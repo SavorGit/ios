@@ -1,21 +1,28 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "fddb3448-ec71-453d-815a-d4bea02dfa4e++104",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "90F626992976447B29037A2DA6DF80FD4DF57019",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
     "fddb3448-ec71-453d-815a-d4bea02dfa4e++104" : {
 
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "90F626992976447B29037A2DA6DF80FD4DF57019" : 9223372036854775807,
     "fddb3448-ec71-453d-815a-d4bea02dfa4e++104" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6925D2F9-9D82-4217-AF1A-0CB538BBBEFB",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "90F626992976447B29037A2DA6DF80FD4DF57019" : "HotTopic\/",
     "fddb3448-ec71-453d-815a-d4bea02dfa4e++104" : "HotSpot\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "SavorX",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SavorX\/SavorX.xcworkspace",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/SavorGit\/ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "90F626992976447B29037A2DA6DF80FD4DF57019"
+    },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "svn:\/\/101.201.46.203\/Ios",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",

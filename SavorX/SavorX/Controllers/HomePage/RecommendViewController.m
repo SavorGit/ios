@@ -283,7 +283,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
-    model.contentURL = [model.contentURL stringByReplacingOccurrencesOfString:@"h5.rerdian.com/content" withString:@"http://devp.savorx.cn/content"];
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
         //如果是绑定状态
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
