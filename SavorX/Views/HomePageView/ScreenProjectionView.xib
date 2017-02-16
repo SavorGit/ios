@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ScreenProjectionView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="544"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="您当前没有连接wifi，如需要投屏请确保wifi开启并与需要投屏的电视保证在同一wifi环境下" textAlignment="center" lineBreakMode="clip" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lnN-nb-YcR">
+                    <rect key="frame" x="25" y="81" width="270" height="61"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjB-Tq-hnf">
+                    <rect key="frame" x="124" y="176" width="80" height="32"/>
+                    <color key="backgroundColor" red="0.90980392156862744" green="0.80784313725490198" blue="0.53333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="80" id="hhd-IX-QA1"/>
+                        <constraint firstAttribute="height" constant="32" id="oBD-wC-TMJ"/>
+                    </constraints>
+                    <state key="normal" title="去设置">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="wifiStateAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="mOF-i8-tnb"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ndx-VD-8ND">
+                    <rect key="frame" x="130" y="384" width="60" height="60"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="QU7-nV-9gY"/>
+                        <constraint firstAttribute="width" constant="60" id="XYP-Ar-nd3"/>
+                    </constraints>
+                    <state key="normal" image="close"/>
+                    <connections>
+                        <action selector="closeAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="Wkl-CM-jCv"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GNT-bo-KCK">
+                    <rect key="frame" x="23" y="248" width="281" height="198"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HNa-EV-7Zl">
+                            <rect key="frame" x="5" y="0.0" width="105" height="88"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="88" id="4p8-8B-WAT"/>
+                                <constraint firstAttribute="width" constant="105" id="ZUC-ca-Ge9"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <inset key="titleEdgeInsets" minX="-37" minY="30" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="32" minY="-30" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="视频" image="video">
+                                <color key="titleColor" red="0.85490196078431369" green="0.86274509803921573" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="videoAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="GJt-h9-oac"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kmv-dK-Pfn">
+                            <rect key="frame" x="163" y="2" width="105" height="88"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="105" id="vQt-W3-aAC"/>
+                                <constraint firstAttribute="height" constant="88" id="w4m-KD-bbP"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <inset key="titleEdgeInsets" minX="-31" minY="30" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="32" minY="-30" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="图片" image="picture">
+                                <color key="titleColor" red="0.90196078431372551" green="0.90588235294117647" blue="0.90588235294117647" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="pictureAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="e3o-Mn-jvW"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zIe-eC-NNz">
+                            <rect key="frame" x="163" y="108" width="105" height="88"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="105" id="2h5-uA-5bN"/>
+                                <constraint firstAttribute="height" constant="88" id="SKg-7s-GXq"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <inset key="titleEdgeInsets" minX="-33" minY="30" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="31" minY="-30" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="文件" image="file">
+                                <color key="titleColor" red="0.8666666666666667" green="0.87450980392156863" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="fileAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="Bif-XY-tpC"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y22-dC-70a">
+                            <rect key="frame" x="5" y="108" width="105" height="88"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="105" id="UW7-Mn-NZw"/>
+                                <constraint firstAttribute="height" constant="88" id="nLc-Xl-6W3"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <inset key="titleEdgeInsets" minX="-33" minY="30" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="27" minY="-30" maxX="-16" maxY="0.0"/>
+                            <state key="normal" title="幻灯片" image="slide">
+                                <color key="titleColor" red="0.92156862745098034" green="0.93725490196078431" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="slideAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="tHM-zK-Kk7"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="Kmv-dK-Pfn" secondAttribute="trailing" constant="13" id="47t-OA-vgu"/>
+                        <constraint firstAttribute="trailing" secondItem="zIe-eC-NNz" secondAttribute="trailing" constant="13" id="5rM-Iw-ebs"/>
+                        <constraint firstAttribute="bottom" secondItem="zIe-eC-NNz" secondAttribute="bottom" constant="2" id="Itp-kG-Ou5"/>
+                        <constraint firstItem="y22-dC-70a" firstAttribute="leading" secondItem="GNT-bo-KCK" secondAttribute="leading" constant="5" id="JJb-Yo-Rvc"/>
+                        <constraint firstAttribute="height" constant="198" id="KSu-kG-nj3"/>
+                        <constraint firstAttribute="bottom" secondItem="y22-dC-70a" secondAttribute="bottom" constant="2" id="S8A-k3-iBf"/>
+                        <constraint firstItem="Kmv-dK-Pfn" firstAttribute="top" secondItem="GNT-bo-KCK" secondAttribute="top" constant="2" id="gCn-lL-5SQ"/>
+                        <constraint firstItem="HNa-EV-7Zl" firstAttribute="leading" secondItem="GNT-bo-KCK" secondAttribute="leading" constant="5" id="igN-Go-Q7s"/>
+                        <constraint firstItem="HNa-EV-7Zl" firstAttribute="top" secondItem="GNT-bo-KCK" secondAttribute="top" id="k0q-H5-cB6"/>
+                        <constraint firstAttribute="width" constant="281" id="m8C-SR-2uh"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.054901960784313725" green="0.054901960784313725" blue="0.062745098039215685" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="GNT-bo-KCK" firstAttribute="top" secondItem="NjB-Tq-hnf" secondAttribute="bottom" constant="40" id="6y0-1a-oxa"/>
+                <constraint firstItem="NjB-Tq-hnf" firstAttribute="centerX" secondItem="GNT-bo-KCK" secondAttribute="centerX" id="AYS-Iq-5BS"/>
+                <constraint firstItem="NjB-Tq-hnf" firstAttribute="top" secondItem="lnN-nb-YcR" secondAttribute="bottom" constant="34" id="ejU-L1-Hal"/>
+                <constraint firstItem="lnN-nb-YcR" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="81" id="fmL-7p-Fzz"/>
+                <constraint firstAttribute="bottom" secondItem="ndx-VD-8ND" secondAttribute="bottom" constant="100" id="m0b-f5-kdk"/>
+                <constraint firstItem="GNT-bo-KCK" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" constant="3.5" id="oxJ-FK-4A7"/>
+                <constraint firstItem="ndx-VD-8ND" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="q2C-q8-B7n"/>
+                <constraint firstItem="lnN-nb-YcR" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="25" id="yh9-e6-sKu"/>
+                <constraint firstAttribute="trailing" secondItem="lnN-nb-YcR" secondAttribute="trailing" constant="25" id="yr8-dl-ibq"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="setWifiButton" destination="NjB-Tq-hnf" id="TRP-Pt-Izu"/>
+                <outlet property="wifiLabel" destination="lnN-nb-YcR" id="LG5-w6-LkJ"/>
+            </connections>
+            <point key="canvasLocation" x="47" y="-148"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="close" width="32" height="32"/>
+        <image name="file" width="35" height="30"/>
+        <image name="picture" width="35" height="30"/>
+        <image name="slide" width="35" height="30"/>
+        <image name="video" width="35" height="30"/>
+    </resources>
+</document>
