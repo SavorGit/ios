@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SXWiFiHelpView">
+            <rect key="frame" x="0.0" y="0.0" width="334" height="231"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提示帮助" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5d-Vu-smQ">
+                    <rect key="frame" x="40" y="47" width="70" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="kJL-sP-vuQ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.26666666666666666" green="0.26666666666666666" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1、请确保设备和手机处在同一局域网环境下" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DiF-c0-REB">
+                    <rect key="frame" x="59" y="78" width="248" height="36"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2、目前只支持具有该投屏协议的设备" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yO9-tQ-WB3">
+                    <rect key="frame" x="59" y="124" width="248" height="36"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIA-ZC-TqV">
+                    <rect key="frame" x="0.0" y="27" width="334" height="1"/>
+                    <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="0.5" id="Cd4-NL-stL"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3、如无法连接，请尝试使用扫码连接热点儿设备或重新扫描" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0h5-K7-Mwy">
+                    <rect key="frame" x="59" y="170" width="248" height="33.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="rIA-ZC-TqV" secondAttribute="trailing" id="2bJ-AL-Hw4"/>
+                <constraint firstItem="DiF-c0-REB" firstAttribute="top" secondItem="c5d-Vu-smQ" secondAttribute="bottom" constant="10" id="Afy-Pv-jSw"/>
+                <constraint firstItem="yO9-tQ-WB3" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="59" id="GxL-HL-jjE"/>
+                <constraint firstItem="rIA-ZC-TqV" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="HBb-uz-znU"/>
+                <constraint firstItem="c5d-Vu-smQ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="JFu-Ez-Mab"/>
+                <constraint firstAttribute="trailing" secondItem="DiF-c0-REB" secondAttribute="trailing" constant="27" id="Rd3-Fx-fgc"/>
+                <constraint firstItem="rIA-ZC-TqV" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="27" id="ahn-8u-oX7"/>
+                <constraint firstAttribute="trailing" secondItem="0h5-K7-Mwy" secondAttribute="trailing" constant="27" id="eBb-43-gP8"/>
+                <constraint firstItem="c5d-Vu-smQ" firstAttribute="top" secondItem="rIA-ZC-TqV" secondAttribute="bottom" constant="19" id="fhQ-wA-Bgi"/>
+                <constraint firstItem="0h5-K7-Mwy" firstAttribute="top" secondItem="yO9-tQ-WB3" secondAttribute="bottom" constant="10" id="kGC-Av-f1m"/>
+                <constraint firstAttribute="trailing" secondItem="yO9-tQ-WB3" secondAttribute="trailing" constant="27" id="kmv-7s-5v9"/>
+                <constraint firstItem="0h5-K7-Mwy" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="59" id="lVH-5U-TKI"/>
+                <constraint firstItem="yO9-tQ-WB3" firstAttribute="top" secondItem="DiF-c0-REB" secondAttribute="bottom" constant="10" id="rgn-Rw-BfR"/>
+                <constraint firstItem="DiF-c0-REB" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="59" id="yZV-zV-3dT"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-22" y="-296.5"/>
+        </view>
+    </objects>
+</document>
