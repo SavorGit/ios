@@ -37,7 +37,6 @@
 
 @property (nonatomic, strong) UIView * hotelView;
 @property (nonatomic, strong) UILabel * hotelNameLabel;
-@property (nonatomic, strong) UILabel * rightLabel;
 
 @end
 
@@ -93,36 +92,18 @@
         make.right.mas_equalTo(-12);
     }];
     
-    self.rightLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.rightLabel.textColor = UIColorFromRGB(0xffa752);
-    self.rightLabel.font = [UIFont systemFontOfSize:14];
-    self.rightLabel.textAlignment = NSTextAlignmentCenter;
-    self.rightLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.6f];
-    self.rightLabel.layer.cornerRadius = 5;
-    self.rightLabel.layer.masksToBounds = YES;
-    self.rightLabel.text = @"本店特色";
-    [self.imageView addSubview:self.rightLabel];
-    [self.rightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
-        make.size.mas_equalTo(CGSizeMake(70, 30));
-    }];
-    
     self.hotelView.hidden = YES;
-    self.rightLabel.hidden = YES;
 }
 
 - (void)showHotelName:(NSString *)name
 {
     self.hotelNameLabel.text = name;
     self.hotelView.hidden = NO;
-    self.rightLabel.hidden = NO;
 }
 
 - (void)hiddenHotelName
 {
     self.hotelView.hidden = YES;
-    self.rightLabel.hidden = YES;
 }
 
 - (void)setTitleLabelBackgroundColor:(UIColor *)titleLabelBackgroundColor

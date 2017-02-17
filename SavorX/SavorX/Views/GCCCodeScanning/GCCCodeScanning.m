@@ -133,8 +133,9 @@
     view4.alpha = 0.5f;
     [self addSubview:view4];
     
-    CGFloat labelY2 = self.upLayer.frame.origin.y - 70;
-    UILabel * label2 = [[UILabel alloc] initWithFrame:CGRectMake(25, labelY2, self.bounds.size.width - 50, 50)];
+    CGFloat labelY2 = self.upLayer.frame.origin.y - 90;
+    CGFloat labelY = self.upLayer.frame.origin.y + self.upLayer.frame.size.height + 30;
+    UILabel * label2 = [[UILabel alloc] initWithFrame:CGRectMake(25, labelY, self.bounds.size.width - 50, 50)];
     label2.numberOfLines = 0;
     label2.text = @"没显示二维码？\n检查手机与电视是否连接同一WiFi";
     label2.textColor = [UIColor colorWithHexString:@"#ffc116"];
@@ -142,8 +143,7 @@
     label2.textAlignment = NSTextAlignmentCenter;
     [self addSubview:label2];
     
-    CGFloat labelY = self.upLayer.frame.origin.y + self.upLayer.frame.size.height + 30;
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(25, labelY, self.bounds.size.width - 50, 60)];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(25, labelY2, self.bounds.size.width - 50, 60)];
     label.numberOfLines = 0;
     label.text = @"请将取景框对准电视机上的二维码\n即可自动连接电视";
     label.textColor = [UIColor whiteColor];

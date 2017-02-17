@@ -50,6 +50,7 @@ NSString * const ID = @"cycleCell";
 @property (nonatomic, assign) NSInteger totalItemsCount;
 @property (nonatomic, weak) UIControl *pageControl;
 @property (nonatomic, copy) NSString * hotellTitle;
+@property (nonatomic, strong) UILabel * rightLabel;
 
 @property (nonatomic, strong) UIImageView *backgroundImageView; // 当imageURLs为空时的背景图
 
@@ -120,6 +121,20 @@ NSString * const ID = @"cycleCell";
 {
     SDCycleScrollView *cycleScrollView = [[self alloc] initWithFrame:frame];
     cycleScrollView.imageURLStringsGroup = [NSMutableArray arrayWithArray:imageURLsGroup];
+    cycleScrollView.rightLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    cycleScrollView.rightLabel.textColor = UIColorFromRGB(0xffa752);
+    cycleScrollView.rightLabel.font = [UIFont systemFontOfSize:14];
+    cycleScrollView.rightLabel.textAlignment = NSTextAlignmentCenter;
+    cycleScrollView.rightLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.6f];
+    cycleScrollView.rightLabel.layer.cornerRadius = 5;
+    cycleScrollView.rightLabel.layer.masksToBounds = YES;
+    cycleScrollView.rightLabel.text = @"本店特色";
+    [cycleScrollView addSubview:cycleScrollView.rightLabel];
+    [cycleScrollView.rightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(10);
+        make.right.mas_equalTo(-10);
+        make.size.mas_equalTo(CGSizeMake(70, 30));
+    }];
     return cycleScrollView;
 }
 

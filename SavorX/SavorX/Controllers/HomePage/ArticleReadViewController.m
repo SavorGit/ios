@@ -39,6 +39,8 @@
 
 - (void)setupViews
 {
+    self.title = self.model.title;
+    
     UIBarButtonItem * shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareAction)];
     self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];

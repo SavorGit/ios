@@ -162,9 +162,7 @@
     
     self.screenButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.screenButton setImage:[UIImage imageNamed:@"quit"] forState:UIControlStateSelected];
-    [self.screenButton setImage:[UIImage new] forState:UIControlStateNormal];
-    [self.screenButton setTitle:@"" forState:UIControlStateSelected];
-    [self.screenButton setTitle:@"投屏" forState:UIControlStateNormal];
+    [self.screenButton setImage:[UIImage imageNamed:@"tv"] forState:UIControlStateNormal];
     [self.screenButton addTarget:self action:@selector(backAciton) forControlEvents:UIControlEventTouchUpInside];
     self.screenButton.selected = YES;
     [self.view addSubview:self.screenButton];
