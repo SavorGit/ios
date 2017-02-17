@@ -313,6 +313,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 - (void)reloadData {
+    
     [self wm_clearDatas];
     
     if (!self.childControllersCount) { return; }
@@ -519,12 +520,27 @@ static NSInteger const kWMControllerCountUndefined = -1;
 #pragma mark - Private Methods
 
 - (void)wm_resetScrollView {
-    if (self.scrollView) {
-        [self.scrollView removeFromSuperview];
-    }
     [self wm_addScrollView];
     [self wm_addViewControllerAtIndex:self.selectIndex];
     self.currentViewController = self.displayVC[@(self.selectIndex)];
+}
+
+- (void)wm_resetMenuView {
+    
+    [self wm_addMenuView];
+    
+    ////    if (!self.menuView) {
+    ////        [self wm_addMenuView];
+    ////    } else {
+    ////        [self.menuView reload];
+    ////        if (self.menuView.userInteractionEnabled == NO) {
+    ////            self.menuView.userInteractionEnabled = YES;
+    ////        }
+    ////        if (self.selectIndex != 0) {
+                [self.menuView selectItemAtIndex:self.selectIndex];
+    ////        }
+            [self.view bringSubviewToFront:self.menuView];
+    ////    }
 }
 
 - (void)wm_clearDatas {
@@ -602,25 +618,27 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 // 包括宽高，子控制器视图 frame
 - (void)wm_calculateSize {
-    CGFloat navigationHeight = CGRectGetMaxY(self.navigationController.navigationBar.frame);
-    UIView *tabBar = [self wm_bottomView];
-    CGFloat height = (tabBar && !tabBar.hidden) ? CGRectGetHeight(tabBar.frame) : 0;
-    CGFloat tarBarHeight = (self.hidesBottomBarWhenPushed == YES) ? 0 : height;
-    // 计算相对 window 的绝对 frame (self.view.window 可能为 nil)
-    UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
-    CGRect absoluteRect = [self.view convertRect:self.view.bounds toView:mainWindow];
-    navigationHeight -= absoluteRect.origin.y;
-    tarBarHeight -= mainWindow.frame.size.height - CGRectGetMaxY(absoluteRect);
-    
-    _viewX = self.viewFrame.origin.x;
-    _viewY = self.viewFrame.origin.y;
-    if (CGRectEqualToRect(self.viewFrame, CGRectZero)) {
-        _viewWidth = self.view.frame.size.width;
-        _viewHeight = self.view.frame.size.height - self.menuHeight - self.menuViewBottomSpace - navigationHeight - tarBarHeight;
-        _viewY += navigationHeight;
-    } else {
-        _viewWidth = self.viewFrame.size.width;
-        _viewHeight = self.viewFrame.size.height - self.menuHeight - self.menuViewBottomSpace;
+    if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) {
+        CGFloat navigationHeight = CGRectGetMaxY(self.navigationController.navigationBar.frame);
+        UIView *tabBar = [self wm_bottomView];
+        CGFloat height = (tabBar && !tabBar.hidden) ? CGRectGetHeight(tabBar.frame) : 0;
+        CGFloat tarBarHeight = (self.hidesBottomBarWhenPushed == YES) ? 0 : height;
+        // 计算相对 window 的绝对 frame (self.view.window 可能为 nil)
+        UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
+        CGRect absoluteRect = [self.view convertRect:self.view.bounds toView:mainWindow];
+        navigationHeight -= absoluteRect.origin.y;
+        tarBarHeight -= mainWindow.frame.size.height - CGRectGetMaxY(absoluteRect);
+        
+        _viewX = self.viewFrame.origin.x;
+        _viewY = self.viewFrame.origin.y;
+        if (CGRectEqualToRect(self.viewFrame, CGRectZero)) {
+            _viewWidth = self.view.frame.size.width;
+            _viewHeight = self.view.frame.size.height - self.menuHeight - self.menuViewBottomSpace - navigationHeight - tarBarHeight;
+            _viewY += navigationHeight;
+        } else {
+            _viewWidth = self.viewFrame.size.width;
+            _viewHeight = self.viewFrame.size.height - self.menuHeight - self.menuViewBottomSpace;
+        }
     }
     if (self.showOnNavigationBar && self.navigationController.navigationBar) {
         _viewHeight += self.menuHeight;
@@ -633,26 +651,33 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 - (void)wm_addScrollView {
-    WMScrollView *scrollView = [[WMScrollView alloc] init];
-    scrollView.scrollsToTop = NO;
-    scrollView.pagingEnabled = YES;
-    scrollView.backgroundColor = [UIColor whiteColor];
-    scrollView.delegate = self;
-    scrollView.showsVerticalScrollIndicator = NO;
-    scrollView.showsHorizontalScrollIndicator = NO;
-    scrollView.bounces = self.bounces;
-    scrollView.otherGestureRecognizerSimultaneously = self.otherGestureRecognizerSimultaneously;
-    scrollView.scrollEnabled = self.scrollEnable;
-    [self.view addSubview:scrollView];
-    self.scrollView = scrollView;
+    
+    if (self.scrollView) {
+        [self.scrollView removeFromSuperview];
+    }
+    
+    self.scrollView = [[WMScrollView alloc] init];
+    self.scrollView.scrollsToTop = NO;
+    self.scrollView.pagingEnabled = YES;
+    self.scrollView.backgroundColor = [UIColor whiteColor];
+    self.scrollView.delegate = self;
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.bounces = self.bounces;
+    self.scrollView.otherGestureRecognizerSimultaneously = self.otherGestureRecognizerSimultaneously;
+    self.scrollView.scrollEnabled = self.scrollEnable;
+    [self.view addSubview:self.scrollView];
     
     if (!self.navigationController) { return; }
-    for (UIGestureRecognizer *gestureRecognizer in scrollView.gestureRecognizers) {
+    for (UIGestureRecognizer *gestureRecognizer in self.scrollView.gestureRecognizers) {
         [gestureRecognizer requireGestureRecognizerToFail:self.navigationController.interactivePopGestureRecognizer];
     }
 }
 
 - (void)wm_addMenuView {
+    if (self.menuView) {
+        [self.menuView removeFromSuperview];
+    }
     CGFloat menuY = _viewY;
     if (self.showOnNavigationBar && self.navigationController.navigationBar) {
         CGFloat navHeight = self.navigationController.navigationBar.frame.size.height;
@@ -661,30 +686,29 @@ static NSInteger const kWMControllerCountUndefined = -1;
     }
     
     CGRect frame = CGRectMake(_viewX, menuY, _viewWidth, self.menuHeight);
-    WMMenuView *menuView = [[WMMenuView alloc] initWithFrame:frame];
-    menuView.backgroundColor = self.menuBGColor;
-    menuView.delegate = self;
-    menuView.dataSource = self;
-    menuView.style = self.menuViewStyle;
-    menuView.layoutMode = self.menuViewLayoutMode;
-    menuView.progressHeight = self.progressHeight;
-    menuView.contentMargin = self.menuViewContentMargin;
-    menuView.progressViewBottomSpace = self.progressViewBottomSpace;
-    menuView.progressWidths = self.progressViewWidths;
-    menuView.progressViewIsNaughty = self.progressViewIsNaughty;
-    menuView.progressViewCornerRadius = self.progressViewCornerRadius;
+    self.menuView = [[WMMenuView alloc] initWithFrame:frame];
+    self.menuView.backgroundColor = self.menuBGColor;
+    self.menuView.delegate = self;
+    self.menuView.dataSource = self;
+    self.menuView.style = self.menuViewStyle;
+    self.menuView.layoutMode = self.menuViewLayoutMode;
+    self.menuView.progressHeight = self.progressHeight;
+    self.menuView.contentMargin = self.menuViewContentMargin;
+    self.menuView.progressViewBottomSpace = self.progressViewBottomSpace;
+    self.menuView.progressWidths = self.progressViewWidths;
+    self.menuView.progressViewIsNaughty = self.progressViewIsNaughty;
+    self.menuView.progressViewCornerRadius = self.progressViewCornerRadius;
     if (self.titleFontName) {
-        menuView.fontName = self.titleFontName;
+        self.menuView.fontName = self.titleFontName;
     }
     if (self.progressColor) {
-        menuView.lineColor = self.progressColor;
+        self.menuView.lineColor = self.progressColor;
     }
     if (self.showOnNavigationBar && self.navigationController.navigationBar) {
-        self.navigationItem.titleView = menuView;
+        self.navigationItem.titleView = self.menuView;
     } else {
-        [self.view addSubview:menuView];
+        [self.view addSubview:self.menuView];
     }
-    self.menuView = menuView;
     
 }
 
@@ -834,21 +858,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
     }
 }
 
-- (void)wm_resetMenuView {
-    if (!self.menuView) {
-        [self wm_addMenuView];
-    } else {
-        [self.menuView reload];
-        if (self.menuView.userInteractionEnabled == NO) {
-            self.menuView.userInteractionEnabled = YES;
-        }
-        if (self.selectIndex != 0) {
-            [self.menuView selectItemAtIndex:self.selectIndex];
-        }
-        [self.view bringSubviewToFront:self.menuView];
-    }
-}
-
 - (void)wm_growCachePolicyAfterMemoryWarning {
     self.cachePolicy = WMPageControllerCachePolicyBalanced;
     [self performSelector:@selector(wm_growCachePolicyToHigh) withObject:nil afterDelay:2.0 inModes:@[NSRunLoopCommonModes]];
@@ -960,6 +969,13 @@ static NSInteger const kWMControllerCountUndefined = -1;
     self.currentViewController = self.displayVC[@(self.selectIndex)];
     
     [self wm_addMenuView];
+    
+    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+    }];
 }
 
 - (void)setupViews

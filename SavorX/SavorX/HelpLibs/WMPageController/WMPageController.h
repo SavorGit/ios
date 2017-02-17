@@ -297,10 +297,10 @@ typedef NS_ENUM(NSUInteger, WMPageControllerPreloadPolicy) {
 /** progressView's cornerRadius */
 @property (nonatomic, assign) CGFloat progressViewCornerRadius;
 /** 顶部导航栏 */
-@property (nonatomic, weak) WMMenuView * _Nullable menuView;
+@property (nonatomic, strong) WMMenuView * _Nullable menuView;
 
 /** 内部容器 */
-@property (nonatomic, weak) WMScrollView * _Nullable scrollView;
+@property (nonatomic, strong) WMScrollView * _Nullable scrollView;
 
 /** MenuView 内部视图与左右的间距 */
 @property (nonatomic, assign) CGFloat menuViewContentMargin;
