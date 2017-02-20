@@ -964,13 +964,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
     self.currentViewController = self.displayVC[@(self.selectIndex)];
     
     [self wm_addMenuView];
-    
-    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.left.mas_equalTo(0);
-        make.bottom.mas_equalTo(0);
-        make.right.mas_equalTo(0);
-    }];
 }
 
 - (void)setupViews
