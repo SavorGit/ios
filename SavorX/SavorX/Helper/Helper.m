@@ -118,6 +118,26 @@
     return wifiName;
 }
 
++ (CGFloat)autoWidthWith:(CGFloat)width
+{
+    CGFloat result = (width / 375) * kMainBoundsWidth;
+    return result;
+}
+
++ (CGFloat)autoHeightWith:(CGFloat)height
+{
+    CGFloat result = (height / 667) * kMainBoundsHeight;
+    return result;
+}
+
++ (CGFloat)autoHomePageCellImageHeight
+{
+    CGFloat imageWidth = kMainBoundsWidth;
+    CGFloat scale = 400.f / 750;
+    CGFloat result = imageWidth * scale;
+    return result;
+}
+
 + (NSString *)getImageNameWithPath:(NSString *)path
 {
     NSRange range = [path rangeOfString:@"/image?"];

@@ -34,6 +34,12 @@
 /**获取当前wifi的名字**/
 + (NSString *)getWifiName;
 
++ (CGFloat)autoWidthWith:(CGFloat)width;
+
++ (CGFloat)autoHeightWith:(CGFloat)height;
+
++ (CGFloat)autoHomePageCellImageHeight;
+
 + (NSString *)getImageNameWithPath:(NSString *)path;
 
 + (NSString *)getVideoNameWithPath:(NSString *)path;

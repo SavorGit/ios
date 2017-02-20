@@ -105,6 +105,9 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 //开始搜索DLNA设备
 - (void)startSearchDevice
 {
+    if ([GlobalData shared].callQRCodeURL.length) {
+        return;
+    }
     if (!self.socket.isClosed) {
         [self socketShouldBeClose]; //先关闭当前的socket连接
     }

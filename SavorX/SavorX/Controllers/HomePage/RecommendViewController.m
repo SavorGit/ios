@@ -218,6 +218,7 @@
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         if ([[response objectForKey:@"code"] integerValue] == 10060) {
             [self showTopFreshLabelWithTitle:@"当前已为最新内容"];
+            [self.tableView.mj_footer resetNoMoreData];
         }
         [self.tableView.mj_header endRefreshing];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
