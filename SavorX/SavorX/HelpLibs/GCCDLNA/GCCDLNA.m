@@ -105,7 +105,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 //开始搜索DLNA设备
 - (void)startSearchDevice
 {
-    if ([GlobalData shared].callQRCodeURL.length) {
+    if ([GlobalData shared].scene == RDSceneHaveRDBox) {
         return;
     }
     if (!self.socket.isClosed) {
