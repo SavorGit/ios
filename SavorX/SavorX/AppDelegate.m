@@ -69,13 +69,16 @@
 - (LGSideMenuController *)createRootViewController
 {
     LeftViewController *leftVc = [[LeftViewController alloc] init];
-    WMPageController *centerVC = [[WMPageController alloc]init];
-    
+    WMPageController *centerVC = [[WMPageController alloc] init];
     //2、初始化导航控制器
     BaseNavigationController *centerNav = [[BaseNavigationController alloc]initWithRootViewController:centerVC];
     
     LGSideMenuController * sliderVC = [[LGSideMenuController alloc] initWithRootViewController:centerNav leftViewController:leftVc rightViewController:nil];
-    sliderVC.leftViewWidth = kMainBoundsWidth / 3 * 2;
+    sliderVC.willShowLeftView = ^(LGSideMenuController * _Nonnull sideMenuController, UIView * _Nonnull leftView){
+        [leftVc willShow];
+    };
+    CGFloat width = kMainBoundsHeight > kMainBoundsWidth ? kMainBoundsWidth : kMainBoundsHeight;
+    sliderVC.leftViewWidth = width / 3 * 2;
     sliderVC.leftViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(66, 66);
     
     return sliderVC;

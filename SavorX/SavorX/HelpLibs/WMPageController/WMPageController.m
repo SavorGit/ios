@@ -526,21 +526,18 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 - (void)wm_resetMenuView {
-    
-    [self wm_addMenuView];
-    
-    ////    if (!self.menuView) {
-    ////        [self wm_addMenuView];
-    ////    } else {
-    ////        [self.menuView reload];
-    ////        if (self.menuView.userInteractionEnabled == NO) {
-    ////            self.menuView.userInteractionEnabled = YES;
-    ////        }
-    ////        if (self.selectIndex != 0) {
-                [self.menuView selectItemAtIndex:self.selectIndex];
-    ////        }
-            [self.view bringSubviewToFront:self.menuView];
-    ////    }
+    if (!self.menuView) {
+        [self wm_addMenuView];
+    } else {
+        [self.menuView reload];
+        if (self.menuView.userInteractionEnabled == NO) {
+            self.menuView.userInteractionEnabled = YES;
+        }
+        if (self.selectIndex != 0) {
+            [self.menuView selectItemAtIndex:self.selectIndex];
+        }
+        [self.view bringSubviewToFront:self.menuView];
+    }
 }
 
 - (void)wm_clearDatas {
@@ -675,9 +672,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 - (void)wm_addMenuView {
-    if (self.menuView) {
-        [self.menuView removeFromSuperview];
-    }
     CGFloat menuY = _viewY;
     if (self.showOnNavigationBar && self.navigationController.navigationBar) {
         CGFloat navHeight = self.navigationController.navigationBar.frame.size.height;
@@ -686,30 +680,30 @@ static NSInteger const kWMControllerCountUndefined = -1;
     }
     
     CGRect frame = CGRectMake(_viewX, menuY, _viewWidth, self.menuHeight);
-    self.menuView = [[WMMenuView alloc] initWithFrame:frame];
-    self.menuView.backgroundColor = self.menuBGColor;
-    self.menuView.delegate = self;
-    self.menuView.dataSource = self;
-    self.menuView.style = self.menuViewStyle;
-    self.menuView.layoutMode = self.menuViewLayoutMode;
-    self.menuView.progressHeight = self.progressHeight;
-    self.menuView.contentMargin = self.menuViewContentMargin;
-    self.menuView.progressViewBottomSpace = self.progressViewBottomSpace;
-    self.menuView.progressWidths = self.progressViewWidths;
-    self.menuView.progressViewIsNaughty = self.progressViewIsNaughty;
-    self.menuView.progressViewCornerRadius = self.progressViewCornerRadius;
+    WMMenuView *menuView = [[WMMenuView alloc] initWithFrame:frame];
+    menuView.backgroundColor = self.menuBGColor;
+    menuView.delegate = self;
+    menuView.dataSource = self;
+    menuView.style = self.menuViewStyle;
+    menuView.layoutMode = self.menuViewLayoutMode;
+    menuView.progressHeight = self.progressHeight;
+    menuView.contentMargin = self.menuViewContentMargin;
+    menuView.progressViewBottomSpace = self.progressViewBottomSpace;
+    menuView.progressWidths = self.progressViewWidths;
+    menuView.progressViewIsNaughty = self.progressViewIsNaughty;
+    menuView.progressViewCornerRadius = self.progressViewCornerRadius;
     if (self.titleFontName) {
-        self.menuView.fontName = self.titleFontName;
+        menuView.fontName = self.titleFontName;
     }
     if (self.progressColor) {
-        self.menuView.lineColor = self.progressColor;
+        menuView.lineColor = self.progressColor;
     }
     if (self.showOnNavigationBar && self.navigationController.navigationBar) {
-        self.navigationItem.titleView = self.menuView;
+        self.navigationItem.titleView = menuView;
     } else {
-        [self.view addSubview:self.menuView];
+        [self.view addSubview:menuView];
     }
-    
+    self.menuView = menuView;
 }
 
 - (void)wm_layoutChildViewControllers {
@@ -881,6 +875,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     CGFloat oldContentOffsetX = self.scrollView.contentOffset.x;
     CGFloat contentWidth = self.scrollView.contentSize.width;
     scrollFrame.origin.y -= self.showOnNavigationBar && self.navigationController.navigationBar ? self.menuHeight : 0;
+    scrollFrame.origin.y = [Helper autoHeightWith:40];
     self.scrollView.frame = scrollFrame;
     self.scrollView.contentSize = CGSizeMake(self.childControllersCount * _viewWidth, 0);
     CGFloat xContentOffset = contentWidth == 0 ? self.selectIndex * _viewWidth : oldContentOffsetX / contentWidth * self.childControllersCount * _viewWidth;

@@ -229,18 +229,23 @@
 
 - (void)setupTopScrollView
 {
+    if (self.adSourcel.count == 0) {
+        return;
+    }
+    
     NSMutableArray * array = [NSMutableArray new];
     
     for (NSInteger i = 0; i < self.adSourcel.count; i++) {
         HSAdsModel * model = [self.adSourcel objectAtIndex:i];
         [array addObject:model.imageURL];
     }
-    self.scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 5, self.view.frame.size.width, 200) imageURLStringsGroup:array];
+    self.scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 5, kMainBoundsWidth, [Helper autoHomePageCellImageHeight]) imageURLStringsGroup:array];
     [self.scrollView setHotelTitle:self.hotelName];
     self.scrollView.delegate = self;
-    [self.tableView.tableHeaderView addSubview:self.scrollView];
+    [self.headView addSubview:self.scrollView];
     [self.scrollView setPageDotImage:[UIImage imageNamed:@"banner_default.png"]];
     [self.scrollView setCurrentPageDotImage:[UIImage imageNamed:@"banner_chose.png"]];
+    self.tableView.tableHeaderView = self.headView;
 }
 
 #pragma mark - UITableViewDataSource
@@ -360,7 +365,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 0.1f;
+        if (self.adSourcel.count != 0) {
+            return 0.1f;
+        }
     }
     return [Helper autoHeightWith:5.f];
 }
@@ -424,8 +431,6 @@
             make.right.mas_equalTo(0);
         }];
         
-        _tableView.tableHeaderView = self.headView;
-        
         //创建tableView动画加载头视图
         _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshDataSource)];
         MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
@@ -440,10 +445,10 @@
 - (UIView *)headView
 {
     if (!_headView) {
-        _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 260)];
+        _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, [Helper autoHomePageCellImageHeight] + 55)];
         _headView.backgroundColor = VCBackgroundColor;
         
-        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 205, kMainBoundsWidth, 55)];
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, [Helper autoHomePageCellImageHeight] + 5, kMainBoundsWidth, 55)];
         label.font = [UIFont systemFontOfSize:16];
         label.textColor = UIColorFromRGB(0x666666);
         label.textAlignment = NSTextAlignmentCenter;

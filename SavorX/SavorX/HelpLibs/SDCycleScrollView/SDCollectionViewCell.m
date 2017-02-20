@@ -88,8 +88,9 @@
     [self.hotelView addSubview:self.hotelNameLabel];
     [self.hotelNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.hotelView);
-        make.left.mas_equalTo(12+13+8);
-        make.right.mas_equalTo(-12);
+        make.left.mas_equalTo(15);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(20);
     }];
     
     self.hotelView.hidden = YES;
@@ -97,6 +98,11 @@
 
 - (void)showHotelName:(NSString *)name
 {
+    CGRect rect = [name boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 100, 16) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15]} context:nil];
+    [self.hotelView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(rect.size.width + 60, 30));
+    }];
+    
     self.hotelNameLabel.text = name;
     self.hotelView.hidden = NO;
 }

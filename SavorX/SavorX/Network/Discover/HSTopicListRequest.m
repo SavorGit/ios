@@ -19,7 +19,6 @@
         [self setIntegerValue:pageNo forParamKey:@"pageNo"];
         [self setIntegerValue:pageSize forParamKey:@"pageSize"];
         [self setIntegerValue:time forParamKey:@"createTime"];
-        
     }
     return self;
 }

@@ -10,4 +10,6 @@
 
 @interface LeftViewController : BaseViewController
 
+- (void)willShow;
+
 @end

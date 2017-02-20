@@ -35,8 +35,8 @@
     self.navigationController.delegate = self;
     [self setupDatas];
     self.leftTableView.backgroundColor = UIColorFromRGB(0x202020);
-    
-    self.headerView = [[LeftTableHeaderView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth / 3 * 2, kMainBoundsWidth / 3 * 2)];
+    CGFloat width = kMainBoundsHeight > kMainBoundsWidth ? kMainBoundsWidth : kMainBoundsHeight;
+    self.headerView = [[LeftTableHeaderView alloc] initWithFrame:CGRectMake(0, 0, width / 3 * 2, width / 3 * 2)];
     self.leftTableView.tableHeaderView = self.headerView;
     
     // Do any additional setup after loading the view from its nib.
@@ -130,6 +130,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 22.f;
+}
+
+- (void)willShow
+{
+    [self.leftTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 //提示用户是否确认清除缓存
