@@ -40,6 +40,8 @@
 
 + (CGFloat)autoHomePageCellImageHeight;
 
++ (CGFloat)autoHomePageCellTitleLabelHeight;
+
 + (NSString *)getImageNameWithPath:(NSString *)path;
 
 + (NSString *)getVideoNameWithPath:(NSString *)path;

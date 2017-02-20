@@ -329,6 +329,8 @@
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
+    }else if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+        [[HomeAnimationView animationView] scanQRCode];
     }else{
         //如果不是绑定状态
         if (model.type == 3) {
@@ -347,12 +349,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 250.f;
+    return kMainBoundsWidth * (500.f / 750);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 5.f;
+    return [Helper autoHeightWith:5.f];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -360,7 +362,7 @@
     if (section == 0) {
         return 0.1f;
     }
-    return 5.f;
+    return [Helper autoHeightWith:5.f];
 }
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index

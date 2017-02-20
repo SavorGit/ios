@@ -55,7 +55,7 @@
     [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
-        make.bottom.mas_equalTo(-50);
+        make.height.mas_equalTo([Helper autoHomePageCellImageHeight]);
         make.right.mas_equalTo(0);
     }];
     

@@ -1092,7 +1092,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 {
     self.menuBGColor = [UIColor whiteColor];
     
-    self.menuHeight = 40;
+    self.menuHeight = [Helper autoHeightWith:40.f];
     self.menuItemWidth = 58;
     self.menuViewStyle = WMMenuViewStyleLine;
     

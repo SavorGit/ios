@@ -132,9 +132,15 @@
 
 + (CGFloat)autoHomePageCellImageHeight
 {
-    CGFloat imageWidth = kMainBoundsWidth;
     CGFloat scale = 400.f / 750;
-    CGFloat result = imageWidth * scale;
+    CGFloat result = kMainBoundsWidth * scale;
+    return result;
+}
+
++ (CGFloat)autoHomePageCellTitleLabelHeight
+{
+    CGFloat scale = 100.f / 750;
+    CGFloat result = kMainBoundsWidth * scale;
     return result;
 }
 

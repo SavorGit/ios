@@ -304,17 +304,17 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 250.f;
+    return kMainBoundsWidth * (500.f / 750);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 5.f;
+    return [Helper autoHeightWith:5.f];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 5.f;
+    return [Helper autoHeightWith:5.f];
 }
 
 #pragma mark -- 懒加载
