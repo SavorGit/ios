@@ -73,4 +73,6 @@
 //删除对应标题数据
 - (void)removeSliderItemWithTitle:(NSString *)title;
 
+- (void)compressImageWithImage:(UIImage *)image finished:(void(^)(NSData * minData, NSData * maxData))finished;
+
 @end

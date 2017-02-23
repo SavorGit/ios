@@ -31,4 +31,12 @@
 - (void)sendRequestWithProgress:(void (^)(NSProgress * _Nonnull))uploadProgress success:(BGSuccessCompletionBlock)successCompletionBlock businessFailure:(BGBusinessFailureBlock)businessFailureBlock networkFailure:(BGNetworkFailureBlock)networkFailureBlock {
     [[BGNetworkManager sharedManager] sendUploadRequest:self progress:uploadProgress success:successCompletionBlock businessFailure:businessFailureBlock networkFailure:networkFailureBlock];
 }
+
+- (void)sendRequestWithBaseURL:(NSString *)url Progress:(nullable void (^)(NSProgress * _Nonnull uploadProgress)) uploadProgress
+                       success:(BGSuccessCompletionBlock _Nullable)successCompletionBlock
+               businessFailure:(BGBusinessFailureBlock _Nullable)businessFailureBlock
+                networkFailure:(BGNetworkFailureBlock _Nullable)networkFailureBlock
+{
+    [[BGNetworkManager sharedManager] sendUploadBaseURL:url Request:self progress:uploadProgress success:successCompletionBlock businessFailure:businessFailureBlock networkFailure:networkFailureBlock];
+}
 @end

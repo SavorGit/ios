@@ -45,6 +45,7 @@ static id BGParseJsonData(id jsonData){
 static BGNetworkManager *_manager = nil;
 
 @interface BGNetworkManager ()<BGAFRequestSerializerDelegate>
+
 @property (nonatomic, strong) BGAFHTTPClient *httpClient;
 @property (nonatomic, strong) BGNetworkCache *cache;
 @property (nonatomic, strong) dispatch_queue_t dataHandleQueue;
@@ -220,6 +221,27 @@ static BGNetworkManager *_manager = nil;
            networkFailure:(BGNetworkFailureBlock)networkFailureBlock {
     
     [self.httpClient POST:request.methodName parameters:request.parametersDic constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        
+        [formData appendPartWithFileData:request.fileData name:request.uploadKey fileName:request.fileName mimeType:request.mimeType];
+        
+    } progress:uploadProgress success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+        [self networkSuccess:request task:task responseData:responseObject success:successCompletionBlock businessFailure:businessFailureBlock];
+        
+    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nullable error) {
+        
+        [self networkFailure:request error:error completion:networkFailureBlock];
+        
+    }];
+}
+
+- (void)sendUploadBaseURL:(NSString *)url Request:(BGUploadRequest * _Nonnull)request
+                 progress:(nullable void (^)(NSProgress * _Nonnull uploadProgress)) uploadProgress
+                  success:(BGSuccessCompletionBlock _Nullable)successCompletionBlock
+          businessFailure:(BGBusinessFailureBlock _Nullable)businessFailureBlock
+           networkFailure:(BGNetworkFailureBlock _Nullable)networkFailureBlock
+{
+    [self.httpClient BaseURL:url POST:request.methodName parameters:request.parametersDic constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
         [formData appendPartWithFileData:request.fileData name:request.uploadKey fileName:request.fileName mimeType:request.mimeType];
         
@@ -438,7 +460,10 @@ static BGNetworkManager *_manager = nil;
  */
 - (void)removeTempRequest:(BGNetworkRequest *)request {
     NSString *requestKey = [[NSURL URLWithString:request.methodName relativeToURL:self.baseURL] absoluteString];
-    [self.tempRequestDic removeObjectForKey:requestKey];
+    
+    if ([self.tempRequestDic objectForKey:requestKey]) {
+        [self.tempRequestDic removeObjectForKey:requestKey];
+    }
 }
 
 #pragma mark - cancel request

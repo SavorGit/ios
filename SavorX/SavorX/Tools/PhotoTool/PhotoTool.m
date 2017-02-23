@@ -512,4 +512,38 @@
     return title;
 }
 
+- (void)compressImageWithImage:(UIImage *)image finished:(void (^)(NSData *, NSData *))finished
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSData*  data = [NSData data];
+        data = UIImageJPEGRepresentation(image, 1);
+        float tempX = 0.9;
+        NSInteger length = data.length;
+        while (data.length > ImageSize) {
+            data = UIImageJPEGRepresentation(image, tempX);
+            tempX -= 0.1;
+            if (data.length == length) {
+                break;
+            }
+            length = data.length;
+        }
+        
+        NSData * tempData = data;
+        while (tempData.length > 5*1024) {
+            tempData = UIImageJPEGRepresentation(image, tempX);
+            if (tempX <= 0.1) {
+                tempX -= 0.02;
+            }else{
+                tempX -= 0.1;
+            }
+            if (tempData.length == length) {
+                break;
+            }
+            length = tempData.length;
+        }
+        
+        finished(tempData, data);
+    });
+}
+
 @end

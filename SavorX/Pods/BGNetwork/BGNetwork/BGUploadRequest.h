@@ -44,4 +44,9 @@
                 businessFailure:(BGBusinessFailureBlock _Nullable)businessFailureBlock
                  networkFailure:(BGNetworkFailureBlock _Nullable)networkFailureBlock;
 
+- (void)sendRequestWithBaseURL:(NSString *)url Progress:(nullable void (^)(NSProgress * _Nonnull uploadProgress)) uploadProgress
+                       success:(BGSuccessCompletionBlock _Nullable)successCompletionBlock
+               businessFailure:(BGBusinessFailureBlock _Nullable)businessFailureBlock
+                networkFailure:(BGNetworkFailureBlock _Nullable)networkFailureBlock;
+
 @end

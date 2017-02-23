@@ -15,6 +15,10 @@
 #import "HomeAnimationView.h"
 #import "PhotoTool.h"
 #import <Photos/Photos.h>
+#import "BGNetWorkManager.h"
+
+#import "GCCGetInfo.h"
+#import "GCCKeyChain.h"
 
 #define PhotoManyCell @"PhotoManyCell"
 
@@ -278,15 +282,64 @@
             NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
             PHAsset * asset = [self.PHAssetSource objectAtIndex:index];
             NSString * name = asset.localIdentifier;
+            
             if (cell.hasEdit) {
-                [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
-                    [self screenImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
-                }];
+//                [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
+//                    [self screenImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
+//                }];
             }else{
+                
                 [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
-                    [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                        [self screenImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
+                    
+                    NSDictionary *parameters = @{@"function": @"prepare",
+                                                 @"action": @"2screen",
+                                                 @"assettype": @"pic",
+                                                 @"asseturl": @"test",
+                                                 @"assetname": @"test",
+                                                 @"play": @"0",
+                                                 @"deviceId" : [GCCKeyChain load:keychainID],
+                                                 @"deviceName" : [GCCGetInfo getIphoneName]};
+                    
+                    [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                        
+                        BGUploadRequest * request = [[BGUploadRequest alloc] initWithData:minData];
+                        request.mimeType = @"image/jpeg";
+                        request.fileName = @"gcc-test";
+//                        [request setValue:@"prepare" forParamKey:@"function"];
+//                        [request setValue:@"2screen" forParamKey:@"action"];
+//                        [request setValue:@"pic" forParamKey:@"assettype"];
+//                        [request setValue:@"test" forParamKey:@"asseturl"];
+//                        [request setValue:@"test" forParamKey:@"assetname"];
+//                        [request setValue:@"0" forParamKey:@"play"];
+//                        [request setValue:[GCCKeyChain load:keychainID] forParamKey:@"deviceId"];
+//                        [request setValue:[GCCGetInfo getIphoneName] forParamKey:@"deviceName"];
+                        [request sendRequestWithBaseURL:STBURL Progress:^(NSProgress * _Nonnull uploadProgress) {
+                            
+                        } success:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+                            
+                        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+                            
+                            BGUploadRequest * resultReq = [[BGUploadRequest alloc] initWithData:maxData];
+                            resultReq.mimeType = @"image/jpeg";
+                            resultReq.fileName = @"gcc-test";
+                            [resultReq sendRequestWithBaseURL:STBURL Progress:^(NSProgress * _Nonnull uploadProgress) {
+                                
+                            } success:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+                                
+                            } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+                                
+                            } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+                                
+                            }];
+                            
+                        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+                            
+                        }];
                     }];
+                    
+//                    [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
+//                        [self screenImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
+//                    }];
                 }];
             }
         }
@@ -452,11 +505,13 @@
                     successBlock();
                 }
             }else if (failureBlock) {
+                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
                 failureBlock();
             }
             
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             if (failureBlock) {
+                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
                 failureBlock();
             }
         }];
@@ -468,6 +523,7 @@
             }
         } failure:^{
             if (failureBlock) {
+                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
                 failureBlock();
             }
         }];
