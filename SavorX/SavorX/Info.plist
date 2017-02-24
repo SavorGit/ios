@@ -316,6 +316,25 @@
 	<string>需要您的允许才能使用相机功能</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>需要您的允许才能使用相册功能</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeLocation</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>二维码扫描</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>3dtouch.qrcode</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypePlay</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>投屏</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>3dtouch.screen</string>
+		</dict>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

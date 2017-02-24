@@ -238,6 +238,19 @@
     [UMessage didReceiveRemoteNotification:userInfo];
 }
 
+- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
+{
+    if ([shortcutItem.type isEqualToString:@"3dtouch.qrcode"]) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [MBProgressHUD showTextHUDwithTitle:@"3DTouch - 二维码扫描"];
+        });
+    }else if ([shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [MBProgressHUD showTextHUDwithTitle:@"3DTouch - 投屏"];
+        });
+    }
+}
+
 //通过其它应用打开APP时调用
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
 {

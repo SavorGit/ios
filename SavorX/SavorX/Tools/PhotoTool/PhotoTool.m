@@ -7,6 +7,7 @@
 //
 
 #import "PhotoTool.h"
+#import "UIImage+Additional.h"
 
 @implementation PhotoTool
 
@@ -517,6 +518,7 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSData*  data = [NSData data];
         data = UIImageJPEGRepresentation(image, 1);
+        NSLog(@"原始图大小:%ld b", data.length);
         float tempX = 0.9;
         NSInteger length = data.length;
         while (data.length > ImageSize) {
@@ -528,19 +530,12 @@
             length = data.length;
         }
         
-        NSData * tempData = data;
-        while (tempData.length > 5*1024) {
-            tempData = UIImageJPEGRepresentation(image, tempX);
-            if (tempX <= 0.1) {
-                tempX -= 0.02;
-            }else{
-                tempX -= 0.1;
-            }
-            if (tempData.length == length) {
-                break;
-            }
-            length = tempData.length;
-        }
+        UIImage * tempImage = [UIImage imageWithData:data];
+        
+        CGFloat scale = 1920 / 1080 > tempImage.size.width / tempImage.size.height ? 152 / tempImage.size.height : 270 / tempImage.size.width;
+        
+        tempImage = [tempImage scaleToSize:CGSizeMake((NSInteger)(tempImage.size.width * scale), (NSInteger)(tempImage.size.height * scale))];
+        NSData * tempData = UIImageJPEGRepresentation(tempImage, 1);
         
         finished(tempData, data);
     });

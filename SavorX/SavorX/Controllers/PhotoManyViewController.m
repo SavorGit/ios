@@ -15,7 +15,7 @@
 #import "HomeAnimationView.h"
 #import "PhotoTool.h"
 #import <Photos/Photos.h>
-#import "BGNetWorkManager.h"
+#import "HSUploadImageRequest.h"
 
 #import "GCCGetInfo.h"
 #import "GCCKeyChain.h"
@@ -301,36 +301,23 @@
                                                  @"deviceName" : [GCCGetInfo getIphoneName]};
                     
                     [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                        NSLog(@"压缩之后的图片大小:%ld b", minData.length);
                         
-                        BGUploadRequest * request = [[BGUploadRequest alloc] initWithData:minData];
-                        request.mimeType = @"image/jpeg";
-                        request.fileName = @"gcc-test";
-//                        [request setValue:@"prepare" forParamKey:@"function"];
-//                        [request setValue:@"2screen" forParamKey:@"action"];
-//                        [request setValue:@"pic" forParamKey:@"assettype"];
-//                        [request setValue:@"test" forParamKey:@"asseturl"];
-//                        [request setValue:@"test" forParamKey:@"assetname"];
-//                        [request setValue:@"0" forParamKey:@"play"];
-//                        [request setValue:[GCCKeyChain load:keychainID] forParamKey:@"deviceId"];
-//                        [request setValue:[GCCGetInfo getIphoneName] forParamKey:@"deviceName"];
-                        [request sendRequestWithBaseURL:STBURL Progress:^(NSProgress * _Nonnull uploadProgress) {
-                            
-                        } success:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+                        HSUploadImageRequest * request = [[HSUploadImageRequest alloc] initWithData:minData name:name type:HSUPLOADIMAGETYPE_MIN];
+                        [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
                             
                         } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
                             
-                            BGUploadRequest * resultReq = [[BGUploadRequest alloc] initWithData:maxData];
-                            resultReq.mimeType = @"image/jpeg";
-                            resultReq.fileName = @"gcc-test";
-                            [resultReq sendRequestWithBaseURL:STBURL Progress:^(NSProgress * _Nonnull uploadProgress) {
-                                
-                            } success:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-                                
-                            } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-                                
-                            } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-                                
-                            }];
+                            if ([[response objectForKey:@"result"] integerValue] == 0) {
+                                HSUploadImageRequest * maxRequest = [[HSUploadImageRequest alloc] initWithData:maxData name:name type:HSUPLOADIMAGETYPE_MAX];
+                                [maxRequest sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+                                    
+                                } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+                                    
+                                } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+                                    
+                                }];
+                            }
                             
                         } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
                             
