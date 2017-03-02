@@ -139,7 +139,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         state = KWifi_NoLinkWifi;
     }
     
-    [ScreenProjectionView showScreenProjectionTitle:@"投屏" wifiState:state block:^(NSInteger selectIndex) {
+    [[ScreenProjectionView shareStance] showScreenProjectionTitle:@"投屏" wifiState:state block:^(NSInteger selectIndex) {
         switch (selectIndex) {
             case 0:
             {

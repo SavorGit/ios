@@ -21,12 +21,13 @@ typedef enum {
 
 @interface ScreenProjectionView : BaseView
 
++ (instancetype)shareStance;
 /**
  *  显示可选视图
  *
  *  @param items       数组，里面全是字符串
  *  @param selectBlock 回调block
  */
-+ (instancetype)showScreenProjectionTitle:(NSString *)title wifiState:(WifiState)wifistate  block:(ScreenProjectionSelectViewSelectBlock)selectBlock;
+- (instancetype)showScreenProjectionTitle:(NSString *)title wifiState:(WifiState)wifistate  block:(ScreenProjectionSelectViewSelectBlock)selectBlock;
 
 @end
