@@ -39,7 +39,7 @@
 
 - (void)setupViews
 {
-    self.title = self.model.title;
+    self.title = @"文章详情";
     
     UIBarButtonItem * shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareAction)];
     self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];

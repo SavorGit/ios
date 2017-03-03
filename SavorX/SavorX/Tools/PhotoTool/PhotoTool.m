@@ -7,6 +7,7 @@
 //
 
 #import "PhotoTool.h"
+#import "UIImage+Additional.h"
 
 @implementation PhotoTool
 
@@ -44,71 +45,75 @@
  */
 - (void)startLoadPhotoAssetCollection
 {
-    //初始化相册数组
-    NSMutableArray * collections = [[NSMutableArray alloc] init];
-    
-    //初始化相册遍历参数
-    PHFetchOptions *userAlbumsOptions = [PHFetchOptions new];
-    //相册中的相片数量大于0
-    userAlbumsOptions.predicate = [NSPredicate predicateWithFormat:@"estimatedAssetCount > 0"];
-    
-    //列出手机自带相册
-    PHFetchResult *syncedAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum
-                                                                           subtype:PHAssetCollectionSubtypeAlbumSyncedAlbum options:userAlbumsOptions];
-    
-    //列出所有用户创建
-    PHFetchResult *userCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
-    
-    NSArray * collectionsFetchResults = @[syncedAlbums, userCollections];
-    
-    
-//    列出所有相册智能相册
-    PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-    
-    [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (collection) {
-            PHFetchOptions * option = [[PHFetchOptions alloc] init];
-            option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
-            PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
-            if (assetsFetchResult.count > 0) {
-                PhotoLibraryModel * model = [[PhotoLibraryModel alloc] init];
-                model.isSystemLibrary = YES;
-                model.result = assetsFetchResult;
-                model.createTime = [self transformDate:collection.startDate];
-                model.title = [self transformAblumTitle:collection.localizedTitle];
-                if (![model.title isEqualToString:@"最近删除"]) {
-                    [collections addObject:model];
-                }
-            }
-        }
-    }];
-    
-    for (int i = 0; i < collectionsFetchResults.count; i ++) {
-        PHFetchResult *fetchResult = collectionsFetchResults[i];
-        if (fetchResult.count > 0) {
-            [fetchResult enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
-                if (collection) {
-                    PHFetchOptions * option = [[PHFetchOptions alloc] init];
-                    option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
-                    PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
-                    if (assetsFetchResult.count > 0) {
-                        PhotoLibraryModel * model = [[PhotoLibraryModel alloc] init];
-                        model.isSystemLibrary = YES;
-                        model.result = assetsFetchResult;
-                        model.createTime = [self transformDate:collection.startDate];
-                        model.title = [self transformAblumTitle:collection.localizedTitle];
-                        if (![model.title isEqualToString:@"最近删除"]) {
-                            [collections addObject:model];
-                        }
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        //初始化相册数组
+        NSMutableArray * collections = [[NSMutableArray alloc] init];
+        
+        //初始化相册遍历参数
+        PHFetchOptions *userAlbumsOptions = [PHFetchOptions new];
+        //相册中的相片数量大于0
+        userAlbumsOptions.predicate = [NSPredicate predicateWithFormat:@"estimatedAssetCount > 0"];
+        
+        //列出手机自带相册
+        PHFetchResult *syncedAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum
+                                                                               subtype:PHAssetCollectionSubtypeAlbumSyncedAlbum options:userAlbumsOptions];
+        
+        //列出所有用户创建
+        PHFetchResult *userCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];
+        
+        NSArray * collectionsFetchResults = @[syncedAlbums, userCollections];
+        
+        
+        //    列出所有相册智能相册
+        PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+        
+        [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (collection) {
+                PHFetchOptions * option = [[PHFetchOptions alloc] init];
+                option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
+                PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
+                if (assetsFetchResult.count > 0) {
+                    PhotoLibraryModel * model = [[PhotoLibraryModel alloc] init];
+                    model.isSystemLibrary = YES;
+                    model.result = assetsFetchResult;
+                    model.createTime = [self transformDate:collection.startDate];
+                    model.title = [self transformAblumTitle:collection.localizedTitle];
+                    if (![model.title isEqualToString:@"最近删除"]) {
+                        [collections addObject:model];
                     }
                 }
-            }];
+            }
+        }];
+        
+        for (int i = 0; i < collectionsFetchResults.count; i ++) {
+            PHFetchResult *fetchResult = collectionsFetchResults[i];
+            if (fetchResult.count > 0) {
+                [fetchResult enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL *stop) {
+                    if (collection) {
+                        PHFetchOptions * option = [[PHFetchOptions alloc] init];
+                        option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
+                        PHFetchResult *assetsFetchResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
+                        if (assetsFetchResult.count > 0) {
+                            PhotoLibraryModel * model = [[PhotoLibraryModel alloc] init];
+                            model.isSystemLibrary = YES;
+                            model.result = assetsFetchResult;
+                            model.createTime = [self transformDate:collection.startDate];
+                            model.title = [self transformAblumTitle:collection.localizedTitle];
+                            if (![model.title isEqualToString:@"最近删除"]) {
+                                [collections addObject:model];
+                            }
+                        }
+                    }
+                }];
+            }
         }
-    }
-    
-    if (_delegate && [_delegate respondsToSelector:@selector(PhotoToolDidGetAssetPhotoGroups:)]) {
-        [_delegate PhotoToolDidGetAssetPhotoGroups:collections];
-    }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (_delegate && [_delegate respondsToSelector:@selector(PhotoToolDidGetAssetPhotoGroups:)]) {
+                [_delegate PhotoToolDidGetAssetPhotoGroups:collections];
+            }
+        });
+    });
 }
 
 - (void)startLoadVideoAssetCollection
@@ -517,6 +522,7 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSData*  data = [NSData data];
         data = UIImageJPEGRepresentation(image, 1);
+        NSLog(@"原始图大小:%ld b", data.length);
         float tempX = 0.9;
         NSInteger length = data.length;
         while (data.length > ImageSize) {
@@ -528,22 +534,39 @@
             length = data.length;
         }
         
-        NSData * tempData = data;
-        while (tempData.length > 5*1024) {
-            tempData = UIImageJPEGRepresentation(image, tempX);
-            if (tempX <= 0.1) {
-                tempX -= 0.02;
-            }else{
-                tempX -= 0.1;
-            }
-            if (tempData.length == length) {
-                break;
-            }
-            length = tempData.length;
-        }
+        UIImage * tempImage = [UIImage imageWithData:data];
+        
+        CGFloat scale = 1920 / 1080 > tempImage.size.width / tempImage.size.height ? 152 / tempImage.size.height : 270 / tempImage.size.width;
+        
+        tempImage = [tempImage scaleToSize:CGSizeMake((NSInteger)(tempImage.size.width * scale), (NSInteger)(tempImage.size.height * scale))];
+        NSData * tempData = UIImageJPEGRepresentation(tempImage, 1);
         
         finished(tempData, data);
     });
+}
+
+- (void)getImageFromPHAssetSourceWithAsset:(PHAsset *)asset success:(void (^)(UIImage *))success
+{
+    //导出图片的参数
+    PHImageRequestOptions *option = [PHImageRequestOptions new];
+    option.synchronous = YES; //开启线程同步
+    option.resizeMode = PHImageRequestOptionsResizeModeExact; //标准的图片尺寸
+    option.version = PHImageRequestOptionsVersionCurrent; //获取用户操作的图片
+    option.deliveryMode = PHImageRequestOptionsDeliveryModeFastFormat; //高质量
+    
+    CGFloat width = asset.pixelWidth;
+    CGFloat height = asset.pixelHeight;
+    CGFloat scale = width / height;
+    CGFloat tempScale = 1920 / 1080.f;
+    CGSize size;
+    if (scale > tempScale) {
+        size = CGSizeMake(1920, 1920 / scale);
+    }else{
+        size = CGSizeMake(1080 * scale, 1080);
+    }
+    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        success(result);
+    }];
 }
 
 @end

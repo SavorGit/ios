@@ -16,6 +16,8 @@
 		060DB0A41D5AD1C8002A2DED /* HTTPServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 060DB0A31D5AD1C8002A2DED /* HTTPServerManager.m */; };
 		060DB0B41D5B26F9002A2DED /* UIColor+YYAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 060DB0B31D5B26F9002A2DED /* UIColor+YYAdditions.m */; };
 		060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 060DB0BD1D5B28BB002A2DED /* DemandViewController.m */; };
+		060E349A1E6662A900D38547 /* PhotoAllViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E34991E6662A900D38547 /* PhotoAllViewController.m */; };
+		060E349D1E6663D600D38547 /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E349C1E6663D600D38547 /* PhotoCollectionViewCell.m */; };
 		060E420D1E4CB03E009A94FC /* TAAbstractDotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E42001E4CB03E009A94FC /* TAAbstractDotView.m */; };
 		060E420E1E4CB03E009A94FC /* TAAnimatedDotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E42021E4CB03E009A94FC /* TAAnimatedDotView.m */; };
 		060E420F1E4CB03E009A94FC /* TADotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E42041E4CB03E009A94FC /* TADotView.m */; };
@@ -279,6 +281,10 @@
 		060DB0B31D5B26F9002A2DED /* UIColor+YYAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YYAdditions.m"; sourceTree = "<group>"; };
 		060DB0BC1D5B28BB002A2DED /* DemandViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemandViewController.h; sourceTree = "<group>"; };
 		060DB0BD1D5B28BB002A2DED /* DemandViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemandViewController.m; sourceTree = "<group>"; };
+		060E34981E6662A900D38547 /* PhotoAllViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAllViewController.h; sourceTree = "<group>"; };
+		060E34991E6662A900D38547 /* PhotoAllViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoAllViewController.m; sourceTree = "<group>"; };
+		060E349B1E6663D600D38547 /* PhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionViewCell.h; sourceTree = "<group>"; };
+		060E349C1E6663D600D38547 /* PhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionViewCell.m; sourceTree = "<group>"; };
 		060E41FF1E4CB03E009A94FC /* TAAbstractDotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAAbstractDotView.h; sourceTree = "<group>"; };
 		060E42001E4CB03E009A94FC /* TAAbstractDotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TAAbstractDotView.m; sourceTree = "<group>"; };
 		060E42011E4CB03E009A94FC /* TAAnimatedDotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAAnimatedDotView.h; sourceTree = "<group>"; };
@@ -1138,6 +1144,8 @@
 				06EA38D11D5980FC0081DDCC /* PhotoShowViewController.m */,
 				063B1D511D7D63D30036C02B /* PhotoSliderViewController.h */,
 				063B1D521D7D63D30036C02B /* PhotoSliderViewController.m */,
+				060E34981E6662A900D38547 /* PhotoAllViewController.h */,
+				060E34991E6662A900D38547 /* PhotoAllViewController.m */,
 			);
 			name = Photo;
 			sourceTree = "<group>";
@@ -1179,6 +1187,8 @@
 				06F1583A1D5C85960050BCA6 /* VideoCollectionViewCell.xib */,
 				06FD5F201DC1D23A0043D898 /* ScreenCollectionViewCell.h */,
 				06FD5F211DC1D23A0043D898 /* ScreenCollectionViewCell.m */,
+				060E349B1E6663D600D38547 /* PhotoCollectionViewCell.h */,
+				060E349C1E6663D600D38547 /* PhotoCollectionViewCell.m */,
 			);
 			name = Screen;
 			sourceTree = "<group>";
@@ -2015,6 +2025,7 @@
 				060DB0A41D5AD1C8002A2DED /* HTTPServerManager.m in Sources */,
 				060E420E1E4CB03E009A94FC /* TAAnimatedDotView.m in Sources */,
 				476F44C01E2DB39E00F99090 /* UIImage+Additional.m in Sources */,
+				060E349D1E6663D600D38547 /* PhotoCollectionViewCell.m in Sources */,
 				062D4F791DEC02BA0093942A /* GCCControlView.m in Sources */,
 				06EA38CF1D5980F10081DDCC /* PhotoListViewController.m in Sources */,
 				064F0E2E1DD316C800D9EFD1 /* SliderShowViewController.m in Sources */,
@@ -2114,6 +2125,7 @@
 				063AA2451DB8AA97007F4C70 /* AddLibraryViewController.m in Sources */,
 				47D6F63D1E4AB68C0030C8C4 /* SXVideoPlayViewController.m in Sources */,
 				47FE2CB91E1BB53200D3D0B4 /* SplashViewController.m in Sources */,
+				060E349A1E6662A900D38547 /* PhotoAllViewController.m in Sources */,
 				060C37461D6C48930058BBBE /* ScanQRCodeViewController.m in Sources */,
 				060E42121E4CB03E009A94FC /* SDCycleScrollView.m in Sources */,
 				061FEFE41E2DB061003CD111 /* WMMenuItem.m in Sources */,

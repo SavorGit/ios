@@ -118,6 +118,78 @@
     return task;
 }
 
++ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type success:(void (^)())success failure:(void (^)())failure
+{
+    BGUploadRequest * request = [[BGUploadRequest alloc] initWithData:data];
+    request.mimeType = @"image/jpeg";
+    request.fileName = name;
+    
+    [request setValue:name forParamKey:@"imageId"];
+    [request setValue:@"prepare" forParamKey:@"function"];
+    [request setValue:@"2screen" forParamKey:@"action"];
+    [request setValue:@"pic" forParamKey:@"assettype"];
+    [request setValue:@"0" forParamKey:@"play"];
+    [request setIntegerValue:type forParamKey:@"isThumbnail"];
+    [request setValue:[GCCKeyChain load:keychainID] forParamKey:@"deviceId"];
+    [request setValue:[GCCGetInfo getIphoneName] forParamKey:@"deviceName"];
+    
+    [request sendRequestWithBaseURL:urlStr Progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        if ([[response objectForKey:@"result"] integerValue] == 0) {
+            if (success) {
+                success();
+            }
+        }else if ([[response objectForKey:@"result"] integerValue] == 2) {
+            
+        }else{
+            if (failure) {
+                [MBProgressHUD showTextHUDwithTitle:[response objectForKey:@"info"]];
+                failure();
+            }
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        if ([[response objectForKey:@"result"] integerValue] == 0) {
+            if (success) {
+                success();
+            }
+        }else if ([[response objectForKey:@"result"] integerValue] == 2) {
+            
+        }else{
+            if (failure) {
+                [MBProgressHUD showTextHUDwithTitle:[response objectForKey:@"info"]];
+                failure();
+            }
+        }
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        if (failure) {
+            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+            failure();
+        }
+    }];
+    
+    return request;
+}
+
++ (void)screenDLNAImageWithKeyStr:(NSString *)keyStr WithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
+{
+    NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
+    [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
+        if (successBlock) {
+            successBlock();
+        }
+    } failure:^{
+        if (failureBlock) {
+            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+            failureBlock();
+        }
+    }];
+}
+
 + (void)showAlertWithString:(NSString *)str withController:(UIViewController *)VC
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:str preferredStyle:UIAlertControllerStyleAlert];

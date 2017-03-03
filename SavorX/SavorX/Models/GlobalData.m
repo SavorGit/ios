@@ -14,6 +14,8 @@
 NSString * const RDDidBindDeviceNotification = @"RDDidBindDeviceNotification";
 NSString * const RDDidDisconnectDeviceNotification = @"RDDidDisconnectDeviceNotification";
 NSString * const RDDidFoundHotelIdNotification = @"RDDidFoundHotelIdNotification";
+NSString * const RDDidNotFoundSenceNotification = @"RDDidNotFoundSenceNotification";
+NSString * const RDDidFoundSenceNotification = @"RDDidFoundSenceNotification";
 
 #define hasUseHotelID @"hasUseHotelID"
 #define hasAlertDemandHelp @"hasAlertDemandHelp"
@@ -57,7 +59,6 @@ static GlobalData* single = nil;
     self.DLNADevice = model;
     [[GCCUPnPManager defaultManager] setDeviceModel:model];
     [[NSNotificationCenter defaultCenter] postNotificationName:RDDidBindDeviceNotification object:nil];
-    [self statusBeChange];
 }
 
 - (void)bindToRDBoxDevice:(RDBoxModel *)model
@@ -66,7 +67,6 @@ static GlobalData* single = nil;
     self.RDBoxDevice = model;
     self.hotelId = model.hotelID;
     [[NSNotificationCenter defaultCenter] postNotificationName:RDDidBindDeviceNotification object:nil];
-    [self statusBeChange];
     
     if (![[[NSUserDefaults standardUserDefaults] objectForKey:hasAlertDemandHelp] boolValue]) {
         
@@ -101,7 +101,6 @@ static GlobalData* single = nil;
     [self disconnectWithRDBoxDevice];
     [self disconnectWithDLNADevice];
     [[NSNotificationCenter defaultCenter] postNotificationName:RDDidDisconnectDeviceNotification object:nil];
-    [self statusBeChange];
 }
 
 - (void)setHotelId:(NSInteger)hotelId
@@ -147,12 +146,14 @@ static GlobalData* single = nil;
 {
     _scene = scene;
     if (scene == RDSceneNothing) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:RDDidNotFoundSenceNotification object:nil];
         if (_isBindRD || _isBindDLNA) {
             [self disconnect];
         }
         self.callQRCodeURL = @"";
+    }else{
+        [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundSenceNotification object:nil];
     }
-    [self statusBeChange];
 }
 
 - (void)setIsWifiStatus:(BOOL)isWifiStatus
@@ -161,20 +162,6 @@ static GlobalData* single = nil;
     if (!isWifiStatus) {
         _scene = RDSceneNothing;
         [MBProgressHUD removeTextHUD];
-    }
-    [self statusBeChange];
-}
-
-- (void)statusBeChange
-{
-    if (self.scene == RDSceneNothing) {
-        [[HomeAnimationView animationView] resetStatus];
-    }else{
-        if (self.isBindRD || self.isBindDLNA) {
-            [[HomeAnimationView animationView] bindRDBox];
-        }else{
-            [[HomeAnimationView animationView] foundRDBox];
-        }
     }
 }
 

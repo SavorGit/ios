@@ -19,6 +19,8 @@ typedef enum : NSUInteger {
 extern NSString * const RDDidBindDeviceNotification;
 extern NSString * const RDDidDisconnectDeviceNotification;
 extern NSString * const RDDidFoundHotelIdNotification;
+extern NSString * const RDDidNotFoundSenceNotification;
+extern NSString * const RDDidFoundSenceNotification;
 
 @interface GlobalData : NSObject 
 

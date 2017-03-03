@@ -30,6 +30,13 @@
 
 @implementation HomeAnimationView
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundSenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidNotFoundSenceNotification object:nil];
+}
+
 + (instancetype)animationView
 {
     static HomeAnimationView *view;
@@ -49,6 +56,10 @@
         }];
         [view.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
         [view hidden];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(foundRDBox) name:RDDidFoundSenceNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(bindRDBox) name:RDDidBindDeviceNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(resetStatus) name:RDDidNotFoundSenceNotification object:nil];
     });
     
     return view;
@@ -56,7 +67,6 @@
 
 -(void)awakeFromNib{
     [super awakeFromNib];
-    
 }
 
 - (void)startScreenWithViewController:(UIViewController *)viewController
