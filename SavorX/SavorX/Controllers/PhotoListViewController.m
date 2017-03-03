@@ -206,34 +206,43 @@
             hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在加载"];
         }
         
+        if ([GlobalData shared].isBindRD) {
+            
+            PHAsset * asset = [self.PHAssetSource objectAtIndex:indexPath.row];
+            NSString * name = asset.localIdentifier;
+            [[PhotoTool sharedInstance] getImageFromPHAssetSourceWithAsset:asset success:^(UIImage *result) {
+                
+                PhotoManyViewController * vc = [[PhotoManyViewController alloc] initWithPHAssetSource:self.PHAssetSource andIndex:indexPath.row];
+                
+                [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                    
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                        [hud hideAnimated:NO];
+                        [self.navigationController pushViewController:vc animated:YES];
+                        [[HomeAnimationView animationView] startScreenWithViewController:vc];
+                        [SAVORXAPI successRing];
+                        
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                            
+                        } failure:^{
+                            
+                        }];
+                        
+                    } failure:^{
+                        [hud hideAnimated:NO];
+                    }];
+                    
+                }];
+                
+            }];
+            return;
+        }
+        
         //不是选择状态
         [self screenImageWithPHAsset:[self.PHAssetSource objectAtIndex:indexPath.row] index:indexPath.row success:^(UIImage *result, NSString *keyStr) {
             
             PhotoManyViewController * vc = [[PhotoManyViewController alloc] initWithPHAssetSource:self.PHAssetSource andIndex:indexPath.row];
-            
-            if ([GlobalData shared].isBindRD) {
-                
-                NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
-                NSDictionary *parameters = @{@"function": @"prepare",
-                                             @"action": @"2screen",
-                                             @"assettype": @"pic",
-                                             @"asseturl": asseturlStr,
-                                             @"assetname": keyStr,
-                                             @"play": @"0"};
-                [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                    [hud hideAnimated:NO];
-                    if ([[result objectForKey:@"result"] integerValue] == 0) {
-                        [self.navigationController pushViewController:vc animated:YES];
-                        [[HomeAnimationView animationView] startScreenWithViewController:vc];
-                        [SAVORXAPI successRing];
-                    }else{
-                        [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-                    }
-                } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                    [hud hideAnimated:NO];
-                    [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-                }];
-            }else if ([GlobalData shared].isBindDLNA){
+            if ([GlobalData shared].isBindDLNA){
                 NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
                 [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                     [hud hideAnimated:NO];

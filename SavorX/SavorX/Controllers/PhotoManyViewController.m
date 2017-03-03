@@ -15,7 +15,6 @@
 #import "HomeAnimationView.h"
 #import "PhotoTool.h"
 #import <Photos/Photos.h>
-#import "HSUploadImageRequest.h"
 
 #import "GCCGetInfo.h"
 #import "GCCKeyChain.h"
@@ -118,25 +117,36 @@
     PHAsset * asset = [self.PHAssetSource objectAtIndex:index];
     NSString * name = asset.localIdentifier;
     if (cell.hasEdit) {
-        [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
-            [self screenImageWithKeyStr:keyStr WithSuccess:^{
-                [hud hideAnimated:NO];
-                [[HomeAnimationView animationView] startScreenWithViewController:self];
-                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
-                self.navigationItem.rightBarButtonItem.enabled = YES;
-                self.isScreen = YES;
-            } failure:^{
-                [hud hideAnimated:NO];
-                self.navigationItem.rightBarButtonItem.enabled = YES;
-                self.isScreen = NO;
-            }];
-        }];
-    }else{
-        [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
-            [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                [self screenImageWithKeyStr:keyStr WithSuccess:^{
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+        
+        if ([GlobalData shared].isBindRD) {
+            [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
+                
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                    
                     [hud hideAnimated:NO];
+                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+                    self.navigationItem.rightBarButtonItem.enabled = YES;
+                    self.isScreen = YES;
+                    
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                        
+                    } failure:^{
+                        
+                    }];
+                    
+                    
+                } failure:^{
+                    [hud hideAnimated:NO];
+                    self.navigationItem.rightBarButtonItem.enabled = YES;
+                    self.isScreen = NO;
+                }];
+            }];
+        }else if ([GlobalData shared].isBindDLNA) {
+            [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
+                [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
+                    [hud hideAnimated:NO];
+                    [[HomeAnimationView animationView] startScreenWithViewController:self];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
@@ -146,6 +156,48 @@
                     self.isScreen = NO;
                 }];
             }];
+        }
+    }else{
+        [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
+            if ([GlobalData shared].isBindRD) {
+                [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                    
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                        
+                        [hud hideAnimated:NO];
+                        [[HomeAnimationView animationView] startScreenWithViewController:self];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+                        self.navigationItem.rightBarButtonItem.enabled = YES;
+                        self.isScreen = YES;
+                        
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                            
+                        } failure:^{
+                            
+                        }];
+                        
+                        
+                    } failure:^{
+                        [hud hideAnimated:NO];
+                        self.navigationItem.rightBarButtonItem.enabled = YES;
+                        self.isScreen = NO;
+                    }];
+                }];
+            }else if ([GlobalData shared].isBindDLNA) {
+                [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
+                    [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
+                        [hud hideAnimated:NO];
+                        [[HomeAnimationView animationView] startScreenWithViewController:self];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+                        self.navigationItem.rightBarButtonItem.enabled = YES;
+                        self.isScreen = YES;
+                    } failure:^{
+                        [hud hideAnimated:NO];
+                        self.navigationItem.rightBarButtonItem.enabled = YES;
+                        self.isScreen = NO;
+                    }];
+                }];
+            }
         }];
     }
 }
@@ -190,7 +242,7 @@
 {
     PhotoManyCollectionViewCell * cell = [self currentCell];
     if (cell.hasEdit) {
-        [cell setCellRealImage:[self rotateImageTo:UIImageOrientationRight withImage:[cell getCellEditImage]]];
+        [cell setCellEditImage:[self rotateImageTo:UIImageOrientationRight withImage:[cell getCellEditImage]]];
     }else{
         [cell setCellRealImage:[self rotateImageTo:UIImageOrientationRight withImage:[cell getCellRealImage]]];
     }
@@ -229,9 +281,27 @@
             NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
             PHAsset * asset = [self.PHAssetSource objectAtIndex:index];
             NSString * name = asset.localIdentifier;
-            [OpenFileTool writeImageToSysImageCacheWithImage:image andName:name handle:^(NSString *keyStr) {
-                [self screenImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
-            }];
+            
+            if ([GlobalData shared].isBindRD) {
+                [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
+                    
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                        
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                            
+                        } failure:^{
+                            
+                        }];
+                        
+                    } failure:^{
+                        
+                    }];
+                }];
+            }else if ([GlobalData shared].isBindDLNA) {
+                [OpenFileTool writeImageToSysImageCacheWithImage:image andName:name handle:^(NSString *keyStr) {
+                    [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
+                }];
+            }
         }
     }
 }
@@ -284,49 +354,51 @@
             NSString * name = asset.localIdentifier;
             
             if (cell.hasEdit) {
-//                [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
-//                    [self screenImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
-//                }];
-            }else{
                 
-                [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
-                    
-                    NSDictionary *parameters = @{@"function": @"prepare",
-                                                 @"action": @"2screen",
-                                                 @"assettype": @"pic",
-                                                 @"asseturl": @"test",
-                                                 @"assetname": @"test",
-                                                 @"play": @"0",
-                                                 @"deviceId" : [GCCKeyChain load:keychainID],
-                                                 @"deviceName" : [GCCGetInfo getIphoneName]};
-                    
-                    [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
-                        NSLog(@"压缩之后的图片大小:%ld b", minData.length);
+                if ([GlobalData shared].isBindRD) {
+                    [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
                         
-                        HSUploadImageRequest * request = [[HSUploadImageRequest alloc] initWithData:minData name:name type:HSUPLOADIMAGETYPE_MIN];
-                        [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+                        [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
                             
-                        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+                            [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                                
+                            } failure:^{
+                                
+                            }];
                             
-                            if ([[response objectForKey:@"result"] integerValue] == 0) {
-                                HSUploadImageRequest * maxRequest = [[HSUploadImageRequest alloc] initWithData:maxData name:name type:HSUPLOADIMAGETYPE_MAX];
-                                [maxRequest sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-                                    
-                                } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-                                    
-                                } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-                                    
-                                }];
-                            }
-                            
-                        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+                        } failure:^{
                             
                         }];
                     }];
-                    
-//                    [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-//                        [self screenImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
-//                    }];
+                }else if ([GlobalData shared].isBindDLNA) {
+                    [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
+                        [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
+                    }];
+                }
+                
+            }else{
+                
+                [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
+                    if ([GlobalData shared].isBindRD) {
+                        [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                            
+                            [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                                
+                                [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                                    
+                                } failure:^{
+                                    
+                                }];
+                                
+                            } failure:^{
+                                
+                            }];
+                        }];
+                    }else if ([GlobalData shared].isBindDLNA) {
+                        [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
+                            [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
+                        }];
+                    }
                 }];
             }
         }
@@ -469,52 +541,6 @@
     
     UIImage *newPic =UIGraphicsGetImageFromCurrentImageContext();
     return newPic;
-}
-
-//投屏图片
-- (void)screenImageWithKeyStr:(NSString *)keyStr WithSuccess:(void(^)())successBlock failure:(void(^)())failureBlock
-{
-    if ([GlobalData shared].isBindRD) {
-        if (self.task) {
-            [self.task cancel];
-        }
-        NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
-        NSDictionary *parameters = @{@"function": @"prepare",
-                                     @"action": @"2screen",
-                                     @"assettype": @"pic",
-                                     @"asseturl": asseturlStr,
-                                     @"assetname": keyStr,
-                                     @"play": @"0"};
-        self.task = [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            
-            if ([[result objectForKey:@"result"] integerValue] == 0) {
-                if (successBlock) {
-                    successBlock();
-                }
-            }else if (failureBlock) {
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-                failureBlock();
-            }
-            
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            if (failureBlock) {
-                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-                failureBlock();
-            }
-        }];
-    }else{
-        NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
-        [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
-            if (successBlock) {
-                successBlock();
-            }
-        } failure:^{
-            if (failureBlock) {
-                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-                failureBlock();
-            }
-        }];
-    }
 }
 
 - (void)dealloc

@@ -75,4 +75,6 @@
 
 - (void)compressImageWithImage:(UIImage *)image finished:(void(^)(NSData * minData, NSData * maxData))finished;
 
+- (void)getImageFromPHAssetSourceWithAsset:(PHAsset *)asset success:(void (^)(UIImage * result))success;
+
 @end

@@ -11,16 +11,16 @@
 @interface PhotoManyCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, assign) BOOL hasEdit;
-@property (nonatomic, assign) NSInteger Orientation;
+@property (nonatomic, assign) NSInteger Orientation; //当前旋转的方向
 
-@property (nonatomic, copy) NSString * firstText;
-@property (nonatomic, copy) NSString * secondText;
-@property (nonatomic, copy) NSString * thirdText;
+@property (nonatomic, copy) NSString * firstText; //第一行文字
+@property (nonatomic, copy) NSString * secondText; //第二行文字
+@property (nonatomic, copy) NSString * thirdText; //第三行文字
 
-- (void)setCellRealImage:(UIImage *)image;
-- (void)setCellEditImage:(UIImage *)image;
+- (void)setCellRealImage:(UIImage *)image; //设置原图
+- (void)setCellEditImage:(UIImage *)image; //设置被添加文字的图片
 
-- (UIImage *)getCellRealImage;
-- (UIImage *)getCellEditImage;
+- (UIImage *)getCellRealImage; //获取原图
+- (UIImage *)getCellEditImage; //获取被添加文字的图片
 
 @end

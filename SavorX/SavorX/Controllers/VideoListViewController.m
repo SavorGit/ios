@@ -89,11 +89,6 @@
             //导出成功进行投屏MP4操作
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                if (![HTTPServerManager getCurrentHTTPServerIP]) {
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    return;
-                }
-                
                 NSString *asseturlStr = [NSString stringWithFormat:@"%@video?media-Redianer-TempCache.mp4", [HTTPServerManager getCurrentHTTPServerIP]];
                 if ([GlobalData shared].isBindRD) {
                     NSDictionary *parameters = @{@"function": @"prepare",
@@ -141,7 +136,6 @@
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                     [self.navigationController pushViewController:play animated:YES];
                 }
-                
             });
         }else if (session.status == AVAssetExportSessionStatusCancelled){
             dispatch_async(dispatch_get_main_queue(), ^{

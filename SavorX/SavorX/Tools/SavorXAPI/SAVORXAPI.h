@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
+#import "BGUploadRequest.h"
 
 typedef NS_ENUM(NSInteger, handleType) {
     collectHandle = 1, //收藏
@@ -50,6 +51,10 @@ typedef NS_ENUM(NSInteger, interactType) {
  * @return NSURLSessionDataTask对象
  */
 + (NSURLSessionDataTask *)getWithURL:(NSString *)urlStr parameters:(NSDictionary *)parameters success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
+
++ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type success:(void (^)())success failure:(void (^)())failure;
+
++ (void)screenDLNAImageWithKeyStr:(NSString *)keyStr WithSuccess:(void(^)())successBlock failure:(void(^)())failureBlock;
 
 /**
  *  展示一个只带确认按钮的信息提示框

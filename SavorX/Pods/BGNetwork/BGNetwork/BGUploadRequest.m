@@ -28,6 +28,10 @@
     return [self sendRequestWithProgress:NULL success:successCompletionBlock businessFailure:businessFailureBlock networkFailure:networkFailureBlock];
 }
 
+- (void)sendRequestWithBaseURL:(NSString *)url Success:(BGSuccessCompletionBlock)successCompletionBlock businessFailure:(BGBusinessFailureBlock)businessFailureBlock networkFailure:(BGNetworkFailureBlock)networkFailureBlock {
+    return [self sendRequestWithBaseURL:url Progress:NULL success:successCompletionBlock businessFailure:businessFailureBlock networkFailure:networkFailureBlock];
+}
+
 - (void)sendRequestWithProgress:(void (^)(NSProgress * _Nonnull))uploadProgress success:(BGSuccessCompletionBlock)successCompletionBlock businessFailure:(BGBusinessFailureBlock)businessFailureBlock networkFailure:(BGNetworkFailureBlock)networkFailureBlock {
     [[BGNetworkManager sharedManager] sendUploadRequest:self progress:uploadProgress success:successCompletionBlock businessFailure:businessFailureBlock networkFailure:networkFailureBlock];
 }

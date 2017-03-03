@@ -224,7 +224,6 @@
                 self.headBackView.palySlider.value = 0;
                 self.footerView.videoPlayButton.selected = YES;
                 self.isPlayEnd = YES;
-                [SAVORXAPI ScreenDemandShouldBackToTV];
                 [self shouldRelease];
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {

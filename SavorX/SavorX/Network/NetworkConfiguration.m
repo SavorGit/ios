@@ -64,9 +64,17 @@
 }
 
 - (BOOL)shouldBusinessSuccessWithResponseData:(NSDictionary *)responseData task:(NSURLSessionDataTask *)task request:(BGNetworkRequest *)request {
-    NSInteger code = [responseData[@"code"] integerValue];
-    if(code == 10000){
-        return YES;
+    NSInteger code;
+    if ([responseData objectForKey:@"code"]) {
+        code = [responseData[@"code"] integerValue];
+        if(code == 10000){
+            return YES;
+        }
+    }else{
+        code = [responseData[@"result"] integerValue];
+        if(code == 0){
+            return YES;
+        }
     }
     return NO;
 }
