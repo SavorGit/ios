@@ -8,6 +8,7 @@
 
 #import "GCCCodeScanning.h"
 #import <AVFoundation/AVFoundation.h>
+#import "HomeAnimationView.h"
 
 @interface GCCCodeScanning ()<AVCaptureMetadataOutputObjectsDelegate>
 
@@ -149,8 +150,32 @@
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
     [self addSubview:label];
-}
+    
+    UIButton *reScanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [reScanBtn setTitle:@"重新连接" forState:UIControlStateNormal];
+    reScanBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    [reScanBtn setBackgroundColor:[UIColor colorWithRed:215.0/255.0 green:190.0/255.0 blue:126.0/255.0 alpha:1.0]];
+    [reScanBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [reScanBtn addTarget:self action:@selector(reScanAction) forControlEvents:UIControlEventTouchUpInside];
+    reScanBtn.layer.masksToBounds = YES;
+    reScanBtn.layer.cornerRadius = 5.0;
+    reScanBtn.layer.borderWidth = 1.0;
+    reScanBtn.layer.borderColor = [[UIColor clearColor] CGColor];
+    
+    [self addSubview:reScanBtn];
+    
+    [reScanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(label2.bottom + 10);
+        make.size.mas_equalTo(CGSizeMake(80, 32));
+        make.centerX.equalTo(self);
+//        make.centerY.equalTo(self).offset(120);215 190 126
+    }];
 
+}
+// 重新连接
+- (void)reScanAction{
+    [[HomeAnimationView animationView] CameroIsReady];
+}
 /**
  *  创建上方动画layer
  *

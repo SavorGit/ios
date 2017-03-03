@@ -31,6 +31,9 @@
 
 - (void)scanQRCode;
 
+//相机权限准备好，即调用TCP连接检测与UDP广播发送进行二维码呼出
+- (void)CameroIsReady;
+
 //发现设备提示动画
 -(void)startDevDetectedAnimation;
 
