@@ -7,6 +7,7 @@
 //
 
 #import "RDHomeScreenButton.h"
+#import "SDImageCache.h"
 
 static CGFloat RDHomeScreenPopAnimationTime = .5f;
 static CGFloat RDHomeScreenCloseAnimationTime = .3f;
@@ -30,6 +31,13 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 @implementation RDHomeScreenButton
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundBoxSenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidNotFoundSenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundDLNASenceNotification object:nil];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
@@ -40,7 +48,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 - (void)createViews
 {
-    self.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height / 2 - 30);
+    self.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height - 30);
     
     self.layer.cornerRadius = self.frame.size.width / 2;
     self.layer.masksToBounds = YES;
@@ -63,12 +71,18 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [self.backgroundView addSubview:self.niceVideoButton];
     [self.backgroundView addSubview:self.repeatButton];
     
-    [self showWithBox];
+    [self setBackgroundImage:[UIImage imageNamed:@"toupin"] forState:UIControlStateNormal];
+    
+    [self showWithNoBox];
     
     [self addTarget:self action:@selector(popOptionsWithAnimation) forControlEvents:UIControlEventTouchUpInside];
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(closeOptionsWithAnimation)];
     tap.numberOfTapsRequired = 1;
     [self.backgroundView addGestureRecognizer:tap];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFoundBoxSence) name:RDDidFoundBoxSenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLoseBoxSence) name:RDDidNotFoundSenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLoseBoxSence) name:RDDidFoundDLNASenceNotification object:nil];
 }
 
 //发现了盒子环境
@@ -164,10 +178,23 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     if (self.isAnimation) {
         return;
     }
+    
+    if (!self.isBoxSence) {
+        self.alpha = 1.f;
+    }
+    
+    [[SDImageCache sharedImageCache] clearMemory];
+    
     self.isAnimation = YES;
     
     [[UIApplication sharedApplication].keyWindow addSubview:self.backgroundView];
+    self.repeatButton.center = [self viewCenter];
     CGPoint point = self.repeatButton.center;
+    self.photoButton.center = point;
+    self.videoButton.center = point;
+    self.sliderButton.center = point;
+    self.documentButton.center = point;
+    self.niceVideoButton.center = point;
     
     if (self.isBoxSence) {
         
@@ -201,6 +228,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         [self animationView:self.sliderButton moveToPoint:point3 completion:nil];
         [self animationView:self.documentButton moveToPoint:point4 completion:^(BOOL finished) {
             self.isAnimation = NO;
+            self.isShowOptions = YES;
         }];
     }
 }
@@ -233,11 +261,27 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         self.isShowOptions = NO;
     }];
     [self animationCloseButton:self.niceVideoButton completion:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
+    if (!self.isBoxSence) {
+        self.alpha = 1.f;
+        [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
+    }
+}
+
+//延时重置4G透明度
+- (void)delayReset4GAlpha
+{
+    self.isAnimation = YES;
+    [UIView animateWithDuration:.4f animations:^{
+        self.alpha = .6f;
+    } completion:^(BOOL finished) {
+        self.isAnimation = NO;
+    }];
 }
 
 - (void)animationCloseButton:(UIButton *)button completion:(void (^)(BOOL finished))completion
 {
-    CGPoint center = self.center;
+    CGPoint center = self.repeatButton.center;
     [UIView animateWithDuration:RDHomeScreenCloseAnimationTime animations:^{
         button.center = center;
     } completion:^(BOOL finished) {
@@ -251,7 +295,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     self.repeatButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.repeatButton.frame = self.frame;
-    self.repeatButton.center = self.center;
+    self.repeatButton.center = [self viewCenter];
     self.repeatButton.layer.cornerRadius = self.layer.cornerRadius;
     self.layer.masksToBounds = YES;
     [self.repeatButton setBackgroundImage:[UIImage imageNamed:@"toupin"] forState:UIControlStateNormal];
@@ -263,8 +307,8 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
     
     CGFloat diameter = 72.f / 375 * [UIScreen mainScreen].bounds.size.width;
-    button.frame = CGRectMake(0, 0, diameter, diameter);
-    button.center = self.center;
+    button.frame = CGRectMake(0, 0, diameter, diameter);;
+    button.center = [self viewCenter];
     button.layer.cornerRadius = button.frame.size.width / 2;
     button.layer.masksToBounds = YES;
     button.tag = tag;
@@ -312,13 +356,27 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 - (void)showWithBox
 {
     self.isBoxSence = YES;
-    [self setBackgroundImage:[UIImage imageNamed:@"toupin"] forState:UIControlStateNormal];
+    self.alpha = 1.f;
 }
 
 - (void)showWithNoBox
 {
     self.isBoxSence = NO;
-    [self setBackgroundImage:[UIImage imageNamed:@"touping_4g"] forState:UIControlStateNormal];
+    self.alpha = .6f;
+}
+
+- (CGPoint)viewCenter
+{
+    CGPoint center = self.center;
+    
+    if (self.superview) {
+        CGRect rect = [self convertRect:self.bounds toView:[UIApplication sharedApplication].keyWindow];
+        center.y = rect.origin.y + rect.size.height / 2;
+    }else{
+        center.y += kStatusBarHeight + kNaviBarHeight;
+    }
+    
+    return center;
 }
 
 @end

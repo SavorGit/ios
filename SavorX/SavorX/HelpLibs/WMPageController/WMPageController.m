@@ -27,7 +27,7 @@ NSString *const WMControllerDidFullyDisplayedNotification = @"WMControllerDidFul
 
 static NSInteger const kWMUndefinedIndex = -1;
 static NSInteger const kWMControllerCountUndefined = -1;
-@interface WMPageController () {
+@interface WMPageController ()<RDHomeScreenButtonDelegate> {
     CGFloat _viewHeight, _viewWidth, _viewX, _viewY, _targetX, _superviewHeight;
     BOOL    _hasInited, _shouldNotScroll, _isTabBarHidden;
     NSInteger _initializedIndex, _controllerConut, _markedSelectIndex;
@@ -52,6 +52,8 @@ static NSInteger const kWMControllerCountUndefined = -1;
 @property (nonatomic, assign) NSInteger count;
 
 @property (nonatomic, assign) BOOL isInHotel; //是否在酒店环境
+
+@property (nonatomic, strong) RDHomeScreenButton * homeButton;
 
 @end
 
@@ -667,6 +669,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     [self.view addSubview:self.scrollView];
     
     [self.view bringSubviewToFront:[HomeAnimationView animationView]];
+    [self.view bringSubviewToFront:self.homeButton];
     
     if (!self.navigationController) { return; }
     for (UIGestureRecognizer *gestureRecognizer in self.scrollView.gestureRecognizers) {
@@ -975,6 +978,39 @@ static NSInteger const kWMControllerCountUndefined = -1;
         make.bottom.mas_equalTo(-120);
         make.right.mas_equalTo(-25);
     }];
+    
+    CGFloat diameter = [Helper autoWidthWith:120.f];
+    self.homeButton = [[RDHomeScreenButton alloc] initWithFrame:CGRectMake(0, 0, diameter, diameter)];
+    self.homeButton.delegate = self;
+    [self.view addSubview:self.homeButton];
+}
+
+- (void)RDHomeScreenButtonDidChooseType:(RDScreenType)type
+{
+    switch (type) {
+        case RDScreenTypePhoto:
+            
+            break;
+            
+        case RDScreenTypeVideo:
+            
+            break;
+            
+        case RDScreenTypeSlider:
+            
+            break;
+            
+        case RDScreenTypeDocument:
+            
+            break;
+            
+        case RDScreenTypeNiceVideo:
+            
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)setupViews

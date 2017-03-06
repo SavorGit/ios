@@ -20,7 +20,8 @@ extern NSString * const RDDidBindDeviceNotification; //已经连接至设备
 extern NSString * const RDDidDisconnectDeviceNotification; //已经断开连接
 extern NSString * const RDDidFoundHotelIdNotification; //发现了新的酒楼ID
 extern NSString * const RDDidNotFoundSenceNotification; //进入了没有设备的环境
-extern NSString * const RDDidFoundSenceNotification; //进入了设备环境
+extern NSString * const RDDidFoundBoxSenceNotification; //进入了机顶盒设备环境
+extern NSString * const RDDidFoundDLNASenceNotification; //进入了DLNA设备环境
 
 extern NSString * const RDQiutScreenNotification; //结束投屏
 

@@ -114,7 +114,7 @@
 		063AA2451DB8AA97007F4C70 /* AddLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 063AA2441DB8AA97007F4C70 /* AddLibraryViewController.m */; };
 		063AA2481DB8C305007F4C70 /* PhotoListCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 063AA2471DB8C305007F4C70 /* PhotoListCollectionViewCell.m */; };
 		063B1D531D7D63D30036C02B /* PhotoSliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 063B1D521D7D63D30036C02B /* PhotoSliderViewController.m */; };
-		063DC13A1E6D55A700449A7B /* RDHomeScreenButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 063DC1391E6D55A700449A7B /* RDHomeScreenButton.m */; };
+		063DC13D1E6D5E1C00449A7B /* RDHomeScreenButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 063DC13C1E6D5E1C00449A7B /* RDHomeScreenButton.m */; };
 		063FA3371D839F1100D03548 /* BadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 063FA3361D839F1100D03548 /* BadView.m */; };
 		0647BC351E506285002284BB /* HSFirstUseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647BC341E506285002284BB /* HSFirstUseRequest.m */; };
 		0647BC381E5063DF002284BB /* HSversionUpgradeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647BC371E5063DF002284BB /* HSversionUpgradeRequest.m */; };
@@ -429,8 +429,8 @@
 		063AA2471DB8C305007F4C70 /* PhotoListCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoListCollectionViewCell.m; sourceTree = "<group>"; };
 		063B1D511D7D63D30036C02B /* PhotoSliderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoSliderViewController.h; sourceTree = "<group>"; };
 		063B1D521D7D63D30036C02B /* PhotoSliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoSliderViewController.m; sourceTree = "<group>"; };
-		063DC1381E6D55A700449A7B /* RDHomeScreenButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHomeScreenButton.h; sourceTree = "<group>"; };
-		063DC1391E6D55A700449A7B /* RDHomeScreenButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHomeScreenButton.m; sourceTree = "<group>"; };
+		063DC13B1E6D5E1C00449A7B /* RDHomeScreenButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHomeScreenButton.h; sourceTree = "<group>"; };
+		063DC13C1E6D5E1C00449A7B /* RDHomeScreenButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHomeScreenButton.m; sourceTree = "<group>"; };
 		063FA3351D839F1100D03548 /* BadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BadView.h; sourceTree = "<group>"; };
 		063FA3361D839F1100D03548 /* BadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BadView.m; sourceTree = "<group>"; };
 		0647BC331E506285002284BB /* HSFirstUseRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSFirstUseRequest.h; sourceTree = "<group>"; };
@@ -1472,8 +1472,8 @@
 		4733B7511E305C01006889A2 /* HomePageView */ = {
 			isa = PBXGroup;
 			children = (
-				063DC1381E6D55A700449A7B /* RDHomeScreenButton.h */,
-				063DC1391E6D55A700449A7B /* RDHomeScreenButton.m */,
+				063DC13B1E6D5E1C00449A7B /* RDHomeScreenButton.h */,
+				063DC13C1E6D5E1C00449A7B /* RDHomeScreenButton.m */,
 				4733B7521E305C21006889A2 /* HomeAnimationView.h */,
 				4733B7531E305C21006889A2 /* HomeAnimationView.m */,
 				4733B7551E305C49006889A2 /* HomeAnimationView.xib */,
@@ -2132,7 +2132,7 @@
 				47FE2CB91E1BB53200D3D0B4 /* SplashViewController.m in Sources */,
 				060E349A1E6662A900D38547 /* PhotoAllViewController.m in Sources */,
 				060C37461D6C48930058BBBE /* ScanQRCodeViewController.m in Sources */,
-				063DC13A1E6D55A700449A7B /* RDHomeScreenButton.m in Sources */,
+				063DC13D1E6D5E1C00449A7B /* RDHomeScreenButton.m in Sources */,
 				060E42121E4CB03E009A94FC /* SDCycleScrollView.m in Sources */,
 				061FEFE41E2DB061003CD111 /* WMMenuItem.m in Sources */,
 				06F1583B1D5C85960050BCA6 /* VideoCollectionViewCell.m in Sources */,
