@@ -166,33 +166,6 @@
     return name;
 }
 
-
-+ (UIView *)createHomePageFirstHelp
-{
-    UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];
-    view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
-    view.userInteractionEnabled = YES;
-    
-    UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];
-    
-    CGPoint point = CGPointMake((kMainBoundsWidth - 25 - 55.5 / 2), kMainBoundsHeight - 100 - 55.5 / 2);
-    
-    [path appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:30 startAngle:0 endAngle:2*M_PI clockwise:NO]];
-    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    shapeLayer.path = path.CGPath;
-    
-    [view.layer setMask:shapeLayer];
-    
-    CGFloat width = kMainBoundsWidth - 34 > 340 ? 340 : kMainBoundsWidth - 34;
-    CGFloat height = width * 53 / 340;
-    
-    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(kMainBoundsWidth - width - 17, kMainBoundsHeight - 160 - height, width, height)];
-    [imageView setImage:[UIImage imageNamed:@"yindao_faxian"]];
-    [view addSubview:imageView];
-    
-    return view;
-}
-
 + (UIView *)createHomePageSecondHelp
 {
     UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];

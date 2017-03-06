@@ -20,6 +20,7 @@
 #import "DocumentListViewController.h"
 #import "SliderViewController.h"
 #import "HomeAnimationView.h"
+#import "RDHomeScreenButton.h"
 
 NSString *const WMControllerDidAddToSuperViewNotification = @"WMControllerDidAddToSuperViewNotification";
 NSString *const WMControllerDidFullyDisplayedNotification = @"WMControllerDidFullyDisplayedNotification";

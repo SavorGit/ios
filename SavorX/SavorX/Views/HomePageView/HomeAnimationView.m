@@ -34,9 +34,6 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundSenceNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidNotFoundSenceNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDQiutScreenNotification object:nil];
 }
 
@@ -77,9 +74,6 @@
         view.currentImage = [[UIImage alloc] init];
         [view hidden];
         
-        [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(foundRDBox) name:RDDidFoundSenceNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(bindRDBox) name:RDDidBindDeviceNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(resetStatus) name:RDDidNotFoundSenceNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(quitScreenHidden) name:RDQiutScreenNotification object:nil];
     });
     
@@ -136,12 +130,6 @@
 {
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     self.currentVC = nil;
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        [self.devImageView setImage:[UIImage imageNamed:@"yilianjie"]];
-    }else if ([GlobalData shared].scene != RDSceneNothing) {
-        
-        [self.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
-    }
 }
 
 - (void)show
@@ -156,12 +144,6 @@
    self.hidden = YES;
 }
 
-- (void)resetStatus
-{
-    [self.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
-    [self hidden];
-}
-
 // 收到退出投屏通知处理方法
 - (void)quitScreenHidden{
     
@@ -169,49 +151,6 @@
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     self.currentVC = nil;
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        [self.devImageView setImage:[UIImage imageNamed:@"yilianjie"]];
-    }else if ([GlobalData shared].scene != RDSceneNothing) {
-        [self.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
-    }
-}
-
-- (void)foundRDBox
-{
-    
-    BOOL hasAlert = [[[NSUserDefaults standardUserDefaults] objectForKey:HasAlertScreen] boolValue];
-    if (!hasAlert) {
-        if ([[Helper getRootNavigationController].topViewController isKindOfClass:[WMPageController class]]) {
-            [self showFirstScreenAlert];
-        }
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:HasAlertScreen];
-    }
-    
-    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[WMPageController class]]) {
-//        [self show];
-//        [self.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
-//        [self startDevDetectedAnimation];
-    }else{
-        [MBProgressHUD showTextHUDwithTitle:@"发现可连接的电视"];
-    }
-}
-
-- (void)bindRDBox
-{
-    [self.devImageView setImage:[UIImage imageNamed:@"yilianjie"]];
-}
-
--(void)startDevDetectedAnimation{
-    
-    [MBProgressHUD showTextHUDwithTitle:@"发现可连接的电视"];
-    
-    [UIView animateWithDuration:0.5f animations:^{
-        
-        _devImageView.transform = CGAffineTransformMakeScale(1.2f, 1.2f);
-        
-    } completion:^(BOOL finished) {
-        [self shakeAnimation];
-    }];
 }
 
 #pragma mark -- 二维码扫描
@@ -420,42 +359,6 @@
     }
 }
 
-- (void) shakeAnimation
-{
-    CABasicAnimation* shake = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    //设置抖动幅度
-    shake.fromValue = [NSNumber numberWithFloat:+0.1];
-    shake.toValue = [NSNumber numberWithFloat:-0.1];
-    shake.duration = 0.1;
-    shake.autoreverses = YES;
-    shake.repeatCount = 4;
-    [self.devImageView.layer addAnimation:shake forKey:@"imageView"];
-    
-    [UIView animateWithDuration:0.5 delay:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        
-       self.devImageView.transform = CGAffineTransformIdentity;
-        
-    } completion:^(BOOL finished) {
-        
-    }];
-}
-
-- (void)showFirstScreenAlert
-{
-    UIView * view = [Helper createHomePageFirstHelp];
-    [[Helper getRootNavigationController].view addSubview:view];
-    if ([GlobalData shared].hotelId == 0) {
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:view action:@selector(removeFromSuperview)];
-        tap.numberOfTapsRequired = 1;
-        [view addGestureRecognizer:tap];
-    }else{
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showSecondScreenAlert:)];
-        tap.numberOfTapsRequired = 1;
-        [view addGestureRecognizer:tap];
-        
-    }
-}
-
 - (void)showAlertWithWifiName:(NSString *)name
 {
     UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];
@@ -509,16 +412,6 @@
     button.layer.borderWidth = .5f;
     button.layer.borderColor = UIColorFromRGB(0xe8e8e8).CGColor;
     [showView addSubview:button];
-}
-
-- (void)showSecondScreenAlert:(UITapGestureRecognizer *)gesture
-{
-    [gesture.view removeFromSuperview];
-    UIView * view = [Helper createHomePageSecondHelp];
-    [[Helper getRootNavigationController].view addSubview:view];
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:view action:@selector(removeFromSuperview)];
-    tap.numberOfTapsRequired = 1;
-    [view addGestureRecognizer:tap];
 }
 
 /*
