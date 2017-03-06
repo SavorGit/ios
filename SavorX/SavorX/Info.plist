@@ -319,16 +319,16 @@
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
-			<key>UIApplicationShortcutItemIconType</key>
-			<string>UIApplicationShortcutIconTypeLocation</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>3d_lianjie</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>二维码扫描</string>
+			<string>连接电视</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>3dtouch.qrcode</string>
 		</dict>
 		<dict>
-			<key>UIApplicationShortcutItemIconType</key>
-			<string>UIApplicationShortcutIconTypePlay</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>3d_touping</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>投屏</string>
 			<key>UIApplicationShortcutItemType</key>

@@ -14,7 +14,8 @@ NSString * const RDDidBindDeviceNotification = @"RDDidBindDeviceNotification";
 NSString * const RDDidDisconnectDeviceNotification = @"RDDidDisconnectDeviceNotification";
 NSString * const RDDidFoundHotelIdNotification = @"RDDidFoundHotelIdNotification";
 NSString * const RDDidNotFoundSenceNotification = @"RDDidNotFoundSenceNotification";
-NSString * const RDDidFoundSenceNotification = @"RDDidFoundSenceNotification";
+NSString * const RDDidFoundBoxSenceNotification = @"RDDidFoundBoxSenceNotification";
+NSString * const RDDidFoundDLNASenceNotification = @"RDDidFoundDLNASenceNotification";
 
 NSString * const RDQiutScreenNotification = @"RDQiutScreenNotification";
 
@@ -154,6 +155,11 @@ static GlobalData* single = nil;
         self.callQRCodeURL = @"";
     }else{
         [MBProgressHUD showTextHUDwithTitle:@"发现可连接的电视"];
+        if (scene == RDSceneHaveRDBox) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundBoxSenceNotification object:nil];
+        }else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundDLNASenceNotification object:nil];
+        }
     }
 }
 

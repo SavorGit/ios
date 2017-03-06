@@ -20,6 +20,7 @@
 #import "NetworkConfiguration.h"
 #import "HSWebServerManager.h"
 #import "HSversionUpgradeRequest.h"
+#import "UIImageView+WebCache.h"
 
 #define version_code @"version_code"
 
@@ -35,6 +36,14 @@
     
     //设置标题颜色和字体
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(0xffffff), NSFontAttributeName : [UIFont boldSystemFontOfSize:17]}];
+    
+    //设置图片缓存策略
+    [[SDImageCache sharedImageCache] setShouldDecompressImages:NO];
+    [[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
+    
+    //设置URL缓存策略
+    [[NSURLCache sharedURLCache] setMemoryCapacity:5 * 1024 * 1024];
+    [[NSURLCache sharedURLCache] setDiskCapacity:40 * 1024 * 1024];
     
     [[HSWebServerManager manager] start];
     
