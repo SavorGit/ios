@@ -263,6 +263,12 @@
 - (void)videoShouldBeDemand
 {
     if (self.model.canPlay) {
+        
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+            [self interfaceOrientation:UIInterfaceOrientationPortrait];
+        }
+        
         [[HomeAnimationView animationView] scanQRCode];
     }else{
         [MBProgressHUD showTextHUDwithTitle:@"当前视频不支持该操作"];
@@ -317,6 +323,35 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [MBProgressHUD hideHUDForView:self.webView animated:NO];
+}
+
+#pragma mark 屏幕转屏相关
+
+/**
+ *  强制屏幕转屏
+ *
+ *  @param orientation 屏幕方向
+ */
+- (void)interfaceOrientation:(UIInterfaceOrientation)orientation
+{
+    // arc下
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        SEL selector             = NSSelectorFromString(@"setOrientation:");
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val                  = orientation;
+        // 从2开始是因为0 1 两个参数已经被selector和target占用
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+    }
+    if (orientation == UIInterfaceOrientationLandscapeRight || orientation == UIInterfaceOrientationLandscapeLeft) {
+        // 设置横屏
+        
+    } else if (orientation == UIInterfaceOrientationPortrait) {
+        // 设置竖屏
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {

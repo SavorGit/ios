@@ -9,6 +9,7 @@
 #import "ScreenDocumentViewController.h"
 #import "GCCScreenImage.h"
 #import "OpenFileTool.h"
+#import "PhotoTool.h"
 #import "UIImage+Custom.h"
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
@@ -156,42 +157,41 @@
     }
     UIImage * image = [screenImage ScalingToSize:size];
     NSString * keyStr = [NSString stringWithFormat:@"savorPhoto%ld.png", index++];
-    [OpenFileTool writeImageToSysImageCacheWithImage:image andName:keyStr handle:^(NSString *keyStr) {
-        NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
         if ([GlobalData shared].isBindRD) {
-            NSDictionary *parameters = @{@"function": @"prepare",
-                                         @"action": @"2screen",
-                                         @"assettype": @"pic",
-                                         @"asseturl": asseturlStr,
-                                         @"assetname": keyStr,
-                                         @"play": @"0"};
-            self.task = [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                
-                if (successBlock) {
-                    successBlock();
-                }
-                
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                if (failureBlock) {
-                    failureBlock();
-                }
+            [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:keyStr type:1 success:^{
+                    if (successBlock) {
+                        successBlock();
+                    }
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:keyStr type:0 success:^{
+                        
+                    } failure:^{
+                        
+                    }];
+                } failure:^{
+                    if (failureBlock) {
+                        failureBlock();
+                    }
+                }];
             }];
         }else if ([GlobalData shared].isBindDLNA) {
-            [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
-                if (successBlock) {
-                    successBlock();
-                }
-            } failure:^{
-                if (failureBlock) {
-                    failureBlock();
-                }
+            [OpenFileTool writeImageToSysImageCacheWithImage:image andName:keyStr handle:^(NSString *keyStr) {
+                NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
+                [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
+                    if (successBlock) {
+                        successBlock();
+                    }
+                } failure:^{
+                    if (failureBlock) {
+                        failureBlock();
+                    }
+                }];
             }];
         }else{
             if (failureBlock) {
                 failureBlock();
             }
         }
-    }];
 }
 
 - (void)PageBack

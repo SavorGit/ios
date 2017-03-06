@@ -8,7 +8,6 @@
 
 #import "GlobalData.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "HSFirstUseRequest.h"
 
 NSString * const RDDidBindDeviceNotification = @"RDDidBindDeviceNotification";

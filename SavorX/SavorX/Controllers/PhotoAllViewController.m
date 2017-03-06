@@ -110,7 +110,7 @@
     [self stopChoose];
     
     if ([GlobalData shared].isBindRD) {
-        [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
+        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
         [self screenImageWithPHAsset:[array objectAtIndex:1] index:1 success:^(UIImage *result, NSString *keyStr) {
             NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
             NSDictionary *parameters = @{@"function": @"prepare",
