@@ -356,6 +356,7 @@
                 self.screenButton.selected = NO;
                 [self.timer invalidate];
                 self.timer = nil;
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
@@ -370,6 +371,7 @@
                 self.playBtn.selected = NO;
                 [self.timer invalidate];
                 self.timer = nil;
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             }else{
                 CGFloat posFloat = [[GCCUPnPManager defaultManager] timeIntegerFromString:totalDuration] * progress;
                 [self.playSilder setValue:posFloat];

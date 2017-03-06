@@ -116,7 +116,6 @@
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
         [self.devImageView setImage:[UIImage imageNamed:@"yilianjie"]];
     }else if ([GlobalData shared].scene != RDSceneNothing) {
-        
         [self.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
     }
 }

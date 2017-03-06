@@ -232,6 +232,7 @@
 + (void)ScreenDemandShouldBackToTV
 {
     [[HomeAnimationView animationView] stopScreen];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
     if ([GlobalData shared].isBindRD) {
         NSDictionary *parameters = @{@"function": @"stop",
                                      @"sessionid": [NSNumber numberWithInt:-1],
@@ -253,6 +254,7 @@
 + (void)ScreenDemandShouldBackToTVWithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
 {
     [[HomeAnimationView animationView] stopScreen];
+    [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
     if ([GlobalData shared].isBindRD) {
         NSDictionary *parameters = @{@"function": @"stop",
                                      @"sessionid": [NSNumber numberWithInt:-1],

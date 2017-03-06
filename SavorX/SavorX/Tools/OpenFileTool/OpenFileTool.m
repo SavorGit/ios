@@ -294,10 +294,7 @@
 
 + (void)writeImageToSysImageCacheWithImage:(UIImage *)Image andName:(NSString *)name handle:(void (^)(NSString *))success
 {
-    if ([GCCKeyChain load:keychainID]) {
-        name = [[GCCKeyChain load:keychainID] stringByAppendingString:name];
-    }
-    name = [name componentsSeparatedByString:@"/"].firstObject;
+    name = [[name componentsSeparatedByString:@"/"].firstObject stringByAppendingString:@".jpg"];
     NSString * result = [SystemImage stringByAppendingPathComponent:name];
     NSFileManager * manager = [NSFileManager defaultManager];
     

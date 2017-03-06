@@ -224,6 +224,7 @@
                 self.headBackView.palySlider.value = 0;
                 self.footerView.videoPlayButton.selected = YES;
                 self.isPlayEnd = YES;
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                 [self shouldRelease];
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -236,7 +237,7 @@
                 self.headBackView.palySlider.value = 0;
                 self.footerView.videoPlayButton.selected = YES;
                 self.isPlayEnd = YES;
-                [SAVORXAPI ScreenDemandShouldBackToTV];
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                 [self shouldRelease];
             }else{
                 CGFloat posFloat = [[GCCUPnPManager defaultManager] timeIntegerFromString:totalDuration] * progress;

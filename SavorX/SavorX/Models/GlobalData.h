@@ -16,11 +16,13 @@ typedef enum : NSUInteger {
     RDSceneNothing,
 } RDScene;
 
-extern NSString * const RDDidBindDeviceNotification;
-extern NSString * const RDDidDisconnectDeviceNotification;
-extern NSString * const RDDidFoundHotelIdNotification;
-extern NSString * const RDDidNotFoundSenceNotification;
-extern NSString * const RDDidFoundSenceNotification;
+extern NSString * const RDDidBindDeviceNotification; //已经连接至设备
+extern NSString * const RDDidDisconnectDeviceNotification; //已经断开连接
+extern NSString * const RDDidFoundHotelIdNotification; //发现了新的酒楼ID
+extern NSString * const RDDidNotFoundSenceNotification; //进入了没有设备的环境
+extern NSString * const RDDidFoundSenceNotification; //进入了设备环境
+
+extern NSString * const RDQiutScreenNotification; //结束投屏
 
 @interface GlobalData : NSObject 
 

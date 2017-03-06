@@ -17,8 +17,6 @@
 
 @property (nonatomic, strong) UICollectionView * collectionView; //展示图片视图
 @property (nonatomic, strong) PHImageRequestOptions * option; //图片导出参数
-@property (nonatomic, strong) NSURLSessionDataTask * task; //当前网络任务
-@property (nonatomic, strong) UIVisualEffectView * bottomView; //底部旋转按钮
 @property (nonatomic, assign) NSInteger currentIndex; //当前图片下标
 
 @end
@@ -97,16 +95,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if ([GlobalData shared].isBindRD) {
-        [self.task cancel];
-        [SAVORXAPI ScreenDemandShouldBackToTV];
-    }else if ([GlobalData shared].isBindDLNA) {
-        [[GCCUPnPManager defaultManager] stopSuccess:^{
-            
-        } failure:^{
-            
-        }];
-    }
 }
 
 - (void)didReceiveMemoryWarning {
