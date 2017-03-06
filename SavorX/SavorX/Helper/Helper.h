@@ -46,8 +46,6 @@
 
 + (NSString *)getVideoNameWithPath:(NSString *)path;
 
-+ (UIView *)createHomePageFirstHelp;
-
 + (UIView *)createHomePageSecondHelp;
 
 @end

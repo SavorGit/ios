@@ -153,7 +153,7 @@ static GlobalData* single = nil;
         }
         self.callQRCodeURL = @"";
     }else{
-        [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundSenceNotification object:nil];
+        [MBProgressHUD showTextHUDwithTitle:@"发现可连接的电视"];
     }
 }
 
