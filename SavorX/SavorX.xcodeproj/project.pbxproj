@@ -245,6 +245,7 @@
 		47FE2CD31E1BD0E000D3D0B4 /* index5_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 47FE2CCA1E1BD0E000D3D0B4 /* index5_1.jpg */; };
 		47FE2CD41E1BD0E000D3D0B4 /* index5_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 47FE2CCB1E1BD0E000D3D0B4 /* index5_2.jpg */; };
 		47FE2CD51E1BD0E000D3D0B4 /* index5_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 47FE2CCC1E1BD0E000D3D0B4 /* index5_3.jpg */; };
+		9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -664,6 +665,8 @@
 		47FE2CCC1E1BD0E000D3D0B4 /* index5_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index5_3.jpg; sourceTree = "<group>"; };
 		4D23F38A0D91013FE6EDB1CD /* Pods-SavorX.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SavorX.release.xcconfig"; path = "Pods/Target Support Files/Pods-SavorX/Pods-SavorX.release.xcconfig"; sourceTree = "<group>"; };
 		5B05B9656F68961787F5EA8E /* Pods-SavorX.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SavorX.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SavorX/Pods-SavorX.debug.xcconfig"; sourceTree = "<group>"; };
+		9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoGuidedTwoDimensionalCode.h; sourceTree = "<group>"; };
+		9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoGuidedTwoDimensionalCode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -847,6 +850,8 @@
 			children = (
 				06153E091D530DEE00BB127F /* GCCCodeScanning.h */,
 				06153E0A1D530DEE00BB127F /* GCCCodeScanning.m */,
+				9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */,
+				9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */,
 			);
 			path = GCCCodeScanning;
 			sourceTree = "<group>";
@@ -2015,6 +2020,7 @@
 				478058271DF985730091C305 /* HSTopicListRequest.m in Sources */,
 				061B4EC11E489C92000D5E07 /* PhotoEditTextView.m in Sources */,
 				060E420F1E4CB03E009A94FC /* TADotView.m in Sources */,
+				9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */,
 				06EA38BC1D5971DA0081DDCC /* AlbumListViewController.m in Sources */,
 				061FEFD71E2DAD64003CD111 /* CategoryViewController.m in Sources */,
 				0690766B1E51FE8E00CA1AC4 /* PhotoManyCollectionViewCell.m in Sources */,
