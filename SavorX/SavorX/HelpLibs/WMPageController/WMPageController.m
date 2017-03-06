@@ -989,19 +989,57 @@ static NSInteger const kWMControllerCountUndefined = -1;
 {
     switch (type) {
         case RDScreenTypePhoto:
-            
+        {
+            if (self.canGetPhoto) {
+                AlbumListViewController * album = [[AlbumListViewController alloc] init];
+                album.hidesBottomBarWhenPushed = YES;
+                album.title = @"我的照片";
+                [self.navigationController pushViewController:album animated:YES];
+            }else{
+                [self openSetting];
+            }
+        }
             break;
             
         case RDScreenTypeVideo:
-            
+        {
+            if (self.canGetPhoto) {
+                VideoListViewController * video = [[VideoListViewController alloc] init];
+                video.hidesBottomBarWhenPushed = YES;
+                video.title = @"我的视频";
+                [self.navigationController pushViewController:video animated:YES];
+            }else{
+                [self openSetting];
+            }
+        }
             break;
             
         case RDScreenTypeSlider:
-            
+        {
+            if (self.canGetPhoto) {
+                SliderViewController * album = [[SliderViewController alloc] init];
+                album.hidesBottomBarWhenPushed = YES;
+                album.title = @"幻灯片";
+                [self.navigationController pushViewController:album animated:YES];
+            }else{
+                [self openSetting];
+            }
+        }
             break;
             
         case RDScreenTypeDocument:
-            
+        {
+            self.count++;
+            DocumentListViewController * document = [[DocumentListViewController alloc] init];
+            document.hidesBottomBarWhenPushed = YES;
+            document.title = @"我的文件";
+            if (self.count == 1) {
+                document.isHelp = YES;
+            }else{
+                document.isHelp = NO;
+            }
+            [self.navigationController pushViewController:document animated:YES];
+        }
             break;
             
         case RDScreenTypeNiceVideo:
