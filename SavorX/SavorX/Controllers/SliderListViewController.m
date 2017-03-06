@@ -423,6 +423,11 @@
             }
             
             [self screenImageWithPHAsset:[array objectAtIndex:1] index:0 success:^(UIImage *result, NSString *keyStr) {
+                
+                // 获取第一张幻灯片图片，回传
+                [HomeAnimationView animationView].currentImage = result;
+                [[HomeAnimationView animationView] startScreenWithViewController:self];
+                
                 NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
                 NSDictionary *parameters = @{@"function": @"prepare",
                                              @"action": @"2screen",

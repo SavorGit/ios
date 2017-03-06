@@ -288,6 +288,12 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // 获得当前视频图片  回传
+    HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+    DemandViewController *view = [[DemandViewController alloc] init];
+    [[HomeAnimationView animationView] startScreenWithViewController:view];
+    
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
         //如果是绑定状态

@@ -13,7 +13,7 @@
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
 
-@interface ScreenDocumentViewController ()<UIScrollViewDelegate>
+@interface ScreenDocumentViewController ()<UIScrollViewDelegate,UIWebViewDelegate>
 
 @property (nonatomic, strong) UIWebView * webView; //文件浏览控件
 @property (nonatomic, strong) NSURLSessionDataTask * task; //记录当前最后一次请求任务
@@ -40,6 +40,7 @@
 //    
     //初始化webView
     self.webView = [[UIWebView alloc] init];
+    self.webView.delegate = self;
     [self.view addSubview:self.webView];
 //
     //为竖屏添加约束
@@ -246,6 +247,17 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self screenButtonDidClickedWithSuccess:nil failure:nil];
         });
+    }
+}
+
+// 网页加载完成
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    
+    if (!webView.isLoading) {
+        // 获得点击图片，回传给缩略图
+        UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
+        [HomeAnimationView animationView].currentImage = currentWebImage;
+        [[HomeAnimationView animationView] startScreenWithViewController:self];
     }
 }
 

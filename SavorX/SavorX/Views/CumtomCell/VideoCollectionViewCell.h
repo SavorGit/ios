@@ -13,4 +13,6 @@
 - (void)getInfoFromAsset:(PHAsset *)asset; //通过PHAsset获取信息
 - (void)getInfoFromAVAsset:(AVAsset *)asset; //通过AVAsset获取信息
 
+@property (weak, nonatomic) IBOutlet UIImageView *bgImage;
+
 @end

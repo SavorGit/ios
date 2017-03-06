@@ -66,6 +66,12 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    // 获得点击图片，回传给缩略图
+    VideoCollectionViewCell * tmpcell = (VideoCollectionViewCell *)[self.collectionView  cellForItemAtIndexPath:indexPath];
+    [HomeAnimationView animationView].currentImage = tmpcell.bgImage.image;
+    SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
+    [[HomeAnimationView animationView] startScreenWithViewController:play];
+    
     [self playVideoWithAsset:[self.results objectAtIndex:indexPath.row]];
 }
 

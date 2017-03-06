@@ -665,6 +665,8 @@ static NSInteger const kWMControllerCountUndefined = -1;
     self.scrollView.scrollEnabled = self.scrollEnable;
     [self.view addSubview:self.scrollView];
     
+    [self.view bringSubviewToFront:[HomeAnimationView animationView]];
+    
     if (!self.navigationController) { return; }
     for (UIGestureRecognizer *gestureRecognizer in self.scrollView.gestureRecognizers) {
         [gestureRecognizer requireGestureRecognizerToFail:self.navigationController.interactivePopGestureRecognizer];
@@ -964,6 +966,14 @@ static NSInteger const kWMControllerCountUndefined = -1;
     self.currentViewController = self.displayVC[@(self.selectIndex)];
     
     [self wm_addMenuView];
+    
+    BaseView *view = [HomeAnimationView animationView];
+    [self.view addSubview:view];
+    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(130, 100));
+        make.bottom.mas_equalTo(-120);
+        make.right.mas_equalTo(-25);
+    }];
 }
 
 - (void)setupViews
@@ -1134,7 +1144,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     self.sideMenuController.leftViewSwipeGestureEnabled = YES;
     if ([GlobalData shared].scene != RDSceneNothing) {
-        [[HomeAnimationView animationView] show];
+       [[HomeAnimationView animationView] show];
     }
 }
 
@@ -1156,7 +1166,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     if ([GlobalData shared].scene == RDSceneHaveRDBox ||
         [GlobalData shared].scene == RDSceneHaveDLNA) {
-        [[HomeAnimationView animationView] show];
+       [[HomeAnimationView animationView] show];
     }
 }
 

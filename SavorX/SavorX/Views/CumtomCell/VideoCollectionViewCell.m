@@ -9,7 +9,6 @@
 #import "VideoCollectionViewCell.h"
 
 @interface VideoCollectionViewCell ()
-@property (weak, nonatomic) IBOutlet UIImageView *bgImage;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 @end

@@ -18,11 +18,13 @@
 #import "DemandViewController.h"
 #import "ScreenDocumentViewController.h"
 #import "ScreenProjectionView.h"
+#import "WMPageController.h"
 
 #define HasAlertScreen @"HasAlertScreen"
 
 @interface HomeAnimationView ()<QRCodeDidBindDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *devImageView;
+@property (nonatomic, strong) UILabel *textLabel;
 
 @property (nonatomic, strong) UIViewController * currentVC;
 
@@ -35,6 +37,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundSenceNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidNotFoundSenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDQiutScreenNotification object:nil];
 }
 
 + (instancetype)animationView
@@ -47,19 +50,37 @@
         
         view = [self loadFromXib];
         
-        LGSideMenuController * side = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-        [side.rootViewController.view addSubview:view];
-        [view mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(55, 55));
-            make.bottom.mas_equalTo(-100);
-            make.right.mas_equalTo(-25);
+//        LGSideMenuController * side = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//        
+//        [side.rootViewController.view addSubview:view];
+//        [view mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.size.mas_equalTo(CGSizeMake(130, 100));
+//            make.bottom.mas_equalTo(-120);
+//            make.right.mas_equalTo(-25);
+//        }];
+        
+        view.textLabel = [[UILabel alloc] init];
+        view.textLabel.text = @"投屏中...";
+        view.textLabel.font = [UIFont systemFontOfSize:12];
+        view.textLabel.textColor = [UIColor whiteColor];
+        view.textLabel.backgroundColor = [UIColor blackColor];
+        view.textLabel.textAlignment = NSTextAlignmentCenter;
+        [view addSubview:view.textLabel];
+        [view.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(130, 20));
+            make.top.mas_equalTo(80);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
         }];
-        [view.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
+        
+//        [view.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
+        view.currentImage = [[UIImage alloc] init];
         [view hidden];
         
         [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(foundRDBox) name:RDDidFoundSenceNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(bindRDBox) name:RDDidBindDeviceNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(resetStatus) name:RDDidNotFoundSenceNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(quitScreenHidden) name:RDQiutScreenNotification object:nil];
     });
     
     return view;
@@ -74,15 +95,15 @@
     if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
         PhotoSliderViewController * vc = (PhotoSliderViewController *)self.currentVC;
         [vc shouldRelease];
-        [self.devImageView setImage:[UIImage imageNamed:@"tupian"]];
+//        [self.devImageView setImage:[UIImage imageNamed:@"tupian"]];
     }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
         SXVideoPlayViewController * vc = (SXVideoPlayViewController *)self.currentVC;
         [vc shouldRelease];
-        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
+//        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
     }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
         DemandViewController * vc = (DemandViewController *)self.currentVC;
         [vc shouldRelease];
-        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
+//        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
     }
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
@@ -96,17 +117,19 @@
     
     self.currentVC = viewController;
     
-    if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
-        [self.devImageView setImage:[UIImage imageNamed:@"tupian"]];
-    }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
-        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
-    }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
-        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
-    }else if ([self.currentVC isKindOfClass:[PhotoManyViewController class]]){
-        [self.devImageView setImage:[UIImage imageNamed:@"tupian"]];
-    }else if([self.currentVC isKindOfClass:[ScreenDocumentViewController class]]){
-        [self.devImageView setImage:[UIImage imageNamed:@"wenjian"]];
-    }
+//    if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
+//        [self.devImageView setImage:[UIImage imageNamed:@"tupian"]];
+//    }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
+//        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
+//    }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
+//        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
+//    }else if ([self.currentVC isKindOfClass:[PhotoManyViewController class]]){
+//        [self.devImageView setImage:[UIImage imageNamed:@"tupian"]];
+//    }else if([self.currentVC isKindOfClass:[ScreenDocumentViewController class]]){
+//        [self.devImageView setImage:[UIImage imageNamed:@"wenjian"]];
+//    }
+    
+    [self.devImageView setImage:self.currentImage];
 }
 
 - (void)stopScreen
@@ -129,13 +152,27 @@
 
 - (void)hidden
 {
-    self.hidden = YES;
+   self.hidden = YES;
 }
 
 - (void)resetStatus
 {
     [self.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
     [self hidden];
+}
+
+// 收到退出投屏通知处理方法
+- (void)quitScreenHidden{
+    
+    [self hidden];
+    
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+    self.currentVC = nil;
+    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+        [self.devImageView setImage:[UIImage imageNamed:@"yilianjie"]];
+    }else if ([GlobalData shared].scene != RDSceneNothing) {
+        [self.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
+    }
 }
 
 - (void)foundRDBox
@@ -150,9 +187,9 @@
     }
     
     if ([[Helper getRootNavigationController].topViewController isKindOfClass:[WMPageController class]]) {
-        [self show];
-        [self.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
-        [self startDevDetectedAnimation];
+//        [self show];
+//        [self.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
+//        [self startDevDetectedAnimation];
     }else{
         [MBProgressHUD showTextHUDwithTitle:@"发现可连接的电视"];
     }
@@ -191,8 +228,8 @@
         [alert addAction:action1];
         [alert addAction:action2];
         
-        UITabBarController * tab = (UITabBarController *)self.window.rootViewController;
-        [tab presentViewController:alert animated:YES completion:nil];
+//        UITabBarController * tab = (UITabBarController *)self.window.rootViewController;
+        [[Helper getRootNavigationController].topViewController presentViewController:alert animated:YES completion:nil];
         return;
     }
     

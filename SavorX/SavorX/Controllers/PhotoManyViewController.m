@@ -329,6 +329,8 @@
     }
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         [cell setCellRealImage:result];
+        [HomeAnimationView animationView].currentImage = result;
+        [[HomeAnimationView animationView] startScreenWithViewController:self];
     }];
     cell.Orientation = 0;
     cell.firstText = @"";
@@ -355,6 +357,8 @@
             
             if (cell.hasEdit) {
                 
+                [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
+                [[HomeAnimationView animationView] startScreenWithViewController:self];
                 if ([GlobalData shared].isBindRD) {
                     [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
                         
@@ -379,6 +383,10 @@
             }else{
                 
                 [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
+                    
+                    [HomeAnimationView animationView].currentImage = result;
+                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    
                     if ([GlobalData shared].isBindRD) {
                         [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                             

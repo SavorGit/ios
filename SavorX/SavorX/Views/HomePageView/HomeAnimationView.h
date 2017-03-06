@@ -37,4 +37,6 @@
 //发现设备提示动画
 -(void)startDevDetectedAnimation;
 
+@property (nonatomic, strong) UIImage *currentImage;
+
 @end
