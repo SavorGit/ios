@@ -288,14 +288,13 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // 获得当前视频图片  回传
-    HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
-    DemandViewController *view = [[DemandViewController alloc] init];
-    [[HomeAnimationView animationView] startScreenWithViewController:view];
     
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
+        // 获得当前视频图片  回传
+        HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+        
         //如果是绑定状态
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         NSDictionary *parameters = @{@"function": @"prepare",
@@ -328,6 +327,11 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
     }else if ([GlobalData shared].isBindDLNA && model.type == 3){
+        
+        // 获得当前视频图片  回传
+        HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+        
         //如果是绑定状态
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [[GCCUPnPManager defaultManager] setAVTransportURL:[model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
