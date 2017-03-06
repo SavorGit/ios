@@ -9,6 +9,7 @@
 #import "PhotoSliderViewController.h"
 #import "ShowPhotoCollectionViewCell.h"
 #import "OpenFileTool.h"
+#import "PhotoTool.h"
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
 
@@ -350,13 +351,26 @@
         }
         NSString * name = asset.localIdentifier;
         [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-            [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                if ([GlobalData shared].isBindRD) {
-                    [self screenImageWithKeyStr:keyStr];
-                }else if([GlobalData shared].isBindDLNA) {
+            
+            if ([GlobalData shared].isBindRD) {
+                [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                        
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                            
+                        } failure:^{
+                            
+                        }];
+                        
+                    } failure:^{
+                        
+                    }];
+                }];
+            }else if ([GlobalData shared].isBindDLNA) {
+                [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
                     [self screenDLNAImageWithKeyStr:keyStr];
-                }
-            }];
+                }];
+            }
         }];
     }
 }
@@ -393,13 +407,25 @@
             }
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 NSString * name = asset.localIdentifier;
-                [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                    if ([GlobalData shared].isBindRD) {
-                        [self screenImageWithKeyStr:keyStr];
-                    }else if([GlobalData shared].isBindDLNA) {
+                if ([GlobalData shared].isBindRD) {
+                    [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                        [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                            
+                            [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                                
+                            } failure:^{
+                                
+                            }];
+                            
+                        } failure:^{
+                            
+                        }];
+                    }];
+                }else if ([GlobalData shared].isBindDLNA) {
+                    [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
                         [self screenDLNAImageWithKeyStr:keyStr];
-                    }
-                }];
+                    }];
+                }
             }];
         }
     }
@@ -476,36 +502,28 @@
             }
             NSString * name = asset.localIdentifier;
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-                [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                    if ([GlobalData shared].isBindRD) {
-                        [self screenImageWithKeyStr:keyStr];
-                    }else if([GlobalData shared].isBindDLNA) {
+                if ([GlobalData shared].isBindRD) {
+                    [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                        [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                            
+                            [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                                
+                            } failure:^{
+                                
+                            }];
+                            
+                        } failure:^{
+                            
+                        }];
+                    }];
+                }else if ([GlobalData shared].isBindDLNA) {
+                    [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
                         [self screenDLNAImageWithKeyStr:keyStr];
-                    }
-                }];
+                    }];
+                }
             }];
         }
     }
-}
-
-//投屏图片
-- (void)screenImageWithKeyStr:(NSString *)keyStr
-{
-    if (self.task) {
-        [self.task cancel];
-    }
-    NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
-    NSDictionary *parameters = @{@"function": @"prepare",
-                                 @"action": @"2screen",
-                                 @"assettype": @"pic",
-                                 @"asseturl": asseturlStr,
-                                 @"assetname": keyStr,
-                                 @"play": @"0"};
-    self.task = [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-    }];
 }
 
 //投屏DLNA图片

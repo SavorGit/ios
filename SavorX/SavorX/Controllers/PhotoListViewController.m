@@ -281,28 +281,32 @@
     [self rightButtonItemDidClicked];
     
     if ([GlobalData shared].isBindRD) {
-        [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
-        [self screenImageWithPHAsset:[array objectAtIndex:1] index:1 success:^(UIImage *result, NSString *keyStr) {
-            NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
-            NSDictionary *parameters = @{@"function": @"prepare",
-                                         @"action": @"2screen",
-                                         @"assettype": @"pic",
-                                         @"asseturl": asseturlStr,
-                                         @"assetname": keyStr,
-                                         @"play": @"0"};
-            [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                if ([[result objectForKey:@"result"] integerValue] == 0) {
+        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
+        PHAsset * asset = [self.PHAssetSource objectAtIndex:1];
+        NSString * name = asset.localIdentifier;
+        
+        [[PhotoTool sharedInstance] getImageFromPHAssetSourceWithAsset:asset success:^(UIImage *result) {
+            
+            [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                    [hud hideAnimated:NO];
                     [[HomeAnimationView animationView] startScreenWithViewController:third];
                     [self.navigationController pushViewController:third animated:YES];
                     [SAVORXAPI successRing];
-                }else{
-                    [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-                }
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+                    
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
+                        
+                    } failure:^{
+                        
+                    }];
+                    
+                } failure:^{
+                    [hud hideAnimated:NO];
+                }];
+                
             }];
+            
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
