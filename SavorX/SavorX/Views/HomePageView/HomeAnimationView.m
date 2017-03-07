@@ -339,7 +339,6 @@
 {
     if (type == QRResultTypeSuccess) {
         [MBProgressHUD showTextHUDwithTitle:BindSuccessStr];
-        [self checkTopViewController];
     }else if (type == QRResultTypeQRError){
         [MBProgressHUD showTextHUDwithTitle:@"连接失败，请扫描电视中的二维码"];
     }else if(type == QRResultTypeWIFIError) {
@@ -365,23 +364,6 @@
     }else{
         //iOS10之后暂不支持直接跳转系统WIFI
         [SAVORXAPI showAlertWithString:@"请前往手机设置，打开无线局域网，连接至与电视同一wifi下" withController:[Helper getRootNavigationController]];
-    }
-}
-
-- (void)checkTopViewController
-{
-    UINavigationController * na = [Helper getRootNavigationController];
-    NSArray * VCArray = na.viewControllers;
-    NSString * classStr = NSStringFromClass([[VCArray objectAtIndex:VCArray.count - 2] class]);
-    if ([classStr isEqualToString:@"SliderShowViewController"] ||
-        [classStr isEqualToString:@"PhotoSliderViewController"]) {
-        [na popToViewController:[VCArray objectAtIndex:VCArray.count - 3] animated:YES];
-    }else if([classStr isEqualToString:@"WMPageController"]){
-        WMPageController * wm = (WMPageController *)[VCArray objectAtIndex:VCArray.count - 2];
-        [na popViewControllerAnimated:YES];
-        [wm rightAction];
-    }else{
-        [na popViewControllerAnimated:YES];
     }
 }
 
