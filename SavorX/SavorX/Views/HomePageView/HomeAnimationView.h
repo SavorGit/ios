@@ -24,9 +24,6 @@
 
 - (void)callQRcodeFromPlatform;
 
-//相机权限准备好，即调用TCP连接检测与UDP广播发送进行二维码呼出
-- (void)CameroIsReady;
-
 // 重新呼出二维码
 - (void)reCallCode;
 
