@@ -20,7 +20,6 @@
 #import "DocumentListViewController.h"
 #import "SliderViewController.h"
 #import "HomeAnimationView.h"
-#import "RDHomeScreenButton.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
 
@@ -54,8 +53,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
 @property (nonatomic, assign) NSInteger count;
 
 @property (nonatomic, assign) BOOL isInHotel; //是否在酒店环境
-
-@property (nonatomic, strong) RDHomeScreenButton * homeButton;
 
 // 标题点击按钮
 @property (nonatomic, strong) UIButton *titleViewBtn;
