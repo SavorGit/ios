@@ -335,7 +335,8 @@
     [[HomeAnimationView animationView] startScreenWithViewController:self];
     self.isScreen = YES;
     self.statusLabel.text = @"正在播放图片";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
     
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
         PHAsset * asset = [self.PHAssetSource objectAtIndex:self.currentIndex];
