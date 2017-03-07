@@ -25,22 +25,25 @@
 
 @implementation VideoGuidedTwoDimensionalCode
 
-//+ (instancetype)shareStance{
-//    
-//    static VideoGuidedTwoDimensionalCode * screenObject = nil;
-//    static dispatch_once_t predicate;
-//    dispatch_once(&predicate, ^{
-//        screenObject=[[VideoGuidedTwoDimensionalCode alloc] init];
-//    });
-//    return screenObject;
-//}
-
 -(id)init
 {
     if (self = [super init]) {
+        //注册通知
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(runLoopTheMovie:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     }
     return self;
 }
+
+- (void)runLoopTheMovie:(NSNotification *)noti{
+    
+    AVPlayerItem * playerItem = [noti object];
+    //关键代码
+    [playerItem seekToTime:kCMTimeZero];
+    
+    [self.player play];
+    NSLog(@"重播");
+}
+
 - (instancetype)showScreenProjectionTitle:(NSString *)title block:(ScreenProjectionSelectViewSelectBlock)selectBlock{
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     self.frame = keyWindow.bounds;
@@ -137,7 +140,6 @@
     
     [self.player pause];
     [self.player replaceCurrentItemWithPlayerItem:nil];
-//    [[HomeAnimationView animationView] scanQRCode];
 }
 
 -(void)selectBtnindex:(NSInteger)index{
@@ -149,6 +151,8 @@
    [self dismissViewWithAnimationDuration:0.4f];
     
    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+   [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification
+                                                              object:nil];
 }
 
 - (void)orieChanged

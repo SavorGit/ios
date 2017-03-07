@@ -174,7 +174,7 @@
 }
 // 重新连接
 - (void)reScanAction{
-    [[HomeAnimationView animationView] CameroIsReady];
+    [[HomeAnimationView animationView] reCallCode];
 }
 /**
  *  创建上方动画layer

@@ -12,7 +12,6 @@ typedef void(^ScreenProjectionSelectViewSelectBlock)(NSInteger selectIndex);
 
 @interface VideoGuidedTwoDimensionalCode : BaseView
 
-//+ (instancetype)shareStance;
 /**
  *  显示可选视图
  *

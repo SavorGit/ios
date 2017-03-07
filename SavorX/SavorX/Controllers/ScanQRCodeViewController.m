@@ -29,13 +29,11 @@
     [MBProgressHUD showLoadingHUDInView:self.view];
     [self createUI];
     
-    [self.scan stop];
-    [[HomeAnimationView animationView] hidden];
-    VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
-    [vgVC showScreenProjectionTitle:@"扫码引导" block:^(NSInteger selectIndex) {
-        [[HomeAnimationView animationView] show];
-        [self.scan start];
-    }];
+//    [self.scan stop];
+//    VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
+//    [vgVC showScreenProjectionTitle:@"扫码引导" block:^(NSInteger selectIndex) {
+//        [self.scan start];
+//    }];
 }
 
 - (void)createUI

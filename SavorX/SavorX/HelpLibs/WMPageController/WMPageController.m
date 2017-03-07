@@ -125,82 +125,84 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 - (void)rightAction{
     
-    WifiState state;
-    if ([GlobalData shared].isWifiStatus) {
-        if ([GlobalData shared].isBindRD) {
-            state = kWifi_LinkRDBox;
-        }else if ([GlobalData shared].isBindDLNA) {
-            state = kWifi_LinkDLNA;
-        }else if ([GlobalData shared].scene == RDSceneHaveRDBox){
-            state = kWifi_HaveRDBox;
-        }else if ([GlobalData shared].scene == RDSceneHaveDLNA){
-            state = kWifi_HaveDLNA;
-        }else{
-            state = kWifi_NolinkDevice;
-        }
-    }else{
-        state = KWifi_NoLinkWifi;
-    }
+    [[HomeAnimationView animationView] CameroIsReady];
     
-    [[ScreenProjectionView shareStance] showScreenProjectionTitle:@"投屏" wifiState:state block:^(NSInteger selectIndex) {
-        switch (selectIndex) {
-            case 0:
-            {
-                if (self.canGetPhoto) {
-                    VideoListViewController * video = [[VideoListViewController alloc] init];
-                    video.hidesBottomBarWhenPushed = YES;
-                    video.title = @"我的视频";
-                    [self.navigationController pushViewController:video animated:YES];
-                }else{
-                    [self openSetting];
-                }
-            }
-                break;
-                
-            case 1:
-            {
-                if (self.canGetPhoto) {
-                    AlbumListViewController * album = [[AlbumListViewController alloc] init];
-                    album.hidesBottomBarWhenPushed = YES;
-                    album.title = @"我的照片";
-                    [self.navigationController pushViewController:album animated:YES];
-                }else{
-                    [self openSetting];
-                }
-            }
-                break;
-                
-            case 2:
-            {
-                if (self.canGetPhoto) {
-                    SliderViewController * album = [[SliderViewController alloc] init];
-                    album.hidesBottomBarWhenPushed = YES;
-                    album.title = @"幻灯片";
-                    [self.navigationController pushViewController:album animated:YES];
-                }else{
-                    [self openSetting];
-                }
-            }
-                break;
-                
-            case 3:
-            {
-                self.count++;
-                DocumentListViewController * document = [[DocumentListViewController alloc] init];
-                document.hidesBottomBarWhenPushed = YES;
-                document.title = @"我的文件";
-                if (self.count == 1) {
-                    document.isHelp = YES;
-                }else{
-                    document.isHelp = NO;
-                }
-                [self.navigationController pushViewController:document animated:YES];
-            }
-                break;
-            default:
-                break;
-        }
-    }];
+//    WifiState state;
+//    if ([GlobalData shared].isWifiStatus) {
+//        if ([GlobalData shared].isBindRD) {
+//            state = kWifi_LinkRDBox;
+//        }else if ([GlobalData shared].isBindDLNA) {
+//            state = kWifi_LinkDLNA;
+//        }else if ([GlobalData shared].scene == RDSceneHaveRDBox){
+//            state = kWifi_HaveRDBox;
+//        }else if ([GlobalData shared].scene == RDSceneHaveDLNA){
+//            state = kWifi_HaveDLNA;
+//        }else{
+//            state = kWifi_NolinkDevice;
+//        }
+//    }else{
+//        state = KWifi_NoLinkWifi;
+//    }
+//    
+//    [[ScreenProjectionView shareStance] showScreenProjectionTitle:@"投屏" wifiState:state block:^(NSInteger selectIndex) {
+//        switch (selectIndex) {
+//            case 0:
+//            {
+//                if (self.canGetPhoto) {
+//                    VideoListViewController * video = [[VideoListViewController alloc] init];
+//                    video.hidesBottomBarWhenPushed = YES;
+//                    video.title = @"我的视频";
+//                    [self.navigationController pushViewController:video animated:YES];
+//                }else{
+//                    [self openSetting];
+//                }
+//            }
+//                break;
+//                
+//            case 1:
+//            {
+//                if (self.canGetPhoto) {
+//                    AlbumListViewController * album = [[AlbumListViewController alloc] init];
+//                    album.hidesBottomBarWhenPushed = YES;
+//                    album.title = @"我的照片";
+//                    [self.navigationController pushViewController:album animated:YES];
+//                }else{
+//                    [self openSetting];
+//                }
+//            }
+//                break;
+//                
+//            case 2:
+//            {
+//                if (self.canGetPhoto) {
+//                    SliderViewController * album = [[SliderViewController alloc] init];
+//                    album.hidesBottomBarWhenPushed = YES;
+//                    album.title = @"幻灯片";
+//                    [self.navigationController pushViewController:album animated:YES];
+//                }else{
+//                    [self openSetting];
+//                }
+//            }
+//                break;
+//                
+//            case 3:
+//            {
+//                self.count++;
+//                DocumentListViewController * document = [[DocumentListViewController alloc] init];
+//                document.hidesBottomBarWhenPushed = YES;
+//                document.title = @"我的文件";
+//                if (self.count == 1) {
+//                    document.isHelp = YES;
+//                }else{
+//                    document.isHelp = NO;
+//                }
+//                [self.navigationController pushViewController:document animated:YES];
+//            }
+//                break;
+//            default:
+//                break;
+//        }
+//    }];
 }
 
 //打开用户应用设置
@@ -973,11 +975,16 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     BaseView *view = [HomeAnimationView animationView];
     [self.view addSubview:view];
+    view.backgroundColor = [UIColor blackColor];
+    view.alpha = 0.8;
+    view.layer.borderWidth = 0.5;
+    view.layer.borderColor = UIColorFromRGB(0xeeeeee).CGColor;
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(130, 100));
+        make.size.mas_equalTo(CGSizeMake(145, 107));
         make.bottom.mas_equalTo(-120);
-        make.right.mas_equalTo(-25);
+        make.right.mas_equalTo(-6);
     }];
+    [[HomeAnimationView animationView] hidden];
     
     CGFloat diameter = [Helper autoWidthWith:120.f];
     self.homeButton = [[RDHomeScreenButton alloc] initWithFrame:CGRectMake(0, 0, diameter, diameter)];
@@ -1219,7 +1226,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     self.sideMenuController.leftViewSwipeGestureEnabled = YES;
     if ([GlobalData shared].scene != RDSceneNothing) {
-       [[HomeAnimationView animationView] show];
+//       [[HomeAnimationView animationView] show];
     }
 }
 
@@ -1241,7 +1248,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     if ([GlobalData shared].scene == RDSceneHaveRDBox ||
         [GlobalData shared].scene == RDSceneHaveDLNA) {
-       [[HomeAnimationView animationView] show];
+//       [[HomeAnimationView animationView] show];
     }
 }
 
