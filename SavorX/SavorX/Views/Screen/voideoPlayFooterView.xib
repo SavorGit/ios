@@ -26,11 +26,11 @@
                     <rect key="frame" x="158" y="128" width="60" height="60"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mvh-Gf-Hzn">
-                    <rect key="frame" x="174" y="148" width="27" height="22"/>
-                    <state key="normal" image="mute"/>
-                    <state key="selected" image="mute_huang"/>
+                    <rect key="frame" x="176.5" y="148" width="22" height="22"/>
+                    <state key="normal" image="video_play"/>
+                    <state key="selected" image="stop"/>
                     <connections>
-                        <action selector="muteAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="dOz-c2-QAA"/>
+                        <action selector="videoPlayAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="gf8-ch-I3S"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="STE-Ru-Ea8">
@@ -39,11 +39,11 @@
                         <constraint firstAttribute="height" constant="60" id="B8R-UC-l17"/>
                         <constraint firstAttribute="width" constant="137" id="pQi-rA-yFg"/>
                     </constraints>
-                    <state key="normal" image="video_play"/>
-                    <state key="selected" image="stop"/>
+                    <state key="normal" image="mute"/>
+                    <state key="selected" image="mute_huang"/>
                     <state key="highlighted" image="up_stophuang"/>
                     <connections>
-                        <action selector="videoPlayAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="cue-Xw-tDo"/>
+                        <action selector="muteAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="j4u-Dp-fQf"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qEr-an-kCf">
@@ -103,9 +103,9 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="muteBtn" destination="Mvh-Gf-Hzn" id="rJL-u6-xGE"/>
+                <outlet property="muteBtn" destination="STE-Ru-Ea8" id="o2P-Hv-myq"/>
                 <outlet property="quitBtn" destination="ZjP-Ua-58V" id="dMm-fE-xvn"/>
-                <outlet property="videoPlayButton" destination="STE-Ru-Ea8" id="zib-u5-9yJ"/>
+                <outlet property="videoPlayButton" destination="Mvh-Gf-Hzn" id="vzh-VE-WC9"/>
                 <outlet property="volAddBtn" destination="qEr-an-kCf" id="O67-12-gXn"/>
                 <outlet property="volSubBtn" destination="qc1-dY-VdD" id="DwZ-Yo-veS"/>
                 <outlet property="yaokongBgImageView" destination="ddJ-cy-h3z" id="184-Oc-rAl"/>

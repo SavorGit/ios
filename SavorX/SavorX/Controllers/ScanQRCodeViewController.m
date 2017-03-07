@@ -9,7 +9,6 @@
 #import "ScanQRCodeViewController.h"
 #import "GCCCodeScanning.h"
 #import "VideoGuidedTwoDimensionalCode.h"
-#import "HomeAnimationView.h"
 
 @interface ScanQRCodeViewController ()<GCCCodeScanningDelegate>
 
@@ -114,6 +113,7 @@
         }
         
         [HUD hideAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
         return;
     }else {
         
