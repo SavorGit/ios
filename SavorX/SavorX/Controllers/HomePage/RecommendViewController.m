@@ -344,7 +344,7 @@
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
-    }else if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+    }else if ([GlobalData shared].scene == RDSceneHaveRDBox || [GlobalData shared].isBindRD == NO) {
         [[HomeAnimationView animationView] scanQRCode];
     }else{
         //如果不是绑定状态

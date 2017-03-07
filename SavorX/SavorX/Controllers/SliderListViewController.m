@@ -419,7 +419,7 @@
         if ([GlobalData shared].isBindRD) {
                 
             MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
-            PHAsset * asset = [self.PHAssetSource objectAtIndex:1];
+            PHAsset * asset = [slider.PHAssetSource objectAtIndex:1];
             NSString * name = asset.localIdentifier;
             
             [[PhotoTool sharedInstance] getImageFromPHAssetSourceWithAsset:asset success:^(UIImage *result) {
