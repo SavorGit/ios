@@ -691,9 +691,11 @@
 
 - (void)shouldRelease
 {
-    [self.timer setFireDate:[NSDate distantFuture]];
-    [self.timer invalidate];
-    self.timer = nil;
+    if (self.timer) {
+        [self.timer setFireDate:[NSDate distantFuture]];
+        [self.timer invalidate];
+        self.timer = nil;
+    }
 }
 
 - (void)dealloc

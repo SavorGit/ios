@@ -82,19 +82,7 @@
 {
     [self show];
     
-    if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
-        PhotoSliderViewController * vc = (PhotoSliderViewController *)self.currentVC;
-        [vc shouldRelease];
-    }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
-        SXVideoPlayViewController * vc = (SXVideoPlayViewController *)self.currentVC;
-        [vc shouldRelease];
-    }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
-        DemandViewController * vc = (DemandViewController *)self.currentVC;
-        [vc shouldRelease];
-    }
-    
-    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
-    self.currentVC = nil;
+    [self stopScreen];
     
     if ([viewController isKindOfClass:[PhotoSliderViewController class]] ||
         [viewController isKindOfClass:[SXVideoPlayViewController class]]) {
@@ -109,6 +97,17 @@
 
 - (void)stopScreen
 {
+    if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
+        PhotoSliderViewController * vc = (PhotoSliderViewController *)self.currentVC;
+        [vc shouldRelease];
+    }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
+        SXVideoPlayViewController * vc = (SXVideoPlayViewController *)self.currentVC;
+        [vc shouldRelease];
+    }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
+        DemandViewController * vc = (DemandViewController *)self.currentVC;
+        [vc shouldRelease];
+    }
+    
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     self.currentVC = nil;
 }
@@ -130,8 +129,7 @@
     
     CGAffineTransform transform;
     transform = CGAffineTransformMakeTranslation(140.0,0.0);
-    [UIView beginAnimations:nil context:nil];
-    [UIView animateWithDuration:3.0f animations:^{
+    [UIView animateWithDuration:.5f animations:^{
         self.transform = transform;
     }completion:^(BOOL finished){
         [self hidden];
