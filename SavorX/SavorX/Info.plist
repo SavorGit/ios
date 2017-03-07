@@ -324,7 +324,7 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>连接电视</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>3dtouch.qrcode</string>
+			<string>3dtouch.connet</string>
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>

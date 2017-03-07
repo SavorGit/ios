@@ -134,19 +134,10 @@
     view4.alpha = 0.5f;
     [self addSubview:view4];
     
-    CGFloat labelY2 = self.upLayer.frame.origin.y - 70;
-    CGFloat labelY = self.upLayer.frame.origin.y + self.upLayer.frame.size.height + 30;
-    UILabel * label2 = [[UILabel alloc] initWithFrame:CGRectMake(25, labelY, self.bounds.size.width - 50, 50)];
-    label2.numberOfLines = 0;
-    label2.text = @"没显示二维码？\n检查手机与电视是否连接同一WiFi";
-    label2.textColor = [UIColor colorWithHexString:@"#ffc116"];
-    label2.font = [UIFont boldSystemFontOfSize:17];
-    label2.textAlignment = NSTextAlignmentCenter;
-    [self addSubview:label2];
     
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(25, labelY2, self.bounds.size.width - 50, 60)];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(25, self.upLayer.frame.origin.y - 70, self.bounds.size.width - 50, 60)];
     label.numberOfLines = 0;
-    label.text = @"扫描电视中出现的二维码进行连接投屏";
+    label.text = @"请扫描电视中的二维码";
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
     [self addSubview:label];
@@ -165,10 +156,9 @@
     [self addSubview:reScanBtn];
     
     [reScanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(label2.bottom + 10);
+        make.top.mas_equalTo(self.upLayer.frame.origin.y + self.upLayer.frame.size.height + 30);
         make.size.mas_equalTo(CGSizeMake(80, 32));
         make.centerX.equalTo(self);
-//        make.centerY.equalTo(self).offset(120);215 190 126
     }];
 
 }
@@ -228,24 +218,24 @@
  */
 - (void)createBorderLayerWithColor:(UIColor *)color
 {
-    CGPoint point1 = CGPointMake(2.f, self.upLayer.bounds.size.width / 6);
+    CGPoint point1 = CGPointMake(2.f, 20);
     CGPoint point2 = CGPointMake(2.f, 2.f);
-    CGPoint point3 = CGPointMake(self.upLayer.bounds.size.width / 6, 2.f);
+    CGPoint point3 = CGPointMake(20, 2.f);
     [self layerSolidLinePoints:@[[NSValue valueWithCGPoint:point1], [NSValue valueWithCGPoint:point2], [NSValue valueWithCGPoint:point3]] Color:color Width:4.f];
     
-    CGPoint point4 = CGPointMake(self.upLayer.bounds.size.width * 5 / 6, 2.f);
+    CGPoint point4 = CGPointMake(self.upLayer.bounds.size.width - 20, 2.f);
     CGPoint point5 = CGPointMake(self.upLayer.bounds.size.width - 2.f, 2.f);
-    CGPoint point6 = CGPointMake(self.upLayer.bounds.size.width - 2.f, self.upLayer.bounds.size.width / 6);
+    CGPoint point6 = CGPointMake(self.upLayer.bounds.size.width - 2.f, 20);
     [self layerSolidLinePoints:@[[NSValue valueWithCGPoint:point4], [NSValue valueWithCGPoint:point5], [NSValue valueWithCGPoint:point6]] Color:color Width:4.f];
     
-    CGPoint point7 = CGPointMake(2.f, self.upLayer.bounds.size.height - self.upLayer.bounds.size.width / 6);
+    CGPoint point7 = CGPointMake(2.f, self.upLayer.bounds.size.height - 20);
     CGPoint point8 = CGPointMake(2.f, self.upLayer.bounds.size.height - 2.f);
-    CGPoint point9 = CGPointMake(self.upLayer.bounds.size.width / 6, self.upLayer.bounds.size.height - 2.f);
+    CGPoint point9 = CGPointMake(20, self.upLayer.bounds.size.height - 2.f);
     [self layerSolidLinePoints:@[[NSValue valueWithCGPoint:point7], [NSValue valueWithCGPoint:point8], [NSValue valueWithCGPoint:point9]] Color:color Width:4.f];
     
-    CGPoint point10 = CGPointMake(self.upLayer.bounds.size.width * 5 / 6, self.upLayer.bounds.size.height - 2.f);
+    CGPoint point10 = CGPointMake(self.upLayer.bounds.size.width - 20, self.upLayer.bounds.size.height - 2.f);
     CGPoint point11 = CGPointMake(self.upLayer.bounds.size.width - 2.f, self.upLayer.bounds.size.height - 2.f);
-    CGPoint point12 = CGPointMake(self.upLayer.bounds.size.width - 2.f, self.upLayer.bounds.size.height - self.upLayer.bounds.size.width / 6);
+    CGPoint point12 = CGPointMake(self.upLayer.bounds.size.width - 2.f, self.upLayer.bounds.size.height - 20);
     [self layerSolidLinePoints:@[[NSValue valueWithCGPoint:point10], [NSValue valueWithCGPoint:point11], [NSValue valueWithCGPoint:point12]] Color:color Width:4.f];
 }
 

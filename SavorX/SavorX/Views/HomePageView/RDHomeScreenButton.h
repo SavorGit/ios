@@ -26,4 +26,10 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, assign) id<RDHomeScreenButtonDelegate> delegate;
 
+//弹出菜单
+- (void)popOptionsWithAnimation;
+
+//关闭菜单
+- (void)closeOptionsWithAnimation;
+
 @end

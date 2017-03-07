@@ -10,6 +10,7 @@
 #import "WMMenuView.h"
 #import "WMScrollView.h"
 #import "HomeBaseViewController.h"
+#import "RDHomeScreenButton.h"
 @class WMPageController;
 
 FOUNDATION_EXTERN NSString *const _Nonnull WMControllerDidAddToSuperViewNotification;
@@ -304,6 +305,8 @@ typedef NS_ENUM(NSUInteger, WMPageControllerPreloadPolicy) {
 
 /** MenuView 内部视图与左右的间距 */
 @property (nonatomic, assign) CGFloat menuViewContentMargin;
+
+@property (nonatomic, strong) RDHomeScreenButton * homeButton;
 
 /**
  *  左滑时同时启用其他手势，比如系统左滑、sidemenu左滑。默认 NO
