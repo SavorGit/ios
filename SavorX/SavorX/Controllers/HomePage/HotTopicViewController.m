@@ -241,11 +241,6 @@
 {
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
-        
-        // 获得当前视频图片，回传
-        HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
-        
         //如果是绑定状态
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         NSDictionary *parameters = @{@"function": @"prepare",
@@ -257,6 +252,11 @@
         
         [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
+                
+                // 获得当前视频图片，回传
+                HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+                [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+                
                 if (model.type == 3) {
                     DemandViewController *view = [[DemandViewController alloc] init];
                     view.model = model;
@@ -278,15 +278,15 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
     }else if ([GlobalData shared].isBindDLNA && model.type == 3){
-        
-        // 获得当前视频图片，回传
-        HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
-        
         //如果是绑定状态
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         NSString * path = [model.videoURL stringByAppendingString:@".f20.mp4"];
         [[GCCUPnPManager defaultManager] setAVTransportURL:path Success:^{
+            
+            // 获得当前视频图片，回传
+            HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+            
             SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
             play.model = model;
             [[HomeAnimationView animationView] startScreenWithViewController:play];

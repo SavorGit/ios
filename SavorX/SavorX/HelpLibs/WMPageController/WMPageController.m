@@ -995,7 +995,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     self.navigationItem.leftBarButtonItem = backItem;
     
-    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
+    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"连接电视" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
     [rightItem setTitlePositionAdjustment:UIOffsetMake(5, 0) forBarMetrics:UIBarMetricsDefault];
     self.navigationItem.rightBarButtonItem = rightItem;
     
@@ -1159,7 +1159,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 {
     [super viewWillDisappear:animated];
     self.sideMenuController.leftViewSwipeGestureEnabled = NO;
-    [[HomeAnimationView animationView] hidden];
+//    [[HomeAnimationView animationView] hidden];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
