@@ -13,6 +13,9 @@
 #import "BaseNavigationController.h"
 #import "SXDlnaViewController.h"
 #import "HomeAnimationView.h"
+#import "LGSideMenuController.h"
+#import "WMPageController.h"
+#import "ScanQRCodeViewController.h"
 
 @interface RDCheackSence ()
 
@@ -38,6 +41,19 @@
 
 - (void)applicationIsSearchSence
 {
+    
+    if ([[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[LGSideMenuController class]]) {
+        LGSideMenuController * side = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
+        if ([baseNa.topViewController isKindOfClass:[WMPageController class]]) {
+            
+            WMPageController * page = (WMPageController *)baseNa.topViewController;
+            [page.homeButton closeWithMust];
+        }else if ([baseNa.topViewController isKindOfClass:[ScanQRCodeViewController class]]){
+            [baseNa popViewControllerAnimated:NO];
+        }
+    }
+    
     self.alertView = [[RDAlertView alloc] initWithTitle:@"提示" message:@"正在扫描可连接的电视...."];
     RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
         

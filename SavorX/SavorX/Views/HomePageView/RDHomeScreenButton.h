@@ -32,4 +32,6 @@ typedef enum : NSUInteger {
 //关闭菜单
 - (void)closeOptionsWithAnimation;
 
+- (void)closeWithMust;
+
 @end
