@@ -20,6 +20,8 @@
 #import "DocumentListViewController.h"
 #import "SliderViewController.h"
 #import "HomeAnimationView.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
 
 NSString *const WMControllerDidAddToSuperViewNotification = @"WMControllerDidAddToSuperViewNotification";
 NSString *const WMControllerDidFullyDisplayedNotification = @"WMControllerDidFullyDisplayedNotification";
@@ -51,6 +53,12 @@ static NSInteger const kWMControllerCountUndefined = -1;
 @property (nonatomic, assign) NSInteger count;
 
 @property (nonatomic, assign) BOOL isInHotel; //是否在酒店环境
+
+// 标题点击按钮
+@property (nonatomic, strong) UIButton *titleViewBtn;
+
+// 连接电视按钮
+@property (nonatomic, strong) UIBarButtonItem* rightItem;
 
 @end
 
@@ -102,6 +110,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundHotelIdNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidDisconnectDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
 }
 
 #pragma mark 投屏处理逻辑
@@ -879,6 +888,8 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bindDevice) name:RDDidFoundHotelIdNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectDevice) name:RDDidDisconnectDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectSuccessDevice) name:RDDidBindDeviceNotification object:nil];
+    
     
     [self configureSelf];
     
@@ -992,11 +1003,18 @@ static NSInteger const kWMControllerCountUndefined = -1;
     UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     self.navigationItem.leftBarButtonItem = backItem;
     
-    UIBarButtonItem* rightItem = [[UIBarButtonItem alloc] initWithTitle:@"连接电视" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
-    [rightItem setTitlePositionAdjustment:UIOffsetMake(5, 0) forBarMetrics:UIBarMetricsDefault];
-    self.navigationItem.rightBarButtonItem = rightItem;
+    self.rightItem = [[UIBarButtonItem alloc] initWithTitle:@"连接电视" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
+    [self.rightItem setTitlePositionAdjustment:UIOffsetMake(5, 0) forBarMetrics:UIBarMetricsDefault];
+    self.navigationItem.rightBarButtonItem = self.rightItem;
     
-    self.navigationItem.title = @"热点儿";
+//    self.navigationItem.title = @"热点儿";
+    self.titleViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.titleViewBtn.frame = CGRectMake(0, 0, 150, 30);
+    self.titleViewBtn.userInteractionEnabled = NO;
+    [self.titleViewBtn setTitle:@"热点儿" forState:UIControlStateNormal];
+    self.titleViewBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    [self.titleViewBtn addTarget:self action:@selector(disconnentClick) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.titleView = self.titleViewBtn;
     
     self.canGetPhoto = NO;
     //判断用户是否拥有相机权限
@@ -1025,6 +1043,35 @@ static NSInteger const kWMControllerCountUndefined = -1;
             }
         }];
     }
+}
+
+// 断开连接
+- (void)disconnentClick{
+    
+    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"是否与电视断开，\n断开后将无法投屏？"];
+    RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+        
+    } bold:nil];
+    RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
+        [self.titleViewBtn setTitle:@"热点儿" forState:UIControlStateNormal];
+        self.rightItem.title = @"连接电视";
+        self.titleViewBtn.userInteractionEnabled = NO;
+        [[GlobalData shared] disconnect];
+    } bold:YES];
+    NSArray *actionArr = [NSArray arrayWithObjects:actionOne,actionTwo, nil];
+    [rdAlert addActions:actionArr];
+    [rdAlert show];
+    
+}
+
+// 连接电视成功，收到通知调用
+- (void)connectSuccessDevice{
+    
+    self.rightItem.title = @"";
+    self.titleViewBtn.userInteractionEnabled = YES;
+    NSString *titleStr = [NSString stringWithFormat:@"已连接“%@”的电视",[GlobalData shared].RDBoxDevice.sid];
+    [self.titleViewBtn setTitle:titleStr forState:UIControlStateNormal];
+    
 }
 
 - (void)setupDatas
