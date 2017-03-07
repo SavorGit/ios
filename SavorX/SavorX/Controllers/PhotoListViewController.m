@@ -290,6 +290,10 @@
             [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                 
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
+                    
+                    // 获取第一张幻灯片图片，回传
+                    [HomeAnimationView animationView].currentImage = result;
+                    
                     [hud hideAnimated:NO];
                     [[HomeAnimationView animationView] startScreenWithViewController:third];
                     [self.navigationController pushViewController:third animated:YES];

@@ -138,14 +138,15 @@
 // 收到退出投屏通知处理方法
 - (void)quitScreenHidden{
     
-    [UIView beginAnimations:@"move" context:nil];
-    [UIView setAnimationDuration:2.0];
-    [UIView setAnimationDelegate:self];
-    //改变它的frame的x,y的值
-    self.frame=CGRectMake(self.centerX - 200,self.centerY, self.size.width,self.size.height);
-    [UIView commitAnimations];
-    
-//    [self hidden];
+    CGAffineTransform transform;
+    transform = CGAffineTransformMakeTranslation(140.0,0.0);
+    [UIView beginAnimations:nil context:nil];
+    [UIView animateWithDuration:3.0f animations:^{
+        self.transform = transform;
+    }completion:^(BOOL finished){
+        [self hidden];
+        self.transform = CGAffineTransformIdentity;
+    }];
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     self.currentVC = nil;
