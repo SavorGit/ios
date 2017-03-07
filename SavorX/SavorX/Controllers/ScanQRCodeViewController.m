@@ -97,6 +97,7 @@
                     if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
                         [_delegate QRCodeDidBindSuccessWithType:QRResultTypeWIFIError andWifiName:model.sid];
                     }
+                    [GlobalData shared].cacheModel = model;
                     [HUD hideAnimated:YES];
                     [self.navigationController popViewControllerAnimated:YES];
                     return;
@@ -134,6 +135,7 @@
                     if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
                         [_delegate QRCodeDidBindSuccessWithType:QRResultTypeWIFIError andWifiName:model.sid];
                     }
+                    [GlobalData shared].cacheModel = model;
                     [HUD hideAnimated:YES];
                     [self.navigationController popViewControllerAnimated:YES];
                     return;

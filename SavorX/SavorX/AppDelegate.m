@@ -292,7 +292,13 @@
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    //应用进入前台时，激活HTTP服务
+    
+    if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
+        if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
+            [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
+        }
+    }
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -309,6 +315,12 @@
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
         }else if ([GlobalData shared].isWifiStatus){
+            if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
+                if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
+                    [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
+                    return;
+                }
+            }
             [[GCCDLNA defaultManager] startSearchPlatform];
         }
         

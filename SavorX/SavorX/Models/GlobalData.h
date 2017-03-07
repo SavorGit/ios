@@ -54,6 +54,9 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //当前酒楼ID
 @property (nonatomic, assign) NSInteger hotelId;
 
+//当前缓存的机顶盒信息
+@property (nonatomic, strong) RDBoxModel * cacheModel;
+
 //当前是否有投屏页
 @property (nonatomic, assign) BOOL isScreenProjectionView;
 

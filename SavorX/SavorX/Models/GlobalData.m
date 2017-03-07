@@ -46,9 +46,6 @@ static GlobalData* single = nil;
 
 - (void)initData {
     self.serverDic = [[NSMutableDictionary alloc] init];
-    self.isBindRD = NO;
-    self.isBindDLNA = NO;
-    self.isWifiStatus = NO;
     self.RDBoxDevice = [[RDBoxModel alloc] init];
     self.DLNADevice = [[DeviceModel alloc] init];
     self.scene = RDSceneNothing;
@@ -69,7 +66,6 @@ static GlobalData* single = nil;
     self.RDBoxDevice = model;
     self.hotelId = model.hotelID;
     [[NSNotificationCenter defaultCenter] postNotificationName:RDDidBindDeviceNotification object:nil];
-    
     if (![[[NSUserDefaults standardUserDefaults] objectForKey:hasAlertDemandHelp] boolValue]) {
         
         if ([NSStringFromClass([[Helper getRootNavigationController].topViewController class]) isEqualToString:@"WMPageController"]) {
@@ -83,6 +79,8 @@ static GlobalData* single = nil;
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
+    NSString * message = [NSString stringWithFormat:@"\"%@\"连接成功, 可以投屏", model.sid];
+    [MBProgressHUD showTextHUDwithTitle:message];
 }
 
 - (void)disconnectWithDLNADevice
@@ -170,6 +168,18 @@ static GlobalData* single = nil;
         _scene = RDSceneNothing;
         [MBProgressHUD removeTextHUD];
     }
+}
+
+- (void)setCacheModel:(RDBoxModel *)cacheModel
+{
+    _cacheModel = cacheModel;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(clearCacheModel) object:nil];
+    [self performSelector:@selector(clearCacheModel) withObject:nil afterDelay:3 * 60.f];
+}
+
+- (void)clearCacheModel
+{
+    self.cacheModel = [[RDBoxModel alloc] init];
 }
 
 @end

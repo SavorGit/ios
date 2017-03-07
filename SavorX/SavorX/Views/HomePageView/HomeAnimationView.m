@@ -37,6 +37,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDQiutScreenNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidDisconnectDeviceNotification object:nil];
 }
 
 + (instancetype)animationView
@@ -67,6 +68,7 @@
         [view hidden];
         
         [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(quitScreenHidden) name:RDQiutScreenNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:view selector:@selector(quitScreenHidden) name:RDDidDisconnectDeviceNotification object:nil];
     });
     
     return view;
@@ -101,18 +103,6 @@
     }
     
     self.currentVC = viewController;
-    
-//    if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
-//        [self.devImageView setImage:[UIImage imageNamed:@"tupian"]];
-//    }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
-//        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
-//    }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
-//        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
-//    }else if ([self.currentVC isKindOfClass:[PhotoManyViewController class]]){
-//        [self.devImageView setImage:[UIImage imageNamed:@"tupian"]];
-//    }else if([self.currentVC isKindOfClass:[ScreenDocumentViewController class]]){
-//        [self.devImageView setImage:[UIImage imageNamed:@"wenjian"]];
-//    }
     
     [self.devImageView setImage: [self.currentImage  scaleToSize:CGSizeMake(145, 79)] ];
 }
@@ -338,7 +328,7 @@
 - (void)QRCodeDidBindSuccessWithType:(QRResultType)type andWifiName:(NSString *)name
 {
     if (type == QRResultTypeSuccess) {
-        [MBProgressHUD showTextHUDwithTitle:BindSuccessStr];
+        
     }else if (type == QRResultTypeQRError){
         [MBProgressHUD showTextHUDwithTitle:@"连接失败，请扫描电视中的二维码"];
     }else if(type == QRResultTypeWIFIError) {
