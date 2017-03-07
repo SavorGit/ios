@@ -176,6 +176,8 @@
 		06FB9D771DF989180053BE0A /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D761DF989180053BE0A /* BaseModel.m */; };
 		06FD5F1F1DC1A8510043D898 /* SliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FD5F1E1DC1A8510043D898 /* SliderViewController.m */; };
 		06FD5F221DC1D23A0043D898 /* ScreenCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FD5F211DC1D23A0043D898 /* ScreenCollectionViewCell.m */; };
+		06FFCCAB1E6E864900ADEA94 /* RDAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FFCCA81E6E864900ADEA94 /* RDAlertAction.m */; };
+		06FFCCAC1E6E864900ADEA94 /* RDAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FFCCAA1E6E864900ADEA94 /* RDAlertView.m */; };
 		26A8176745C4493D3EE874EA /* libPods-SavorX.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC211233FEE2DC8EC430CCC /* libPods-SavorX.a */; };
 		4733B7541E305C21006889A2 /* HomeAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4733B7531E305C21006889A2 /* HomeAnimationView.m */; };
 		4733B7561E305C49006889A2 /* HomeAnimationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4733B7551E305C49006889A2 /* HomeAnimationView.xib */; };
@@ -554,6 +556,10 @@
 		06FD5F1E1DC1A8510043D898 /* SliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderViewController.m; sourceTree = "<group>"; };
 		06FD5F201DC1D23A0043D898 /* ScreenCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenCollectionViewCell.h; sourceTree = "<group>"; };
 		06FD5F211DC1D23A0043D898 /* ScreenCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenCollectionViewCell.m; sourceTree = "<group>"; };
+		06FFCCA71E6E864900ADEA94 /* RDAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAlertAction.h; sourceTree = "<group>"; };
+		06FFCCA81E6E864900ADEA94 /* RDAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAlertAction.m; sourceTree = "<group>"; };
+		06FFCCA91E6E864900ADEA94 /* RDAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAlertView.h; sourceTree = "<group>"; };
+		06FFCCAA1E6E864900ADEA94 /* RDAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAlertView.m; sourceTree = "<group>"; };
 		0BC211233FEE2DC8EC430CCC /* libPods-SavorX.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SavorX.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4733B7521E305C21006889A2 /* HomeAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeAnimationView.h; sourceTree = "<group>"; };
 		4733B7531E305C21006889A2 /* HomeAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAnimationView.m; sourceTree = "<group>"; };
@@ -1089,6 +1095,7 @@
 		0684DF1D1D519095006756D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				06FFCCA61E6E864900ADEA94 /* RDAlertView */,
 				4733B7511E305C01006889A2 /* HomePageView */,
 				476F44C71E2DBEA000F99090 /* LeftView */,
 				47F997521DFF96090009BDFB /* Dlna */,
@@ -1472,6 +1479,17 @@
 				06FB9D701DF9890C0053BE0A /* JastorRuntimeHelper.m */,
 			);
 			path = Jastor;
+			sourceTree = "<group>";
+		};
+		06FFCCA61E6E864900ADEA94 /* RDAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				06FFCCA71E6E864900ADEA94 /* RDAlertAction.h */,
+				06FFCCA81E6E864900ADEA94 /* RDAlertAction.m */,
+				06FFCCA91E6E864900ADEA94 /* RDAlertView.h */,
+				06FFCCAA1E6E864900ADEA94 /* RDAlertView.m */,
+			);
+			path = RDAlertView;
 			sourceTree = "<group>";
 		};
 		4733B7511E305C01006889A2 /* HomePageView */ = {
@@ -2047,6 +2065,7 @@
 				061E0FD31DFFD9A40072605F /* GCCUPnPManager.m in Sources */,
 				06AB944F1D880C8000A29D36 /* rotationImageView.m in Sources */,
 				06FD5F1F1DC1A8510043D898 /* SliderViewController.m in Sources */,
+				06FFCCAC1E6E864900ADEA94 /* RDAlertView.m in Sources */,
 				06FA33981D3E171D001F5B37 /* DDTTYLogger.m in Sources */,
 				0647BC381E5063DF002284BB /* HSversionUpgradeRequest.m in Sources */,
 				06FA339A1D3E171D001F5B37 /* DispatchQueueLogFormatter.m in Sources */,
@@ -2127,6 +2146,7 @@
 				0606505C1E014CF100E43024 /* HSWebServerManager.m in Sources */,
 				06FB9D741DF9890C0053BE0A /* JastorRuntimeHelper.m in Sources */,
 				067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */,
+				06FFCCAB1E6E864900ADEA94 /* RDAlertAction.m in Sources */,
 				478058261DF985730091C305 /* HSCategoryListRequest.m in Sources */,
 				061FEFE81E2DB061003CD111 /* WMPageController.m in Sources */,
 				06EA38D21D5980FC0081DDCC /* PhotoShowViewController.m in Sources */,
