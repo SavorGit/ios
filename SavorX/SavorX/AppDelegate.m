@@ -28,6 +28,8 @@
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate>
 
+@property (nonatomic, assign) BOOL is3D_Touch;
+
 @end
 
 @implementation AppDelegate
@@ -240,14 +242,27 @@
 
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
 {
-    if ([shortcutItem.type isEqualToString:@"3dtouch.qrcode"]) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [MBProgressHUD showTextHUDwithTitle:@"3DTouch - 二维码扫描"];
-        });
+    self.is3D_Touch = YES;
+    
+    if ([shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
+        
     }else if ([shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [MBProgressHUD showTextHUDwithTitle:@"3DTouch - 投屏"];
-        });
+        
+        if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
+            LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
+            BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
+            if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
+                [baseNa popToRootViewControllerAnimated:NO];
+            }
+            if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
+                WMPageController * page = (WMPageController *)baseNa.topViewController;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [page.homeButton popOptionsWithAnimation];
+                });
+            }
+            
+        }
+        
     }
 }
 
@@ -289,19 +304,19 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
+    self.is3D_Touch = NO;
+    
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     
-    if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
-        if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
-            [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
-        }
-    }
-    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    if (self.is3D_Touch) {
+        return;
+    }
     
     if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
         if ([GlobalData shared].isBindRD) {

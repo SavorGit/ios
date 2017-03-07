@@ -108,6 +108,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     if ([GlobalData shared].scene == RDSceneHaveRDBox) {
         return;
     }
+    _isSearch = YES;
     if (!self.socket.isClosed) {
         [self socketShouldBeClose]; //先关闭当前的socket连接
     }
@@ -126,6 +127,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 
 - (void)startSearchPlatform
 {
+    _isSearch = YES;
     [self searchBoxWithAP];
     
     if (!self.socket.isClosed) {
@@ -146,6 +148,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
         
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             [GlobalData shared].scene = RDSceneHaveRDBox;
+            _isSearch = NO;
             NSInteger hotelID = [[result objectForKey:@"hotelId"] integerValue];
             if (hotelID > 0) {
                 [GlobalData shared].hotelId = hotelID;
@@ -176,11 +179,13 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
                         [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@",[array firstObject],command_port,[type lowercaseString]];
                         [GlobalData shared].hotelId = [[array objectAtIndex:1] integerValue];
                         [GlobalData shared].scene = RDSceneHaveRDBox;
+                        _isSearch = NO;
                     }
                 }else{
                     if([GlobalData shared].callQRCodeURL.length == 0){
                         [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@",ipInfo,command_port,[type lowercaseString]];
                         [GlobalData shared].scene = RDSceneHaveRDBox;
+                        _isSearch = NO;
                     }
                 }
             }
@@ -258,6 +263,7 @@ withFilterContext:(nullable id)filterContext{
         [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"], [[dict objectForKey:@"Savor-Type"] lowercaseString]];
         [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
         [GlobalData shared].scene = RDSceneHaveRDBox;
+        _isSearch = NO;
         [self socketShouldBeClose];
     }
     
@@ -341,6 +347,7 @@ withFilterContext:(nullable id)filterContext{
                         }
                         if ([GlobalData shared].scene == RDSceneNothing) {
                             [GlobalData shared].scene = RDSceneHaveDLNA;
+                            _isSearch = NO;
                         }
                     }
                 });
