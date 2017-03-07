@@ -293,7 +293,6 @@
                     
                     // 获取第一张幻灯片图片，回传
                     [HomeAnimationView animationView].currentImage = result;
-                    
                     [hud hideAnimated:NO];
                     [[HomeAnimationView animationView] startScreenWithViewController:third];
                     [self.navigationController pushViewController:third animated:YES];
@@ -317,6 +316,8 @@
         [self screenImageWithPHAsset:[array objectAtIndex:1] index:1 success:^(UIImage *result, NSString *keyStr) {
             NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
             [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
+                // 获取第一张幻灯片图片，回传
+                [HomeAnimationView animationView].currentImage = result;
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 [[HomeAnimationView animationView] startScreenWithViewController:third];
                 [self.navigationController pushViewController:third animated:YES];
