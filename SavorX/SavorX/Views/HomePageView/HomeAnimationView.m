@@ -19,6 +19,8 @@
 #import "ScreenDocumentViewController.h"
 #import "ScreenProjectionView.h"
 #import "WMPageController.h"
+#import "UIImage+Additional.h"
+
 
 #define HasAlertScreen @"HasAlertScreen"
 
@@ -47,30 +49,20 @@
         
         view = [self loadFromXib];
         
-//        LGSideMenuController * side = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-//        
-//        [side.rootViewController.view addSubview:view];
-//        [view mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.size.mas_equalTo(CGSizeMake(130, 100));
-//            make.bottom.mas_equalTo(-120);
-//            make.right.mas_equalTo(-25);
-//        }];
-        
         view.textLabel = [[UILabel alloc] init];
         view.textLabel.text = @"投屏中...";
         view.textLabel.font = [UIFont systemFontOfSize:12];
-        view.textLabel.textColor = [UIColor whiteColor];
-        view.textLabel.backgroundColor = [UIColor blackColor];
+        view.textLabel.textColor = UIColorFromRGB(0xf5f5f5);
+        view.textLabel.backgroundColor = [UIColor clearColor];
         view.textLabel.textAlignment = NSTextAlignmentCenter;
         [view addSubview:view.textLabel];
         [view.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(130, 20));
-            make.top.mas_equalTo(80);
+            make.size.mas_equalTo(CGSizeMake(145, 23));
+            make.top.mas_equalTo(84);
             make.left.mas_equalTo(0);
             make.right.mas_equalTo(0);
         }];
-        
-//        [view.devImageView setImage:[UIImage imageNamed:@"faxianshebei"]];
+        view.devImageView.contentMode = UIViewContentModeScaleAspectFill;
         view.currentImage = [[UIImage alloc] init];
         [view hidden];
         
@@ -86,18 +78,17 @@
 
 - (void)startScreenWithViewController:(UIViewController *)viewController
 {
+    [self show];
+    
     if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
         PhotoSliderViewController * vc = (PhotoSliderViewController *)self.currentVC;
         [vc shouldRelease];
-//        [self.devImageView setImage:[UIImage imageNamed:@"tupian"]];
     }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
         SXVideoPlayViewController * vc = (SXVideoPlayViewController *)self.currentVC;
         [vc shouldRelease];
-//        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
     }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
         DemandViewController * vc = (DemandViewController *)self.currentVC;
         [vc shouldRelease];
-//        [self.devImageView setImage:[UIImage imageNamed:@"shipin"]];
     }
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
@@ -123,7 +114,7 @@
 //        [self.devImageView setImage:[UIImage imageNamed:@"wenjian"]];
 //    }
     
-    [self.devImageView setImage:self.currentImage];
+    [self.devImageView setImage: [self.currentImage  scaleToSize:CGSizeMake(145, 79)] ];
 }
 
 - (void)stopScreen
@@ -290,6 +281,50 @@
             }
         }
     }];
+}
+
+// 重新呼出二维码
+- (void)reCallCode{
+    
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"准备扫描二维码"];
+    
+//    __block BOOL hasPush = NO;
+    __block NSInteger count = 0;
+    
+    NSDictionary * dict = @{@"function" : @"showQRCode"};
+    [SAVORXAPI postWithURL:@"http://192.168.43.1:8080" parameters:dict success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [hud hideAnimated:NO];
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        count++;
+        if (count >= 2) {
+            if (error.code == -1009 || error.code == -1001) {
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
+            }else{
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
+            }
+        }
+    }];
+    
+    NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
+    [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [hud hideAnimated:NO];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        //
+        count++;
+        if (count >= 2) {
+            if (error.code == -1009 || error.code == -1001) {
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
+            }else{
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
+            }
+        }
+    }];
+    
 }
 
 #pragma mark -- QRCodeDidBindDelegate
