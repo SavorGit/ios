@@ -454,6 +454,10 @@
         }else if ([GlobalData shared].isBindDLNA) {
             [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
             [self screenImageWithPHAsset:[array objectAtIndex:1] index:1 success:^(UIImage *result, NSString *keyStr) {
+                
+                // 获取第一张幻灯片图片，回传
+                [HomeAnimationView animationView].currentImage = result;
+                
                 NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
                 [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                     [MBProgressHUD hideHUDForView:self.view animated:YES];

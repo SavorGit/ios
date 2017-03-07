@@ -979,8 +979,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
     view.alpha = 0.8;
     view.layer.borderWidth = 0.5;
     view.layer.borderColor = UIColorFromRGB(0xeeeeee).CGColor;
+    CGFloat viewWidth = [Helper autoWidthWith:145.f];
+    CGFloat viewHeight = [Helper autoHeightWith:107.f];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(145, 107));
+        make.size.mas_equalTo(CGSizeMake(viewWidth, viewHeight));
         make.bottom.mas_equalTo(-120);
         make.right.mas_equalTo(-6);
     }];
