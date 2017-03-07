@@ -178,6 +178,7 @@
 		06FD5F221DC1D23A0043D898 /* ScreenCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FD5F211DC1D23A0043D898 /* ScreenCollectionViewCell.m */; };
 		06FFCCAB1E6E864900ADEA94 /* RDAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FFCCA81E6E864900ADEA94 /* RDAlertAction.m */; };
 		06FFCCAC1E6E864900ADEA94 /* RDAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FFCCAA1E6E864900ADEA94 /* RDAlertView.m */; };
+		06FFCCAF1E6EBF6A00ADEA94 /* RDCheackSence.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FFCCAE1E6EBF6A00ADEA94 /* RDCheackSence.m */; };
 		26A8176745C4493D3EE874EA /* libPods-SavorX.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC211233FEE2DC8EC430CCC /* libPods-SavorX.a */; };
 		4733B7541E305C21006889A2 /* HomeAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4733B7531E305C21006889A2 /* HomeAnimationView.m */; };
 		4733B7561E305C49006889A2 /* HomeAnimationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4733B7551E305C49006889A2 /* HomeAnimationView.xib */; };
@@ -560,6 +561,8 @@
 		06FFCCA81E6E864900ADEA94 /* RDAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAlertAction.m; sourceTree = "<group>"; };
 		06FFCCA91E6E864900ADEA94 /* RDAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAlertView.h; sourceTree = "<group>"; };
 		06FFCCAA1E6E864900ADEA94 /* RDAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAlertView.m; sourceTree = "<group>"; };
+		06FFCCAD1E6EBF6A00ADEA94 /* RDCheackSence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCheackSence.h; sourceTree = "<group>"; };
+		06FFCCAE1E6EBF6A00ADEA94 /* RDCheackSence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDCheackSence.m; sourceTree = "<group>"; };
 		0BC211233FEE2DC8EC430CCC /* libPods-SavorX.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SavorX.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4733B7521E305C21006889A2 /* HomeAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeAnimationView.h; sourceTree = "<group>"; };
 		4733B7531E305C21006889A2 /* HomeAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAnimationView.m; sourceTree = "<group>"; };
@@ -1495,6 +1498,8 @@
 		4733B7511E305C01006889A2 /* HomePageView */ = {
 			isa = PBXGroup;
 			children = (
+				06FFCCAD1E6EBF6A00ADEA94 /* RDCheackSence.h */,
+				06FFCCAE1E6EBF6A00ADEA94 /* RDCheackSence.m */,
 				063DC13B1E6D5E1C00449A7B /* RDHomeScreenButton.h */,
 				063DC13C1E6D5E1C00449A7B /* RDHomeScreenButton.m */,
 				4733B7521E305C21006889A2 /* HomeAnimationView.h */,
@@ -2082,6 +2087,7 @@
 				478058361DF989850091C305 /* DesUtil.m in Sources */,
 				47D6F6531E4ACD450030C8C4 /* voideoPlayFooterView.m in Sources */,
 				06FA30EA1D3E0C70001F5B37 /* main.m in Sources */,
+				06FFCCAF1E6EBF6A00ADEA94 /* RDCheackSence.m in Sources */,
 				4780584E1DF9908D0091C305 /* HSSubmitFeedbackRequest.m in Sources */,
 				06FA33991D3E171D001F5B37 /* ContextFilterLogFormatter.m in Sources */,
 				062E99CE1E49C2F30042C924 /* UIImage+WaterMark.m in Sources */,

@@ -131,7 +131,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 - (void)rightAction{
     
-    [[HomeAnimationView animationView] CameroIsReady];
+    [[HomeAnimationView animationView] scanQRCode];
 }
 
 //打开用户应用设置
