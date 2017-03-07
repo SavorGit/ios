@@ -244,7 +244,36 @@
 {
     self.is3D_Touch = YES;
     
+    if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
+        if ([GlobalData shared].isBindRD) {
+            if (![HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].RDBoxDevice.BoxIP]) {
+                [[GlobalData shared] disconnect];
+                [[GCCDLNA defaultManager] startSearchPlatform];
+            }
+        }else if ([GlobalData shared].isBindDLNA){
+            if (![HTTPServerManager checkHttpServerWithDLNAIP:[GlobalData shared].DLNADevice.headerURL]) {
+                [[GlobalData shared] disconnect];
+                [[GCCDLNA defaultManager] startSearchPlatform];
+            }
+        }else if ([GlobalData shared].isWifiStatus){
+            if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
+                if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
+                    [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
+                    return;
+                }
+            }
+            [[GCCDLNA defaultManager] startSearchPlatform];
+        }
+        
+        //检测当前绑定状态是否断开
+        if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
+            [[HomeAnimationView animationView] stopScreen];
+        }
+    }
+    
     if ([shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
+        
+        [[HomeAnimationView animationView] scanQRCode];
         
     }else if ([shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
         

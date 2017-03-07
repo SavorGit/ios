@@ -10,17 +10,14 @@
 #import "SXDlnaViewController.h"
 #import "ScanQRCodeViewController.h"
 #import "BaseNavigationController.h"
-#import "LGSideMenuController.h"
 #import "WMPageController.h"
 #import "PhotoSliderViewController.h"
 #import "SXVideoPlayViewController.h"
-#import "PhotoManyViewController.h"
 #import "DemandViewController.h"
-#import "ScreenDocumentViewController.h"
-#import "ScreenProjectionView.h"
-#import "WMPageController.h"
 #import "UIImage+Additional.h"
-
+#import "RDAlertView.h"
+#import "RDCheackSence.h"
+#import "GCCDLNA.h"
 
 #define HasAlertScreen @"HasAlertScreen"
 
@@ -29,6 +26,8 @@
 @property (nonatomic, strong) UILabel *textLabel;
 
 @property (nonatomic, strong) UIViewController * currentVC;
+
+@property (nonatomic, strong) RDCheackSence * checkSecen;
 
 @end
 
@@ -155,13 +154,20 @@
         [alert addAction:action1];
         [alert addAction:action2];
         
-//        UITabBarController * tab = (UITabBarController *)self.window.rootViewController;
         [[Helper getRootNavigationController].topViewController presentViewController:alert animated:YES completion:nil];
         return;
     }
     
     if (![GlobalData shared].isWifiStatus) {
         [self goToSetting];
+        return;
+    }
+    
+    
+    if ([GCCDLNA defaultManager].isSearch) {
+        self.checkSecen = [[RDCheackSence alloc] init];
+        [self.checkSecen startCheckSence];
+        
         return;
     }
     
@@ -173,7 +179,12 @@
             BaseNavigationController * na = [[BaseNavigationController alloc] initWithRootViewController:SX];
             [[Helper getRootNavigationController] presentViewController:na animated:YES completion:nil];
         }else{
-            [MBProgressHUD showTextHUDwithTitle:@"当前网络环境暂未发现可投屏设备"];
+            RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"未发现可连接的电视\n请连接与电视相同的wifi"];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+                
+            } bold:YES];
+            [alert addActions:@[action]];
+            [alert show];
         }
     }
 }
@@ -284,7 +295,6 @@
     
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"准备扫描二维码"];
     
-//    __block BOOL hasPush = NO;
     __block NSInteger count = 0;
     
     NSDictionary * dict = @{@"function" : @"showQRCode"};
@@ -352,7 +362,12 @@
         [[Helper getRootNavigationController] presentViewController:alert animated:YES completion:nil];
     }else{
         //iOS10之后暂不支持直接跳转系统WIFI
-        [SAVORXAPI showAlertWithString:@"请前往手机设置，打开无线局域网，连接至与电视同一wifi下" withController:[Helper getRootNavigationController]];
+        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"请前往手机设置，打开无线局域网，连接至与电视同一wifi下"];
+        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+            
+        } bold:YES];
+        [alert addActions:@[action]];
+        [alert show];
     }
 }
 

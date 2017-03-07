@@ -23,7 +23,7 @@
 @interface GCCDLNA : NSObject
 
 @property (nonatomic, assign) id<GCCDLNADelegate> delegate;
-@property (nonatomic, assign, readonly) BOOL isSearch;
+@property (nonatomic, assign) BOOL isSearch;
 
 //开始搜索DLNA设备
 - (void)startSearchDevice;
