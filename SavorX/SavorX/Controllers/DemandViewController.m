@@ -28,6 +28,7 @@
 @property (nonatomic, assign) BOOL isHandle; //记录当前是否在进行操作
 @property (nonatomic, strong) UIButton * volumeButton;
 @property (nonatomic, strong) UIButton * screenButton;
+@property (nonatomic, strong) UIButton * quitScreenButton;
 @property (nonatomic, strong) UIImageView * backImageView;
 @property (nonatomic, assign) NSInteger DLNAVolume;
 
@@ -171,6 +172,25 @@
         make.top.mas_equalTo(20);
         make.right.mas_equalTo(-110);
         make.size.mas_equalTo(CGSizeMake(40, 40));
+    }];
+    
+    self.quitScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.quitScreenButton.backgroundColor = [UIColor blackColor];
+    self.quitScreenButton.titleLabel.text = @"退出投屏";
+    self.quitScreenButton.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    self.quitScreenButton.titleLabel.textColor = [UIColor colorWithRed:215.0/255.0 green:190.0/255.0 blue:126.0/255.0 alpha:1.0];
+    self.quitScreenButton.layer.masksToBounds = YES;
+    self.quitScreenButton.layer.cornerRadius = 5.0;
+    self.quitScreenButton.layer.borderWidth = 1.0;
+    self.quitScreenButton.layer.borderColor = [[UIColor clearColor] CGColor];
+    [self.quitScreenButton addTarget:self action:@selector(quitScreenAciton) forControlEvents:UIControlEventTouchUpInside];
+    self.quitScreenButton.selected = YES;
+    [self.view addSubview:self.quitScreenButton];
+    
+    [self.quitScreenButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 32));
+        make.centerX.equalTo(self);
+        make.centerY.equalTo(self);
     }];
     
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {

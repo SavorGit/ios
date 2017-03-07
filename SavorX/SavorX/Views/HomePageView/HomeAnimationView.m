@@ -63,7 +63,7 @@
             make.left.mas_equalTo(0);
             make.right.mas_equalTo(0);
         }];
-        view.devImageView.contentMode = UIViewContentModeScaleAspectFill;
+        view.devImageView.contentMode = UIViewContentModeScaleToFill;
         view.currentImage = [[UIImage alloc] init];
         [view hidden];
         
