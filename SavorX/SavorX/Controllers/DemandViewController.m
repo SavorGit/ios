@@ -162,10 +162,10 @@
     }];
     
     self.screenButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.screenButton setImage:[UIImage imageNamed:@"quit"] forState:UIControlStateSelected];
     [self.screenButton setImage:[UIImage imageNamed:@"tv"] forState:UIControlStateNormal];
     [self.screenButton addTarget:self action:@selector(backAciton) forControlEvents:UIControlEventTouchUpInside];
     self.screenButton.selected = YES;
+    self.screenButton.hidden = YES;
     [self.view addSubview:self.screenButton];
     
     [self.screenButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -174,24 +174,25 @@
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     
-//    self.quitScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    self.quitScreenButton.backgroundColor = [UIColor blackColor];
-//    self.quitScreenButton.titleLabel.text = @"退出投屏";
-//    self.quitScreenButton.titleLabel.font = [UIFont systemFontOfSize:17.0];
-//    self.quitScreenButton.titleLabel.textColor = [UIColor colorWithRed:215.0/255.0 green:190.0/255.0 blue:126.0/255.0 alpha:1.0];
-//    self.quitScreenButton.layer.masksToBounds = YES;
-//    self.quitScreenButton.layer.cornerRadius = 5.0;
-//    self.quitScreenButton.layer.borderWidth = 1.0;
-//    self.quitScreenButton.layer.borderColor = [[UIColor clearColor] CGColor];
-//    [self.quitScreenButton addTarget:self action:@selector(quitScreenAciton) forControlEvents:UIControlEventTouchUpInside];
-//    self.quitScreenButton.selected = YES;
-//    [self.view addSubview:self.quitScreenButton];
-//    
-//    [self.quitScreenButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(100, 32));
-//        make.centerX.equalTo(self);
-//        make.centerY.equalTo(self);
-//    }];
+    self.quitScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.quitScreenButton.backgroundColor = [UIColor blackColor];
+    self.quitScreenButton.alpha = 0.8;
+    [self.quitScreenButton setTitle:@"退出投屏" forState:UIControlStateNormal];
+    [self.quitScreenButton.titleLabel setFont:[UIFont systemFontOfSize:17.0]];
+    [self.quitScreenButton setTitleColor:[UIColor colorWithRed:215.0/255.0 green:190.0/255.0 blue:126.0/255.0 alpha:1.0] forState:UIControlStateNormal];
+    self.quitScreenButton.layer.masksToBounds = YES;
+    self.quitScreenButton.layer.cornerRadius = 5.0;
+    self.quitScreenButton.layer.borderWidth = 1.0;
+    self.quitScreenButton.layer.borderColor = [[UIColor clearColor] CGColor];
+    [self.quitScreenButton addTarget:self action:@selector(quitScreenAciton) forControlEvents:UIControlEventTouchUpInside];
+    self.quitScreenButton.selected = YES;
+    [self.view addSubview:self.quitScreenButton];
+    
+    [self.quitScreenButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(90, 32));
+        make.centerX.equalTo(self.backImageView);
+        make.centerY.equalTo(self.backImageView);
+    }];
     
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
         NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
@@ -215,23 +216,46 @@
     [self createTimer];
 }
 
+// 退出投屏
+- (void)quitScreenAciton{
+    
+    self.screenButton.hidden = NO;
+    self.quitScreenButton.hidden = YES;
+    
+    self.screenButton.enabled = NO;
+    [self.timer setFireDate:[NSDate distantFuture]];
+    [self.timer invalidate];
+    self.timer = nil;
+    [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+        self.playBtn.selected = NO;
+        self.screenButton.enabled = YES;
+    } failure:^{
+        self.screenButton.enabled = YES;
+    }];
+
+}
+
 - (void)backAciton
 {
-    if (self.screenButton.isSelected) {
-        self.screenButton.enabled = NO;
-        [self.timer setFireDate:[NSDate distantFuture]];
-        [self.timer invalidate];
-        self.timer = nil;
-        [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-            self.screenButton.selected = !self.screenButton.isSelected;
-            self.playBtn.selected = NO;
-            self.screenButton.enabled = YES;
-        } failure:^{
-            self.screenButton.enabled = YES;
-        }];
-    }else{
-        [self restartVod];
-    }
+    [self restartVod];
+    self.quitScreenButton.hidden = NO;
+    self.screenButton.hidden = YES;
+    
+//    if (self.screenButton.isSelected) {
+//        self.screenButton.enabled = NO;
+//        [self.timer setFireDate:[NSDate distantFuture]];
+//        [self.timer invalidate];
+//        self.timer = nil;
+//        [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+//            self.screenButton.selected = !self.screenButton.isSelected;
+//            self.playBtn.selected = NO;
+//            self.screenButton.enabled = YES;
+//        } failure:^{
+//            self.screenButton.enabled = YES;
+//        }];
+//    }else{
+//        [self restartVod];
+//    }
 }
 
 //收藏按钮被点击触发
@@ -373,7 +397,8 @@
                 self.playSilder.value = 0;
                 self.isPlayEnd = YES;
                 self.playBtn.selected = NO;
-                self.screenButton.selected = NO;
+//                self.screenButton.selected = NO;
+                self.screenButton.hidden = NO;
                 [self.timer invalidate];
                 self.timer = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
@@ -552,7 +577,8 @@
                 [[HomeAnimationView animationView] startScreenWithViewController:self];
                 self.isPlayEnd = NO;
                 self.playBtn.selected = YES;
-                self.screenButton.selected = YES;
+//                self.screenButton.selected = YES;
+                self.quitScreenButton.hidden = NO;
                 [self createTimer];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
@@ -570,7 +596,8 @@
         [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
             [[HomeAnimationView animationView] startScreenWithViewController:self];
             self.screenButton.enabled = YES;
-            self.screenButton.selected = YES;
+//            self.screenButton.selected = YES;
+            self.quitScreenButton.hidden = NO;
             [hud hideAnimated:NO];
             self.isPlayEnd = NO;
             self.playBtn.selected = YES;
