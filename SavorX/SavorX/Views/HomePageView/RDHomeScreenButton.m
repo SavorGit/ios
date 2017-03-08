@@ -263,6 +263,24 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [self animationCloseButton:self.niceVideoButton completion:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
     if (!self.isBoxSence) {
+        [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
+    }
+}
+
+- (void)closeWithMust{
+    self.isAnimation= YES;
+    
+    [self animationCloseButton:self.photoButton completion:nil];
+    [self animationCloseButton:self.videoButton completion:nil];
+    [self animationCloseButton:self.sliderButton completion:nil];
+    [self animationCloseButton:self.documentButton completion:^(BOOL finished) {
+        [self.backgroundView removeFromSuperview];
+        self.isAnimation = NO;
+        self.isShowOptions = NO;
+    }];
+    [self animationCloseButton:self.niceVideoButton completion:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
+    if (!self.isBoxSence) {
         self.alpha = 1.f;
         [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
     }
@@ -272,11 +290,13 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 - (void)delayReset4GAlpha
 {
     self.isAnimation = YES;
-    [UIView animateWithDuration:.4f animations:^{
-        self.alpha = .6f;
-    } completion:^(BOOL finished) {
-        self.isAnimation = NO;
-    }];
+    if (!self.isBoxSence) {
+        [UIView animateWithDuration:.4f animations:^{
+            self.alpha = .6f;
+        } completion:^(BOOL finished) {
+            self.isAnimation = NO;
+        }];
+    }
 }
 
 - (void)animationCloseButton:(UIButton *)button completion:(void (^)(BOOL finished))completion
