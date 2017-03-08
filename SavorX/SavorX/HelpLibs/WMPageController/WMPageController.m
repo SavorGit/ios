@@ -1055,6 +1055,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [self.titleViewBtn setTitle:@"热点儿" forState:UIControlStateNormal];
         self.rightItem.title = @"连接电视";
         self.titleViewBtn.userInteractionEnabled = NO;
+        [SAVORXAPI ScreenDemandShouldBackToTV];
         [[GlobalData shared] disconnect];
     } bold:YES];
     NSArray *actionArr = [NSArray arrayWithObjects:actionOne,actionTwo, nil];
@@ -1131,9 +1132,11 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 - (void)disconnectDevice
 {
-    self.isInHotel = NO;
-    [self reloadData];
-    self.selectIndex = 0;
+    if ([GlobalData shared].scene != RDSceneHaveRDBox) {
+        self.isInHotel = NO;
+        [self reloadData];
+        self.selectIndex = 0;
+    }
 }
 
 - (void)configureSelf

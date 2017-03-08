@@ -115,11 +115,6 @@
         if (array.count > 0) {
             [MBProgressHUD showTextHUDwithTitle:@"添加成功"];
             
-            if (self.delegate && [self.delegate respondsToSelector:@selector(libraryDidCreateByIDArray:)]) {
-                [self.delegate libraryDidCreateByIDArray:array];
-            }
-            [self.selectArray removeAllObjects];
-            
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             UIViewController * listVC = [self currentSliderListViewController];
             UIViewController * sliderVC = [self currentSliderViewController];
@@ -131,6 +126,10 @@
             }else{
                 [self.navigationController popViewControllerAnimated:YES];
             }
+            if (self.delegate && [self.delegate respondsToSelector:@selector(libraryDidCreateByIDArray:)]) {
+                [self.delegate libraryDidCreateByIDArray:array];
+            }
+            [self.selectArray removeAllObjects];
         }
         
     }];
@@ -161,12 +160,6 @@
         UIViewController * listVC = [self currentSliderListViewController];
         UIViewController * sliderVC = [self currentSliderViewController];
         
-        if (self.delegate && [self.delegate respondsToSelector:@selector(libraryDidCreateByIDArray:)]) {
-            [self.delegate libraryDidCreateByIDArray:array];
-        }
-        
-        [self.selectArray removeAllObjects];
-        
         if (listVC) {
             [self.navigationController popToViewController:listVC animated:YES];
         }else if (sliderVC){
@@ -174,6 +167,10 @@
         }else{
             [self.navigationController popViewControllerAnimated:YES];
         }
+        if (self.delegate && [self.delegate respondsToSelector:@selector(libraryDidCreateByIDArray:)]) {
+            [self.delegate libraryDidCreateByIDArray:array];
+        }
+        [self.selectArray removeAllObjects];
     }
 }
 

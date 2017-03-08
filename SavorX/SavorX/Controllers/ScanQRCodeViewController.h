@@ -28,6 +28,5 @@ typedef NS_ENUM(NSInteger, QRResultType) {
 @interface ScanQRCodeViewController : BaseViewController
 
 @property (nonatomic, assign) id<QRCodeDidBindDelegate> delegate;
-@property (nonatomic, strong) GCCPlayerView * playView;
 
 @end

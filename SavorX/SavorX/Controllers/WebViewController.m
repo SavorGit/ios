@@ -152,10 +152,10 @@
                     [[HomeAnimationView animationView] startScreenWithViewController:play];
                     [self.navigationController pushViewController:play animated:YES];
                 }
+                [self.playView shouldRelease];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
-            [self.playView shouldRelease];
             [hud hideAnimated:NO];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [hud hideAnimated:NO];
@@ -302,9 +302,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     if ([[Helper getRootNavigationController].topViewController isKindOfClass:[ScanQRCodeViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]]) {
-        ScanQRCodeViewController * scan = (ScanQRCodeViewController *)[Helper getRootNavigationController].topViewController;
-        scan.playView = self.playView;
-        [self.playView pause];
+        
     }else{
         [self.playView shouldRelease];
     }
