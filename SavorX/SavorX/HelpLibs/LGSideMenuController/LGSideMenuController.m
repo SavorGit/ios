@@ -34,6 +34,7 @@
 #import "LGSideMenuControllerGesturesHandler.h"
 #import "ScreenDocumentViewController.h"
 #import "WebViewController.h"
+#import "VideoGuidedTwoDimensionalCode.h"
 
 #pragma mark -
 
@@ -3056,6 +3057,10 @@ rightViewBackgroundImageInitialScale = _rightViewBackgroundImageInitialScale;
     //判断如果是文档展示页就返回镜像，左，右三个方向
     if ([[Helper getRootNavigationController].topViewController isKindOfClass:[ScreenDocumentViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]]) {
         return UIInterfaceOrientationMaskAllButUpsideDown;
+    }else if ([UIApplication sharedApplication].keyWindow.subviews.count > 1){
+        if ([[UIApplication sharedApplication].keyWindow.subviews[1] isKindOfClass:[VideoGuidedTwoDimensionalCode class] ]) {
+            return UIInterfaceOrientationMaskAllButUpsideDown;
+        }
     }
     return UIInterfaceOrientationMaskPortrait;
 }

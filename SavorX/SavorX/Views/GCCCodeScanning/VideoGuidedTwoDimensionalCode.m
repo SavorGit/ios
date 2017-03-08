@@ -30,18 +30,9 @@
     if (self = [super init]) {
         //注册通知
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(runLoopTheMovie:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     }
     return self;
-}
-
-- (void)runLoopTheMovie:(NSNotification *)noti{
-    
-    AVPlayerItem * playerItem = [noti object];
-    //关键代码
-    [playerItem seekToTime:kCMTimeZero];
-    
-    [self.player play];
-    NSLog(@"重播");
 }
 
 - (instancetype)showScreenProjectionTitle:(NSString *)title block:(ScreenProjectionSelectViewSelectBlock)selectBlock{
@@ -50,11 +41,13 @@
     self.bottom = keyWindow.top;
     [self creadUI];
     self.selectBlock = selectBlock;
-    
     [keyWindow addSubview:self];
-    [self showViewWithAnimationDuration:.3f];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeFromSuperview)];
+    tap.numberOfTapsRequired = 1;
+    [self addGestureRecognizer:tap];
+    
+    [self showViewWithAnimationDuration:.3f];
     
     return self;
 }
@@ -71,21 +64,6 @@
         make.centerX.equalTo(self);
         make.centerY.equalTo(self).offset(-170);
     }];
-    
-    
-    self.videoBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 200, kMainBoundsWidth, 200)];
-    self.videoBgView.backgroundColor = [UIColor lightGrayColor];
-    [self addSubview:self.videoBgView];
-    
-    NSURL * playURL = [NSURL URLWithString:@"http://200048203.vod.myqcloud.com/200048203_bfa6ad56e1f811e6a93519af8e641b73.f30.mp4"];
-    AVPlayerItem * playerItem = [AVPlayerItem playerItemWithURL:playURL];
-    self.player = [AVPlayer playerWithPlayerItem:playerItem];
-    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-    self.playerLayer.frame = CGRectMake(0, 0, kMainBoundsWidth, 200);
-    self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    [self.videoBgView.layer addSublayer:self.playerLayer];
-    
-    [self.player play];
     
     UIButton *reScanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [reScanBtn setTitle:@"开始扫码" forState:UIControlStateNormal];
@@ -105,34 +83,30 @@
         make.centerX.equalTo(self);
         make.centerY.equalTo(self).offset(150);
     }];
+    
+    [self creatPlayer];
+    [self.player play];
 }
 
-#pragma mark - show view
--(void)showViewWithAnimationDuration:(float)duration{
-    if ([GlobalData shared].isScreenProjectionView) {
-        return;
-    }
-    [GlobalData shared].isScreenProjectionView = YES;
-    [UIView animateWithDuration:duration animations:^{
-        self.backgroundColor = RGBA(0, 0, 0, 0.88);
-        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-        self.bottom = keyWindow.bottom;
-    } completion:^(BOOL finished) {
-    }];
+// 创建视频页面
+- (void)creatPlayer{
+    
+    self.videoBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 200, kMainBoundsWidth, 200)];
+    self.videoBgView.backgroundColor = [UIColor lightGrayColor];
+    [self addSubview:self.videoBgView];
+    
+    NSURL * playURL = [NSURL URLWithString:@"http://200048203.vod.myqcloud.com/200048203_bfa6ad56e1f811e6a93519af8e641b73.f30.mp4"];
+    AVPlayerItem * playerItem = [AVPlayerItem playerItemWithURL:playURL];
+    self.player = [AVPlayer playerWithPlayerItem:playerItem];
+    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+    self.playerLayer.frame = CGRectMake(0, 0, kMainBoundsWidth, 200);
+    self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    
+    [self.videoBgView.layer addSublayer:self.playerLayer];
+    
 }
 
--(void)dismissViewWithAnimationDuration:(float)duration{
-    [UIView animateWithDuration:duration animations:^{
-        
-        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-        self.bottom = keyWindow.top;
-        
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
-        [GlobalData shared].isScreenProjectionView = NO;
-    }];
-}
-
+// 开始扫码
 - (void)startScanAction:(id)sender {
     
     UIButton *btn = (UIButton *)sender;
@@ -148,13 +122,51 @@
         _selectBlock(index);
         _selectBlock = nil;
     }
-   [self dismissViewWithAnimationDuration:0.4f];
     
-   [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-   [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification
-                                                              object:nil];
+    [self dismissViewWithAnimationDuration:0.4f];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification
+                                                  object:nil];
 }
 
+#pragma  mark - player
+// 收到通知，重播
+- (void)runLoopTheMovie:(NSNotification *)noti{
+    
+    AVPlayerItem * playerItem = [noti object];
+    [playerItem seekToTime:kCMTimeZero];
+    
+    [self.player play];
+    NSLog(@"重播");
+}
+
+#pragma mark - show view
+-(void)showViewWithAnimationDuration:(float)duration{
+    
+    [UIView animateWithDuration:duration animations:^{
+        self.backgroundColor = RGBA(0, 0, 0, 0.88);
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        self.bottom = keyWindow.bottom;
+    } completion:^(BOOL finished) {
+    }];
+}
+
+-(void)dismissViewWithAnimationDuration:(float)duration{
+    
+    [UIView animateWithDuration:duration animations:^{
+        
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        self.bottom = keyWindow.top;
+        
+    } completion:^(BOOL finished) {
+        
+        [self removeFromSuperview];
+
+    }];
+}
+
+// 旋转屏幕通知处理
 - (void)orieChanged
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
