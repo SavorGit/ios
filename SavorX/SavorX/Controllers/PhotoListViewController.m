@@ -219,6 +219,7 @@
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
                         [hud hideAnimated:NO];
                         [self.navigationController pushViewController:vc animated:YES];
+                        [HomeAnimationView animationView].currentImage = result;
                         [[HomeAnimationView animationView] startScreenWithViewController:vc];
                         [SAVORXAPI successRing];
                         
@@ -247,6 +248,7 @@
                 [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                     [hud hideAnimated:NO];
                     [self.navigationController pushViewController:vc animated:YES];
+                    [HomeAnimationView animationView].currentImage = result;
                     [[HomeAnimationView animationView] startScreenWithViewController:vc];
                     [SAVORXAPI successRing];
                 } failure:^{
@@ -328,7 +330,7 @@
             }];
         }];
     }else{
-        [[HomeAnimationView animationView] scanQRCode];
+        [self.navigationController pushViewController:third animated:YES];
     }
 }
 

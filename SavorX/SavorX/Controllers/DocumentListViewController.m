@@ -142,7 +142,7 @@
                     [[HomeAnimationView animationView] startScreenWithViewController:video];
                     [self.navigationController pushViewController:video animated:YES];
                 }else{
-                    [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
                 }
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
             } failure:^(NSURLSessionDataTask *task, NSError *error) {

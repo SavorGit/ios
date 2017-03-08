@@ -42,7 +42,6 @@
 {
     if (self = [super init]) {
         self.timeLong = 5;
-        self.isScreen = YES;
     }
     return self;
 }
@@ -54,7 +53,14 @@
     
     self.view.backgroundColor = VCBackgroundColor;
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+        self.isScreen = YES;
+    }else{
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        [SAVORXAPI showConnetToTVAlert];
+        self.isScreen = NO;
+    }
     
     UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc]init];
     flowLayout.itemSize = CGSizeMake(kScreen_Width, kScreen_Height - 64);

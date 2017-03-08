@@ -255,7 +255,8 @@
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
-        }else if ([GlobalData shared].isWifiStatus){
+        }else if ([Helper isWifiStatus]){
+            [GlobalData shared].isWifiStatus = YES;
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
                 if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
                     [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
@@ -269,15 +270,13 @@
         if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
             [[HomeAnimationView animationView] stopScreen];
         }
-    }
-    
-    if ([shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
         
-        [[HomeAnimationView animationView] scanQRCode];
-        
-    }else if ([shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
-        
-        if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
+        if ([shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
+            
+            [[HomeAnimationView animationView] scanQRCode];
+            
+        }else if ([shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
+            
             LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
             BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
             if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
@@ -291,7 +290,6 @@
             }
             
         }
-        
     }
 }
 

@@ -255,22 +255,23 @@
                 
                 // 获得当前视频图片，回传
                 HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-                [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
                 
                 if (model.type == 3) {
                     DemandViewController *view = [[DemandViewController alloc] init];
                     view.model = model;
                     [SAVORXAPI successRing];
+                    [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
                     [[HomeAnimationView animationView] startScreenWithViewController:view];
                     [self.parentNavigationController pushViewController:view animated:YES];
                 }else{
                     SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
                     play.model = model;
+                    [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
                     [[HomeAnimationView animationView] startScreenWithViewController:play];
                     [self.navigationController pushViewController:play animated:YES];
                 }
             }else{
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
             [hud hideAnimated:NO];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {

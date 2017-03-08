@@ -99,6 +99,7 @@
         self.isScreen = YES;
     }else{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        [SAVORXAPI showConnetToTVAlert];
         self.isScreen = NO;
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenCurrentImage) name:RDDidBindDeviceNotification object:nil];
@@ -124,6 +125,7 @@
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
                     
                     [hud hideAnimated:NO];
+                    [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
                     [[HomeAnimationView animationView] startScreenWithViewController:self];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -146,6 +148,7 @@
             [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
                 [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
                     [hud hideAnimated:NO];
+                    [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
                     [[HomeAnimationView animationView] startScreenWithViewController:self];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -165,6 +168,7 @@
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
                         
                         [hud hideAnimated:NO];
+                        [HomeAnimationView animationView].currentImage = result;
                         [[HomeAnimationView animationView] startScreenWithViewController:self];
                         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -187,6 +191,7 @@
                 [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
                     [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
                         [hud hideAnimated:NO];
+                        [HomeAnimationView animationView].currentImage = result;
                         [[HomeAnimationView animationView] startScreenWithViewController:self];
                         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -329,7 +334,7 @@
     }
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         [cell setCellRealImage:result];
-        [HomeAnimationView animationView].currentImage = result;
+//        [HomeAnimationView animationView].currentImage = result;
         [[HomeAnimationView animationView] startScreenWithViewController:self];
     }];
     cell.Orientation = 0;
@@ -356,14 +361,11 @@
             NSString * name = asset.localIdentifier;
             
             if (cell.hasEdit) {
-                
-                [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
-                [[HomeAnimationView animationView] startScreenWithViewController:self];
                 if ([GlobalData shared].isBindRD) {
                     [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
-                        
                         [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
-                            
+                            [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
+                            [[HomeAnimationView animationView] startScreenWithViewController:self];
                             [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
                                 
                             } failure:^{
@@ -376,6 +378,8 @@
                     }];
                 }else if ([GlobalData shared].isBindDLNA) {
                     [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
+                        [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
+                        [[HomeAnimationView animationView] startScreenWithViewController:self];
                         [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
                     }];
                 }
@@ -384,14 +388,12 @@
                 
                 [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
                     
-                    [HomeAnimationView animationView].currentImage = result;
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    
                     if ([GlobalData shared].isBindRD) {
                         [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                             
                             [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 success:^{
-                                
+                                [HomeAnimationView animationView].currentImage = result;
+                                [[HomeAnimationView animationView] startScreenWithViewController:self];
                                 [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:0 success:^{
                                     
                                 } failure:^{

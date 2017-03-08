@@ -455,13 +455,12 @@
             [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
             [self screenImageWithPHAsset:[array objectAtIndex:1] index:1 success:^(UIImage *result, NSString *keyStr) {
                 
-                // 获取第一张幻灯片图片，回传
-                [HomeAnimationView animationView].currentImage = result;
-                
                 NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
                 [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                     [self.navigationController pushViewController:slider animated:YES];
+                    // 获取第一张幻灯片图片，回传
+                    [HomeAnimationView animationView].currentImage = result;
                     [[HomeAnimationView animationView] startScreenWithViewController:slider];
                     [SAVORXAPI successRing];
                 } failure:^{
@@ -473,7 +472,7 @@
         }
     }
     
-    [[HomeAnimationView animationView] scanQRCode];
+    [self.navigationController pushViewController:slider animated:YES];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

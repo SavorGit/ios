@@ -63,6 +63,7 @@
         self.isScreen = YES;
     }else{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+        [SAVORXAPI showConnetToTVAlert];
         self.isScreen = NO;
     }
 

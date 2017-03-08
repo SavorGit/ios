@@ -118,6 +118,34 @@
     return wifiName;
 }
 
++ (BOOL)isWifiStatus
+{
+    NSString *wifiName = nil;
+    
+    CFArrayRef wifiInterfaces = CNCopySupportedInterfaces();
+    
+    if (!wifiInterfaces) {
+        return nil;
+    }
+    
+    NSArray *interfaces = (__bridge NSArray *)wifiInterfaces;
+    
+    for (NSString *interfaceName in interfaces) {
+        CFDictionaryRef dictRef = CNCopyCurrentNetworkInfo((__bridge CFStringRef)(interfaceName));
+        
+        if (dictRef) {
+            NSDictionary *networkInfo = (__bridge NSDictionary *)dictRef;
+            wifiName = [networkInfo objectForKey:(__bridge NSString *)kCNNetworkInfoKeySSID];
+            if (wifiName.length > 0) {
+                return YES;
+            }
+        }
+    }
+    
+    CFRelease(wifiInterfaces);
+    return NO;
+}
+
 + (CGFloat)autoWidthWith:(CGFloat)width
 {
     CGFloat result = (width / 375) * kMainBoundsWidth;
