@@ -56,6 +56,9 @@ static GlobalData* single = nil;
 {
     self.isBindDLNA = YES;
     self.DLNADevice = model;
+    if (self.scene != RDSceneHaveDLNA) {
+        self.scene = RDSceneHaveDLNA;
+    }
     [[GCCUPnPManager defaultManager] setDeviceModel:model];
     [[NSNotificationCenter defaultCenter] postNotificationName:RDDidBindDeviceNotification object:nil];
 }
@@ -65,6 +68,9 @@ static GlobalData* single = nil;
     self.isBindRD = YES;
     self.RDBoxDevice = model;
     self.hotelId = model.hotelID;
+    if (self.scene != RDSceneHaveRDBox) {
+        self.scene = RDSceneHaveRDBox;
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:RDDidBindDeviceNotification object:nil];
     if (![[[NSUserDefaults standardUserDefaults] objectForKey:hasAlertDemandHelp] boolValue]) {
         

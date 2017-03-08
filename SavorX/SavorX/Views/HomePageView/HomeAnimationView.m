@@ -83,11 +83,7 @@
     
     [self stopScreen];
     
-    if ([viewController isKindOfClass:[PhotoSliderViewController class]] ||
-        [viewController isKindOfClass:[SXVideoPlayViewController class]]) {
-        // 设置屏幕常亮
-        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-    }
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     
     self.currentVC = viewController;
     
@@ -143,18 +139,9 @@
 - (void)scanQRCode
 {
     if (([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA)) {
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"断开连接?" message:@"您确定与当前电视断开链接吗?\n断开后将无法进行投屏!" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [SAVORXAPI ScreenDemandShouldBackToTV];
-            [[GlobalData shared] disconnect];
-        }];
-        [alert addAction:action1];
-        [alert addAction:action2];
         
-        [[Helper getRootNavigationController].topViewController presentViewController:alert animated:YES completion:nil];
+        WMPageController * page = [[Helper getRootNavigationController].viewControllers firstObject];
+        [page disconnentClick];
         return;
     }
     

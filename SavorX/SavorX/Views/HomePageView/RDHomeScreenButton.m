@@ -25,7 +25,6 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 @property (nonatomic, assign) BOOL isBoxSence; //记录当前时候是在酒店环境
 @property (nonatomic, assign) BOOL isShowOptions; //记录当前是否在展示选项
-@property (nonatomic, assign) BOOL isAnimation; //记录当前动画状态
 
 @end
 
@@ -90,14 +89,8 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     if (!self.isBoxSence) {
         [self showWithBox];
-        if (self.isAnimation) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(RDHomeScreenPopAnimationTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self animationAddNiceVideoButton];
-            });
-        }else{
-            if (self.isShowOptions) {
-                [self animationAddNiceVideoButton];
-            }
+        if (self.isShowOptions) {
+            [self animationAddNiceVideoButton];
         }
     }
 }
@@ -107,14 +100,8 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     if (self.isBoxSence) {
         [self showWithNoBox];
-        if (self.isAnimation) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(RDHomeScreenCloseAnimationTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self animationRemoveNiceVideoButton];
-            });
-        }else{
-            if (self.isShowOptions) {
-                [self animationRemoveNiceVideoButton];
-            }
+        if (self.isShowOptions) {
+            [self animationRemoveNiceVideoButton];
         }
     }
 }
@@ -122,11 +109,6 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 //动画添加精彩视频按钮
 - (void)animationAddNiceVideoButton
 {
-    if (self.isAnimation) {
-        return;
-    }
-    
-    self.isAnimation = YES;
     CGPoint point = self.repeatButton.center;
     
     double tempSin = sin(M_PI / 4);
@@ -142,18 +124,13 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [self animationView:self.sliderButton moveToPoint:point3 completion:nil];
     [self animationView:self.documentButton moveToPoint:point4 completion:nil];
     [self animationView:self.niceVideoButton moveToPoint:point5 completion:^(BOOL finished) {
-        self.isAnimation = NO;
+        
     }];
 }
 
 //动态移除精彩视频按钮
 - (void)animationRemoveNiceVideoButton
 {
-    if (self.isAnimation) {
-        return;
-    }
-    
-    self.isAnimation = YES;
     CGPoint point = self.repeatButton.center;
     
     double tempSin1 = sin(M_PI / (180 / 22.5));
@@ -168,24 +145,18 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [self animationView:self.sliderButton moveToPoint:point3 completion:nil];
     [self animationView:self.documentButton moveToPoint:point4 completion:nil];
     [self animationCloseButton:self.niceVideoButton completion:^(BOOL finished) {
-        self.isAnimation = NO;
+        
     }];
 }
 
 //弹出菜单
 - (void)popOptionsWithAnimation
 {
-    if (self.isAnimation) {
-        return;
-    }
-    
     if (!self.isBoxSence) {
         self.alpha = 1.f;
     }
-    
+    self.isShowOptions = YES;
     [[SDImageCache sharedImageCache] clearMemory];
-    
-    self.isAnimation = YES;
     
     [[UIApplication sharedApplication].keyWindow addSubview:self.backgroundView];
     self.repeatButton.center = [self viewCenter];
@@ -211,8 +182,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         [self animationView:self.sliderButton moveToPoint:point3 completion:nil];
         [self animationView:self.documentButton moveToPoint:point4 completion:nil];
         [self animationView:self.niceVideoButton moveToPoint:point5 completion:^(BOOL finished) {
-            self.isAnimation = NO;
-            self.isShowOptions = YES;
+            
         }];
         
     }else{
@@ -227,8 +197,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         [self animationView:self.videoButton moveToPoint:point2 completion:nil];
         [self animationView:self.sliderButton moveToPoint:point3 completion:nil];
         [self animationView:self.documentButton moveToPoint:point4 completion:^(BOOL finished) {
-            self.isAnimation = NO;
-            self.isShowOptions = YES;
+            
         }];
     }
 }
@@ -246,19 +215,14 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 //关闭菜单
 - (void)closeOptionsWithAnimation{
-    if (self.isAnimation) {
-        return;
-    }
     
-    self.isAnimation= YES;
+    self.isShowOptions = NO;
     
     [self animationCloseButton:self.photoButton completion:nil];
     [self animationCloseButton:self.videoButton completion:nil];
     [self animationCloseButton:self.sliderButton completion:nil];
     [self animationCloseButton:self.documentButton completion:^(BOOL finished) {
         [self.backgroundView removeFromSuperview];
-        self.isAnimation = NO;
-        self.isShowOptions = NO;
     }];
     [self animationCloseButton:self.niceVideoButton completion:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
@@ -268,15 +232,14 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 }
 
 - (void)closeWithMust{
-    self.isAnimation= YES;
+    
+    self.isShowOptions = NO;
     
     [self animationCloseButton:self.photoButton completion:nil];
     [self animationCloseButton:self.videoButton completion:nil];
     [self animationCloseButton:self.sliderButton completion:nil];
     [self animationCloseButton:self.documentButton completion:^(BOOL finished) {
         [self.backgroundView removeFromSuperview];
-        self.isAnimation = NO;
-        self.isShowOptions = NO;
     }];
     [self animationCloseButton:self.niceVideoButton completion:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
@@ -289,12 +252,11 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 //延时重置4G透明度
 - (void)delayReset4GAlpha
 {
-    self.isAnimation = YES;
     if (!self.isBoxSence) {
         [UIView animateWithDuration:.4f animations:^{
             self.alpha = .6f;
         } completion:^(BOOL finished) {
-            self.isAnimation = NO;
+            
         }];
     }
 }

@@ -127,6 +127,16 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 
 - (void)startSearchPlatform
 {
+    if ([GlobalData shared].isBindRD) {
+        if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].RDBoxDevice.BoxIP]) {
+            return;
+        }
+    }else if ([GlobalData shared].isBindDLNA) {
+        if ([HTTPServerManager checkHttpServerWithDLNAIP:[GlobalData shared].DLNADevice.headerURL]) {
+            return;
+        }
+    }
+    
     self.isSearch = YES;
     [self searchBoxWithAP];
     
@@ -342,8 +352,8 @@ withFilterContext:(nullable id)filterContext{
                         }
                         if ([GlobalData shared].scene == RDSceneNothing) {
                             [GlobalData shared].scene = RDSceneHaveDLNA;
-                            self.isSearch = NO;
                         }
+                        self.isSearch = NO;
                     }
                 });
             }

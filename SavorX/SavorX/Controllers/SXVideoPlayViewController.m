@@ -156,7 +156,7 @@
         self.tableView.tableFooterView =  self.footerView;
     }
     [self.headBackView.palySlider setThumbImage:[UIImage imageNamed:@"slider_thumb"] forState:UIControlStateNormal];
-    self.headBackView.palySlider.minimumValue = 0;
+    self.headBackView.palySlider.minimumValue = 1;
     self.headBackView.palySlider.maximumValue = (NSInteger)self.totalTime;
     [self.headBackView.palySlider setMinimumTrackTintColor:[UIColor colorWithHexString:@"#fb573c"]];
     [self.headBackView.palySlider setMaximumTrackTintColor:[UIColor colorWithHexString:@"#a2a7aa"]];

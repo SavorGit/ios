@@ -30,7 +30,7 @@
                     <state key="normal" image="video_play"/>
                     <state key="selected" image="stop"/>
                     <connections>
-                        <action selector="videoPlayAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="gf8-ch-I3S"/>
+                        <action selector="videoPlayAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="BnC-8P-q5q"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="STE-Ru-Ea8">
@@ -43,7 +43,7 @@
                     <state key="selected" image="mute_huang"/>
                     <state key="highlighted" image="up_stophuang"/>
                     <connections>
-                        <action selector="muteAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="j4u-Dp-fQf"/>
+                        <action selector="muteAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="7QO-eO-eWc"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qEr-an-kCf">
@@ -103,9 +103,9 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="muteBtn" destination="STE-Ru-Ea8" id="o2P-Hv-myq"/>
+                <outlet property="muteBtn" destination="STE-Ru-Ea8" id="zan-TW-dUE"/>
                 <outlet property="quitBtn" destination="ZjP-Ua-58V" id="dMm-fE-xvn"/>
-                <outlet property="videoPlayButton" destination="Mvh-Gf-Hzn" id="vzh-VE-WC9"/>
+                <outlet property="videoPlayButton" destination="Mvh-Gf-Hzn" id="fc5-ZF-zR6"/>
                 <outlet property="volAddBtn" destination="qEr-an-kCf" id="O67-12-gXn"/>
                 <outlet property="volSubBtn" destination="qc1-dY-VdD" id="DwZ-Yo-veS"/>
                 <outlet property="yaokongBgImageView" destination="ddJ-cy-h3z" id="184-Oc-rAl"/>

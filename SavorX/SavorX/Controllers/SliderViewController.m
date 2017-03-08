@@ -98,6 +98,13 @@
         [self.idArray addObjectsFromArray:array];
         [[PhotoTool sharedInstance] addSliderItemWithIDArray:self.idArray andTitle:self.currentTitle];
         [self refreshUI];
+        
+        NSDictionary * dict = [self.results objectAtIndex:0];
+        SliderListViewController * list = [[SliderListViewController alloc] init];
+        list.infoDict = dict;
+        list.systemResults = self.systemResults;
+        list.delegate = self;
+        [self.navigationController pushViewController:list animated:YES];
     }
 }
 

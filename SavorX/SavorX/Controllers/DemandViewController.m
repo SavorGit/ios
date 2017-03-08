@@ -397,7 +397,7 @@
                 self.playSilder.value = 0;
                 self.isPlayEnd = YES;
                 self.playBtn.selected = NO;
-//                self.screenButton.selected = NO;
+                self.quitScreenButton.hidden = YES;
                 self.screenButton.hidden = NO;
                 [self.timer invalidate];
                 self.timer = nil;
@@ -414,6 +414,8 @@
                 self.playSilder.value = 0;
                 self.isPlayEnd = YES;
                 self.playBtn.selected = NO;
+                self.quitScreenButton.hidden = YES;
+                self.screenButton.hidden = NO;
                 [self.timer invalidate];
                 self.timer = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];

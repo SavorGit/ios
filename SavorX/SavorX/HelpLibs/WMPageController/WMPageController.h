@@ -360,4 +360,6 @@ typedef NS_ENUM(NSUInteger, WMPageControllerPreloadPolicy) {
 
 - (void)rightAction;
 
+- (void)disconnentClick;
+
 @end

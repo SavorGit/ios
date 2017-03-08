@@ -106,9 +106,6 @@
         }
         
         [[GlobalData shared] bindToRDBoxDevice:model];
-        if (self.playView) {
-            [self.playView shouldRelease];
-        }
         if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
             [_delegate QRCodeDidBindSuccessWithType:QRResultTypeSuccess andWifiName:nil];
         }

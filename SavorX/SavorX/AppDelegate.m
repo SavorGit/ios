@@ -120,6 +120,7 @@
         }else{
             [GlobalData shared].isWifiStatus = NO;
             [[GlobalData shared] disconnect];
+            [[GCCDLNA defaultManager] stopSearchDevice];
         }
     }];
     
@@ -342,6 +343,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     if (self.is3D_Touch) {
+        self.is3D_Touch = NO;
         return;
     }
     
