@@ -21,6 +21,7 @@
 #import "HSWebServerManager.h"
 #import "HSversionUpgradeRequest.h"
 #import "UIImageView+WebCache.h"
+#import "RDAlertView.h"
 
 #define version_code @"version_code"
 
@@ -154,7 +155,14 @@
             
         }else{
             if (failure) {
-                [MBProgressHUD showTextHUDwithTitle:[response objectForKey:@"info"]];
+                
+                RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:[response objectForKey:@"info"]];
+                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+                    
+                } bold:YES];
+                [alert addActions:@[action]];
+                [alert show];
+                
                 failure();
             }
         }
@@ -169,7 +177,14 @@
             
         }else{
             if (failure) {
-                [MBProgressHUD showTextHUDwithTitle:[response objectForKey:@"info"]];
+                
+                RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:[response objectForKey:@"info"]];
+                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+                    
+                } bold:YES];
+                [alert addActions:@[action]];
+                [alert show];
+                
                 failure();
             }
         }
@@ -313,6 +328,29 @@
         default:
             break;
     }
+}
+
++ (void)showAlertWithMessage:(NSString *)message
+{
+    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:message];
+    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+        
+    } bold:YES];
+    [alert addActions:@[action]];
+    [alert show];
+}
+
++ (void)showConnetToTVAlert
+{
+    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"请点击\"连接电视\", 即可投屏"];
+    RDAlertAction * action1 = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+        
+    } bold:NO];
+    RDAlertAction * action2 = [[RDAlertAction alloc] initWithTitle:@"连接电视" handler:^{
+        [[HomeAnimationView animationView] scanQRCode];
+    } bold:YES];
+    [alert addActions:@[action1, action2]];
+    [alert show];
 }
 
 + (void)successRing

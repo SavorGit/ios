@@ -170,6 +170,10 @@
     [self isEnableFooter];
     
     [self createTimer];
+    
+    if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
+        [SAVORXAPI showConnetToTVAlert];
+    }
 }
 
 //创建更新播放进度定时器
@@ -443,7 +447,7 @@
                 [self.tableView reloadData];
             }else{
                 self.footerView.videoPlayButton.selected = YES;
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
             self.isHandle = NO;
             self.footerView.videoPlayButton.enabled = YES;

@@ -153,7 +153,7 @@
                     [self.navigationController pushViewController:play animated:YES];
                 }
             }else{
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
             [self.playView shouldRelease];
             [hud hideAnimated:NO];

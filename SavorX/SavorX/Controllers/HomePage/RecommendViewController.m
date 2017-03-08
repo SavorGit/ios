@@ -320,7 +320,7 @@
                     [self.navigationController pushViewController:play animated:YES];
                 }
             }else{
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -412,7 +412,7 @@
                 [[HomeAnimationView animationView] startScreenWithViewController:play];
                 [self.navigationController pushViewController:play animated:YES];
             }else{
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {

@@ -71,12 +71,16 @@
         [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:NO];
             
-            SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
-            video.videoUrl = videoUrl;
-            video.totalTime = totalTime;
-            video.title = [filePath lastPathComponent];
-            [[HomeAnimationView animationView] startScreenWithViewController:video];
-            [[Helper getRootNavigationController] pushViewController:video animated:YES];
+            if ([[result objectForKey:@"result"] integerValue] == 0) {
+                SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
+                video.videoUrl = videoUrl;
+                video.totalTime = totalTime;
+                video.title = [filePath lastPathComponent];
+                [[HomeAnimationView animationView] startScreenWithViewController:video];
+                [[Helper getRootNavigationController] pushViewController:video animated:YES];
+            }else{
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+            }
             
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:NO];

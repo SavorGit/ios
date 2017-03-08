@@ -126,55 +126,65 @@ static GlobalData* single = nil;
 
 - (void)setIsBindRD:(BOOL)isBindRD
 {
-    _isBindRD = isBindRD;
-    if (isBindRD) {
-        _isBindDLNA = NO;
-        _DLNADevice = [[DeviceModel alloc] init];
+    if (_isBindRD != isBindRD) {
+        _isBindRD = isBindRD;
+        if (isBindRD) {
+            _isBindDLNA = NO;
+            _DLNADevice = [[DeviceModel alloc] init];
+        }
     }
 }
 
 - (void)setIsBindDLNA:(BOOL)isBindDLNA
 {
-    _isBindDLNA = isBindDLNA;
-    if (isBindDLNA) {
-        _isBindRD = NO;
-        _RDBoxDevice = [[RDBoxModel alloc] init];
+    if (_isBindDLNA != isBindDLNA) {
+        _isBindDLNA = isBindDLNA;
+        if (isBindDLNA) {
+            _isBindRD = NO;
+            _RDBoxDevice = [[RDBoxModel alloc] init];
+        }
     }
 }
 
 - (void)setScene:(RDScene)scene
 {
-    _scene = scene;
-    if (scene == RDSceneNothing) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:RDDidNotFoundSenceNotification object:nil];
-        if (_isBindRD || _isBindDLNA) {
-            [self disconnect];
-        }
-        self.callQRCodeURL = @"";
-    }else{
-        [MBProgressHUD showTextHUDwithTitle:@"发现可连接的电视"];
-        if (scene == RDSceneHaveRDBox) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundBoxSenceNotification object:nil];
+    if (_scene != scene) {
+        _scene = scene;
+        if (scene == RDSceneNothing) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDDidNotFoundSenceNotification object:nil];
+            if (_isBindRD || _isBindDLNA) {
+                [self disconnect];
+            }
+            self.callQRCodeURL = @"";
         }else{
-            [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundDLNASenceNotification object:nil];
+            [MBProgressHUD showTextHUDwithTitle:@"发现电视, 可以投屏"];
+            if (scene == RDSceneHaveRDBox) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundBoxSenceNotification object:nil];
+            }else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundDLNASenceNotification object:nil];
+            }
         }
     }
 }
 
 - (void)setIsWifiStatus:(BOOL)isWifiStatus
 {
-    _isWifiStatus = isWifiStatus;
-    if (!isWifiStatus) {
-        _scene = RDSceneNothing;
-        [MBProgressHUD removeTextHUD];
+    if (_isWifiStatus != isWifiStatus) {
+        _isWifiStatus = isWifiStatus;
+        if (!isWifiStatus) {
+            _scene = RDSceneNothing;
+            [MBProgressHUD removeTextHUD];
+        }
     }
 }
 
 - (void)setCacheModel:(RDBoxModel *)cacheModel
 {
-    _cacheModel = cacheModel;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(clearCacheModel) object:nil];
-    [self performSelector:@selector(clearCacheModel) withObject:nil afterDelay:3 * 60.f];
+    if (_cacheModel != cacheModel) {
+        _cacheModel = cacheModel;
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(clearCacheModel) object:nil];
+        [self performSelector:@selector(clearCacheModel) withObject:nil afterDelay:3 * 60.f];
+    }
 }
 
 - (void)clearCacheModel

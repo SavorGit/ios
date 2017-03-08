@@ -1007,7 +1007,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
     [self.rightItem setTitlePositionAdjustment:UIOffsetMake(5, 0) forBarMetrics:UIBarMetricsDefault];
     self.navigationItem.rightBarButtonItem = self.rightItem;
     
-//    self.navigationItem.title = @"热点儿";
     self.titleViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.titleViewBtn.frame = CGRectMake(0, 0, 150, 30);
     self.titleViewBtn.userInteractionEnabled = NO;

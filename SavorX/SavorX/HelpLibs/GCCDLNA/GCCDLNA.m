@@ -181,12 +181,6 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
                         [GlobalData shared].scene = RDSceneHaveRDBox;
                         self.isSearch = NO;
                     }
-                }else{
-                    if([GlobalData shared].callQRCodeURL.length == 0){
-                        [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@",ipInfo,command_port,[type lowercaseString]];
-                        [GlobalData shared].scene = RDSceneHaveRDBox;
-                        self.isSearch = NO;
-                    }
                 }
             }
         }

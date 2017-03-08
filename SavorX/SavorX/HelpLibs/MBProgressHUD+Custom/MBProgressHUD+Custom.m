@@ -174,6 +174,10 @@
             [tempView removeFromSuperview];
         }
         
+        if ([NSStringFromClass([[Helper getRootNavigationController].topViewController class]) isEqualToString:@"ScanQRCodeViewController"]) {
+            return;
+        }
+        
         CGRect rect = [title boundingRectWithSize:CGSizeMake(kScreen_Width - 60, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17]} context:nil];
         
         UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width + 30, rect.size.height + 20)];

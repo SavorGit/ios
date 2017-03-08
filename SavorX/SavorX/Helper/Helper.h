@@ -34,6 +34,8 @@
 /**获取当前wifi的名字**/
 + (NSString *)getWifiName;
 
++ (BOOL)isWifiStatus;
+
 + (CGFloat)autoWidthWith:(CGFloat)width;
 
 + (CGFloat)autoHeightWith:(CGFloat)height;

@@ -89,6 +89,10 @@ typedef NS_ENUM(NSInteger, interactType) {
  */
 + (void)postUMHandleWithContentId:(NSInteger)contentId withType:(NSInteger)type;
 
++ (void)showAlertWithMessage:(NSString *)message;
+
++ (void)showConnetToTVAlert;
+
 //投屏成功的铃声
 + (void)successRing;
 

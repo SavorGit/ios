@@ -555,7 +555,7 @@
                 self.screenButton.selected = YES;
                 [self createTimer];
             }else{
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
             self.isHandle = NO;
             self.screenButton.enabled = YES;
