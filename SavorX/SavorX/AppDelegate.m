@@ -358,7 +358,8 @@
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
-        }else if ([GlobalData shared].isWifiStatus){
+        }else if ([Helper isWifiStatus]){
+            [GlobalData shared].isWifiStatus = YES;
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
                 if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
                     [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
