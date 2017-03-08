@@ -77,4 +77,10 @@
 
 - (void)getImageFromPHAssetSourceWithAsset:(PHAsset *)asset success:(void (^)(UIImage * result))success;
 
+// 获取视频第一帧或是第几帧的图片
+- (UIImage *)imageWithVideoUrl:(NSURL *)urlAsSet atTime:(NSTimeInterval)tmpTime;
+
+// 获取视频第一帧或是第几帧的图片
+- (void)thumbnailImageForVideo:(NSURL *)videoURL atTime:(NSTimeInterval)tmpTime completion:(void(^)(UIImage *image))completion;
+
 @end

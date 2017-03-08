@@ -335,7 +335,7 @@
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         [cell setCellRealImage:result];
 //        [HomeAnimationView animationView].currentImage = result;
-        [[HomeAnimationView animationView] startScreenWithViewController:self];
+//        [[HomeAnimationView animationView] startScreenWithViewController:self];
     }];
     cell.Orientation = 0;
     cell.firstText = @"";

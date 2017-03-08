@@ -15,6 +15,7 @@
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
 #import "GCCKeyChain.h"
+#import "PhotoTool.h"
 
 @implementation OpenFileTool
 
@@ -76,6 +77,8 @@
                 video.videoUrl = videoUrl;
                 video.totalTime = totalTime;
                 video.title = [filePath lastPathComponent];
+                UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
+                [HomeAnimationView animationView].currentImage = firstImage;
                 [[HomeAnimationView animationView] startScreenWithViewController:video];
                 [[Helper getRootNavigationController] pushViewController:video animated:YES];
             }else{
@@ -93,6 +96,8 @@
             video.videoUrl = videoUrl;
             video.totalTime = totalTime;
             video.title = [filePath lastPathComponent];
+            UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
+            [HomeAnimationView animationView].currentImage = firstImage;
             [[HomeAnimationView animationView] startScreenWithViewController:video];
             [[Helper getRootNavigationController] pushViewController:video animated:YES];
 

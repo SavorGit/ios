@@ -12,6 +12,7 @@
 #import "OpenFileTool.h"
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
+#import "PhotoTool.h"
 
 #define DocumentListCell @"DocumentListCell"
 
@@ -120,6 +121,7 @@
         
         NSURL *movieURL = [NSURL fileURLWithPath:filePath];
         AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:movieURL options:nil];  // 初始化视频媒体文件
+        
         NSInteger totalTime = (NSInteger)urlAsset.duration.value / urlAsset.duration.timescale;
         
         NSString * videoUrl = [NSString stringWithFormat:@"video?%@", [filePath lastPathComponent]];
@@ -139,6 +141,9 @@
             [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
                 
                 if ([[result objectForKey:@"result"] integerValue] == 0) {
+                    
+                    UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
+                    [HomeAnimationView animationView].currentImage = firstImage;
                     [[HomeAnimationView animationView] startScreenWithViewController:video];
                     [self.navigationController pushViewController:video animated:YES];
                 }else{
@@ -152,6 +157,8 @@
         }else if ([GlobalData shared].isBindDLNA) {
              [MBProgressHUD showCustomLoadingHUDInView:self.view];
             [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{
+                UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
+                [HomeAnimationView animationView].currentImage = firstImage;
                 [[HomeAnimationView animationView] startScreenWithViewController:video];
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 [self.navigationController pushViewController:video animated:YES];

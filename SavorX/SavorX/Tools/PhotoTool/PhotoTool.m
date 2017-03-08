@@ -569,4 +569,58 @@
     }];
 }
 
+// 获取视频第一帧或是第几帧的图片
+- (UIImage *)imageWithVideoUrl:(NSURL *)urlAsSet atTime:(NSTimeInterval)tmpTime
+
+{
+     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:urlAsSet options:nil];
+    AVAssetImageGenerator* gen = [AVAssetImageGenerator assetImageGeneratorWithAsset:asset];
+    gen.appliesPreferredTrackTransform = YES;
+    gen.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
+    
+    // 定义获取tmpTime帧处的视频截图
+    CMTime time = CMTimeMakeWithSeconds(tmpTime, asset.duration.timescale);
+    
+    NSError *error = nil;
+    
+    CMTime actualTime;
+    
+    // 获取time处的视频截图
+    CGImageRef  image = [gen  copyCGImageAtTime: time actualTime: &actualTime error:&error];
+    CMTimeShow(actualTime);
+    
+    // 将CGImageRef转换为UIImage
+    UIImage *thumb = [[UIImage alloc] initWithCGImage: image];
+    
+    CGImageRelease(image);
+    
+    return  thumb;
+    
+}
+
+- (void)thumbnailImageForVideo:(NSURL *)videoURL atTime:(NSTimeInterval)tmpTime completion:(void(^)(UIImage *image))completion{
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+        
+        AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+        
+        gen.appliesPreferredTrackTransform = YES;
+        
+        CMTime time = CMTimeMakeWithSeconds(tmpTime, 600);
+        
+        NSError *error = nil;
+        
+        CMTime actualTime;
+        CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+        UIImage *thumbImg = [[UIImage alloc] initWithCGImage:image];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion(thumbImg);
+            }
+        });
+    });
+}
+
 @end
