@@ -1132,9 +1132,11 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 - (void)disconnectDevice
 {
-    self.isInHotel = NO;
-    [self reloadData];
-    self.selectIndex = 0;
+    if ([GlobalData shared].scene != RDSceneHaveRDBox) {
+        self.isInHotel = NO;
+        [self reloadData];
+        self.selectIndex = 0;
+    }
 }
 
 - (void)configureSelf

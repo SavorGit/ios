@@ -99,7 +99,6 @@ static GlobalData* single = nil;
 {
     self.isBindRD = NO;
     self.RDBoxDevice = [[RDBoxModel alloc] init];
-    self.hotelId = 0;
 }
 
 - (void)disconnect
