@@ -227,6 +227,7 @@
     [self.timer invalidate];
     self.timer = nil;
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+        self.isPlayEnd = YES;
         self.playBtn.selected = NO;
         self.screenButton.enabled = YES;
     } failure:^{
@@ -583,6 +584,7 @@
                 self.playBtn.selected = YES;
 //                self.screenButton.selected = YES;
                 self.quitScreenButton.hidden = NO;
+                self.screenButton.hidden = YES;
                 [self createTimer];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
@@ -602,6 +604,7 @@
             self.screenButton.enabled = YES;
 //            self.screenButton.selected = YES;
             self.quitScreenButton.hidden = NO;
+            self.screenButton.hidden = YES;
             [hud hideAnimated:NO];
             self.isPlayEnd = NO;
             self.playBtn.selected = YES;

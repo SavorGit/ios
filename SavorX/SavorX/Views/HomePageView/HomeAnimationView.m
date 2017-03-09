@@ -65,6 +65,7 @@
             make.right.mas_equalTo(0);
         }];
         view.devImageView.contentMode = UIViewContentModeScaleAspectFill;
+        view.devImageView.clipsToBounds = YES;
         view.currentImage = [[UIImage alloc] init];
         [view hidden];
         
@@ -89,7 +90,7 @@
     
     self.currentVC = viewController;
     
-    [self.devImageView setImage: [self.currentImage  scaleToSize:CGSizeMake(145, 79)] ];
+    [self.devImageView setImage:self.currentImage];
 }
 
 - (void)stopScreen
