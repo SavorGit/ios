@@ -273,6 +273,7 @@
                 *stop = YES;
             }
         }];
+        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:cancleCollectHandle];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -280,6 +281,7 @@
         [button setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
         [SAVORXAPI postUMHandleWithContentId:contenId withType:cancleCollectHandle];
     }else{
+        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:collectHandle];
         [favoritesArray addObject:[self.model toDictionary]];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];

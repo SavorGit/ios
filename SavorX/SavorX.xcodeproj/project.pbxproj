@@ -119,6 +119,8 @@
 		0647BC351E506285002284BB /* HSFirstUseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647BC341E506285002284BB /* HSFirstUseRequest.m */; };
 		0647BC381E5063DF002284BB /* HSversionUpgradeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647BC371E5063DF002284BB /* HSversionUpgradeRequest.m */; };
 		0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647EACA1E70E93500C39160 /* RDRightConnetItem.m */; };
+		0647EACF1E70F37E00C39160 /* ZFBrightnessView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647EACE1E70F37E00C39160 /* ZFBrightnessView.m */; };
+		0647EAD21E7129E900C39160 /* ZFVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647EAD11E7129E900C39160 /* ZFVolumeView.m */; };
 		064F0E2B1DD3087700D9EFD1 /* AddSliderCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 064F0E2A1DD3087700D9EFD1 /* AddSliderCollectionViewCell.m */; };
 		064F0E2E1DD316C800D9EFD1 /* SliderShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 064F0E2D1DD316C800D9EFD1 /* SliderShowViewController.m */; };
 		064F8B8D1E52FDBC006280FD /* HomeBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 064F8B8C1E52FDBC006280FD /* HomeBaseViewController.m */; };
@@ -444,6 +446,10 @@
 		0647BC371E5063DF002284BB /* HSversionUpgradeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSversionUpgradeRequest.m; sourceTree = "<group>"; };
 		0647EAC91E70E93500C39160 /* RDRightConnetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDRightConnetItem.h; sourceTree = "<group>"; };
 		0647EACA1E70E93500C39160 /* RDRightConnetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDRightConnetItem.m; sourceTree = "<group>"; };
+		0647EACD1E70F37E00C39160 /* ZFBrightnessView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFBrightnessView.h; sourceTree = "<group>"; };
+		0647EACE1E70F37E00C39160 /* ZFBrightnessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFBrightnessView.m; sourceTree = "<group>"; };
+		0647EAD01E7129E900C39160 /* ZFVolumeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFVolumeView.h; sourceTree = "<group>"; };
+		0647EAD11E7129E900C39160 /* ZFVolumeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFVolumeView.m; sourceTree = "<group>"; };
 		064F0E291DD3087700D9EFD1 /* AddSliderCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSliderCollectionViewCell.h; sourceTree = "<group>"; };
 		064F0E2A1DD3087700D9EFD1 /* AddSliderCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSliderCollectionViewCell.m; sourceTree = "<group>"; };
 		064F0E2C1DD316C800D9EFD1 /* SliderShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderShowViewController.h; sourceTree = "<group>"; };
@@ -1003,6 +1009,7 @@
 				062D4F4B1DEC02BA0093942A /* GCCControlView.m */,
 				062D4F4C1DEC02BA0093942A /* GCCPlayerView.h */,
 				062D4F4D1DEC02BA0093942A /* GCCPlayerView.m */,
+				0647EACC1E70F37E00C39160 /* ZFBrightnessView */,
 				062D4F4E1DEC02BA0093942A /* Resource */,
 			);
 			path = GCCPlayer;
@@ -1078,6 +1085,17 @@
 				064F8B921E532838006280FD /* HSGetIpRequest.m */,
 			);
 			path = other;
+			sourceTree = "<group>";
+		};
+		0647EACC1E70F37E00C39160 /* ZFBrightnessView */ = {
+			isa = PBXGroup;
+			children = (
+				0647EACD1E70F37E00C39160 /* ZFBrightnessView.h */,
+				0647EACE1E70F37E00C39160 /* ZFBrightnessView.m */,
+				0647EAD01E7129E900C39160 /* ZFVolumeView.h */,
+				0647EAD11E7129E900C39160 /* ZFVolumeView.m */,
+			);
+			path = ZFBrightnessView;
 			sourceTree = "<group>";
 		};
 		067CB3BC1D603B4A00094BB8 /* Discover */ = {
@@ -2042,6 +2060,7 @@
 				06F9B2A31D6ED8CE00C7F0A4 /* GCCGetInfo.m in Sources */,
 				47F997621DFFA58F0009BDFB /* SXWiFiHelpView.m in Sources */,
 				0627E0C11E3231DA00DAED92 /* LGSideMenuView.m in Sources */,
+				0647EACF1E70F37E00C39160 /* ZFBrightnessView.m in Sources */,
 				47F9975E1DFFA4060009BDFB /* SXWiFiCell.m in Sources */,
 				060031631E53618200E675F5 /* HSGetLastVodList.m in Sources */,
 				06076C191E30DB1A008C0E29 /* HomePageCell.m in Sources */,
@@ -2129,6 +2148,7 @@
 				476F44C51E2DBC1000F99090 /* LeftViewController.m in Sources */,
 				478058511DF99A5B0091C305 /* HSLatestTopicListRequest.m in Sources */,
 				4772FF901DFA9C5900758697 /* BaseView.m in Sources */,
+				0647EAD21E7129E900C39160 /* ZFVolumeView.m in Sources */,
 				06FA333F1D3E16A0001F5B37 /* GlobalData.m in Sources */,
 				061E0FD11DFFD9A40072605F /* DeviceModel.m in Sources */,
 				4772FF8C1DFA570D00758697 /* UIView+Additional.m in Sources */,

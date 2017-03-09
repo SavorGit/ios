@@ -30,7 +30,7 @@
     
     self.bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.bgImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.bgImageView.clipsToBounds = YES;
+    self.bgImageView.layer.masksToBounds = YES;
     [self.contentView addSubview:self.bgImageView];
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];

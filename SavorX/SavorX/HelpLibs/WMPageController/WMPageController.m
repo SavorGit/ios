@@ -21,7 +21,7 @@
 #import "SliderViewController.h"
 #import "HomeAnimationView.h"
 #import "RDAlertView.h"
-#import "RDAlertAction.h"
+#import "RDRightConnetItem.h"
 
 NSString *const WMControllerDidAddToSuperViewNotification = @"WMControllerDidAddToSuperViewNotification";
 NSString *const WMControllerDidFullyDisplayedNotification = @"WMControllerDidFullyDisplayedNotification";
@@ -58,7 +58,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 @property (nonatomic, strong) UIButton *titleViewBtn;
 
 // 连接电视按钮
-@property (nonatomic, strong) UIBarButtonItem* rightItem;
+@property (nonatomic, strong) RDRightConnetItem* rightItem;
 
 @end
 
@@ -1003,9 +1003,9 @@ static NSInteger const kWMControllerCountUndefined = -1;
     UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     self.navigationItem.leftBarButtonItem = backItem;
     
-    self.rightItem = [[UIBarButtonItem alloc] initWithTitle:@"连接电视" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
-    [self.rightItem setTitlePositionAdjustment:UIOffsetMake(5, 0) forBarMetrics:UIBarMetricsDefault];
-    self.navigationItem.rightBarButtonItem = self.rightItem;
+    self.rightItem = [RDRightConnetItem buttonWithType:UIButtonTypeCustom];
+    [self.rightItem addTarget:self action:@selector(rightAction) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
     
     self.titleViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.titleViewBtn.frame = CGRectMake(0, 0, 150, 30);
@@ -1053,7 +1053,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     } bold:nil];
     RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
         [self.titleViewBtn setTitle:@"热点儿" forState:UIControlStateNormal];
-        self.rightItem.title = @"连接电视";
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
         self.titleViewBtn.userInteractionEnabled = NO;
         [SAVORXAPI ScreenDemandShouldBackToTV];
         [[GlobalData shared] disconnect];
@@ -1067,7 +1067,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 // 连接电视成功，收到通知调用
 - (void)connectSuccessDevice{
     
-    self.rightItem.title = @"";
+    self.navigationItem.rightBarButtonItem = nil;
     self.titleViewBtn.userInteractionEnabled = YES;
     NSString *titleStr = [NSString stringWithFormat:@"已连接“%@”的电视",[GlobalData shared].RDBoxDevice.sid];
     [self.titleViewBtn setTitle:titleStr forState:UIControlStateNormal];

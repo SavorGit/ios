@@ -13,11 +13,13 @@
 #import "SXVideoPlayViewController.h"
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate>
 
 @property (nonatomic, strong) UIView * toolView; //操作栏
 @property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
+@property (nonatomic, strong) MPVolumeView * volumeView;
 
 @end
 
@@ -31,6 +33,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(-100, -100, 40, 40)];
+    [self.volumeView setHidden:NO];
+    [self.view addSubview:self.volumeView];
     
     [self createUI];
 }
@@ -234,11 +240,13 @@
                 *stop = YES;
             }
         }];
+        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:cancleCollectHandle];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self.playView setIsCollect:NO];
     }else{
+        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:collectHandle];
         [favoritesArray addObject:[self.model toDictionary]];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
@@ -278,6 +286,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.volumeView setHidden:NO];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:readHandle];
 }
@@ -293,6 +302,7 @@
 {
     [super viewWillDisappear:animated];
     
+    [self.volumeView setHidden:YES];
     [self.playView pause];
     if ([UIApplication sharedApplication].statusBarHidden) {
         [[UIApplication sharedApplication] setStatusBarHidden:NO];

@@ -52,8 +52,7 @@
     [[IQKeyboardManager sharedManager] setEnableAutoToolbar:NO];
     
     //友盟分享
-    [[UMSocialManager defaultManager] setUmSocialAppkey:@"57b432afe0f55a9832001a0a"];
-    [UMConfigInstance setAppKey:UmengAppkey];
+    [[UMSocialManager defaultManager] setUmSocialAppkey:UmengAppkey];
     
     //设置微信的appKey和appSecret
     [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx9663b3234c565a7a" appSecret:@"1fb27ff272313bb4c9fe382af98de80b" redirectURL:@"http://www.savor.cn"];
@@ -67,6 +66,8 @@
     //友盟统计
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [MobClick setAppVersion:version];
+    [UMConfigInstance setAppKey:UmengAppkey];
+    UMConfigInstance.channelId = @"App Store";
     [MobClick startWithConfigure:UMConfigInstance];
     
     NSString* identifierNumber = [[UIDevice currentDevice].identifierForVendor UUIDString];
@@ -297,7 +298,7 @@
     }
 }
 
-+ (void)postUMHandleWithContentId:(NSInteger)contentId withType:(NSInteger)type
++ (void)postUMHandleWithContentId:(NSInteger)contentId withType:(handleType)type
 {
     NSDictionary * parameters = @{@"contentID" : [NSString stringWithFormat:@"%ld", (long)contentId]};
     switch (type) {

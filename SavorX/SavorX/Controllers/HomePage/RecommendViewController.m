@@ -291,6 +291,7 @@
     
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         //如果是绑定状态
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         NSDictionary *parameters = @{@"function": @"prepare",
@@ -328,7 +329,7 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
     }else if ([GlobalData shared].isBindDLNA && model.type == 3){
-        
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         // 获得当前视频图片  回传
         HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
         [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
@@ -353,6 +354,7 @@
     }else if ([GlobalData shared].scene == RDSceneHaveRDBox || [GlobalData shared].isBindRD == NO) {
         [[HomeAnimationView animationView] scanQRCode];
     }else{
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
         //如果不是绑定状态
         if (model.type == 3) {
             WebViewController * web = [[WebViewController alloc] init];
@@ -468,8 +470,18 @@
         label.font = [UIFont systemFontOfSize:16];
         label.textColor = UIColorFromRGB(0x666666);
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = @"—— ◆ 精彩视频 ◆ ——";
+        label.text = @"精彩视频";
         [_headView addSubview:label];
+        
+        UIImageView * leftImageView = [[UIImageView alloc] initWithFrame:CGRectMake(label.width / 2 - 70, 0, 30, 55)];
+        leftImageView.contentMode = UIViewContentModeScaleAspectFit;
+        [leftImageView setImage:[UIImage imageNamed:@"left"]];
+        [label addSubview:leftImageView];
+        
+        UIImageView * rightImageView = [[UIImageView alloc] initWithFrame:CGRectMake(label.width / 2 + 40, 0, 30, 55)];
+        rightImageView.contentMode = UIViewContentModeScaleAspectFit;
+        [rightImageView setImage:[UIImage imageNamed:@"right"]];
+        [label addSubview:rightImageView];
     }
     return _headView;
 }

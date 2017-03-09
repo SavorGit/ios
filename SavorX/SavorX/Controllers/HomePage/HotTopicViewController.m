@@ -240,7 +240,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         //如果是绑定状态
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         NSDictionary *parameters = @{@"function": @"prepare",
@@ -279,6 +281,7 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
     }else if ([GlobalData shared].isBindDLNA && model.type == 3){
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         //如果是绑定状态
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         NSString * path = [model.videoURL stringByAppendingString:@".f20.mp4"];
@@ -298,6 +301,7 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
     }else{
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
         //如果不是绑定状态
         if (model.type == 3) {
             WebViewController * web = [[WebViewController alloc] init];
