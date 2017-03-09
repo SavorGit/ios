@@ -28,6 +28,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 @property (nonatomic, strong) NSMutableArray * locationSource;
 @property (nonatomic, strong) GCDAsyncUdpSocket * socket;
 @property (nonatomic, assign) BOOL isSearchPlatform;
+@property (nonatomic, strong) NSURLSessionDataTask * task;
 
 @end
 
@@ -137,6 +138,10 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
         }
     }
     
+    if (self.isSearch) {
+        [self stopSearchDevice];
+    }
+    
     self.isSearch = YES;
     [self searchBoxWithAP];
     
@@ -146,7 +151,6 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     [GlobalData shared].scene = RDSceneNothing;
     self.isSearchPlatform = YES;
     [self setUpSocketForPlatform]; //若当前socket处于关闭状态，先配置socket地址和端口
-    
     [self callQRcodeFromPlatform];
     [self performSelector:@selector(startSearchDevice) withObject:nil afterDelay:6.f];
 }
@@ -154,7 +158,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 - (void)searchBoxWithAP
 {
     NSDictionary * dict = @{@"function" : @"check"};
-    [SAVORXAPI postWithURL:@"http://192.168.43.1:8080" parameters:dict success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+    self.task = [SAVORXAPI postWithURL:@"http://192.168.43.1:8080" parameters:dict success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             [GlobalData shared].scene = RDSceneHaveRDBox;
@@ -204,10 +208,18 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 //停止设备搜索
 - (void)stopSearchDevice
 {
+    if (self.task) {
+        [self.task cancel];
+    }
+    [HSGetIpRequest cancelRequest];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startSearchDevice) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
+    
     if (!self.socket.isClosed) {
         [self socketShouldBeClose]; //调用socket关闭
-        self.isSearch = NO;
     }
+    
+    self.isSearch = NO;
 }
 
 - (void)socketShouldBeClose
