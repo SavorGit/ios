@@ -256,6 +256,9 @@ static NSInteger const kWMControllerCountUndefined = -1;
     [self.memCache removeAllObjects];
     [self wm_resetMenuView];
     [self viewDidLayoutSubviews];
+    
+    [self.view bringSubviewToFront:[HomeAnimationView animationView]];
+    [self.view bringSubviewToFront:self.homeButton];
 }
 
 - (void)updateTitle:(NSString *)title atIndex:(NSInteger)index {
@@ -1073,7 +1076,12 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     self.navigationItem.rightBarButtonItem = nil;
     self.titleViewBtn.userInteractionEnabled = YES;
-    NSString *titleStr = [NSString stringWithFormat:@"已连接“%@”的电视",[GlobalData shared].RDBoxDevice.sid];
+    NSString *titleStr;
+    if ([GlobalData shared].isBindRD) {
+        titleStr = [NSString stringWithFormat:@"已连接\"%@\"的电视",[GlobalData shared].RDBoxDevice.sid];
+    }else if ([GlobalData shared].isBindDLNA) {
+        titleStr = [NSString stringWithFormat:@"已连接\"%@\"的电视",[GlobalData shared].DLNADevice.name];
+    }
     [self.titleViewBtn setTitle:titleStr forState:UIControlStateNormal];
     
 }

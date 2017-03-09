@@ -177,7 +177,7 @@ static GlobalData* single = nil;
     if (_isWifiStatus != isWifiStatus) {
         _isWifiStatus = isWifiStatus;
         if (!isWifiStatus) {
-            _scene = RDSceneNothing;
+            self.scene = RDSceneNothing;
             [MBProgressHUD removeTextHUD];
         }
     }

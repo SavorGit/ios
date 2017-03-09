@@ -75,9 +75,8 @@
     if (![HTTPServerManager checkHttpServerIsWifi]) {
         //如果不是wifi环境
         [HUD hideAnimated:YES];
-        [MBProgressHUD showTextHUDwithTitle:@"请先连接wifi再进行操作"];
-        [HUD hideAnimated:YES];
         [self.navigationController popViewControllerAnimated:YES];
+        [MBProgressHUD showTextHUDwithTitle:@"请先连接wifi再进行操作"];
         return;
     }
     
@@ -85,11 +84,11 @@
     NSArray * array = [value componentsSeparatedByString:@"="];
     
     if (array.count == 1) {
+        [HUD hideAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
         if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
             [_delegate QRCodeDidBindSuccessWithType:QRResultTypeQRError andWifiName:nil];
         }
-        [HUD hideAnimated:YES];
-        [self.navigationController popViewControllerAnimated:YES];
         return;
     }
     
@@ -108,24 +107,23 @@
             }else if ([paramArray.firstObject isEqualToString:@"sid"]) {
                 model.sid = paramArray.lastObject;
                 if (![model.sid isEqualToString:[Helper getWifiName]]) {
-                    if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
-                        [_delegate QRCodeDidBindSuccessWithType:QRResultTypeWIFIError andWifiName:model.sid];
-                    }
                     [GlobalData shared].cacheModel = model;
                     [HUD hideAnimated:YES];
                     [self.navigationController popViewControllerAnimated:YES];
+                    if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
+                        [_delegate QRCodeDidBindSuccessWithType:QRResultTypeWIFIError andWifiName:model.sid];
+                    }
                     return;
                 }
             }
         }
         
         [[GlobalData shared] bindToRDBoxDevice:model];
+        [HUD hideAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
         if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
             [_delegate QRCodeDidBindSuccessWithType:QRResultTypeSuccess andWifiName:nil];
         }
-        
-        [HUD hideAnimated:YES];
-        [self.navigationController popViewControllerAnimated:YES];
         return;
     }else {
         
@@ -143,21 +141,21 @@
             }else if ([paramArray.firstObject isEqualToString:@"sid"]) {
                 model.sid = paramArray.lastObject;
                 if (![model.sid isEqualToString:[Helper getWifiName]]) {
-                    if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
-                        [_delegate QRCodeDidBindSuccessWithType:QRResultTypeWIFIError andWifiName:model.sid];
-                    }
                     [GlobalData shared].cacheModel = model;
                     [HUD hideAnimated:YES];
                     [self.navigationController popViewControllerAnimated:YES];
+                    if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
+                        [_delegate QRCodeDidBindSuccessWithType:QRResultTypeWIFIError andWifiName:model.sid];
+                    }
                     return;
                 }
             }
         }
+        [HUD hideAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
         if (_delegate && [_delegate respondsToSelector:@selector(QRCodeDidBindSuccessWithType:andWifiName:)]) {
             [_delegate QRCodeDidBindSuccessWithType:QRResultTypeQRError andWifiName:nil];
         }
-        [HUD hideAnimated:YES];
-        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
