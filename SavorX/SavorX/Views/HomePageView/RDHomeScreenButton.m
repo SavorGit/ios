@@ -59,7 +59,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     self.videoButton = [self createButtonWithTag:101 image:[UIImage imageNamed:@"shipin"]];
     self.sliderButton = [self createButtonWithTag:102 image:[UIImage imageNamed:@"huandengpian"]];
     self.documentButton = [self createButtonWithTag:103 image:[UIImage imageNamed:@"wenjian"]];
-    self.niceVideoButton = [self createButtonWithTag:104 image:[UIImage imageNamed:@"dainbo"]];
+    self.niceVideoButton = [self createButtonWithTag:104 image:[UIImage imageNamed:@"dianbo"]];
     
     [self createRepeatButton];
     
