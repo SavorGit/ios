@@ -70,13 +70,14 @@
     UILabel *topTextLabel = [[UILabel alloc] init ];
     topTextLabel.text = @"文件列表为空，请先导入文件";
     topTextLabel.textAlignment = NSTextAlignmentCenter;
-    topTextLabel.font = [UIFont systemFontOfSize:17];
-    topTextLabel.textColor = RGBA(164, 124, 87,1);
-    topTextLabel.backgroundColor = RGBA(253, 235,200,1);
+    topTextLabel.font = [UIFont systemFontOfSize:15];
+    topTextLabel.textColor = UIColorFromRGB(0x9a6f45);
+    topTextLabel.backgroundColor = UIColorFromRGB(0xffebc3);
+    topTextLabel.alpha = 0.95;
     [self.guidView addSubview:topTextLabel];
     [topTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.guidView).offset(0);
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 44));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 35));
         make.centerX.equalTo(self.view);
     }];
     
