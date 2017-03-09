@@ -258,7 +258,7 @@
 {
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
-        
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         // 获得当前视频图片，回传
         BasicTableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
         
@@ -297,7 +297,7 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
     }else if ([GlobalData shared].isBindDLNA && model.type == 3){
-        
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         // 获得当前视频图片，回传
         BasicTableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
         
@@ -315,6 +315,7 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
     }else{
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
         //如果不是绑定状态
         if (model.type == 3) {
             WebViewController * web = [[WebViewController alloc] init];

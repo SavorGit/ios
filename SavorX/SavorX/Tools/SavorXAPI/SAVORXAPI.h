@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
 #import "BGUploadRequest.h"
+#import "HSVodModel.h"
 
 typedef NS_ENUM(NSInteger, handleType) {
     collectHandle = 1, //收藏
@@ -16,7 +17,7 @@ typedef NS_ENUM(NSInteger, handleType) {
     shareHandle, //分享
     cancleCollectHandle, //取消收藏
     demandHandle, //点播
-    clickHandel = 7,
+    clickHandel = 7, //点击
     allOpenHandle //完全打开量
 };
 
@@ -87,7 +88,7 @@ typedef NS_ENUM(NSInteger, interactType) {
  *  @param contentId 文章ID
  *  @param type      事件的类型
  */
-+ (void)postUMHandleWithContentId:(NSInteger)contentId withType:(NSInteger)type;
++ (void)postUMHandleWithContentId:(NSInteger)contentId withType:(handleType)type;
 
 + (void)showAlertWithMessage:(NSString *)message;
 

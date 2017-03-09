@@ -12,6 +12,8 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "PhotoTool.h"
+#import "ZFBrightnessView.h"
+#import "ZFVolumeView.h"
 
 typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     GCCPlayerStatusInitial, //初始状态
@@ -31,6 +33,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, strong) id timeObserve;
 @property (nonatomic, strong) UIButton * replayButton; //重播按钮
 @property (nonatomic, strong) UISlider * volumeViewSlider; //记录系统音量视图
+@property (nonatomic, strong) ZFBrightnessView * brightnessView;
+@property (nonatomic, strong) ZFVolumeView * volumeView;
 @property (nonatomic, assign) NSInteger sumTime; //当前用户横向操作的时长
 @property (nonatomic, strong) UILabel * sliderLabel; //用户快进快退提示
 @property (nonatomic, assign) BOOL canPlay; //是否可以播放
@@ -41,6 +45,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, assign) GCCPlayerStatus lastStutas; //上一次进入后台前状态
 @property (nonatomic, assign) BOOL isPan; //是否在进行pan手势
 @property (nonatomic, assign) BOOL isHorizontal; //用户手指是否是水平移动
+@property (nonatomic, assign) BOOL isVolume; //记录当前是否在调节时间
 
 @end
 
@@ -61,6 +66,19 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self.controlView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(0);
         }];
+        
+        [[UIApplication sharedApplication].keyWindow addSubview:self.brightnessView];
+        [self.brightnessView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(155);
+            make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
+        }];
+        
+        [[UIApplication sharedApplication].keyWindow addSubview:self.volumeView];
+        [self.volumeView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.mas_equalTo(155);
+            make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
+        }];
+        
         // 单击
         self.singleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(viewDidBeSingleClicked)];
         self.singleTap.numberOfTouchesRequired = 1; //手指数
@@ -124,7 +142,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)createTimer
 {
     __weak typeof(self) weakSelf = self;
-    self.timeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1, 1) queue:nil usingBlock:^(CMTime time){
+    self.timeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1, 1) queue:dispatch_get_main_queue() usingBlock:^(CMTime time){
         if (weakSelf.isPan) {
             return;
         }
@@ -289,8 +307,12 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)panDirection:(UIPanGestureRecognizer *)pan
 {
+    //根据在view上Pan的位置，确定是调音量还是亮度
+    CGPoint locationPoint = [pan locationInView:self];
+    
     // 我们要响应水平移动和垂直移动, 根据上次和本次移动的位置，算出一个速率的point
     CGPoint veloctyPoint = [pan velocityInView:self];
+    
     switch (pan.state) {
         case UIGestureRecognizerStateBegan:
         {
@@ -305,6 +327,17 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
                 self.sumTime      = time.value/time.timescale;
             }else{
                 self.isHorizontal = NO;
+                if (locationPoint.x > self.bounds.size.width / 2) {
+                    self.isVolume = YES;
+                    if (self.brightnessView.alpha != 0.f) {
+                        self.brightnessView.alpha = 0.f;
+                    }
+                }else{
+                    self.isVolume = NO;
+                    if (self.volumeView.alpha != 0.f) {
+                        self.volumeView.alpha = 0.f;
+                    }
+                }
             }
         }
             break;
@@ -328,6 +361,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
                 self.isPan = NO;
             }else{
                 [self verticalMoved:veloctyPoint.y]; // 垂直移动的方法只要y方向的值
+                self.isVolume = NO;
             }
         }
             break;
@@ -336,6 +370,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         {
             self.isPan = NO;
             self.sliderLabel.hidden = YES;
+            self.isVolume = NO;
         }
             break;
             
@@ -408,7 +443,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //用户手指竖向滑动的时候
 - (void)verticalMoved:(CGFloat)value
 {
-    self.volumeViewSlider.value -= value / 10000;
+    if (self.isVolume) {
+        self.volumeViewSlider.value -= value / 10000;
+    }else{
+        [UIScreen mainScreen].brightness -= value / 10000;
+    }
 }
 
 /**
@@ -472,7 +511,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)playOrientationPortrait
 {
     self.isFullScreen = NO;
-//    [self removeUserActionView];
     [self.controlView playOrientationPortrait];
     if ([self viewWithTag:888]) {
         UIView * view = [self viewWithTag:888];
@@ -485,7 +523,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)playOrientationLandscape
 {
     self.isFullScreen = YES;
-//    [self addUserActionForView];
     [self.controlView playOrientationLandscape];
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:@"hasPlay"] boolValue];
     if (!temp) {
@@ -750,6 +787,21 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     return playerLayer.player;
 }
 
+- (ZFBrightnessView *)brightnessView {
+    if (!_brightnessView) {
+        _brightnessView = [ZFBrightnessView sharedBrightnessView];
+    }
+    return _brightnessView;
+}
+
+- (ZFVolumeView *)volumeView
+{
+    if (!_volumeView) {
+        _volumeView = [ZFVolumeView sharedVolumeView];
+    }
+    return _volumeView;
+}
+
 - (void)shouldRelease
 {
     [self.player pause];
@@ -767,6 +819,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [self.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
     [self.player replaceCurrentItemWithPlayerItem:nil];
     self.player = nil;
+    [self.brightnessView removeFromSuperview];
+    [self.volumeView removeFromSuperview];
     NSLog(@"应该释放");
 }
 

@@ -16,14 +16,34 @@
 
 @implementation RDRightConnetItem
 
-- (void)setFrame:(CGRect)frame
+- (void)dealloc
 {
-    [super setFrame:frame];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundBoxSenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundDLNASenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidNotFoundSenceNotification object:nil];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:CGRectMake(0, 0, 80, 35)]) {
+        [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self setTitle:@"连接电视" forState:UIControlStateNormal];
+        [self addNotifiCation];
+    }
+    return self;
+}
+
+- (void)addNotifiCation
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAnimation) name:RDDidFoundBoxSenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAnimation) name:RDDidFoundDLNASenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopAnimation) name:RDDidNotFoundSenceNotification object:nil];
 }
 
 - (void)showAnimation
 {
     self.number = 1;
+    [self stopAnimation];
     [self createAnimationLayer];
 }
 
@@ -35,9 +55,9 @@
 - (void)createAnimationLayer
 {
     if (self.number < 3) {
-        [self performSelector:@selector(createAnimationLayer) withObject:nil afterDelay:.4f];
+        [self performSelector:@selector(createAnimationLayer) withObject:nil afterDelay:.2f];
     }else{
-        [self performSelector:@selector(showAnimation) withObject:nil afterDelay:5.f];
+        [self performSelector:@selector(showAnimation) withObject:nil afterDelay:2.f];
     }
     
     self.number += 1;
@@ -61,7 +81,7 @@
     
     CAAnimationGroup *group = [CAAnimationGroup animation];
     group.animations = @[scale, opacity];
-    group.duration =1.5f;
+    group.duration =1.f;
     group.repeatCount = 1;
     group.removedOnCompletion = NO;
     group.fillMode = kCAFillModeForwards;
@@ -69,7 +89,7 @@
     
     [self.layer addSublayer:layer];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [layer removeFromSuperlayer];
     });
 }
