@@ -983,7 +983,11 @@ static NSInteger const kWMControllerCountUndefined = -1;
             break;
             
         case RDScreenTypeNiceVideo:
-            
+        {
+            if (self.isInHotel) {
+                [self setSelectIndex:0];
+            }
+        }
             break;
             
         default:
