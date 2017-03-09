@@ -95,6 +95,7 @@
     self.videoBgView.backgroundColor = [UIColor lightGrayColor];
     [self addSubview:self.videoBgView];
     
+//    NSURL*playURL=  [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"mp4"]];
     NSURL * playURL = [NSURL URLWithString:@"http://200048203.vod.myqcloud.com/200048203_bfa6ad56e1f811e6a93519af8e641b73.f30.mp4"];
     AVPlayerItem * playerItem = [AVPlayerItem playerItemWithURL:playURL];
     self.player = [AVPlayer playerWithPlayerItem:playerItem];
