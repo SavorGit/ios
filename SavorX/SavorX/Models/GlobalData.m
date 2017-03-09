@@ -112,7 +112,9 @@ static GlobalData* single = nil;
 {
     if (_hotelId != hotelId) {
         _hotelId = hotelId;
-        [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundHotelIdNotification object:nil];
+        if (hotelId != 0) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundHotelIdNotification object:nil];
+        }
     }
     if (![[[NSUserDefaults standardUserDefaults] objectForKey:hasUseHotelID] boolValue]
         && hotelId != 0) {
@@ -160,12 +162,14 @@ static GlobalData* single = nil;
             if (_isBindRD || _isBindDLNA) {
                 [self disconnect];
             }
+            self.hotelId = 0;
             self.callQRCodeURL = @"";
         }else{
             [MBProgressHUD showTextHUDwithTitle:@"发现电视, 可以投屏"];
             if (scene == RDSceneHaveRDBox) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundBoxSenceNotification object:nil];
             }else{
+                self.hotelId = 0;
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundDLNASenceNotification object:nil];
             }
         }

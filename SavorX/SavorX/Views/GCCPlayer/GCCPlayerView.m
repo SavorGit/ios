@@ -734,7 +734,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [self.player pause];
     self.status = GCCPlayerStatusEnd;
     [self sliderDidSlideToTime:0];
-//    [self removeUserActionView];
 }
 
 //set方法，重写以及时获取播放状态并进行不同的处理
@@ -813,6 +812,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     [self.player.currentItem removeObserver:self forKeyPath:@"status"];
     [self.player.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
     [self.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];

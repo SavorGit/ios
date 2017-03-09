@@ -467,8 +467,8 @@
         _headView.backgroundColor = VCBackgroundColor;
         
         UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, [Helper autoHomePageCellImageHeight] + 5, kMainBoundsWidth, 55)];
-        label.font = [UIFont systemFontOfSize:16];
-        label.textColor = UIColorFromRGB(0x666666);
+        label.font = [UIFont boldSystemFontOfSize:16];
+        label.textColor = UIColorFromRGB(0x444444);
         label.textAlignment = NSTextAlignmentCenter;
         label.text = @"精彩视频";
         [_headView addSubview:label];
