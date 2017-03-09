@@ -13,6 +13,7 @@
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
 #import "PhotoTool.h"
+#import "VideoGuidedTwoDimensionalCode.h"
 
 #define DocumentListCell @"DocumentListCell"
 
@@ -20,6 +21,8 @@
 
 @property (nonatomic, strong) UITableView * tableView; //表格视图展示控件
 @property (nonatomic, strong) NSArray * dataSource; //数据源
+
+@property (nonatomic, strong) UIView *guidView; // 引导页视图
 
 @end
 
@@ -36,16 +39,80 @@
     [self createUI];
     
     if (self.dataSource.count == 0) {
-        [self createNothingView];
+        [self creatHelpGuide];
         if (self.isHelp) {
-            [self createHelpView];
         }
     }
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(createHelpView)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(creatHelpGuide)];
     
     //监听程序进入活跃状态
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)creatHelpGuide{
+    
+    VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
+    [vgVC showScreenProjectionTitle:@"documentGuide" block:^(NSInteger selectIndex) {
+        [self creatGuidTouchView];
+    }];
+}
+
+- (void)creatGuidTouchView{
+    
+    self.guidView = [[UIView alloc] init];
+    self.guidView.tag = 888;
+    self.guidView.backgroundColor = [UIColor clearColor];
+    self.guidView.userInteractionEnabled = YES;
+    self.guidView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
+    [self.view addSubview:self.guidView];
+    
+    UILabel *topTextLabel = [[UILabel alloc] init ];
+    topTextLabel.text = @"文件列表为空，请先导入文件";
+    topTextLabel.textAlignment = NSTextAlignmentCenter;
+    topTextLabel.font = [UIFont systemFontOfSize:17];
+    topTextLabel.textColor = RGBA(164, 124, 87,1);
+    topTextLabel.backgroundColor = RGBA(253, 235,200,1);
+    [self.guidView addSubview:topTextLabel];
+    [topTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.guidView).offset(0);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 44));
+        make.centerX.equalTo(self.view);
+    }];
+    
+    UIImageView *bgVideoView = [[UIImageView alloc] init];
+    bgVideoView.frame = CGRectMake(0, 145, kMainBoundsWidth,215);
+    bgVideoView.image = [UIImage imageNamed:@"DocGuided"];
+    bgVideoView.backgroundColor = [UIColor lightGrayColor];
+    bgVideoView.userInteractionEnabled = YES;
+    [self.guidView addSubview:bgVideoView];
+    
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(creatHelpGuide)];
+    tap.numberOfTapsRequired = 1;
+    [bgVideoView addGestureRecognizer:tap];
+    
+    UILabel *textLabel = [[UILabel alloc] init ];
+    textLabel.text = @"如何导入文件请查看视频";
+    textLabel.textAlignment = NSTextAlignmentCenter;
+    textLabel.font = [UIFont systemFontOfSize:16];
+    textLabel.textColor = UIColorFromRGB(0x333333);
+    textLabel.backgroundColor = [UIColor clearColor];
+    [self.guidView addSubview:textLabel];
+    [textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(bgVideoView).offset(230);
+        make.size.mas_equalTo(CGSizeMake(200,30));
+        make.centerX.equalTo(self.view);
+    }];
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender{
+    
+    // 返回时判断引导视图是否存在，存在则移除
+    if (self.guidView) {
+        [ self.guidView  removeFromSuperview];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 //程序进入活跃状态

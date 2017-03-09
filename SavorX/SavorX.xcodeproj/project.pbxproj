@@ -250,6 +250,11 @@
 		47FE2CD41E1BD0E000D3D0B4 /* index5_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 47FE2CCB1E1BD0E000D3D0B4 /* index5_2.jpg */; };
 		47FE2CD51E1BD0E000D3D0B4 /* index5_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 47FE2CCC1E1BD0E000D3D0B4 /* index5_3.jpg */; };
 		9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */; };
+		9670C4A51E70F5DE0060CE0B /* documentVideoGuided.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A31E70F5DE0060CE0B /* documentVideoGuided.mp4 */; };
+		9670C4A61E70F5DE0060CE0B /* scanVideoGuided.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A41E70F5DE0060CE0B /* scanVideoGuided.mp4 */; };
+		9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A71E7159210060CE0B /* DocGuided.png */; };
+		9670C4AB1E7159210060CE0B /* DocGuided@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A81E7159210060CE0B /* DocGuided@2x.png */; };
+		9670C4AC1E7159210060CE0B /* DocGuided@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A91E7159210060CE0B /* DocGuided@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -679,6 +684,11 @@
 		5B05B9656F68961787F5EA8E /* Pods-SavorX.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SavorX.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SavorX/Pods-SavorX.debug.xcconfig"; sourceTree = "<group>"; };
 		9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoGuidedTwoDimensionalCode.h; sourceTree = "<group>"; };
 		9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoGuidedTwoDimensionalCode.m; sourceTree = "<group>"; };
+		9670C4A31E70F5DE0060CE0B /* documentVideoGuided.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = documentVideoGuided.mp4; sourceTree = "<group>"; };
+		9670C4A41E70F5DE0060CE0B /* scanVideoGuided.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = scanVideoGuided.mp4; sourceTree = "<group>"; };
+		9670C4A71E7159210060CE0B /* DocGuided.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DocGuided.png; sourceTree = "<group>"; };
+		9670C4A81E7159210060CE0B /* DocGuided@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DocGuided@2x.png"; sourceTree = "<group>"; };
+		9670C4A91E7159210060CE0B /* DocGuided@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DocGuided@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1011,6 +1021,9 @@
 		062D4F4E1DEC02BA0093942A /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9670C4A71E7159210060CE0B /* DocGuided.png */,
+				9670C4A81E7159210060CE0B /* DocGuided@2x.png */,
+				9670C4A91E7159210060CE0B /* DocGuided@3x.png */,
 				06F5C9E01E4DE73E00E05492 /* RDFullScreen.png */,
 				06F5C9E11E4DE73E00E05492 /* RDFullScreen@2x.png */,
 				06F5C9E21E4DE73E00E05492 /* RDFullScreen@3x.png */,
@@ -1279,6 +1292,7 @@
 		06FA30E81D3E0C70001F5B37 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9670C4A21E70F5DE0060CE0B /* videoGuide */,
 				47FE2C9D1E1BB36A00D3D0B4 /* lanch */,
 				06FA30E91D3E0C70001F5B37 /* main.m */,
 				06FA30F41D3E0C70001F5B37 /* Assets.xcassets */,
@@ -1752,6 +1766,15 @@
 			path = lanch;
 			sourceTree = "<group>";
 		};
+		9670C4A21E70F5DE0060CE0B /* videoGuide */ = {
+			isa = PBXGroup;
+			children = (
+				9670C4A31E70F5DE0060CE0B /* documentVideoGuided.mp4 */,
+				9670C4A41E70F5DE0060CE0B /* scanVideoGuided.mp4 */,
+			);
+			path = videoGuide;
+			sourceTree = "<group>";
+		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1890,8 +1913,10 @@
 				473EC4431E31DEE40050E619 /* ScreenProjectionView.xib in Resources */,
 				062D4F801DEC02BA0093942A /* RDBackFullScreen.png in Resources */,
 				062D4F8A1DEC02BA0093942A /* RDDown@2x.png in Resources */,
+				9670C4AC1E7159210060CE0B /* DocGuided@3x.png in Resources */,
 				47F997571DFF96570009BDFB /* SXDlnaView.xib in Resources */,
 				062D4F9B1DEC02BA0093942A /* RDScreen.png in Resources */,
+				9670C4AB1E7159210060CE0B /* DocGuided@2x.png in Resources */,
 				06F1583C1D5C85960050BCA6 /* VideoCollectionViewCell.xib in Resources */,
 				062D4F9E1DEC02BA0093942A /* RDShare.png in Resources */,
 				47FE2CCD1E1BD0E000D3D0B4 /* index_1.jpg in Resources */,
@@ -1934,8 +1959,10 @@
 				476F44CC1E2DBEDA00F99090 /* LeftCell.xib in Resources */,
 				47FE2CBA1E1BB53200D3D0B4 /* SplashViewController.xib in Resources */,
 				47566F7B1DFE885F0047156E /* ScreenCollectionHeaderView.xib in Resources */,
+				9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */,
 				47F9975F1DFFA4060009BDFB /* SXWiFiCell.xib in Resources */,
 				062D4F931DEC02BA0093942A /* RDPause@2x.png in Resources */,
+				9670C4A51E70F5DE0060CE0B /* documentVideoGuided.mp4 in Resources */,
 				06FA30F51D3E0C70001F5B37 /* Assets.xcassets in Resources */,
 				47F4A27C1E4965AD001C93F0 /* FeedbackView.xib in Resources */,
 				47C90F211E13AB5C0089AC7B /* SXEmptyCell.xib in Resources */,
@@ -1951,6 +1978,7 @@
 				47D6F6551E4ACD520030C8C4 /* voideoPlayFooterView.xib in Resources */,
 				47FE2CC31E1BCB7400D3D0B4 /* indexp6_3.jpg in Resources */,
 				062D4F9F1DEC02BA0093942A /* RDShare@2x.png in Resources */,
+				9670C4A61E70F5DE0060CE0B /* scanVideoGuided.mp4 in Resources */,
 				062D4F8B1DEC02BA0093942A /* RDDown@3x.png in Resources */,
 				062D4F991DEC02BA0093942A /* RDReplay@2x.png in Resources */,
 				06F5C9E51E4DE73E00E05492 /* RDFullScreen@3x.png in Resources */,
@@ -2333,7 +2361,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2bef76ea-0e89-4825-a298-e14dfc8bd783";
+				PROVISIONING_PROFILE = "e8b73aa4-7da7-4372-a5e6-0fc7df53e13f";
 				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2348,7 +2376,7 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CODE_SIGN_ENTITLEMENTS = SavorX/SavorX.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 3VYVQ3265F;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2371,8 +2399,8 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1b9ecf7f-84e6-4ca1-873e-c2b97f328cec";
-				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "e8b73aa4-7da7-4372-a5e6-0fc7df53e13f";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

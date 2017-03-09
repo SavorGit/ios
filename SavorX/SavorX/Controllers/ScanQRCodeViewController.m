@@ -1,4 +1,4 @@
-//
+ //
 //  ScanQRCodeViewController.m
 //  SavorX
 //
@@ -28,12 +28,13 @@
     [MBProgressHUD showLoadingHUDInView:self.view];
     [self createUI];
     
-    [self.scan stop];
-    VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
-    [vgVC showScreenProjectionTitle:@"扫码引导" block:^(NSInteger selectIndex) {
-        [self.scan start];
-    }];
-    
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    // 第一次进来，显示引导页视频
+    if (![[user objectForKey:@"firstKey"]  isEqualToString:@"1"]) {
+        [self creatHelpGuide];
+        [user setObject:@"1" forKey:@"firstKey"];
+        [user synchronize];
+    }
 }
 
 - (void)createUI
@@ -44,7 +45,19 @@
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     
     [self.view addSubview:self.scan];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(creatHelpGuide)];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(animationRestart) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)creatHelpGuide{
+    
+    [self.scan stop];
+    VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
+    [vgVC showScreenProjectionTitle:@"scanGuide" block:^(NSInteger selectIndex) {
+        [self.scan start];
+    }];
 }
 
 /**

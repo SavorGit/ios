@@ -29,4 +29,6 @@ typedef NS_ENUM(NSInteger, QRResultType) {
 
 @property (nonatomic, assign) id<QRCodeDidBindDelegate> delegate;
 
+@property (nonatomic, assign) BOOL isHelp;
+
 @end

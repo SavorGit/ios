@@ -29,6 +29,8 @@
 
 @property (nonatomic, strong) RDCheackSence * checkSecen;
 
+@property (nonatomic, assign) NSInteger isFirstCount;
+
 @end
 
 @implementation HomeAnimationView
@@ -232,6 +234,12 @@
             
             if (!hasPush) {
                 hasPush = YES;
+                 self.isFirstCount++;
+                if (self.isFirstCount == 1) {
+                    scan.isHelp = YES;
+                }else{
+                    scan.isHelp = NO;
+                }
                 [[Helper getRootNavigationController] pushViewController:scan animated:YES];
             }
         }
@@ -257,7 +265,13 @@
             ScanQRCodeViewController * scan = [[ScanQRCodeViewController alloc] init];
             scan.delegate = self;
             if (!hasPush) {
+                self.isFirstCount++;
                 hasPush = YES;
+                if (self.isFirstCount == 1) {
+                    scan.isHelp = YES;
+                }else{
+                    scan.isHelp = NO;
+                }
                 [[Helper getRootNavigationController] pushViewController:scan animated:YES];
             }
         }

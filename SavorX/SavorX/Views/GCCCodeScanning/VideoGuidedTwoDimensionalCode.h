@@ -18,6 +18,6 @@ typedef void(^ScreenProjectionSelectViewSelectBlock)(NSInteger selectIndex);
  *  @param items       数组，里面全是字符串
  *  @param selectBlock 回调block
  */
-- (instancetype)showScreenProjectionTitle:(NSString *)title  block:(ScreenProjectionSelectViewSelectBlock)selectBlock;
+- (instancetype)showScreenProjectionTitle:(NSString *)guidType  block:(ScreenProjectionSelectViewSelectBlock)selectBlock;
 
 @end
