@@ -32,6 +32,10 @@
     if (self = [super init]) {
         //注册通知
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(runLoopTheMovie:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+        // app退到后台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground) name:UIApplicationWillResignActiveNotification object:nil];
+        // app进入前台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterPlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 
     }
@@ -155,6 +159,14 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification
                                                   object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)dealloc{
+    
+    NSLog(@"导航播放器释放了---");
 }
 
 #pragma  mark - player
@@ -200,6 +212,18 @@
         [self removeFromSuperview];
 
     }];
+}
+
+//app已经进入后台运行
+- (void)appDidEnterBackground
+{
+    [self.player pause];
+}
+
+//app已经进入前台运行
+- (void)appDidEnterPlayground
+{
+    [self.player play];
 }
 
 // 旋转屏幕通知处理
