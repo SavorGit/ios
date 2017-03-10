@@ -1149,6 +1149,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [self reloadData];
         self.selectIndex = 0;
     }
+    [self.titleViewBtn setTitle:@"热点儿" forState:UIControlStateNormal];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
+    self.titleViewBtn.userInteractionEnabled = NO;
+
 }
 
 - (void)configureSelf

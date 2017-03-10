@@ -92,7 +92,9 @@
     }];
     
     UIImageView *bgVideoView = [[UIImageView alloc] init];
-    bgVideoView.frame = CGRectMake(0, 145, kMainBoundsWidth,215);
+    float bgVideoHeight = [Helper autoHeightWith:215];
+    float topbgVideoDistance = [Helper autoHeightWith:145];
+    bgVideoView.frame = CGRectMake(0, topbgVideoDistance, kMainBoundsWidth,bgVideoHeight);
     bgVideoView.image = [UIImage imageNamed:@"DocGuided"];
     bgVideoView.backgroundColor = [UIColor lightGrayColor];
     bgVideoView.userInteractionEnabled = YES;
@@ -109,8 +111,9 @@
     textLabel.textColor = UIColorFromRGB(0x333333);
     textLabel.backgroundColor = [UIColor clearColor];
     [self.guidView addSubview:textLabel];
+    float topTextLabelDistance = [Helper autoHeightWith:230];
     [textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(bgVideoView).offset(230);
+        make.top.equalTo(bgVideoView).offset(topTextLabelDistance);
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,30));
         make.centerX.equalTo(self.view);
     }];
