@@ -37,6 +37,18 @@
     return UIStatusBarAnimationSlide;
 }
 
+//允许屏幕旋转
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+//返回当前屏幕旋转方向
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

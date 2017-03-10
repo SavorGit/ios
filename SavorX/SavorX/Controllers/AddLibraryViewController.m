@@ -51,7 +51,7 @@
     flowLayout.minimumInteritemSpacing = 1;
     flowLayout.minimumLineSpacing = 1;
     
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, kScreen_Width, kScreen_Height - NavHeight) collectionViewLayout:flowLayout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
     [self.collectionView registerClass:[AddSliderCollectionViewCell class] forCellWithReuseIdentifier:SliderListCollection];
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -62,7 +62,7 @@
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
-        make.bottom.mas_equalTo(0);
+        make.bottom.mas_equalTo(-50);
     }];
     
     self.bottomView = [[UIToolbar alloc] init];
@@ -84,7 +84,9 @@
     
     NSIndexPath * indexPath = [NSIndexPath indexPathForItem:self.model.result.count - 1 inSection:0];
     if (self.model.result.count > 0) {
-        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+        });
     }
 }
 
@@ -300,12 +302,6 @@
         self.title = self.model.title;
         self.chooseButton.userInteractionEnabled = NO;
     }
-}
-
-//更改collectionView具体上左下右的距离
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    //上、左、下、右的边距
-    return UIEdgeInsetsMake(0, 0, 50, 0);
 }
 
 //页面返回的时候判断是否有选择的图片
