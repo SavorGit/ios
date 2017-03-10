@@ -220,7 +220,7 @@
 - (void)quitScreenAciton{
 
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        
+          
         self.isPlayEnd = YES;
         self.playBtn.selected = NO;
         self.screenButton.enabled = YES;
