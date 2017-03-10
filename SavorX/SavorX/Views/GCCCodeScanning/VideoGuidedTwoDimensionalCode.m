@@ -118,6 +118,11 @@
     }];
     self.playerLayer.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
     
+    self.videoBgView.userInteractionEnabled = YES;
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startScanAction:)];
+    tap.numberOfTapsRequired = 1;
+    [self addGestureRecognizer:tap];
+    
     [self.player play];
     
 }
@@ -125,11 +130,12 @@
 // 创建视频页面
 - (void)creatPlayer{
     
-    self.videoBgView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.videoBgView = [[UIView alloc] init];
     self.videoBgView.backgroundColor = [UIColor clearColor ];
     [self addSubview:self.videoBgView];
     float videoBgViewHeight = [Helper autoWidthWith:425];
     float topDistance = [Helper autoWidthWith:125];
+    self.videoBgView.frame = CGRectMake(0, 0, kMainBoundsWidth, videoBgViewHeight);
     [self.videoBgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, videoBgViewHeight));
         make.top.equalTo(self).offset(topDistance);

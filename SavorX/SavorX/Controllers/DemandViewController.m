@@ -176,11 +176,11 @@
     }];
     
     self.quitScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.quitScreenButton.backgroundColor = [UIColor blackColor];
+    self.quitScreenButton.backgroundColor = UIColorFromRGB(0xf1d897);
     self.quitScreenButton.alpha = 0.8;
     [self.quitScreenButton setTitle:@"退出投屏" forState:UIControlStateNormal];
-    [self.quitScreenButton.titleLabel setFont:[UIFont systemFontOfSize:17.0]];
-    [self.quitScreenButton setTitleColor:[UIColor colorWithRed:215.0/255.0 green:190.0/255.0 blue:126.0/255.0 alpha:1.0] forState:UIControlStateNormal];
+    [self.quitScreenButton.titleLabel setFont:[UIFont boldSystemFontOfSize:17]];
+    [self.quitScreenButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.quitScreenButton.layer.masksToBounds = YES;
     self.quitScreenButton.layer.cornerRadius = 5.0;
     self.quitScreenButton.layer.borderWidth = 1.0;
