@@ -111,7 +111,7 @@
     [self.guidView addSubview:textLabel];
     [textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(bgVideoView).offset(230);
-        make.size.mas_equalTo(CGSizeMake(200,30));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,30));
         make.centerX.equalTo(self.view);
     }];
 }
