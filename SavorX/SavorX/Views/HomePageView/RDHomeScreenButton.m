@@ -47,7 +47,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 - (void)createViews
 {
-    self.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height - 30);
+    self.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height / 2 - 30);
     
     self.layer.cornerRadius = self.frame.size.width / 2;
     self.layer.masksToBounds = YES;

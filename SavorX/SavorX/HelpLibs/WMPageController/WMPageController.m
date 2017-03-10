@@ -258,7 +258,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
     [self viewDidLayoutSubviews];
     
     [self.view bringSubviewToFront:[HomeAnimationView animationView]];
-    [self.view bringSubviewToFront:self.homeButton];
 }
 
 - (void)updateTitle:(NSString *)title atIndex:(NSInteger)index {
@@ -603,7 +602,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
     [self.view addSubview:self.scrollView];
     
     [self.view bringSubviewToFront:[HomeAnimationView animationView]];
-    [self.view bringSubviewToFront:self.homeButton];
     
     if (!self.navigationController) { return; }
     for (UIGestureRecognizer *gestureRecognizer in self.scrollView.gestureRecognizers) {
@@ -895,11 +893,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     
     [self configureSelf];
-    
-    CGFloat diameter = [Helper autoWidthWith:120.f];
-    self.homeButton = [[RDHomeScreenButton alloc] initWithFrame:CGRectMake(0, 0, diameter, diameter)];
-    self.homeButton.delegate = self;
-    [self.view addSubview:self.homeButton];
     
     if (!self.childControllersCount) return;
     
@@ -1208,20 +1201,19 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     self.sideMenuController.leftViewSwipeGestureEnabled = YES;
-    if ([GlobalData shared].scene != RDSceneNothing) {
-//       [[HomeAnimationView animationView] show];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     self.sideMenuController.leftViewSwipeGestureEnabled = NO;
-//    [[HomeAnimationView animationView] hidden];
+    self.homeButton.hidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    self.homeButton.hidden = NO;
     
     if (!self.childControllersCount) { return; }
     
@@ -1415,6 +1407,17 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 - (NSString *)menuView:(WMMenuView *)menu titleAtIndex:(NSInteger)index {
     return [self titleAtIndex:index];
+}
+
+- (RDHomeScreenButton *)homeButton
+{
+    if (!_homeButton) {
+        CGFloat diameter = [Helper autoWidthWith:120.f];
+        _homeButton = [[RDHomeScreenButton alloc] initWithFrame:CGRectMake(0, 0, diameter, diameter)];
+        _homeButton.delegate = self;
+        [self.navigationController.view addSubview:_homeButton];
+    }
+    return _homeButton;
 }
 
 @end

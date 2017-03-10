@@ -31,6 +31,7 @@
 @property (nonatomic, strong) UIButton * quitScreenButton;
 @property (nonatomic, strong) UIImageView * backImageView;
 @property (nonatomic, assign) NSInteger DLNAVolume;
+@property (nonatomic, strong) UIButton * collectButton;
 
 @end
 
@@ -137,11 +138,11 @@
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     
-    UIButton *collectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
-    [collectBtn setAdjustsImageWhenHighlighted:NO];
-    [collectBtn addTarget:self action:@selector(collectAciton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:collectBtn];
+    self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+    [self.collectButton setAdjustsImageWhenHighlighted:NO];
+    [self.collectButton addTarget:self action:@selector(collectAciton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.collectButton];
     
     
     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -155,7 +156,7 @@
         make.right.mas_equalTo(-10);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
-    [collectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.collectButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(20);
         make.right.mas_equalTo(-60);
         make.size.mas_equalTo(CGSizeMake(40, 40));
@@ -193,22 +194,6 @@
         make.centerX.equalTo(self.backImageView);
         make.centerY.equalTo(self.backImageView);
     }];
-    
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
-        NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
-        __block BOOL iscollect = NO;
-        [theArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
-                iscollect = YES;
-                *stop = YES;
-                return;
-            }
-        }];
-        [collectBtn setSelected:iscollect];
-        if (iscollect) {
-            [collectBtn setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateNormal];
-        }
-    }
     
     [self createWebView];
     [self createBottomView];
@@ -623,7 +608,27 @@
 {
     [super viewWillAppear:animated];
     [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:demandHandle];
+    [self cheakIsFavorite];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
+- (void)cheakIsFavorite
+{
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
+        NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
+        __block BOOL iscollect = NO;
+        [theArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
+                iscollect = YES;
+                *stop = YES;
+                return;
+            }
+        }];
+        [self.collectButton setSelected:iscollect];
+        if (iscollect) {
+            [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateNormal];
+        }
+    }
 }
 
 -(void)voidelPlayVolumeAction:(UIButton *)button{
