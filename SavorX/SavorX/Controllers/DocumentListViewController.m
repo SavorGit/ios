@@ -39,6 +39,7 @@
     [self createUI];
     
     if (self.dataSource.count == 0) {
+        [self creatGuidTouchView];
         [self creatHelpGuide];
         if (self.isHelp) {
         }
@@ -54,7 +55,16 @@
     
     VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
     [vgVC showScreenProjectionTitle:@"documentGuide" block:^(NSInteger selectIndex) {
-        [self creatGuidTouchView];
+        
+        if (self.dataSource.count == 0) {
+            if (self.guidView) {
+                [self.guidView removeFromSuperview];
+                [self creatGuidTouchView];
+
+            }
+           
+        }
+
     }];
 }
 
