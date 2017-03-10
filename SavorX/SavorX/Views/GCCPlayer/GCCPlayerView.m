@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, strong) UIButton * replayButton; //重播按钮
 @property (nonatomic, strong) UISlider * volumeViewSlider; //记录系统音量视图
 @property (nonatomic, strong) ZFBrightnessView * brightnessView;
-@property (nonatomic, strong) ZFVolumeView * volumeView;
+//@property (nonatomic, strong) ZFVolumeView * volumeView;
 @property (nonatomic, assign) NSInteger sumTime; //当前用户横向操作的时长
 @property (nonatomic, strong) UILabel * sliderLabel; //用户快进快退提示
 @property (nonatomic, assign) BOOL canPlay; //是否可以播放
@@ -73,11 +73,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
         }];
         
-        [[UIApplication sharedApplication].keyWindow addSubview:self.volumeView];
-        [self.volumeView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.width.height.mas_equalTo(155);
-            make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
-        }];
+//        [[UIApplication sharedApplication].keyWindow addSubview:self.volumeView];
+//        [self.volumeView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.width.height.mas_equalTo(155);
+//            make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
+//        }];
         
         // 单击
         self.singleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(viewDidBeSingleClicked)];
@@ -334,9 +334,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
                     }
                 }else{
                     self.isVolume = NO;
-                    if (self.volumeView.alpha != 0.f) {
-                        self.volumeView.alpha = 0.f;
-                    }
+//                    if (self.volumeView.alpha != 0.f) {
+//                        self.volumeView.alpha = 0.f;
+//                    }
                 }
             }
         }
@@ -793,13 +793,13 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     return _brightnessView;
 }
 
-- (ZFVolumeView *)volumeView
-{
-    if (!_volumeView) {
-        _volumeView = [ZFVolumeView sharedVolumeView];
-    }
-    return _volumeView;
-}
+//- (ZFVolumeView *)volumeView
+//{
+//    if (!_volumeView) {
+//        _volumeView = [ZFVolumeView sharedVolumeView];
+//    }
+//    return _volumeView;
+//}
 
 - (void)shouldRelease
 {
@@ -820,7 +820,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [self.player replaceCurrentItemWithPlayerItem:nil];
     self.player = nil;
     [self.brightnessView removeFromSuperview];
-    [self.volumeView removeFromSuperview];
+//    [self.volumeView removeFromSuperview];
     NSLog(@"应该释放");
 }
 

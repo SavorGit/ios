@@ -34,9 +34,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(-100, -100, 40, 40)];
-    [self.volumeView setHidden:NO];
-    [self.view addSubview:self.volumeView];
+//    self.volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(-100, -100, 40, 40)];
+//    [self.volumeView setHidden:NO];
+//    [self.view addSubview:self.volumeView];
     
     [self createUI];
 }
@@ -286,7 +286,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.volumeView setHidden:NO];
+//    [self.volumeView setHidden:NO];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:readHandle];
 }
@@ -302,7 +302,7 @@
 {
     [super viewWillDisappear:animated];
     
-    [self.volumeView setHidden:YES];
+//    [self.volumeView setHidden:YES];
     [self.playView pause];
     if ([UIApplication sharedApplication].statusBarHidden) {
         [[UIApplication sharedApplication] setStatusBarHidden:NO];

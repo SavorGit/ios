@@ -15,7 +15,7 @@
     if (self = [super init]) {
         self.methodName = @"versionUpgrade";
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setIntegerValue:2017022001 forParamKey:@"versionCode"];
+        [self setIntegerValue:2017031001 forParamKey:@"versionCode"];
         [self setIntegerValue:4 forParamKey:@"deviceType"];
     }
     return self;
