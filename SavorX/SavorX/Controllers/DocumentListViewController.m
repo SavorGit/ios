@@ -59,7 +59,7 @@
         if (self.dataSource.count == 0) {
             if (self.guidView) {
                 [self.guidView removeFromSuperview];
-                [self creatGuidTouchView];
+                [self.view addSubview:self.guidView];
 
             }
            
