@@ -139,7 +139,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     }
     
     if (self.isSearch) {
-        [self stopSearchDevice];
+        [self resetSearch];
     }
     
     self.isSearch = YES;
@@ -220,6 +220,16 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     }
     
     self.isSearch = NO;
+}
+
+- (void)resetSearch
+{
+    if (self.task) {
+        [self.task cancel];
+    }
+    [HSGetIpRequest cancelRequest];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startSearchDevice) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
 }
 
 - (void)socketShouldBeClose
@@ -364,8 +374,8 @@ withFilterContext:(nullable id)filterContext{
                         }
                         if ([GlobalData shared].scene == RDSceneNothing) {
                             [GlobalData shared].scene = RDSceneHaveDLNA;
+                            self.isSearch = NO;
                         }
-                        self.isSearch = NO;
                     }
                 });
             }
