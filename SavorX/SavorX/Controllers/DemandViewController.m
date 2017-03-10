@@ -218,18 +218,21 @@
 
 // 退出投屏
 - (void)quitScreenAciton{
-    
-    self.screenButton.hidden = NO;
-    self.quitScreenButton.hidden = YES;
-    
-    self.screenButton.enabled = NO;
-    [self.timer setFireDate:[NSDate distantFuture]];
-    [self.timer invalidate];
-    self.timer = nil;
+
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+        
         self.isPlayEnd = YES;
         self.playBtn.selected = NO;
         self.screenButton.enabled = YES;
+        
+        self.screenButton.hidden = NO;
+        self.quitScreenButton.hidden = YES;
+        
+        self.screenButton.enabled = NO;
+        [self.timer setFireDate:[NSDate distantFuture]];
+        [self.timer invalidate];
+        self.timer = nil;
+        
     } failure:^{
         self.screenButton.enabled = YES;
     }];
