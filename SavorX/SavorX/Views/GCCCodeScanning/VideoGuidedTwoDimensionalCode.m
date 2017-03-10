@@ -78,10 +78,12 @@
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
     [self addSubview:label];
+    float topLabelDistance = [Helper autoWidthWith:70];
+    float labelBtnHeight = [Helper autoHeightWith:44];
     [label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(150, 44));
+        make.size.mas_equalTo(CGSizeMake(150, labelBtnHeight));
         make.centerX.equalTo(self);
-        make.top.equalTo(self).offset(70);
+        make.top.equalTo(self).offset(topLabelDistance);
     }];
     
     UIButton *reScanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -95,9 +97,9 @@
     reScanBtn.layer.borderWidth = 1.0;
     reScanBtn.layer.borderColor = [[UIColor clearColor] CGColor];
     [self addSubview:reScanBtn];
-    
+    float reScanBtnHeight = [Helper autoHeightWith:32];
     [reScanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(80, 32));
+        make.size.mas_equalTo(CGSizeMake(80, reScanBtnHeight));
         make.centerX.equalTo(self);
         make.centerY.equalTo(self).offset(265);
     }];
@@ -126,9 +128,11 @@
     self.videoBgView = [[UIView alloc] initWithFrame:CGRectZero];
     self.videoBgView.backgroundColor = [UIColor clearColor ];
     [self addSubview:self.videoBgView];
+    float videoBgViewHeight = [Helper autoWidthWith:425];
+    float topDistance = [Helper autoWidthWith:125];
     [self.videoBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 425));
-        make.top.equalTo(self).offset(125);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, videoBgViewHeight));
+        make.top.equalTo(self).offset(topDistance);
     }];
     
    NSURL*playURL=  [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%@",self.videoName] ofType:@"mp4"]];
@@ -232,7 +236,9 @@
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (orientation == UIInterfaceOrientationPortrait) {
         
-        self.videoBgView.frame = CGRectMake(0, 125, kMainBoundsWidth, 425);
+        float videoBgViewHeight = [Helper autoWidthWith:425];
+        float topDistance = [Helper autoWidthWith:125];
+        self.videoBgView.frame = CGRectMake(0, topDistance, kMainBoundsWidth, videoBgViewHeight);
         self.playerLayer.frame = CGRectMake(0, 0, kMainBoundsWidth, 425);
         
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
