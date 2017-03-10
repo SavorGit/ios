@@ -896,6 +896,11 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     [self configureSelf];
     
+    CGFloat diameter = [Helper autoWidthWith:120.f];
+    self.homeButton = [[RDHomeScreenButton alloc] initWithFrame:CGRectMake(0, 0, diameter, diameter)];
+    self.homeButton.delegate = self;
+    [self.view addSubview:self.homeButton];
+    
     if (!self.childControllersCount) return;
     
     [self wm_calculateSize];
@@ -921,11 +926,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
         make.right.mas_equalTo(-6);
     }];
     [[HomeAnimationView animationView] hidden];
-    
-    CGFloat diameter = [Helper autoWidthWith:120.f];
-    self.homeButton = [[RDHomeScreenButton alloc] initWithFrame:CGRectMake(0, 0, diameter, diameter)];
-    self.homeButton.delegate = self;
-    [self.view addSubview:self.homeButton];
 }
 
 - (void)RDHomeScreenButtonDidChooseType:(RDScreenType)type
