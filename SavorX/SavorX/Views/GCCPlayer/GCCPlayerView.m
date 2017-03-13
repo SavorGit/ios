@@ -171,6 +171,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
                 if (self.status != GCCPlayerStatusEnd) {
                     [self play];
                 }
+                [self.controlView videoDidInit];
+                [self pause];
                 [self createGesture];
             }else if (self.player.currentItem.status == AVPlayerItemStatusFailed){
                 //播放失败

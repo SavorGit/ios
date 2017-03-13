@@ -295,7 +295,6 @@
 {
     [super viewDidAppear:animated];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    [self.playView play];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

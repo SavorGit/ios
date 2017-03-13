@@ -42,6 +42,10 @@
 
 - (void)showAnimation
 {
+    if ([GlobalData shared].scene == RDSceneNothing) {
+        return;
+    }
+    
     self.number = 1;
     [self stopAnimation];
     [self createAnimationLayer];
