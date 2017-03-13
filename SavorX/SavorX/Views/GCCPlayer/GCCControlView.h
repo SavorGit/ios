@@ -37,6 +37,8 @@
 - (void)loading; //缓冲
 - (void)stopLoading; //停止缓冲
 
+- (void)videoDidInit;
+
 - (void)playOrientationLandscape; //切换横屏
 - (void)playOrientationPortrait; //切换竖屏
 

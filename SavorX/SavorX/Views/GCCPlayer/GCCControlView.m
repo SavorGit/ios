@@ -138,7 +138,6 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     
     self.loadingView = [[UIActivityIndicatorView alloc] init];
     self.loadingView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    [self.loadingView startAnimating];
     [self addSubview:self.loadingView];
     
     self.shotButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -346,7 +345,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     
     self.playButton.alpha = 0.f;
     self.isShow = YES;
-    [self waitToHiddenToolView];
+//    [self waitToHiddenToolView];
     if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
         [self playOrientationLandscape];
     }
@@ -658,6 +657,12 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
             self.playButton.alpha = 1.0;
         }
     }
+}
+
+- (void)videoDidInit
+{
+    [self stopLoading];
+    self.playButton.alpha = 1.f;
 }
 
 - (void)stop
