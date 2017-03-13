@@ -9,6 +9,7 @@
 #import "ScanQRCodeViewController.h"
 #import "GCCCodeScanning.h"
 #import "VideoGuidedTwoDimensionalCode.h"
+#import "HomeAnimationView.h"
 
 @interface ScanQRCodeViewController ()<GCCCodeScanningDelegate>
 
@@ -28,6 +29,9 @@
     [MBProgressHUD showLoadingHUDInView:self.view];
     [self createUI];
     
+}
+
+- (void)viewDidAppear:(BOOL)animated{
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     // 第一次进来，显示引导页视频
     if (![[user objectForKey:@"firstKey"]  isEqualToString:@"1"]) {
@@ -56,6 +60,7 @@
     [self.scan stop];
     VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
     [vgVC showScreenProjectionTitle:@"scanGuide" block:^(NSInteger selectIndex) {
+//        [[HomeAnimationView animationView] reCallCode];
         [self.scan start];
     }];
 }
