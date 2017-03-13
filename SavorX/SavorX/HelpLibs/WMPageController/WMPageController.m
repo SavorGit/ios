@@ -894,6 +894,8 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     [self configureSelf];
     
+    [self creatSmallWindow];
+    
     if (!self.childControllersCount) return;
     
     [self wm_calculateSize];
@@ -904,6 +906,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
     self.currentViewController = self.displayVC[@(self.selectIndex)];
     
     [self wm_addMenuView];
+    
+}
+
+- (void)creatSmallWindow{
     
     BaseView *view = [HomeAnimationView animationView];
     [self.view addSubview:view];
