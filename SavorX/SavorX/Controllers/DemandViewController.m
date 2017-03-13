@@ -217,6 +217,8 @@
 
 // 退出投屏
 - (void)quitScreenAciton{
+    
+    NSLog(@"我点了退出按钮！");
 
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
           
@@ -240,6 +242,8 @@
 
 - (void)backAciton
 {
+    NSLog(@"我点了TVTVTV......！");
+    
     [self restartVod];
     self.quitScreenButton.hidden = NO;
     self.maskingView.hidden = NO;

@@ -129,6 +129,7 @@
     transform = CGAffineTransformMakeTranslation(140.0,0.0);
     [UIView animateWithDuration:.5f animations:^{
         self.transform = transform;
+        NSLog(@"---我要退出投屏了---。。。");
     }completion:^(BOOL finished){
         [self hidden];
         self.transform = CGAffineTransformIdentity;
