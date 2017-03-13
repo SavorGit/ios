@@ -32,6 +32,7 @@
 @property (nonatomic, strong) UIImageView * backImageView;
 @property (nonatomic, assign) NSInteger DLNAVolume;
 @property (nonatomic, strong) UIButton * collectButton;
+@property (nonatomic, strong) UIView *maskingView;
 
 @end
 
@@ -175,6 +176,19 @@
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     
+    self.maskingView = [[UIView alloc] init];
+    self.maskingView.backgroundColor = [UIColor blackColor];
+    self.maskingView.alpha = 0.6;
+    [self.backImageView addSubview:self.maskingView];
+    [self.maskingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(-15);;
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.equalTo(self.view.mas_width).offset(- 20).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height) ;
+
+    }];
+    
+    
     self.quitScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.quitScreenButton.backgroundColor = UIColorFromRGB(0xf1d897);
     self.quitScreenButton.alpha = 0.8;
@@ -212,8 +226,8 @@
         
         self.screenButton.hidden = NO;
         self.quitScreenButton.hidden = YES;
+        self.maskingView.hidden = YES;
         
-        self.screenButton.enabled = NO;
         [self.timer setFireDate:[NSDate distantFuture]];
         [self.timer invalidate];
         self.timer = nil;
@@ -228,6 +242,7 @@
 {
     [self restartVod];
     self.quitScreenButton.hidden = NO;
+    self.maskingView.hidden = NO;
     self.screenButton.hidden = YES;
     
 //    if (self.screenButton.isSelected) {
@@ -389,6 +404,7 @@
                 self.isPlayEnd = YES;
                 self.playBtn.selected = NO;
                 self.quitScreenButton.hidden = YES;
+                self.maskingView.hidden = YES;
                 self.screenButton.hidden = NO;
                 [self.timer invalidate];
                 self.timer = nil;
@@ -406,6 +422,7 @@
                 self.isPlayEnd = YES;
                 self.playBtn.selected = NO;
                 self.quitScreenButton.hidden = YES;
+                self.maskingView.hidden = YES;
                 self.screenButton.hidden = NO;
                 [self.timer invalidate];
                 self.timer = nil;
@@ -572,6 +589,7 @@
                 self.playBtn.selected = YES;
 //                self.screenButton.selected = YES;
                 self.quitScreenButton.hidden = NO;
+                self.maskingView.hidden = NO;
                 self.screenButton.hidden = YES;
                 [self createTimer];
             }else{
@@ -592,6 +610,7 @@
             self.screenButton.enabled = YES;
 //            self.screenButton.selected = YES;
             self.quitScreenButton.hidden = NO;
+            self.maskingView.hidden = NO;
             self.screenButton.hidden = YES;
             [hud hideAnimated:NO];
             self.isPlayEnd = NO;
