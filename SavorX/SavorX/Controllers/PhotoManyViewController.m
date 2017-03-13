@@ -210,7 +210,6 @@
 - (void)stopScreenImage
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    [[HomeAnimationView animationView] stopScreen];
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         self.navigationItem.rightBarButtonItem.enabled = YES;

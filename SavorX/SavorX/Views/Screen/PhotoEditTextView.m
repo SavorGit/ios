@@ -63,7 +63,6 @@
     self.textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
     self.textField.leftViewMode = UITextFieldViewModeAlways;
     self.textField.delegate = self;
-    [self.textField addTarget:self action:@selector(textFieldDidChangeValue) forControlEvents:UIControlEventEditingChanged];
     [self.toolView addSubview:self.textField];
     
     UIButton * OKButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -73,6 +72,7 @@
     [OKButton addTarget:self action:@selector(OKButtonDidBeClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.toolView addSubview:OKButton];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldValueDidBeChange:) name:UITextFieldTextDidChangeNotification object:nil];
     [[NSNotificationCenter
       defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
      name:UIKeyboardWillShowNotification object:nil];
@@ -81,18 +81,50 @@
      name:UIKeyboardWillHideNotification object:nil];//在这里注册通知
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (void)textFieldValueDidBeChange:(NSNotification *)obj
 {
-    if (self.style == PhotoEditTextStyleTitle) {
-        if (self.textField.text.length + string.length > 16) {
-            [MBProgressHUD showTextHUDwithTitle:@"最多只能添加16个字"];
-            return NO;
-        }
-    }else if (self.textField.text.length + string.length > 20){
-        [MBProgressHUD showTextHUDwithTitle:@"最多只能添加20个字"];
-        return NO;
+    UITextField *textField = (UITextField *)obj.object;
+    
+    NSString *toBeString = textField.text;
+    if (toBeString.length == 0) {
+        self.textLabel.text = @"点击输入文字";
+        return;
+    }else{
+        self.textLabel.text = toBeString;
     }
-    return YES;
+    
+    NSString *lang = [textField.textInputMode primaryLanguage]; // 键盘输入模式
+    
+    if ([lang isEqualToString:@"zh-Hans"]) { // 简体中文输入，包括简体拼音，健体五笔，简体手写
+        UITextRange *selectedRange = [textField markedTextRange];
+        //获取高亮部分
+        UITextPosition *position = [textField positionFromPosition:selectedRange.start offset:0];
+        
+        // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
+        if (!position) {
+            
+            if (self.style == PhotoEditTextStyleTitle) {
+                if (toBeString.length > 16) {
+                    textField.text = [toBeString substringToIndex:16];
+                    [MBProgressHUD showTextHUDwithTitle:@"最多输入16个字符"];
+                }
+            }else if (toBeString.length > 20) {
+                textField.text = [toBeString substringToIndex:20];
+                [MBProgressHUD showTextHUDwithTitle:@"最多输入20个字符"];
+            }
+        }
+        // 有高亮选择的字符串，则暂不对文字进行统计和限制
+        else{
+            
+        }
+    }
+    // 中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
+    else{
+        if (toBeString.length > 16) {
+            textField.text = [toBeString substringToIndex:16];
+            [MBProgressHUD showTextHUDwithTitle:@"最多输入16个字符"];
+        }
+    }
 }
 
 - (void)textLabelDidBeClicked
@@ -134,15 +166,6 @@
     
     [self removeFromSuperview];
     self.textLabel.frame = CGRectMake(40, -70, self.bounds.size.width - 80, 70);
-}
-
-- (void)textFieldDidChangeValue
-{
-    if (self.textField.text.length == 0) {
-        self.textLabel.text = @"点击输入文字";
-    }else{
-        self.textLabel.text = self.textField.text;
-    }
 }
 
 #pragma mark - 监听方法

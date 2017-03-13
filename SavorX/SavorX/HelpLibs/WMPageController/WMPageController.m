@@ -813,7 +813,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     CGFloat oldContentOffsetX = self.scrollView.contentOffset.x;
     CGFloat contentWidth = self.scrollView.contentSize.width;
     scrollFrame.origin.y -= self.showOnNavigationBar && self.navigationController.navigationBar ? self.menuHeight : 0;
-    scrollFrame.origin.y = [Helper autoHeightWith:40];
+    scrollFrame.origin.y = self.menuHeight;
     self.scrollView.frame = scrollFrame;
     self.scrollView.contentSize = CGSizeMake(self.childControllersCount * _viewWidth, 0);
     CGFloat xContentOffset = contentWidth == 0 ? self.selectIndex * _viewWidth : oldContentOffsetX / contentWidth * self.childControllersCount * _viewWidth;
@@ -852,7 +852,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }];
         CGFloat navHeight = self.navigationController.navigationBar.frame.size.height;
         menuHeight = self.menuHeight > navHeight ? navHeight : self.menuHeight;
-        menuY = (navHeight - menuHeight) / 2;
+//        menuY = (navHeight - menuHeight) / 2;
     }
     CGFloat menuWidth = _viewWidth - menuX - rightWidth;
     self.menuView.frame = CGRectMake(menuX, menuY, menuWidth, menuHeight);
@@ -1149,6 +1149,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     }
     [self.titleViewBtn setTitle:@"热点儿" forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
+    [self.rightItem stopAnimation];
     self.titleViewBtn.userInteractionEnabled = NO;
 
 }

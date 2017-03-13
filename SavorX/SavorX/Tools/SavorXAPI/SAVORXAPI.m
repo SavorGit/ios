@@ -256,19 +256,23 @@
 
 + (void)ScreenDemandShouldBackToTV
 {
-    [[HomeAnimationView animationView] stopScreen];
-    [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
     if ([GlobalData shared].isBindRD) {
         NSDictionary *parameters = @{@"function": @"stop",
                                      @"sessionid": [NSNumber numberWithInt:-1],
                                      @"reason": [NSNumber numberWithInt:0]};
         [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             
+            [[HomeAnimationView animationView] stopScreen];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
+            
+            [[HomeAnimationView animationView] stopScreen];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             
         } failure:^{
             
@@ -278,19 +282,24 @@
 
 + (void)ScreenDemandShouldBackToTVWithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
 {
-    [[HomeAnimationView animationView] stopScreen];
-    [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
     if ([GlobalData shared].isBindRD) {
         NSDictionary *parameters = @{@"function": @"stop",
                                      @"sessionid": [NSNumber numberWithInt:-1],
                                      @"reason": [NSNumber numberWithInt:0]};
         [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            [[HomeAnimationView animationView] stopScreen];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            
             successBlock();
+            
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             failureBlock();
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
+            [[HomeAnimationView animationView] stopScreen];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            
             successBlock();
         } failure:^{
             failureBlock();
