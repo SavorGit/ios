@@ -198,6 +198,11 @@
         label.font = [UIFont systemFontOfSize:17];
         [view addSubview:label];
         [[UIApplication sharedApplication].keyWindow addSubview:view];
+        [view mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(rect.size.width + 30);
+            make.height.mas_equalTo(rect.size.height + 20);
+            make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
+        }];
         
         [UIView animateWithDuration:0.5f delay:2.5f options:UIViewAnimationOptionCurveEaseInOut animations:^{
             view.alpha = 0.f;

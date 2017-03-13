@@ -158,15 +158,21 @@
         NSDictionary * dict = response[@"result"];
         
         NSArray * vodArray = [dict objectForKey:@"vodList"];
-        for (NSInteger i = 0; i < vodArray.count; i++) {
-            NSDictionary * vodDict = [vodArray objectAtIndex:i];
-            HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
-            [self.dataSource addObject:model];
+        
+        if (vodArray) {
+            for (NSInteger i = 0; i < vodArray.count; i++) {
+                NSDictionary * vodDict = [vodArray objectAtIndex:i];
+                HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
+                [self.dataSource addObject:model];
+            }
+            self.pageNo++;
+            self.lastDownTime = [[dict objectForKey:@"time"] integerValue];
+            [self.tableView reloadData];
+            [self.tableView.mj_footer endRefreshing];
+        }else{
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
-        self.pageNo++;
-        self.lastDownTime = [[dict objectForKey:@"time"] integerValue];
-        [self.tableView reloadData];
-        [self.tableView.mj_footer endRefreshing];
+        
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         if ([[response objectForKey:@"code"] integerValue] == 10060) {
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
@@ -233,13 +239,15 @@
         return;
     }
     
+    CGFloat width = MIN(kMainBoundsHeight, kMainBoundsWidth);
+    
     NSMutableArray * array = [NSMutableArray new];
     
     for (NSInteger i = 0; i < self.adSourcel.count; i++) {
         HSAdsModel * model = [self.adSourcel objectAtIndex:i];
         [array addObject:model.imageURL];
     }
-    self.scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 5, kMainBoundsWidth, [Helper autoHomePageCellImageHeight]) imageURLStringsGroup:array];
+    self.scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 5, width, [Helper autoHomePageCellImageHeight]) imageURLStringsGroup:array];
     [self.scrollView setHotelTitle:self.hotelName];
     self.scrollView.delegate = self;
     [self.headView addSubview:self.scrollView];
@@ -463,10 +471,13 @@
 - (UIView *)headView
 {
     if (!_headView) {
-        _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, [Helper autoHomePageCellImageHeight] + 55)];
+        
+        CGFloat width = MIN(kMainBoundsHeight, kMainBoundsWidth);
+        
+        _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, [Helper autoHomePageCellImageHeight] + 55)];
         _headView.backgroundColor = VCBackgroundColor;
         
-        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, [Helper autoHomePageCellImageHeight] + 5, kMainBoundsWidth, 55)];
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, [Helper autoHomePageCellImageHeight] + 5, width, 55)];
         label.font = [UIFont boldSystemFontOfSize:16];
         label.textColor = UIColorFromRGB(0x444444);
         label.textAlignment = NSTextAlignmentCenter;

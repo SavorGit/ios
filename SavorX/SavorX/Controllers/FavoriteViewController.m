@@ -8,7 +8,7 @@
 
 #import "FavoriteViewController.h"
 #import "WebViewController.h"
-#import "BasicTableViewCell.h"
+#import "HomePageCell.h"
 #import "UIImageView+WebCache.h"
 #import "UMCustomSocialManager.h"
 
@@ -74,9 +74,9 @@
 #pragma mark -- UITableViewDataSource
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BasicTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:FavoriteCell];
+    HomePageCell * cell = [tableView dequeueReusableCellWithIdentifier:FavoriteCell];
     if (nil == cell) {
-        cell = [[BasicTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FavoriteCell];
+        cell = [[HomePageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FavoriteCell];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
@@ -87,6 +87,7 @@
         [cell videoCanDemand:NO];
     }
     
+    cell.categroyLabel.text = [NSString stringWithFormat:@"# %@", model.category];
     [cell.bgImageView sd_setImageWithURL:[NSURL URLWithString:[model.imageURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     cell.titleLabel.text = model.title;
     
