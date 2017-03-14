@@ -184,6 +184,12 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [[SDImageCache sharedImageCache] clearMemory];
     
     [[UIApplication sharedApplication].keyWindow addSubview:self.backgroundView];
+    
+    UIView * tempView = [[UIApplication sharedApplication].keyWindow viewWithTag:888];
+    if (tempView) {
+        [tempView removeFromSuperview];
+    }
+    
     self.repeatButton.center = [self viewCenter];
     CGPoint point = self.repeatButton.center;
     self.photoButton.center = point;

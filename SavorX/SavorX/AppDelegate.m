@@ -369,7 +369,7 @@
                     return;
                 }
             }
-            if (![self.window viewWithTag:1234]) {
+            if (![self.window viewWithTag:1234] && [self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
         }
