@@ -392,6 +392,7 @@
                 [self.timer invalidate];
                 self.timer = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                NSLog(@"---服务器要我更新播放进度了，我要退出了---");
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
@@ -411,6 +412,7 @@
                 [self.timer invalidate];
                 self.timer = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                 NSLog(@"---服务器要我更新播放进度了，我要退出了dlna---");
             }else{
                 CGFloat posFloat = [[GCCUPnPManager defaultManager] timeIntegerFromString:totalDuration] * progress;
                 [self.playSilder setValue:posFloat];

@@ -58,12 +58,26 @@
         view.textLabel.backgroundColor = [UIColor clearColor];
         view.textLabel.textAlignment = NSTextAlignmentCenter;
         [view addSubview:view.textLabel];
+        CGFloat textLabelWidth = [Helper autoWidthWith:145.f];
+        CGFloat textLabelHeight = [Helper autoHeightWith:23.f];
+        CGFloat textLabTopDistance = [Helper autoHeightWith:84.f];
         [view.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(145, 23));
-            make.top.mas_equalTo(84);
+            make.size.mas_equalTo(CGSizeMake(textLabelWidth, textLabelHeight));
+            make.top.mas_equalTo(textLabTopDistance);
             make.left.mas_equalTo(0);
             make.right.mas_equalTo(0);
         }];
+        
+        CGFloat devImageWidth = [Helper autoWidthWith:145.f];
+        CGFloat devImageHeight = [Helper autoHeightWith:79.f];
+        CGFloat devImageTopDistance = [Helper autoHeightWith:5.f];
+        [view.devImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(devImageWidth, devImageHeight));
+            make.top.mas_equalTo(devImageTopDistance);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+        }];
+        
         view.devImageView.contentMode = UIViewContentModeScaleAspectFill;
         view.devImageView.clipsToBounds = YES;
         view.currentImage = [[UIImage alloc] init];

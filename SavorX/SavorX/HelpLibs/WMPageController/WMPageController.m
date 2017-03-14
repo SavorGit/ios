@@ -919,9 +919,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
     view.layer.borderColor = UIColorFromRGB(0xeeeeee).CGColor;
     CGFloat viewWidth = [Helper autoWidthWith:145.f];
     CGFloat viewHeight = [Helper autoHeightWith:107.f];
+    CGFloat viewBottomDistance = [Helper autoHeightWith:120.f];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(viewWidth, viewHeight));
-        make.bottom.mas_equalTo(-120);
+        make.bottom.mas_equalTo(-viewBottomDistance);
         make.right.mas_equalTo(-6);
     }];
     [[HomeAnimationView animationView] hidden];
