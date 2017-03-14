@@ -406,6 +406,7 @@
 - (void)showAlertWithWifiName:(NSString *)name
 {
     UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];
+    view.tag = 422;
     view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7f];
     [[UIApplication sharedApplication].keyWindow addSubview:view];
     

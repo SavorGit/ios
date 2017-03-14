@@ -264,6 +264,13 @@
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
                 if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
                     [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
+                    [GlobalData shared].cacheModel = nil;
+                    
+                    UIView * view = [[UIApplication sharedApplication].keyWindow viewWithTag:422];
+                    if (view) {
+                        [view removeFromSuperview];
+                    }
+                    
                     return;
                 }
             }
@@ -366,6 +373,13 @@
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
                 if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
                     [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
+                    [GlobalData shared].cacheModel = nil;
+                    
+                    UIView * view = [[UIApplication sharedApplication].keyWindow viewWithTag:422];
+                    if (view) {
+                        [view removeFromSuperview];
+                    }
+                    
                     return;
                 }
             }

@@ -233,6 +233,9 @@
         [self.timer invalidate];
         self.timer = nil;
         
+        self.minimumLabel.text = @"00:00";
+        self.playSilder.value = 0;
+        
     } failure:^{
         self.screenButton.enabled = YES;
     }];
@@ -580,6 +583,7 @@
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
+            self.screenButton.enabled = YES;
             self.isHandle = NO;
             [hud hideAnimated:NO];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -600,6 +604,7 @@
             self.playBtn.selected = YES;
             [self createTimer];
             self.isHandle = NO;
+            self.screenButton.enabled = YES;
         } failure:^{
             self.screenButton.enabled = YES;
             [hud hideAnimated:NO];

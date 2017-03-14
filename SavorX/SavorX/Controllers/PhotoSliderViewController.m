@@ -53,15 +53,6 @@
     
     self.view.backgroundColor = VCBackgroundColor;
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
-        self.isScreen = YES;
-    }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-        [SAVORXAPI showConnetToTVAlert];
-        self.isScreen = NO;
-    }
-    
     UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc]init];
     flowLayout.itemSize = CGSizeMake(kScreen_Width, kScreen_Height - 64);
     flowLayout.minimumLineSpacing = 0;
@@ -79,11 +70,6 @@
     self.currentIndex = 1;
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
     
-    if (self.PHAssetSource > 0) {
-        self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-    }
-    
     //导出图片的参数
     self.option = [PHImageRequestOptions new];
     //self.option.synchronous = YES; //开启线程同步
@@ -93,6 +79,8 @@
     self.option.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat; //高质量
     
     [self setupBottomView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenCurrentImage) name:RDDidBindDeviceNotification object:nil];
 }
 
 - (void)setupBottomView
@@ -191,6 +179,21 @@
     self.thirdTimeButton.tag = 20;
     
     [self.bottomView addSubview:self.timeLabel];
+    
+    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+        self.isScreen = YES;
+        if (self.PHAssetSource > 0) {
+            self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+        }
+    }else{
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        [SAVORXAPI showConnetToTVAlert];
+        self.isScreen = NO;
+        self.playButton.selected = NO;
+        self.statusLabel.text = @"幻灯片";
+    }
 }
 
 - (void)timeLabelBeClicked
@@ -369,7 +372,16 @@
                         }];
                         
                     } failure:^{
-                        
+                        self.playButton.selected = NO;
+                        [self.timer invalidate];
+                        self.timer = nil;
+                        self.isScreen = NO;
+                        if (self.task) {
+                            [self.task cancel];
+                        }
+                        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                        self.statusLabel.text = @"幻灯片";
                     }];
                 }];
             }else if ([GlobalData shared].isBindDLNA) {
@@ -424,7 +436,16 @@
                             }];
                             
                         } failure:^{
-                            
+                            self.playButton.selected = NO;
+                            [self.timer invalidate];
+                            self.timer = nil;
+                            self.isScreen = NO;
+                            if (self.task) {
+                                [self.task cancel];
+                            }
+                            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                            self.statusLabel.text = @"幻灯片";
                         }];
                     }];
                 }else if ([GlobalData shared].isBindDLNA) {
@@ -519,7 +540,16 @@
                             }];
                             
                         } failure:^{
-                            
+                            self.playButton.selected = NO;
+                            [self.timer invalidate];
+                            self.timer = nil;
+                            self.isScreen = NO;
+                            if (self.task) {
+                                [self.task cancel];
+                            }
+                            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                            self.statusLabel.text = @"幻灯片";
                         }];
                     }];
                 }else if ([GlobalData shared].isBindDLNA) {
@@ -558,13 +588,11 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    if (!self.isScreen) {
-        [self shouldRelease];
-    }
 }
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
     [self.timer invalidate];
     self.timer = nil;
     NSLog(@"多张图片投屏释放了");
