@@ -28,7 +28,6 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 @property (nonatomic, strong) NSMutableArray * locationSource;
 @property (nonatomic, strong) GCDAsyncUdpSocket * socket;
 @property (nonatomic, assign) BOOL isSearchPlatform;
-@property (nonatomic, strong) NSURLSessionDataTask * task;
 
 @end
 
@@ -143,7 +142,6 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     }
     
     self.isSearch = YES;
-    [self searchBoxWithAP];
     
     if (!self.socket.isClosed) {
         [self socketShouldBeClose]; //先关闭当前的socket连接
@@ -155,28 +153,8 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     [self performSelector:@selector(startSearchDevice) withObject:nil afterDelay:6.f];
 }
 
-- (void)searchBoxWithAP
-{
-    NSDictionary * dict = @{@"function" : @"check"};
-    self.task = [SAVORXAPI postWithURL:@"http://192.168.43.1:8080" parameters:dict success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        
-        if ([[result objectForKey:@"result"] integerValue] == 0) {
-            [GlobalData shared].scene = RDSceneHaveRDBox;
-            self.isSearch = NO;
-            NSInteger hotelID = [[result objectForKey:@"hotelId"] integerValue];
-            if (hotelID > 0) {
-                [GlobalData shared].hotelId = hotelID;
-            }
-        }
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-    }];
-}
-
 - (void)callQRcodeFromPlatform
 {
-    
     HSGetIpRequest * request = [[HSGetIpRequest alloc] init];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSInteger code = [response[@"code"] integerValue];
@@ -208,10 +186,6 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 //停止设备搜索
 - (void)stopSearchDevice
 {
-    if (self.task) {
-        [self.task cancel];
-    }
-    [HSGetIpRequest cancelRequest];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startSearchDevice) object:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
     
@@ -224,9 +198,6 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 
 - (void)resetSearch
 {
-    if (self.task) {
-        [self.task cancel];
-    }
     [HSGetIpRequest cancelRequest];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startSearchDevice) object:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];

@@ -135,8 +135,7 @@
         self.transform = CGAffineTransformIdentity;
     }];
     
-    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
-    self.currentVC = nil;
+    [self stopScreen];
 }
 
 #pragma mark -- 二维码扫描

@@ -246,7 +246,13 @@
     [super viewDidAppear:animated];
     if (self.isScreen) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self screenButtonDidClickedWithSuccess:nil failure:nil];
+            [self screenButtonDidClickedWithSuccess:^{
+                
+            } failure:^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+                self.isScreen = NO;
+            }];
         });
     }
 }

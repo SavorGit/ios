@@ -262,7 +262,6 @@
                                      @"reason": [NSNumber numberWithInt:0]};
         [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             
-            [[HomeAnimationView animationView] stopScreen];
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -271,7 +270,6 @@
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
             
-            [[HomeAnimationView animationView] stopScreen];
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             
         } failure:^{
@@ -287,7 +285,7 @@
                                      @"sessionid": [NSNumber numberWithInt:-1],
                                      @"reason": [NSNumber numberWithInt:0]};
         [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            [[HomeAnimationView animationView] stopScreen];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             
             successBlock();
@@ -297,7 +295,7 @@
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
-            [[HomeAnimationView animationView] stopScreen];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             
             successBlock();

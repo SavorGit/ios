@@ -852,10 +852,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }];
         CGFloat navHeight = self.navigationController.navigationBar.frame.size.height;
         menuHeight = self.menuHeight > navHeight ? navHeight : self.menuHeight;
-//        menuY = (navHeight - menuHeight) / 2;
+        menuY = (navHeight - menuHeight) / 2;
     }
     CGFloat menuWidth = _viewWidth - menuX - rightWidth;
-    self.menuView.frame = CGRectMake(menuX, menuY, menuWidth, menuHeight);
+    self.menuView.frame = CGRectMake(menuX, 0, menuWidth, menuHeight);
     [self.menuView resetFrames];
     
 }

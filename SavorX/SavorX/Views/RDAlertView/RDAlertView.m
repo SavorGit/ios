@@ -22,6 +22,7 @@
 {
     if (self = [super initWithFrame:[UIScreen mainScreen].bounds]) {
         [self createAlertWithTitle:title message:message];
+        self.tag = 333;
     }
     return self;
 }
@@ -59,6 +60,11 @@
 
 - (void)show
 {
+    UIView * view = [[UIApplication sharedApplication].keyWindow viewWithTag:333];
+    if (view) {
+        [view removeFromSuperview];
+    }
+    
     [[UIApplication sharedApplication].keyWindow addSubview:self];
 }
 

@@ -254,7 +254,7 @@
     NSInteger contenId = self.model.cid;
     if (button.selected) {
         [favoritesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([[obj objectForKey:@"contenURL"] isEqualToString:self.model.contentURL]) {
+            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
                 [favoritesArray removeObject:obj];
                 *stop = YES;
             }

@@ -278,7 +278,9 @@
     cell.secondText = detail;
     cell.thirdText = date;
     
-    [[PhotoTool sharedInstance] saveImageInSystemPhoto:image withAlert:NO];
+    if (!([title isEqualToString:@"在这里添加文字"] && [detail isEqualToString:@"在这里添加文字"] && [date isEqualToString:@"在这里添加文字"])) {
+        [[PhotoTool sharedInstance] saveImageInSystemPhoto:image withAlert:NO];
+    }
     
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
         if (self.isScreen) {
