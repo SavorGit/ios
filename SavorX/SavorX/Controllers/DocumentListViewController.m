@@ -271,7 +271,6 @@
     doucment.title = [doucment.path lastPathComponent];
     
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        [[HomeAnimationView animationView] startScreenWithViewController:doucment];
         [SAVORXAPI successRing];
     }
     [self.navigationController pushViewController:doucment animated:YES];

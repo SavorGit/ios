@@ -250,6 +250,11 @@
     if (self.isScreen) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self screenButtonDidClickedWithSuccess:^{
+            
+                // 获得点击图片，回传给缩略图
+            UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
+            [HomeAnimationView animationView].currentImage = currentWebImage;
+            [[HomeAnimationView animationView] startScreenWithViewController:self];
                 
             } failure:^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
@@ -261,15 +266,17 @@
 }
 
 // 网页加载完成
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    
-    if (!webView.isLoading) {
-        // 获得点击图片，回传给缩略图
-        UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
-        [HomeAnimationView animationView].currentImage = currentWebImage;
-//        [[HomeAnimationView animationView] startScreenWithViewController:self];
-    }
-}
+//- (void)webViewDidFinishLoad:(UIWebView *)webView {
+//    
+//    if (!webView.isLoading) {
+//        // 获得点击图片，回传给缩略图
+//        UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
+//        [HomeAnimationView animationView].currentImage = currentWebImage;
+//        if (self.isScreen == YES) {
+//            [[HomeAnimationView animationView] startScreenWithViewController:self];
+//        }
+//    }
+//}
 
 //浏览滑动停止的时候
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
