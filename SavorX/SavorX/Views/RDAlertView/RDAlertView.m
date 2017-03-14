@@ -31,7 +31,7 @@
 {
     self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.6f];
     
-    self.self.showView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 182)];
+    self.showView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 182)];
     self.showView.backgroundColor = [UIColor whiteColor];
     self.showView.center = CGPointMake((self.frame.origin.x + self.frame.size.width) / 2, (self.frame.origin.y + self.frame.size.height) / 2);
     [self addSubview:self.showView];
@@ -66,6 +66,14 @@
     }
     
     [[UIApplication sharedApplication].keyWindow addSubview:self];
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    
+    [self.showView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(300, 182));
+        make.center.mas_equalTo(0);
+    }];
 }
 
 - (void)addActions:(NSArray<RDAlertAction *> *)actions

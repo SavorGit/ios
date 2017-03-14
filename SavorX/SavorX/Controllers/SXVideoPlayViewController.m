@@ -524,14 +524,16 @@
                                      };
         [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (action == 1 || action == 2) {
-                self.footerView.muteBtn.enabled = YES;
-            }
             if ([[result objectForKey:@"result"] integerValue] == 0) {
-                
+                if (action == 1 || action == 2) {
+                    self.footerView.muteBtn.enabled = YES;
+                }else{
+                    self.footerView.muteBtn.selected = NO;
+                }
             }else{
                 [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
                 if (action == 1 || action == 2) {
+                    self.footerView.muteBtn.enabled = YES;
                     self.footerView.muteBtn.selected = !self.footerView.muteBtn.isSelected;
                 }
             }
@@ -579,6 +581,8 @@
         [[GCCUPnPManager defaultManager] setVolume:volume Success:^{
             if (action == 1 || action == 2) {
                 self.footerView.muteBtn.enabled = YES;
+            }else{
+                self.footerView.muteBtn.selected = NO;
             }
         } failure:^{
             if (action == 1 || action == 2) {

@@ -8,6 +8,7 @@
 
 #import "RDHomeScreenButton.h"
 #import "SDImageCache.h"
+#import "WMPageController.h"
 
 static CGFloat RDHomeScreenPopAnimationTime = .5f;
 static CGFloat RDHomeScreenCloseAnimationTime = .3f;
@@ -47,7 +48,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 - (void)createViews
 {
-    self.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height / 2 - 30);
+    self.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height / 2 - 30 - kStatusBarHeight - kNaviBarHeight);
     
     self.layer.cornerRadius = self.frame.size.width / 2;
     self.layer.masksToBounds = YES;
@@ -91,6 +92,8 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         [self showWithBox];
         if (self.isShowOptions) {
             [self animationAddNiceVideoButton];
+        }else{
+            [self popWithNoAnimation];
         }
     }
 }
@@ -149,9 +152,31 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     }];
 }
 
+- (void)popWithNoAnimation
+{
+    if (![[Helper getRootNavigationController].topViewController isKindOfClass:[WMPageController class]]) {
+        return;
+    }
+    
+    [[UIApplication sharedApplication].keyWindow addSubview:self.backgroundView];
+    [MBProgressHUD showTextHUDwithTitle:@"发现电视, 可以投屏"];
+    self.repeatButton.center = [self viewCenter];
+    CGPoint point = self.repeatButton.center;
+    self.photoButton.center = point;
+    self.videoButton.center = point;
+    self.sliderButton.center = point;
+    self.documentButton.center = point;
+    self.niceVideoButton.center = point;
+}
+
 //弹出菜单
 - (void)popOptionsWithAnimation
 {
+    if (![[Helper getRootNavigationController].topViewController isKindOfClass:[WMPageController class]]) {
+        [self closeOptionsWithAnimation];
+        return;
+    }
+    
     if (!self.isBoxSence) {
         self.alpha = 1.f;
     }
@@ -159,6 +184,12 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [[SDImageCache sharedImageCache] clearMemory];
     
     [[UIApplication sharedApplication].keyWindow addSubview:self.backgroundView];
+    
+    UIView * tempView = [[UIApplication sharedApplication].keyWindow viewWithTag:888];
+    if (tempView) {
+        [tempView removeFromSuperview];
+    }
+    
     self.repeatButton.center = [self viewCenter];
     CGPoint point = self.repeatButton.center;
     self.photoButton.center = point;
@@ -281,7 +312,28 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     self.repeatButton.layer.cornerRadius = self.layer.cornerRadius;
     self.layer.masksToBounds = YES;
     [self.repeatButton setBackgroundImage:[UIImage imageNamed:@"toupin"] forState:UIControlStateNormal];
-    [self.repeatButton addTarget:self action:@selector(closeOptionsWithAnimation) forControlEvents:UIControlEventTouchUpInside];
+    [self.repeatButton addTarget:self action:@selector(checkIsShowOptions) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)checkIsShowOptions
+{
+    if (self.isShowOptions) {
+        self.isShowOptions = NO;
+        
+        [self animationCloseButton:self.photoButton completion:nil];
+        [self animationCloseButton:self.videoButton completion:nil];
+        [self animationCloseButton:self.sliderButton completion:nil];
+        [self animationCloseButton:self.documentButton completion:^(BOOL finished) {
+            [self.backgroundView removeFromSuperview];
+        }];
+        [self animationCloseButton:self.niceVideoButton completion:nil];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
+        if (!self.isBoxSence) {
+            [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
+        }
+    }else{
+        [self popOptionsWithAnimation];
+    }
 }
 
 - (UIButton *)createButtonWithTag:(NSInteger)tag image:(UIImage *)image
