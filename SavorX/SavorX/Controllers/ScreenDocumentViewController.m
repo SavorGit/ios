@@ -267,7 +267,7 @@
         // 获得点击图片，回传给缩略图
         UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
         [HomeAnimationView animationView].currentImage = currentWebImage;
-        [[HomeAnimationView animationView] startScreenWithViewController:self];
+//        [[HomeAnimationView animationView] startScreenWithViewController:self];
     }
 }
 
