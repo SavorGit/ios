@@ -124,7 +124,7 @@
 
 // 收到退出投屏通知处理方法
 - (void)quitScreenHidden{
-    
+
     CGAffineTransform transform;
     transform = CGAffineTransformMakeTranslation(140.0,0.0);
     [UIView animateWithDuration:.5f animations:^{
