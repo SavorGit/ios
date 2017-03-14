@@ -39,10 +39,10 @@
     [self createUI];
     
     if (self.dataSource.count == 0) {
+        
         [self creatGuidTouchView];
-        [self creatHelpGuide];
-        if (self.isHelp) {
-        }
+//        [self creatHelpGuide];
+
     }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(creatHelpGuide)];
