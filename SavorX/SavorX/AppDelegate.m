@@ -164,6 +164,7 @@
         
         //设置一个图片;
         UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        niceView.tag = 1234;
         UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
         [niceView addSubview:blackView];
@@ -368,7 +369,9 @@
                     return;
                 }
             }
-            [[GCCDLNA defaultManager] startSearchPlatform];
+            if (![self.window viewWithTag:1234]) {
+                [[GCCDLNA defaultManager] startSearchPlatform];
+            }
         }
         
         //检测当前绑定状态是否断开
