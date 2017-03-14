@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, QRResultType) {
 
 
 /**
- *	热点儿二维码扫描界面
+ *	小热点二维码扫描界面
  */
 @interface ScanQRCodeViewController : BaseViewController
 

@@ -13,9 +13,9 @@ typedef void(^ScreenProjectionSelectViewSelectBlock)(NSInteger selectIndex);
 typedef enum {
     kWifi_NolinkDevice = 0, //无可连接设备
     KWifi_NoLinkWifi,       //无可连接wifi
-    kWifi_HaveRDBox,        //有热点儿盒子
+    kWifi_HaveRDBox,        //有小热点盒子
     kWifi_HaveDLNA,         //有DLNA
-    kWifi_LinkRDBox,        //连接到热点儿机顶盒
+    kWifi_LinkRDBox,        //连接到小热点机顶盒
     kWifi_LinkDLNA          //连接到DLNA设备
 } WifiState;
 

@@ -15,7 +15,7 @@
 @end
 
 /**
- *	热点儿幻灯片详情，主要用于展示某一幻灯片下所有的幻灯片，具有添加，删除，预览，投屏功能
+ *	小热点幻灯片详情，主要用于展示某一幻灯片下所有的幻灯片，具有添加，删除，预览，投屏功能
  */
 @interface SliderListViewController : BaseViewController
 

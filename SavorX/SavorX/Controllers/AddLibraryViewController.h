@@ -19,7 +19,7 @@
 @end
 
 /**
- *	热点儿幻灯片添加选择相片页，主要用于添加幻灯片时，选择某一个相片
+ *	小热点幻灯片添加选择相片页，主要用于添加幻灯片时，选择某一个相片
  */
 @interface AddLibraryViewController : BaseViewController
 

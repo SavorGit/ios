@@ -39,6 +39,7 @@
 {
     if (self = [super init]) {
         self.info = @"热点聚焦 , 投你所好";
+        [UMSocialUIManager setPreDefinePlatforms:@[@(UMSocialPlatformType_WechatSession), @(UMSocialPlatformType_WechatTimeLine), @(UMSocialPlatformType_WechatFavorite), @(UMSocialPlatformType_QQ), @(UMSocialPlatformType_Qzone), @(UMSocialPlatformType_Sina)]];
     }
     return self;
 }
@@ -79,9 +80,9 @@
                 
             {
                     NSString * url = [model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                    NSString * text = [NSString stringWithFormat:@"热点儿 | %@\n%@", model.title, url];
+                    NSString * text = [NSString stringWithFormat:@"小热点 | %@\n%@", model.title, url];
                     if ([self convertToByte:text] > 140) {
-                        text = [NSString stringWithFormat:@"热点儿\n%@", url];
+                        text = [NSString stringWithFormat:@"小热点\n%@", url];
                         if ([self convertToByte:text] > 140) {
                             [MBProgressHUD showTextHUDwithTitle:@"该文章暂不支持新浪分享"];
                             return;
@@ -144,7 +145,7 @@
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建网页分享类型
-    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"热点儿 - %@", self.model.title] descr:self.info thumImage:image];
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", self.model.title] descr:self.info thumImage:image];
     [object setWebpageUrl:url];
     messageObject.shareObject = object;
     

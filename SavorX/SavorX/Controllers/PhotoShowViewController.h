@@ -10,7 +10,7 @@
 #import <Photos/Photos.h>
 
 /**
- *	热点儿相片预览页，预览当前相册的相片
+ *	小热点相片预览页，预览当前相册的相片
  */
 @interface PhotoShowViewController : BaseViewController
 

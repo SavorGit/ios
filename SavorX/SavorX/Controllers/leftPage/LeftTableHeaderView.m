@@ -57,7 +57,7 @@
     label.font = [UIFont systemFontOfSize:14];
     label.textColor = [UIColor whiteColor];
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = @"热点儿";
+    label.text = @"小热点";
     label.backgroundColor = [UIColor clearColor];
     [BGView addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make) {

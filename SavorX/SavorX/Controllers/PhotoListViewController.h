@@ -10,7 +10,7 @@
 #import <Photos/Photos.h>
 
 /**
- *	热点儿相片展示页，展示某一相册下所有的图片
+ *	小热点相片展示页，展示某一相册下所有的图片
  */
 @interface PhotoListViewController : BaseViewController
 

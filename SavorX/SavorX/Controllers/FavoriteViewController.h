@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 /**
- *	热点儿我的收藏页，展示我的收藏列表
+ *	小热点我的收藏页，展示我的收藏列表
  */
 @interface FavoriteViewController : BaseViewController
 

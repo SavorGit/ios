@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 /**
- *	热点儿文档投屏页，对文档进行投屏操作
+ *	小热点文档投屏页，对文档进行投屏操作
  */
 @interface ScreenDocumentViewController : BaseViewController
 

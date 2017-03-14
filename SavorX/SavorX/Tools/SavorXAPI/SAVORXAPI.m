@@ -55,13 +55,13 @@
     [[UMSocialManager defaultManager] setUmSocialAppkey:UmengAppkey];
     
     //设置微信的appKey和appSecret
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx9663b3234c565a7a" appSecret:@"1fb27ff272313bb4c9fe382af98de80b" redirectURL:@"http://www.savor.cn"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx59643f058e9b544c" appSecret:@"ad5cf8b259673427421a1181614c33c7" redirectURL:@"http://itunes.apple.com/cn/app/id1144051586"];
     
     //设置新浪的appKey和appSecret
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:@"3225976487"  appSecret:@"f107b91769da4dd5e6a1987f553cfc73" redirectURL:@"http://itunes.apple.com/cn/app/id1144051586?mt=8"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:@"258257010"  appSecret:@"7b2701caad98239314089869bec08982" redirectURL:@"http://itunes.apple.com/cn/app/id1144051586"];
     
     //设置分享到QQ互联的appKey和appSecret
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1105447330"  appSecret:@"dBxguLhCwtYdGGsH" redirectURL:@"http://itunes.apple.com/cn/app/id1144051586?mt=8"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1105974848"  appSecret:@"j2l2GwJFxSOyzflj" redirectURL:@"http://itunes.apple.com/cn/app/id1144051586"];
     
     //友盟统计
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];

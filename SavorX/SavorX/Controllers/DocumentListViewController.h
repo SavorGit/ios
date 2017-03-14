@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 /**
- *	热点儿文件列表页，展示文件列表
+ *	小热点文件列表页，展示文件列表
  */
 @interface DocumentListViewController : BaseViewController
 

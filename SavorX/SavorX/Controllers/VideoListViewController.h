@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 /**
- *	热点儿视频列表页，用于展示系统相册中的视频列表
+ *	小热点视频列表页，用于展示系统相册中的视频列表
  */
 @interface VideoListViewController : BaseViewController
 

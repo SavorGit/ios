@@ -11,7 +11,7 @@
 #import "GCCPlayerView.h"
 
 /**
- *	热点儿H5加载页面，在未绑定机顶盒时阅读当期文章，或者在发现页阅读历史文章用于展示文章的页面
+ *	小热点H5加载页面，在未绑定机顶盒时阅读当期文章，或者在发现页阅读历史文章用于展示文章的页面
  */
 @interface WebViewController : BaseViewController
 

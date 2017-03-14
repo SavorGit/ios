@@ -1016,7 +1016,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     self.titleViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.titleViewBtn.frame = CGRectMake(0, 0, 150, 30);
     self.titleViewBtn.userInteractionEnabled = NO;
-    [self.titleViewBtn setTitle:@"热点儿" forState:UIControlStateNormal];
+    [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
     self.titleViewBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
     [self.titleViewBtn addTarget:self action:@selector(disconnentClick) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.titleView = self.titleViewBtn;
@@ -1058,7 +1058,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         
     } bold:nil];
     RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
-        [self.titleViewBtn setTitle:@"热点儿" forState:UIControlStateNormal];
+        [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
         self.titleViewBtn.userInteractionEnabled = NO;
         [SAVORXAPI ScreenDemandShouldBackToTV];
@@ -1147,7 +1147,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         self.isInHotel = NO;
         [self reloadData];
     }
-    [self.titleViewBtn setTitle:@"热点儿" forState:UIControlStateNormal];
+    [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
     [self.rightItem stopAnimation];
     self.titleViewBtn.userInteractionEnabled = NO;

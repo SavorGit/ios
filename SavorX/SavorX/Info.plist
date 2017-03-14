@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>cn</string>
 	<key>CFBundleDisplayName</key>
-	<string>热点儿</string>
+	<string>小热点</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -124,7 +124,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wx9663b3234c565a7a</string>
+				<string>wx59643f058e9b544c</string>
 			</array>
 		</dict>
 		<dict>
@@ -140,7 +140,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wb3225976487</string>
+				<string>wb258257010</string>
 			</array>
 		</dict>
 		<dict>
@@ -148,15 +148,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>prefs</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>QQ41e3c9a2</string>
+				<string>QQ41ebd640</string>
 			</array>
 		</dict>
 	</array>

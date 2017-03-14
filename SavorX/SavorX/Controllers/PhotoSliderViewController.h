@@ -10,7 +10,7 @@
 #import <Photos/Photos.h>
 
 /**
- *	热点儿相册中的幻灯片播放页
+ *	小热点相册中的幻灯片播放页
  */
 @interface PhotoSliderViewController : BaseViewController
 

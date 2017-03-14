@@ -151,7 +151,7 @@
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         // 相册的标题
-        NSString *title = @"热点儿";
+        NSString *title = @"小热点";
         
         PHAssetCollection * myCollection;
         

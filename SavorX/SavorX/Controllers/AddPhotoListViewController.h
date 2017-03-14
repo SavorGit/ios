@@ -15,7 +15,7 @@
 @end
 
 /**
- *	热点儿幻灯片添加选择相册页，主要用于添加幻灯片时，选择某一个相册
+ *	小热点幻灯片添加选择相册页，主要用于添加幻灯片时，选择某一个相册
  */
 @interface AddPhotoListViewController : BaseViewController
 

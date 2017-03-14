@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 /**
- *	热点儿帮助页，使用帮助页
+ *	小热点帮助页，使用帮助页
  */
 @interface HelpViewController : BaseViewController
 

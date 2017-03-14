@@ -183,7 +183,7 @@
 {
     
     if ([GlobalData shared].isWifiStatus) {
-        //判断用户当前是否允许热点儿使用相机权限
+        //判断用户当前是否允许小热点使用相机权限
         AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
         if (authStatus == AVAuthorizationStatusNotDetermined){
             [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {

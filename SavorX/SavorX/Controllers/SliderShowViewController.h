@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 /**
- *	热点儿幻灯片预览界面，主要用于预览幻灯片
+ *	小热点幻灯片预览界面，主要用于预览幻灯片
  */
 @interface SliderShowViewController : BaseViewController
 

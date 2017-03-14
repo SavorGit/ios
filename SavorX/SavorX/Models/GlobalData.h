@@ -75,7 +75,7 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 - (void)bindToDLNADevice:(DeviceModel *)model;
 
 /**
- *  连接到热点儿机顶盒设备
+ *  连接到小热点机顶盒设备
  *
  *  @param 连接到机顶盒的Box模型信息
  */

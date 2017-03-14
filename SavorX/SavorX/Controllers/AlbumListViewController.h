@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 /**
- *	热点儿相册列表页，展示系统相册列表
+ *	小热点相册列表页，展示系统相册列表
  */
 @interface AlbumListViewController : BaseViewController
 

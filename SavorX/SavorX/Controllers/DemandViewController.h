@@ -10,7 +10,7 @@
 #import "HSVodModel.h"
 
 /**
- *	热点儿点播界面，绑定机顶盒的情况下，点击当期视频会进入此界面
+ *	小热点点播界面，绑定机顶盒的情况下，点击当期视频会进入此界面
  */
 @interface DemandViewController : BaseViewController
 

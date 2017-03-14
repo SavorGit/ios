@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 /**
- *	热点儿意见反馈页，用于收集用户相关意见
+ *	小热点意见反馈页，用于收集用户相关意见
  */
 @interface AdviceViewController : BaseViewController
 

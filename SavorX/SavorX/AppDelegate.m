@@ -172,6 +172,13 @@
         
         niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
         logoView.image = [Helper getLaunchImage];
+        
+        
+        LGSideMenuController * sliderVC = [self createRootViewController];
+        
+        self.window.rootViewController = sliderVC;
+        [self.window makeKeyAndVisible];
+        
         //添加到场景
         [self.window addSubview:niceView];
         [self.window addSubview:logoView];
@@ -188,11 +195,6 @@
                 [self monitorInternet]; //监控网络状态
             }];
         }];
-        
-        LGSideMenuController * sliderVC = [self createRootViewController];
-        
-        self.window.rootViewController = sliderVC;
-        [self.window makeKeyAndVisible];
     }else{
         
         //设置一个图片;
