@@ -222,9 +222,10 @@
           
         self.isPlayEnd = YES;
         self.playBtn.selected = NO;
-        self.screenButton.enabled = YES;
         
+        self.screenButton.enabled = YES;
         self.screenButton.hidden = NO;
+        
         self.quitScreenButton.hidden = YES;
         self.maskingView.hidden = YES;
         
@@ -241,25 +242,6 @@
 - (void)backAciton
 {
     [self restartVod];
-    self.quitScreenButton.hidden = NO;
-    self.maskingView.hidden = NO;
-    self.screenButton.hidden = YES;
-    
-//    if (self.screenButton.isSelected) {
-//        self.screenButton.enabled = NO;
-//        [self.timer setFireDate:[NSDate distantFuture]];
-//        [self.timer invalidate];
-//        self.timer = nil;
-//        [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-//            self.screenButton.selected = !self.screenButton.isSelected;
-//            self.playBtn.selected = NO;
-//            self.screenButton.enabled = YES;
-//        } failure:^{
-//            self.screenButton.enabled = YES;
-//        }];
-//    }else{
-//        [self restartVod];
-//    }
 }
 
 //收藏按钮被点击触发
@@ -406,6 +388,7 @@
                 self.quitScreenButton.hidden = YES;
                 self.maskingView.hidden = YES;
                 self.screenButton.hidden = NO;
+                self.screenButton.enabled = YES;
                 [self.timer invalidate];
                 self.timer = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
@@ -424,6 +407,7 @@
                 self.quitScreenButton.hidden = YES;
                 self.maskingView.hidden = YES;
                 self.screenButton.hidden = NO;
+                self.screenButton.enabled = YES;
                 [self.timer invalidate];
                 self.timer = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
@@ -587,7 +571,6 @@
                 [[HomeAnimationView animationView] startScreenWithViewController:self];
                 self.isPlayEnd = NO;
                 self.playBtn.selected = YES;
-//                self.screenButton.selected = YES;
                 self.quitScreenButton.hidden = NO;
                 self.maskingView.hidden = NO;
                 self.screenButton.hidden = YES;
@@ -596,19 +579,17 @@
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
             self.isHandle = NO;
-            self.screenButton.enabled = YES;
             [hud hideAnimated:NO];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             self.screenButton.enabled = YES;
             [hud hideAnimated:NO];
             [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
             self.isHandle = NO;
+            NSLog(@"我播放失败了----------");
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
             [[HomeAnimationView animationView] startScreenWithViewController:self];
-            self.screenButton.enabled = YES;
-//            self.screenButton.selected = YES;
             self.quitScreenButton.hidden = NO;
             self.maskingView.hidden = NO;
             self.screenButton.hidden = YES;
@@ -622,6 +603,8 @@
             [hud hideAnimated:NO];
             [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
             self.isHandle = NO;
+            NSLog(@"我播放失败了----------");
+
         }];
     }
 }
