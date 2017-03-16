@@ -2381,7 +2381,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e8b73aa4-7da7-4372-a5e6-0fc7df53e13f";
+				PROVISIONING_PROFILE = "db2beac0-ec5e-4eff-b2b2-d4cad5476653";
 				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2395,8 +2395,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CODE_SIGN_ENTITLEMENTS = SavorX/SavorX.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 3VYVQ3265F;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2419,8 +2419,8 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e8b73aa4-7da7-4372-a5e6-0fc7df53e13f";
-				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
+				PROVISIONING_PROFILE = "a3e6aede-f774-4205-8a6e-b8d7e8cd4aad";
+				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
