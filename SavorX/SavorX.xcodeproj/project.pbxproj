@@ -1872,7 +1872,7 @@
 				TargetAttributes = {
 					06FA30E41D3E0C70001F5B37 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 3VYVQ3265F;
+						DevelopmentTeam = 922V2U92Z9;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -2359,7 +2359,7 @@
 				CODE_SIGN_ENTITLEMENTS = SavorX/SavorX.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 3VYVQ3265F;
+				DEVELOPMENT_TEAM = 922V2U92Z9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2381,7 +2381,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "db2beac0-ec5e-4eff-b2b2-d4cad5476653";
+				PROVISIONING_PROFILE = "5963538d-4228-45ed-ac6f-fe59f98f61ec";
 				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2397,7 +2397,7 @@
 				CODE_SIGN_ENTITLEMENTS = SavorX/SavorX.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 3VYVQ3265F;
+				DEVELOPMENT_TEAM = 922V2U92Z9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2419,7 +2419,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a3e6aede-f774-4205-8a6e-b8d7e8cd4aad";
+				PROVISIONING_PROFILE = "7d723ee5-c37f-4052-b11c-c6cb9abd8624";
 				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
