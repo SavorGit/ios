@@ -17,7 +17,6 @@
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate>
 
-@property (nonatomic, strong) UIView * toolView; //操作栏
 @property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
 @property (nonatomic, strong) MPVolumeView * volumeView;
 
@@ -63,41 +62,6 @@
         [self.playView hiddenTVButton];
     }
     
-    CGRect rect = [self.model.title boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 20, 60) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:18]} context:nil];
-    self.toolView = [[UIView alloc] init];
-    self.toolView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.toolView];
-    [self.toolView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.playView.mas_bottom);
-        make.left.mas_equalTo(0);
-        make.right.mas_equalTo(0);
-        make.height.mas_equalTo(rect.size.height + 20);
-    }];
-    
-    UIView * view = [[UIView alloc] init];
-    view.backgroundColor = [UIColor lightGrayColor];
-    [self.view addSubview:view];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(0);
-        make.bottom.equalTo(self.toolView.mas_bottom).mas_offset(-0.5);
-        make.right.mas_equalTo(0);
-        make.height.mas_equalTo(.5f);
-    }];
-    
-    UILabel * label = [[UILabel alloc] init];
-    label.textColor = [UIColor grayColor];
-    label.font = [UIFont systemFontOfSize:18];
-    label.textColor = UIColorFromRGB(0x333333);
-    label.numberOfLines = 2;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.text = self.model.title;
-    [self.toolView addSubview:label];
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(10);
-        make.left.mas_equalTo(10);
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, rect.size.height));
-    }];
-    
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
         NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
         __block BOOL iscollect = NO;
@@ -115,7 +79,7 @@
     self.webView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.webView];
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.toolView.mas_bottom);
+        make.top.equalTo(self.playView.mas_bottom);
         make.left.mas_equalTo(0);
         make.width.mas_equalTo(kMainBoundsWidth);
         make.bottom.mas_equalTo(0);

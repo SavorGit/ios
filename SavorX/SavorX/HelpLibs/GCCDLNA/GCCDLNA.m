@@ -150,7 +150,8 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     self.isSearchPlatform = YES;
     [self setUpSocketForPlatform]; //若当前socket处于关闭状态，先配置socket地址和端口
     [self callQRcodeFromPlatform];
-    [self performSelector:@selector(startSearchDevice) withObject:nil afterDelay:6.f];
+    [self performSelector:@selector(stopSearchDevice) withObject:nil afterDelay:8.f];
+//    [self performSelector:@selector(startSearchDevice) withObject:nil afterDelay:6.f];
 }
 
 - (void)callQRcodeFromPlatform

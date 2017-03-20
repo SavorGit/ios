@@ -25,13 +25,6 @@
     NSString * inboxPath = [NSHomeDirectory() stringByAppendingString:[tempArray lastObject]];
     FileType type = [OpenFileTool getFileTypeWithPath:inboxPath];
     NSString * filePath = [OpenFileTool copyDocmentFileWithPath:inboxPath andType:type];
-    if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-        //如果没有绑定
-        [SAVORXAPI showAlertWithString:ScreenDidNotBind withController:[Helper getRootNavigationController]];
-        NSError * error;
-        [[NSFileManager defaultManager] removeItemAtPath:inboxPath error:&error];
-        return;
-    }
     if (nil == filePath) {
         return;
     }

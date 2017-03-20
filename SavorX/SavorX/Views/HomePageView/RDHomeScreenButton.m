@@ -9,11 +9,12 @@
 #import "RDHomeScreenButton.h"
 #import "SDImageCache.h"
 #import "WMPageController.h"
+#import "LGSideMenuController.h"
 
 static CGFloat RDHomeScreenPopAnimationTime = .5f;
 static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
-@interface RDHomeScreenButton ()
+@interface RDHomeScreenButton ()<LGSideMenuControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UIView * backgroundView;
 
@@ -42,8 +43,19 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     if (self = [super initWithFrame:frame]) {
         [self createViews];
+        
+        [self createDelegate];
     }
     return self;
+}
+
+- (void)createDelegate
+{
+    LGSideMenuController * side = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    side.delegate = self;
+    
+    UINavigationController * na = (UINavigationController *)side.rootViewController;
+    na.delegate = self;
 }
 
 - (void)createViews
@@ -154,7 +166,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 - (void)popWithNoAnimation
 {
-    if (![[Helper getRootNavigationController].topViewController isKindOfClass:[WMPageController class]]) {
+    if (![self checkIsCanShowInWindow]) {
         return;
     }
     
@@ -172,7 +184,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 //弹出菜单
 - (void)popOptionsWithAnimation
 {
-    if (![[Helper getRootNavigationController].topViewController isKindOfClass:[WMPageController class]]) {
+    if (![self checkIsCanShowInWindow]) {
         [self closeOptionsWithAnimation];
         return;
     }
@@ -397,6 +409,43 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     self.isBoxSence = NO;
     self.alpha = .6f;
+}
+
+//检测是否可以在window上添加投屏菜单蒙层
+- (BOOL)checkIsCanShowInWindow
+{
+    BOOL result = YES;
+    
+    LGSideMenuController * side = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UINavigationController * na = (UINavigationController *)side.rootViewController;
+    if ([na.topViewController isKindOfClass:[WMPageController class]]) {
+        if (side.isLeftViewShowing) {
+            result = NO;
+        }
+        if (na.interactivePopGestureRecognizer.state != UIGestureRecognizerStatePossible) {
+            result = NO;
+        }
+    }else{
+        result = NO;
+    }
+    
+    return result;
+}
+
+- (void)didShowLeftView:(UIView *)leftView sideMenuController:(LGSideMenuController *)sideMenuController
+{
+    if (self.backgroundView.superview) {
+        [self closeOptionsWithAnimation];
+    }
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (![viewController isKindOfClass:[WMPageController class]]) {
+        if (self.backgroundView.superview) {
+            [self closeOptionsWithAnimation];
+        }
+    }
 }
 
 - (CGPoint)viewCenter
