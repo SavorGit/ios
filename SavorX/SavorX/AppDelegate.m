@@ -42,6 +42,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
     [self createLaunch];
+    [self saveImage:nil];
     
     [SAVORXAPI configApplication];
     [SAVORXAPI checkVersionUpgrade];
@@ -159,6 +160,10 @@
 //启动程序欢迎页设置
 - (void)createLaunch
 {
+    NSString *imagePath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
+    NSData *picData = [NSData dataWithContentsOfFile:imagePath];
+    UIImage *launchImage = [UIImage imageWithData:picData];
+    
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:HasLaunched] boolValue];
     if (temp) {
         
@@ -170,8 +175,13 @@
         [niceView addSubview:blackView];
         
         UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+
+        if (launchImage) {
+            niceView.image = launchImage;
+        }else{
+            niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
+        }
         
-        niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
         logoView.image = [Helper getLaunchImage];
         
         
@@ -206,7 +216,11 @@
         
         UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         
-        niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
+        if (launchImage) {
+            niceView.image = launchImage;
+        }else{
+            niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
+        }
         logoView.image = [Helper getLaunchImage];
         //添加到场景
         [self.window addSubview:niceView];
@@ -229,6 +243,21 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self gotoGuidePageView];
     }
+}
+
+- (void)saveImage:(NSString *)imageUrl
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        
+        NSData *beforImageDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://redian-produce.oss-cn-beijing.aliyuncs.com/media/resource/pxbJA4YSzb.jpg"]];
+        NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        if ([fileManager fileExistsAtPath:filePath]) {
+            [fileManager removeItemAtPath:filePath error:nil];
+        }
+        [beforImageDate writeToFile:filePath atomically:YES];
+        
+    });
 }
 
 //app注册推送deviceToken

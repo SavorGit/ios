@@ -13,10 +13,13 @@
 /**
  *	小热点H5加载页面，在未绑定机顶盒时阅读当期文章，或者在发现页阅读历史文章用于展示文章的页面
  */
+typedef void (^comeFromWebView)(NSDictionary *parDic);
 @interface WebViewController : BaseViewController
 
 @property (nonatomic, strong) UIImage * image;
 @property (nonatomic, strong) HSVodModel * model;
 @property (nonatomic, strong) GCCPlayerView * playView; //播放器
+@property (nonatomic, assign) BOOL isFormDemand; // 是否来自Demand
+@property (nonatomic, copy) comeFromWebView coFromWebView;
 
 @end

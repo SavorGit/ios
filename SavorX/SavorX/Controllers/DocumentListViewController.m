@@ -38,10 +38,10 @@
     
     [self createUI];
     
+    
     if (self.dataSource.count == 0) {
         
         [self creatGuidTouchView];
-//        [self creatHelpGuide];
 
     }
     
@@ -71,7 +71,7 @@
 - (void)creatGuidTouchView{
     
     self.guidView = [[UIView alloc] init];
-    self.guidView.tag = 888;
+    self.guidView.tag = 1888;
     self.guidView.backgroundColor = [UIColor clearColor];
     self.guidView.userInteractionEnabled = YES;
     self.guidView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
@@ -134,11 +134,11 @@
 {
     [self createDataSource];
     if (self.dataSource.count > 0) {
-        UIView * view1 = [self.view viewWithTag:888];
+        UIView * view1 = [self.view viewWithTag:1888];
         if (view1) {
             [view1 removeFromSuperview];
         }
-        UIView * view2 = [[UIApplication sharedApplication].keyWindow viewWithTag:888];
+        UIView * view2 = [[UIApplication sharedApplication].keyWindow viewWithTag:1888];
         if (view2) {
             [view2 removeFromSuperview];
         }
