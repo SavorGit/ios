@@ -116,12 +116,16 @@
 
 + (NSURLSessionDataTask *)getWithURL:(NSString *)urlStr parameters:(NSDictionary *)parameters success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    [self sharedManager].requestSerializer.timeoutInterval = 6.f;
+    [self sharedManager].requestSerializer.timeoutInterval = 15.f;
+    [[self sharedManager].requestSerializer setValue:@"1.0" forHTTPHeaderField:@"version"];
     NSURLSessionDataTask * task = [[self sharedManager] GET:urlStr parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError* error;
         NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject
                                                              options:kNilOptions
                                                                error:&error];
+        if ([json objectForKey:@"projectId"]) {
+            [GlobalData shared].projectId = [json objectForKey:@"projectId"];
+        }
         success(task, json);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         failure(task, error);
@@ -129,20 +133,13 @@
     return task;
 }
 
-+ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type success:(void (^)())success failure:(void (^)())failure
++ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(CGFloat)rotation success:(void (^)())success failure:(void (^)())failure
 {
+    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%lf", urlStr, isThumbnail, name, [GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName], type, rotation];
+    
     BGUploadRequest * request = [[BGUploadRequest alloc] initWithData:data];
     request.mimeType = @"image/jpeg";
     request.fileName = name;
-    
-    [request setValue:name forParamKey:@"imageId"];
-    [request setValue:@"prepare" forParamKey:@"function"];
-    [request setValue:@"2screen" forParamKey:@"action"];
-    [request setValue:@"pic" forParamKey:@"assettype"];
-    [request setValue:@"0" forParamKey:@"play"];
-    [request setIntegerValue:type forParamKey:@"isThumbnail"];
-    [request setValue:[GCCKeyChain load:keychainID] forParamKey:@"deviceId"];
-    [request setValue:[GCCGetInfo getIphoneName] forParamKey:@"deviceName"];
     
     [request sendRequestWithBaseURL:urlStr Progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -198,6 +195,31 @@
     }];
     
     return request;
+}
+
++ (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/vod"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+                                  @"type" : [NSNumber numberWithInteger:type],
+                                  @"name" : name,
+                                  @"deviceName" : [GCCGetInfo getIphoneName],
+                                  @"position" : [NSNumber numberWithFloat:position]};
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
++ (NSURLSessionDataTask *)volumeWithURL:(NSString *)urlStr action:(NSInteger)action success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/volume"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+                                  @"action" : [NSNumber numberWithInteger:action]};
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
 }
 
 + (void)screenDLNAImageWithKeyStr:(NSString *)keyStr WithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock

@@ -53,7 +53,44 @@ typedef NS_ENUM(NSInteger, interactType) {
  */
 + (NSURLSessionDataTask *)getWithURL:(NSString *)urlStr parameters:(NSDictionary *)parameters success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
 
-+ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type success:(void (^)())success failure:(void (^)())failure;
+/**
+ *  点播视频请求
+ *
+ *  @param urlStr     请求地址
+ *  @param name       点播的视频名称
+ *  @param type       点播的视频类型
+ *  @param success    请求成功的回调
+ *  @param failure    请求失败的回调
+ *  @param position   点播视频的初始进度
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
+
+/**
+ *  音量控制请求
+ *
+ *  @param urlStr     请求地址
+ *  @param action     音量控制的动作类型
+ *  @param success    请求成功的回调
+ *  @param failure    请求失败的回调
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)volumeWithURL:(NSString *)urlStr action:(NSInteger)action success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
+
+/**
+ *  投屏图片请求
+ *
+ *  @param urlStr       请求地址
+ *  @param data         投屏的图片数据
+ *  @param name         投屏的图片名称
+ *  @param type         投屏的图片类型
+ *  @param isThumbnail  是否是缩略图
+ *  @param rotation     投屏的图片角度
+ *  @param success      请求成功的回调
+ *  @param failure      请求失败的回调
+ * @return NSURLSessionDataTask对象
+ */
++ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(CGFloat)rotation success:(void (^)())success failure:(void (^)())failure;
 
 + (void)screenDLNAImageWithKeyStr:(NSString *)keyStr WithSuccess:(void(^)())successBlock failure:(void(^)())failureBlock;
 
