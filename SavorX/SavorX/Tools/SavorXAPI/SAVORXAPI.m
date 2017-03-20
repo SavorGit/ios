@@ -82,17 +82,17 @@
     static dispatch_once_t once;
     static AFHTTPSessionManager *manager;
     dispatch_once(&once, ^ {
-        manager = [AFHTTPSessionManager manager];
+        manager = [[AFHTTPSessionManager alloc] init];
         manager.requestSerializer = [AFJSONRequestSerializer serializer];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        [manager.requestSerializer setValue:@"1.0" forHTTPHeaderField:@"version"];
+        manager.requestSerializer.timeoutInterval = 15.f;
     });
     return manager;
 }
 
 + (NSURLSessionDataTask *)postWithURL:(NSString *)urlStr parameters:(NSDictionary *)parameters success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    [self sharedManager].requestSerializer.timeoutInterval = 15.f;
-    
     NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [dict setObject:[GCCKeyChain load:keychainID] forKey:@"deviceId"];
     if ([dict objectForKey:@"function"]) {
@@ -116,8 +116,6 @@
 
 + (NSURLSessionDataTask *)getWithURL:(NSString *)urlStr parameters:(NSDictionary *)parameters success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    [self sharedManager].requestSerializer.timeoutInterval = 15.f;
-    [[self sharedManager].requestSerializer setValue:@"1.0" forHTTPHeaderField:@"version"];
     NSURLSessionDataTask * task = [[self sharedManager] GET:urlStr parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError* error;
         NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject
@@ -133,9 +131,10 @@
     return task;
 }
 
-+ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(CGFloat)rotation success:(void (^)())success failure:(void (^)())failure
+//投屏图片
++ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation success:(void (^)())success failure:(void (^)())failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%lf", urlStr, isThumbnail, name, [GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName], type, rotation];
+    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName], type, rotation];
     
     BGUploadRequest * request = [[BGUploadRequest alloc] initWithData:data];
     request.mimeType = @"image/jpeg";
@@ -197,6 +196,7 @@
     return request;
 }
 
+//点播视频
 + (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     urlStr = [urlStr stringByAppendingString:@"/vod"];
@@ -211,12 +211,74 @@
     return task;
 }
 
+//音量控制
 + (NSURLSessionDataTask *)volumeWithURL:(NSString *)urlStr action:(NSInteger)action success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     urlStr = [urlStr stringByAppendingString:@"/volume"];
     
     NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
-                                  @"action" : [NSNumber numberWithInteger:action]};
+                                  @"action" : [NSNumber numberWithInteger:action],
+                                  @"projectId" : [GlobalData shared].projectId};
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
+//图片旋转
++ (NSURLSessionDataTask *)rotateWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/rotate"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+                                  @"projectId" : [GlobalData shared].projectId};
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
+//视频投屏
++ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position success:(void (^)())success failure:(void (^)())failure
+{
+    urlStr = [NSString stringWithFormat:@"%@/video?deviceId=%@&deviceName=%@", urlStr,[GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName]];
+    
+    NSDictionary * parameters = @{@"mediaPath" : mediaPath,
+                                  @"position" : position};
+    
+    NSURLSessionDataTask * task = [self postWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
+//视频暂停
++ (NSURLSessionDataTask *)pauseVideoWithURL:(NSString *)urlStr success:(void (^)())success failure:(void (^)())failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/pause"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+                                  @"projectId" : [GlobalData shared].projectId};
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
+//视频恢复播放
++ (NSURLSessionDataTask *)resumeVideoWithURL:(NSString *)urlStr success:(void (^)())success failure:(void (^)())failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/resume"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+                                  @"projectId" : [GlobalData shared].projectId};
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
+//视频进度请求
++ (NSURLSessionDataTask *)queryVideoWithURL:(NSString *)urlStr success:(void (^)())success failure:(void (^)())failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/query"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+                                  @"projectId" : [GlobalData shared].projectId};
     
     NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
     return task;
@@ -279,12 +341,12 @@
 + (void)ScreenDemandShouldBackToTV
 {
     if ([GlobalData shared].isBindRD) {
-        NSDictionary *parameters = @{@"function": @"stop",
-                                     @"sessionid": [NSNumber numberWithInt:-1],
-                                     @"reason": [NSNumber numberWithInt:0]};
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+        NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
+        
+        NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+                                      @"projectId" : [GlobalData shared].projectId};
+        
+        [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
@@ -303,18 +365,12 @@
 + (void)ScreenDemandShouldBackToTVWithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
 {
     if ([GlobalData shared].isBindRD) {
-        NSDictionary *parameters = @{@"function": @"stop",
-                                     @"sessionid": [NSNumber numberWithInt:-1],
-                                     @"reason": [NSNumber numberWithInt:0]};
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-            
-            successBlock();
-            
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            failureBlock();
-        }];
+        NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
+        
+        NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+                                      @"projectId" : [GlobalData shared].projectId};
+        
+        [self getWithURL:urlStr parameters:parameters success:successBlock failure:failureBlock];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
             

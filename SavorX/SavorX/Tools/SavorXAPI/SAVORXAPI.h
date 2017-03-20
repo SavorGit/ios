@@ -90,7 +90,56 @@ typedef NS_ENUM(NSInteger, interactType) {
  *  @param failure      请求失败的回调
  * @return NSURLSessionDataTask对象
  */
-+ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(CGFloat)rotation success:(void (^)())success failure:(void (^)())failure;
++ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation success:(void (^)())success failure:(void (^)())failure;
+
+/**
+ *  投屏视频请求
+ *
+ *  @param urlStr       请求地址
+ *  @param mediaPath    投屏的视频地址
+ *  @param position     投屏的初始进度
+ *  @param success      请求成功的回调
+ *  @param failure      请求失败的回调
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position success:(void (^)())success failure:(void (^)())failure;
+
+/**
+ *  视频暂停请求
+ *
+ *  @param urlStr       请求地址
+ *  @param success      请求成功的回调
+ *  @param failure      请求失败的回调
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)pauseVideoWithURL:(NSString *)urlStr success:(void (^)())success failure:(void (^)())failure;
+
+/**
+ *  视频恢复播放请求
+ *
+ *  @param urlStr       请求地址
+ *  @param success      请求成功的回调
+ *  @param failure      请求失败的回调
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)resumeVideoWithURL:(NSString *)urlStr success:(void (^)())success failure:(void (^)())failure;
+
+/**
+ *  视频进度请求
+ *
+ *  @param urlStr       请求地址
+ *  @param success      请求成功的回调
+ *  @param failure      请求失败的回调
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)queryVideoWithURL:(NSString *)urlStr success:(void (^)())success failure:(void (^)())failure;
+
+/**
+ *  旋转图片请求
+ *
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)rotateWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
 
 + (void)screenDLNAImageWithKeyStr:(NSString *)keyStr WithSuccess:(void(^)())successBlock failure:(void(^)())failureBlock;
 

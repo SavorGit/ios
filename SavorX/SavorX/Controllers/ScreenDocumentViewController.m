@@ -164,11 +164,11 @@
     NSString * keyStr = [NSString stringWithFormat:@"savorPhoto%ld.png", index++];
         if ([GlobalData shared].isBindRD) {
             [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
-                [SAVORXAPI postImageWithURL:STBURL data:minData name:keyStr type:1 success:^{
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 success:^{
                     if (successBlock) {
                         successBlock();
                     }
-                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:keyStr type:0 success:^{
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 success:^{
                         
                     } failure:^{
                         
