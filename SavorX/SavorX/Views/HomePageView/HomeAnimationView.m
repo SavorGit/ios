@@ -237,41 +237,6 @@
 {
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"准备扫描二维码"];
     
-    __block BOOL hasPush = NO;
-    __block NSInteger count = 0;
-    
-    NSDictionary * dict = @{@"function" : @"showQRCode"};
-    [SAVORXAPI postWithURL:@"http://192.168.43.1:8080" parameters:dict success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        [hud hideAnimated:NO];
-        if ([[result objectForKey:@"result"] integerValue] == 0) {
-            ScanQRCodeViewController * scan = [[ScanQRCodeViewController alloc] init];
-            scan.delegate = self;
-            
-            if (!hasPush) {
-                hasPush = YES;
-                 self.isFirstCount++;
-                if (self.isFirstCount == 1) {
-                    scan.isHelp = YES;
-                }else{
-                    scan.isHelp = NO;
-                }
-                [[Helper getRootNavigationController] pushViewController:scan animated:YES];
-            }
-        }
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        count++;
-        if (count >= 2) {
-            if (error.code == -1009 || error.code == -1001) {
-                [hud hideAnimated:NO];
-                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
-            }else{
-                [hud hideAnimated:NO];
-                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
-            }
-        }
-    }];
-    
     NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
     [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         [hud hideAnimated:NO];
@@ -279,29 +244,23 @@
         if(code == 10000){
             ScanQRCodeViewController * scan = [[ScanQRCodeViewController alloc] init];
             scan.delegate = self;
-            if (!hasPush) {
-                self.isFirstCount++;
-                hasPush = YES;
-                if (self.isFirstCount == 1) {
-                    scan.isHelp = YES;
-                }else{
-                    scan.isHelp = NO;
-                }
-                [[Helper getRootNavigationController] pushViewController:scan animated:YES];
+            self.isFirstCount++;
+            if (self.isFirstCount == 1) {
+                scan.isHelp = YES;
+            }else{
+                scan.isHelp = NO;
             }
+            [[Helper getRootNavigationController] pushViewController:scan animated:YES];
         }
         //
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         //
-        count++;
-        if (count >= 2) {
-            if (error.code == -1009 || error.code == -1001) {
-                [hud hideAnimated:NO];
-                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
-            }else{
-                [hud hideAnimated:NO];
-                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
-            }
+        if (error.code == -1009 || error.code == -1001) {
+            [hud hideAnimated:NO];
+            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
+        }else{
+            [hud hideAnimated:NO];
+            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
         }
     }];
 }
@@ -311,39 +270,17 @@
     
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"准备扫描二维码"];
     
-    __block NSInteger count = 0;
-    
-    NSDictionary * dict = @{@"function" : @"showQRCode"};
-    [SAVORXAPI postWithURL:@"http://192.168.43.1:8080" parameters:dict success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        [hud hideAnimated:NO];
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        count++;
-        if (count >= 2) {
-            if (error.code == -1009 || error.code == -1001) {
-                [hud hideAnimated:NO];
-                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
-            }else{
-                [hud hideAnimated:NO];
-                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
-            }
-        }
-    }];
-    
     NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
     [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         [hud hideAnimated:NO];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         //
-        count++;
-        if (count >= 2) {
-            if (error.code == -1009 || error.code == -1001) {
-                [hud hideAnimated:NO];
-                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
-            }else{
-                [hud hideAnimated:NO];
-                [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
-            }
+        if (error.code == -1009 || error.code == -1001) {
+            [hud hideAnimated:NO];
+            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
+        }else{
+            [hud hideAnimated:NO];
+            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
         }
     }];
     

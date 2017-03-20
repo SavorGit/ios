@@ -78,6 +78,15 @@
 + (void)showTextHUDwithTitle:(NSString *)title;
 
 /**
+ *  显示一个纯文本的提示框
+ *
+ *  @param title 显示的标题
+ *  @param delay 显示的时长
+ *
+ */
++ (void)showTextHUDwithTitle:(NSString *)title delay:(CGFloat)delay;
+
+/**
  *  显示一个长时间的纯文本的提示框
  *
  *  @param view  需要显示的界面

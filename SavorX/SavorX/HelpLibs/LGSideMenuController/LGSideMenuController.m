@@ -3056,7 +3056,30 @@ rightViewBackgroundImageInitialScale = _rightViewBackgroundImageInitialScale;
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     //判断如果是文档展示页就返回镜像，左，右三个方向
-    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[ScreenDocumentViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]]) {
+    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[ScreenDocumentViewController class]]){
+        
+        ScreenDocumentViewController * document = (ScreenDocumentViewController *)[Helper getRootNavigationController].topViewController;
+        if (document.isLockScreen) {
+            switch (document.orientation) {
+                case UIInterfaceOrientationPortrait:
+                    return UIInterfaceOrientationMaskPortrait;
+                    break;
+                    
+                case UIInterfaceOrientationLandscapeLeft:
+                    return UIInterfaceOrientationMaskLandscapeLeft;
+                    break;
+                    
+                case UIInterfaceOrientationLandscapeRight:
+                    return UIInterfaceOrientationMaskLandscapeRight;
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }else if ([[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]]) {
         return UIInterfaceOrientationMaskAllButUpsideDown;
     }else if ([UIApplication sharedApplication].keyWindow.subviews.count > 1){
         if ([[UIApplication sharedApplication].keyWindow.subviews[1] isKindOfClass:[VideoGuidedTwoDimensionalCode class]] && [[Helper getRootNavigationController].topViewController isKindOfClass:[ScanQRCodeViewController class]]) {

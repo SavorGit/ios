@@ -359,8 +359,9 @@
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
-    }else if ([GlobalData shared].scene == RDSceneHaveRDBox || [GlobalData shared].isBindRD == NO) {
+    }else if ([GlobalData shared].scene == RDSceneHaveRDBox && [GlobalData shared].isBindRD == NO) {
         [[HomeAnimationView animationView] scanQRCode];
+        [MBProgressHUD showTextHUDwithTitle:@"扫码连接电视, 即可在电视上点播" delay:1.f];
     }else{
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
         //如果不是绑定状态

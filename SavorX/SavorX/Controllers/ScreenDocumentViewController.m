@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) UIWebView * webView; //文件浏览控件
 @property (nonatomic, strong) NSURLSessionDataTask * task; //记录当前最后一次请求任务
+@property (nonatomic, strong) UIButton * lockButton;
 
 @property (nonatomic, assign) BOOL isScreen;
 
@@ -33,6 +34,7 @@
 
 - (void)createUI
 {
+    self.orientation = [UIApplication sharedApplication].statusBarOrientation;
     self.view.backgroundColor = VCBackgroundColor;
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"] style:UIBarButtonItemStylePlain target:self action:@selector(PageBack)];
@@ -67,10 +69,34 @@
         [SAVORXAPI showConnetToTVAlert];
         self.isScreen = NO;
     }
+    
+    self.lockButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"unLockFile"] forState:UIControlStateNormal];
+    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"lockFile"] forState:UIControlStateSelected];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(lockButtonDidClicked)];
+    tap.numberOfTapsRequired = 1;
+    [self.lockButton addGestureRecognizer:tap];
+    [self.view addSubview:self.lockButton];
+    [self.lockButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(32, 32));
+        make.bottom.mas_equalTo(-30);
+        make.right.mas_equalTo(-30);
+    }];
 
+    [self.navigationController.barHideOnTapGestureRecognizer requireGestureRecognizerToFail:tap];
     //监听用户手机屏幕方向变化
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ApplicationDidBindToDevice) name:RDDidBindDeviceNotification object:nil];
+}
+
+- (void)lockButtonDidClicked
+{
+    if (self.lockButton.selected) {
+        self.isLockScreen = NO;
+    }else{
+        self.isLockScreen = YES;
+    }
+    self.lockButton.selected = !self.lockButton.selected;
 }
 
 - (void)ApplicationDidBindToDevice
@@ -119,6 +145,19 @@
             [self screenButtonDidClickedWithSuccess:nil failure:nil];
         });
     }
+    
+    UIInterfaceOrientation  orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (orientation == UIInterfaceOrientationPortrait) {
+        self.orientation = orientation;
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+        [self.navigationController setHidesBarsOnTap:NO];
+    }else if (orientation == UIInterfaceOrientationLandscapeLeft ||
+              orientation == UIInterfaceOrientationLandscapeRight){
+        self.orientation = orientation;
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+        [self.navigationController setHidesBarsOnTap:YES];
+    }
+    
 }
 
 - (void)resetCurrentItemWithPath:(NSString *)path
@@ -241,12 +280,14 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.navigationController setHidesBarsOnTap:NO];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     if (self.isScreen) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self screenButtonDidClickedWithSuccess:^{
@@ -265,18 +306,14 @@
     }
 }
 
-// 网页加载完成
-//- (void)webViewDidFinishLoad:(UIWebView *)webView {
-//    
-//    if (!webView.isLoading) {
-//        // 获得点击图片，回传给缩略图
-//        UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
-//        [HomeAnimationView animationView].currentImage = currentWebImage;
-//        if (self.isScreen == YES) {
-//            [[HomeAnimationView animationView] startScreenWithViewController:self];
-//        }
-//    }
-//}
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSURL * requestURL = [request URL];
+    if ([[requestURL scheme] isEqualToString: @"http"] || [[requestURL scheme] isEqualToString:@"https"]) {
+        return NO;
+    }
+    return YES;
+}
 
 //浏览滑动停止的时候
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView

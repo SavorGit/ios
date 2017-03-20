@@ -13,6 +13,9 @@
  */
 @interface ScreenDocumentViewController : BaseViewController
 
+@property (nonatomic, assign) UIInterfaceOrientation orientation;
+@property (nonatomic, assign) BOOL isLockScreen;
+
 @property (nonatomic, strong) NSString * path; //投屏文档所在路径
 
 //重置条目
