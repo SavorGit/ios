@@ -55,16 +55,9 @@
     
     NSString * videoUrl = [NSString stringWithFormat:@"video?%@", [filePath lastPathComponent]];
     NSString *asseturlStr = [NSString stringWithFormat:@"%@%@", [HTTPServerManager getCurrentHTTPServerIP], videoUrl];
+    
     if ([GlobalData shared].isBindRD) {
-        NSDictionary *parameters = @{@"function": @"prepare",
-                                     @"action": @"2screen",
-                                     @"assettype": @"video",
-                                     @"asseturl": [asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                                     @"assetname": [filePath lastPathComponent],
-                                     @"play": @"0"};
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:NO];
-            
+        [SAVORXAPI postVideoWithURL:STBURL mediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
                 video.videoUrl = videoUrl;
@@ -77,7 +70,6 @@
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
-            
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:NO];
         }];

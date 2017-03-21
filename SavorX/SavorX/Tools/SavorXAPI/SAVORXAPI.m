@@ -93,20 +93,16 @@
 
 + (NSURLSessionDataTask *)postWithURL:(NSString *)urlStr parameters:(NSDictionary *)parameters success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithDictionary:parameters];
-    [dict setObject:[GCCKeyChain load:keychainID] forKey:@"deviceId"];
-    if ([dict objectForKey:@"function"]) {
-        if ([[dict objectForKey:@"function"] isEqualToString:@"prepare"]) {
-            [dict setObject:[GCCGetInfo getIphoneName] forKey:@"deviceName"];
-        }
-    }
-    parameters = [NSDictionary dictionaryWithDictionary:dict];
+    urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     NSURLSessionDataTask * task = [[self sharedManager] POST:urlStr parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError* error;
         NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject
                                                              options:kNilOptions
                                                                error:&error];
+        if ([json objectForKey:@"projectId"]) {
+            [GlobalData shared].projectId = [json objectForKey:@"projectId"];
+        }
         success(task, json);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         failure(task, error);
@@ -116,6 +112,8 @@
 
 + (NSURLSessionDataTask *)getWithURL:(NSString *)urlStr parameters:(NSDictionary *)parameters success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
+    urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSURLSessionDataTask * task = [[self sharedManager] GET:urlStr parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError* error;
         NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseObject
@@ -132,17 +130,24 @@
 }
 
 //投屏图片
-+ (BGNetworkRequest *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation success:(void (^)())success failure:(void (^)())failure
++ (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation success:(void (^)())success failure:(void (^)())failure
 {
     urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName], type, rotation];
     
-    BGUploadRequest * request = [[BGUploadRequest alloc] initWithData:data];
-    request.mimeType = @"image/jpeg";
-    request.fileName = name;
+    urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    [request sendRequestWithBaseURL:urlStr Progress:^(NSProgress * _Nonnull uploadProgress) {
+    NSURLSessionDataTask * task = [[self sharedManager] POST:urlStr parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:data name:@"fileUpload" fileName:name mimeType:@"image/jpeg"];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
         
-    } success:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSError* error;
+        NSDictionary* response = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                             options:kNilOptions
+                                                               error:&error];
+        if ([response objectForKey:@"projectId"]) {
+            [GlobalData shared].projectId = [response objectForKey:@"projectId"];
+        }
         
         if ([[response objectForKey:@"result"] integerValue] == 0) {
             if (success) {
@@ -163,37 +168,12 @@
                 failure();
             }
         }
-        
-    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
-        if ([[response objectForKey:@"result"] integerValue] == 0) {
-            if (success) {
-                success();
-            }
-        }else if ([[response objectForKey:@"result"] integerValue] == 2) {
-            
-        }else{
-            if (failure) {
-                
-                RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:[response objectForKey:@"info"]];
-                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
-                    
-                } bold:YES];
-                [alert addActions:@[action]];
-                [alert show];
-                
-                failure();
-            }
-        }
-        
-    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        if (failure) {
-            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-            failure();
-        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+        failure();
     }];
     
-    return request;
+    return task;
 }
 
 //点播视频
@@ -237,7 +217,7 @@
 }
 
 //视频投屏
-+ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position success:(void (^)())success failure:(void (^)())failure
++ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     urlStr = [NSString stringWithFormat:@"%@/video?deviceId=%@&deviceName=%@", urlStr,[GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName]];
     
@@ -249,7 +229,7 @@
 }
 
 //视频暂停
-+ (NSURLSessionDataTask *)pauseVideoWithURL:(NSString *)urlStr success:(void (^)())success failure:(void (^)())failure
++ (NSURLSessionDataTask *)pauseVideoWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     urlStr = [urlStr stringByAppendingString:@"/pause"];
     
@@ -261,7 +241,7 @@
 }
 
 //视频恢复播放
-+ (NSURLSessionDataTask *)resumeVideoWithURL:(NSString *)urlStr success:(void (^)())success failure:(void (^)())failure
++ (NSURLSessionDataTask *)resumeVideoWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     urlStr = [urlStr stringByAppendingString:@"/resume"];
     
@@ -272,8 +252,21 @@
     return task;
 }
 
-//视频进度请求
-+ (NSURLSessionDataTask *)queryVideoWithURL:(NSString *)urlStr success:(void (^)())success failure:(void (^)())failure
+//视频设置进度请求
++ (NSURLSessionDataTask *)seekVideoWithURL:(NSString *)urlStr position:(NSString *)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/seek"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+                                  @"projectId" : [GlobalData shared].projectId,
+                                  @"position" : position};
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
+//视频获取进度请求
++ (NSURLSessionDataTask *)queryVideoWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     urlStr = [urlStr stringByAppendingString:@"/query"];
     
@@ -347,7 +340,7 @@
                                       @"projectId" : [GlobalData shared].projectId};
         
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
         }];
@@ -370,7 +363,10 @@
         NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
                                       @"projectId" : [GlobalData shared].projectId};
         
-        [self getWithURL:urlStr parameters:parameters success:successBlock failure:failureBlock];
+        [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            successBlock();
+        } failure:failureBlock];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
             

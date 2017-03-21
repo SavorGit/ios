@@ -399,9 +399,8 @@
         if (self.task) {
             [self.task cancel];
         }
-        NSString *whatstr = [NSString stringWithFormat:@"pos@%ld",_model.cid];
-        NSDictionary *parameters = @{@"function": @"query",@"what":whatstr};
-        self.task = [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        
+        [SAVORXAPI queryVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             NSInteger code = [[result objectForKey:@"result"] integerValue];
             if (code == 0) {
                 CGFloat posFloat = [[result objectForKey:@"pos"] floatValue]/1000;
@@ -419,14 +418,12 @@
                 [self.timer invalidate];
                 self.timer = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                NSLog(@"---服务器要我更新播放进度了，我要退出了---");
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
         }];
     }else if ([GlobalData shared].isBindDLNA){
         [[GCCUPnPManager defaultManager] getPlayProgressSuccess:^(NSString *totalDuration, NSString *currentDuration, float progress) {
-            NSLog(@"*******%lf, %lf", progress, 1 - 1 / self.playSilder.maximumValue);
             if (progress >= 1 - 1 / self.playSilder.maximumValue) {
                 self.minimumLabel.text = @"00:00";
                 self.playSilder.value = 0;
@@ -439,7 +436,6 @@
                 [self.timer invalidate];
                 self.timer = nil;
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                 NSLog(@"---服务器要我更新播放进度了，我要退出了dlna---");
             }else{
                 CGFloat posFloat = [[GCCUPnPManager defaultManager] timeIntegerFromString:totalDuration] * progress;
                 [self.playSilder setValue:posFloat];
@@ -484,7 +480,21 @@
             [self restartVod];
             return;
         }
-        if ([GlobalData shared].isBindDLNA) {
+        if ([GlobalData shared].isBindRD) {
+            [SAVORXAPI resumeVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                if ([[result objectForKey:@"result"] integerValue] != 0) {
+                    [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                    self.playBtn.selected = !self.playBtn.selected;
+                    [self changeTimerWithPlayStatus];
+                }
+                self.isHandle = NO;
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+                self.playBtn.selected = !self.playBtn.selected;
+                [self changeTimerWithPlayStatus];
+                self.isHandle = NO;
+            }];
+        }else if ([GlobalData shared].isBindDLNA) {
             [[GCCUPnPManager defaultManager] playSuccess:^{
                 self.isHandle = NO;
             } failure:^{
@@ -495,11 +505,24 @@
             }];
             return;
         }
-        parameters = @{@"function": @"play",
-                       @"rate": @"1"};
     }else{
         [self.timer setFireDate:[NSDate distantFuture]];
-        if ([GlobalData shared].isBindDLNA) {
+        
+        if ([GlobalData shared].isBindRD) {
+            [SAVORXAPI pauseVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                if ([[result objectForKey:@"result"] integerValue] != 0) {
+                    [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                    self.playBtn.selected = !self.playBtn.selected;
+                    [self changeTimerWithPlayStatus];
+                }
+                self.isHandle = NO;
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+                self.playBtn.selected = !self.playBtn.selected;
+                [self changeTimerWithPlayStatus];
+                self.isHandle = NO;
+            }];
+        }else if ([GlobalData shared].isBindDLNA) {
             [[GCCUPnPManager defaultManager] pauseSuccess:^{
                 self.isHandle = NO;
             } failure:^{
@@ -510,22 +533,7 @@
             }];
             return;
         }
-        parameters = @{@"function": @"play",
-                       @"rate": @"0"};
     }
-    [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        if ([[result objectForKey:@"result"] integerValue] != 0) {
-            [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-            self.playBtn.selected = !self.playBtn.selected;
-            [self changeTimerWithPlayStatus];
-        }
-        self.isHandle = NO;
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
-        self.playBtn.selected = !self.playBtn.selected;
-        [self changeTimerWithPlayStatus];
-        self.isHandle = NO;
-    }];
 }
 
 - (void)changeTimerWithPlayStatus
@@ -563,9 +571,7 @@
                 value = [NSString stringWithFormat:@"%0.0f",self.playSilder.value];
             }
             
-            NSDictionary *parameters = @{@"function": @"seek_to",
-                                         @"absolutepos": value};
-            [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            [SAVORXAPI seekVideoWithURL:STBURL position:value success:^(NSURLSessionDataTask *task, NSDictionary *result) {
                 if ([[result objectForKey:@"result"] integerValue] == 0) {
                     [self.timer setFireDate:[NSDate distantPast]];
                 }else{
@@ -590,12 +596,8 @@
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     self.screenButton.enabled = NO;
     if ([GlobalData shared].isBindRD) {
-        NSDictionary *parameters = @{@"function": @"prepare",
-                                     @"action": @"vod",
-                                     @"assettype": @"video",
-                                     @"assetname": self.model.name,
-                                     @"play": @"0"};
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        
+        [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 [[HomeAnimationView animationView] startScreenWithViewController:self];
                 self.isPlayEnd = NO;
@@ -615,8 +617,8 @@
             [hud hideAnimated:NO];
             [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
             self.isHandle = NO;
-            NSLog(@"我播放失败了----------");
         }];
+        
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
             [[HomeAnimationView animationView] startScreenWithViewController:self];
@@ -634,7 +636,6 @@
             [hud hideAnimated:NO];
             [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
             self.isHandle = NO;
-            NSLog(@"我播放失败了----------");
 
         }];
     }
@@ -683,13 +684,8 @@
         action = 3;
     }
     if ([GlobalData shared].isBindRD) {
-        NSString *volumeType = [NSString stringWithFormat:@"%ld",action];
         
-        NSDictionary *parameters = @{@"function": @"volume",
-                                     @"action": volumeType
-                                     };
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [SAVORXAPI volumeWithURL:STBURL action:action success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 button.selected = !button.isSelected;
                 if (action == 3 || action == 4) {
@@ -707,8 +703,8 @@
             if (button.tag == 101) {
                 button.enabled = YES;
             }
-            
         }];
+        
     }else if ([GlobalData shared].isBindDLNA) {
         NSInteger volume;
         switch (action) {

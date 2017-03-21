@@ -101,14 +101,7 @@
     if ([GlobalData shared].isBindRD && self.model.canPlay == 1) {
         //如果是绑定状态
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-        NSDictionary *parameters = @{@"function": @"prepare",
-                                     @"action": @"vod",
-                                     @"assettype": @"video",
-                                     @"assetname": self.model.name,
-                                     @"vodType"  : [NSNumber numberWithInt:1],
-                                     @"play": @"0"};
-        
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 if (self.model.type == 3) {
                     DemandViewController *view = [[DemandViewController alloc] init];

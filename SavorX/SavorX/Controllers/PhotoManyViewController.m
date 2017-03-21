@@ -228,10 +228,7 @@
 - (void)rotateImage
 {
     if ([GlobalData shared].isBindRD && self.isScreen) {
-        NSDictionary *parameters = @{@"function": @"rotate",
-                                     @"rotatevalue": [NSNumber numberWithInt:90],
-                                     @"sessionid": [NSNumber numberWithInt:-1]};
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI rotateWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0){
                 [self currentCellImageShouldRotate];
             }else{

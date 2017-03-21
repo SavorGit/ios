@@ -217,9 +217,7 @@
     }
     
     if ([GlobalData shared].isBindRD) {
-        NSDictionary *parameters = @{@"function": @"query",
-                                     @"what": @"pos@"};
-        self.task = [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI queryVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             NSInteger code = [[result objectForKey:@"result"] integerValue];
             if (code == 0) {
                 CGFloat posFloat = [[result objectForKey:@"pos"] floatValue]/1000;
@@ -235,6 +233,7 @@
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
         }];
+        
     }else if ([GlobalData shared].isBindDLNA){
         [[GCCUPnPManager defaultManager] getPlayProgressSuccess:^(NSString *totalDuration, NSString *currentDuration, float progress) {
             if (progress >= 1 - 1 / self.headBackView.palySlider.maximumValue) {
@@ -295,10 +294,8 @@
             }else{
                 value = [NSString stringWithFormat:@"%0.0f",self.headBackView.palySlider.value];
             }
-            NSDictionary *parameters = @{@"function": @"seek_to",
-                                         @"sessionid": [NSNumber numberWithInt:1],
-                                         @"absolutepos": value};
-            [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            
+            [SAVORXAPI seekVideoWithURL:STBURL position:value success:^(NSURLSessionDataTask *task, NSDictionary *result) {
                 if ([[result objectForKey:@"result"] integerValue] == 0) {
                     
                     [self.timer setFireDate:[NSDate distantPast]];
@@ -315,6 +312,7 @@
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
             }];
+            
         }else if([GlobalData shared].isBindDLNA){
             [[GCCUPnPManager defaultManager] seekProgressTo:(NSInteger)self.headBackView.palySlider.value success:^{
                 [self.timer setFireDate:[NSDate distantPast]];
@@ -341,7 +339,30 @@
             [self restartVod];
             return;
         }
-        if ([GlobalData shared].isBindDLNA) {
+        
+        if ([GlobalData shared].isBindRD) {
+            [SAVORXAPI resumeVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                if ([[result objectForKey:@"result"] integerValue] != 0) {
+                    [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                    self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
+                    [self changeTimerWithPlayStatus];
+                }else{
+                    button.selected = !button.selected;
+                    if(!button.selected){
+                        
+                        [button setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
+                    }
+                }
+                self.isHandle = NO;
+                button.enabled = YES;
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+                self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
+                [self changeTimerWithPlayStatus];
+                self.isHandle = NO;
+                button.enabled = YES;
+            }];
+        }else if ([GlobalData shared].isBindDLNA) {
             [[GCCUPnPManager defaultManager] playSuccess:^{
                 button.selected = !button.selected;
                 if(!button.selected){
@@ -359,12 +380,32 @@
             }];
             return;
         }
-        parameters = @{@"function": @"play",
-                       @"sessionid": [NSNumber numberWithInt:1],
-                       @"rate": @"1"};
     }else{
         [self.timer setFireDate:[NSDate distantFuture]];
-        if ([GlobalData shared].isBindDLNA) {
+        
+        if ([GlobalData shared].isBindRD) {
+            [SAVORXAPI pauseVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                if ([[result objectForKey:@"result"] integerValue] != 0) {
+                    [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                    self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
+                    [self changeTimerWithPlayStatus];
+                }else{
+                    button.selected = !button.selected;
+                    if(!button.selected){
+                        
+                        [button setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
+                    }
+                }
+                self.isHandle = NO;
+                button.enabled = YES;
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+                self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
+                [self changeTimerWithPlayStatus];
+                self.isHandle = NO;
+                button.enabled = YES;
+            }];
+        }else if ([GlobalData shared].isBindDLNA) {
             [[GCCUPnPManager defaultManager] pauseSuccess:^{
                 button.selected = !button.selected;
                 if(!button.selected){
@@ -382,32 +423,7 @@
             }];
             return;
         }
-        parameters = @{@"function": @"play",
-                       @"sessionid": [NSNumber numberWithInt:1],
-                       @"rate": @"0"};
     }
-    [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        if ([[result objectForKey:@"result"] integerValue] != 0) {
-            [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-            self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
-            [self changeTimerWithPlayStatus];
-        }else{
-            button.selected = !button.selected;
-            if(!button.selected){
-                
-                [button setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
-            }
-        }
-        self.isHandle = NO;
-        button.enabled = YES;
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
-        self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
-        [self changeTimerWithPlayStatus];
-        self.isHandle = NO;
-        button.enabled = YES;
-    }];
-    
 }
 
 //重置当前播放条目
@@ -420,46 +436,60 @@
     if ([GlobalData shared].isBindRD) {
         NSDictionary *parameters;
         if (self.model) {
-            parameters = @{@"function": @"prepare",
-                           @"action": @"vod",
-                           @"assettype": @"video",
-                           @"assetname": self.model.name,
-                           @"vodType"  : [NSNumber numberWithInt:self.type],
-                           @"play": @"0"};
+            
+            [SAVORXAPI demandWithURL:STBURL name:self.model.name type:self.type position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                if ([[result objectForKey:@"result"] integerValue] == 0) {
+                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    self.isPlayEnd = NO;
+                    self.footerView.videoPlayButton.selected = NO;
+                    [self createTimer];
+                    [self.tableView reloadData];
+                }else{
+                    self.footerView.videoPlayButton.selected = YES;
+                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+                }
+                self.isHandle = NO;
+                self.footerView.videoPlayButton.enabled = YES;
+                if(self.footerView.videoPlayButton.selected){
+                    
+                    [self.footerView.videoPlayButton setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
+                }
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
+                self.isHandle = NO;
+                self.footerView.videoPlayButton.selected = YES;
+                self.footerView.videoPlayButton.enabled = YES;
+            }];
         }else{
             asseturlStr = [NSString stringWithFormat:@"%@%@", [HTTPServerManager getCurrentHTTPServerIP], self.videoUrl];
-            parameters = @{@"function": @"prepare",
-                           @"action": @"2screen",
-                           @"assettype": @"video",
-                           @"asseturl": [asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                           @"assetname": [Helper getVideoNameWithPath:self.videoUrl],
-                           @"play" : @"0"};
-        }
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if ([[result objectForKey:@"result"] integerValue] == 0) {
-                [[HomeAnimationView animationView] startScreenWithViewController:self];
-                self.isPlayEnd = NO;
-               self.footerView.videoPlayButton.selected = NO;
-                [self createTimer];
-                [self.tableView reloadData];
-            }else{
+            [SAVORXAPI postVideoWithURL:STBURL mediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                if ([[result objectForKey:@"result"] integerValue] == 0) {
+                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    self.isPlayEnd = NO;
+                    self.footerView.videoPlayButton.selected = NO;
+                    [self createTimer];
+                    [self.tableView reloadData];
+                }else{
+                    self.footerView.videoPlayButton.selected = YES;
+                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+                }
+                self.isHandle = NO;
+                self.footerView.videoPlayButton.enabled = YES;
+                if(self.footerView.videoPlayButton.selected){
+                    
+                    [self.footerView.videoPlayButton setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
+                }
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
+                self.isHandle = NO;
                 self.footerView.videoPlayButton.selected = YES;
-                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-            }
-            self.isHandle = NO;
-            self.footerView.videoPlayButton.enabled = YES;
-            if(self.footerView.videoPlayButton.selected){
-                
-                [self.footerView.videoPlayButton setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
-            }
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
-            self.isHandle = NO;
-            self.footerView.videoPlayButton.selected = YES;
-            self.footerView.videoPlayButton.enabled = YES;
-        }];
+                self.footerView.videoPlayButton.enabled = YES;
+            }];
+        }
     }else if ([GlobalData shared].isBindDLNA) {
         if (self.model) {
             asseturlStr = [self.model.videoURL stringByAppendingString:@".f20.mp4"];
@@ -517,12 +547,7 @@
         self.footerView.muteBtn.enabled = NO;
     }
     if ([GlobalData shared].isBindRD) {
-        NSString *volumeType = [NSString stringWithFormat:@"%ld",action];
-        
-        NSDictionary *parameters = @{@"function": @"volume",
-                                     @"action": volumeType
-                                     };
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI volumeWithURL:STBURL action:action success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 if (action == 1 || action == 2) {
@@ -544,7 +569,6 @@
             }
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
-            
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         NSInteger volume;

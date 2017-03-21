@@ -245,14 +245,7 @@
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         //如果是绑定状态
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-        NSDictionary *parameters = @{@"function": @"prepare",
-                                     @"action": @"vod",
-                                     @"assettype": @"video",
-                                     @"vodType"  : [NSNumber numberWithInt:1],
-                                     @"assetname": model.name,
-                                     @"play": @"0"};
-        
-        [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 
                 // 获得当前视频图片，回传

@@ -120,7 +120,7 @@
                                          @"assetname": keyStr,
                                          @"play": @"0"};
             [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [hud hideAnimated:NO];
                 if ([[result objectForKey:@"result"] integerValue] == 0) {
                     [[HomeAnimationView animationView] startScreenWithViewController:third];
                     [self.navigationController pushViewController:third animated:YES];
@@ -129,7 +129,7 @@
                     [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
                 }
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [hud hideAnimated:NO];
                 [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
             }];
         }];
