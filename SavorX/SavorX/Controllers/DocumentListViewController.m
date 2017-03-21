@@ -54,7 +54,7 @@
 - (void)creatHelpGuide{
     
     VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
-    [vgVC showScreenProjectionTitle:@"documentGuide" block:^(NSInteger selectIndex) {
+    [vgVC showScreenProjectionTitle:@"documentGuide" fromStyle:FromDocumentGuide block:^(NSInteger selectIndex) {
         
         if (self.dataSource.count == 0) {
             if (self.guidView) {

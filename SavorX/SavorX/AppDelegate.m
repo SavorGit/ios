@@ -25,6 +25,7 @@
 #import "LeftViewController.h"
 #import "WMPageController.h"
 #import "HomeAnimationView.h"
+#import "VideoLauchMovieViewController.h"
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate>
 
@@ -160,6 +161,7 @@
 //启动程序欢迎页设置
 - (void)createLaunch
 {
+    
     NSString *imagePath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
     NSData *picData = [NSData dataWithContentsOfFile:imagePath];
     UIImage *launchImage = [UIImage imageWithData:picData];
@@ -167,45 +169,60 @@
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:HasLaunched] boolValue];
     if (temp) {
         
-        //设置一个图片;
-        UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        niceView.tag = 1234;
-        UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-        [niceView addSubview:blackView];
-        
-        UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-
-        if (launchImage) {
-            niceView.image = launchImage;
+        BOOL isLauchImage =  YES;
+        if (!isLauchImage) {
+            
+            VideoLauchMovieViewController *vc = [[VideoLauchMovieViewController alloc] init];
+            self.window.rootViewController = vc;
+            vc.videoUrlString = @"";
+            vc.lauchClickedBack = ^(NSDictionary *parmDic){
+                LGSideMenuController * sliderVC = [self createRootViewController];
+                self.window.rootViewController = sliderVC;
+                [self monitorInternet]; //监控网络状态
+            };
         }else{
-            niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
+                LGSideMenuController * sliderVC = [self createRootViewController];
+                self.window.rootViewController = sliderVC;
         }
         
-        logoView.image = [Helper getLaunchImage];
-        
-        
-        LGSideMenuController * sliderVC = [self createRootViewController];
-        
-        self.window.rootViewController = sliderVC;
         [self.window makeKeyAndVisible];
         
-        //添加到场景
-        [self.window addSubview:niceView];
-        [self.window addSubview:logoView];
-        
-        [UIView animateWithDuration:1.5 animations:^{
-            [niceView setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:1.2 animations:^{
-                [niceView setAlpha:0];
-                [logoView setAlpha:0];
+        if (isLauchImage) {
+            
+            //设置一个图片;
+            UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            niceView.tag = 1234;
+            UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+            [niceView addSubview:blackView];
+            if (launchImage) {
+                niceView.image = launchImage;
+            }else{
+                niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
+            }
+            
+            UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            logoView.image = [Helper getLaunchImage];
+            
+            //添加到场景
+            [self.window addSubview:niceView];
+            [self.window addSubview:logoView];
+            
+            [UIView animateWithDuration:1.5 animations:^{
+                [niceView setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
             } completion:^(BOOL finished) {
-                [niceView removeFromSuperview];
-                [logoView removeFromSuperview];
-                [self monitorInternet]; //监控网络状态
+                [UIView animateWithDuration:1.2 animations:^{
+                    [niceView setAlpha:0];
+                    [logoView setAlpha:0];
+                } completion:^(BOOL finished) {
+                    [niceView removeFromSuperview];
+                    [logoView removeFromSuperview];
+                    [self monitorInternet]; //监控网络状态
+                }];
             }];
-        }];
+
+        }
+        
     }else{
         
         //设置一个图片;
@@ -213,14 +230,13 @@
         UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
         [niceView addSubview:blackView];
-        
-        UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        
         if (launchImage) {
             niceView.image = launchImage;
         }else{
             niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
         }
+        
+        UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         logoView.image = [Helper getLaunchImage];
         //添加到场景
         [self.window addSubview:niceView];

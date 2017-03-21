@@ -59,7 +59,7 @@
     
     [self.scan stop];
     VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
-    [vgVC showScreenProjectionTitle:@"scanGuide" block:^(NSInteger selectIndex) {
+    [vgVC showScreenProjectionTitle:@"scanGuide" fromStyle:FromScanGuide block:^(NSInteger selectIndex) {
 //        [[HomeAnimationView animationView] reCallCode];
         [self.scan start];
     }];
