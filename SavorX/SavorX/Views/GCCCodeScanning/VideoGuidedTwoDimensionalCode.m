@@ -42,7 +42,7 @@
     return self;
 }
 
-- (instancetype)showScreenProjectionTitle:(NSString *)guidType block:(ScreenProjectionSelectViewSelectBlock)selectBlock{
+- (instancetype)showScreenProjectionTitle:(NSString *)guidType fromStyle:(FromGuide)style block:(ScreenProjectionSelectViewSelectBlock)selectBlock{
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     self.frame = keyWindow.bounds;
@@ -54,12 +54,12 @@
     self.guidType = guidType;
     self.selectBlock = selectBlock;
 
-    if ([self.guidType isEqualToString:@"scanGuide"]) {
+    if (style == FromScanGuide) {
         
         self.videoName = @"scanVideoGuided";
         [self creatScanGuidUI];
         
-    }else if ([self.guidType isEqualToString:@"documentGuide"]){
+    }else if (style == FromDocumentGuide){
         
         self.videoName = @"documentVideoGuided";
         [self creatDocumentGuidUI];
