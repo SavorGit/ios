@@ -178,6 +178,7 @@
         LGSideMenuController * sliderVC = [self createRootViewController];
         
         self.window.rootViewController = sliderVC;
+        
         [self.window makeKeyAndVisible];
         
         //添加到场景
@@ -197,32 +198,6 @@
             }];
         }];
     }else{
-        
-        //设置一个图片;
-        UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-        [niceView addSubview:blackView];
-        
-        UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        
-        niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
-        logoView.image = [Helper getLaunchImage];
-        //添加到场景
-        [self.window addSubview:niceView];
-        [self.window addSubview:logoView];
-        
-        [UIView animateWithDuration:1.5 animations:^{
-            [niceView setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:1.2 animations:^{
-                [niceView setAlpha:0];
-                [logoView setAlpha:0];
-            } completion:^(BOOL finished) {
-                [niceView removeFromSuperview];
-                [logoView removeFromSuperview];
-            }];
-        }];
         
         //第一次启动应用程序
         [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:HasLaunched];

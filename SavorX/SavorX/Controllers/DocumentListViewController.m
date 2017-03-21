@@ -213,14 +213,8 @@
         video.title = [filePath lastPathComponent];
         if ([GlobalData shared].isBindRD) {
              [MBProgressHUD showCustomLoadingHUDInView:self.view];
-            NSDictionary *parameters = @{@"function": @"prepare",
-                                         @"action": @"2screen",
-                                         @"assettype": @"video",
-                                         @"asseturl": [asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                                         @"assetname": [filePath lastPathComponent],
-                                         @"play": @"0"};
-            [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                
+            
+            [SAVORXAPI postVideoWithURL:STBURL mediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
                 if ([[result objectForKey:@"result"] integerValue] == 0) {
                     
                     UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
@@ -235,6 +229,7 @@
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
             }];
+            
         }else if ([GlobalData shared].isBindDLNA) {
              [MBProgressHUD showCustomLoadingHUDInView:self.view];
             [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{

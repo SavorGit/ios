@@ -95,14 +95,7 @@
                 
                 NSString *asseturlStr = [NSString stringWithFormat:@"%@video?media-Redianer-TempCache.mp4", [HTTPServerManager getCurrentHTTPServerIP]];
                 if ([GlobalData shared].isBindRD) {
-                    NSDictionary *parameters = @{@"function": @"prepare",
-                                                 @"action": @"2screen",
-                                                 @"assettype": @"video",
-                                                 @"asseturl": asseturlStr,
-                                                 @"assetname": @"media-Redianer-TempCache.mp4",
-                                                 @"play": @"0"};
-                    
-                    [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                    [SAVORXAPI postVideoWithURL:STBURL mediaPath:asseturlStr position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
                         if ([[result objectForKey:@"result"] integerValue] == 0) {
                             SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
                             play.videoUrl = @"video?media-Redianer-TempCache.mp4";
