@@ -10,6 +10,12 @@
 
 typedef void(^ScreenProjectionSelectViewSelectBlock)(NSInteger selectIndex);
 
+typedef enum _TTGState {
+    FromScanGuide  = 0,
+    FromDocumentGuide,
+    FromLauchGuide
+} FromGuide;
+
 @interface VideoGuidedTwoDimensionalCode : BaseView
 
 /**
@@ -18,6 +24,6 @@ typedef void(^ScreenProjectionSelectViewSelectBlock)(NSInteger selectIndex);
  *  @param items       数组，里面全是字符串
  *  @param selectBlock 回调block
  */
-- (instancetype)showScreenProjectionTitle:(NSString *)guidType  block:(ScreenProjectionSelectViewSelectBlock)selectBlock;
+- (instancetype)showScreenProjectionTitle:(NSString *)guidType  fromStyle:(FromGuide)style block:(ScreenProjectionSelectViewSelectBlock)selectBlock;
 
 @end

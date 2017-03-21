@@ -151,7 +151,16 @@
 
 - (void)backButtonDidBeClicked
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_isFormDemand == YES) {
+        UINavigationController * na = [Helper getRootNavigationController];
+        if ([NSStringFromClass([na class]) isEqualToString:@"BaseNavigationController"]) {
+            UIViewController * vc = [na.viewControllers firstObject];
+            [self.navigationController popToViewController:vc animated:YES];
+        }
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+
 }
 
 - (void)orientationChanged
@@ -227,7 +236,7 @@
 
 - (void)videoShouldBeDemand
 {
-    if (self.model.canPlay) {
+    if (self.model.canPlay && !_isFormDemand ) {
         
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
@@ -235,7 +244,14 @@
         }
         
         [[HomeAnimationView animationView] scanQRCode];
-    }else{
+    }else if (self.model.canPlay && _isFormDemand == YES ){
+        
+        [self.navigationController popViewControllerAnimated:YES];
+        if (_coFromWebView) {
+            _coFromWebView(nil);
+        }
+    }
+    else{
         [MBProgressHUD showTextHUDwithTitle:@"当前视频不支持该操作"];
     }
 }

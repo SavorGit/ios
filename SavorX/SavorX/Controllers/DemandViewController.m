@@ -1,4 +1,4 @@
-//
+ //
 //  DemandViewController.m
 //  SavorX
 //
@@ -11,6 +11,9 @@
 #import "GCCUPnPManager.h"
 #import "UIImageView+WebCache.h"
 #import "HomeAnimationView.h"
+
+#import "WebViewController.h"
+#import "WMPageController.h"
 
 #define BOTTOMHEIGHT 50.f
 
@@ -165,7 +168,7 @@
     
     self.screenButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.screenButton setImage:[UIImage imageNamed:@"tv"] forState:UIControlStateNormal];
-    [self.screenButton addTarget:self action:@selector(backAciton) forControlEvents:UIControlEventTouchUpInside];
+    [self.screenButton addTarget:self action:@selector(tvAciton) forControlEvents:UIControlEventTouchUpInside];
     self.screenButton.selected = YES;
     self.screenButton.hidden = YES;
     [self.view addSubview:self.screenButton];
@@ -236,13 +239,34 @@
         self.minimumLabel.text = @"00:00";
         self.playSilder.value = 0;
         
+        [self quitBack];
+        
     } failure:^{
         self.screenButton.enabled = YES;
     }];
 
 }
 
-- (void)backAciton
+- (void)quitBack{
+    
+    UINavigationController * na = [Helper getRootNavigationController];
+    int j = (int)na.viewControllers.count - 2;
+    UIViewController * vc = na.viewControllers[j];
+    if ([vc  isKindOfClass:[WebViewController class]] ) {
+        [self.navigationController popToViewController:vc animated:YES];
+    }else if ([vc  isKindOfClass:[WMPageController class]]){
+        WebViewController *weVc = [[WebViewController alloc] init];
+        weVc.model = self.model;
+        weVc.isFormDemand = YES;
+        [self.navigationController pushViewController:weVc animated:YES];
+        weVc.coFromWebView = ^(NSDictionary *parmDic){
+            [self restartVod];
+        };
+    }
+    
+}
+
+- (void)tvAciton
 {
     [self restartVod];
 }
@@ -623,6 +647,7 @@
     [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:demandHandle];
     [self cheakIsFavorite];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+    
 }
 
 - (void)cheakIsFavorite

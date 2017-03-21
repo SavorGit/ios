@@ -30,11 +30,13 @@
 
 - (void)customMyself:(CGRect)frame
 {
+    CGPoint upPosition = CGPointMake(self.layer.position.x, self.layer.position.y - 75);
     //创建响应区间layer
     self.upLayer = [CALayer layer];
     self.upLayer.bounds = frame;
-    self.upLayer.position = self.layer.position;
+    self.upLayer.position = upPosition;
     self.upLayer.backgroundColor = [UIColor clearColor].CGColor;
+    
     
     [self createCaptureLayer];
 }
@@ -135,7 +137,7 @@
     [self addSubview:view4];
     
     
-    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(25, self.upLayer.frame.origin.y - 70, self.bounds.size.width - 50, 60)];
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(25, self.upLayer.frame.origin.y - 52, self.bounds.size.width - 50, 32)];
     label.numberOfLines = 0;
     label.text = @"请扫描电视中的二维码";
     label.textColor = [UIColor whiteColor];
