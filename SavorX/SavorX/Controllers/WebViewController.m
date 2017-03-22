@@ -325,13 +325,6 @@
         [invocation setArgument:&val atIndex:2];
         [invocation invoke];
     }
-    if (orientation == UIInterfaceOrientationLandscapeRight || orientation == UIInterfaceOrientationLandscapeLeft) {
-        // 设置横屏
-        
-    } else if (orientation == UIInterfaceOrientationPortrait) {
-        // 设置竖屏
-        
-    }
 }
 
 - (void)didReceiveMemoryWarning {
