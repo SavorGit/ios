@@ -412,6 +412,15 @@
     }
 }
 
++ (void)postUMHandleWithContentId:(NSString *)eventId key:(NSString *)key value:(NSString *)value
+{
+    if (key.length > 0 && value.length > 0) {
+        [MobClick event:eventId attributes:@{key : value}];
+    }else{
+        [MobClick event:eventId];
+    }
+}
+
 + (void)showAlertWithMessage:(NSString *)message
 {
     RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:message];

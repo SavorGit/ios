@@ -187,6 +187,15 @@ typedef NS_ENUM(NSInteger, interactType) {
  */
 + (void)postUMHandleWithContentId:(NSInteger)contentId withType:(handleType)type;
 
+/**
+ *  友盟上传事件
+ *
+ *  @param eventId   事件ID
+ *  @param key       事件参数对应的key
+ *  @param key       事件参数对应的value
+ */
++ (void)postUMHandleWithContentId:(NSString *)eventId key:(NSString *)key value:(NSString *)value;
+
 + (void)showAlertWithMessage:(NSString *)message;
 
 + (void)showConnetToTVAlert;
