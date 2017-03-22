@@ -78,9 +78,9 @@
     [self.lockButton addGestureRecognizer:tap];
     [self.view addSubview:self.lockButton];
     [self.lockButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(32, 32));
-        make.bottom.mas_equalTo(-30);
-        make.right.mas_equalTo(-30);
+        make.size.mas_equalTo(CGSizeMake(45, 45));
+        make.top.mas_equalTo(18);
+        make.right.mas_equalTo(-15);
     }];
 
     [self.navigationController.barHideOnTapGestureRecognizer requireGestureRecognizerToFail:tap];
