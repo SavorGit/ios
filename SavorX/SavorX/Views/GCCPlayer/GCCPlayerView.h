@@ -30,8 +30,12 @@
 - (void)setVideoTitle:(NSString *)title; //设置播放标题
 - (void)setIsCollect:(BOOL)isCollect; //设置是否收藏
 - (void)playOrientationLandscape; //横屏切换
+- (void)playOrientationLandscapeWithOnlyVideo;
 - (void)playOrientationPortrait; //竖屏切换
+- (void)playOrientationPortraitWithOnlyVideo;
 - (void)hiddenTVButton;
+
+- (void)backgroundImage:(UIImage *)image;
 
 - (void)shouldRelease;
 

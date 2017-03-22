@@ -50,6 +50,8 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 @property (nonatomic, assign) BOOL isShow; //ToolView是否是显示状态
 @property (nonatomic, assign) BOOL isAnimation; //是否正在进行显示或隐藏
 @property (nonatomic, assign) BOOL isFullScreen; //是否全屏
+@property (nonatomic, assign) BOOL isOnlyVideo;
+@property (nonatomic, strong) UIImageView * imageView;
 
 @end
 
@@ -351,6 +353,22 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     }
 }
 
+- (void)backgroundImage:(UIImage *)image
+{
+    [self.imageView setImage:image];
+    [self.endView insertSubview:self.imageView belowSubview:self.replayButton];
+    [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    
+    UIView * view = [[UIView alloc] initWithFrame:CGRectZero];
+    view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.3f];
+    [self.imageView addSubview:view];
+    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+}
+
 //截屏
 - (void)shotScreenVideo
 {
@@ -440,6 +458,29 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         make.right.mas_equalTo(-100);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
+}
+
+- (void)playOrientationPortraitWithOnlyVideo
+{
+    self.isOnlyVideo = YES;
+    self.TVButton.hidden = YES;
+    self.shareButton.hidden = YES;
+    self.collectButton.hidden = YES;
+    self.backButton.hidden = YES;
+    self.topImageView.hidden = YES;
+    self.endBackButton.hidden = YES;
+    [self playOrientationPortrait];
+}
+
+- (void)playOrientationLandscapeWithOnlyVideo
+{
+    self.isOnlyVideo = YES;
+    self.shareButton.hidden = NO;
+    self.collectButton.hidden = NO;
+    self.backButton.hidden = NO;
+    self.topImageView.hidden = NO;
+    self.endBackButton.hidden = NO;
+    [self playOrientationLandscape];
 }
 
 //变成横屏
@@ -842,6 +883,15 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     }];
 }
 
+- (UIImageView *)imageView
+{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
+    }
+    return _imageView;
+}
+
 #pragma mark 屏幕转屏相关
 
 /**
@@ -864,11 +914,19 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     }
     if (orientation == UIInterfaceOrientationLandscapeRight || orientation == UIInterfaceOrientationLandscapeLeft) {
         // 设置横屏
-        [self playOrientationLandscape];
+        if (self.isOnlyVideo) {
+            [self playOrientationLandscapeWithOnlyVideo];
+        }else{
+            [self playOrientationLandscape];
+        }
         
     } else if (orientation == UIInterfaceOrientationPortrait) {
         // 设置竖屏
-        [self playOrientationPortrait];
+        if (self.isOnlyVideo) {
+            [self playOrientationPortraitWithOnlyVideo];
+        }else{
+            [self playOrientationPortrait];
+        }
         
     }
 }

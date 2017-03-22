@@ -136,6 +136,7 @@
 		06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */; };
 		0684DF231D5191F6006756D4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0684DF221D5191F6006756D4 /* WebKit.framework */; };
 		068A58C81D5E1FFF00CBD684 /* BasicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 068A58C71D5E1FFF00CBD684 /* BasicTableViewCell.m */; };
+		068F0FB31E8266CE0089068F /* HSVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 068F0FB21E8266CE0089068F /* HSVideoViewController.m */; };
 		069076651E51904C00CA1AC4 /* ArticleReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 069076641E51904C00CA1AC4 /* ArticleReadViewController.m */; };
 		069076681E51F6C700CA1AC4 /* PhotoManyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 069076671E51F6C700CA1AC4 /* PhotoManyViewController.m */; };
 		0690766B1E51FE8E00CA1AC4 /* PhotoManyCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0690766A1E51FE8E00CA1AC4 /* PhotoManyCollectionViewCell.m */; };
@@ -482,6 +483,8 @@
 		0684DF221D5191F6006756D4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		068A58C61D5E1FFF00CBD684 /* BasicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasicTableViewCell.h; path = ../BasicTableViewCell.h; sourceTree = "<group>"; };
 		068A58C71D5E1FFF00CBD684 /* BasicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicTableViewCell.m; path = ../BasicTableViewCell.m; sourceTree = "<group>"; };
+		068F0FB11E8266CE0089068F /* HSVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSVideoViewController.h; sourceTree = "<group>"; };
+		068F0FB21E8266CE0089068F /* HSVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSVideoViewController.m; sourceTree = "<group>"; };
 		069076631E51904C00CA1AC4 /* ArticleReadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleReadViewController.h; sourceTree = "<group>"; };
 		069076641E51904C00CA1AC4 /* ArticleReadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArticleReadViewController.m; sourceTree = "<group>"; };
 		069076661E51F6C700CA1AC4 /* PhotoManyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoManyViewController.h; sourceTree = "<group>"; };
@@ -937,6 +940,8 @@
 				061FEFED1E2DB4AD003CD111 /* RecommendViewController.m */,
 				062705901D586EA2003EA6A0 /* WebViewController.h */,
 				062705911D586EA2003EA6A0 /* WebViewController.m */,
+				068F0FB11E8266CE0089068F /* HSVideoViewController.h */,
+				068F0FB21E8266CE0089068F /* HSVideoViewController.m */,
 				069076631E51904C00CA1AC4 /* ArticleReadViewController.h */,
 				069076641E51904C00CA1AC4 /* ArticleReadViewController.m */,
 				06E719201E810B6A008496F4 /* HSConnectViewController.h */,
@@ -2210,6 +2215,7 @@
 				0690766E1E520A7700CA1AC4 /* PhotoManyEditView.m in Sources */,
 				476F44CA1E2DBEC500F99090 /* LeftCell.m in Sources */,
 				061B4EBE1E487EF5000D5E07 /* PhotoTextLabel.m in Sources */,
+				068F0FB31E8266CE0089068F /* HSVideoViewController.m in Sources */,
 				06FD5F221DC1D23A0043D898 /* ScreenCollectionViewCell.m in Sources */,
 				061FEFEE1E2DB4AD003CD111 /* RecommendViewController.m in Sources */,
 				061A700D1D61C68D00702016 /* DocumentListViewController.m in Sources */,

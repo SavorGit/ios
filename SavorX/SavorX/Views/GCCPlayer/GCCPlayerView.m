@@ -46,6 +46,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, assign) BOOL isPan; //是否在进行pan手势
 @property (nonatomic, assign) BOOL isHorizontal; //用户手指是否是水平移动
 @property (nonatomic, assign) BOOL isVolume; //记录当前是否在调节时间
+@property (nonatomic, assign) BOOL canDemand;
+@property (nonatomic, strong) UIImageView * imageView;
 
 @end
 
@@ -55,6 +57,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 {
     if (self = [super init]) {
         self.status = GCCPlayerStatusInitial;
+        self.canDemand = YES;
         // app退到后台
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground) name:UIApplicationWillResignActiveNotification object:nil];
         // app进入前台
@@ -88,6 +91,23 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self configureVolume];
     }
     return self;
+}
+
+- (void)backgroundImage:(UIImage *)image
+{
+    [self.imageView setImage:image];
+    [self insertSubview:self.imageView belowSubview:self.controlView];
+    [self.controlView backgroundImage:image];
+    [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    
+    UIView * view = [[UIView alloc] initWithFrame:CGRectZero];
+    view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.3f];
+    [self.imageView addSubview:view];
+    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
 }
 
 - (void)setPlayItemWithURL:(NSString *)url
@@ -521,6 +541,17 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     }
 }
 
+- (void)playOrientationPortraitWithOnlyVideo
+{
+    self.isFullScreen = NO;
+    [self.controlView playOrientationPortraitWithOnlyVideo];
+    if ([self viewWithTag:888]) {
+        UIView * view = [self viewWithTag:888];
+        [view removeFromSuperview];
+        [self play];
+    }
+}
+
 //变成横屏
 - (void)playOrientationLandscape
 {
@@ -529,6 +560,19 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:@"hasPlay"] boolValue];
     if (!temp) {
             [self createHasNotPlayView];
+    }
+}
+
+- (void)playOrientationLandscapeWithOnlyVideo
+{
+    self.isFullScreen = YES;
+    [self.controlView playOrientationLandscapeWithOnlyVideo];
+    if (self.canDemand) {
+        self.controlView.TVButton.hidden = NO;
+    }
+    BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:@"hasPlay"] boolValue];
+    if (!temp) {
+        [self createHasNotPlayView];
     }
 }
 
@@ -622,6 +666,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)playButtonDidClickedToPlay:(UIButton *)button
 {
     [self play];
+    if (self.imageView.superview) {
+        [self.imageView removeFromSuperview];
+    }
 }
 
 //用户点击播放按钮以暂停视频
@@ -748,7 +795,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             break;
             
         case GCCPlayerStatusEnd:
+        {
             [self.controlView stop];
+        }
             break;
             
         case GCCPlayerStatusPlaying:
@@ -786,6 +835,15 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 {
     AVPlayerLayer *playerLayer = (AVPlayerLayer *)self.layer;
     return playerLayer.player;
+}
+
+- (UIImageView *)imageView
+{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
+    }
+    return _imageView;
 }
 
 - (ZFBrightnessView *)brightnessView {
@@ -829,6 +887,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)hiddenTVButton
 {
     self.controlView.TVButton.hidden = YES;
+    self.canDemand = NO;
 }
 
 - (void)dealloc

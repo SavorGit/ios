@@ -319,7 +319,7 @@
                     SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
                     play.model = model;
                     [[HomeAnimationView animationView] startScreenWithViewController:play];
-                    [self.navigationController pushViewController:play animated:YES];
+                    [self.parentNavigationController pushViewController:play animated:YES];
                 }
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
@@ -347,7 +347,7 @@
             SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
             play.model = model;
             [[HomeAnimationView animationView] startScreenWithViewController:play];
-            [self.navigationController pushViewController:play animated:YES];
+            [self.parentNavigationController pushViewController:play animated:YES];
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         } failure:^{
             [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -355,7 +355,7 @@
         }];
     }else if ([GlobalData shared].scene == RDSceneHaveRDBox && [GlobalData shared].isBindRD == NO) {
         [[HomeAnimationView animationView] scanQRCode];
-        [MBProgressHUD showTextHUDwithTitle:@"扫码连接电视, 即可在电视上点播" delay:1.f];
+        [MBProgressHUD showTextHUDwithTitle:@"连接电视后即可点播视频" delay:1.f];
     }else{
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
         //如果不是绑定状态
@@ -368,7 +368,7 @@
         }else{
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
-            [self.navigationController pushViewController:article animated:YES];
+            [self.parentNavigationController pushViewController:article animated:YES];
         }
     }
 }

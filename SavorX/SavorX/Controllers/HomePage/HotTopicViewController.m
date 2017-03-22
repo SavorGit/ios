@@ -19,6 +19,7 @@
 #import "HSGetLastVodList.h"
 #import "SXVideoPlayViewController.h"
 #import "ArticleReadViewController.h"
+#import "HSVideoViewController.h"
 
 @interface HotTopicViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -263,7 +264,7 @@
                     play.model = model;
                     [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
                     [[HomeAnimationView animationView] startScreenWithViewController:play];
-                    [self.navigationController pushViewController:play animated:YES];
+                    [self.parentNavigationController pushViewController:play animated:YES];
                 }
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
@@ -287,7 +288,7 @@
             SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
             play.model = model;
             [[HomeAnimationView animationView] startScreenWithViewController:play];
-            [self.navigationController pushViewController:play animated:YES];
+            [self.parentNavigationController pushViewController:play animated:YES];
             [hud hideAnimated:NO];
         } failure:^{
             [hud hideAnimated:NO];
@@ -297,15 +298,18 @@
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
         //如果不是绑定状态
         if (model.type == 3) {
-            WebViewController * web = [[WebViewController alloc] init];
-            web.model = model;
+//            WebViewController * web = [[WebViewController alloc] init];
+//            web.model = model;
+//            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+//            web.image = cell.bgImageView.image;
+//            [self.parentNavigationController pushViewController:web animated:YES];
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            web.image = cell.bgImageView.image;
+            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
             [self.parentNavigationController pushViewController:web animated:YES];
         }else{
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
-            [self.navigationController pushViewController:article animated:YES];
+            [self.parentNavigationController pushViewController:article animated:YES];
         }
     }
 }
