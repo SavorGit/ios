@@ -180,7 +180,7 @@
             [self.tableView.mj_footer endRefreshing];
         }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        [self.tableView.mj_footer endRefreshing];
+        [self.tableView.mj_footer endRefrenshWithNoNetWork];
         [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
     }];
 }

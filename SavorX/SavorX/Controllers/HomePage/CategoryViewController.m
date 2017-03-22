@@ -189,7 +189,6 @@
         self.pageNo++;
         [self.tableView reloadData];
         [self.tableView.mj_footer endRefreshing];
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (self.dataSource.count == 0) {
             [self showNoDataView];
         }
@@ -202,13 +201,9 @@
             [self.tableView.mj_footer endRefreshing];
         }
         
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
-        [self showNoNetWorkView];
-        [self.tableView.mj_footer endRefreshing];
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self.tableView.mj_footer endRefrenshWithNoNetWork];
         [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
         
     }];

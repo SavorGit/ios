@@ -65,6 +65,8 @@
         [tempView removeFromSuperview];
     }
     
+    [MBProgressHUD hideHUDForView:view animated:NO];
+    
     AnimationImageView * imageView = [[AnimationImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     NSMutableArray * array = [NSMutableArray new];
     for (NSInteger i = 0; i < 2; i++) {

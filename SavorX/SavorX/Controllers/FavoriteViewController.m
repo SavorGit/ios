@@ -8,6 +8,7 @@
 
 #import "FavoriteViewController.h"
 #import "WebViewController.h"
+#import "ArticleReadViewController.h"
 #import "HomePageCell.h"
 #import "UIImageView+WebCache.h"
 #import "UMCustomSocialManager.h"
@@ -63,12 +64,17 @@
 {
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
     model.canPlay = NO;
-    WebViewController * web = [[WebViewController alloc] init];
-    web.model = model;
-    web.title = model.title;
     BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-    web.image = cell.bgImageView.image;
-    [self.navigationController pushViewController:web animated:YES];
+    if (model.type == 3) {
+        WebViewController * web = [[WebViewController alloc] init];
+        web.model = model;
+        web.title = model.title;
+        web.image = cell.bgImageView.image;
+        [self.navigationController pushViewController:web animated:YES];
+    }else{
+        ArticleReadViewController * read = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
+        [self.navigationController pushViewController:read animated:YES];
+    }
 }
 
 #pragma mark -- UITableViewDataSource

@@ -50,6 +50,7 @@ UIKIT_EXTERN NSString *const MJRefreshHeaderRefreshingText;
 UIKIT_EXTERN NSString *const MJRefreshAutoFooterIdleText;
 UIKIT_EXTERN NSString *const MJRefreshAutoFooterRefreshingText;
 UIKIT_EXTERN NSString *const MJRefreshAutoFooterNoMoreDataText;
+UIKIT_EXTERN NSString *const MJRefreshAutoFooterNoNetWorkText;
 
 UIKIT_EXTERN NSString *const MJRefreshBackFooterIdleText;
 UIKIT_EXTERN NSString *const MJRefreshBackFooterPullingText;

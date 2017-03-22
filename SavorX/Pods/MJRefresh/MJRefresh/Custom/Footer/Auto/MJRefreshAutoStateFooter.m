@@ -46,7 +46,7 @@
 #pragma mark - 私有方法
 - (void)stateLabelClick
 {
-    if (self.state == MJRefreshStateIdle) {
+    if (self.state == MJRefreshStateIdle || self.state == MJRefreshStateNoNetWork) {
         [self beginRefreshing];
     }
 }
@@ -63,6 +63,7 @@
     [self setTitle:[NSBundle mj_localizedStringForKey:MJRefreshAutoFooterIdleText] forState:MJRefreshStateIdle];
     [self setTitle:[NSBundle mj_localizedStringForKey:MJRefreshAutoFooterRefreshingText] forState:MJRefreshStateRefreshing];
     [self setTitle:[NSBundle mj_localizedStringForKey:MJRefreshAutoFooterNoMoreDataText] forState:MJRefreshStateNoMoreData];
+    [self setTitle:[NSBundle mj_localizedStringForKey:MJRefreshAutoFooterNoNetWorkText] forState:MJRefreshStateNoNetWork];
     
     // 监听label
     self.stateLabel.userInteractionEnabled = YES;

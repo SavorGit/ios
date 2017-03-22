@@ -145,6 +145,7 @@
 		069FE84A1E4D5F56000CBA5E /* HSHotelVodListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 069FE8491E4D5F56000CBA5E /* HSHotelVodListRequest.m */; };
 		06AB944F1D880C8000A29D36 /* rotationImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06AB944E1D880C8000A29D36 /* rotationImageView.m */; };
 		06BD18D91E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06BD18D71E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a */; };
+		06E719221E810B6A008496F4 /* HSConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06E719211E810B6A008496F4 /* HSConnectViewController.m */; };
 		06EA38BC1D5971DA0081DDCC /* AlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06EA38BB1D5971DA0081DDCC /* AlbumListViewController.m */; };
 		06EA38CF1D5980F10081DDCC /* PhotoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06EA38CE1D5980F10081DDCC /* PhotoListViewController.m */; };
 		06EA38D21D5980FC0081DDCC /* PhotoShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06EA38D11D5980FC0081DDCC /* PhotoShowViewController.m */; };
@@ -498,6 +499,8 @@
 		06AB944E1D880C8000A29D36 /* rotationImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = rotationImageView.m; path = ../rotationImageView.m; sourceTree = "<group>"; };
 		06BD18D71E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUMessage_Sdk_1.4.0.a; sourceTree = "<group>"; };
 		06BD18D81E35AE3C0030F69F /* UMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMessage.h; sourceTree = "<group>"; };
+		06E719201E810B6A008496F4 /* HSConnectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSConnectViewController.h; sourceTree = "<group>"; };
+		06E719211E810B6A008496F4 /* HSConnectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSConnectViewController.m; sourceTree = "<group>"; };
 		06EA38BA1D5971DA0081DDCC /* AlbumListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumListViewController.h; sourceTree = "<group>"; };
 		06EA38BB1D5971DA0081DDCC /* AlbumListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumListViewController.m; sourceTree = "<group>"; };
 		06EA38CD1D5980F10081DDCC /* PhotoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoListViewController.h; sourceTree = "<group>"; };
@@ -936,6 +939,8 @@
 				062705911D586EA2003EA6A0 /* WebViewController.m */,
 				069076631E51904C00CA1AC4 /* ArticleReadViewController.h */,
 				069076641E51904C00CA1AC4 /* ArticleReadViewController.m */,
+				06E719201E810B6A008496F4 /* HSConnectViewController.h */,
+				06E719211E810B6A008496F4 /* HSConnectViewController.m */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -2097,6 +2102,7 @@
 				47F9975E1DFFA4060009BDFB /* SXWiFiCell.m in Sources */,
 				060031631E53618200E675F5 /* HSGetLastVodList.m in Sources */,
 				06076C191E30DB1A008C0E29 /* HomePageCell.m in Sources */,
+				06E719221E810B6A008496F4 /* HSConnectViewController.m in Sources */,
 				478058271DF985730091C305 /* HSTopicListRequest.m in Sources */,
 				061B4EC11E489C92000D5E07 /* PhotoEditTextView.m in Sources */,
 				060E420F1E4CB03E009A94FC /* TADotView.m in Sources */,

@@ -102,6 +102,12 @@
                 
                 [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:controller completion:^(id result, NSError *error) {
                     
+                    if (error) {
+                        [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                    }else{
+                        [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                    }
+                    
                 }];
             }
                 
@@ -150,6 +156,12 @@
     messageObject.shareObject = object;
     
     [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
+        
+        if (error) {
+            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+        }else{
+            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+        }
         
     }];
 }

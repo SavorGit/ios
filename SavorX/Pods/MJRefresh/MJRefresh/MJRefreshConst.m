@@ -22,6 +22,7 @@ NSString *const MJRefreshHeaderRefreshingText = @"MJRefreshHeaderRefreshingText"
 NSString *const MJRefreshAutoFooterIdleText = @"MJRefreshAutoFooterIdleText";
 NSString *const MJRefreshAutoFooterRefreshingText = @"MJRefreshAutoFooterRefreshingText";
 NSString *const MJRefreshAutoFooterNoMoreDataText = @"MJRefreshAutoFooterNoMoreDataText";
+NSString *const MJRefreshAutoFooterNoNetWorkText = @"MJRefreshAutoFooterNoNetWorkText";
 
 NSString *const MJRefreshBackFooterIdleText = @"MJRefreshBackFooterIdleText";
 NSString *const MJRefreshBackFooterPullingText = @"MJRefreshBackFooterPullingText";

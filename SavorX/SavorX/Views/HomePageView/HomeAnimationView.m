@@ -18,6 +18,7 @@
 #import "RDAlertView.h"
 #import "RDCheackSence.h"
 #import "GCCDLNA.h"
+#import "HSConnectViewController.h"
 
 #define HasAlertScreen @"HasAlertScreen"
 
@@ -236,21 +237,15 @@
 - (void)CameroIsReady
 {
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"准备扫描二维码"];
-    
     NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
     [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         [hud hideAnimated:NO];
         NSInteger code = [result[@"code"] integerValue];
         if(code == 10000){
-            ScanQRCodeViewController * scan = [[ScanQRCodeViewController alloc] init];
-            scan.delegate = self;
-            self.isFirstCount++;
-            if (self.isFirstCount == 1) {
-                scan.isHelp = YES;
-            }else{
-                scan.isHelp = NO;
+            HSConnectViewController * view = [[HSConnectViewController alloc] init];
+            if (![[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]]) {
+                [[Helper getRootNavigationController] pushViewController:view animated:YES];
             }
-            [[Helper getRootNavigationController] pushViewController:scan animated:YES];
         }
         //
     } failure:^(NSURLSessionDataTask *task, NSError *error) {

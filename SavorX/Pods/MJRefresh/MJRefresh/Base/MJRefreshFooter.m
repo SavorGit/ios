@@ -62,6 +62,11 @@
     self.state = MJRefreshStateNoMoreData;
 }
 
+- (void)endRefrenshWithNoNetWork
+{
+    self.state = MJRefreshStateNoNetWork;
+}
+
 - (void)noticeNoMoreData
 {
     [self endRefreshingWithNoMoreData];
