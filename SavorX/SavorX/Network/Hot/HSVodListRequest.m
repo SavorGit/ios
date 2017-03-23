@@ -14,7 +14,7 @@
 - (instancetype)initWithPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize createTime:(NSInteger)createTime
 {
     if(self = [super init]){
-        self.methodName = @"getVodList";
+        self.methodName = [@"content/Home/getVodList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setIntegerValue:pageNo forParamKey:@"pageNo"];
         [self setIntegerValue:pageSize forParamKey:@"pageSize"];

@@ -27,7 +27,7 @@
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
 
-#define TEST_DEV_TYPE 1 //测试环境切换宏，1代表线上环境，0代表测试环境
+#define TEST_DEV_TYPE 0 //测试环境切换宏，1代表线上环境，0代表测试环境
 
 #if TEST_DEV_TYPE
 
@@ -35,10 +35,11 @@
 
 #else
 
-#define HOSTURL @"http://devp.api.rerdian.com/mobile/api/"  //测试地址
+#define HOSTURL @"http://devp.testapi.rerdian.com/"  //测试地址
 
 #endif
 
+#define kVersionCode 2017031401
 
 //-------------------友盟-------------------------
 #define UmengAppkey @"57be6121e0f55a9171000905"

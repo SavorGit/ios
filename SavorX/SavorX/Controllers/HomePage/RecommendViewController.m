@@ -33,8 +33,9 @@
 @property (nonatomic, strong) NSMutableArray * adSourcel;
 @property (nonatomic, strong) UILabel * TopFreshLabel;
 @property (nonatomic, copy) NSString * hotelName;
-@property (nonatomic, assign) NSInteger lastTopTime;
-@property (nonatomic, assign) NSInteger lastDownTime;
+@property (nonatomic, assign) NSInteger minTime;
+@property (nonatomic, assign) NSInteger maxTime;
+@property (nonatomic, copy) NSString * flag;
 
 @end
 
@@ -46,7 +47,6 @@
     
     self.dataSource = [NSMutableArray new];
     self.adSourcel = [NSMutableArray new];
-    self.lastDownTime = 0;
     
     self.hotelName = @"";
     
@@ -100,8 +100,9 @@
             [self.adSourcel addObject:model];
         }
         self.hotelName = [dict objectForKey:@"hotelName"];
-        self.lastTopTime = [[dict objectForKey:@"time"] integerValue];
-        self.lastDownTime = [[dict objectForKey:@"minTime"] integerValue];
+        self.minTime = [[dict objectForKey:@"minTime"] integerValue];
+        self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
+        self.flag = [dict objectForKey:@"flag"];
         [self setupTopScrollView];
         [self.tableView reloadData];
         self.pageNo = 3;
@@ -109,7 +110,7 @@
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
     
-    HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId createTime:0];
+    HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId createTime:0 flag:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary * dict = response[@"result"];
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
@@ -128,8 +129,9 @@
             [self.adSourcel addObject:model];
         }
         self.hotelName = [dict objectForKey:@"hotelName"];
-        self.lastTopTime = [[dict objectForKey:@"time"] integerValue];
-        self.lastDownTime = [[dict objectForKey:@"minTime"] integerValue];
+        self.minTime = [[dict objectForKey:@"minTime"] integerValue];
+        self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
+        self.flag = [dict objectForKey:@"flag"];
         [self setupTopScrollView];
         self.pageNo = 3;
         [self.tableView reloadData];
@@ -152,12 +154,18 @@
 
 - (void)getDataWithPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize
 {
-    HSHotelVodListRequest * request = [[HSHotelVodListRequest alloc] initWithHotelID:[GlobalData shared].hotelId andPageNo:pageNo andPageSize:pageSize createTime:self.lastDownTime];
+    HSHotelVodListRequest * request = [[HSHotelVodListRequest alloc] initWithHotelID:[GlobalData shared].hotelId andPageNo:pageNo andPageSize:pageSize createTime:self.maxTime];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary * dict = response[@"result"];
         
         NSArray * vodArray = [dict objectForKey:@"vodList"];
+        
+        if (vodArray.count == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
+            return;
+        }
         
         if (vodArray) {
             for (NSInteger i = 0; i < vodArray.count; i++) {
@@ -166,22 +174,13 @@
                 [self.dataSource addObject:model];
             }
             self.pageNo++;
-            self.lastDownTime = [[dict objectForKey:@"time"] integerValue];
+            self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
             [self.tableView reloadData];
             [self.tableView.mj_footer endRefreshing];
-        }else{
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
         [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        if ([[response objectForKey:@"code"] integerValue] == 10060) {
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
-
-        }else{
-            [self.tableView.mj_footer endRefreshing];
-            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"fail"];
-        }
+        
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self.tableView.mj_footer endRefrenshWithNoNetWork];
         [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
@@ -191,7 +190,7 @@
 
 - (void)refreshDataSource
 {
-    HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId createTime:self.lastTopTime];
+    HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId createTime:self.minTime flag:self.flag];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary * dict = response[@"result"];
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
@@ -210,8 +209,9 @@
             [self.adSourcel addObject:model];
         }
         self.hotelName = [dict objectForKey:@"hotelName"];
-        self.lastTopTime = [[dict objectForKey:@"time"] integerValue];
-        self.lastDownTime = [[dict objectForKey:@"minTime"] integerValue];
+        self.minTime = [[dict objectForKey:@"minTime"] integerValue];
+        self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
+        self.flag = [dict objectForKey:@"flag"];
         [self setupTopScrollView];
         self.pageNo = 3;
         [self.tableView reloadData];

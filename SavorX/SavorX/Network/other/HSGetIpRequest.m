@@ -13,7 +13,7 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        self.methodName = @"getIp";
+        self.methodName = [@"basedata/Ip/getIp?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPGet;
     }
     return self;

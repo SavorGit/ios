@@ -12,12 +12,14 @@
 
 - (instancetype)initWithCategoryId:(NSInteger)categoryId updateTime:(NSInteger)updateTime{
     if (self = [super init]) {
-        self.methodName = @"getLastTopList";
+        self.methodName = [@"catvideo/catvideo/getLastTopList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         
         [self setIntegerValue:categoryId forParamKey:@"categoryId"];
-        [self setIntegerValue:updateTime forParamKey:@"createTime"];
         
+        if (updateTime != 0) {
+            [self setIntegerValue:updateTime forParamKey:@"createTime"];
+        }
     }
     return self;
 }

@@ -13,7 +13,7 @@
 
 - (instancetype)initWithSuggestion:(NSString *)suggestion contactWay:(NSString *)contactWay {
     if (self = [super init]) {
-        self.methodName = @"feedback";
+        self.methodName = [@"feed/feedback/feedInsert?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setValue:[GCCKeyChain load:keychainID] forParamKey:@"deviceId"];
         [self setValue:suggestion forParamKey:@"suggestion"];

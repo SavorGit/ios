@@ -9,6 +9,8 @@
 #import "Helper.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import "LGSideMenuController.h"
+#import <CommonCrypto/CommonDigest.h>
+#import "GCCKeyChain.h"
 
 @implementation Helper
 
@@ -222,6 +224,33 @@
     [view addSubview:imageView];
     
     return view;
+}
+
++ (NSString *)getMd5_32Bit:(NSString *)mdStr
+{
+    const char *original_str = [mdStr UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(original_str, (int)strlen(original_str), result);
+    NSMutableString *hash = [NSMutableString string];
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [hash appendFormat:@"%02X", result[i]];
+    return [hash lowercaseString];
+}
+
++ (NSString *)getURLPublic
+{
+    NSTimeInterval time = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSString *timeString = [NSString stringWithFormat:@"%.0f", time];
+    NSString *mdStr = [timeString stringByAppendingString:@"savor4321abcd1234"];
+    NSString * result = [Helper getMd5_32Bit:mdStr];
+    result = [NSString stringWithFormat:@"time=%@&sign=%@", timeString, result];
+    return result;
+}
+
++ (NSString *)getHTTPHeaderValue
+{
+    NSString * result = [NSString stringWithFormat:@"versionname=%@;versioncode=%d;osversion=%@;model=ios;appname=hotSpot;clientname=ios;channelName=appstore;deviceid=%@", kSoftwareVersion, kVersionCode, [UIDevice currentDevice].systemVersion, [GCCKeyChain load:keychainID]];
+    return result;
 }
 
 @end

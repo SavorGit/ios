@@ -15,7 +15,7 @@
 -(instancetype)init{
     
     if(self = [super init]){
-        self.methodName = @"getCategoryList";
+        self.methodName = [@"basedata/category/getCategoryList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
     }
     return self;

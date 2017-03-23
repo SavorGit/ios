@@ -13,7 +13,7 @@
 - (instancetype)initWithHotelID:(NSInteger)hotelID andPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize createTime:(NSInteger)createTime
 {
     if(self = [super init]){
-        self.methodName = @"getHotelVodList";
+        self.methodName = [@"content/home/getHotelList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setIntegerValue:hotelID forParamKey:@"hotelId"];
         [self setIntegerValue:pageNo forParamKey:@"pageNo"];

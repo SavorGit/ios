@@ -28,8 +28,9 @@
 @property (nonatomic, assign) NSInteger pageNo; //当前数据页面
 @property (nonatomic, assign) NSInteger pageSize; //页面数据大小
 @property (nonatomic, strong) UILabel * TopFreshLabel;
-@property (nonatomic, assign) NSInteger lastTopTime;
-@property (nonatomic, assign) NSInteger lastDownTime;
+@property (nonatomic, assign) NSInteger minTime;
+@property (nonatomic, assign) NSInteger maxTime;
+@property (nonatomic, copy) NSString * flag;
 
 @end
 
@@ -72,8 +73,9 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:HotVodCache]) {
         NSDictionary *dataDict = [NSDictionary dictionaryWithContentsOfFile:HotVodCache];
         NSArray *listAry = [dataDict objectForKey:@"list"];
-        self.lastTopTime = [[dataDict objectForKey:@"time"] integerValue];
-        self.lastDownTime = [[dataDict objectForKey:@"minTime"] integerValue];
+        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
+        self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
+        self.flag = [dataDict objectForKey:@"flag"];
         for(NSDictionary *dict in listAry){
             
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
@@ -85,14 +87,15 @@
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
     
-    HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithCreateTime:0];
+    HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithCreateTime:0 flag:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary *dataDict = dic[@"result"];
         NSArray *listAry = [dataDict objectForKey:@"list"];
-        self.lastTopTime = [[dataDict objectForKey:@"time"] integerValue];
-        self.lastDownTime = [[dataDict objectForKey:@"minTime"] integerValue];
+        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
+        self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
+        self.flag = [dataDict objectForKey:@"flag"];
         for(NSDictionary *dict in listAry){
             
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
@@ -120,13 +123,20 @@
 
 - (void)getDataWithPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize
 {
-    HSVodListRequest * request = [[HSVodListRequest alloc] initWithPageNo:pageNo andPageSize:pageSize createTime:self.lastDownTime];
+    HSVodListRequest * request = [[HSVodListRequest alloc] initWithPageNo:pageNo andPageSize:pageSize createTime:self.maxTime];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary * dataDict = [dic objectForKey:@"result"];
         NSArray *listAry = [dataDict objectForKey:@"list"];
-        self.lastDownTime = [[dataDict objectForKey:@"time"] integerValue];
+        
+        if (listAry.count == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
+            return;
+        }
+        
+        self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         NSMutableArray *mutableArr = [NSMutableArray array];
         for(NSDictionary *dict in listAry){
             
@@ -139,13 +149,7 @@
         self.pageNo++;
         [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        if ([[response objectForKey:@"code"] integerValue] == 10060) {
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
-        }else{
-            [self.tableView.mj_footer endRefreshing];
-            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"fail"];
-        }
+        
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         [self.tableView.mj_footer endRefrenshWithNoNetWork];
@@ -156,14 +160,15 @@
 
 - (void)refreshDataSource
 {
-    HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithCreateTime:self.lastTopTime];
+    HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithCreateTime:self.minTime flag:self.flag];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary *dataDict = dic[@"result"];
         NSArray *listAry = [dataDict objectForKey:@"list"];
-        self.lastTopTime = [[dataDict objectForKey:@"time"] integerValue];
-        self.lastDownTime = [[dataDict objectForKey:@"minTime"] integerValue];
+        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
+        self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
+        self.flag = [dataDict objectForKey:@"flag"];
         for(NSDictionary *dict in listAry){
             
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];

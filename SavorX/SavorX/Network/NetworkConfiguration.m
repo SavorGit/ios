@@ -20,6 +20,7 @@
     return @{
              @"Content-Type":@"application/json",
              @"User-Agent":@"HotSpot",
+             @"traceinfo":[Helper getHTTPHeaderValue]
              };
 }
 

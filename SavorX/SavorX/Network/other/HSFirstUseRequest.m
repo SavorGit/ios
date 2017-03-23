@@ -14,7 +14,7 @@
 - (instancetype)initWithHotelId:(NSInteger)hotelId
 {
     if (self = [super init]) {
-        self.methodName = @"fisrtUse";
+        self.methodName = [@"basedata/Firstuse/pushData?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setValue:[GCCKeyChain load:keychainID] forParamKey:@"deviceId"];
         [self setIntegerValue:hotelId forParamKey:@"hotelId"];

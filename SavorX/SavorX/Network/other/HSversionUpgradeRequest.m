@@ -13,9 +13,9 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        self.methodName = @"versionUpgrade";
+        self.methodName = [@"version/Upgrade/index?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setIntegerValue:2017031401 forParamKey:@"versionCode"];
+        [self setIntegerValue:kVersionCode forParamKey:@"versionCode"];
         [self setIntegerValue:4 forParamKey:@"deviceType"];
     }
     return self;

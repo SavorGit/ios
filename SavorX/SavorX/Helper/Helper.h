@@ -50,4 +50,10 @@
 
 + (UIView *)createHomePageSecondHelp;
 
++ (NSString *)getMd5_32Bit:(NSString *)mdStr;
+
++ (NSString *)getURLPublic;
+
++ (NSString *)getHTTPHeaderValue;
+
 @end

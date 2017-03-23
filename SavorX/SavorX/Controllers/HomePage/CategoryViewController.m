@@ -31,6 +31,9 @@
 @property (nonatomic, copy) NSString * cachePath;
 @property (nonatomic, assign) NSInteger currentTime;
 @property (nonatomic, strong) UILabel * TopFreshLabel;
+@property (nonatomic, assign) NSInteger minTime;
+@property (nonatomic, assign) NSInteger maxTime;
+@property (nonatomic, copy) NSString * flag;
 
 @end
 
@@ -85,7 +88,11 @@
     [self.dataSource removeAllObjects];
     MBProgressHUD * hud;
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
-        NSArray * listAry = [NSArray arrayWithContentsOfFile:self.cachePath];
+        NSDictionary * dataDict = [NSDictionary dictionaryWithContentsOfFile:self.cachePath];
+        NSArray * listAry = dataDict[@"list"];
+        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
+        self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
+        self.flag = [dataDict objectForKey:@"flag"];
         for(NSDictionary *dict in listAry){
             
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
@@ -96,13 +103,18 @@
     }else{
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
-    HSTopicListRequest * request = [[HSTopicListRequest alloc] initWithCategoryId:self.categoryID pageNo:1 pageSize:20 time:self.currentTime];
+    
+    HSLatestTopicListRequest * request = [[HSLatestTopicListRequest alloc] initWithCategoryId:self.categoryID updateTime:0];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
-        NSArray *listAry = dic[@"result"];
-        [SAVORXAPI saveFileOnPath:self.cachePath withArray:listAry];
+        NSDictionary * dataDict = [dic objectForKey:@"result"];
+        NSArray *listAry = dataDict[@"list"];
+        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
+        self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
+        self.flag = [dataDict objectForKey:@"flag"];
+        [SAVORXAPI saveFileOnPath:self.cachePath withDictionary:dataDict];
         for(NSDictionary *dict in listAry){
             
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
@@ -140,8 +152,12 @@
     HSLatestTopicListRequest * request = [[HSLatestTopicListRequest alloc] initWithCategoryId:self.categoryID updateTime:self.currentTime];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary *dic = (NSDictionary *)response;
-        NSArray *listAry = dic[@"result"][@"list"];
-        [SAVORXAPI saveFileOnPath:self.cachePath withArray:listAry];
+        NSDictionary * dataDict = [dic objectForKey:@"result"];
+        NSArray *listAry = dataDict[@"list"];
+        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
+        self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
+        self.flag = [dataDict objectForKey:@"flag"];
+        [SAVORXAPI saveFileOnPath:self.cachePath withDictionary:dataDict];
         [self.dataSource removeAllObjects];
         for(NSDictionary *dict in listAry){
             
@@ -154,7 +170,7 @@
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
         
-        NSInteger count = [dic[@"result"][@"count"] integerValue];
+        NSInteger count = [dataDict[@"count"] integerValue];
         if (count == 0) {
             [self showTopFreshLabelWithTitle:@"当前已为最新内容"];
         }else{
@@ -184,7 +200,16 @@
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary *dic = (NSDictionary *)response;
-        NSArray *listAry = dic[@"result"];
+        NSDictionary * dataDict = [dic objectForKey:@"result"];
+        NSArray *listAry = dataDict[@"list"];
+        
+        if (listAry.count == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
+            return;
+        }
+        
+        self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         for(NSDictionary *dict in listAry){
             
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
@@ -199,14 +224,6 @@
         [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        if ([[response objectForKey:@"code"] integerValue] == 10060) {
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
-        }else{
-            [self.tableView.mj_footer endRefreshing];
-            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"fail"];
-
-        }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
