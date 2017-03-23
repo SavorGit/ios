@@ -1,28 +1,35 @@
 //
-//  WebViewController.m
+//  HSVideoViewController.m
 //  SavorX
 //
-//  Created by 郭春城 on 16/8/8.
-//  Copyright © 2016年 郭春城. All rights reserved.
+//  Created by 郭春城 on 17/3/22.
+//  Copyright © 2017年 郭春城. All rights reserved.
 //
 
-#import "WebViewController.h"
-#import "UMCustomSocialManager.h"
+#import "HSVideoViewController.h"
 #import "HSConnectViewController.h"
-#import "HomeAnimationView.h"
-#import "SXVideoPlayViewController.h"
 #import "DemandViewController.h"
+#import "SXVideoPlayViewController.h"
+#import "HomeAnimationView.h"
 #import "GCCUPnPManager.h"
-#import <MediaPlayer/MediaPlayer.h>
+#import "UMCustomSocialManager.h"
 
-@interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate>
+@interface HSVideoViewController ()<GCCPlayerViewDelegate>
 
-@property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
-@property (nonatomic, strong) MPVolumeView * volumeView;
+@property (nonatomic, strong) UIView * topView;
+@property (nonatomic, strong) UIButton * collectButton; //收藏按钮
+@property (nonatomic, strong) UIButton * shareButton; //分享按钮
+@property (nonatomic, strong) UIButton * TVButton; //投屏按钮
+@property (nonatomic, strong) UIButton * backButton; //返回按钮
+
+@property (nonatomic, strong) UIView * videoView;
+@property (nonatomic, strong) UILabel * titleLabel;
+@property (nonatomic, strong) HSVodModel * model;
+@property (nonatomic, strong) UIImage * image;
 
 @end
 
-@implementation WebViewController
+@implementation HSVideoViewController
 
 -(void)dealloc{
     
@@ -30,37 +37,59 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
 }
 
+- (instancetype)initWithModel:(HSVodModel *)model image:(UIImage *)image
+{
+    if (self = [super init]) {
+        self.model = model;
+        self.image = image;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    self.volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(-100, -100, 40, 40)];
-//    [self.volumeView setHidden:NO];
-//    [self.view addSubview:self.volumeView];
-    
-    [self createUI];
+    [self setupViews];
 }
 
-//初始化界面
-- (void)createUI
+- (void)setupViews
 {
     self.view.backgroundColor = [UIColor blackColor];
     
-    self.title = self.model.title;
+    self.videoView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.view addSubview:self.videoView];
+    [self.videoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.center.mas_equalTo(0);
+        make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height).mas_offset(30);
+    }];
     
     self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
     self.playView.backgroundColor = [UIColor blackColor];
-    self.playView.delegate = self;
     [self.playView setVideoTitle:self.model.title];
-    [self.view addSubview:self.playView];
+    [self.playView backgroundImage:self.image];
+    [self.videoView addSubview:self.playView];
+    self.playView.delegate = self;
     [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
+        make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
         make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
     }];
-    if (!self.model.canPlay) {
-        [self.playView hiddenTVButton];
-    }
+    
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.backgroundColor = [UIColor clearColor];
+    self.titleLabel.text = self.model.title;
+    [self.videoView addSubview:self.titleLabel];
+    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(20);
+        make.bottom.mas_equalTo(0);
+        make.height.mas_equalTo(30);
+    }];
+    
     
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
         NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
@@ -72,25 +101,65 @@
                 return;
             }
         }];
-        [self.playView setIsCollect:iscollect];
+        [self setIsCollect:iscollect];
     }
     
-    self.webView = [[UIWebView alloc] init];
-    self.webView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.webView];
-    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.playView.mas_bottom);
+    self.topView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.view addSubview:self.topView];
+    self.topView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.3f];
+    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
-        make.width.mas_equalTo(kMainBoundsWidth);
-        make.bottom.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(70);
     }];
-    self.webView.delegate = self;
-    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
-    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-    self.webView.opaque = NO;
-    [self.webView loadRequest:request];
     
-    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    self.TVButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.TVButton setImage:[UIImage imageNamed:@"tv"] forState:UIControlStateNormal];
+    [self.TVButton addTarget:self action:@selector(videoShouldBeDemand) forControlEvents:UIControlEventTouchUpInside];
+    [self.topView addSubview:self.TVButton];
+    
+    self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
+    [self.collectButton addTarget:self action:@selector(videoShouldBeCollect:) forControlEvents:UIControlEventTouchUpInside];
+    [self.topView addSubview:self.collectButton];
+    
+    self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.shareButton setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
+    [self.shareButton addTarget:self action:@selector(videoShouldBeShare) forControlEvents:UIControlEventTouchUpInside];
+    [self.topView addSubview:self.shareButton];
+    
+    self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.backButton setImage:[UIImage imageNamed:@"RDBack"] forState:UIControlStateNormal];
+    [self.backButton addTarget:self action:@selector(backButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self.topView addSubview:self.backButton];
+    
+    [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(10);
+        make.top.mas_equalTo(20);
+        make.size.mas_equalTo(CGSizeMake(40, 40));
+    }];
+    [self.shareButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(20);
+        make.right.mas_equalTo(0);
+        make.size.mas_equalTo(CGSizeMake(40, 40));
+    }];
+    [self.collectButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(20);
+        make.right.mas_equalTo(-50);
+        make.size.mas_equalTo(CGSizeMake(40, 40));
+    }];
+    [self.TVButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(20);
+        make.right.mas_equalTo(-100);
+        make.size.mas_equalTo(CGSizeMake(40, 40));
+    }];
+    
+    [self playOrientationPortrait];
+    if (!self.model.canPlay) {
+        [self hiddenTVButton];
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(phoneBindDevice) name:RDDidBindDeviceNotification object:nil];
@@ -160,32 +229,7 @@
     }else{
         [self.navigationController popViewControllerAnimated:YES];
     }
-
-}
-
-- (void)orientationChanged
-{
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if (orientation == UIInterfaceOrientationPortrait) {
-        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        [self.playView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(20);
-        }];
-        [self.playView playOrientationPortrait];
-        
-        if (self.webView.isLoading) {
-            [MBProgressHUD showWebLoadingHUDInView:self.webView];
-        }
-        [self.navigationController setNeedsStatusBarAppearanceUpdate];
-    }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
-        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-        [self.playView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-        }];
-        [self.playView playOrientationLandscape];
-        [MBProgressHUD hideHUDForView:self.webView animated:NO];
-        [self.navigationController setNeedsStatusBarAppearanceUpdate];
-    }
+    
 }
 
 //收藏按钮被点击
@@ -204,34 +248,85 @@
         }];
         [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:cancleCollectHandle];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
-        [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        [self.playView setIsCollect:NO];
+        [self setIsCollect:NO];
     }else{
         [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:collectHandle];
         [favoritesArray addObject:[self.model toDictionary]];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
-        [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        [self.playView setIsCollect:YES];
+        [self setIsCollect:YES];
     }
 }
 
 - (void)videoShouldBeShare
 {
     [UMCustomSocialManager defaultManager].image = self.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self];
 }
 
-//分享按钮被点击
+- (void)hiddenTVButton
+{
+    [self.playView hiddenTVButton];
+    self.TVButton.hidden = YES;
+}
+
+- (void)setIsCollect:(BOOL)isCollect
+{
+    [self.playView setIsCollect:isCollect];
+    if (isCollect) {
+        [self.collectButton setSelected:YES];
+        [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateNormal];
+    }else{
+        [self.collectButton setSelected:NO];
+        [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)orientationChanged
+{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (orientation == UIInterfaceOrientationPortrait) {
+        [self playOrientationPortrait];
+    }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
+        [self playOrientationLandscape];
+    }
+}
+
+- (void)playOrientationPortrait
+{
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    [self.videoView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.center.mas_equalTo(0);
+        make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height).mas_offset(30);
+    }];
+    self.topView.hidden = NO;
+    [self.playView playOrientationPortraitWithOnlyVideo];
+    [self.navigationController setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void)playOrientationLandscape
+{
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    [self.videoView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height).mas_offset(30);
+    }];
+    self.topView.hidden = YES;
+    [self.playView playOrientationLandscapeWithOnlyVideo];
+    [self.navigationController setNeedsStatusBarAppearanceUpdate];
+}
+
 - (void)shareAction:(UIButton *)button
 {
     [UMCustomSocialManager defaultManager].image = self.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self];
 }
 
 - (void)videoShouldBeDemand
@@ -256,56 +351,6 @@
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-//    [self.volumeView setHidden:NO];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
-    [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:readHandle];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    [self.playView pause];
-    if ([UIApplication sharedApplication].statusBarHidden) {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    }
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]]) {
-        
-    }else{
-        [self.playView shouldRelease];
-    }
-    
-    [super viewDidDisappear:animated];
-}
-
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    if ([request.URL.absoluteString hasSuffix:@"mp4"]) {
-        return NO;
-    }
-    return YES;
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    [MBProgressHUD hideHUDForView:self.webView animated:NO];
-}
-
-#pragma mark 屏幕转屏相关
-
 /**
  *  强制屏幕转屏
  *
@@ -326,9 +371,34 @@
     }
 }
 
-- (void)navBackButtonClicked:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:readHandle];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.playView pause];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[HSVideoViewController class]]) {
+        
+    }else{
+        [self.playView shouldRelease];
+    }
+    [super viewDidDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {

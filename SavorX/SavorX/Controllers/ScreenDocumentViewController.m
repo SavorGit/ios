@@ -71,16 +71,16 @@
     }
     
     self.lockButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"unLockFile"] forState:UIControlStateNormal];
-    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"lockFile"] forState:UIControlStateSelected];
+    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"suoping"] forState:UIControlStateNormal];
+    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"yisuoping"] forState:UIControlStateSelected];
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(lockButtonDidClicked)];
     tap.numberOfTapsRequired = 1;
     [self.lockButton addGestureRecognizer:tap];
     [self.view addSubview:self.lockButton];
     [self.lockButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(32, 32));
-        make.bottom.mas_equalTo(-30);
-        make.right.mas_equalTo(-30);
+        make.size.mas_equalTo(CGSizeMake(45, 45));
+        make.top.mas_equalTo(18);
+        make.right.mas_equalTo(-15);
     }];
 
     [self.navigationController.barHideOnTapGestureRecognizer requireGestureRecognizerToFail:tap];

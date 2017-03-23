@@ -284,7 +284,7 @@
                     play.model = model;
                     [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
                     [[HomeAnimationView animationView] startScreenWithViewController:play];
-                    [self.navigationController pushViewController:play animated:YES];
+                    [self.parentNavigationController pushViewController:play animated:YES];
                 }
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
@@ -307,7 +307,7 @@
             play.model = model;
             [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
             [[HomeAnimationView animationView] startScreenWithViewController:play];
-            [self.navigationController pushViewController:play animated:YES];
+            [self.parentNavigationController pushViewController:play animated:YES];
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         } failure:^{
             [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -326,8 +326,9 @@
         }else{
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
-            [self.navigationController pushViewController:article animated:YES];
+            [self.parentNavigationController pushViewController:article animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
+
         }
     }
 }

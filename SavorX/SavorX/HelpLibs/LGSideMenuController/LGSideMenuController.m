@@ -35,7 +35,7 @@
 #import "ScreenDocumentViewController.h"
 #import "WebViewController.h"
 #import "VideoGuidedTwoDimensionalCode.h"
-#import "ScanQRCodeViewController.h"
+#import "HSVideoViewController.h"
 
 #pragma mark -
 
@@ -3083,12 +3083,8 @@ rightViewBackgroundImageInitialScale = _rightViewBackgroundImageInitialScale;
         }
         
         return UIInterfaceOrientationMaskAllButUpsideDown;
-    }else if ([[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]]) {
+    }else if ([[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[HSVideoViewController class]]) {
         return UIInterfaceOrientationMaskAllButUpsideDown;
-    }else if ([UIApplication sharedApplication].keyWindow.subviews.count > 1){
-        if ([[UIApplication sharedApplication].keyWindow.subviews[1] isKindOfClass:[VideoGuidedTwoDimensionalCode class]] && [[Helper getRootNavigationController].topViewController isKindOfClass:[ScanQRCodeViewController class]]) {
-            return UIInterfaceOrientationMaskAllButUpsideDown;
-        }
     }
     return UIInterfaceOrientationMaskPortrait;
 }

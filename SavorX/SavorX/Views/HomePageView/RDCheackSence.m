@@ -15,7 +15,7 @@
 #import "HomeAnimationView.h"
 #import "LGSideMenuController.h"
 #import "WMPageController.h"
-#import "ScanQRCodeViewController.h"
+#import "HSConnectViewController.h"
 
 @interface RDCheackSence ()
 
@@ -49,7 +49,7 @@
             
             WMPageController * page = (WMPageController *)baseNa.topViewController;
             [page.homeButton closeWithMust];
-        }else if ([baseNa.topViewController isKindOfClass:[ScanQRCodeViewController class]]){
+        }else if ([baseNa.topViewController isKindOfClass:[HSConnectViewController class]]){
             [baseNa popViewControllerAnimated:NO];
         }
     }

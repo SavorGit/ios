@@ -27,4 +27,26 @@
     return self;
 }
 
+- (instancetype)initVersionWithTitle:(NSString *)title handler:(void (^)())handler bold:(BOOL)bold
+{
+    if (self = [super init]) {
+        
+        [self setTitle:title forState:UIControlStateNormal];
+        self.block = handler;
+        [self setTitleColor:UIColorFromRGB(0x444444) forState:UIControlStateNormal];
+        if (bold) {
+            self.titleLabel.font = [UIFont boldSystemFontOfSize:17];
+        }else{
+            self.titleLabel.font = [UIFont systemFontOfSize:17];
+        }
+        [self addTarget:self action:@selector(didBeCicked) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return self;
+}
+
+- (void)didBeCicked
+{
+    self.block();
+}
+
 @end

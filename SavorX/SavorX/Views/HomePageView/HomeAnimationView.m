@@ -8,7 +8,7 @@
 
 #import "HomeAnimationView.h"
 #import "SXDlnaViewController.h"
-#import "ScanQRCodeViewController.h"
+#import "HSConnectViewController.h"
 #import "BaseNavigationController.h"
 #import "WMPageController.h"
 #import "PhotoSliderViewController.h"
@@ -18,11 +18,10 @@
 #import "RDAlertView.h"
 #import "RDCheackSence.h"
 #import "GCCDLNA.h"
-#import "HSConnectViewController.h"
 
 #define HasAlertScreen @"HasAlertScreen"
 
-@interface HomeAnimationView ()<QRCodeDidBindDelegate>
+@interface HomeAnimationView ()
 @property (weak, nonatomic) IBOutlet UIImageView *devImageView;
 @property (nonatomic, strong) UILabel *textLabel;
 
@@ -236,7 +235,7 @@
 //相机权限准备好，即调用TCP连接检测与UDP广播发送进行二维码呼出
 - (void)CameroIsReady
 {
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"准备扫描二维码"];
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
     NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
     [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         [hud hideAnimated:NO];
@@ -252,10 +251,10 @@
         //
         if (error.code == -1009 || error.code == -1001) {
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
+            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
         }else{
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
+            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
         }
     }];
 }
@@ -263,7 +262,7 @@
 // 重新呼出二维码
 - (void)reCallCode{
     
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"准备扫描二维码"];
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
     
     NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
     [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
@@ -272,25 +271,13 @@
         //
         if (error.code == -1009 || error.code == -1001) {
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
+            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
         }else{
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
+            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
         }
     }];
     
-}
-
-#pragma mark -- QRCodeDidBindDelegate
-- (void)QRCodeDidBindSuccessWithType:(QRResultType)type andWifiName:(NSString *)name
-{
-    if (type == QRResultTypeSuccess) {
-        
-    }else if (type == QRResultTypeQRError){
-        [MBProgressHUD showTextHUDwithTitle:@"连接失败，请扫描电视中的二维码"];
-    }else if(type == QRResultTypeWIFIError) {
-        [self showAlertWithWifiName:name];
-    }
 }
 
 //前往系统WIFI设置
