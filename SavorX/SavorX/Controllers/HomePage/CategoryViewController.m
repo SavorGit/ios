@@ -99,6 +99,7 @@
     HSTopicListRequest * request = [[HSTopicListRequest alloc] initWithCategoryId:self.categoryID pageNo:1 pageSize:20 time:self.currentTime];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
         NSArray *listAry = dic[@"result"];
         [SAVORXAPI saveFileOnPath:self.cachePath withArray:listAry];
