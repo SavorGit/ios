@@ -35,6 +35,11 @@
     [[PhotoTool sharedInstance] startLoadVideoAssetCollection];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_list" key:nil value:nil];
+}
+
 //创建列表视图
 - (void)createCollectionView
 {
@@ -104,6 +109,7 @@
                             [SAVORXAPI successRing];
                             [[HomeAnimationView animationView] startScreenWithViewController:play];
                             [self.navigationController pushViewController:play animated:YES];
+                            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];
                         }else{
                             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
                         }
@@ -122,6 +128,7 @@
                         [SAVORXAPI successRing];
                         [[HomeAnimationView animationView] startScreenWithViewController:play];
                         [self.navigationController pushViewController:play animated:YES];
+                        [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];
                     } failure:^{
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
@@ -194,6 +201,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_back" key:nil value:nil];
 }
 
 /*

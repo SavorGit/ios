@@ -2311,7 +2311,9 @@ rightViewBackgroundImageInitialScale = _rightViewBackgroundImageInitialScale;
     }
 }
 
+//  侧滑打开
 - (void)showLeftViewDoneWithGesture:(BOOL)withGesture {
+     [SAVORXAPI postUMHandleWithContentId:@"menu_collapse" key:nil value:nil];
     if (withGesture) {
         self.leftViewGestireStartX = nil;
     }
@@ -2398,7 +2400,9 @@ rightViewBackgroundImageInitialScale = _rightViewBackgroundImageInitialScale;
     }
 }
 
+// 侧滑关闭
 - (void)hideLeftViewDoneWithGesture:(BOOL)withGesture {
+    [SAVORXAPI postUMHandleWithContentId:@"menu_expand" key:nil value:nil];
     if (withGesture) {
         [self statusBarAppearanceUpdateAnimated:YES
                                        duration:self.leftViewAnimationSpeed

@@ -29,6 +29,10 @@
     [self createUI];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_open_album" key:nil value:nil];
+}
+
 - (void)libraryDidCreateByIDArray:(NSArray *)array
 {
     self.currentNum = self.currentNum + array.count;
@@ -93,6 +97,7 @@
 #pragma mark -- UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_click_album" key:nil value:nil];
     if (self.currentNum >= 50) {
         [MBProgressHUD showTextHUDwithTitle:@"该幻灯片已经有50张照片"];
         return;

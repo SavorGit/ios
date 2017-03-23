@@ -123,6 +123,10 @@
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"home_video" key:nil value:nil];
+}
+
 - (void)viewDidDisappear:(BOOL)animated{
     
     [super viewDidDisappear:animated];
@@ -282,7 +286,10 @@
     [self.timer setFireDate:[NSDate distantFuture]];
 }
 
+// 拖动进度
 -(void)VoideoPlaysliderEndTouch{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_drag_progress" key:nil value:nil];
     if (self.isPlayEnd) {
         [self restartVod];
     }else{
@@ -325,6 +332,9 @@
 
 
 -(void)voideoPlayFooterView:(voideoPlayFooterView *)vView didVideoPlayButton:(UIButton *)button{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_pause" key:nil value:nil];
+    
     button.enabled = NO;
     if (self.isHandle) {
         [MBProgressHUD showTextHUDwithTitle:@"正在进行操作"];
@@ -534,6 +544,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+// 退出投屏
 -(void)stopVoideoPlay{
     
     [SAVORXAPI ScreenDemandShouldBackToTV];
@@ -583,6 +594,7 @@
                 
             case 3:
             {
+                [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_vol_down" key:nil value:nil];
                 if (self.DLNAVolume > 0) {
                     self.DLNAVolume--;
                 }
@@ -592,6 +604,7 @@
                 
             case 4:
             {
+                [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_vol_up" key:nil value:nil];
                 if (self.DLNAVolume < 100) {
                     self.DLNAVolume++;
                 }
@@ -637,6 +650,7 @@
     }else{
         [self.navigationController popViewControllerAnimated:YES];
     }
+    [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_back_list" key:nil value:nil];
 }
 
 -(void)isEnableFooter{

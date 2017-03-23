@@ -80,7 +80,8 @@
 - (void)shareAction
 {
     [UMCustomSocialManager defaultManager].image = self.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
 - (void)collectAction
@@ -98,6 +99,7 @@
         }];
         [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:cancleCollectHandle];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+        [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         self.collectButton.selected = NO;
@@ -105,6 +107,7 @@
         [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:collectHandle];
         [favoritesArray addObject:[self.model toDictionary]];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+        [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         self.collectButton.selected = YES;
@@ -117,6 +120,11 @@
         return NO;
     }
     return YES;
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView

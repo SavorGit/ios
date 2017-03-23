@@ -75,6 +75,7 @@
         ArticleReadViewController * read = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
         [self.navigationController pushViewController:read animated:YES];
     }
+    [SAVORXAPI postUMHandleWithContentId:@"menu_collection_details" key:nil value:nil];
 }
 
 #pragma mark -- UITableViewDataSource
@@ -181,8 +182,14 @@
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
-        [SAVORXAPI postUMHandleWithContentId:model.cid withType:cancleCollectHandle];
+//        [SAVORXAPI postUMHandleWithContentId:model.cid withType:cancleCollectHandle];
+        [SAVORXAPI postUMHandleWithContentId:@"menu_cancel_collection" key:nil value:nil];
     }
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"menu_collection_back" key:nil value:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -192,6 +199,10 @@
     [self getDataSource];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"menu_collection" key:nil value:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

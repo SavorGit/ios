@@ -26,4 +26,13 @@
  */
 - (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller;
 
+/**
+ *
+ *  展示分享视图
+ *  dict         需要分享的条目信息
+ *  controller   需要展示视图的控制器
+ *  type         页面来源
+ */
+- (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type;
+
 @end

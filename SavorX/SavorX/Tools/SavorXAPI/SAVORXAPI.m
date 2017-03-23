@@ -341,6 +341,7 @@
         
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
         }];
@@ -348,6 +349,7 @@
         [[GCCUPnPManager defaultManager] stopSuccess:^{
             
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
             
         } failure:^{
             
@@ -435,9 +437,10 @@
 {
     RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"请点击\"连接电视\", 即可投屏"];
     RDAlertAction * action1 = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-        
+        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"cancel"];
     } bold:NO];
     RDAlertAction * action2 = [[RDAlertAction alloc] initWithTitle:@"连接电视" handler:^{
+        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"link"];
         [[HomeAnimationView animationView] scanQRCode];
     } bold:YES];
     [alert addActions:@[action1, action2]];
@@ -516,6 +519,7 @@
                 if ([[info objectForKey:@"update_type"] integerValue] == 1) {
                     UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1144051586?mt=8"]];
+                        [SAVORXAPI postUMHandleWithContentId:@"home_update" key:@"home_update" value:@"ensure"];
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [SAVORXAPI showAlert:alert];
                         });
@@ -526,10 +530,12 @@
                     UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"忽略此版本" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         [[NSUserDefaults standardUserDefaults] setObject:[info objectForKey:version_code] forKey:version_code];
                         [[NSUserDefaults standardUserDefaults] synchronize];
+                        [SAVORXAPI postUMHandleWithContentId:@"home_update" key:@"home_update" value:@"cancel"];
                     }];
                     UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1144051586?mt=8"]];
+                            [SAVORXAPI postUMHandleWithContentId:@"home_update" key:@"home_update" value:@"ensure"];
                         });
                     }];
                     [alert addAction:action1];

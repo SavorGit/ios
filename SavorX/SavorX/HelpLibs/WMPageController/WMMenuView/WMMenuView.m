@@ -227,9 +227,14 @@ static NSInteger const WMBadgeViewTagOffset = 1212;
     }
     currentItem.rate = 1-rate;
     nextItem.rate = rate;
+    
+    [SAVORXAPI postUMHandleWithContentId:@"home_sliding_category" key:@"home_sliding_category" value:self.selItem.text];
 }
 
 - (void)selectItemAtIndex:(NSInteger)index {
+    
+    [SAVORXAPI postUMHandleWithContentId:@"home_click_category" key:@"home_click_category" value:self.selItem.text];
+    
     NSInteger tag = index + WMMenuItemTagOffset;
     NSInteger currentIndex = self.selItem.tag - WMMenuItemTagOffset;
     self.selectIndex = index;

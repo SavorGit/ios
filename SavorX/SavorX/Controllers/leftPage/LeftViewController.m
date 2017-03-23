@@ -142,10 +142,11 @@
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"" message:@"本次清除缓存，将清除图片、视频、以及您的文件缓存，请确认您的操作" preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
+        [SAVORXAPI postUMHandleWithContentId:@"menu_clear_cache" key:@"menu_clear_cache" value:@"fail"];
     }];
     UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [self clearApplicationCache];
+        [SAVORXAPI postUMHandleWithContentId:@"menu_clear_cache" key:@"menu_clear_cache" value:@"success"];
     }];
     [alert addAction:action1];
     [alert addAction:action2];

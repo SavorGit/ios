@@ -56,7 +56,6 @@
 }
 
 - (void)creatHelpGuide{
-    
     [self.scan stop];
     VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
     [vgVC showScreenProjectionTitle:@"scanGuide" fromStyle:FromScanGuide block:^(NSInteger selectIndex) {

@@ -132,6 +132,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 - (void)rightAction{
     
     [[HomeAnimationView animationView] scanQRCode];
+    [SAVORXAPI postUMHandleWithContentId:@"home_connect_tv" key:nil value:nil];
 }
 
 //打开用户应用设置
@@ -990,6 +991,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         {
             if (self.isInHotel) {
                 [self setSelectIndex:0];
+                [SAVORXAPI postUMHandleWithContentId:@"home_bunch_planting" key:nil value:nil];
             }
         }
             break;

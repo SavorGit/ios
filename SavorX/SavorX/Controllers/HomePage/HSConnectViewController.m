@@ -32,6 +32,10 @@
     [self setupViews];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"link_tv_enter" key:nil value:nil];
+}
+
 - (void)setupViews
 {
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -265,6 +269,7 @@
         self.failConectLabel.hidden = YES;
         self.reConnectBtn.hidden = YES;
         self.textLabel.hidden = NO;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
@@ -273,6 +278,7 @@
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
         self.textLabel.hidden = YES;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
         
     }];
 }
@@ -284,6 +290,11 @@
         UILabel * label = [self.labelSource objectAtIndex:i];
         label.text = @"";
     }
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"link_tv_back" key:nil value:nil];
 }
 
 - (void)didReceiveMemoryWarning {

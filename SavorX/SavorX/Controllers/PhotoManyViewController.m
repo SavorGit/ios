@@ -47,6 +47,12 @@
     return self;
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"home_pic" key:nil value:nil];
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -219,6 +225,7 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = NO;
+        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_exit_screen" key:nil value:nil];
     } failure:^{
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = YES;
@@ -227,6 +234,7 @@
 
 - (void)rotateImage
 {
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_rotating" key:nil value:nil];
     if ([GlobalData shared].isBindRD && self.isScreen) {
         [SAVORXAPI rotateWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0){
@@ -260,6 +268,7 @@
 
 - (void)addTextOnImage
 {
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_add_text" key:nil value:nil];
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在加载"];
     
     PhotoManyCollectionViewCell * cell = [self currentCell];
@@ -356,6 +365,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_switch" key:nil value:nil];
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
         if (self.isScreen) {
             PhotoManyCollectionViewCell * cell = [self currentCell];
@@ -560,6 +570,11 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
     NSLog(@"相册投屏释放了");
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_back_list" key:nil value:nil];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -392,6 +392,7 @@
 //多选图片进行幻灯片操作
 - (void)photoArrayToPlay
 {
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_start" key:nil value:nil];
     if (self.PHAssetSource.count == 0) {
         [MBProgressHUD showTextHUDwithTitle:@"请至少选择一张图片"];
         return;
@@ -523,6 +524,15 @@
 {
     [super viewWillAppear:animated];
     [OpenFileTool deleteFileSubPath:SystemImage];
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"home_slide" key:nil value:nil];
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_back_list" key:nil value:nil];
 }
 
 - (void)didReceiveMemoryWarning {

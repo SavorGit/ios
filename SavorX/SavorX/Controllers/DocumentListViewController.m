@@ -51,7 +51,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_list" key:nil value:nil];
+}
+
 - (void)creatHelpGuide{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_guide" key:nil value:nil];
+     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_help" key:nil value:nil];
     
     VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
     [vgVC showScreenProjectionTitle:@"documentGuide" fromStyle:FromDocumentGuide block:^(NSInteger selectIndex) {

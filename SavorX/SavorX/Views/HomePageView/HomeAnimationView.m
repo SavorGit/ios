@@ -319,11 +319,12 @@
     }
 }
 
-//测试后期可以去掉
+// 点击投屏浮层，快捷进入
 - (IBAction)animationStart:(id)sender {
     
     if (self.currentVC) {
         [[Helper getRootNavigationController] pushViewController:self.currentVC animated:YES];
+        [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
     }else if ([GlobalData shared].isBindDLNA || [GlobalData shared].isBindRD) {
         UINavigationController * na = [Helper getRootNavigationController];
         if ([na.topViewController isKindOfClass:[WMPageController class]]) {
