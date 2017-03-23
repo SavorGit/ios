@@ -558,6 +558,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 - (void)selectButtonDidClicked:(UIButton *)button
 {
     if (button.tag == 101) {
+        [SAVORXAPI postUMHandleWithContentId:@"details_page_mediation_clarity" key:@"details_page_mediation_clarity" value:@"hd"];
         switch (self.definition) {
             case RDDefinitionSD:
                 [self changeToRDDefinitionHQD];
@@ -577,6 +578,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         
     }else{
         
+       [SAVORXAPI postUMHandleWithContentId:@"details_page_mediation_clarity" key:@"details_page_mediation_clarity" value:@"ld"];
         switch (self.definition) {
             case RDDefinitionSD:
                 [self changeToRDDefinitionHD];

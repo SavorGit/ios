@@ -35,6 +35,11 @@
     [self createUI];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_list" key:nil value:nil];
+}
+
 - (void)createUI
 {
     self.view.backgroundColor = VCBackgroundColor;
@@ -178,6 +183,7 @@
 //创建按钮被点击
 - (void)createPhotoLibrary
 {
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_creat" key:nil value:nil];
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"新建幻灯片" message:@"为此幻灯片输入名称" preferredStyle:UIAlertControllerStyleAlert];
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.placeholder = @"请输入名称";
@@ -186,8 +192,10 @@
     }];
     UIAlertAction * leftAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_creat_name" key:@"slide_to_screen_creat_name" value:@"cancel"];
     }];
     UIAlertAction * rightAction = [UIAlertAction actionWithTitle:@"创建" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_creat_name" key:@"slide_to_screen_creat_name" value:@"creat"];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
         
         UITextField * textFiled = [alert.textFields firstObject];

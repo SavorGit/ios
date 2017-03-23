@@ -28,6 +28,11 @@
     [self createUI];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_photo_list" key:nil value:nil];
+}
+
 - (void)createUI
 {
     self.view.backgroundColor = VCBackgroundColor;
@@ -99,6 +104,7 @@
 #pragma mark -- UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_photo_album" key:nil value:nil];
     PhotoLibraryModel * model = [self.results objectAtIndex:indexPath.row];
     PhotoListViewController * list = [[PhotoListViewController alloc] init];
     list.title = model.title;

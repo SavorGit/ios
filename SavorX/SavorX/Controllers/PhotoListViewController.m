@@ -94,6 +94,7 @@
 - (void)rightButtonItemDidClicked
 {
     if (self.isChooseStatus) {
+        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_photo_cancel_select" key:nil value:nil];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"选择" style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
         self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
         [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -103,6 +104,7 @@
         self.isAllChoose = NO;
         [self.selectArray removeAllObjects];
     }else{
+        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_photo_select" key:nil value:nil];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStyleDone target:self action:@selector(allChoose)];
         [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -116,6 +118,7 @@
 //全选动作触发
 - (void)allChoose
 {
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_photo_select_all" key:nil value:nil];
     NSInteger maxNum = self.PHAssetSource.count > 50 ? 50 : self.PHAssetSource.count;
     for (NSInteger i = 0; i < maxNum; i++) {
         if (self.selectArray.count > 49) {
@@ -223,6 +226,7 @@
                         [[HomeAnimationView animationView] startScreenWithViewController:vc];
                         [SAVORXAPI successRing];
                         
+                        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_play" key:nil value:nil];
                         [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 success:^{
                             
                         } failure:^{
@@ -337,6 +341,7 @@
 //投屏某一张图片
 - (void)screenImageWithPHAsset:(PHAsset *)asset index:(NSInteger)index success:(void (^)(UIImage * result, NSString * keyStr))success
 {
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_click_item" key:nil value:nil];
     //导出图片的参数
     PHImageRequestOptions *option = [PHImageRequestOptions new];
     option.synchronous = YES; //开启线程同步
@@ -364,6 +369,11 @@
             });
         }];
     }];
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_back_album" key:nil value:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated

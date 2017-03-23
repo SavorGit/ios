@@ -137,16 +137,20 @@
         [self.tableView.mj_footer endRefreshing];
         [self.tableView reloadData];
         self.pageNo++;
+        [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         if ([[response objectForKey:@"code"] integerValue] == 10060) {
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
         }else{
             [self.tableView.mj_footer endRefreshing];
+            [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"fail"];
         }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         [self.tableView.mj_footer endRefrenshWithNoNetWork];
         [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
+        [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"fail"];
     }];
 }
 
@@ -178,15 +182,20 @@
         
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
+        [SAVORXAPI postUMHandleWithContentId:@"home_refresh" key:@"home_refresh" value:@"success"];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         if ([[response objectForKey:@"code"] integerValue] == 10060) {
             [self showTopFreshLabelWithTitle:@"当前已为最新内容"];
             [self.tableView.mj_footer resetNoMoreData];
+             [SAVORXAPI postUMHandleWithContentId:@"home_refresh" key:@"home_refresh" value:@"success"];
+        }else{
+             [SAVORXAPI postUMHandleWithContentId:@"home_refresh" key:@"home_refresh" value:@"fail"];
         }
         [self.tableView.mj_header endRefreshing];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self.tableView.mj_header endRefreshing];
         [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
+        [SAVORXAPI postUMHandleWithContentId:@"home_refresh" key:@"home_refresh" value:@"fail"];
     }];
 }
 
@@ -259,6 +268,7 @@
                     [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
                     [[HomeAnimationView animationView] startScreenWithViewController:view];
                     [self.parentNavigationController pushViewController:view animated:YES];
+                    [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
                 }else{
                     SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
                     play.model = model;
@@ -306,10 +316,13 @@
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
             [self.parentNavigationController pushViewController:web animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else{
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
             [self.parentNavigationController pushViewController:article animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
+
         }
     }
 }

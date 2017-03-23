@@ -35,6 +35,10 @@
     return self;
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_photo_list" key:nil value:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -149,6 +153,7 @@
 
 - (void)addPhotoToLibrary
 {
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_select_add_item" key:nil value:nil];
     NSMutableArray * array = [NSMutableArray new];
     PHFetchResult * result = self.model.result;
     
@@ -203,6 +208,8 @@
 //全选动作触发
 - (void)allChoose
 {
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_select_all" key:nil value:nil];
+    
     NSInteger maxNum = self.model.result.count > kMAXPhotoNum - self.currentNum ? kMAXPhotoNum - self.currentNum : self.model.result.count;
     NSMutableArray * tempArray = [NSMutableArray new];
     for (NSInteger i = 0; i < maxNum; i++) {
@@ -232,6 +239,7 @@
 
 - (void)cancelAllChoose
 {
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_select_all_cancel" key:nil value:nil];
     if (self.selectArray.count > 0) {
         [self.selectArray removeAllObjects];
     }
@@ -292,6 +300,7 @@
 - (void)updateChooseButtonStatus
 {
     if (self.selectArray.count > 0) {
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_select" key:nil value:nil];
         [self.chooseButton setTitleColor:PhotoToolTitleColor forState:UIControlStateNormal];
         [self.chooseButton setTitle:[NSString stringWithFormat:@"添加至幻灯片\"%@\"", self.libraryTitle] forState:UIControlStateNormal];
         self.title = [NSString stringWithFormat:@"%@(%ld/%d)", self.model.title, self.selectArray.count + self.currentNum, kMAXPhotoNum];
@@ -301,6 +310,7 @@
         [self.chooseButton setTitle:@"请先选择图片" forState:UIControlStateNormal];
         self.title = self.model.title;
         self.chooseButton.userInteractionEnabled = NO;
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_select_cancel" key:nil value:nil];
     }
 }
 

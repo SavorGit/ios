@@ -22,6 +22,10 @@
     [self customHelpView];
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"menu_help" key:nil value:nil];
+}
+
 - (void)customHelpView
 {
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
@@ -34,6 +38,11 @@
     
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://h5.rerdian.com/Public/html/help"]];
     [self.webView loadRequest:request];
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"menu_help_back" key:nil value:nil];
 }
 
 @end

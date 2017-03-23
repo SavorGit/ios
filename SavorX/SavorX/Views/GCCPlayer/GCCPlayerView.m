@@ -321,8 +321,10 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)viewDidBeDoubleClicked
 {
     if (self.status == GCCPlayerStatusPause) {
+        [SAVORXAPI postUMHandleWithContentId:@"details_page_play_video" key:nil value:nil];
         [self play];
     }else if (self.status == GCCPlayerStatusPlaying){
+        [SAVORXAPI postUMHandleWithContentId:@"details_page_pause_touch" key:nil value:nil];
         [self pause];
     }
 }
@@ -449,9 +451,10 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     }
 }
 
-//用户进度调节完毕
+//用户进度调节完毕（滑动调节进度）
 - (void)horizontalIsEnd
 {
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_sliding_progress" key:nil value:nil];
     AVPlayerItem *currentItem = self.player.currentItem;
     NSInteger currentTime = (NSInteger)CMTimeGetSeconds([currentItem currentTime]);
     CGFloat totalTime = (CGFloat)currentItem.duration.value / currentItem.duration.timescale;
@@ -466,8 +469,12 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)verticalMoved:(CGFloat)value
 {
     if (self.isVolume) {
+        // 调节音量
+        [SAVORXAPI postUMHandleWithContentId:@"details_page_mediation_volume" key:nil value:nil];
         self.volumeViewSlider.value -= value / 10000;
     }else{
+        // 调节亮度
+        [SAVORXAPI postUMHandleWithContentId:@"details_page_mediation_brightness" key:nil value:nil];
         [UIScreen mainScreen].brightness -= value / 10000;
     }
 }
@@ -555,6 +562,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //变成横屏
 - (void)playOrientationLandscape
 {
+    // 全屏播放
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_full_screen" key:nil value:nil];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_rotating_screen" key:nil value:nil];
     self.isFullScreen = YES;
     [self.controlView playOrientationLandscape];
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:@"hasPlay"] boolValue];
@@ -615,6 +625,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //截屏按钮被点击
 - (void)shotButtonDidClicked
 {
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_screenshots" key:nil value:nil];
     //判断用户是否拥有相机权限
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
     if (status == PHAuthorizationStatusNotDetermined) {
@@ -665,6 +676,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //用户点击播放按钮以播放视频
 - (void)playButtonDidClickedToPlay:(UIButton *)button
 {
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_play_video" key:nil value:nil];
     [self play];
     if (self.imageView.superview) {
         [self.imageView removeFromSuperview];
@@ -674,12 +686,14 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //用户点击播放按钮以暂停视频
 - (void)playButtonDidClickedToPause:(UIButton *)button
 {
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_pause_button" key:nil value:nil];
     [self pause];
 }
 
 //用户拖动进度条调节进度
 - (void)sliderDidSlideToTime:(NSInteger)time
 {
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_drag_progress" key:nil value:nil];
     [self.controlView loading];
     self.isPan = YES;
     [self.player pause];
@@ -730,6 +744,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)TVButtonDidClicked
 {
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_to_screen" key:nil value:nil];
     if (self.delegate && [self.delegate respondsToSelector:@selector(videoShouldBeDemand)]) {
         [self.delegate videoShouldBeDemand];
     }

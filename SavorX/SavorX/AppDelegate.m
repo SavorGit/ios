@@ -26,6 +26,7 @@
 #import "WMPageController.h"
 #import "HomeAnimationView.h"
 #import "VideoLauchMovieViewController.h"
+#import "HSLauchImageOrVideoRequest.h"
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate>
 
@@ -43,7 +44,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
     [self createLaunch];
-    [self saveImage:nil];
+    [self requestGetLauchImageOrVideo];
     
     [SAVORXAPI configApplication];
     [SAVORXAPI checkVersionUpgrade];
@@ -94,6 +95,7 @@
     splashViewController.delegate = self;
     self.window.rootViewController = splashViewController;
     [self.window makeKeyAndVisible];
+    [SAVORXAPI postUMHandleWithContentId:@"guide" key:nil value:nil];
 }
 
 #pragma mark splashViewControllerDelegate
@@ -162,19 +164,17 @@
 - (void)createLaunch
 {
     
-    NSString *imagePath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
-    NSData *picData = [NSData dataWithContentsOfFile:imagePath];
-    UIImage *launchImage = [UIImage imageWithData:picData];
-    
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:HasLaunched] boolValue];
     if (temp) {
         
         BOOL isLauchImage =  YES;
         if (!isLauchImage) {
             
+            NSString *videoPath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.MP4"];
+            
             VideoLauchMovieViewController *vc = [[VideoLauchMovieViewController alloc] init];
             self.window.rootViewController = vc;
-            vc.videoUrlString = @"";
+            vc.videoUrlString = videoPath;
             vc.lauchClickedBack = ^(NSDictionary *parmDic){
                 LGSideMenuController * sliderVC = [self createRootViewController];
                 self.window.rootViewController = sliderVC;
@@ -188,6 +188,10 @@
         [self.window makeKeyAndVisible];
         
         if (isLauchImage) {
+            
+            NSString *imagePath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
+            NSData *picData = [NSData dataWithContentsOfFile:imagePath];
+            UIImage *launchImage = [UIImage imageWithData:picData];
             
             //设置一个图片;
             UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -222,29 +226,68 @@
             }];
 
         }
+        [SAVORXAPI postUMHandleWithContentId:@"start_page" key:@"start_page" value:@"success"];
         
     }else{
         //第一次启动应用程序
         [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:HasLaunched];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        [SAVORXAPI postUMHandleWithContentId:@"start_page" key:@"start_page" value:@"success"];
         [self gotoGuidePageView];
     }
 }
 
-- (void)saveImage:(NSString *)imageUrl
+- (void)saveImage:(NSString *)urlStr withType:(NSString *)typeString
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         
-        NSData *beforImageDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://redian-produce.oss-cn-beijing.aliyuncs.com/media/resource/pxbJA4YSzb.jpg"]];
-        NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        if ([fileManager fileExistsAtPath:filePath]) {
-            [fileManager removeItemAtPath:filePath error:nil];
+        if ([typeString isEqualToString:@"1"]) {
+            NSData *beforImageDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://redian-produce.oss-cn-beijing.aliyuncs.com/media/resource/pxbJA4YSzb.jpg"]];
+            NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            if ([fileManager fileExistsAtPath:filePath]) {
+                [fileManager removeItemAtPath:filePath error:nil];
+            }
+            [beforImageDate writeToFile:filePath atomically:YES];
+        }else if ([typeString isEqualToString:@"2"]){
+            NSData *beforImageDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
+            NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.MP4"];
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            if ([fileManager fileExistsAtPath:filePath]) {
+                [fileManager removeItemAtPath:filePath error:nil];
+            }
+            [beforImageDate writeToFile:filePath atomically:YES];
         }
-        [beforImageDate writeToFile:filePath atomically:YES];
-        
     });
 }
+
+- (void)requestGetLauchImageOrVideo
+{
+    HSLauchImageOrVideoRequest * request = [[HSLauchImageOrVideoRequest alloc] initWithDeviceIdentification:@"iphone"];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary * dict = response[@"result"];
+        NSString *idString = dict[@"id"];
+        NSString *statusString = dict[@"status"];
+        NSString *durationString = dict[@"duration"];
+        NSString *urlString = dict[@"url"];
+        
+        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+        // 如果拿到的lauchID和本地存储的id不一致，则存储图片伙食视频
+        if (![[user objectForKey:@"lauchId"]  isEqualToString:idString]) {
+            [user setObject:idString forKey:@"lauchId"];
+            [user synchronize];
+            [self saveImage:urlString withType:statusString];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        NSLog(@"无法连接到网络,请检查网络设置");
+    }];
+}
+
+
 
 //app注册推送deviceToken
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken

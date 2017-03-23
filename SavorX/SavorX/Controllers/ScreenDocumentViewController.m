@@ -94,6 +94,7 @@
     if (self.lockButton.selected) {
         self.isLockScreen = NO;
     }else{
+        [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_lock" key:nil value:nil];
         self.isLockScreen = YES;
     }
     self.lockButton.selected = !self.lockButton.selected;
@@ -113,6 +114,7 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
         self.isScreen = NO;
         self.navigationItem.rightBarButtonItem.enabled = YES;
+        [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_exit" key:nil value:nil];
     } failure:^{
         self.navigationItem.rightBarButtonItem.enabled = YES;
     }];
@@ -120,6 +122,7 @@
 
 - (void)screenDocment
 {
+    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_details_play" key:nil value:nil];
     if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
         [[HomeAnimationView animationView] scanQRCode];
         return;
@@ -140,6 +143,7 @@
 
 - (void)orientationChanged
 {
+    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_rotating" key:nil value:nil];
     if (self.isScreen) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self screenButtonDidClickedWithSuccess:nil failure:nil];
@@ -296,6 +300,7 @@
             UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
             [HomeAnimationView animationView].currentImage = currentWebImage;
             [[HomeAnimationView animationView] startScreenWithViewController:self];
+            [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
                 
             } failure:^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
@@ -345,6 +350,11 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_back" key:nil value:nil];
 }
 
 - (void)didReceiveMemoryWarning {

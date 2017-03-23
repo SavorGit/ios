@@ -243,6 +243,7 @@
     self.timeLong = button.tag;
     switch (button.tag) {
         case 3:
+            [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_switch_time" key:@"slide_to_screen_switch_time" value:@"3"];
             [self.firstTimeButton setTitle:@"5s" forState:UIControlStateNormal];
             self.firstTimeButton.tag = 5;
             [self.secondTimeButton setTitle:@"10s" forState:UIControlStateNormal];
@@ -261,6 +262,7 @@
             break;
             
         case 10:
+            [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_switch_time" key:@"slide_to_screen_switch_time" value:@"10"];
             [self.firstTimeButton setTitle:@"3s" forState:UIControlStateNormal];
             self.firstTimeButton.tag = 3;
             [self.secondTimeButton setTitle:@"5s" forState:UIControlStateNormal];
@@ -270,6 +272,7 @@
             break;
             
         case 20:
+            [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_switch_time" key:@"slide_to_screen_switch_time" value:@"20"];
             [self.firstTimeButton setTitle:@"3s" forState:UIControlStateNormal];
             self.firstTimeButton.tag = 3;
             [self.secondTimeButton setTitle:@"5s" forState:UIControlStateNormal];
@@ -298,6 +301,7 @@
 {
     button.selected = !button.isSelected;
     if (button.isSelected) {
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_play" key:nil value:nil];
         [self.timer setFireDate:[NSDate distantFuture]];
         [self.timer invalidate];
         //播放
@@ -306,6 +310,7 @@
         self.statusLabel.text = @"正在播放图片";
     }else{
         //暂停
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_pause" key:nil value:nil];
         [self.timer invalidate];
         self.statusLabel.text = @"已暂停";
     }
@@ -325,6 +330,7 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.statusLabel.text = @"幻灯片";
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_exit" key:nil value:nil];
     } failure:^{
         self.navigationItem.rightBarButtonItem.enabled = YES;
     }];
@@ -396,6 +402,7 @@
 //图片滑动切换
 - (void)scrollPhotos
 {
+    [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_switch_item" key:nil value:nil];
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self.currentIndex + 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
     self.currentIndex += 1;
     if (self.currentIndex == self.PHAssetSource.count - 1) {

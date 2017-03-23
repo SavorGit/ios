@@ -341,6 +341,7 @@
         
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
         }];
@@ -348,6 +349,7 @@
         [[GCCUPnPManager defaultManager] stopSuccess:^{
             
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
             
         } failure:^{
             
@@ -435,9 +437,10 @@
 {
     RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"请点击\"连接电视\", 即可投屏"];
     RDAlertAction * action1 = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-        
+        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"cancel"];
     } bold:NO];
     RDAlertAction * action2 = [[RDAlertAction alloc] initWithTitle:@"连接电视" handler:^{
+        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"link"];
         [[HomeAnimationView animationView] scanQRCode];
     } bold:YES];
     [alert addActions:@[action1, action2]];
@@ -538,6 +541,7 @@
                 if (update_type == 1) {
                     RDAlertAction * leftButton = [[RDAlertAction alloc] initVersionWithTitle:@"立即更新" handler:^{
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1144051586?mt=8"]];
+                        [SAVORXAPI postUMHandleWithContentId:@"home_update" key:@"home_update" value:@"ensure"];
                     } bold:YES];
                     leftButton.frame = CGRectMake(scrollView.frame.origin.x - 10, imageView.frame.size.height - [Helper autoHeightWith:50], scrollView.frame.size.width + 20, [Helper autoHeightWith:35]);
                     [imageView addSubview:leftButton];
@@ -548,6 +552,7 @@
                     
                     RDAlertAction * leftButton = [[RDAlertAction alloc] initVersionWithTitle:@"取消" handler:^{
                         [view removeFromSuperview];
+                        [SAVORXAPI postUMHandleWithContentId:@"home_update" key:@"home_update" value:@"cancel"];
                     } bold:NO];
                     leftButton.frame = CGRectMake(scrollView.frame.origin.x - 10, imageView.frame.size.height - [Helper autoHeightWith:50], scrollView.frame.size.width / 2 + 10, [Helper autoHeightWith:35]);
                     [imageView addSubview:leftButton];
@@ -555,6 +560,7 @@
                     RDAlertAction * righButton = [[RDAlertAction alloc] initVersionWithTitle:@"立即更新" handler:^{
                         [view removeFromSuperview];
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1144051586?mt=8"]];
+                        [SAVORXAPI postUMHandleWithContentId:@"home_update" key:@"home_update" value:@"ensure"];
                     } bold:YES];
                     righButton.frame =  CGRectMake(leftButton.frame.size.width + leftButton.frame.origin.x, imageView.frame.size.height - [Helper autoHeightWith:50], scrollView.frame.size.width / 2 + 10, [Helper autoHeightWith:35]);
                     [imageView addSubview:righButton];
@@ -569,6 +575,7 @@
         }];
     }
 }
+
 
 + (void)showAlert:(UIAlertController *)alert
 {

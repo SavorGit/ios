@@ -184,6 +184,8 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 //弹出菜单
 - (void)popOptionsWithAnimation
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_toscreen_list_expand" key:nil value:nil];
+    
     if (![self checkIsCanShowInWindow]) {
         [self closeOptionsWithAnimation];
         return;
@@ -343,6 +345,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         if (!self.isBoxSence) {
             [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
         }
+        [SAVORXAPI postUMHandleWithContentId:@"home_toscreen_list_collapse" key:nil value:nil];
     }else{
         [self popOptionsWithAnimation];
     }

@@ -75,6 +75,7 @@
     
     if(_delegate && [_delegate respondsToSelector:@selector(stopVoideoPlay)]){
         [_delegate stopVoideoPlay];
+        
     }
     
 }

@@ -240,6 +240,7 @@
         self.playSilder.value = 0;
         
         [self quitBack];
+        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_exit_screen" key:nil value:nil];
         
     } failure:^{
         self.screenButton.enabled = YES;
@@ -288,6 +289,7 @@
         }];
         [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:cancleCollectHandle];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share_cancel_collection" key:@"bunch planting_page_share_cancel_collection" value:@"success"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [button setSelected:NO];
@@ -297,6 +299,7 @@
         [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:collectHandle];
         [favoritesArray addObject:[self.model toDictionary]];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share_collection" key:@"bunch planting_page_share_collection" value:@"success"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [button setSelected:YES];
@@ -309,7 +312,8 @@
 - (void)shareAction:(UIButton *)button
 {
     [UMCustomSocialManager defaultManager].image = self.backImageView.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:1];
+    [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share" key:nil value:nil];
 }
 
 //创建浏览的webView
@@ -475,6 +479,7 @@
     self.playBtn.selected = !self.playBtn.selected;
     NSDictionary *parameters = [[NSDictionary alloc] init];
     if (self.playBtn.selected) {
+        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_play_video" key:nil value:nil];
         [self.timer setFireDate:[NSDate distantPast]];
         if (self.isPlayEnd) {
             [self restartVod];
@@ -506,6 +511,9 @@
             return;
         }
     }else{
+        
+        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_pause_button" key:nil value:nil];
+        
         [self.timer setFireDate:[NSDate distantFuture]];
         
         if ([GlobalData shared].isBindRD) {
@@ -560,6 +568,7 @@
 //进度条用户交互结束
 - (void)sliderEndTouch
 {
+    [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_drag_progress" key:nil value:nil];
     if (self.isPlayEnd) {
         [self restartVod];
     }else{
@@ -672,6 +681,7 @@
 -(void)voidelPlayVolumeAction:(UIButton *)button{
     NSInteger action;
     if (button.tag == 101) {
+        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_vol_mute" key:nil value:nil];
         button.enabled = YES;
         if (button.isSelected) {
             action = 1;
@@ -679,8 +689,10 @@
             action = 2;
         }
     }else if (button.tag == 102) {
+        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_vol_up" key:nil value:nil];
         action = 4;
     }else{
+        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_vol_down" key:nil value:nil];
         action = 3;
     }
     if ([GlobalData shared].isBindRD) {
@@ -779,6 +791,7 @@
         UIViewController * vc = [na.viewControllers firstObject];
         [self.navigationController popToViewController:vc animated:YES];
     }
+     [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_back" key:nil value:nil];
 }
 
 - (void)shouldRelease

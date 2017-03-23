@@ -29,11 +29,21 @@
     self.feedbackView.frame = self.view.frame;
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"menu_feedback" key:nil value:nil];
+}
+
 -(void)feedbackView:(FeedbackView *)fView adviceText:(NSString *)advice phoneText:(NSString *)phone{
     
     NSString * adviceStr = advice;
     NSString * contactStr = phone;
     
+    if (![advice isEqualToString:@""]) {
+        [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_input" key:nil value:nil];
+    }
+    if (![phone isEqualToString:@""]) {
+        [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_information" key:nil value:nil];
+    }
     if (adviceStr.length == 0) {
         [SAVORXAPI showAlertWithString:@"请填写完整信息" withController:self];
         return;
@@ -45,16 +55,23 @@
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"已发送"];
+        [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"success"];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
         [SAVORXAPI showAlertWithString:@"发送失败" withController:self];
+        [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
         [SAVORXAPI showAlertWithString:@"发送失败" withController:self];
+        [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     }];
     
 }
 
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back" key:nil value:nil];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

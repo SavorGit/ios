@@ -119,6 +119,117 @@
     }];
 }
 
+- (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type{
+    
+    self.model = model;
+    [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
+        
+        switch (platformType) {
+                //微信聊天
+            case UMSocialPlatformType_WechatSession:
+                if (type == 0) {
+                   [self shareWebPageToPlatform:UMSocialPlatformType_WechatSession andController:controller andType:type andUmKeyString:@"details_page_share_weixin"];
+                }else if (type == 1) {
+                   [self shareWebPageToPlatform:UMSocialPlatformType_WechatSession andController:controller andType:type andUmKeyString:@"bunch planting_page_share_weixin"];
+                }
+
+                break;
+                
+                //微信朋友圈
+            case UMSocialPlatformType_WechatTimeLine:
+                if (type == 0) {
+                   [self shareWebPageToPlatform:UMSocialPlatformType_WechatTimeLine andController:controller andType:type andUmKeyString:@"details_page_share_weixin_friends"];
+                }else if (type == 1){
+                   [self shareWebPageToPlatform:UMSocialPlatformType_WechatTimeLine andController:controller andType:type andUmKeyString:@"bunch planting_page_share_weixin_friends"];
+                }
+
+                break;
+                
+                //微信收藏
+            case UMSocialPlatformType_WechatFavorite:
+                if (type == 0) {
+                    [self shareWebPageToPlatform:UMSocialPlatformType_WechatFavorite andController:controller andType:type andUmKeyString:@"details_page_share_weixin_collection"];
+                }else if (type == 1){
+                    [self shareWebPageToPlatform:UMSocialPlatformType_WechatFavorite andController:controller andType:type andUmKeyString:@"bunch planting_page_share_weixin_collection"];
+                }
+
+                break;
+                
+                //QQ聊天
+            case UMSocialPlatformType_QQ:
+                if (type == 0) {
+                    [self shareWebPageToPlatform:UMSocialPlatformType_QQ andController:controller andType:type andUmKeyString:@"details_page_share_qq"];
+                }else if (type == 1){
+                    [self shareWebPageToPlatform:UMSocialPlatformType_QQ andController:controller andType:type andUmKeyString:@"bunch planting_page_share_qq"];
+                }
+                
+                break;
+                
+                //QQ空间
+            case UMSocialPlatformType_Qzone:
+                if (type == 0) {
+                    [self shareWebPageToPlatform:UMSocialPlatformType_Qzone andController:controller andType:type andUmKeyString:@"details_page_share_qq_zone"];
+                }else if (type == 1){
+                    [self shareWebPageToPlatform:UMSocialPlatformType_Qzone andController:controller andType:type andUmKeyString:@"bunch planting_page_share_qq_zone"];
+                }
+
+                break;
+                
+                //新浪微博
+            case UMSocialPlatformType_Sina:
+                
+            {
+                NSString * url = [model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                NSString * text = [NSString stringWithFormat:@"小热点 | %@\n%@", model.title, url];
+                if ([self convertToByte:text] > 140) {
+                    text = [NSString stringWithFormat:@"小热点\n%@", url];
+                    if ([self convertToByte:text] > 140) {
+                        [MBProgressHUD showTextHUDwithTitle:@"该文章暂不支持新浪分享"];
+                        return;
+                    }
+                }
+                
+                UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+                messageObject.text = text;
+                //创建图片内容对象
+                UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
+                if ([UMCustomSocialManager defaultManager].image) {
+                    shareObject.shareImage = [UMCustomSocialManager defaultManager].image;
+                }else{
+                    shareObject.shareImage = [UIImage imageNamed:@"shareDefalut"];
+                }
+                messageObject.shareObject = shareObject;
+                
+                [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:controller completion:^(id result, NSError *error) {
+                    
+                    if (error) {
+                        [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                        if (type == 0) {
+                            [SAVORXAPI postUMHandleWithContentId:@"details_page_share_sina" key:@"details_page_share_sina" value:@"fail"];
+                        }else if (type == 1){
+                            [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share_sina" key:@"bunch planting_page_share_sina" value:@"fail"];
+                        }
+                    }else{
+                        [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                        if (type == 0) {
+                            [SAVORXAPI postUMHandleWithContentId:@"details_page_share_sina" key:@"details_page_share_sina" value:@"success"];
+                        }else if (type == 1){
+                            [SAVORXAPI postUMHandleWithContentId:@"planting_page_share_sina" key:@"planting_page_share_sina" value:@"success"];
+                        }
+                    }
+                    
+                }];
+            }
+                
+                break;
+                
+            default:
+                break;
+        }
+    }];
+    
+}
+
 - (NSInteger)convertToByte:(NSString*)str {
     NSInteger strlength = 0;
     char* p = (char*)[str cStringUsingEncoding:NSUnicodeStringEncoding];
@@ -161,6 +272,40 @@
             [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
         }else{
             [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+        }
+        
+    }];
+}
+
+/**
+ *  分享至平台
+ */
+- (void)shareWebPageToPlatform:(UMSocialPlatformType)platformType andController:(UIViewController *)VC andType:(NSUInteger)type andUmKeyString:(NSString *)keyString
+{
+    NSString * url = [self.model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    UIImage * image;
+    if ([UMCustomSocialManager defaultManager].image) {
+        image = [UMCustomSocialManager defaultManager].image;
+    }else{
+        image = [UIImage imageNamed:@"shareDefalut"];
+    }
+    
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //创建网页分享类型
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", self.model.title] descr:self.info thumImage:image];
+    [object setWebpageUrl:url];
+    messageObject.shareObject = object;
+    
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
+        
+        if (error) {
+            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
+        }else{
+            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
         }
         
     }];
