@@ -425,6 +425,9 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         if (na.interactivePopGestureRecognizer.state != UIGestureRecognizerStatePossible) {
             result = NO;
         }
+        if ([[UIApplication sharedApplication].keyWindow viewWithTag:4444]) {
+            return NO;
+        }
     }else{
         result = NO;
     }

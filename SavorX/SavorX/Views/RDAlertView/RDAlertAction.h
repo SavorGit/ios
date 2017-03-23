@@ -14,4 +14,6 @@
 
 - (instancetype)initWithTitle:(NSString *)title handler:(void (^)())handler bold:(BOOL)bold;
 
+- (instancetype)initVersionWithTitle:(NSString *)title handler:(void (^)())handler bold:(BOOL)bold;
+
 @end

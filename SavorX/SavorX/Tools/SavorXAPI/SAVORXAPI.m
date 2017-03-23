@@ -504,37 +504,60 @@
             
             if ([[info objectForKey:@"device_type"] integerValue] == 4) {
                 
-                NSString * str = [[NSUserDefaults standardUserDefaults] objectForKey:version_code];
-                if ([str isEqualToString:[info objectForKey:version_code]]) {
-                    return;
-                }
-                
-                NSString * title = @"有新的版本可以使用";
                 NSString * detail = [NSString stringWithFormat:@"本次更新内容:\n%@", info[@"remark"]];
-                UIAlertController * alert = [UIAlertController alertControllerWithTitle:title message:detail preferredStyle:UIAlertControllerStyleAlert];
                 
-                if ([[info objectForKey:@"update_type"] integerValue] == 1) {
-                    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                NSInteger update_type = [[info objectForKey:@"update_type"] integerValue];
+                
+                UIView * view = [[UIView alloc] initWithFrame:CGRectZero];
+                view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7f];
+                view.tag = 4444;
+                [[UIApplication sharedApplication].keyWindow addSubview:view];
+                [view mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.edges.mas_equalTo(0);
+                }];
+                
+                UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [Helper autoWidthWith:320], [Helper autoHeightWith:344])];
+                [imageView setImage:[UIImage imageNamed:@"banbengengxin_bg"]];
+                imageView.center = CGPointMake(kMainBoundsWidth / 2, kMainBoundsHeight / 2);
+                imageView.userInteractionEnabled = YES;
+                [view addSubview:imageView];
+                
+                UIScrollView * scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(20, [Helper autoHeightWith:75], imageView.frame.size.width - 40, imageView.frame.size.height - [Helper autoHeightWith:155])];
+                [imageView addSubview:scrollView];
+                
+                CGRect rect = [detail boundingRectWithSize:CGSizeMake(scrollView.frame.size.width, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]} context:nil];
+                
+                UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, rect.size.height + 20)];
+                label.textColor = [UIColor blackColor];
+                label.numberOfLines = 0;
+                label.font = [UIFont systemFontOfSize:15];
+                label.text = detail;
+                [scrollView addSubview:label];
+                scrollView.contentSize = label.frame.size;
+                
+                if (update_type == 1) {
+                    RDAlertAction * leftButton = [[RDAlertAction alloc] initVersionWithTitle:@"立即更新" handler:^{
                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1144051586?mt=8"]];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [SAVORXAPI showAlert:alert];
-                        });
-                    }];
-                    [alert addAction:action];
-                    [[Helper getRootNavigationController] presentViewController:alert animated:YES completion:nil];
-                }else if ([[info objectForKey:@"update_type"] integerValue] == 0) {
-                    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"忽略此版本" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                        [[NSUserDefaults standardUserDefaults] setObject:[info objectForKey:version_code] forKey:version_code];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }];
-                    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1144051586?mt=8"]];
-                        });
-                    }];
-                    [alert addAction:action1];
-                    [alert addAction:action2];
-                    [[Helper getRootNavigationController] presentViewController:alert animated:YES completion:nil];
+                    } bold:YES];
+                    leftButton.frame = CGRectMake(scrollView.frame.origin.x - 10, imageView.frame.size.height - [Helper autoHeightWith:50], scrollView.frame.size.width + 20, [Helper autoHeightWith:35]);
+                    [imageView addSubview:leftButton];
+                }else if (update_type == 0) {
+                    UIView * lineView = [[UIView alloc] initWithFrame:CGRectMake(imageView.frame.size.width / 2, imageView.frame.size.height - [Helper autoHeightWith:50], .5f, [Helper autoHeightWith:35])];
+                    lineView.backgroundColor = UIColorFromRGB(0xb6a482);
+                    [imageView addSubview:lineView];
+                    
+                    RDAlertAction * leftButton = [[RDAlertAction alloc] initVersionWithTitle:@"取消" handler:^{
+                        [view removeFromSuperview];
+                    } bold:NO];
+                    leftButton.frame = CGRectMake(scrollView.frame.origin.x - 10, imageView.frame.size.height - [Helper autoHeightWith:50], scrollView.frame.size.width / 2 + 10, [Helper autoHeightWith:35]);
+                    [imageView addSubview:leftButton];
+                    
+                    RDAlertAction * righButton = [[RDAlertAction alloc] initVersionWithTitle:@"立即更新" handler:^{
+                        [view removeFromSuperview];
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/cn/app/id1144051586?mt=8"]];
+                    } bold:YES];
+                    righButton.frame =  CGRectMake(leftButton.frame.size.width + leftButton.frame.origin.x, imageView.frame.size.height - [Helper autoHeightWith:50], scrollView.frame.size.width / 2 + 10, [Helper autoHeightWith:35]);
+                    [imageView addSubview:righButton];
                 }
             }
             

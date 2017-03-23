@@ -71,8 +71,8 @@
     }
     
     self.lockButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"unLockFile"] forState:UIControlStateNormal];
-    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"lockFile"] forState:UIControlStateSelected];
+    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"suoping"] forState:UIControlStateNormal];
+    [self.lockButton setBackgroundImage:[UIImage imageNamed:@"yisuoping"] forState:UIControlStateSelected];
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(lockButtonDidClicked)];
     tap.numberOfTapsRequired = 1;
     [self.lockButton addGestureRecognizer:tap];
