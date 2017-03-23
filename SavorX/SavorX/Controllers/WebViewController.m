@@ -8,7 +8,7 @@
 
 #import "WebViewController.h"
 #import "UMCustomSocialManager.h"
-#import "ScanQRCodeViewController.h"
+#import "HSConnectViewController.h"
 #import "HomeAnimationView.h"
 #import "SXVideoPlayViewController.h"
 #import "DemandViewController.h"
@@ -278,7 +278,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[ScanQRCodeViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]]) {
+    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]]) {
         
     }else{
         [self.playView shouldRelease];

@@ -8,7 +8,7 @@
 
 #import "HomeAnimationView.h"
 #import "SXDlnaViewController.h"
-#import "ScanQRCodeViewController.h"
+#import "HSConnectViewController.h"
 #import "BaseNavigationController.h"
 #import "WMPageController.h"
 #import "PhotoSliderViewController.h"
@@ -18,7 +18,6 @@
 #import "RDAlertView.h"
 #import "RDCheackSence.h"
 #import "GCCDLNA.h"
-#import "HSConnectViewController.h"
 
 #define HasAlertScreen @"HasAlertScreen"
 

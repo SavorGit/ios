@@ -176,7 +176,7 @@
             [tempView removeFromSuperview];
         }
         
-        if ([NSStringFromClass([[Helper getRootNavigationController].topViewController class]) isEqualToString:@"ScanQRCodeViewController"] ||
+        if ([NSStringFromClass([[Helper getRootNavigationController].topViewController class]) isEqualToString:@"HSConnectViewController"] ||
             [NSStringFromClass([[Helper getRootNavigationController].topViewController class]) isEqualToString:@"SXDlnaViewController"]) {
             return;
         }
