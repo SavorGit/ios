@@ -235,7 +235,7 @@
 //相机权限准备好，即调用TCP连接检测与UDP广播发送进行二维码呼出
 - (void)CameroIsReady
 {
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"准备扫描二维码"];
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
     NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
     [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         [hud hideAnimated:NO];
@@ -251,10 +251,10 @@
         //
         if (error.code == -1009 || error.code == -1001) {
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
+            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
         }else{
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
+            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
         }
     }];
 }
@@ -262,7 +262,7 @@
 // 重新呼出二维码
 - (void)reCallCode{
     
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"准备扫描二维码"];
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
     
     NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
     [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
@@ -271,10 +271,10 @@
         //
         if (error.code == -1009 || error.code == -1001) {
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出超时"];
+            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
         }else{
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"二维码呼出失败"];
+            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
         }
     }];
     
