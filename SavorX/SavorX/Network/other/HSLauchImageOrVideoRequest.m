@@ -14,8 +14,7 @@
 {
     if(self = [super init]){
         self.methodName = [@"clientstart/clientstart/getInfo?" stringByAppendingString:[Helper getURLPublic]];
-        self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setValue:identification forParamKey:@"identification"];
+        self.httpMethod = BGNetworkRequestHTTPGet;
     }
     return self;
 }
