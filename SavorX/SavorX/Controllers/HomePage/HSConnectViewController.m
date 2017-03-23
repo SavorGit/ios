@@ -38,44 +38,77 @@
 
 - (void)setupViews
 {
-    UIView *bgView = [[UIView alloc] initWithFrame:CGRectZero];
-    bgView.backgroundColor = [UIColor lightGrayColor];
+    UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    bgView.backgroundColor = [UIColor clearColor];
+    bgView.userInteractionEnabled = YES;
+    [bgView setImage:[UIImage imageNamed:@"ljtvsanweishu_bg"]];
     [self.view addSubview:bgView];
     [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 340));
-        make.top.mas_equalTo(20);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 370));
+        make.top.mas_equalTo(15);
+        make.left.mas_equalTo(15);
+        make.right.mas_equalTo(-15);
     }];
     
-    UIImageView *tvImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    tvImageView.backgroundColor = [UIColor brownColor];
-    tvImageView.userInteractionEnabled = YES;
-    [bgView addSubview:tvImageView];
-    [tvImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(bgView.width - 60, 180));
-        make.top.mas_equalTo(20);
-        make.left.mas_equalTo(30);
-        make.right.mas_equalTo(-30);
+    self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.textLabel.textAlignment = NSTextAlignmentCenter;
+    self.textLabel.font = [UIFont systemFontOfSize:17];
+    self.textLabel.text = @"请输入电视中的三位数连接电视";
+    self.textLabel.textColor = UIColorFromRGB(0x333333);
+    self.textLabel.backgroundColor = [UIColor clearColor];
+    [bgView addSubview:self.textLabel];
+    [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 30));
+        make.bottom.mas_equalTo(bgView).offset(-32);
+        make.centerX.mas_equalTo(bgView);
+    }];
+    
+    self.failConectLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.failConectLabel.textAlignment = NSTextAlignmentRight;
+    self.failConectLabel.font = [UIFont systemFontOfSize:17];
+    self.failConectLabel.backgroundColor = [UIColor clearColor];
+    self.failConectLabel.text = @"连接失败，";
+    self.failConectLabel.textColor = UIColorFromRGB(0x333333);
+    [bgView addSubview:self.failConectLabel];
+    self.failConectLabel.hidden = YES;
+    [self.failConectLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 30));
+        make.bottom.mas_equalTo(bgView.mas_bottom).offset(-32);
+        make.centerX.mas_equalTo(-50);
+    }];
+    
+    self.reConnectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.reConnectBtn.backgroundColor = [UIColor clearColor];
+    self.reConnectBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
+    [self.reConnectBtn setTitleColor:UIColorFromRGB(0xff2a00) forState:UIControlStateNormal];
+    [self.reConnectBtn setTitle:@"重新连接？" forState:UIControlStateNormal];
+    self.reConnectBtn.titleLabel.font = [UIFont systemFontOfSize:17];
+    [self.reConnectBtn addTarget:self action:@selector(reClick) forControlEvents:UIControlEventTouchUpInside];
+    [bgView addSubview:self.reConnectBtn];
+    self.reConnectBtn.hidden = YES;
+    [self.reConnectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 30));
+        make.bottom.mas_equalTo(bgView.mas_bottom).offset(-32);
+        make.centerX.mas_equalTo(50);
     }];
     
     for (NSInteger i = 0; i < 3; i++) {
         UILabel * label = [[UILabel alloc] initWithFrame:CGRectZero];
-        label.layer.cornerRadius = 5;
-        label.layer.borderColor = [UIColor blackColor].CGColor;
-        label.layer.borderWidth = .5f;
+        label.layer.cornerRadius = 0;
+        label.layer.borderColor = UIColorFromRGB(0xffd237).CGColor;
+        label.layer.borderWidth = 1.5f;
         label.textAlignment = NSTextAlignmentCenter;
         label.layer.masksToBounds = YES;
         [bgView addSubview:label];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo (tvImageView.mas_bottom).offset(20);
-            make.size.mas_equalTo(CGSizeMake(65, 45));
+            make.bottom.mas_equalTo (self.textLabel.mas_top).offset(-18);
+            make.size.mas_equalTo(CGSizeMake(70, 50));
             if (i == 0) {
-                make.centerX.mas_equalTo(-kMainBoundsWidth / 4);
+                make.centerX.mas_equalTo(-99);
             }else if (i == 1) {
                 make.centerX.mas_equalTo(0);
             }else{
-                make.centerX.mas_equalTo(kMainBoundsWidth / 4);
+                make.centerX.mas_equalTo(99);
             }
         }];
         [self.labelSource addObject:label];
@@ -87,54 +120,13 @@
     [bgView addSubview:self.textField];
     self.textField.backgroundColor = [UIColor clearColor];
     [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(tvImageView.mas_bottom).offset(20);
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 45));
+        make.bottom.mas_equalTo (self.textLabel.mas_top).offset(-18);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 50));
         make.centerX.mas_equalTo(0);
     }];
     self.textField.hidden = YES;
     [self.textField becomeFirstResponder];
     
-    
-    self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.textLabel.textAlignment = NSTextAlignmentCenter;
-    self.textLabel.font = [UIFont systemFontOfSize:16];
-    self.textLabel.text = @"请输入电视中的三位数连接电视";
-    self.textLabel.backgroundColor = [UIColor clearColor];
-    [bgView addSubview:self.textLabel];
-    [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 30));
-        make.top.mas_equalTo(self.textField.mas_bottom).offset(10);
-        make.centerX.mas_equalTo(bgView);
-    }];
-    
-    self.failConectLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.failConectLabel.textAlignment = NSTextAlignmentRight;
-    self.failConectLabel.font = [UIFont systemFontOfSize:16];
-    self.failConectLabel.backgroundColor = [UIColor clearColor];
-    self.failConectLabel.text = @"连接失败，";
-    [bgView addSubview:self.failConectLabel];
-    self.failConectLabel.hidden = YES;
-    [self.failConectLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(100, 30));
-        make.top.mas_equalTo(self.textField.mas_bottom).offset(10);
-        make.centerX.mas_equalTo(-50);
-    }];
-    
-    self.reConnectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.reConnectBtn.backgroundColor = [UIColor clearColor];
-    self.reConnectBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
-    [self.reConnectBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [self.reConnectBtn setTitle:@"重新连接？" forState:UIControlStateNormal];
-    self.reConnectBtn.titleLabel.font = [UIFont systemFontOfSize:16];
-    [self.reConnectBtn addTarget:self action:@selector(reClick) forControlEvents:UIControlEventTouchUpInside];
-    [bgView addSubview:self.reConnectBtn];
-    self.reConnectBtn.hidden = YES;
-    [self.reConnectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(100, 30));
-        make.top.mas_equalTo(self.textField.mas_bottom).offset(10);
-        make.centerX.mas_equalTo(50);
-    }];
-
 }
 
 // 重新连接
@@ -147,7 +139,7 @@
     
     self.maskingView = [[UIView alloc] initWithFrame:CGRectZero];
     self.maskingView.backgroundColor = [UIColor blackColor];
-    self.maskingView.alpha = 0.66;
+    self.maskingView.alpha = 0.88;
     
     UIWindow *keyWindow = [[[UIApplication sharedApplication] windows] lastObject];
     self.maskingView.frame = keyWindow.bounds;
@@ -155,46 +147,33 @@
     [keyWindow addSubview:self.maskingView];
     [self showViewWithAnimationDuration:0.0];
     
-    UIView *smallWindowView = [[UIView alloc] initWithFrame:CGRectZero];
-    smallWindowView.backgroundColor = [UIColor whiteColor];
-    smallWindowView.layer.cornerRadius = 5;
-    smallWindowView.layer.borderColor = [UIColor blackColor].CGColor;
-    smallWindowView.layer.borderWidth = .5f;
-    smallWindowView.layer.masksToBounds = YES;
+    UIImageView *smallWindowView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    [smallWindowView setImage:[UIImage imageNamed:@"lianjie_bg"]];
     [self.maskingView addSubview:smallWindowView];
     [smallWindowView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(180, 180));
+        make.size.mas_equalTo(CGSizeMake(190, 160));
         make.centerX.mas_equalTo(self.maskingView);
         make.centerY.mas_equalTo(self.maskingView);
     }];
     
-    UIImageView *loadIconImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    loadIconImageView.backgroundColor = [UIColor brownColor];
-    [smallWindowView addSubview:loadIconImageView];
-    [loadIconImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(90, 60));
-        make.top.mas_equalTo(40);
-        make.centerX.mas_equalTo(self.maskingView);
-    }];
-    
     self.animationImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    self.animationImageView.backgroundColor = [UIColor brownColor];
+    self.animationImageView.backgroundColor = [UIColor clearColor];
     [smallWindowView addSubview:self.animationImageView];
     [self.animationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(60, 30));
-        make.top.mas_equalTo(loadIconImageView.mas_bottom).offset(20);
+        make.size.mas_equalTo(CGSizeMake(80, 20));
+        make.bottom.mas_equalTo(smallWindowView.mas_bottom).offset(- 20);
         make.centerX.mas_equalTo(self.maskingView);
     }];
     
     // 播放一组图片，设置一共有多少张图片生成的动画
     NSMutableArray *imageArray = [NSMutableArray arrayWithCapacity:0];
     for (int i = 1; i < 4; i++) {
-        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"index_%d.jpg", i]];
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"connecting%d.png", i]];
         [imageArray addObject:image];
     }
     self.animationImageView.animationImages = imageArray;
     self.animationImageView.animationDuration = 0.5;
-    self.animationImageView.animationRepeatCount = 1000;
+    self.animationImageView.animationRepeatCount = 10000;
     [self.animationImageView startAnimating];
 
 }
@@ -209,7 +188,7 @@
 -(void)showViewWithAnimationDuration:(float)duration{
     
     [UIView animateWithDuration:duration animations:^{
-        self.maskingView.backgroundColor = RGBA(0, 0, 0, 0.66);
+        self.maskingView.backgroundColor = RGBA(0, 0, 0, 0.88);
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         self.maskingView.bottom = keyWindow.bottom;
     } completion:^(BOOL finished) {
