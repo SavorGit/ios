@@ -10,6 +10,4 @@
 
 @interface HSLauchImageOrVideoRequest : BGNetworkRequest
 
-- (instancetype)initWithDeviceIdentification:(NSString *)identification;
-
 @end

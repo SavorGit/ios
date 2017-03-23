@@ -44,9 +44,10 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
     [self createLaunch];
-    [self requestGetLauchImageOrVideo];
     
     [SAVORXAPI configApplication];
+    
+    [self requestGetLauchImageOrVideo];
     [SAVORXAPI checkVersionUpgrade];
     
     //友盟推送
@@ -263,7 +264,7 @@
 
 - (void)requestGetLauchImageOrVideo
 {
-    HSLauchImageOrVideoRequest * request = [[HSLauchImageOrVideoRequest alloc] initWithDeviceIdentification:@"iphone"];
+    HSLauchImageOrVideoRequest * request = [[HSLauchImageOrVideoRequest alloc] init];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary * dict = response[@"result"];

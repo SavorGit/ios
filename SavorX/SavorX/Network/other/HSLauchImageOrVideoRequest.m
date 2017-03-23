@@ -10,7 +10,7 @@
 
 @implementation HSLauchImageOrVideoRequest
 
-- (instancetype)initWithDeviceIdentification:(NSString *)identification
+- (instancetype)init;
 {
     if(self = [super init]){
         self.methodName = [@"clientstart/clientstart/getInfo?" stringByAppendingString:[Helper getURLPublic]];
