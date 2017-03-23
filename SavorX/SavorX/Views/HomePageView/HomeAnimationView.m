@@ -21,7 +21,7 @@
 
 #define HasAlertScreen @"HasAlertScreen"
 
-@interface HomeAnimationView ()<QRCodeDidBindDelegate>
+@interface HomeAnimationView ()
 @property (weak, nonatomic) IBOutlet UIImageView *devImageView;
 @property (nonatomic, strong) UILabel *textLabel;
 
@@ -278,18 +278,6 @@
         }
     }];
     
-}
-
-#pragma mark -- QRCodeDidBindDelegate
-- (void)QRCodeDidBindSuccessWithType:(QRResultType)type andWifiName:(NSString *)name
-{
-    if (type == QRResultTypeSuccess) {
-        
-    }else if (type == QRResultTypeQRError){
-        [MBProgressHUD showTextHUDwithTitle:@"连接失败，请扫描电视中的二维码"];
-    }else if(type == QRResultTypeWIFIError) {
-        [self showAlertWithWifiName:name];
-    }
 }
 
 //前往系统WIFI设置
