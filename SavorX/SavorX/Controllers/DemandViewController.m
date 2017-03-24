@@ -347,16 +347,16 @@
     self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.playBtn setFrame:CGRectMake(0, 0, 30, 30)];
     self.playBtn.center = CGPointMake(kMainBoundsWidth / 8 * 7, 25);
-    [self.playBtn setImage:[UIImage imageNamed:@"icon_play"] forState:UIControlStateSelected];
-    [self.playBtn setImage:[UIImage imageNamed:@"icon_pause"] forState:UIControlStateNormal];
+    [self.playBtn setImage:[UIImage imageNamed:@"bofang"] forState:UIControlStateSelected];
+    [self.playBtn setImage:[UIImage imageNamed:@"zanting"] forState:UIControlStateNormal];
     self.playBtn.selected = YES;
     [self.playBackView addSubview:self.playBtn];
     
     self.volumeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.volumeButton setFrame:CGRectMake(0, 0, 30, 30)];
     self.volumeButton.center = CGPointMake(kMainBoundsWidth / 8 * 5, 25);
-    [self.volumeButton setImage:[UIImage imageNamed:@"laba_dianbo"] forState:UIControlStateSelected];
-    [self.volumeButton setImage:[UIImage imageNamed:@"mute_dianbo"] forState:UIControlStateNormal];
+    [self.volumeButton setImage:[UIImage imageNamed:@"laba"] forState:UIControlStateSelected];
+    [self.volumeButton setImage:[UIImage imageNamed:@"labajingyin"] forState:UIControlStateNormal];
     [self.volumeButton setSelected:YES];
     self.volumeButton.tag = 101;
     [self.volumeButton addTarget:self action:@selector(voidelPlayVolumeAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -365,7 +365,8 @@
     UIButton * volumeAdd = [UIButton buttonWithType:UIButtonTypeCustom];
     [volumeAdd setFrame:CGRectMake(0, 0, 30, 30)];
     volumeAdd.center = CGPointMake(kMainBoundsWidth / 8 * 3, 25);
-    [volumeAdd setImage:[UIImage imageNamed:@"Volumeplus"] forState:UIControlStateNormal];
+    [volumeAdd setImage:[UIImage imageNamed:@"voljia"] forState:UIControlStateNormal];
+    [volumeAdd setImage:[UIImage imageNamed:@"voljia_g"] forState:UIControlStateHighlighted];
     volumeAdd.tag = 102;
     [volumeAdd addTarget:self action:@selector(voidelPlayVolumeAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.playBackView addSubview:volumeAdd];
@@ -373,7 +374,8 @@
     UIButton * volumeSmall = [UIButton buttonWithType:UIButtonTypeCustom];
     [volumeSmall setFrame:CGRectMake(0, 0, 30, 30)];
     volumeSmall.center = CGPointMake(kMainBoundsWidth / 8, 25);
-    [volumeSmall setImage:[UIImage imageNamed:@"vol"] forState:UIControlStateNormal];
+    [volumeSmall setImage:[UIImage imageNamed:@"voljian"] forState:UIControlStateNormal];
+    [volumeSmall setImage:[UIImage imageNamed:@"voljian_g"] forState:UIControlStateHighlighted];
     volumeSmall.tag = 103;
     [volumeSmall addTarget:self action:@selector(voidelPlayVolumeAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.playBackView addSubview:volumeSmall];
@@ -493,11 +495,22 @@
                     [self changeTimerWithPlayStatus];
                 }
                 self.isHandle = NO;
+                if (self.playBtn.isSelected == YES) {
+                    [self.playBtn setImage:[UIImage imageNamed:@"bofang_g"] forState:UIControlStateHighlighted];
+                }else if (self.playBtn.isSelected == NO){
+                    [self.playBtn setImage:[UIImage imageNamed:@"zanting_g"] forState:UIControlStateHighlighted];
+                }
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
                 self.playBtn.selected = !self.playBtn.selected;
                 [self changeTimerWithPlayStatus];
                 self.isHandle = NO;
+                if (self.playBtn.isSelected == YES) {
+                    [self.playBtn setImage:[UIImage imageNamed:@"bofang_g"] forState:UIControlStateHighlighted];
+                }else if (self.playBtn.isSelected == NO){
+                    [self.playBtn setImage:[UIImage imageNamed:@"zanting_g"] forState:UIControlStateHighlighted];
+                }
+                
             }];
         }else if ([GlobalData shared].isBindDLNA) {
             [[GCCUPnPManager defaultManager] playSuccess:^{
@@ -507,6 +520,11 @@
                 self.playBtn.selected = !self.playBtn.selected;
                 [self changeTimerWithPlayStatus];
                 self.isHandle = NO;
+                if (self.playBtn.isSelected == YES) {
+                    [self.playBtn setImage:[UIImage imageNamed:@"bofang_g"] forState:UIControlStateHighlighted];
+                }else if (self.playBtn.isSelected == NO){
+                    [self.playBtn setImage:[UIImage imageNamed:@"zanting_g"] forState:UIControlStateHighlighted];
+                }
             }];
             return;
         }
@@ -708,6 +726,11 @@
             }
             if (button.tag == 101) {
                 button.enabled = YES;
+            }
+            if (button.tag == 101 && self.volumeButton.selected == YES) {
+                [self.volumeButton setImage:[UIImage imageNamed:@"laba_g"] forState:UIControlStateHighlighted];
+            }else if (button.tag == 101 && self.volumeButton.selected == NO){
+                [self.volumeButton setImage:[UIImage imageNamed:@"labajingyin_g"] forState:UIControlStateHighlighted];
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
