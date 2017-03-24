@@ -29,7 +29,8 @@
     
     self.labelSource = [NSMutableArray new];
     self.numSring = [[NSString alloc] init];
-    [self setupViews];
+   [self setupViews];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -42,20 +43,20 @@
     UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectZero];
     bgView.backgroundColor = [UIColor clearColor];
     bgView.userInteractionEnabled = YES;
-
-    [self.view addSubview:bgView];
-    [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        if (kMainBoundsHeight == 568) {
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 30] , [Helper autoHeightWith:320]));
-        }else{
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 30] , [Helper autoHeightWith:370]));
-        }
-        make.top.mas_equalTo(15);
-        make.left.mas_equalTo(15);
-        make.right.mas_equalTo(-15);
-    }];
     [bgView setImage:[UIImage imageNamed:@"ljtvsanweishu_bg"]];
     bgView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:bgView];
+    float bgViewWidth = kMainBoundsWidth - 10;
+    [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (kMainBoundsHeight == 568) {
+            make.size.mas_equalTo(CGSizeMake(bgViewWidth , [Helper autoHeightWith:320]));
+        }else{
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:bgViewWidth] , [Helper autoHeightWith:370]));
+        }
+        make.top.mas_equalTo(5);
+        make.left.mas_equalTo(5);
+        make.right.mas_equalTo(-5);
+    }];
     
     self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.textLabel.textAlignment = NSTextAlignmentCenter;
@@ -230,7 +231,6 @@
     if (number.length > self.labelSource.count) {
         self.textField.text = [number substringWithRange:NSMakeRange(0,3)];
     }
-    NSLog(@"---%@",self.textField.text);
     for (NSUInteger i = 0; i < self.labelSource.count; i++) {
         if (i < number.length) {
             UILabel * label = [self.labelSource objectAtIndex:i];
@@ -244,6 +244,7 @@
             self.reConnectBtn.hidden = YES;
             self.textLabel.hidden = NO;
             self.numSring = @"";
+            self.textLabel.text = @"请输入电视中的三位数连接电视";
         }
     }
 }
@@ -278,7 +279,9 @@
             }
         }else{
             [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
+            self.textLabel.text = [result objectForKey:@"msg"];
         }
+        
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = YES;
         self.reConnectBtn.hidden = YES;
