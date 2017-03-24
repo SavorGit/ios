@@ -135,6 +135,7 @@
 		067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB7141D60B21C00094BB8 /* OpenFileTool.m */; };
 		06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */; };
 		0684DF231D5191F6006756D4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0684DF221D5191F6006756D4 /* WebKit.framework */; };
+		0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 0689915C1E854EE900BC9EFE /* RDKeyBoard.m */; };
 		068A58C81D5E1FFF00CBD684 /* BasicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 068A58C71D5E1FFF00CBD684 /* BasicTableViewCell.m */; };
 		068F0FB31E8266CE0089068F /* HSVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 068F0FB21E8266CE0089068F /* HSVideoViewController.m */; };
 		069076651E51904C00CA1AC4 /* ArticleReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 069076641E51904C00CA1AC4 /* ArticleReadViewController.m */; };
@@ -191,8 +192,6 @@
 		26A8176745C4493D3EE874EA /* libPods-SavorX.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC211233FEE2DC8EC430CCC /* libPods-SavorX.a */; };
 		4733B7541E305C21006889A2 /* HomeAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4733B7531E305C21006889A2 /* HomeAnimationView.m */; };
 		4733B7561E305C49006889A2 /* HomeAnimationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4733B7551E305C49006889A2 /* HomeAnimationView.xib */; };
-		473EC4411E31DED30050E619 /* ScreenProjectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 473EC4401E31DED30050E619 /* ScreenProjectionView.m */; };
-		473EC4431E31DEE40050E619 /* ScreenProjectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 473EC4421E31DEE40050E619 /* ScreenProjectionView.xib */; };
 		474C76351DFB9BED001129C9 /* NoDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 474C76301DFB9BED001129C9 /* NoDataView.m */; };
 		474C76361DFB9BED001129C9 /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 474C76311DFB9BED001129C9 /* NoDataView.xib */; };
 		474C76371DFB9BED001129C9 /* NoNetWorkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 474C76331DFB9BED001129C9 /* NoNetWorkView.m */; };
@@ -536,6 +535,8 @@
 		06819FCB1DEEC109005FED25 /* UMCustomSocialManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMCustomSocialManager.h; sourceTree = "<group>"; };
 		06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMCustomSocialManager.m; sourceTree = "<group>"; };
 		0684DF221D5191F6006756D4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		0689915B1E854EE900BC9EFE /* RDKeyBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDKeyBoard.h; sourceTree = "<group>"; };
+		0689915C1E854EE900BC9EFE /* RDKeyBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDKeyBoard.m; sourceTree = "<group>"; };
 		068A58C61D5E1FFF00CBD684 /* BasicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasicTableViewCell.h; path = ../BasicTableViewCell.h; sourceTree = "<group>"; };
 		068A58C71D5E1FFF00CBD684 /* BasicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicTableViewCell.m; path = ../BasicTableViewCell.m; sourceTree = "<group>"; };
 		068F0FB11E8266CE0089068F /* HSVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSVideoViewController.h; sourceTree = "<group>"; };
@@ -647,9 +648,6 @@
 		4733B7521E305C21006889A2 /* HomeAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeAnimationView.h; sourceTree = "<group>"; };
 		4733B7531E305C21006889A2 /* HomeAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAnimationView.m; sourceTree = "<group>"; };
 		4733B7551E305C49006889A2 /* HomeAnimationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeAnimationView.xib; sourceTree = "<group>"; };
-		473EC43F1E31DED30050E619 /* ScreenProjectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenProjectionView.h; sourceTree = "<group>"; };
-		473EC4401E31DED30050E619 /* ScreenProjectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenProjectionView.m; sourceTree = "<group>"; };
-		473EC4421E31DEE40050E619 /* ScreenProjectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScreenProjectionView.xib; sourceTree = "<group>"; };
 		474C762F1DFB9BED001129C9 /* NoDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoDataView.h; sourceTree = "<group>"; };
 		474C76301DFB9BED001129C9 /* NoDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDataView.m; sourceTree = "<group>"; };
 		474C76311DFB9BED001129C9 /* NoDataView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
@@ -1262,6 +1260,7 @@
 		0684DF1D1D519095006756D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0689915A1E854EE900BC9EFE /* RDKeyBoard */,
 				06FFCCA61E6E864900ADEA94 /* RDAlertView */,
 				4733B7511E305C01006889A2 /* HomePageView */,
 				476F44C71E2DBEA000F99090 /* LeftView */,
@@ -1275,6 +1274,15 @@
 				069D0F311D8F88260002F2CE /* BasicView */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		0689915A1E854EE900BC9EFE /* RDKeyBoard */ = {
+			isa = PBXGroup;
+			children = (
+				0689915B1E854EE900BC9EFE /* RDKeyBoard.h */,
+				0689915C1E854EE900BC9EFE /* RDKeyBoard.m */,
+			);
+			path = RDKeyBoard;
 			sourceTree = "<group>";
 		};
 		069D0F311D8F88260002F2CE /* BasicView */ = {
@@ -1672,9 +1680,6 @@
 				4733B7521E305C21006889A2 /* HomeAnimationView.h */,
 				4733B7531E305C21006889A2 /* HomeAnimationView.m */,
 				4733B7551E305C49006889A2 /* HomeAnimationView.xib */,
-				473EC43F1E31DED30050E619 /* ScreenProjectionView.h */,
-				473EC4401E31DED30050E619 /* ScreenProjectionView.m */,
-				473EC4421E31DEE40050E619 /* ScreenProjectionView.xib */,
 			);
 			path = HomePageView;
 			sourceTree = "<group>";
@@ -2137,7 +2142,6 @@
 				062D4F921DEC02BA0093942A /* RDPause.png in Resources */,
 				962EFA891E84F7980074450A /* voljian@3x.png in Resources */,
 				962EFA7B1E84F7980074450A /* labajingyin.png in Resources */,
-				473EC4431E31DEE40050E619 /* ScreenProjectionView.xib in Resources */,
 				962EFA8C1E84F7980074450A /* voljian_g@3x.png in Resources */,
 				062D4F801DEC02BA0093942A /* RDBackFullScreen.png in Resources */,
 				962EFA7C1E84F7980074450A /* labajingyin@2x.png in Resources */,
@@ -2429,6 +2433,7 @@
 				06FB9D611DF97D0E0053BE0A /* MBProgressHUD+Custom.m in Sources */,
 				474C76351DFB9BED001129C9 /* NoDataView.m in Sources */,
 				476F44C51E2DBC1000F99090 /* LeftViewController.m in Sources */,
+				0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */,
 				478058511DF99A5B0091C305 /* HSLatestTopicListRequest.m in Sources */,
 				4772FF901DFA9C5900758697 /* BaseView.m in Sources */,
 				0647EAD21E7129E900C39160 /* ZFVolumeView.m in Sources */,
@@ -2438,7 +2443,6 @@
 				47D6F6441E4AB9D80030C8C4 /* VoideoPlayHeaderView.m in Sources */,
 				0627E0B31E32111500DAED92 /* LeftTableHeaderView.m in Sources */,
 				06FA33961D3E171D001F5B37 /* DDFileLogger.m in Sources */,
-				473EC4411E31DED30050E619 /* ScreenProjectionView.m in Sources */,
 				0647BC351E506285002284BB /* HSFirstUseRequest.m in Sources */,
 				0627E0BF1E3231DA00DAED92 /* LGSideMenuController.m in Sources */,
 				47F4A27A1E496598001C93F0 /* FeedbackView.m in Sources */,

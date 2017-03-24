@@ -14,7 +14,6 @@
 #import "HSCategoryListRequest.h"
 #import "HSCategoryModel.h"
 #import "RecommendViewController.h"
-#import "ScreenProjectionView.h"
 #import "VideoListViewController.h"
 #import "AlbumListViewController.h"
 #import "DocumentListViewController.h"

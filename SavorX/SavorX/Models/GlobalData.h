@@ -59,9 +59,6 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 
 @property (nonatomic, copy) NSString * projectId;
 
-//当前是否有投屏页
-@property (nonatomic, assign) BOOL isScreenProjectionView;
-
 /**
  *  创建单例
  *
