@@ -34,6 +34,10 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //强制变为不是第一次安装
+    [self setIsFirstLauchApp:YES];
+    
     // 设置界面
     [self setupView];
     //添加监听
@@ -61,12 +65,11 @@
     NSString *filePath = nil;
     if (![self isFirstLauchApp]) {
         //第一次安装
-        filePath = [[NSBundle mainBundle] pathForResource:@"opening_long_1080*1920.mp4" ofType:nil];
+        filePath = _videoUrlString;
         [self setIsFirstLauchApp:YES];
     }else {
         
         filePath = _videoUrlString;
-//        filePath = [[NSBundle mainBundle] pathForResource:@"opening_short_1080*1920.mp4" ofType:nil];
     }
     //初始化player
     self.player = [AVPlayer playerWithURL:[NSURL fileURLWithPath:filePath]];
@@ -77,7 +80,8 @@
 
 #pragma mark -- 初始化视图逻辑
 - (void)setupView {
-    self.startPlayerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"lauch"]];
+    // 视频启动时，加载图，目前没有
+    self.startPlayerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"lauch.png"]];
     _startPlayerImageView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     [self.contentOverlayView addSubview:_startPlayerImageView];
     //是否是第一次进入视频
@@ -182,6 +186,7 @@
     if ([self isFirstLauchApp]) {
         //第二次进入app视频需要直接结束
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlaybackComplete) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];//视频播放结束
+        
     }else {
         //第一次进入app视频需要轮播
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlaybackAgain) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];//视频播放结束
@@ -204,7 +209,7 @@
 }
 //开始播放
 - (void)moviePlaybackStart {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.startPlayerImageView removeFromSuperview];
         self.startPlayerImageView = nil;
     });
