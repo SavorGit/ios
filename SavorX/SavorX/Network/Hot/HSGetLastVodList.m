@@ -10,15 +10,12 @@
 
 @implementation HSGetLastVodList
 
-- (instancetype)initWithCreateTime:(NSInteger)createTime flag:(NSString *)flag
+- (instancetype)initWithFlag:(NSString *)flag
 {
     if (self = [super init]) {
         self.methodName = [@"content/Home/getLastVodList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         
-        if (createTime != 0) {
-            [self setIntegerValue:createTime forParamKey:@"createTime"];
-        }
         [self setValue:flag forParamKey:@"flag"];
     }
     return self;

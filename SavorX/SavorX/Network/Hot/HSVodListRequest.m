@@ -11,13 +11,11 @@
 
 @implementation HSVodListRequest
 
-- (instancetype)initWithPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize createTime:(NSInteger)createTime
+- (instancetype)initWithCreateTime:(NSInteger)createTime
 {
     if(self = [super init]){
         self.methodName = [@"content/Home/getVodList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setIntegerValue:pageNo forParamKey:@"pageNo"];
-        [self setIntegerValue:pageSize forParamKey:@"pageSize"];
         if (createTime > 0) {
             [self setIntegerValue:createTime forParamKey:@"createTime"];
         }

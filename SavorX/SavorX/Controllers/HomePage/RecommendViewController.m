@@ -21,6 +21,7 @@
 #import "SXVideoPlayViewController.h"
 #import "ArticleReadViewController.h"
 #import "HSGetLastHotelVodList.h"
+#import "HSVideoViewController.h"
 
 @interface RecommendViewController ()<UITableViewDelegate, UITableViewDataSource, SDCycleScrollViewDelegate>
 
@@ -28,12 +29,9 @@
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, strong) UIView * headView; //头视图
-@property (nonatomic, assign) NSInteger pageNo; //当前数据页面
-@property (nonatomic, assign) NSInteger pageSize; //页面数据大小
 @property (nonatomic, strong) NSMutableArray * adSourcel;
 @property (nonatomic, strong) UILabel * TopFreshLabel;
 @property (nonatomic, copy) NSString * hotelName;
-@property (nonatomic, assign) NSInteger minTime;
 @property (nonatomic, assign) NSInteger maxTime;
 @property (nonatomic, copy) NSString * flag;
 
@@ -81,8 +79,6 @@
 
 - (void)setupDatas
 {
-    self.pageNo = 2;
-    self.pageSize = 10;
     [self.dataSource removeAllObjects];
     MBProgressHUD * hud;
     if ([[NSFileManager defaultManager] fileExistsAtPath:HotelCache]) {
@@ -100,17 +96,15 @@
             [self.adSourcel addObject:model];
         }
         self.hotelName = [dict objectForKey:@"hotelName"];
-        self.minTime = [[dict objectForKey:@"minTime"] integerValue];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
         [self setupTopScrollView];
         [self.tableView reloadData];
-        self.pageNo = 3;
     }else{
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
     
-    HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId createTime:0 flag:nil];
+    HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId flag:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary * dict = response[@"result"];
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
@@ -129,11 +123,9 @@
             [self.adSourcel addObject:model];
         }
         self.hotelName = [dict objectForKey:@"hotelName"];
-        self.minTime = [[dict objectForKey:@"minTime"] integerValue];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
         [self setupTopScrollView];
-        self.pageNo = 3;
         [self.tableView reloadData];
         if (hud) {
             [hud hideAnimated:NO];
@@ -152,9 +144,9 @@
     }];
 }
 
-- (void)getDataWithPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize
+- (void)getMoreData
 {
-    HSHotelVodListRequest * request = [[HSHotelVodListRequest alloc] initWithHotelID:[GlobalData shared].hotelId andPageNo:pageNo andPageSize:pageSize createTime:self.maxTime];
+    HSHotelVodListRequest * request = [[HSHotelVodListRequest alloc] initWithHotelID:[GlobalData shared].hotelId createTime:self.maxTime];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary * dict = response[@"result"];
@@ -173,7 +165,6 @@
                 HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
                 [self.dataSource addObject:model];
             }
-            self.pageNo++;
             self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
             [self.tableView reloadData];
             [self.tableView.mj_footer endRefreshing];
@@ -190,7 +181,7 @@
 
 - (void)refreshDataSource
 {
-    HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId createTime:self.minTime flag:self.flag];
+    HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId flag:self.flag];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary * dict = response[@"result"];
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
@@ -209,11 +200,9 @@
             [self.adSourcel addObject:model];
         }
         self.hotelName = [dict objectForKey:@"hotelName"];
-        self.minTime = [[dict objectForKey:@"minTime"] integerValue];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
         [self setupTopScrollView];
-        self.pageNo = 3;
         [self.tableView reloadData];
         [self.tableView.mj_footer resetNoMoreData];
         [self.tableView.mj_header endRefreshing];
@@ -375,6 +364,11 @@
             web.image = cell.bgImageView.image;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
+        }else if (model.type == 4){
+            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
+            [self.parentNavigationController pushViewController:web animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else{
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
@@ -461,7 +455,7 @@
         //创建tableView动画加载头视图
         _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshDataSource)];
         MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
-            [self getDataWithPageNo:self.pageNo andPageSize:self.pageSize];
+            [self getMoreData];
         }];
         _tableView.mj_footer = footer;
     }

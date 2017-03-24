@@ -10,6 +10,6 @@
 
 @interface HSVodListRequest : BGNetworkRequest
 
-- (instancetype)initWithPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize createTime:(NSInteger)createTime;
+- (instancetype)initWithCreateTime:(NSInteger)createTime;
 
 @end

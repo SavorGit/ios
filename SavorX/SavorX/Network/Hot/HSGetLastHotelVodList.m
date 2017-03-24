@@ -10,15 +10,12 @@
 
 @implementation HSGetLastHotelVodList
 
-- (instancetype)initWithHotelId:(NSInteger)hotelId createTime:(NSInteger)createTime flag:(NSString *)flag
+- (instancetype)initWithHotelId:(NSInteger)hotelId flag:(NSString *)flag
 {
     if (self = [super init]) {
         self.methodName = [@"content/home/getLastHotelList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setIntegerValue:hotelId forParamKey:@"hotelId"];
-        if (createTime != 0) {
-            [self setIntegerValue:createTime forParamKey:@"createTime"];
-        }
         [self setValue:flag forParamKey:@"flag"];
     }
     return self;

@@ -25,10 +25,7 @@
 
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
-@property (nonatomic, assign) NSInteger pageNo; //当前数据页面
-@property (nonatomic, assign) NSInteger pageSize; //页面数据大小
 @property (nonatomic, strong) UILabel * TopFreshLabel;
-@property (nonatomic, assign) NSInteger minTime;
 @property (nonatomic, assign) NSInteger maxTime;
 @property (nonatomic, copy) NSString * flag;
 
@@ -66,14 +63,11 @@
 
 - (void)setupDatas
 {
-    self.pageNo = 2;
-    self.pageSize = 10;
     [self.dataSource removeAllObjects];
     MBProgressHUD * hud;
     if ([[NSFileManager defaultManager] fileExistsAtPath:HotVodCache]) {
         NSDictionary *dataDict = [NSDictionary dictionaryWithContentsOfFile:HotVodCache];
         NSArray *listAry = [dataDict objectForKey:@"list"];
-        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
         for(NSDictionary *dict in listAry){
@@ -82,18 +76,16 @@
             [self.dataSource addObject:model];
         }
         [self.tableView reloadData];
-        self.pageNo = 3;
     }else{
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
     
-    HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithCreateTime:0 flag:nil];
+    HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithFlag:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary *dataDict = dic[@"result"];
         NSArray *listAry = [dataDict objectForKey:@"list"];
-        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
         for(NSDictionary *dict in listAry){
@@ -102,7 +94,6 @@
             [self.dataSource addObject:model];
         }
         [self.tableView reloadData];
-        self.pageNo = 3;
         
         [SAVORXAPI saveFileOnPath:HotVodCache withDictionary:dataDict];
         if (hud) {
@@ -121,9 +112,9 @@
     }];
 }
 
-- (void)getDataWithPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize
+- (void)getMoreData
 {
-    HSVodListRequest * request = [[HSVodListRequest alloc] initWithPageNo:pageNo andPageSize:pageSize createTime:self.maxTime];
+    HSVodListRequest * request = [[HSVodListRequest alloc] initWithCreateTime:self.maxTime];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary *dic = (NSDictionary *)response;
@@ -146,7 +137,6 @@
         [self.dataSource addObjectsFromArray:mutableArr];
         [self.tableView.mj_footer endRefreshing];
         [self.tableView reloadData];
-        self.pageNo++;
         [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -160,13 +150,12 @@
 
 - (void)refreshDataSource
 {
-    HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithCreateTime:self.minTime flag:self.flag];
+    HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithFlag:self.flag];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary *dataDict = dic[@"result"];
         NSArray *listAry = [dataDict objectForKey:@"list"];
-        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
         for(NSDictionary *dict in listAry){
@@ -175,7 +164,6 @@
             [self.dataSource addObject:model];
         }
         [self.tableView reloadData];
-        self.pageNo = 3;
         
         NSInteger count = [[dataDict objectForKey:@"count"] integerValue];
         if (count == 0) {
@@ -313,11 +301,13 @@
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
         //如果不是绑定状态
         if (model.type == 3) {
-//            WebViewController * web = [[WebViewController alloc] init];
-//            web.model = model;
-//            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-//            web.image = cell.bgImageView.image;
-//            [self.parentNavigationController pushViewController:web animated:YES];
+            WebViewController * web = [[WebViewController alloc] init];
+            web.model = model;
+            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+            web.image = cell.bgImageView.image;
+            [self.parentNavigationController pushViewController:web animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
+        }else if (model.type == 4){
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
             [self.parentNavigationController pushViewController:web animated:YES];
@@ -370,7 +360,7 @@
         _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshDataSource)];
         
         MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
-            [self getDataWithPageNo:self.pageNo andPageSize:self.pageSize];
+            [self getMoreData];
         }];
         _tableView.mj_footer = footer;
     }

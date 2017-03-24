@@ -10,7 +10,6 @@
 
 @interface HSCategoryModel : BaseModel
 
-
 @property (nonatomic, assign) NSInteger cid;
 @property (nonatomic, copy) NSString *imageURL;
 @property (nonatomic, copy) NSString *name;

@@ -10,6 +10,6 @@
 
 @interface HSLatestTopicListRequest : BGNetworkRequest
 
-- (instancetype)initWithCategoryId:(NSInteger)categoryId updateTime:(NSInteger)updateTime;
+- (instancetype)initWithCategoryId:(NSInteger)categoryId flag:(NSString *)flag;
 
 @end

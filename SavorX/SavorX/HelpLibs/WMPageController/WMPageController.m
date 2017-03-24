@@ -1150,12 +1150,14 @@ static NSInteger const kWMControllerCountUndefined = -1;
     if ([GlobalData shared].scene != RDSceneHaveRDBox) {
         self.isInHotel = NO;
         [self reloadData];
+        if (self.selectIndex > 1) {
+            self.selectIndex -= 1;
+        }
     }
     [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
     [self.rightItem stopAnimation];
     self.titleViewBtn.userInteractionEnabled = NO;
-
 }
 
 - (void)configureSelf
