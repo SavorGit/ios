@@ -41,14 +41,16 @@
     UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectZero];
     bgView.backgroundColor = [UIColor clearColor];
     bgView.userInteractionEnabled = YES;
-    [bgView setImage:[UIImage imageNamed:@"ljtvsanweishu_bg"]];
+
     [self.view addSubview:bgView];
     [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 370));
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 30] , [Helper autoHeightWith:370]));
         make.top.mas_equalTo(15);
         make.left.mas_equalTo(15);
         make.right.mas_equalTo(-15);
     }];
+    [bgView setImage:[UIImage imageNamed:@"ljtvsanweishu_bg"]];
+    bgView.contentMode = UIViewContentModeScaleAspectFit;
     
     self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.textLabel.textAlignment = NSTextAlignmentCenter;
@@ -58,7 +60,7 @@
     self.textLabel.backgroundColor = [UIColor clearColor];
     [bgView addSubview:self.textLabel];
     [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 30));
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 40] ,[Helper autoHeightWith:30] ));
         make.bottom.mas_equalTo(bgView).offset(-32);
         make.centerX.mas_equalTo(bgView);
     }];
@@ -72,7 +74,7 @@
     [bgView addSubview:self.failConectLabel];
     self.failConectLabel.hidden = YES;
     [self.failConectLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(100, 30));
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:30]));
         make.bottom.mas_equalTo(bgView.mas_bottom).offset(-32);
         make.centerX.mas_equalTo(-50);
     }];
@@ -87,7 +89,7 @@
     [bgView addSubview:self.reConnectBtn];
     self.reConnectBtn.hidden = YES;
     [self.reConnectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(100, 30));
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:30]));
         make.bottom.mas_equalTo(bgView.mas_bottom).offset(-32);
         make.centerX.mas_equalTo(50);
     }];
@@ -99,16 +101,19 @@
         label.layer.borderWidth = 1.5f;
         label.textAlignment = NSTextAlignmentCenter;
         label.layer.masksToBounds = YES;
+        label.textColor = UIColorFromRGB(0x333333);
+        label.font = [UIFont boldSystemFontOfSize:30];
         [bgView addSubview:label];
+        float distance = [Helper autoHeightWith:99];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.mas_equalTo (self.textLabel.mas_top).offset(-18);
-            make.size.mas_equalTo(CGSizeMake(70, 50));
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:70],[Helper autoHeightWith:50]));
             if (i == 0) {
-                make.centerX.mas_equalTo(-99);
+                make.centerX.mas_equalTo(-distance);
             }else if (i == 1) {
                 make.centerX.mas_equalTo(0);
             }else{
-                make.centerX.mas_equalTo(99);
+                make.centerX.mas_equalTo(distance);
             }
         }];
         [self.labelSource addObject:label];
@@ -121,8 +126,9 @@
     self.textField.backgroundColor = [UIColor clearColor];
     [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo (self.textLabel.mas_top).offset(-18);
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 50));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, [Helper autoHeightWith:50]));
         make.centerX.mas_equalTo(0);
+        
     }];
     self.textField.hidden = YES;
     [self.textField becomeFirstResponder];
@@ -151,7 +157,7 @@
     [smallWindowView setImage:[UIImage imageNamed:@"lianjie_bg"]];
     [self.maskingView addSubview:smallWindowView];
     [smallWindowView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(190, 160));
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:190],[Helper autoHeightWith:160]));
         make.centerX.mas_equalTo(self.maskingView);
         make.centerY.mas_equalTo(self.maskingView);
     }];
@@ -160,7 +166,7 @@
     self.animationImageView.backgroundColor = [UIColor clearColor];
     [smallWindowView addSubview:self.animationImageView];
     [self.animationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(80, 20));
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:80],[Helper autoHeightWith:20]));
         make.bottom.mas_equalTo(smallWindowView.mas_bottom).offset(- 20);
         make.centerX.mas_equalTo(self.maskingView);
     }];
