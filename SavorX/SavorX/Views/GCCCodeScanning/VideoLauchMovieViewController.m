@@ -61,12 +61,11 @@
     NSString *filePath = nil;
     if (![self isFirstLauchApp]) {
         //第一次安装
-        filePath = [[NSBundle mainBundle] pathForResource:@"opening_long_1080*1920.mp4" ofType:nil];
+        filePath = _videoUrlString;
         [self setIsFirstLauchApp:YES];
     }else {
         
         filePath = _videoUrlString;
-//        filePath = [[NSBundle mainBundle] pathForResource:@"opening_short_1080*1920.mp4" ofType:nil];
     }
     //初始化player
     self.player = [AVPlayer playerWithURL:[NSURL fileURLWithPath:filePath]];
@@ -77,7 +76,8 @@
 
 #pragma mark -- 初始化视图逻辑
 - (void)setupView {
-    self.startPlayerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"lauch"]];
+    // 视频启动时，加载图，目前没有
+    self.startPlayerImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"lauch.png"]];
     _startPlayerImageView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     [self.contentOverlayView addSubview:_startPlayerImageView];
     //是否是第一次进入视频

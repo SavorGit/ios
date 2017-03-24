@@ -168,10 +168,13 @@
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:HasLaunched] boolValue];
     if (temp) {
         
-        BOOL isLauchImage =  YES;
-        if (!isLauchImage) {
+        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+        NSString *status = [user objectForKey:@"status"];
+        [user synchronize];
+        
+        if ([status isEqualToString:@"2"]) {
             
-            NSString *videoPath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.MP4"];
+            NSString *videoPath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.mp4"];
             
             VideoLauchMovieViewController *vc = [[VideoLauchMovieViewController alloc] init];
             self.window.rootViewController = vc;
@@ -188,7 +191,7 @@
         
         [self.window makeKeyAndVisible];
         
-        if (isLauchImage) {
+        if ([status isEqualToString:@"1"]) {
             
             NSString *imagePath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
             NSData *picData = [NSData dataWithContentsOfFile:imagePath];
@@ -243,7 +246,7 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         
         if ([typeString isEqualToString:@"1"]) {
-            NSData *beforImageDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://redian-produce.oss-cn-beijing.aliyuncs.com/media/resource/pxbJA4YSzb.jpg"]];
+            NSData *beforImageDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
             NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
             NSFileManager *fileManager = [NSFileManager defaultManager];
             if ([fileManager fileExistsAtPath:filePath]) {
@@ -251,13 +254,13 @@
             }
             [beforImageDate writeToFile:filePath atomically:YES];
         }else if ([typeString isEqualToString:@"2"]){
-            NSData *beforImageDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
-            NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.MP4"];
+            NSData *beforVideoDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
+            NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.mp4"];
             NSFileManager *fileManager = [NSFileManager defaultManager];
             if ([fileManager fileExistsAtPath:filePath]) {
                 [fileManager removeItemAtPath:filePath error:nil];
             }
-            [beforImageDate writeToFile:filePath atomically:YES];
+            [beforVideoDate writeToFile:filePath atomically:YES];
         }
     });
 }
@@ -274,9 +277,11 @@
         NSString *urlString = dict[@"url"];
         
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-        // 如果拿到的lauchID和本地存储的id不一致，则存储图片伙食视频
+        // 如果拿到的lauchID和本地存储的id不一致，则存储图片或是视频
         if (![[user objectForKey:@"lauchId"]  isEqualToString:idString]) {
             [user setObject:idString forKey:@"lauchId"];
+            [user setObject:statusString forKey:@"status"];
+            [user setObject:durationString forKey:@"duration"];
             [user synchronize];
             [self saveImage:urlString withType:statusString];
         }
