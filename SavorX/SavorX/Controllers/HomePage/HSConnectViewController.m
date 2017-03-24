@@ -34,6 +34,7 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [SAVORXAPI postUMHandleWithContentId:@"link_tv_enter" key:nil value:nil];
+    
 }
 
 - (void)setupViews
@@ -44,7 +45,11 @@
 
     [self.view addSubview:bgView];
     [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 30] , [Helper autoHeightWith:370]));
+        if (kMainBoundsHeight == 568) {
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 30] , [Helper autoHeightWith:320]));
+        }else{
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 30] , [Helper autoHeightWith:370]));
+        }
         make.top.mas_equalTo(15);
         make.left.mas_equalTo(15);
         make.right.mas_equalTo(-15);
@@ -54,14 +59,23 @@
     
     self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.textLabel.textAlignment = NSTextAlignmentCenter;
-    self.textLabel.font = [UIFont systemFontOfSize:17];
+     if (kMainBoundsHeight == 568) {
+        self.textLabel.font = [UIFont systemFontOfSize:15];
+     }else{
+        self.textLabel.font = [UIFont systemFontOfSize:17];
+     }
     self.textLabel.text = @"请输入电视中的三位数连接电视";
     self.textLabel.textColor = UIColorFromRGB(0x333333);
     self.textLabel.backgroundColor = [UIColor clearColor];
     [bgView addSubview:self.textLabel];
     [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 40] ,[Helper autoHeightWith:30] ));
-        make.bottom.mas_equalTo(bgView).offset(-32);
+        if (kMainBoundsHeight == 568) {
+            make.bottom.mas_equalTo(bgView).offset(-18);
+        }else{
+            make.bottom.mas_equalTo(bgView).offset(-32);
+        }
+
         make.centerX.mas_equalTo(bgView);
     }];
     
@@ -106,7 +120,11 @@
         [bgView addSubview:label];
         float distance = [Helper autoHeightWith:99];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.mas_equalTo (self.textLabel.mas_top).offset(-18);
+            if (kMainBoundsHeight == 568) {
+                make.bottom.mas_equalTo (self.textLabel.mas_top).offset(-10);
+            }else{
+                make.bottom.mas_equalTo (self.textLabel.mas_top).offset(-18);
+            }
             make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:70],[Helper autoHeightWith:50]));
             if (i == 0) {
                 make.centerX.mas_equalTo(-distance);
