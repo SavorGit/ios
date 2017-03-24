@@ -265,17 +265,15 @@
         if ([typeString isEqualToString:@"1"]) {
             NSData *beforImageDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
             NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            if ([fileManager fileExistsAtPath:filePath]) {
-                [fileManager removeItemAtPath:filePath error:nil];
+            if ([FileManage fileExistsAtPath:filePath]) {
+                [FileManage removeItemAtPath:filePath error:nil];   
             }
             [beforImageDate writeToFile:filePath atomically:YES];
         }else if ([typeString isEqualToString:@"2"]){
             NSData *beforVideoDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
             NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.mp4"];
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            if ([fileManager fileExistsAtPath:filePath]) {
-                [fileManager removeItemAtPath:filePath error:nil];
+            if ([FileManage fileExistsAtPath:filePath]) {
+                [FileManage removeItemAtPath:filePath error:nil];
             }
             [beforVideoDate writeToFile:filePath atomically:YES];
         }

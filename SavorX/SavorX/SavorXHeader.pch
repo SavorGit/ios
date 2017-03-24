@@ -80,6 +80,10 @@
 #define FontSizeSmall 12.0f
 #define FontSizeBig 16.0f
 
+//-------------------其他-------------------------
+
+#define FileManage [NSFileManager defaultManager]
+
 #define VCBackgroundColor [UIColor colorWithHexString:@"#f5f5f5"]
 #define FontColor [UIColor colorWithHexString:@"#d8b964"]
 #define PhotoToolTitleColor [UIColor colorWithHexString:@"#c49053"]
