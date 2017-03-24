@@ -172,62 +172,40 @@
         NSString *status = [user objectForKey:@"status"];
         [user synchronize];
         
+        // status为2是视频类型，为1是图片类型
         if ([status isEqualToString:@"2"]) {
             
             NSString *videoPath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.mp4"];
-            
-            VideoLauchMovieViewController *vc = [[VideoLauchMovieViewController alloc] init];
-            self.window.rootViewController = vc;
-            vc.videoUrlString = videoPath;
-            vc.lauchClickedBack = ^(NSDictionary *parmDic){
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            // 如果视频文件存在，加载视频，否则加载默认图片
+            if ([fileManager fileExistsAtPath:videoPath]) {
+                VideoLauchMovieViewController *vc = [[VideoLauchMovieViewController alloc] init];
+                self.window.rootViewController = vc;
+                vc.videoUrlString = videoPath;
+                vc.lauchClickedBack = ^(NSDictionary *parmDic){
+                    LGSideMenuController * sliderVC = [self createRootViewController];
+                    self.window.rootViewController = sliderVC;
+                    [self monitorInternet]; //监控网络状态
+                };
+                [self.window makeKeyAndVisible];
+            }else{
                 LGSideMenuController * sliderVC = [self createRootViewController];
                 self.window.rootViewController = sliderVC;
-                [self monitorInternet]; //监控网络状态
-            };
+                [self.window makeKeyAndVisible];
+                [self loadLauchImage];
+                NSLog(@"没有视频文件！");
+                
+            }
+
         }else{
                 LGSideMenuController * sliderVC = [self createRootViewController];
                 self.window.rootViewController = sliderVC;
+                [self.window makeKeyAndVisible];
         }
-        
-        [self.window makeKeyAndVisible];
         
         if ([status isEqualToString:@"1"]) {
             
-            NSString *imagePath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
-            NSData *picData = [NSData dataWithContentsOfFile:imagePath];
-            UIImage *launchImage = [UIImage imageWithData:picData];
-            
-            //设置一个图片;
-            UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-            niceView.tag = 1234;
-            UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-            blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-            [niceView addSubview:blackView];
-            if (launchImage) {
-                niceView.image = launchImage;
-            }else{
-                niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
-            }
-            
-            UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-            logoView.image = [Helper getLaunchImage];
-            
-            //添加到场景
-            [self.window addSubview:niceView];
-            [self.window addSubview:logoView];
-            
-            [UIView animateWithDuration:1.5 animations:^{
-                [niceView setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:1.2 animations:^{
-                    [niceView setAlpha:0];
-                    [logoView setAlpha:0];
-                } completion:^(BOOL finished) {
-                    [niceView removeFromSuperview];
-                    [logoView removeFromSuperview];
-                    [self monitorInternet]; //监控网络状态
-                }];
-            }];
+            [self loadLauchImage];
 
         }
         [SAVORXAPI postUMHandleWithContentId:@"start_page" key:@"start_page" value:@"success"];
@@ -239,6 +217,45 @@
         [SAVORXAPI postUMHandleWithContentId:@"start_page" key:@"start_page" value:@"success"];
         [self gotoGuidePageView];
     }
+}
+
+- (void)loadLauchImage{
+    
+    NSString *imagePath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
+    NSData *picData = [NSData dataWithContentsOfFile:imagePath];
+    UIImage *launchImage = [UIImage imageWithData:picData];
+    
+    //设置一个图片;
+    UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    niceView.tag = 1234;
+    UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+    [niceView addSubview:blackView];
+    if (launchImage) {
+        niceView.image = launchImage;
+    }else{
+        niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
+    }
+    
+    UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    logoView.image = [Helper getLaunchImage];
+    
+    //添加到场景
+    [self.window addSubview:niceView];
+    [self.window addSubview:logoView];
+    
+    [UIView animateWithDuration:1.5 animations:^{
+        [niceView setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:1.2 animations:^{
+            [niceView setAlpha:0];
+            [logoView setAlpha:0];
+        } completion:^(BOOL finished) {
+            [niceView removeFromSuperview];
+            [logoView removeFromSuperview];
+            [self monitorInternet]; //监控网络状态
+        }];
+    }];
 }
 
 - (void)saveImage:(NSString *)urlStr withType:(NSString *)typeString
@@ -271,15 +288,14 @@
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary * dict = response[@"result"];
-        NSString *idString = dict[@"id"];
         NSString *statusString = dict[@"status"];
         NSString *durationString = dict[@"duration"];
         NSString *urlString = dict[@"url"];
         
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
         // 如果拿到的lauchID和本地存储的id不一致，则存储图片或是视频
-        if (![[user objectForKey:@"lauchId"]  isEqualToString:idString]) {
-            [user setObject:idString forKey:@"lauchId"];
+        if (![[user objectForKey:@"url"]  isEqualToString:urlString]) {
+            [user setObject:urlString forKey:@"url"];
             [user setObject:statusString forKey:@"status"];
             [user setObject:durationString forKey:@"duration"];
             [user synchronize];

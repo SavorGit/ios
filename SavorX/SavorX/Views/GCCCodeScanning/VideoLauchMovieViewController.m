@@ -34,6 +34,10 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //强制变为不是第一次安装
+    [self setIsFirstLauchApp:YES];
+    
     // 设置界面
     [self setupView];
     //添加监听
@@ -182,6 +186,7 @@
     if ([self isFirstLauchApp]) {
         //第二次进入app视频需要直接结束
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlaybackComplete) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];//视频播放结束
+        
     }else {
         //第一次进入app视频需要轮播
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlaybackAgain) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];//视频播放结束
@@ -204,7 +209,7 @@
 }
 //开始播放
 - (void)moviePlaybackStart {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.startPlayerImageView removeFromSuperview];
         self.startPlayerImageView = nil;
     });
