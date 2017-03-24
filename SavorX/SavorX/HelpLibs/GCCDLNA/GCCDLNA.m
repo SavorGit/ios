@@ -127,7 +127,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 
 - (void)startSearchPlatform
 {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
     if ([GlobalData shared].isBindRD) {
         if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].RDBoxDevice.BoxIP]) {
             return;
@@ -151,7 +151,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     self.isSearchPlatform = YES;
     [self setUpSocketForPlatform]; //若当前socket处于关闭状态，先配置socket地址和端口
     [self callQRcodeFromPlatform];
-    [self performSelector:@selector(stopSearchDevice) withObject:nil afterDelay:8.f];
+//    [self performSelector:@selector(stopSearchDevice) withObject:nil afterDelay:8.f];
 //    [self performSelector:@selector(startSearchDevice) withObject:nil afterDelay:6.f];
 }
 
@@ -188,7 +188,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 //停止设备搜索
 - (void)stopSearchDevice
 {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startSearchDevice) object:nil];
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startSearchDevice) object:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
     
     if (!self.socket.isClosed) {
@@ -201,7 +201,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 - (void)resetSearch
 {
     [HSGetIpRequest cancelRequest];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startSearchDevice) object:nil];
+//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startSearchDevice) object:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
 }
 

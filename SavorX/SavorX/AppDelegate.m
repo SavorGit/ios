@@ -244,7 +244,12 @@
     [self.window addSubview:niceView];
     [self.window addSubview:logoView];
     
-    [UIView animateWithDuration:1.5 animations:^{
+    NSInteger animationTime = [[[NSUserDefaults standardUserDefaults] objectForKey:@"duration"] integerValue];
+    if (!(animationTime > 0)) {
+        animationTime = 1.5f;
+    }
+    
+    [UIView animateWithDuration:animationTime animations:^{
         [niceView setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:1.2 animations:^{
@@ -258,7 +263,7 @@
     }];
 }
 
-- (void)saveImage:(NSString *)urlStr withType:(NSString *)typeString
+- (void)saveImage:(NSString *)urlStr withType:(NSString *)typeString success:(void(^)())success
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         
@@ -270,6 +275,7 @@
                 [fileManager removeItemAtPath:filePath error:nil];
             }
             [beforImageDate writeToFile:filePath atomically:YES];
+            success();
         }else if ([typeString isEqualToString:@"2"]){
             NSData *beforVideoDate = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlStr]];
             NSString * filePath = [HTTPServerDocument stringByAppendingPathComponent:@"launch.mp4"];
@@ -278,6 +284,7 @@
                 [fileManager removeItemAtPath:filePath error:nil];
             }
             [beforVideoDate writeToFile:filePath atomically:YES];
+            success();
         }
     });
 }
@@ -295,11 +302,12 @@
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
         // 如果拿到的lauchID和本地存储的id不一致，则存储图片或是视频
         if (![[user objectForKey:@"url"]  isEqualToString:urlString]) {
-            [user setObject:urlString forKey:@"url"];
-            [user setObject:statusString forKey:@"status"];
-            [user setObject:durationString forKey:@"duration"];
-            [user synchronize];
-            [self saveImage:urlString withType:statusString];
+            [self saveImage:urlString withType:statusString success:^{
+                [user setObject:urlString forKey:@"url"];
+                [user setObject:statusString forKey:@"status"];
+                [user setObject:durationString forKey:@"duration"];
+                [user synchronize];
+            }];
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
