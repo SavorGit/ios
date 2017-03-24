@@ -117,6 +117,7 @@
     self.navigationItem.rightBarButtonItem.enabled = NO;
     if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
         [[HomeAnimationView animationView] scanQRCode];
+        self.navigationItem.rightBarButtonItem.enabled = YES;
         return;
     }
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
@@ -134,7 +135,6 @@
                     [hud hideAnimated:NO];
                     [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
                     [[HomeAnimationView animationView] startScreenWithViewController:self];
-//                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
@@ -158,7 +158,6 @@
                     [hud hideAnimated:NO];
                     [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
                     [[HomeAnimationView animationView] startScreenWithViewController:self];
-//                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
