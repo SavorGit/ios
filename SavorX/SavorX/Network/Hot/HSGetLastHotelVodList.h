@@ -10,6 +10,6 @@
 
 @interface HSGetLastHotelVodList : BGNetworkRequest
 
-- (instancetype)initWithHotelId:(NSInteger)hotelId createTime:(NSInteger)createTime flag:(NSString *)flag;
+- (instancetype)initWithHotelId:(NSInteger)hotelId flag:(NSString *)flag;
 
 @end

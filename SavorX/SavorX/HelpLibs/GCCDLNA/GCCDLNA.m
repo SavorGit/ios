@@ -127,6 +127,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 
 - (void)startSearchPlatform
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
     if ([GlobalData shared].isBindRD) {
         if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].RDBoxDevice.BoxIP]) {
             return;

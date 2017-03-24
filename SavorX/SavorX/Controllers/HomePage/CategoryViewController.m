@@ -19,6 +19,7 @@
 #import "HomeAnimationView.h"
 #import "SXVideoPlayViewController.h"
 #import "ArticleReadViewController.h"
+#import "HSVideoViewController.h"
 
 @interface CategoryViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -26,12 +27,8 @@
 
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
-@property (nonatomic, assign) NSInteger pageNo; //当前数据页面
-@property (nonatomic, assign) NSInteger pageSize; //页面数据大小
 @property (nonatomic, copy) NSString * cachePath;
-@property (nonatomic, assign) NSInteger currentTime;
 @property (nonatomic, strong) UILabel * TopFreshLabel;
-@property (nonatomic, assign) NSInteger minTime;
 @property (nonatomic, assign) NSInteger maxTime;
 @property (nonatomic, copy) NSString * flag;
 
@@ -52,9 +49,6 @@
     [super viewDidLoad];
     
     self.dataSource = [NSMutableArray new];
-    
-    NSTimeInterval time = [[NSDate date] timeIntervalSince1970] * 1000;
-    self.currentTime = (NSInteger)time;
     
     [self setupDatas];
 }
@@ -81,8 +75,6 @@
 
 - (void)setupDatas
 {
-    self.pageNo = 2;
-    self.pageSize = 10;
     [MBProgressHUD showCustomLoadingHUDInView:self.view];
     
     [self.dataSource removeAllObjects];
@@ -90,7 +82,6 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
         NSDictionary * dataDict = [NSDictionary dictionaryWithContentsOfFile:self.cachePath];
         NSArray * listAry = dataDict[@"list"];
-        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
         for(NSDictionary *dict in listAry){
@@ -98,20 +89,18 @@
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
-        self.pageNo = 3;
         [self.tableView reloadData];
     }else{
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
     
-    HSLatestTopicListRequest * request = [[HSLatestTopicListRequest alloc] initWithCategoryId:self.categoryID updateTime:0];
+    HSLatestTopicListRequest * request = [[HSLatestTopicListRequest alloc] initWithCategoryId:self.categoryID flag:nil];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary * dataDict = [dic objectForKey:@"result"];
         NSArray *listAry = dataDict[@"list"];
-        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
         [SAVORXAPI saveFileOnPath:self.cachePath withDictionary:dataDict];
@@ -120,7 +109,6 @@
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
-        self.pageNo = 3;
         [self.tableView reloadData];
         
         if (hud) {
@@ -144,17 +132,11 @@
 
 - (void)refreshData
 {
-    if (self.dataSource.count > 0) {
-        HSVodModel * model = [self.dataSource objectAtIndex:0];
-        self.currentTime = model.createTime;
-    }
-    
-    HSLatestTopicListRequest * request = [[HSLatestTopicListRequest alloc] initWithCategoryId:self.categoryID updateTime:self.currentTime];
+    HSLatestTopicListRequest * request = [[HSLatestTopicListRequest alloc] initWithCategoryId:self.categoryID flag:self.flag];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary * dataDict = [dic objectForKey:@"result"];
         NSArray *listAry = dataDict[@"list"];
-        self.minTime = [[dataDict objectForKey:@"minTime"] integerValue];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
         [SAVORXAPI saveFileOnPath:self.cachePath withDictionary:dataDict];
@@ -165,7 +147,6 @@
             [self.dataSource addObject:model];
         }
         
-        self.pageNo = 3;
         [self.tableView reloadData];
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
@@ -194,9 +175,9 @@
 }
 
 //根据页面和页面大小获取页面数据
-- (void)getVodListWithPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize
+- (void)getMoreData
 {
-    HSTopicListRequest * request = [[HSTopicListRequest alloc] initWithCategoryId:self.categoryID pageNo:pageNo pageSize:pageSize time:self.currentTime];
+    HSTopicListRequest * request = [[HSTopicListRequest alloc] initWithCategoryId:self.categoryID time:self.maxTime];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary *dic = (NSDictionary *)response;
@@ -215,7 +196,6 @@
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
-        self.pageNo++;
         [self.tableView reloadData];
         [self.tableView.mj_footer endRefreshing];
         if (self.dataSource.count == 0) {
@@ -341,6 +321,11 @@
             web.image = cell.bgImageView.image;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
+        }else if (model.type == 4){
+            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
+            [self.parentNavigationController pushViewController:web animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else{
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
@@ -391,7 +376,7 @@
         
         
         MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
-            [self getVodListWithPageNo:self.pageNo andPageSize:self.pageSize];
+            [self getMoreData];
         }];
         _tableView.mj_footer = footer;
     }

@@ -11,13 +11,12 @@
 @implementation HSTopicListRequest
 
 
-- (instancetype)initWithCategoryId:(NSInteger)categoryId pageNo:(NSInteger )pageNo pageSize:(NSInteger)pageSize time:(NSInteger)time{
+- (instancetype)initWithCategoryId:(NSInteger)categoryId time:(NSInteger)time
+{
     if (self = [super init]) {
         self.methodName = [@"catvideo/catvideo/getTopList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setIntegerValue:categoryId forParamKey:@"categoryId"];
-        [self setIntegerValue:pageNo forParamKey:@"pageNo"];
-        [self setIntegerValue:pageSize forParamKey:@"pageSize"];
         [self setIntegerValue:time forParamKey:@"createTime"];
     }
     return self;

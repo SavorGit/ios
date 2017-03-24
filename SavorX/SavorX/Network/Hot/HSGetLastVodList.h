@@ -10,6 +10,6 @@
 
 @interface HSGetLastVodList : BGNetworkRequest
 
-- (instancetype)initWithCreateTime:(NSInteger)createTime flag:(NSString *)flag;
+- (instancetype)initWithFlag:(NSString *)flag;
 
 @end

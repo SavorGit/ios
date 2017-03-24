@@ -29,7 +29,7 @@
 @property (nonatomic, assign) BOOL isPlayEnd; //当前是否处于播放结束状态
 @property (nonatomic, strong) NSURLSessionDataTask * task; //记录当前请求任务
 @property (nonatomic, assign) BOOL isHandle; //记录当前是否在进行操作
-@property (nonatomic, strong) UIButton * volumeButton;
+@property (nonatomic, strong) UIButton * volumeButton; //静音按钮
 @property (nonatomic, strong) UIButton * screenButton;
 @property (nonatomic, strong) UIButton * quitScreenButton;
 @property (nonatomic, strong) UIImageView * backImageView;

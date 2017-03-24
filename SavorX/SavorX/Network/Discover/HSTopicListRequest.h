@@ -10,6 +10,6 @@
 
 @interface HSTopicListRequest : BGNetworkRequest
 
-- (instancetype)initWithCategoryId:(NSInteger)categoryId pageNo:(NSInteger )pageNo pageSize:(NSInteger)pageSize time:(NSInteger)time;
+- (instancetype)initWithCategoryId:(NSInteger)categoryId time:(NSInteger)time;
 
 @end

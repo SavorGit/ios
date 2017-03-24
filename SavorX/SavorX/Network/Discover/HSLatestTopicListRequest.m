@@ -10,16 +10,14 @@
 
 @implementation HSLatestTopicListRequest
 
-- (instancetype)initWithCategoryId:(NSInteger)categoryId updateTime:(NSInteger)updateTime{
+- (instancetype)initWithCategoryId:(NSInteger)categoryId flag:(NSString *)flag
+{
     if (self = [super init]) {
         self.methodName = [@"catvideo/catvideo/getLastTopList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         
         [self setIntegerValue:categoryId forParamKey:@"categoryId"];
-        
-        if (updateTime != 0) {
-            [self setIntegerValue:updateTime forParamKey:@"createTime"];
-        }
+        [self setValue:flag forParamKey:@"flag"];
     }
     return self;
 }

@@ -10,6 +10,6 @@
 
 @interface HSHotelVodListRequest : BGNetworkRequest
 
-- (instancetype)initWithHotelID:(NSInteger)hotelID andPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize createTime:(NSInteger)createTime;
+- (instancetype)initWithHotelID:(NSInteger)hotelID createTime:(NSInteger)createTime;
 
 @end

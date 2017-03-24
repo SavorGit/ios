@@ -10,14 +10,12 @@
 
 @implementation HSHotelVodListRequest
 
-- (instancetype)initWithHotelID:(NSInteger)hotelID andPageNo:(NSInteger)pageNo andPageSize:(NSInteger)pageSize createTime:(NSInteger)createTime
+- (instancetype)initWithHotelID:(NSInteger)hotelID createTime:(NSInteger)createTime
 {
     if(self = [super init]){
         self.methodName = [@"content/home/getHotelList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setIntegerValue:hotelID forParamKey:@"hotelId"];
-        [self setIntegerValue:pageNo forParamKey:@"pageNo"];
-        [self setIntegerValue:pageSize forParamKey:@"pageSize"];
         
         if (createTime > 0) {
             [self setIntegerValue:createTime forParamKey:@"createTime"];
