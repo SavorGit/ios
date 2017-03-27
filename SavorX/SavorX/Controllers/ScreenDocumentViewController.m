@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIWebView * webView; //文件浏览控件
 @property (nonatomic, strong) NSURLSessionDataTask * task; //记录当前最后一次请求任务
 @property (nonatomic, strong) UIButton * lockButton;
+@property (nonatomic, assign) CGPoint content;
 
 @property (nonatomic, assign) BOOL isScreen;
 
@@ -44,6 +45,7 @@
     //初始化webView
     self.webView = [[UIWebView alloc] init];
     self.webView.delegate = self;
+    self.webView.scrollView.delegate = self;
     [self.view addSubview:self.webView];
 //
     //为竖屏添加约束
@@ -132,7 +134,6 @@
     
     [self screenButtonDidClickedWithSuccess:^{
         [[HomeAnimationView animationView] startScreenWithViewController:self];
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment)];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = YES;
@@ -143,13 +144,6 @@
 
 - (void)orientationChanged
 {
-    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_rotating" key:nil value:nil];
-    if (self.isScreen) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self screenButtonDidClickedWithSuccess:nil failure:nil];
-        });
-    }
-    
     UIInterfaceOrientation  orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (orientation == UIInterfaceOrientationPortrait) {
         self.orientation = orientation;
@@ -160,8 +154,14 @@
         self.orientation = orientation;
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         [self.navigationController setHidesBarsOnTap:YES];
+        [self.webView reload];
     }
-    
+    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_rotating" key:nil value:nil];
+    if (self.isScreen) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self screenButtonDidClickedWithSuccess:nil failure:nil];
+        });
+    }
 }
 
 - (void)resetCurrentItemWithPath:(NSString *)path
@@ -177,6 +177,10 @@
 
 - (void)screenButtonDidClickedWithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
 {
+    if (self.isScreen && !self.isScreen) {
+        return;
+    }
+    
     for (UIView * view in self.webView.subviews) {
         if (view.subviews.count) {
             for (UIView * subView in view.subviews) {
@@ -320,12 +324,18 @@
     return YES;
 }
 
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [self.webView.scrollView setContentOffset:self.content animated:NO];
+}
+
 //浏览滑动停止的时候
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     if (self.isScreen) {
         [self screenButtonDidClickedWithSuccess:nil failure:nil];
     }
+    self.content = scrollView.contentOffset;
 }
 
 //浏览手动停止的时候
@@ -336,6 +346,7 @@
             [self screenButtonDidClickedWithSuccess:nil failure:nil];
         }
     }
+    self.content = scrollView.contentOffset;
 }
 
 //浏览缩放停止的时候
@@ -344,6 +355,7 @@
     if (self.isScreen) {
         [self screenButtonDidClickedWithSuccess:nil failure:nil];
     }
+    self.content = scrollView.contentOffset;
 }
 
 - (void)dealloc

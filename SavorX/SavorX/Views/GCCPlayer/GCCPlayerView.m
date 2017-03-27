@@ -175,6 +175,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             [weakSelf.controlView setSliderValue:value currentTime:currentTime totalTime:totalTime];
             [weakSelf.controlView stopLoading];
         }
+        if (weakSelf.imageView.superview) {
+            [weakSelf.imageView removeFromSuperview];
+        }
     }];
 }
 

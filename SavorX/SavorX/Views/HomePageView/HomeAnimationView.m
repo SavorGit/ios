@@ -236,6 +236,11 @@
 //相机权限准备好，即调用TCP连接检测与UDP广播发送进行二维码呼出
 - (void)CameroIsReady
 {
+    
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+        [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
+    }
+    
     __block BOOL hasSuccess = NO; //记录是否呼码成功过
     __block BOOL hasFailure = NO; //记录是否呼码失败过
     

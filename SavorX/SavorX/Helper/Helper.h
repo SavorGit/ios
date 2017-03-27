@@ -56,4 +56,6 @@
 
 + (NSString *)getHTTPHeaderValue;
 
++ (void)interfaceOrientation:(UIInterfaceOrientation)orientation;
+
 @end
