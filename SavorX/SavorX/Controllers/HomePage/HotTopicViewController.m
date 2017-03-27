@@ -224,14 +224,14 @@
     cell.titleLabel.text = model.title;
     cell.categroyLabel.text = [NSString stringWithFormat:@"# %@", model.category];
     
-    if (model.type != 3) {
-        cell.timeLabel.hidden = YES;
-    }else{
+    if (model.type == 3 || model.type == 4) {
         cell.timeLabel.hidden = NO;
         NSInteger durationInt = model.duration; // some duration from the JSONr
         NSInteger minutesInt = durationInt / 60;
         NSInteger secondsInt = durationInt % 60;
         cell.timeLabel.text = [NSString stringWithFormat:@"%02ld'%02ld\"", (long)minutesInt, (long)secondsInt];
+    }else{
+        cell.timeLabel.hidden = YES;
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

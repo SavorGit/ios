@@ -8,7 +8,7 @@
 
 #import "HelpViewController.h"
 
-@interface HelpViewController ()<UIScrollViewDelegate, UIWebViewDelegate>
+@interface HelpViewController ()<UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIWebView * webView;
 @property (nonatomic, copy) NSString * url;
@@ -40,7 +40,6 @@
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
     self.webView.backgroundColor = [UIColor whiteColor];
     self.webView.opaque = NO;
-    self.webView.delegate = self;
     [self.view addSubview:self.webView];
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
@@ -48,11 +47,6 @@
     
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
     [self.webView loadRequest:request];
-}
-
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    return YES;
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {
