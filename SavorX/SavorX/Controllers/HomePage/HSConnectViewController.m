@@ -39,6 +39,8 @@
 
 - (void)setupViews
 {
+    self.title = @"连接电视";
+    
     UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectZero];
     bgView.backgroundColor = [UIColor clearColor];
     bgView.userInteractionEnabled = YES;
