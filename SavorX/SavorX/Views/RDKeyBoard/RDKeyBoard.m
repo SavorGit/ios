@@ -40,7 +40,7 @@
         for (int j = 0; j < 3; j++) {
             UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [button setBackgroundImage:[self createImageWithColor:[UIColor grayColor]] forState:UIControlStateHighlighted];
+            [button setBackgroundImage:[self createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateHighlighted];
             [button addTarget:self action:@selector(numberButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
             button.tag = 101 + i * 3 + j;
             
@@ -68,7 +68,7 @@
         [line mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(0);
             make.right.mas_equalTo(0);
-            make.height.mas_equalTo(1.f);
+            make.height.mas_equalTo(.5f);
             make.top.mas_equalTo(height * (i / 4.f));
         }];
     }
@@ -80,7 +80,7 @@
         [line mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
             make.bottom.mas_equalTo(0);
-            make.width.mas_equalTo(1.f);
+            make.width.mas_equalTo(.5f);
             make.left.mas_equalTo([UIScreen mainScreen].bounds.size.width * ((i + 1) / 3.f));
         }];
     }

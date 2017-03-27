@@ -326,7 +326,7 @@
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
-        [MBProgressHUD showTextHUDwithTitle:@"绑定失败"];
+        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
