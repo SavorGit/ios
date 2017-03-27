@@ -363,6 +363,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     button.tag = tag;
     [button addTarget:self action:@selector(categoryDidBeChoose:) forControlEvents:UIControlEventTouchUpInside];
     [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button setExclusiveTouch:YES];
     
     return button;
 }

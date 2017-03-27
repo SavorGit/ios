@@ -127,7 +127,6 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 
 - (void)startSearchPlatform
 {
-//    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
     if ([GlobalData shared].isBindRD) {
         if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].RDBoxDevice.BoxIP]) {
             return;
@@ -150,8 +149,9 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     [GlobalData shared].scene = RDSceneNothing;
     self.isSearchPlatform = YES;
     [self setUpSocketForPlatform]; //若当前socket处于关闭状态，先配置socket地址和端口
-//    [self callQRcodeFromPlatform];
-//    [self performSelector:@selector(stopSearchDevice) withObject:nil afterDelay:8.f];
+    [self callQRcodeFromPlatform];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
+    [self performSelector:@selector(stopSearchDevice) withObject:nil afterDelay:10.f];
 //    [self performSelector:@selector(startSearchDevice) withObject:nil afterDelay:6.f];
 }
 
@@ -267,11 +267,11 @@ withFilterContext:(nullable id)filterContext{
             [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
             [GlobalData shared].scene = RDSceneHaveRDBox;
             self.isSearch = NO;
-            [self socketShouldBeClose];
         }else{
             [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"], [[dict objectForKey:@"Savor-Type"] lowercaseString]];
             [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
             [GlobalData shared].scene = RDSceneHaveRDBox;
+            self.isSearch = NO;
         }
     }
     

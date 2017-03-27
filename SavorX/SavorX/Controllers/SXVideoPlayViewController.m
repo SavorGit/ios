@@ -638,6 +638,7 @@
     }
     [self isEnableFooter];
     [self restartVod];
+    [self.tableView reloadData];
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender
