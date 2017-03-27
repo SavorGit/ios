@@ -182,7 +182,6 @@
     
     self.maskingView = [[UIView alloc] initWithFrame:CGRectZero];
     self.maskingView.backgroundColor = [UIColor blackColor];
-    self.maskingView.alpha = 0.88;
     
     UIWindow *keyWindow = [[[UIApplication sharedApplication] windows] lastObject];
     self.maskingView.frame = keyWindow.bounds;
@@ -231,7 +230,7 @@
 -(void)showViewWithAnimationDuration:(float)duration{
     
     [UIView animateWithDuration:duration animations:^{
-        self.maskingView.backgroundColor = RGBA(0, 0, 0, 0.88);
+        self.maskingView.backgroundColor = RGBA(0, 0, 0, 0.7);
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         self.maskingView.bottom = keyWindow.bottom;
     } completion:^(BOOL finished) {
@@ -278,11 +277,6 @@
             self.textLabel.text = @"请输入电视中的三位数连接电视";
         }
     }
-
-    
-    NSLog(@"%@",str);
-    NSLog(@"---%@---",self.keyMuSring);
-    
 }
 
 - (void)getBoxInfo

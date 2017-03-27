@@ -45,8 +45,11 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //当前是否处于wifi网络状态
 @property (nonatomic, assign) BOOL isWifiStatus;
 
-//存储呼出二维码地址
-@property (nonatomic, strong) NSString * callQRCodeURL;
+//存储小平台呼出二维码地址
+@property (nonatomic, copy) NSString * callQRCodeURL;
+
+//存储机顶盒呼出二维码地址
+@property (nonatomic, copy) NSString * boxCallCodeURL;
 
 //热点当前场景
 @property (nonatomic, assign) RDScene scene;

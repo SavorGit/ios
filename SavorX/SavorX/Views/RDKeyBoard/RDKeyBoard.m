@@ -39,6 +39,8 @@
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 3; j++) {
             UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setBackgroundColor:[UIColor whiteColor]];
+            button.titleLabel.font = [UIFont systemFontOfSize:28];
             [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             [button setBackgroundImage:[self createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateHighlighted];
             [button addTarget:self action:@selector(numberButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -47,6 +49,7 @@
             if (button.tag == 112) {
                 [button setImage:[UIImage imageNamed:@"shanchu1"] forState:UIControlStateNormal];
                 [button setImage:[UIImage imageNamed:@"shanchu2"] forState:UIControlStateHighlighted];
+                [button setImageEdgeInsets:UIEdgeInsetsMake(0, 6, 0, 0)];
             }
             
             [self addSubview:button];
@@ -61,7 +64,7 @@
         }
     }
     
-    for (int i = 0; i < 4; i++) {
+    for (int i = 1; i < 4; i++) {
         UIView * line = [[UIView alloc] initWithFrame:CGRectZero];
         [self addSubview:line];
         line.backgroundColor = [UIColor grayColor];
