@@ -253,13 +253,13 @@
     [UIView animateWithDuration:animationTime animations:^{
         [niceView setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
     } completion:^(BOOL finished) {
+        [self monitorInternet];
         [UIView animateWithDuration:1.2 animations:^{
             [niceView setAlpha:0];
             [logoView setAlpha:0];
         } completion:^(BOOL finished) {
             [niceView removeFromSuperview];
             [logoView removeFromSuperview];
-            [self monitorInternet]; //监控网络状态
         }];
     }];
 }
@@ -465,6 +465,10 @@
                     UIView * view = [[UIApplication sharedApplication].keyWindow viewWithTag:422];
                     if (view) {
                         [view removeFromSuperview];
+                    }
+                    
+                    if ([NSStringFromClass([[Helper getRootNavigationController].topViewController class]) isEqualToString:@"HSConnectViewController"]) {
+                        [[Helper getRootNavigationController] popViewControllerAnimated:YES];
                     }
                     
                     return;

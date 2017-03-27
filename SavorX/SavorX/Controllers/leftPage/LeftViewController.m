@@ -109,7 +109,7 @@
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:advice  animated:NO];
         }else if (indexPath.row == 2){
             [self hideLeftViewAnimated:nil];
-            HelpViewController * help = [[HelpViewController alloc] init];
+            HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.rerdian.com/Public/html/help"];
             help.title = [_itemArys objectAtIndex:indexPath.row];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:help  animated:NO];
         }

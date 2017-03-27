@@ -87,7 +87,7 @@ static GlobalData* single = nil;
     }
     
     NSString * message = [NSString stringWithFormat:@"\"%@\"连接成功, 可以投屏", model.sid];
-    [MBProgressHUD showTextHUDwithTitle:message];
+    [MBProgressHUD showTextHUDwithTitle:message delay:2.f];
 }
 
 - (void)disconnectWithDLNADevice

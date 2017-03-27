@@ -10,6 +10,7 @@
 #import "RDBoxModel.h"
 #import "RDKeyBoard.h"
 #import "GCCKeyChain.h"
+#import "HelpViewController.h"
 
 @interface HSConnectViewController ()<RDKeyBoradDelegate>
 
@@ -171,6 +172,15 @@
     }
     keyBoard.delegate = self;
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];
+    
+}
+
+- (void)shouldPushHelp
+{
+    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.rerdian.com/Public/html/help/helptwo.html"];
+    help.title = @"帮助";
+    [self.navigationController  pushViewController:help  animated:NO];
 }
 
 // 重新连接

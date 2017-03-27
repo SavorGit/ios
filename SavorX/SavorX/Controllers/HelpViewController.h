@@ -13,4 +13,6 @@
  */
 @interface HelpViewController : BaseViewController
 
+- (instancetype)initWithURL:(NSString *)url;
+
 @end

@@ -8,13 +8,22 @@
 
 #import "HelpViewController.h"
 
-@interface HelpViewController ()<UIScrollViewDelegate>
+@interface HelpViewController ()<UIScrollViewDelegate, UIWebViewDelegate>
 
 @property (nonatomic, strong) UIWebView * webView;
+@property (nonatomic, copy) NSString * url;
 
 @end
 
 @implementation HelpViewController
+
+- (instancetype)initWithURL:(NSString *)url
+{
+    if (self = [super init]) {
+        self.url = url;
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
@@ -31,13 +40,19 @@
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
     self.webView.backgroundColor = [UIColor whiteColor];
     self.webView.opaque = NO;
+    self.webView.delegate = self;
     [self.view addSubview:self.webView];
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];
     
-    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://h5.rerdian.com/Public/html/help"]];
+    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
     [self.webView loadRequest:request];
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    return YES;
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {
