@@ -34,6 +34,9 @@
     self.keyMuSring = [[NSMutableString alloc] initWithCapacity:100];
    [self setupViews];
     
+    //监听程序进入活跃状态
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -218,7 +221,16 @@
     self.animationImageView.animationDuration = 0.5;
     self.animationImageView.animationRepeatCount = 10000;
     [self.animationImageView startAnimating];
+    
 
+}
+
+//程序进入活跃状态
+- (void)applicationWillActive
+{
+    if (self.animationImageView) {
+        [self.animationImageView startAnimating];
+    }
 }
 
 - (void)hidenMaskingLoadingView{
@@ -477,6 +489,11 @@
     button.layer.borderWidth = .5f;
     button.layer.borderColor = UIColorFromRGB(0xe8e8e8).CGColor;
     [showView addSubview:button];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
