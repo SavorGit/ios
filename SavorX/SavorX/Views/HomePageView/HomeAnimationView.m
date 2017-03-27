@@ -18,6 +18,7 @@
 #import "RDAlertView.h"
 #import "RDCheackSence.h"
 #import "GCCDLNA.h"
+#import "GCCKeyChain.h"
 
 #define HasAlertScreen @"HasAlertScreen"
 
@@ -235,48 +236,132 @@
 //相机权限准备好，即调用TCP连接检测与UDP广播发送进行二维码呼出
 - (void)CameroIsReady
 {
+    __block BOOL hasSuccess = NO; //记录是否呼码成功过
+    __block BOOL hasFailure = NO; //记录是否呼码失败过
+    
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
-    NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
-    [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        [hud hideAnimated:NO];
-        NSInteger code = [result[@"code"] integerValue];
-        if(code == 10000){
-            HSConnectViewController * view = [[HSConnectViewController alloc] init];
-            if (![[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]]) {
-                [[Helper getRootNavigationController] pushViewController:view animated:YES];
+    if ([GlobalData shared].callQRCodeURL) {
+        NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
+        [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            [hud hideAnimated:NO];
+            NSInteger code = [result[@"code"] integerValue];
+            if(code == 10000){
+                if (hasSuccess) {
+                    return;
+                }
+                HSConnectViewController * view = [[HSConnectViewController alloc] init];
+                if (![[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]]) {
+                    [[Helper getRootNavigationController] pushViewController:view animated:YES];
+                    hasSuccess = YES;
+                }
             }
-        }
-        //
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        //
-        if (error.code == -1009 || error.code == -1001) {
+            //
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            //
+            
+            if (!hasFailure) {
+                hasFailure = YES;
+                return;
+            }
+            
+            if (error.code == -1009 || error.code == -1001) {
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
+            }else{
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
+            }
+        }];
+    }
+    
+    if ([GlobalData shared].boxCodeURL) {
+        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
+        NSString *hosturl = [NSString stringWithFormat:@"%@/showCode?deviceId=%@", [GlobalData shared].boxCodeURL, [GCCKeyChain load:keychainID]];
+        [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
-        }else{
-            [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
-        }
-    }];
+            NSInteger code = [result[@"code"] integerValue];
+            if(code == 10000){
+                if (hasSuccess) {
+                    return;
+                }
+                HSConnectViewController * view = [[HSConnectViewController alloc] init];
+                if (![[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]]) {
+                    [[Helper getRootNavigationController] pushViewController:view animated:YES];
+                    hasSuccess = YES;
+                }
+            }
+            //
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            //
+            
+            if (!hasFailure) {
+                hasFailure = YES;
+                return;
+            }
+            
+            if (error.code == -1009 || error.code == -1001) {
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
+            }else{
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
+            }
+        }];
+    }
 }
 
 // 重新呼出二维码
 - (void)reCallCode{
     
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
+    __block BOOL hasFailure;
     
-    NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
-    [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        [hud hideAnimated:NO];
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        //
-        if (error.code == -1009 || error.code == -1001) {
+    if ([GlobalData shared].callQRCodeURL) {
+        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
+        NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
+        [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
-        }else{
+            //
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            //
+            
+            if (!hasFailure) {
+                hasFailure = YES;
+                return;
+            }
+            
+            if (error.code == -1009 || error.code == -1001) {
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
+            }else{
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
+            }
+        }];
+    }
+    
+    if ([GlobalData shared].boxCodeURL) {
+        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
+        NSString *hosturl = [NSString stringWithFormat:@"%@/showCode?deviceId=%@", [GlobalData shared].boxCodeURL, [GCCKeyChain load:keychainID]];
+        [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
-        }
-    }];
+            //
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            //
+            
+            if (!hasFailure) {
+                hasFailure = YES;
+                return;
+            }
+            
+            if (error.code == -1009 || error.code == -1001) {
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
+            }else{
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
+            }
+        }];
+    }
     
 }
 

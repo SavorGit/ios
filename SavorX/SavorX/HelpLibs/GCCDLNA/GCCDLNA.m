@@ -150,7 +150,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     [GlobalData shared].scene = RDSceneNothing;
     self.isSearchPlatform = YES;
     [self setUpSocketForPlatform]; //若当前socket处于关闭状态，先配置socket地址和端口
-    [self callQRcodeFromPlatform];
+//    [self callQRcodeFromPlatform];
 //    [self performSelector:@selector(stopSearchDevice) withObject:nil afterDelay:8.f];
 //    [self performSelector:@selector(startSearchDevice) withObject:nil afterDelay:6.f];
 }
@@ -258,13 +258,21 @@ withFilterContext:(nullable id)filterContext{
     }
     
     NSString * host = [dict objectForKey:@"Savor-HOST"];
-    if (host.length) {
+    NSString * boxHost = [dict objectForKey:@"Savor-Box-HOST"];
+    if (host.length || boxHost.length) {
 
-        [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"], [[dict objectForKey:@"Savor-Type"] lowercaseString]];
-        [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
-        [GlobalData shared].scene = RDSceneHaveRDBox;
-        self.isSearch = NO;
-        [self socketShouldBeClose];
+        if ([[dict objectForKey:@"Savor-Type"] isEqualToString:@"box"]) {
+            [GlobalData shared].boxCodeURL = [NSString stringWithFormat:@"http://%@:8080", [dict objectForKey:@"Savor-Box-HOST"]];
+            [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/small", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"]];
+            [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
+            [GlobalData shared].scene = RDSceneHaveRDBox;
+            self.isSearch = NO;
+            [self socketShouldBeClose];
+        }else{
+            [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"], [[dict objectForKey:@"Savor-Type"] lowercaseString]];
+            [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
+            [GlobalData shared].scene = RDSceneHaveRDBox;
+        }
     }
     
     return nil;

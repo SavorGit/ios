@@ -9,6 +9,7 @@
 #import "HSConnectViewController.h"
 #import "RDBoxModel.h"
 #import "RDKeyBoard.h"
+#import "GCCKeyChain.h"
 
 @interface HSConnectViewController ()<RDKeyBoradDelegate>
 
@@ -279,53 +280,142 @@
 
 - (void)getBoxInfo
 {
-    NSString *hosturl = [NSString stringWithFormat:@"%@/command/box-info/%@", [GlobalData shared].callQRCodeURL, self.numSring];
+    __block BOOL hasSuccess;
+    __block BOOL hasFailure;
     
-    [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+    if ([GlobalData shared].callQRCodeURL) {
+        NSString *hosturl = [NSString stringWithFormat:@"%@/command/box-info/%@", [GlobalData shared].callQRCodeURL, self.numSring];
         
-        NSInteger code = [[result objectForKey:@"code"] integerValue];
-        if (code == 10000) {
-            result = [result objectForKey:@"result"];
-            RDBoxModel * model = [[RDBoxModel alloc] init];
+        [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             
-            if ([HTTPServerManager checkHttpServerWithBoxIP:[result objectForKey:@"box_ip"]]) {
-                model.BoxIP = [[result objectForKey:@"box_ip"] stringByAppendingString:@":8080"];
-                model.BoxID = [result objectForKey:@"box_mac"];
-                model.hotelID = [[result objectForKey:@"hotel_id"] integerValue];
-                model.roomID = [[result objectForKey:@"room_id"] integerValue];
-                model.sid = [result objectForKey:@"ssid"];
-                [[GlobalData shared] bindToRDBoxDevice:model];
-                [self.navigationController popViewControllerAnimated:YES];
-            }else if (![[result objectForKey:@"ssid"] isEqualToString:[Helper getWifiName]]) {
-                model.BoxIP = [[result objectForKey:@"box_ip"] stringByAppendingString:@":8080"];
-                model.BoxID = [result objectForKey:@"box_mac"];
-                model.hotelID = [[result objectForKey:@"hotel_id"] integerValue];
-                model.roomID = [[result objectForKey:@"room_id"] integerValue];
-                model.sid = [result objectForKey:@"ssid"];
-                [GlobalData shared].cacheModel = model;
-                [self showAlertWithWifiName:[result objectForKey:@"ssid"]];
+            NSInteger code = [[result objectForKey:@"code"] integerValue];
+            if (code == 10000) {
+                
+                if (hasSuccess) {
+                    return;
+                }
+                hasSuccess = YES;
+                
+                result = [result objectForKey:@"result"];
+                RDBoxModel * model = [[RDBoxModel alloc] init];
+                
+                if ([HTTPServerManager checkHttpServerWithBoxIP:[result objectForKey:@"box_ip"]]) {
+                    model.BoxIP = [[result objectForKey:@"box_ip"] stringByAppendingString:@":8080"];
+                    model.BoxID = [result objectForKey:@"box_mac"];
+                    model.hotelID = [[result objectForKey:@"hotel_id"] integerValue];
+                    model.roomID = [[result objectForKey:@"room_id"] integerValue];
+                    model.sid = [result objectForKey:@"ssid"];
+                    [[GlobalData shared] bindToRDBoxDevice:model];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }else if (![[result objectForKey:@"ssid"] isEqualToString:[Helper getWifiName]]) {
+                    model.BoxIP = [[result objectForKey:@"box_ip"] stringByAppendingString:@":8080"];
+                    model.BoxID = [result objectForKey:@"box_mac"];
+                    model.hotelID = [[result objectForKey:@"hotel_id"] integerValue];
+                    model.roomID = [[result objectForKey:@"room_id"] integerValue];
+                    model.sid = [result objectForKey:@"ssid"];
+                    [GlobalData shared].cacheModel = model;
+                    [self showAlertWithWifiName:[result objectForKey:@"ssid"]];
+                }
+            }else{
+                
+                if (!hasFailure) {
+                    hasFailure = YES;
+                    return;
+                }
+                
+                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
+                self.textLabel.text = [result objectForKey:@"msg"];
             }
-        }else{
-            [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
-            self.textLabel.text = [result objectForKey:@"msg"];
-        }
+            
+            [self hidenMaskingLoadingView];
+            self.failConectLabel.hidden = YES;
+            self.reConnectBtn.hidden = YES;
+            self.textLabel.hidden = NO;
+            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            if (!hasFailure) {
+                hasFailure = YES;
+                return;
+            }
+            
+            [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+            [self hidenMaskingLoadingView];
+            self.failConectLabel.hidden = NO;
+            self.reConnectBtn.hidden = NO;
+            self.textLabel.hidden = YES;
+            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
+            
+        }];
+    }
+    
+    if ([GlobalData shared].boxCodeURL) {
+        NSString *hosturl = [NSString stringWithFormat:@"%@/verify?code=%@&deviceId=%@", [GlobalData shared].boxCodeURL, self.numSring, [GCCKeyChain load:keychainID]];
         
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = YES;
-        self.reConnectBtn.hidden = YES;
-        self.textLabel.hidden = NO;
-        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = NO;
-        self.reConnectBtn.hidden = NO;
-        self.textLabel.hidden = YES;
-        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
-        
-    }];
+        [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            
+            NSInteger code = [[result objectForKey:@"code"] integerValue];
+            if (code == 10000) {
+                
+                if (hasSuccess) {
+                    return;
+                }
+                hasSuccess = YES;
+                
+                result = [result objectForKey:@"result"];
+                RDBoxModel * model = [[RDBoxModel alloc] init];
+                
+                if ([HTTPServerManager checkHttpServerWithBoxIP:[result objectForKey:@"box_ip"]]) {
+                    model.BoxIP = [[result objectForKey:@"box_ip"] stringByAppendingString:@":8080"];
+                    model.BoxID = [result objectForKey:@"box_mac"];
+                    model.hotelID = [[result objectForKey:@"hotel_id"] integerValue];
+                    model.roomID = [[result objectForKey:@"room_id"] integerValue];
+                    model.sid = [result objectForKey:@"ssid"];
+                    [[GlobalData shared] bindToRDBoxDevice:model];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }else if (![[result objectForKey:@"ssid"] isEqualToString:[Helper getWifiName]]) {
+                    model.BoxIP = [[result objectForKey:@"box_ip"] stringByAppendingString:@":8080"];
+                    model.BoxID = [result objectForKey:@"box_mac"];
+                    model.hotelID = [[result objectForKey:@"hotel_id"] integerValue];
+                    model.roomID = [[result objectForKey:@"room_id"] integerValue];
+                    model.sid = [result objectForKey:@"ssid"];
+                    [GlobalData shared].cacheModel = model;
+                    [self showAlertWithWifiName:[result objectForKey:@"ssid"]];
+                }
+            }else{
+                
+                if (!hasFailure) {
+                    hasFailure = YES;
+                    return;
+                }
+                
+                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
+                self.textLabel.text = [result objectForKey:@"msg"];
+            }
+            
+            [self hidenMaskingLoadingView];
+            self.failConectLabel.hidden = YES;
+            self.reConnectBtn.hidden = YES;
+            self.textLabel.hidden = NO;
+            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+            if (!hasFailure) {
+                hasFailure = YES;
+                return;
+            }
+            
+            [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+            [self hidenMaskingLoadingView];
+            self.failConectLabel.hidden = NO;
+            self.reConnectBtn.hidden = NO;
+            self.textLabel.hidden = YES;
+            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
+            
+        }];
+    }
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {

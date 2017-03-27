@@ -49,7 +49,7 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 @property (nonatomic, copy) NSString * callQRCodeURL;
 
 //存储机顶盒呼出二维码地址
-@property (nonatomic, copy) NSString * boxCallCodeURL;
+@property (nonatomic, copy) NSString * boxCodeURL;
 
 //热点当前场景
 @property (nonatomic, assign) RDScene scene;

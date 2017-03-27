@@ -228,6 +228,7 @@
     //设置一个图片;
     UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     niceView.tag = 1234;
+    [niceView setContentMode:UIViewContentModeScaleAspectFill];
     UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
     [niceView addSubview:blackView];
