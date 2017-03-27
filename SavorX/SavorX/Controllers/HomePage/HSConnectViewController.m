@@ -13,7 +13,7 @@
 @interface HSConnectViewController ()<RDKeyBoradDelegate>
 
 @property (nonatomic, strong) NSMutableArray * labelSource;
-@property (nonatomic, strong) NSString *numSring;
+@property (nonatomic, copy) NSString *numSring;
 @property (nonatomic, strong) NSMutableString *keyMuSring;
 @property (nonatomic, strong) UILabel * textLabel;
 @property (nonatomic, strong) UILabel * failConectLabel;
@@ -259,8 +259,6 @@
     if (number.length > self.labelSource.count) {
         [self.keyMuSring deleteCharactersInRange:NSMakeRange(3, number.length - 3)];
     }
-    NSLog(@"---%@---",number);
-    NSLog(@"------%@---",self.keyMuSring);
     for (NSUInteger i = 0; i < self.labelSource.count; i++) {
         if (i < number.length) {
             UILabel * label = [self.labelSource objectAtIndex:i];
