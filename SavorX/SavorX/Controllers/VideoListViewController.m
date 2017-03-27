@@ -98,6 +98,9 @@
             //导出成功进行投屏MP4操作
             dispatch_async(dispatch_get_main_queue(), ^{
                 
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [MBProgressHUD showCustomLoadingHUDInView:self.view];
+                
                 NSString *asseturlStr = [NSString stringWithFormat:@"%@video?media-Redianer-TempCache.mp4", [HTTPServerManager getCurrentHTTPServerIP]];
                 if ([GlobalData shared].isBindRD) {
                     [SAVORXAPI postVideoWithURL:STBURL mediaPath:asseturlStr position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
