@@ -127,8 +127,8 @@
     }];
     
     self.playButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.playButton setImage:[UIImage imageNamed:@"bofang"] forState:UIControlStateSelected];
-    [self.playButton setImage:[UIImage imageNamed:@"zanting"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageNamed:@"slider_bofang"] forState:UIControlStateSelected];
+    [self.playButton setImage:[UIImage imageNamed:@"slider_zanting"] forState:UIControlStateNormal];
     self.playButton.selected = YES;
     [self.playButton addTarget:self action:@selector(playButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
     [downView addSubview:self.playButton];
@@ -495,6 +495,16 @@
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [self.timer invalidate];
+    NSInteger itemIndex = (scrollView.contentOffset.x + kScreen_Width * 0.5) / kScreen_Width;
+    
+    if (itemIndex == self.PHAssetSource.count - 1) {
+        itemIndex = 1;
+    }else if (itemIndex == 0){
+        itemIndex = self.PHAssetSource.count - 2;
+    }
+    
+    self.currentIndex = itemIndex;
+    self.indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
 }
 
 //视图结束滑动

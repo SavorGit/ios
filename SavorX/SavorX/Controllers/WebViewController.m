@@ -246,12 +246,16 @@
         [[HomeAnimationView animationView] scanQRCode];
     }else if (self.model.canPlay && _isFormDemand == YES ){
         
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+            [self interfaceOrientation:UIInterfaceOrientationPortrait];
+        }
+        
         [self.navigationController popViewControllerAnimated:YES];
         if (_coFromWebView) {
             _coFromWebView(nil);
         }
-    }
-    else{
+    }else{
         [MBProgressHUD showTextHUDwithTitle:@"当前视频不支持该操作"];
     }
 }

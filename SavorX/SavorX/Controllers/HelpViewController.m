@@ -50,8 +50,14 @@
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    
     [SAVORXAPI postUMHandleWithContentId:@"menu_help_back" key:nil value:nil];
+    if (self.webView.canGoBack) {
+        [self.webView goBack];
+        return;
+    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

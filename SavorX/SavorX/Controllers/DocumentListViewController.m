@@ -14,6 +14,7 @@
 #import "HomeAnimationView.h"
 #import "PhotoTool.h"
 #import "VideoGuidedTwoDimensionalCode.h"
+#import "HelpViewController.h"
 
 #define DocumentListCell @"DocumentListCell"
 
@@ -45,7 +46,7 @@
 
     }
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(creatHelpGuide)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];
     
     //监听程序进入活跃状态
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillActive) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -73,6 +74,13 @@
         }
 
     }];
+}
+
+- (void)shouldPushHelp
+{
+    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.rerdian.com/Public/html/help/helptwo.html"];
+    help.title = @"连接帮助";
+    [self.navigationController  pushViewController:help  animated:NO];
 }
 
 - (void)creatGuidTouchView{

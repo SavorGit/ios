@@ -254,21 +254,13 @@
                 // 获得当前视频图片，回传
                 HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
                 
-                if (model.type == 3) {
-                    DemandViewController *view = [[DemandViewController alloc] init];
-                    view.model = model;
-                    [SAVORXAPI successRing];
-                    [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
-                    [[HomeAnimationView animationView] startScreenWithViewController:view];
-                    [self.parentNavigationController pushViewController:view animated:YES];
-                    [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-                }else{
-                    SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
-                    play.model = model;
-                    [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
-                    [[HomeAnimationView animationView] startScreenWithViewController:play];
-                    [self.parentNavigationController pushViewController:play animated:YES];
-                }
+                DemandViewController *view = [[DemandViewController alloc] init];
+                view.model = model;
+                [SAVORXAPI successRing];
+                [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+                [[HomeAnimationView animationView] startScreenWithViewController:view];
+                [self.parentNavigationController pushViewController:view animated:YES];
+                [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }

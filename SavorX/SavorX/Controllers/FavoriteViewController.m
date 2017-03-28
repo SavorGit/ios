@@ -12,6 +12,7 @@
 #import "HomePageCell.h"
 #import "UIImageView+WebCache.h"
 #import "UMCustomSocialManager.h"
+#import "HSVideoViewController.h"
 
 #define FavoriteCell @"FavoriteCell"
 
@@ -70,6 +71,9 @@
         web.model = model;
         web.title = model.title;
         web.image = cell.bgImageView.image;
+        [self.navigationController pushViewController:web animated:YES];
+    }else if (model.type == 4){
+        HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
         [self.navigationController pushViewController:web animated:YES];
     }else{
         ArticleReadViewController * read = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];

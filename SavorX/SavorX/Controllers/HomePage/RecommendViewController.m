@@ -306,19 +306,12 @@
                 HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
                 [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
                 
-                if (model.type == 3) {
-                    DemandViewController *view = [[DemandViewController alloc] init];
-                    view.model = model;
-                    [SAVORXAPI successRing];
-                    [[HomeAnimationView animationView] startScreenWithViewController:view];
-                    [self.parentNavigationController pushViewController:view animated:YES];
-                    [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-                }else{
-                    SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
-                    play.model = model;
-                    [[HomeAnimationView animationView] startScreenWithViewController:play];
-                    [self.parentNavigationController pushViewController:play animated:YES];
-                }
+                DemandViewController *view = [[DemandViewController alloc] init];
+                view.model = model;
+                [SAVORXAPI successRing];
+                [[HomeAnimationView animationView] startScreenWithViewController:view];
+                [self.parentNavigationController pushViewController:view animated:YES];
+                [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }

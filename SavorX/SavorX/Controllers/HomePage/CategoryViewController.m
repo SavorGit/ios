@@ -269,21 +269,13 @@
         [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 
-                if (model.type == 3) {
-                    DemandViewController *view = [[DemandViewController alloc] init];
-                    view.model = model;
-                    [SAVORXAPI successRing];
-                    [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
-                    [[HomeAnimationView animationView] startScreenWithViewController:view];
-                    [self.parentNavigationController pushViewController:view animated:YES];
-                    [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-                }else{
-                    SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
-                    play.model = model;
-                    [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
-                    [[HomeAnimationView animationView] startScreenWithViewController:play];
-                    [self.parentNavigationController pushViewController:play animated:YES];
-                }
+                DemandViewController *view = [[DemandViewController alloc] init];
+                view.model = model;
+                [SAVORXAPI successRing];
+                [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+                [[HomeAnimationView animationView] startScreenWithViewController:view];
+                [self.parentNavigationController pushViewController:view animated:YES];
+                [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
