@@ -86,6 +86,10 @@
 
 - (void)collectAction
 {
+    if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
+        [MBProgressHUD showTextHUDwithTitle:@"该内容暂不支持收藏" delay:1.5f];
+    }
+    
     NSMutableArray *favoritesArray = [NSMutableArray array];
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
         favoritesArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];

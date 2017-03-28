@@ -474,6 +474,10 @@
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
+            if (![[Helper getWifiName] isEqualToString:[GlobalData shared].RDBoxDevice.sid]) {
+                [[GlobalData shared] disconnect];
+                [[GCCDLNA defaultManager] startSearchPlatform];
+            }
         }else if ([GlobalData shared].isBindDLNA){
             if (![HTTPServerManager checkHttpServerWithDLNAIP:[GlobalData shared].DLNADevice.headerURL]) {
                 [[GlobalData shared] disconnect];

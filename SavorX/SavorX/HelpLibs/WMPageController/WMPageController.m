@@ -1039,18 +1039,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         self.canGetPhoto = YES;
     }
     self.count = 0;
-    
-    //请求相机权限
-    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    if (authStatus == AVAuthorizationStatusNotDetermined){
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
-            if (granted) {
-                
-            }else{
-                
-            }
-        }];
-    }
+
 }
 
 // 断开连接
@@ -1064,6 +1053,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
         self.titleViewBtn.userInteractionEnabled = NO;
+        [[HomeAnimationView animationView] stopScreen];
         [SAVORXAPI ScreenDemandShouldBackToTV];
         [[GlobalData shared] disconnect];
     } bold:YES];

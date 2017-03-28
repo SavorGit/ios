@@ -175,9 +175,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             [weakSelf.controlView setSliderValue:value currentTime:currentTime totalTime:totalTime];
             [weakSelf.controlView stopLoading];
         }
-        if (weakSelf.imageView.superview) {
-            [weakSelf.imageView removeFromSuperview];
-        }
     }];
 }
 
@@ -700,6 +697,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [self.controlView loading];
     self.isPan = YES;
     [self.player pause];
+    if (self.imageView.superview) {
+        [self.imageView removeFromSuperview];
+    }
     // 转换成CMTime才能给player来控制播放进度
     CMTime dragedCMTime = CMTimeMake(time, 1);
     [self.player seekToTime:dragedCMTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {

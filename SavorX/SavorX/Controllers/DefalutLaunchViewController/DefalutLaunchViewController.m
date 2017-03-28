@@ -32,16 +32,22 @@
 
 - (void)createPlayer
 {
-    self.playView = [[DefalutLaunchPlayView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    NSInteger width = [Helper autoWidthWith:180];
+    
+    if (kMainBoundsWidth >= 410) {
+        width = [Helper autoWidthWith:210];
+    }
+    
+    self.playView = [[DefalutLaunchPlayView alloc] initWithFrame:CGRectMake(0, 0, width, width)];
     NSString * path = [[NSBundle mainBundle] pathForResource:@"DefaultLaunch" ofType:@"mp4"];
     [self.playView setVideoURL:path];
     [self.view addSubview:self.playView];
     
     [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo([Helper autoWidthWith:200]);
-        make.height.mas_equalTo([Helper autoWidthWith:200]);
+        make.width.mas_equalTo(width);
+        make.height.mas_equalTo(width);
         make.centerX.mas_equalTo(0);
-        make.centerY.equalTo(self.view).offset(-(kMainBoundsHeight / 6));
+        make.centerY.equalTo(self.view).offset(-(kMainBoundsHeight / 8));
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playDidEnd) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
@@ -53,9 +59,16 @@
     self.playEnd();
 }
 
-- (void)dealloc
+//允许屏幕旋转
+- (BOOL)shouldAutorotate
 {
-    NSLog(@"释放了");
+    return YES;
+}
+
+//返回当前屏幕旋转方向
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)didReceiveMemoryWarning {

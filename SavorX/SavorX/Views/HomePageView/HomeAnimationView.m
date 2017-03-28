@@ -19,6 +19,7 @@
 #import "RDCheackSence.h"
 #import "GCCDLNA.h"
 #import "GCCKeyChain.h"
+#import "SDWebImageManager.h"
 
 #define HasAlertScreen @"HasAlertScreen"
 
@@ -105,7 +106,21 @@
     
     self.currentVC = viewController;
     
-    [self.devImageView setImage:self.currentImage];
+    if (self.currentImage) {
+        [self.devImageView setImage:self.currentImage];
+    }else{
+        [self.devImageView setImage:[UIImage imageNamed:@"ic_projecting_bg"]];
+    }
+}
+
+- (void)SDSetImage:(NSString *)path
+{
+    [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:path] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        
+    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        self.currentImage = image;
+        [self.devImageView setImage:self.currentImage];
+    }];
 }
 
 - (void)stopScreen

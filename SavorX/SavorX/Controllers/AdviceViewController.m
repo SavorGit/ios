@@ -54,7 +54,7 @@
     HSSubmitFeedbackRequest *request = [[HSSubmitFeedbackRequest alloc] initWithSuggestion:adviceStr contactWay:contactStr];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [MBProgressHUD showSuccessHUDInView:self.view title:@"已发送"];
+        [MBProgressHUD showSuccessHUDInView:[UIApplication sharedApplication].keyWindow title:@"已发送"];
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"success"];
         [self.navigationController popViewControllerAnimated:YES];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {

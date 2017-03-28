@@ -330,6 +330,7 @@
         self.statusLabel.text = @"幻灯片";
         [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_exit" key:nil value:nil];
     } failure:^{
+        self.isScreen = YES;
         self.navigationItem.rightBarButtonItem.enabled = YES;
     }];
 }
@@ -603,6 +604,9 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    if (!self.isScreen) {
+        [self shouldRelease];
+    }
 }
 
 - (void)dealloc
@@ -610,7 +614,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
     [self.timer invalidate];
     self.timer = nil;
-    NSLog(@"多张图片投屏释放了");
 }
 
 - (void)didReceiveMemoryWarning {

@@ -511,7 +511,13 @@
             
             if ([[info objectForKey:@"device_type"] integerValue] == 4) {
                 
-                NSString * detail = [NSString stringWithFormat:@"本次更新内容:\n%@", info[@"remark"]];
+                NSArray * detailArray =  info[@"remark"];
+                
+                NSString * detail = @"本次更新内容:\n";
+                for (int i = 0; i < detailArray.count; i++) {
+                    NSString * tempsTr = [detailArray objectAtIndex:i];
+                    detail = [detail stringByAppendingString:tempsTr];
+                }
                 
                 NSInteger update_type = [[info objectForKey:@"update_type"] integerValue];
                 

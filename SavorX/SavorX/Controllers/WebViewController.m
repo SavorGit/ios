@@ -50,6 +50,7 @@
     self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
     self.playView.backgroundColor = [UIColor blackColor];
     self.playView.delegate = self;
+    [self.playView backgroundImage:self.image];
     [self.playView setVideoTitle:self.model.title];
     [self.view addSubview:self.playView];
     [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -191,6 +192,9 @@
 //收藏按钮被点击
 - (void)videoShouldBeCollect:(UIButton *)button
 {
+    if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
+        [MBProgressHUD showTextHUDwithTitle:@"该内容暂不支持收藏" delay:1.5f];
+    }
     NSMutableArray *favoritesArray = [NSMutableArray array];
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
         favoritesArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];

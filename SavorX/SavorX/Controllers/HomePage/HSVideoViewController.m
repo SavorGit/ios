@@ -90,20 +90,6 @@
         make.height.mas_equalTo(30);
     }];
     
-    
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
-        NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
-        __block BOOL iscollect = NO;
-        [theArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
-                iscollect = YES;
-                *stop = YES;
-                return;
-            }
-        }];
-        [self setIsCollect:iscollect];
-    }
-    
     self.topView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.topView];
     self.topView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.3f];
@@ -124,6 +110,19 @@
     [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
     [self.collectButton addTarget:self action:@selector(videoShouldBeCollect:) forControlEvents:UIControlEventTouchUpInside];
     [self.topView addSubview:self.collectButton];
+    
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
+        NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
+        __block BOOL iscollect = NO;
+        [theArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
+                iscollect = YES;
+                *stop = YES;
+                return;
+            }
+        }];
+        [self setIsCollect:iscollect];
+    }
     
     self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.shareButton setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
@@ -235,6 +234,10 @@
 //收藏按钮被点击
 - (void)videoShouldBeCollect:(UIButton *)button
 {
+    if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
+        [MBProgressHUD showTextHUDwithTitle:@"该内容暂不支持收藏" delay:1.5f];
+    }
+    
     NSMutableArray *favoritesArray = [NSMutableArray array];
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
         favoritesArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];

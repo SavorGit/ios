@@ -398,16 +398,22 @@
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [SAVORXAPI demandWithURL:STBURL name:model.name type:2 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
-                SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
-                play.type = 2;
-                HSVodModel * hsVod = [[HSVodModel alloc] init];
-                hsVod.duration = model.duration;
-                hsVod.name = model.name;
-                hsVod.imageURL = model.imageURL;
-                play.model = hsVod;
-                [[HomeAnimationView animationView] startScreenWithViewController:play];
-                [self.navigationController pushViewController:play animated:YES];
-                [SAVORXAPI postUMHandleWithContentId:@"home_advertising_video" key:nil value:nil];
+                // 获得当前视频图片  回传
+                
+                HSVodModel * vodModel = [[HSVodModel alloc] init];
+                vodModel.name = model.name;
+                vodModel.imageURL = model.imageURL;
+                vodModel.cid = model.cid;
+                vodModel.title = model.title;
+                vodModel.duration = model.duration;
+                
+                DemandViewController *view = [[DemandViewController alloc] init];
+                view.model = vodModel;
+                [SAVORXAPI successRing];
+                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+                [[HomeAnimationView animationView] startScreenWithViewController:view];
+                [self.parentNavigationController pushViewController:view animated:YES];
+                [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }

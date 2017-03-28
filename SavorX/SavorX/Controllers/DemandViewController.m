@@ -252,11 +252,15 @@
     
     UINavigationController * na = [Helper getRootNavigationController];
     int j = (int)na.viewControllers.count - 2;
+    if (j < 0) {
+        j = 0;
+    }
     UIViewController * vc = na.viewControllers[j];
     if ([vc  isKindOfClass:[WebViewController class]] ) {
         [self.navigationController popToViewController:vc animated:YES];
     }else if ([vc  isKindOfClass:[WMPageController class]]){
         WebViewController *weVc = [[WebViewController alloc] init];
+        weVc.image = self.backImageView.image;
         weVc.model = self.model;
         weVc.isFormDemand = YES;
         [self.navigationController pushViewController:weVc animated:YES];
@@ -264,7 +268,6 @@
             [self restartVod];
         };
     }
-    
 }
 
 - (void)tvAciton
@@ -275,6 +278,11 @@
 //收藏按钮被点击触发
 - (void)collectAciton:(UIButton *)button
 {
+    if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
+        [MBProgressHUD showTextHUDwithTitle:@"该内容暂不支持收藏" delay:1.5f];
+        return;
+    }
+    
     NSMutableArray *favoritesArray = [NSMutableArray array];
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
         favoritesArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
@@ -340,9 +348,6 @@
     self.playBackView = [[UIView alloc] initWithFrame:CGRectMake(0, kMainBoundsHeight - BOTTOMHEIGHT, kMainBoundsWidth, BOTTOMHEIGHT)];
     self.playBackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7f];
     [self.view addSubview:self.playBackView];
-    UIView * lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreen_Width, 1)];
-    lineView.backgroundColor = [UIColor lightGrayColor];
-    [self.playBackView addSubview:lineView];
     
     self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.playBtn setFrame:CGRectMake(0, 0, 40, 40)];
@@ -358,7 +363,7 @@
     [self.volumeButton setFrame:CGRectMake(0, 0, 40, 40)];
     self.volumeButton.center = CGPointMake(kMainBoundsWidth / 8 * 5, 25);
     [self.volumeButton setImage:[UIImage imageNamed:@"De_laba"] forState:UIControlStateSelected];
-    [self.volumeButton setImage:[UIImage imageNamed:@"De_labajingyin"] forState:UIControlStateNormal];
+    [self.volumeButton setImage:[UIImage imageNamed:@"De_laba_g"] forState:UIControlStateNormal];
     [self.volumeButton setSelected:YES];
     [self.volumeButton setImage:[UIImage imageNamed:@"De_laba_g"] forState:UIControlStateHighlighted];
     self.volumeButton.tag = 101;
@@ -702,6 +707,8 @@
         [self.collectButton setSelected:iscollect];
         if (iscollect) {
             [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateNormal];
+        }else{
+            [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
         }
     }
 }
@@ -727,9 +734,10 @@
         
         [SAVORXAPI volumeWithURL:STBURL action:action success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
-                button.selected = !button.isSelected;
                 if (action == 3 || action == 4) {
                     self.volumeButton.selected = YES;
+                }else{
+                    button.selected = !button.isSelected;
                 }
             }else{
                 [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];

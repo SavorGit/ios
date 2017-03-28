@@ -163,7 +163,7 @@
     hud.label.textColor = FontColor;
     hud.label.text = title;
     
-    [hud hideAnimated:YES afterDelay:1];
+    [hud hideAnimated:YES afterDelay:.8f];
     
     return hud;
 }

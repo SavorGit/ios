@@ -27,6 +27,8 @@
 // 重新呼出二维码
 - (void)reCallCode;
 
+- (void)SDSetImage:(NSString *)path;
+
 @property (nonatomic, strong) UIImage *currentImage;
 
 @end

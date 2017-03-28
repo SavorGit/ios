@@ -149,6 +149,7 @@
         self.orientation = orientation;
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         [self.navigationController setHidesBarsOnTap:NO];
+        [self screenButtonDidClickedWithSuccess:nil failure:nil];
     }else if (orientation == UIInterfaceOrientationLandscapeLeft ||
               orientation == UIInterfaceOrientationLandscapeRight){
         self.orientation = orientation;
@@ -157,11 +158,6 @@
         [self.webView reload];
     }
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_rotating" key:nil value:nil];
-    if (self.isScreen) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self screenButtonDidClickedWithSuccess:nil failure:nil];
-        });
-    }
 }
 
 - (void)resetCurrentItemWithPath:(NSString *)path
@@ -327,6 +323,21 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self.webView.scrollView setContentOffset:self.content animated:NO];
+    if (self.isScreen) {
+        [self screenButtonDidClickedWithSuccess:^{
+            
+            // 获得点击图片，回传给缩略图
+            UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
+            [HomeAnimationView animationView].currentImage = currentWebImage;
+            [[HomeAnimationView animationView] startScreenWithViewController:self];
+            [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
+            
+        } failure:^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+            self.isScreen = NO;
+        }];
+    }
 }
 
 //浏览滑动停止的时候

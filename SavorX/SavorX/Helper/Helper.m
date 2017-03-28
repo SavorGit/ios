@@ -150,13 +150,13 @@
 
 + (CGFloat)autoWidthWith:(CGFloat)width
 {
-    CGFloat result = (width / 375) * kMainBoundsWidth;
+    CGFloat result = (width / 375.f) * kMainBoundsWidth;
     return result;
 }
 
 + (CGFloat)autoHeightWith:(CGFloat)height
 {
-    CGFloat result = (height / 667) * kMainBoundsHeight;
+    CGFloat result = (height / 667.f) * kMainBoundsHeight;
     return result;
 }
 
