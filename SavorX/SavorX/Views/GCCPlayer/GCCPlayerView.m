@@ -629,7 +629,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)shotButtonDidClicked
 {
     [SAVORXAPI postUMHandleWithContentId:@"details_page_screenshots" key:nil value:nil];
-    //判断用户是否拥有相机权限
+    //判断用户是否拥有权限
     PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
     if (status == PHAuthorizationStatusNotDetermined) {
         [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {

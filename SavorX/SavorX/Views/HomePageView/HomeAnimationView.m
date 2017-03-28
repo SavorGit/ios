@@ -199,34 +199,7 @@
     
     if ([GlobalData shared].isWifiStatus) {
         //判断用户当前是否允许小热点使用相机权限
-        AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-        if (authStatus == AVAuthorizationStatusNotDetermined){
-            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
-                if (granted) {
-                    //如果还没有进行选择
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self CameroIsReady];
-                    });
-                }else{
-                    
-                }
-            }];
-        }else if (authStatus == AVAuthorizationStatusAuthorized){
-            //如果已经允许了权限
-            [self CameroIsReady];
-        }else{
-            //没有使用相机的权限
-            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"前往开启相机权限" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-            }];
-            [alert addAction:action1];
-            [alert addAction:action2];
-            [[Helper getRootNavigationController] presentViewController:alert animated:YES completion:nil];
-        }
+        [self CameroIsReady];
         
     }else{
         [self goToSetting];

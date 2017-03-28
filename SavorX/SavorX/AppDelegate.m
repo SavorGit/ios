@@ -27,6 +27,7 @@
 #import "HomeAnimationView.h"
 #import "VideoLauchMovieViewController.h"
 #import "HSLauchImageOrVideoRequest.h"
+#import "DefalutLaunchViewController.h"
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate>
 
@@ -193,20 +194,22 @@
                 self.window.rootViewController = sliderVC;
                 [self.window makeKeyAndVisible];
                 [self loadLauchImage];
-                NSLog(@"没有视频文件！");
-                
             }
 
-        }else{
+        }else if ([status isEqualToString:@"1"]){
                 LGSideMenuController * sliderVC = [self createRootViewController];
                 self.window.rootViewController = sliderVC;
                 [self.window makeKeyAndVisible];
-        }
-        
-        if ([status isEqualToString:@"1"]) {
-            
-            [self loadLauchImage];
-
+                [self loadLauchImage];
+        }else{
+            DefalutLaunchViewController * defalut = [[DefalutLaunchViewController alloc] init];
+            defalut.playEnd = ^(){
+                LGSideMenuController * sliderVC = [self createRootViewController];
+                self.window.rootViewController = sliderVC;
+                [self monitorInternet]; //监控网络状态
+            };
+            self.window.rootViewController = defalut;
+            [self.window makeKeyAndVisible];
         }
         [SAVORXAPI postUMHandleWithContentId:@"start_page" key:@"start_page" value:@"success"];
         
@@ -222,46 +225,58 @@
 - (void)loadLauchImage{
     
     NSString *imagePath =  [HTTPServerDocument stringByAppendingPathComponent:@"launch.png"];
-    NSData *picData = [NSData dataWithContentsOfFile:imagePath];
-    UIImage *launchImage = [UIImage imageWithData:picData];
-    
-    //设置一个图片;
-    UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    niceView.tag = 1234;
-    [niceView setContentMode:UIViewContentModeScaleAspectFill];
-    UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-    [niceView addSubview:blackView];
-    if (launchImage) {
-        niceView.image = launchImage;
-    }else{
-        niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
-    }
-    
-    UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    logoView.image = [Helper getLaunchImage];
-    
-    //添加到场景
-    [self.window addSubview:niceView];
-    [self.window addSubview:logoView];
-    
-    NSInteger animationTime = [[[NSUserDefaults standardUserDefaults] objectForKey:@"duration"] integerValue];
-    if (!(animationTime > 0)) {
-        animationTime = 1.5f;
-    }
-    
-    [UIView animateWithDuration:animationTime animations:^{
-        [niceView setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
-    } completion:^(BOOL finished) {
-        [self monitorInternet];
-        [UIView animateWithDuration:1.2 animations:^{
-            [niceView setAlpha:0];
-            [logoView setAlpha:0];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:imagePath]) {
+        NSData *picData = [NSData dataWithContentsOfFile:imagePath];
+        UIImage *launchImage = [UIImage imageWithData:picData];
+        
+        //设置一个图片;
+        UIImageView *niceView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        niceView.tag = 1234;
+        [niceView setContentMode:UIViewContentModeScaleAspectFill];
+        UIView * blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+        [niceView addSubview:blackView];
+        if (launchImage) {
+            niceView.image = launchImage;
+        }else{
+            niceView.image = [UIImage imageNamed:@"DefaultLaunch"];
+        }
+        
+        UIImageView *logoView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        logoView.image = [Helper getLaunchImage];
+        
+        //添加到场景
+        [self.window addSubview:niceView];
+        [self.window addSubview:logoView];
+        
+        NSInteger animationTime = [[[NSUserDefaults standardUserDefaults] objectForKey:@"duration"] integerValue];
+        if (!(animationTime > 0)) {
+            animationTime = 1.5f;
+        }
+        
+        [UIView animateWithDuration:animationTime animations:^{
+            [niceView setTransform:CGAffineTransformMakeScale(1.1, 1.1)];
         } completion:^(BOOL finished) {
-            [niceView removeFromSuperview];
-            [logoView removeFromSuperview];
+            [self monitorInternet];
+            [UIView animateWithDuration:1.2 animations:^{
+                [niceView setAlpha:0];
+                [logoView setAlpha:0];
+            } completion:^(BOOL finished) {
+                [niceView removeFromSuperview];
+                [logoView removeFromSuperview];
+            }];
         }];
-    }];
+    }else{
+        DefalutLaunchViewController * defalut = [[DefalutLaunchViewController alloc] init];
+        defalut.playEnd = ^(){
+            LGSideMenuController * sliderVC = [self createRootViewController];
+            self.window.rootViewController = sliderVC;
+            [self monitorInternet]; //监控网络状态
+        };
+        self.window.rootViewController = defalut;
+        [self.window makeKeyAndVisible];
+    }
 }
 
 - (void)saveImage:(NSString *)urlStr withType:(NSString *)typeString success:(void(^)())success
@@ -294,19 +309,28 @@
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary * dict = response[@"result"];
-        NSString *statusString = dict[@"status"];
-        NSString *durationString = dict[@"duration"];
-        NSString *urlString = dict[@"url"];
         
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-        // 如果拿到的lauchID和本地存储的id不一致，则存储图片或是视频
-        if (![[user objectForKey:@"url"]  isEqualToString:urlString]) {
-            [self saveImage:urlString withType:statusString success:^{
-                [user setObject:urlString forKey:@"url"];
-                [user setObject:statusString forKey:@"status"];
-                [user setObject:durationString forKey:@"duration"];
-                [user synchronize];
-            }];
+        
+        NSString *urlString = dict[@"url"];
+        if (urlString && urlString.length > 0) {
+            NSString *statusString = dict[@"status"];
+            NSString *durationString = dict[@"duration"];
+            
+            // 如果拿到的lauchID和本地存储的id不一致，则存储图片或是视频
+            if (![[user objectForKey:@"url"]  isEqualToString:urlString]) {
+                [self saveImage:urlString withType:statusString success:^{
+                    [user setObject:urlString forKey:@"url"];
+                    [user setObject:statusString forKey:@"status"];
+                    [user setObject:durationString forKey:@"duration"];
+                    [user synchronize];
+                }];
+            }
+        }else{
+            [user removeObjectForKey:@"url"];
+            [user removeObjectForKey:@"status"];
+            [user removeObjectForKey:@"duration"];
+            [user synchronize];
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {

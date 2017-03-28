@@ -110,7 +110,7 @@
     float bgVideoHeight = [Helper autoHeightWith:215];
     float topbgVideoDistance = [Helper autoHeightWith:145];
     bgVideoView.frame = CGRectMake(0, topbgVideoDistance, kMainBoundsWidth,bgVideoHeight);
-    bgVideoView.image = [UIImage imageNamed:@"DocGuided"];
+    bgVideoView.image = [UIImage imageNamed:@"DocGuided_new"];
     bgVideoView.backgroundColor = [UIColor lightGrayColor];
     bgVideoView.userInteractionEnabled = YES;
     [self.guidView addSubview:bgVideoView];

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>cn</string>
 	<key>CFBundleDisplayName</key>
-	<string>小热点测试版</string>
+	<string>小热点</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -304,8 +304,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>需要您的允许才能使用相机功能</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>需要您的允许才能使用相册功能</string>
 	<key>UIApplicationShortcutItems</key>

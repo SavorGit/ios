@@ -341,8 +341,6 @@
         return;
     }
     self.isHandle = YES;
-   
-    NSDictionary *parameters = [[NSDictionary alloc] init];
     if (button.isSelected) {
         [self.timer setFireDate:[NSDate distantPast]];
         if (self.isPlayEnd) {
@@ -444,7 +442,6 @@
     NSString * asseturlStr;
     
     if ([GlobalData shared].isBindRD) {
-        NSDictionary *parameters;
         if (self.model) {
             
             [SAVORXAPI demandWithURL:STBURL name:self.model.name type:self.type position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
