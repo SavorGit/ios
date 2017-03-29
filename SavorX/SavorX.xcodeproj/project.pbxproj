@@ -36,7 +36,6 @@
 		0614AA3F1D66AC310080D710 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0614AA3E1D66AC310080D710 /* ImageIO.framework */; };
 		06153DCB1D52E15200BB127F /* ScreenDocumentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06153DCA1D52E15200BB127F /* ScreenDocumentViewController.m */; };
 		06153E071D530D9A00BB127F /* SAVORXAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 06153E061D530D9A00BB127F /* SAVORXAPI.m */; };
-		06153E0B1D530DEE00BB127F /* GCCCodeScanning.m in Sources */ = {isa = PBXBuildFile; fileRef = 06153E0A1D530DEE00BB127F /* GCCCodeScanning.m */; };
 		061A700D1D61C68D00702016 /* DocumentListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 061A700C1D61C68D00702016 /* DocumentListViewController.m */; };
 		061B4EBB1E4850B2000D5E07 /* PhotoHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 061B4EBA1E4850B2000D5E07 /* PhotoHandleView.m */; };
 		061B4EBE1E487EF5000D5E07 /* PhotoTextLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 061B4EBD1E487EF5000D5E07 /* PhotoTextLabel.m */; };
@@ -390,8 +389,6 @@
 		06153DCA1D52E15200BB127F /* ScreenDocumentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenDocumentViewController.m; sourceTree = "<group>"; };
 		06153E051D530D9A00BB127F /* SAVORXAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAVORXAPI.h; sourceTree = "<group>"; };
 		06153E061D530D9A00BB127F /* SAVORXAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAVORXAPI.m; sourceTree = "<group>"; };
-		06153E091D530DEE00BB127F /* GCCCodeScanning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCCCodeScanning.h; sourceTree = "<group>"; };
-		06153E0A1D530DEE00BB127F /* GCCCodeScanning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCCCodeScanning.m; sourceTree = "<group>"; };
 		061A700B1D61C68D00702016 /* DocumentListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentListViewController.h; sourceTree = "<group>"; };
 		061A700C1D61C68D00702016 /* DocumentListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentListViewController.m; sourceTree = "<group>"; };
 		061B4EB91E4850B2000D5E07 /* PhotoHandleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoHandleView.h; sourceTree = "<group>"; };
@@ -1007,8 +1004,6 @@
 		06153E081D530DEE00BB127F /* GCCCodeScanning */ = {
 			isa = PBXGroup;
 			children = (
-				06153E091D530DEE00BB127F /* GCCCodeScanning.h */,
-				06153E0A1D530DEE00BB127F /* GCCCodeScanning.m */,
 				9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */,
 				9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */,
 				96608FF01E80D47900D28A61 /* VideoLauchMovieViewController.h */,
@@ -2366,7 +2361,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06153E0B1D530DEE00BB127F /* GCCCodeScanning.m in Sources */,
 				061FEFE51E2DB061003CD111 /* WMMenuView.m in Sources */,
 				06FA30ED1D3E0C70001F5B37 /* AppDelegate.m in Sources */,
 				068A58C81D5E1FFF00CBD684 /* BasicTableViewCell.m in Sources */,
