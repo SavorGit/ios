@@ -302,10 +302,12 @@
             [self screenButtonDidClickedWithSuccess:^{
             
                 // 获得点击图片，回传给缩略图
-            UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
-            [HomeAnimationView animationView].currentImage = currentWebImage;
-            [[HomeAnimationView animationView] startScreenWithViewController:self];
-            [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
+                if (self.isScreen) {
+                    UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
+                    [HomeAnimationView animationView].currentImage = currentWebImage;
+                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
+                }
                 
             } failure:^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];

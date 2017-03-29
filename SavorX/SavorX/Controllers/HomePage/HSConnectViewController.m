@@ -326,8 +326,13 @@
                 model.hotelID = [[result objectForKey:@"hotel_id"] integerValue];
                 model.roomID = [[result objectForKey:@"room_id"] integerValue];
                 model.sid = [result objectForKey:@"ssid"];
-                [[GlobalData shared] bindToRDBoxDevice:model];
-                [self.navigationController popViewControllerAnimated:YES];
+                if (![[result objectForKey:@"ssid"] isEqualToString:[Helper getWifiName]]){
+                    [GlobalData shared].cacheModel = model;
+                    [self showAlertWithWifiName:[result objectForKey:@"ssid"]];
+                }else{
+                    [[GlobalData shared] bindToRDBoxDevice:model];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
             }else if (![[result objectForKey:@"ssid"] isEqualToString:[Helper getWifiName]]) {
                 model.BoxIP = [[result objectForKey:@"box_ip"] stringByAppendingString:@":8080"];
                 model.BoxID = [result objectForKey:@"box_mac"];
@@ -391,8 +396,13 @@
                 model.hotelID = [[result objectForKey:@"hotel_id"] integerValue];
                 model.roomID = [[result objectForKey:@"room_id"] integerValue];
                 model.sid = [result objectForKey:@"ssid"];
-                [[GlobalData shared] bindToRDBoxDevice:model];
-                [self.navigationController popViewControllerAnimated:YES];
+                if (![[result objectForKey:@"ssid"] isEqualToString:[Helper getWifiName]]){
+                    [GlobalData shared].cacheModel = model;
+                    [self showAlertWithWifiName:[result objectForKey:@"ssid"]];
+                }else{
+                    [[GlobalData shared] bindToRDBoxDevice:model];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
             }else if (![[result objectForKey:@"ssid"] isEqualToString:[Helper getWifiName]]) {
                 model.BoxIP = [[result objectForKey:@"box_ip"] stringByAppendingString:@":8080"];
                 model.BoxID = [result objectForKey:@"box_mac"];

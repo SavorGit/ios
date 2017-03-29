@@ -38,7 +38,7 @@
 
 + (void)screenVideoFileWithPath:(NSString *)filePath
 {
-    [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow];
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow];
     
     UINavigationController * na = [Helper getRootNavigationController];
     if ([na.topViewController isKindOfClass:[SXVideoPlayViewController class]] ||
@@ -70,12 +70,13 @@
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
+            [hud hideAnimated:NO];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:NO];
+            [hud hideAnimated:NO];
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{
-            [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:NO];
+            [hud hideAnimated:NO];
             
             SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
             video.videoUrl = videoUrl;
@@ -87,7 +88,7 @@
             [[Helper getRootNavigationController] pushViewController:video animated:YES];
 
         } failure:^{
-            [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:NO];
+            [hud hideAnimated:NO];
         }];
     }
 }
