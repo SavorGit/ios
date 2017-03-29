@@ -189,7 +189,6 @@
         [playerItem seekToTime:kCMTimeZero];
         
         [self.player play];
-        NSLog(@"重播");
         
     }else if ([self.guidType isEqualToString:@"documentGuide"]){
         

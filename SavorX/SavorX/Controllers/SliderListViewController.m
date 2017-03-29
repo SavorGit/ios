@@ -413,6 +413,14 @@
         return;
     }
     
+    PHAsset * asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[[self.PHAssetSource objectAtIndex:0]] options:nil].firstObject;
+    
+    if (asset) {
+        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CollectionViewCellSize contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+            [HomeAnimationView animationView].currentImage = result;
+        }];
+    }
+    
     [array insertObject:[array lastObject] atIndex:0];
     [array addObject:[array objectAtIndex:1]];
     slider.PHAssetSource = array;

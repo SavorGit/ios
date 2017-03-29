@@ -522,7 +522,6 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSData*  data = [NSData data];
         data = UIImageJPEGRepresentation(image, 1);
-        NSLog(@"原始图大小:%ld b", data.length);
         float tempX = 0.9;
         NSInteger length = data.length;
         while (data.length > ImageSize) {

@@ -35,7 +35,7 @@
 
 - (void)rotateImage
 {
-    NSLog(@"点击了");
+    
 }
 
 - (UIView *)toolView

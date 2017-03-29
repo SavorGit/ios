@@ -336,7 +336,7 @@
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        NSLog(@"无法连接到网络,请检查网络设置");
+        
     }];
 }
 

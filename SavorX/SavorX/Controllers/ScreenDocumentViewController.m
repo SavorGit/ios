@@ -105,7 +105,6 @@
 - (void)ApplicationDidBindToDevice
 {
     self.isScreen = YES;
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment)];
 }
 
@@ -133,7 +132,11 @@
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
     [self screenButtonDidClickedWithSuccess:^{
+        
+        UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
+        [HomeAnimationView animationView].currentImage = currentWebImage;
         [[HomeAnimationView animationView] startScreenWithViewController:self];
+        
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = YES;
@@ -149,7 +152,9 @@
         self.orientation = orientation;
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         [self.navigationController setHidesBarsOnTap:NO];
-        [self screenButtonDidClickedWithSuccess:nil failure:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self screenButtonDidClickedWithSuccess:nil failure:nil];
+        });
     }else if (orientation == UIInterfaceOrientationLandscapeLeft ||
               orientation == UIInterfaceOrientationLandscapeRight){
         self.orientation = orientation;
@@ -304,6 +309,9 @@
                 
             } failure:^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                
+                [[HomeAnimationView animationView] stopScreen];
+                
                 self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
                 self.isScreen = NO;
             }];
@@ -326,10 +334,6 @@
     if (self.isScreen) {
         [self screenButtonDidClickedWithSuccess:^{
             
-            // 获得点击图片，回传给缩略图
-            UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
-            [HomeAnimationView animationView].currentImage = currentWebImage;
-            [[HomeAnimationView animationView] startScreenWithViewController:self];
             [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
             
         } failure:^{

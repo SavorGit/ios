@@ -148,6 +148,9 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     }
     [GlobalData shared].scene = RDSceneNothing;
     self.isSearchPlatform = YES;
+    
+    [GlobalData shared].callQRCodeURL = @"";
+    
     [self setUpSocketForPlatform]; //若当前socket处于关闭状态，先配置socket地址和端口
     [self callQRcodeFromPlatform];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopSearchDevice) object:nil];
@@ -216,12 +219,12 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag
 {
-    NSLog(@"搜索设备信息发出了");
+    
 }
 
 - (void)udpSocketDidClose:(GCDAsyncUdpSocket *)sock withError:(NSError *)error
 {
-    NSLog(@"连接关闭了");
+    
 }
 
 //获取到设备反馈信息
@@ -263,7 +266,9 @@ withFilterContext:(nullable id)filterContext{
 
         if ([[dict objectForKey:@"Savor-Type"] isEqualToString:@"box"]) {
             [GlobalData shared].boxCodeURL = [NSString stringWithFormat:@"http://%@:8080", [dict objectForKey:@"Savor-Box-HOST"]];
-            [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/small", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"]];
+            if (!([GlobalData shared].callQRCodeURL.length > 0)) {
+                [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/small", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"]];
+            }
             [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
             [GlobalData shared].scene = RDSceneHaveRDBox;
             self.isSearch = NO;
@@ -281,7 +286,6 @@ withFilterContext:(nullable id)filterContext{
 //对设备信息进行提取解析
 - (void)getDeviceInfoFromLocationURL:(NSURL *)url
 {
-    NSLog(@"location == %@", url);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSURLRequest  *request=[NSURLRequest requestWithURL:url];
         NSURLSession *session = [NSURLSession sharedSession];

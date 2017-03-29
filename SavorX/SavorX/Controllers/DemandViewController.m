@@ -324,6 +324,11 @@
 //分享按钮被点击触发
 - (void)shareAction:(UIButton *)button
 {
+    if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
+        [MBProgressHUD showTextHUDwithTitle:@"该内容暂不支持分享" delay:1.5f];
+        return;
+    }
+    
     [UMCustomSocialManager defaultManager].image = self.backImageView.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:1];
     [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share" key:nil value:nil];
