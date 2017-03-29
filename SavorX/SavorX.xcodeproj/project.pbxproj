@@ -2717,8 +2717,8 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7d723ee5-c37f-4052-b11c-c6cb9abd8624";
-				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "76656c52-5e06-4032-89d7-9b8e6523ea89";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDistribution;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
