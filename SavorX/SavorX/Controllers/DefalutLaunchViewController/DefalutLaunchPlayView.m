@@ -17,11 +17,28 @@
 
 @implementation DefalutLaunchPlayView
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)setVideoURL:(NSString *)url
 {
     self.backgroundColor = [UIColor whiteColor];
     AVPlayerItem * item = [AVPlayerItem playerItemWithURL:[NSURL fileURLWithPath:url]];
     self.player = [AVPlayer playerWithPlayerItem:item];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEndBackground) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEndPlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [self.player play];
+}
+
+- (void)applicationDidEndBackground
+{
+    [self.player pause];
+}
+
+- (void)applicationDidEndPlayground
+{
     [self.player play];
 }
 

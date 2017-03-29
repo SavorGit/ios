@@ -69,7 +69,7 @@
           businessFailure:(BGBusinessFailureBlock _Nullable)businessFailureBlock
            networkFailure:(BGNetworkFailureBlock _Nullable)networkFailureBlock;
 
-- (void)sendUploadBaseURL:(NSString *)url Request:(BGUploadRequest * _Nonnull)request
+- (void)sendUploadBaseURL:(NSString *_Nullable)url Request:(BGUploadRequest * _Nonnull)request
                  progress:(nullable void (^)(NSProgress * _Nonnull uploadProgress)) uploadProgress
                   success:(BGSuccessCompletionBlock _Nullable)successCompletionBlock
           businessFailure:(BGBusinessFailureBlock _Nullable)businessFailureBlock

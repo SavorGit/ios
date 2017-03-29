@@ -250,6 +250,11 @@
 
 - (void)quitBack{
     
+    if (!self.model.videoURL || !(self.model.videoURL.length > 0)) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
+    
     UINavigationController * na = [Helper getRootNavigationController];
     int j = (int)na.viewControllers.count - 2;
     if (j < 0) {
@@ -327,6 +332,7 @@
 //创建浏览的webView
 - (void)createWebView
 {
+    
     self.webView = [[UIWebView alloc] init];
     [self.view addSubview:self.webView];
     
@@ -338,6 +344,9 @@
     }];
     self.webView.delegate = self;
     
+    if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
+        return;
+    }
     [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
     [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
