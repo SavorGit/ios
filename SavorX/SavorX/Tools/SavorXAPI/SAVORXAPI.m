@@ -74,7 +74,6 @@
     if ([[GCCKeyChain load:keychainID] isEqualToString:@"unknow"]) {
         [GCCKeyChain save:keychainID data:identifierNumber];
     }
-    
     [[BGNetworkManager sharedManager] setNetworkConfiguration:[NetworkConfiguration configuration]];
 }
 
