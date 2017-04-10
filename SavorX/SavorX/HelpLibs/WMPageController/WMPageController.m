@@ -1050,12 +1050,12 @@ static NSInteger const kWMControllerCountUndefined = -1;
         
     } bold:nil];
     RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
-        [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
-        self.titleViewBtn.userInteractionEnabled = NO;
-        [[HomeAnimationView animationView] stopScreen];
-        [SAVORXAPI ScreenDemandShouldBackToTV];
-        [[GlobalData shared] disconnect];
+        [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+            [[HomeAnimationView animationView] stopScreen];
+            [[GlobalData shared] disconnect];
+        } failure:^{
+            
+        }];
     } bold:YES];
     NSArray *actionArr = [NSArray arrayWithObjects:actionOne,actionTwo, nil];
     [rdAlert addActions:actionArr];
@@ -1142,10 +1142,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
         if (self.selectIndex > 1) {
             self.selectIndex -= 1;
         }
+        [self.rightItem stopAnimation];
     }
     [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
-    [self.rightItem stopAnimation];
     self.titleViewBtn.userInteractionEnabled = NO;
 }
 

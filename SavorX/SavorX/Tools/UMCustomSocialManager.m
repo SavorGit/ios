@@ -7,8 +7,8 @@
 //
 
 #import "UMCustomSocialManager.h"
-#import <UMSocialCore/UMSocialCore.h>
 #import <UShareUI/UShareUI.h>
+#import "GCCKeyChain.h"
 
 @interface UMCustomSocialManager ()
 
@@ -309,6 +309,53 @@
         }
         
     }];
+}
+
+- (void)shareRDApplicationToPlatform:(UMSocialPlatformType)type currentViewController:(UIViewController *)VC
+{
+    NSString * url = [NSString stringWithFormat:@"%@?st=usershare&clientname=ios&deviceid=%@", RDDownLoadURL, [GCCKeyChain load:keychainID]];
+    
+    UIImage * image;
+    image = [UIImage imageNamed:@"shareDefalut"];
+    
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //创建网页分享类型
+    UMShareWebpageObject * object;
+    
+    if (type == UMSocialPlatformType_Sina) {
+        UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
+        shareObject.shareImage = image;
+        messageObject.text = [NSString stringWithFormat:@"我觉得小热点很好用, 推荐给您~\n投屏神器, 进入饭局的才是热点\n%@", url];
+        messageObject.shareObject = shareObject;
+        [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
+            
+            if (error) {
+                [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+            }else{
+                [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+            }
+            
+        }];
+    }else{
+        if(type == UMSocialPlatformType_WechatTimeLine) {
+            object = [UMShareWebpageObject shareObjectWithTitle:@"我觉得小热点很好用, 推荐给您~" descr:@"投屏神器, 进入饭局的才是热点" thumImage:image];
+        }else{
+            object = [UMShareWebpageObject shareObjectWithTitle:@"我觉得小热点很好用, 推荐给您~" descr:@"投屏神器, 进入饭局的才是热点" thumImage:image];
+        }
+        [object setWebpageUrl:url];
+        messageObject.shareObject = object;
+        
+        [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
+            
+            if (error) {
+                [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+            }else{
+                [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+            }
+            
+        }];
+    }
 }
 
 @end

@@ -150,6 +150,9 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     self.isSearchPlatform = YES;
     
     [GlobalData shared].callQRCodeURL = @"";
+    [GlobalData shared].boxCodeURL = @"";
+    [GlobalData shared].secondCallCodeURL = @"";
+    [GlobalData shared].thirdCallCodeURL = @"";
     
     [self setUpSocketForPlatform]; //若当前socket处于关闭状态，先配置socket地址和端口
     [self callQRcodeFromPlatform];
@@ -172,12 +175,19 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
                 
                 NSArray * array = [ipInfo componentsSeparatedByString:@"*"];
                 if (array.count > 1) {
-                    if([GlobalData shared].callQRCodeURL.length == 0){
-                        [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@",[array firstObject],command_port,[type lowercaseString]];
-                        [GlobalData shared].hotelId = [[array objectAtIndex:1] integerValue];
-                        [GlobalData shared].scene = RDSceneHaveRDBox;
-                        self.isSearch = NO;
+                    
+                    if ([GlobalData shared].secondCallCodeURL.length > 0) {
+                        NSString * codeURL = [NSString stringWithFormat:@"http://%@:%@/%@",[array firstObject],command_port,[type lowercaseString]];
+                        
+                        if (![[GlobalData shared].secondCallCodeURL isEqualToString:codeURL]) {
+                            [GlobalData shared].thirdCallCodeURL = codeURL;
+                        }
+                    }else{
+                        [GlobalData shared].secondCallCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@",[array firstObject],command_port,[type lowercaseString]];
                     }
+                    [GlobalData shared].hotelId = [[array objectAtIndex:1] integerValue];
+                    [GlobalData shared].scene = RDSceneHaveRDBox;
+                    self.isSearch = NO;
                 }
             }
         }
@@ -266,8 +276,15 @@ withFilterContext:(nullable id)filterContext{
 
         if ([[dict objectForKey:@"Savor-Type"] isEqualToString:@"box"]) {
             [GlobalData shared].boxCodeURL = [NSString stringWithFormat:@"http://%@:8080", [dict objectForKey:@"Savor-Box-HOST"]];
-            if (!([GlobalData shared].callQRCodeURL.length > 0)) {
-                [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/small", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"]];
+            if ([GlobalData shared].secondCallCodeURL.length > 0) {
+                
+                NSString * codeURL = [NSString stringWithFormat:@"http://%@:%@/small", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"]];
+                if (![[GlobalData shared].secondCallCodeURL isEqualToString:codeURL]) {
+                    [GlobalData shared].thirdCallCodeURL = codeURL;
+                }
+                
+            }else{
+                [GlobalData shared].secondCallCodeURL = [NSString stringWithFormat:@"http://%@:%@/small", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"]];
             }
             [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
             [GlobalData shared].scene = RDSceneHaveRDBox;
