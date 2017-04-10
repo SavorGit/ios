@@ -912,14 +912,14 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 - (void)creatSmallWindow{
     
-    BaseView *view = [HomeAnimationView animationView];
+    HomeAnimationView *view = [HomeAnimationView animationView];
     [self.view addSubview:view];
     view.backgroundColor = [UIColor blackColor];
     view.alpha = 0.8;
     view.layer.borderWidth = 0.5;
     view.layer.borderColor = UIColorFromRGB(0xeeeeee).CGColor;
-    CGFloat viewWidth = [Helper autoWidthWith:145.f];
-    CGFloat viewHeight = [Helper autoHeightWith:107.f];
+    CGFloat viewWidth = [Helper autoWidthWith:147.f];
+    CGFloat viewHeight = [Helper autoHeightWith:117.f];
     CGFloat viewBottomDistance = [Helper autoHeightWith:120.f];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(viewWidth, viewHeight));
@@ -927,8 +927,16 @@ static NSInteger const kWMControllerCountUndefined = -1;
         make.right.mas_equalTo(-6);
     }];
     [[HomeAnimationView animationView] hidden];
+   
+    view.singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SingleTapQuitScreen)];
+    //点击的次数
+    view.singleRecognizer.numberOfTapsRequired = 1; // 单击
+    [view.quitScreenLabel addGestureRecognizer:view.singleRecognizer];
 }
 
+- (void)SingleTapQuitScreen{
+    [[HomeAnimationView animationView] quitScreen];
+}
 - (void)RDHomeScreenButtonDidChooseType:(RDScreenType)type
 {
     switch (type) {

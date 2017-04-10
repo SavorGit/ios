@@ -18,4 +18,5 @@
 
 - (void)shouldRelease;
 
+- (void)quitScreenAciton;
 @end

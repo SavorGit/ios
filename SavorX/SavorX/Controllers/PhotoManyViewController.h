@@ -12,4 +12,6 @@
 
 - (instancetype)initWithPHAssetSource:(id)source andIndex:(NSInteger)index;
 
+- (void)stopScreenImage;
+
 @end

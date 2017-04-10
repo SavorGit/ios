@@ -16,6 +16,8 @@
 
 - (void)stopScreen;
 
+- (void)quitScreen;
+
 - (void)show;
 
 - (void)hidden;
@@ -27,5 +29,9 @@
 - (void)SDSetImage:(NSString *)path;
 
 @property (nonatomic, strong) UIImage *currentImage;
+
+@property (nonatomic, strong) UILabel *quitScreenLabel;
+
+@property (nonatomic, strong) UITapGestureRecognizer* singleRecognizer;
 
 @end

@@ -53,7 +53,7 @@
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.bottom.mas_equalTo(0);
-        make.right.mas_equalTo(0);
+        make.right.mas_equalTo(0);  
     }];
 //
 //    //webView加载文档

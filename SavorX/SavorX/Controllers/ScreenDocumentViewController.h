@@ -21,4 +21,6 @@
 //重置条目
 - (void)resetCurrentItemWithPath:(NSString *)path;
 
+- (void)stopScreenDocment;
+
 @end

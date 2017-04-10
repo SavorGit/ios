@@ -14,6 +14,8 @@
 #import "PhotoSliderViewController.h"
 #import "SXVideoPlayViewController.h"
 #import "DemandViewController.h"
+#import "PhotoManyViewController.h"
+#import "ScreenDocumentViewController.h"
 #import "UIImage+Additional.h"
 #import "RDAlertView.h"
 #import "RDCheackSence.h"
@@ -25,6 +27,7 @@
 
 @interface HomeAnimationView ()
 @property (weak, nonatomic) IBOutlet UIImageView *devImageView;
+
 @property (nonatomic, strong) UILabel *textLabel;
 
 @property (nonatomic, strong) UIViewController * currentVC;
@@ -54,15 +57,16 @@
         view = [self loadFromXib];
         
         view.textLabel = [[UILabel alloc] init];
-        view.textLabel.text = @"投屏中...";
+//        view.textLabel.text = @"投屏中...";
+        view.textLabel.userInteractionEnabled = YES;
         view.textLabel.font = [UIFont systemFontOfSize:12];
         view.textLabel.textColor = UIColorFromRGB(0xf5f5f5);
         view.textLabel.backgroundColor = [UIColor clearColor];
         view.textLabel.textAlignment = NSTextAlignmentCenter;
         [view addSubview:view.textLabel];
-        CGFloat textLabelWidth = [Helper autoWidthWith:145.f];
-        CGFloat textLabelHeight = [Helper autoHeightWith:23.f];
-        CGFloat textLabTopDistance = [Helper autoHeightWith:84.f];
+        CGFloat textLabelWidth = [Helper autoWidthWith:147.f];
+        CGFloat textLabelHeight = [Helper autoHeightWith:31.f];
+        CGFloat textLabTopDistance = [Helper autoHeightWith:86.f];
         [view.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(textLabelWidth, textLabelHeight));
             make.top.mas_equalTo(textLabTopDistance);
@@ -70,8 +74,29 @@
             make.right.mas_equalTo(0);
         }];
         
-        CGFloat devImageWidth = [Helper autoWidthWith:145.f];
-        CGFloat devImageHeight = [Helper autoHeightWith:79.f];
+        view.quitScreenLabel = [[UILabel alloc] init];
+        view.quitScreenLabel.text = @"退出投屏";
+        view.quitScreenLabel.layer.cornerRadius = 3.0;
+        view.quitScreenLabel.layer.borderColor = [UIColor whiteColor].CGColor;
+        view.quitScreenLabel.layer.borderWidth = 1;
+        view.quitScreenLabel.userInteractionEnabled = YES;
+        view.quitScreenLabel.font = [UIFont systemFontOfSize:13];
+        view.quitScreenLabel.textColor = UIColorFromRGB(0xffffff);
+        view.quitScreenLabel.backgroundColor = [UIColor clearColor];
+        view.quitScreenLabel.textAlignment = NSTextAlignmentCenter;
+        [view addSubview:view.quitScreenLabel];
+        CGFloat quitScreenLabWidth = [Helper autoWidthWith:74.f];
+        CGFloat quitScreenLabHeight = [Helper autoHeightWith:21.f];
+        CGFloat quitScreenLabTopDistance = [Helper autoHeightWith:91.f];
+        [view.quitScreenLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(quitScreenLabWidth, quitScreenLabHeight));
+            make.top.mas_equalTo(quitScreenLabTopDistance);
+            make.centerX.mas_equalTo(view.centerX - quitScreenLabWidth);
+
+        }];
+ 
+        CGFloat devImageWidth = [Helper autoWidthWith:147.f];
+        CGFloat devImageHeight = [Helper autoHeightWith:81.f];
         CGFloat devImageTopDistance = [Helper autoHeightWith:5.f];
         [view.devImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(devImageWidth, devImageHeight));
@@ -121,6 +146,30 @@
         self.currentImage = image;
         [self.devImageView setImage:self.currentImage];
     }];
+}
+
+// 退出投屏
+- (void)quitScreen
+{
+   
+    if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
+        PhotoSliderViewController * vc = (PhotoSliderViewController *)self.currentVC;
+        [vc stopScreenImage];
+        
+    }else if ([self.currentVC isKindOfClass:[PhotoManyViewController class]]) {
+        PhotoManyViewController * vc = (PhotoManyViewController *)self.currentVC;
+        [vc stopScreenImage];
+    }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
+        SXVideoPlayViewController * vc = (SXVideoPlayViewController *)self.currentVC;
+        [vc stopVoideoPlay];
+
+    }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
+        DemandViewController * vc = (DemandViewController *)self.currentVC;
+        [vc quitScreenAciton];
+    }else if ([self.currentVC isKindOfClass:[ScreenDocumentViewController class]]) {
+        ScreenDocumentViewController * vc = (ScreenDocumentViewController *)self.currentVC;
+        [vc stopScreenDocment];
+    }
 }
 
 - (void)stopScreen
