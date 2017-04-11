@@ -57,7 +57,6 @@
         view = [self loadFromXib];
         
         view.textLabel = [[UILabel alloc] init];
-//        view.textLabel.text = @"投屏中...";
         view.textLabel.userInteractionEnabled = YES;
         view.textLabel.font = [UIFont systemFontOfSize:12];
         view.textLabel.textColor = UIColorFromRGB(0xf5f5f5);
@@ -91,7 +90,7 @@
         [view.quitScreenLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(quitScreenLabWidth, quitScreenLabHeight));
             make.top.mas_equalTo(quitScreenLabTopDistance);
-            make.centerX.mas_equalTo(view.centerX - quitScreenLabWidth);
+            make.centerX.equalTo(view);
 
         }];
  

@@ -260,19 +260,23 @@
     if (j < 0) {
         j = 0;
     }
-    UIViewController * vc = na.viewControllers[j];
-    if ([vc  isKindOfClass:[WebViewController class]] ) {
-        [self.navigationController popToViewController:vc animated:YES];
-    }else if ([vc  isKindOfClass:[WMPageController class]]){
-        WebViewController *weVc = [[WebViewController alloc] init];
-        weVc.image = self.backImageView.image;
-        weVc.model = self.model;
-        weVc.isFormDemand = YES;
-        [self.navigationController pushViewController:weVc animated:YES];
-        weVc.coFromWebView = ^(NSDictionary *parmDic){
-            [self restartVod];
-        };
-    }
+//    UIViewController * vc = na.viewControllers;
+//    if ([vc  isKindOfClass:[WebViewController class]] ) {
+//        [self.navigationController popToViewController:vc animated:YES];
+//    }else if ([vc  isKindOfClass:[WMPageController class]]){
+//        WebViewController *weVc = [[WebViewController alloc] init];
+//        weVc.image = self.backImageView.image;
+//        weVc.model = self.model;
+//        weVc.isFormDemand = YES;
+//        [self.navigationController pushViewController:weVc animated:YES];
+//        weVc.coFromWebView = ^(NSDictionary *parmDic){
+//            [self restartVod];
+//        };
+//    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+    
 }
 
 - (void)tvAciton
