@@ -314,6 +314,8 @@
 - (void)shareRDApplicationToPlatform:(UMSocialPlatformType)type currentViewController:(UIViewController *)VC
 {
     NSString * url = [NSString stringWithFormat:@"%@?st=usershare&clientname=ios&deviceid=%@", RDDownLoadURL, [GCCKeyChain load:keychainID]];
+    NSString * title = @"我觉得小热点很好用, 推荐给您~";
+    NSString * description = @"投屏神器, 进入饭局的才是热点";
     
     UIImage * image;
     image = [UIImage imageNamed:@"shareDefalut"];
@@ -326,7 +328,7 @@
     if (type == UMSocialPlatformType_Sina) {
         UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
         shareObject.shareImage = image;
-        messageObject.text = [NSString stringWithFormat:@"我觉得小热点很好用, 推荐给您~\n投屏神器, 进入饭局的才是热点\n%@", url];
+        messageObject.text = [NSString stringWithFormat:@"%@\n%@\n%@", title, description, url];
         messageObject.shareObject = shareObject;
         [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
             
@@ -339,9 +341,9 @@
         }];
     }else{
         if(type == UMSocialPlatformType_WechatTimeLine) {
-            object = [UMShareWebpageObject shareObjectWithTitle:@"我觉得小热点很好用, 推荐给您~" descr:@"投屏神器, 进入饭局的才是热点" thumImage:image];
+            object = [UMShareWebpageObject shareObjectWithTitle:title descr:description thumImage:image];
         }else{
-            object = [UMShareWebpageObject shareObjectWithTitle:@"我觉得小热点很好用, 推荐给您~" descr:@"投屏神器, 进入饭局的才是热点" thumImage:image];
+            object = [UMShareWebpageObject shareObjectWithTitle:title descr:description thumImage:image];
         }
         [object setWebpageUrl:url];
         messageObject.shareObject = object;
