@@ -334,7 +334,7 @@
     return nil;
 }
 
-+ (void)ScreenDemandShouldBackToTV
++ (void)ScreenDemandShouldBackToTV:(BOOL)fromHomeType
 {
     if ([GlobalData shared].isBindRD) {
         NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
@@ -345,17 +345,26 @@
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
+            if (fromHomeType == YES) {
+                [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
+            }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            
+            if (fromHomeType == YES) {
+                [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
+            }
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
             
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
-            
+            if (fromHomeType == YES) {
+                [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
+            }
         } failure:^{
-            
+            if (fromHomeType == YES) {
+                [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
+            }
         }];
     }
 }

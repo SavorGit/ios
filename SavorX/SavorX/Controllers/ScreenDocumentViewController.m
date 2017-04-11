@@ -55,16 +55,15 @@
         make.bottom.mas_equalTo(0);
         make.right.mas_equalTo(0);  
     }];
-//
+
 //    //webView加载文档
     NSURL * url = [NSURL fileURLWithPath:self.path];
     self.webView.scalesPageToFit = YES;
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
     self.webView.scrollView.delegate = self;
-//
+
     if ([GlobalData shared].isBindDLNA || [GlobalData shared].isBindRD) {
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment)];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
         self.isScreen = YES;
     }else{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
@@ -105,10 +104,10 @@
 - (void)ApplicationDidBindToDevice
 {
     self.isScreen = YES;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
 }
 
-- (void)stopScreenDocment
+- (void)stopScreenDocment:(BOOL)fromHomeType
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
@@ -116,8 +115,14 @@
         self.isScreen = NO;
         self.navigationItem.rightBarButtonItem.enabled = YES;
         [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_exit" key:nil value:nil];
+        if (fromHomeType == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
+        }
     } failure:^{
         self.navigationItem.rightBarButtonItem.enabled = YES;
+        if (fromHomeType == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
+        }
     }];
 }
 
@@ -137,7 +142,7 @@
         [HomeAnimationView animationView].currentImage = currentWebImage;
         [[HomeAnimationView animationView] startScreenWithViewController:self];
         
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = YES;
     } failure:^{

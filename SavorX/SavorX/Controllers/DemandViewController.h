@@ -18,5 +18,5 @@
 
 - (void)shouldRelease;
 
-- (void)quitScreenAciton;
+- (void)quitScreenAciton:(BOOL)fromHomeType;
 @end

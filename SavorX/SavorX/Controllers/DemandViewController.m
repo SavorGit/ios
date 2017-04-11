@@ -202,7 +202,7 @@
     self.quitScreenButton.layer.cornerRadius = 5.0;
     self.quitScreenButton.layer.borderWidth = 1.0;
     self.quitScreenButton.layer.borderColor = [[UIColor clearColor] CGColor];
-    [self.quitScreenButton addTarget:self action:@selector(quitScreenAciton) forControlEvents:UIControlEventTouchUpInside];
+    [self.quitScreenButton addTarget:self action:@selector(quitScreenAciton:) forControlEvents:UIControlEventTouchUpInside];
     self.quitScreenButton.selected = YES;
     [self.view addSubview:self.quitScreenButton];
     
@@ -219,7 +219,7 @@
 }
 
 // 退出投屏
-- (void)quitScreenAciton{
+- (void)quitScreenAciton:(BOOL)fromHomeType{
 
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
           
@@ -241,9 +241,15 @@
         
         [self quitBack];
         [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_exit_screen" key:nil value:nil];
+        if (fromHomeType == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
+        }
         
     } failure:^{
         self.screenButton.enabled = YES;
+        if (fromHomeType == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
+        }
     }];
 
 }

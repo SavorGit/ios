@@ -153,21 +153,21 @@
    
     if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
         PhotoSliderViewController * vc = (PhotoSliderViewController *)self.currentVC;
-        [vc stopScreenImage];
+        [vc stopScreenImage:YES];
         
     }else if ([self.currentVC isKindOfClass:[PhotoManyViewController class]]) {
         PhotoManyViewController * vc = (PhotoManyViewController *)self.currentVC;
-        [vc stopScreenImage];
+        [vc stopScreenImage:YES];
     }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
         SXVideoPlayViewController * vc = (SXVideoPlayViewController *)self.currentVC;
-        [vc stopVoideoPlay];
+        [vc stopVoideoPlay:YES];
 
     }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
         DemandViewController * vc = (DemandViewController *)self.currentVC;
-        [vc quitScreenAciton];
+        [vc quitScreenAciton:YES];
     }else if ([self.currentVC isKindOfClass:[ScreenDocumentViewController class]]) {
         ScreenDocumentViewController * vc = (ScreenDocumentViewController *)self.currentVC;
-        [vc stopScreenDocment];
+        [vc stopScreenDocment:YES];
     }
 }
 

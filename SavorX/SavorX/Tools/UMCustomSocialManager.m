@@ -334,8 +334,10 @@
             
             if (error) {
                 [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina" key:@"menu_recommend_sina" value:@"fail"];
             }else{
                 [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina" key:@"menu_recommend_sina" value:@"success"];
             }
             
         }];
@@ -352,8 +354,23 @@
             
             if (error) {
                 [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                if (type == UMSocialPlatformType_QQ) {
+                    [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_qq" key:@"menu_recommend_share_qq" value:@"fail"];
+                }else if (type == UMSocialPlatformType_WechatSession){
+                    [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_weixin" key:@"menu_recommend_share_weixin" value:@"fail"];
+                }else if (type == UMSocialPlatformType_WechatTimeLine){
+                    [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_weixin_friends" key:@"menu_recommend_share_weixin_friends" value:@"fail"];
+                }
             }else{
                 [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                
+                if (type == UMSocialPlatformType_QQ) {
+                    [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_qq" key:@"menu_recommend_share_qq" value:@"success"];
+                }else if (type == UMSocialPlatformType_WechatSession){
+                    [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_weixin" key:@"menu_recommend_share_weixin" value:@"success"];
+                }else if (type == UMSocialPlatformType_WechatTimeLine){
+                    [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_weixin_friends" key:@"menu_recommend_share_weixin_friends" value:@"success"];
+                }
             }
             
         }];
