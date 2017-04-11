@@ -161,6 +161,9 @@
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         [self.navigationController setHidesBarsOnTap:YES];
         [self.webView reload];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self screenButtonDidClickedWithSuccess:nil failure:nil];
+        });
     }
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_rotating" key:nil value:nil];
 }
@@ -333,17 +336,6 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self.webView.scrollView setContentOffset:self.content animated:NO];
-    if (self.isScreen) {
-        [self screenButtonDidClickedWithSuccess:^{
-            
-            [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
-            
-        } failure:^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
-            self.isScreen = NO;
-        }];
-    }
 }
 
 //浏览滑动停止的时候
