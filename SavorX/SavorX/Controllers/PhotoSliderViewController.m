@@ -181,7 +181,7 @@
     [self.bottomView addSubview:self.timeLabel];
     
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
         self.isScreen = YES;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
     }else{
@@ -313,7 +313,7 @@
     }
 }
 
-- (void)stopScreenImage
+- (void)stopScreenImage:(BOOL)fromHomeType
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     self.playButton.selected = NO;
@@ -328,9 +328,15 @@
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.statusLabel.text = @"幻灯片";
         [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_exit" key:nil value:nil];
+        if (fromHomeType == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
+        }
     } failure:^{
         self.isScreen = YES;
         self.navigationItem.rightBarButtonItem.enabled = YES;
+        if (fromHomeType == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
+        }
     }];
 }
 
@@ -348,7 +354,7 @@
     [[HomeAnimationView animationView] startScreenWithViewController:self];
     self.isScreen = YES;
     self.statusLabel.text = @"正在播放图片";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
     
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
         PHAsset * asset = [self.PHAssetSource objectAtIndex:self.currentIndex];
@@ -406,7 +412,7 @@
     if (self.currentIndex == self.PHAssetSource.count - 1) {
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0] atScrollPosition:UICollectionViewScrollPositionRight animated:NO];
         self.currentIndex = 1;
-        [self stopScreenImage];
+        [self stopScreenImage:nil];
         [MBProgressHUD showTextHUDwithTitle:@"幻灯片播放已经结束"];
         self.playButton.selected = NO;
     }else if (self.currentIndex == 0){

@@ -73,8 +73,8 @@
 
 - (IBAction)quitAction:(id)sender {
     
-    if(_delegate && [_delegate respondsToSelector:@selector(stopVoideoPlay)]){
-        [_delegate stopVoideoPlay];
+    if(_delegate && [_delegate respondsToSelector:@selector(stopVoideoPlay:)]){
+        [_delegate stopVoideoPlay:nil];
         
     }
     

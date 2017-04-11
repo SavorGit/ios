@@ -18,6 +18,6 @@
 @property (nonatomic, strong) NSArray<PHAsset *> * PHAssetSource;//需要展示的图片集合
 
 - (void)shouldRelease;
-- (void)stopScreenImage;
+- (void)stopScreenImage:(BOOL)fromHomeType;
 
 @end

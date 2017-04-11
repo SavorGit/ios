@@ -217,6 +217,7 @@
     share.title = @"推荐";
     [(UINavigationController *)self.sideMenuController.rootViewController pushViewController:share  animated:NO];
     self.sideMenuController.leftViewAnimationSpeed = .5f;
+    [SAVORXAPI postUMHandleWithContentId:@"menu_recommend" key:nil value:nil];
 }
 
 - (void)willShow

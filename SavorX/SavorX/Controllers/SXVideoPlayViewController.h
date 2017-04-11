@@ -17,6 +17,6 @@
 @property (nonatomic, assign) int type;
 
 - (void)shouldRelease;
--(void)stopVoideoPlay;
+-(void)stopVoideoPlay:(BOOL)fromHomeType;
 
 @end

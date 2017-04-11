@@ -212,6 +212,8 @@
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = [NSString stringWithFormat:@"%@?st=usershare&clientname=ios&deviceid=%@", RDDownLoadURL, [GCCKeyChain load:keychainID]];
             [MBProgressHUD showTextHUDwithTitle:@"复制成功" delay:1.5f];
+            
+            [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_copy_link" key:nil value:nil];
         }
             break;
             
@@ -292,6 +294,13 @@
     UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return result;
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    
+    [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_back" key:nil value:nil];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -27,7 +27,7 @@
 
 -(void)voideoPlayFooterView:(voideoPlayFooterView *)vView didVideoPlayButton:(UIButton *)button;
 
--(void)stopVoideoPlay;
+-(void)stopVoideoPlay:(BOOL)fromHomeType;
 
 -(void)voidelPlayVolumeAction:(NSInteger)action;
 

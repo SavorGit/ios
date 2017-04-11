@@ -542,9 +542,9 @@
 }
 
 // 退出投屏
--(void)stopVoideoPlay{
+-(void)stopVoideoPlay:(BOOL)fromHomeType{
     
-    [SAVORXAPI ScreenDemandShouldBackToTV];
+    [SAVORXAPI ScreenDemandShouldBackToTV:fromHomeType];
     [self shouldRelease];
     [self.navigationController popViewControllerAnimated:YES];
 }

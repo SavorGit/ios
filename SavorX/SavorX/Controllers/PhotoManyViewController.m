@@ -101,8 +101,7 @@
     }];
     
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
         self.isScreen = YES;
     }else{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
@@ -135,7 +134,7 @@
                     [hud hideAnimated:NO];
                     [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
                     [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
                     
@@ -158,7 +157,7 @@
                     [hud hideAnimated:NO];
                     [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
                     [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
                 } failure:^{
@@ -178,8 +177,7 @@
                         [hud hideAnimated:NO];
                         [HomeAnimationView animationView].currentImage = result;
                         [[HomeAnimationView animationView] startScreenWithViewController:self];
-//                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
                         self.isScreen = YES;
                         
@@ -202,8 +200,7 @@
                         [hud hideAnimated:NO];
                         [HomeAnimationView animationView].currentImage = result;
                         [[HomeAnimationView animationView] startScreenWithViewController:self];
-//                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"quit"] style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
                         self.isScreen = YES;
                     } failure:^{
@@ -217,7 +214,7 @@
     }
 }
 
-- (void)stopScreenImage
+- (void)stopScreenImage:(BOOL)fromHomeType
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
@@ -225,9 +222,15 @@
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = NO;
         [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_exit_screen" key:nil value:nil];
+        if (fromHomeType == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
+        }
     } failure:^{
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = YES;
+        if (fromHomeType == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
+        }
     }];
 }
 
