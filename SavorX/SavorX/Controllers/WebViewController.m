@@ -152,15 +152,17 @@
 
 - (void)backButtonDidBeClicked
 {
-    if (_isFormDemand == YES) {
-        UINavigationController * na = [Helper getRootNavigationController];
-        if ([NSStringFromClass([na class]) isEqualToString:@"BaseNavigationController"]) {
-            UIViewController * vc = [na.viewControllers firstObject];
-            [self.navigationController popToViewController:vc animated:YES];
-        }
-    }else{
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+//    if (_isFormDemand == YES) {
+//        UINavigationController * na = [Helper getRootNavigationController];
+//        if ([NSStringFromClass([na class]) isEqualToString:@"BaseNavigationController"]) {
+//            UIViewController * vc = [na.viewControllers firstObject];
+//            [self.navigationController popToViewController:vc animated:YES];
+//        }
+//    }else{
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
 
 }
 
