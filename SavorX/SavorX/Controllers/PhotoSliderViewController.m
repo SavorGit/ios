@@ -183,8 +183,7 @@
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage)];
         self.isScreen = YES;
-        self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
     }else{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         [SAVORXAPI showConnetToTVAlert];
@@ -450,6 +449,7 @@
                                 [self.task cancel];
                             }
                             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                            [MBProgressHUD showTextHUDwithTitle:@"幻灯片投屏失败" delay:1.5f];
                             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
                             self.statusLabel.text = @"幻灯片";
                         }];

@@ -114,5 +114,6 @@
 #define HasLaunched @"HasLaunched"
 #define keychainID @"HotTopicsKeychainID"
 #define crashType @"crashType"
+#define RDDownLoadURL @"http://www.rerdian.com/d"
 
 #endif /* SavorXHeader_pch */

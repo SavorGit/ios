@@ -7,6 +7,7 @@
 //
 
 #import <AVFoundation/AVFoundation.h>
+#import <UMSocialCore/UMSocialCore.h>
 #import "HSVodModel.h"
 
 @interface UMCustomSocialManager : NSObject
@@ -34,5 +35,7 @@
  *  type         页面来源
  */
 - (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type;
+
+- (void)shareRDApplicationToPlatform:(UMSocialPlatformType)type currentViewController:(UIViewController *)VC;
 
 @end

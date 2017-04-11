@@ -15,6 +15,7 @@
 #import "SDImageCache.h"
 #import "LeftCell.h"
 #import "LeftTableHeaderView.h"
+#import "ShareRDViewController.h"
 
 @interface LeftViewController ()<UINavigationControllerDelegate>{
     
@@ -25,6 +26,7 @@
 @property (nonatomic, assign) long long totalSize; //总大小
 @property (nonatomic, strong) CALayer *redLayer;
 @property (nonatomic, strong) LeftTableHeaderView * headerView;
+@property (nonatomic, strong) UIView * footView;
 
 @end
 
@@ -38,6 +40,13 @@
     CGFloat width = kMainBoundsHeight > kMainBoundsWidth ? kMainBoundsWidth : kMainBoundsHeight;
     self.headerView = [[LeftTableHeaderView alloc] initWithFrame:CGRectMake(0, 0, width / 3 * 2, width / 3 * 2)];
     self.leftTableView.tableHeaderView = self.headerView;
+    [self.view addSubview:self.footView];
+    [self.footView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.leftTableView.mas_bottom);
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+    }];
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -130,6 +139,84 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 22.f;
+}
+
+- (UIView *)footView
+{
+    if (!_footView) {
+        _footView = [[UIView alloc] initWithFrame:CGRectZero];
+        _footView.backgroundColor = self.leftTableView.backgroundColor;
+        
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shareRDToFriends)];
+        tap.numberOfTapsRequired = 1;
+        [_footView addGestureRecognizer:tap];
+        
+        UIView * lineView = [[UIView alloc] initWithFrame:CGRectZero];
+        lineView.backgroundColor = UIColorFromRGB(0x424242);
+        [_footView addSubview:lineView];
+        [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.height.mas_equalTo(.5f);
+        }];
+        
+        UIImageView * recommendImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [recommendImageView setImage:[UIImage imageNamed:@"tuijian"]];
+        [_footView addSubview:recommendImageView];
+        [recommendImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+            make.size.mas_equalTo(CGSizeMake(35, 35));
+        }];
+        
+        UIImageView * peopleImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [peopleImageView setImage:[UIImage imageNamed:@"py"]];
+        [_footView addSubview:peopleImageView];
+        [peopleImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.mas_equalTo(0);
+            make.left.mas_equalTo(recommendImageView.mas_right);
+            make.size.mas_equalTo(CGSizeMake(17, 18));
+        }];
+        
+        UILabel * label = [[UILabel alloc] initWithFrame:CGRectZero];
+        if (kMainBoundsWidth < 375) {
+            label.font = [UIFont systemFontOfSize:12.5];
+        }else{
+            label.font = [UIFont systemFontOfSize:16];
+        }
+        label.textColor = UIColorFromRGB(0xffffff);
+        label.text = @"向朋友推荐小热点";
+        [_footView addSubview:label];
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(peopleImageView.mas_right).offset(10);
+            make.right.mas_equalTo(-40);
+            make.height.mas_equalTo(30);
+            make.centerY.mas_equalTo(0);
+        }];
+        
+        UIImageView * rightMode = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [rightMode setImage:[UIImage imageNamed:@"more"]];
+        [_footView addSubview:rightMode];
+        [rightMode mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.mas_equalTo(-15);
+            make.width.mas_equalTo(15);
+            make.height.mas_equalTo(15);
+            make.centerY.mas_equalTo(0);
+        }];
+    }
+    
+    return _footView;
+}
+
+- (void)shareRDToFriends
+{
+    self.sideMenuController.leftViewAnimationSpeed = .2f;
+    [self hideLeftViewAnimated:nil];
+    ShareRDViewController * share = [[ShareRDViewController alloc] init];
+    share.title = @"推荐";
+    [(UINavigationController *)self.sideMenuController.rootViewController pushViewController:share  animated:NO];
+    self.sideMenuController.leftViewAnimationSpeed = .5f;
 }
 
 - (void)willShow

@@ -48,6 +48,12 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //存储小平台呼出二维码地址
 @property (nonatomic, copy) NSString * callQRCodeURL;
 
+//存储二级小平台呼出二维码地址
+@property (nonatomic, copy) NSString * secondCallCodeURL;
+
+//存储三级小平台呼出二维码地址
+@property (nonatomic, copy) NSString * thirdCallCodeURL;
+
 //存储机顶盒呼出二维码地址
 @property (nonatomic, copy) NSString * boxCodeURL;
 
