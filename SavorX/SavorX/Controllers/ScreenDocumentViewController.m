@@ -20,12 +20,20 @@
 @property (nonatomic, strong) NSURLSessionDataTask * task; //记录当前最后一次请求任务
 @property (nonatomic, strong) UIButton * lockButton;
 @property (nonatomic, assign) CGPoint content;
-
+@property (nonatomic, copy) NSString * seriesId;
 @property (nonatomic, assign) BOOL isScreen;
 
 @end
 
 @implementation ScreenDocumentViewController
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        self.seriesId = [Helper getTimeStamp];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -112,6 +120,7 @@
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+        self.seriesId = [Helper getTimeStamp];
         self.isScreen = NO;
         self.navigationItem.rightBarButtonItem.enabled = YES;
         [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_exit" key:nil value:nil];
@@ -175,6 +184,8 @@
 
 - (void)resetCurrentItemWithPath:(NSString *)path
 {
+    self.seriesId = [Helper getTimeStamp];
+    
     self.path = path;
     //webView加载文档
     NSURL * url = [NSURL fileURLWithPath:self.path];
@@ -220,11 +231,11 @@
     NSString * keyStr = [NSString stringWithFormat:@"savorPhoto%ld.png", index++];
         if ([GlobalData shared].isBindRD) {
             [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
-                [SAVORXAPI postImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 success:^{
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId success:^{
                     if (successBlock) {
                         successBlock();
                     }
-                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 success:^{
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId success:^{
                         
                     } failure:^{
                         
