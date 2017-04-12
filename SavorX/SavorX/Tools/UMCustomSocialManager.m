@@ -302,10 +302,10 @@
         
         if (error) {
             [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
-            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
+            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
         }else{
             [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
-            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
+            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
         }
         
     }];

@@ -445,14 +445,31 @@
     [alert show];
 }
 
-+ (void)showConnetToTVAlert
++ (void)showConnetToTVAlert:(NSString *)type
 {
     RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"请点击\"连接电视\", 即可投屏"];
     RDAlertAction * action1 = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"cancel"];
+        if ([type isEqualToString:@"photo"]) {
+            [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"cancel"];
+        }if ([type isEqualToString:@"sliderPhoto"]) {
+            [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_link_tv" key:@"slide_to_screen_link_tv" value:@"cancel"];
+        }else if ([type isEqualToString:@"video"]){
+            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_link_tv" key:@"video_to_screen_link_tv" value:@"cancel"];
+        }else if ([type isEqualToString:@"doc"]){
+            [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_link_tv" key:@"file_to_screen_link_tv" value:@"cancel"];
+        }
+
     } bold:NO];
     RDAlertAction * action2 = [[RDAlertAction alloc] initWithTitle:@"连接电视" handler:^{
-        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"link"];
+        if ([type isEqualToString:@"photo"]) {
+            [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"link"];
+        }if ([type isEqualToString:@"sliderPhoto"]) {
+            [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_link_tv" key:@"slide_to_screen_link_tv" value:@"link"];
+        }else if ([type isEqualToString:@"video"]){
+            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_link_tv" key:@"video_to_screen_link_tv" value:@"link"];
+        }else if ([type isEqualToString:@"doc"]){
+            [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_link_tv" key:@"file_to_screen_link_tv" value:@"link"];
+        }
         [[HomeAnimationView animationView] scanQRCode];
     } bold:YES];
     [alert addActions:@[action1, action2]];

@@ -198,7 +198,7 @@ typedef NS_ENUM(NSInteger, interactType) {
 
 + (void)showAlertWithMessage:(NSString *)message;
 
-+ (void)showConnetToTVAlert;
++ (void)showConnetToTVAlert:(NSString *)type;
 
 //投屏成功的铃声
 + (void)successRing;

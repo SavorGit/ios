@@ -6,6 +6,7 @@
 //  Copyright © 2017年 郭春城. All rights reserved.
 //
 
+
 #import "PhotoManyViewController.h"
 #import "PhotoManyCollectionViewCell.h"
 #import "PhotoHandleView.h"
@@ -105,7 +106,7 @@
         self.isScreen = YES;
     }else{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-        [SAVORXAPI showConnetToTVAlert];
+        [SAVORXAPI showConnetToTVAlert:@"photo"];
         self.isScreen = NO;
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenCurrentImage) name:RDDidBindDeviceNotification object:nil];

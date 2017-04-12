@@ -10,6 +10,7 @@
 #import "PhotoListViewController.h"
 #import "PhotoTool.h"
 #import "OpenFileTool.h"
+#import "HomeAnimationView.h"
 
 #define ALBUMCELLID @"ALBUMCELLID"
 
@@ -139,6 +140,14 @@
         _option.resizeMode = PHImageRequestOptionsResizeModeExact;
     }
     return _option;
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    if ([HomeAnimationView animationView].isScreening == YES) {
+        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_back" key:nil value:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

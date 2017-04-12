@@ -34,4 +34,6 @@
 
 @property (nonatomic, strong) UITapGestureRecognizer* singleRecognizer;
 
+@property (nonatomic, assign) BOOL isScreening; //是否正在投屏
+
 @end

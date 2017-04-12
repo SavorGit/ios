@@ -36,6 +36,7 @@
 
 @property (nonatomic, assign) NSInteger isFirstCount;
 
+
 @end
 
 @implementation HomeAnimationView
@@ -135,6 +136,8 @@
     }else{
         [self.devImageView setImage:[UIImage imageNamed:@"ic_projecting_bg"]];
     }
+    
+    _isScreening = YES;
 }
 
 - (void)SDSetImage:(NSString *)path
@@ -213,6 +216,7 @@
     }];
     
     [self stopScreen];
+    _isScreening = NO;
 }
 
 #pragma mark -- 二维码扫描

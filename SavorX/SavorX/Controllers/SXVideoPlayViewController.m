@@ -176,7 +176,7 @@
     [self createTimer];
     
     if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-        [SAVORXAPI showConnetToTVAlert];
+        [SAVORXAPI showConnetToTVAlert:@"video"];
     }
 }
 
@@ -562,6 +562,11 @@
                     self.footerView.muteBtn.enabled = YES;
                 }else{
                     self.footerView.muteBtn.selected = NO;
+                }
+                if (action == 3) {
+                    [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_vol_down" key:nil value:nil];
+                }else if (action == 4){
+                    [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_vol_up" key:nil value:nil];
                 }
             }else{
                 [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];

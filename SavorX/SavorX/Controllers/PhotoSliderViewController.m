@@ -186,7 +186,7 @@
         self.timer = [NSTimer scheduledTimerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
     }else{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-        [SAVORXAPI showConnetToTVAlert];
+        [SAVORXAPI showConnetToTVAlert:@"sliderPhoto"];
         self.isScreen = NO;
         self.playButton.selected = NO;
         self.statusLabel.text = @"幻灯片";
