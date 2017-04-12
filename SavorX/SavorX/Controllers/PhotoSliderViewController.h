@@ -14,6 +14,7 @@
  */
 @interface PhotoSliderViewController : BaseViewController
 
+@property (nonatomic, copy) NSString * seriesId;
 @property (nonatomic, assign) NSInteger timeLong;
 @property (nonatomic, strong) NSArray<PHAsset *> * PHAssetSource;//需要展示的图片集合
 

@@ -130,7 +130,7 @@
         if ([GlobalData shared].isBindRD) {
             [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
                 
-                [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 success:^{
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil success:^{
                     
                     [hud hideAnimated:NO];
                     [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
@@ -139,7 +139,7 @@
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
                     
-                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 success:^{
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil success:^{
                         
                     } failure:^{
                         
@@ -173,7 +173,7 @@
             if ([GlobalData shared].isBindRD) {
                 [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                     
-                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 success:^{
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil success:^{
                         
                         [hud hideAnimated:NO];
                         [HomeAnimationView animationView].currentImage = result;
@@ -182,7 +182,7 @@
                         self.navigationItem.rightBarButtonItem.enabled = YES;
                         self.isScreen = YES;
                         
-                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 success:^{
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil success:^{
                             
                         } failure:^{
                             
@@ -305,9 +305,9 @@
             if ([GlobalData shared].isBindRD) {
                 [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
                     
-                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 success:^{
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil success:^{
                         
-                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 success:^{
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil success:^{
                             
                         } failure:^{
                             
@@ -379,10 +379,10 @@
             if (cell.hasEdit) {
                 if ([GlobalData shared].isBindRD) {
                     [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
-                        [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 success:^{
+                        [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil success:^{
                             [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
                             [[HomeAnimationView animationView] startScreenWithViewController:self];
-                            [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 success:^{
+                            [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil success:^{
                                 
                             } failure:^{
                                 
@@ -407,10 +407,10 @@
                     if ([GlobalData shared].isBindRD) {
                         [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                             
-                            [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 success:^{
+                            [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil success:^{
                                 [HomeAnimationView animationView].currentImage = result;
                                 [[HomeAnimationView animationView] startScreenWithViewController:self];
-                                [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 success:^{
+                                [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil success:^{
                                     
                                 } failure:^{
                                     
