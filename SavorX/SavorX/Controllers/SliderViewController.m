@@ -10,6 +10,7 @@
 #import "SliderListViewController.h"
 #import "PhotoTool.h"
 #import "AddPhotoListViewController.h"
+#import "HomeAnimationView.h"
 
 #define sliderMaxNum 50
 
@@ -360,6 +361,14 @@
         _option.resizeMode = PHImageRequestOptionsResizeModeExact;
     }
     return _option;
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    if ([HomeAnimationView animationView].isScreening == YES) {
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_back" key:nil value:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

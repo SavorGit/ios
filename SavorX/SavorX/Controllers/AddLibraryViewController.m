@@ -108,7 +108,7 @@
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"是否添加已勾选的这%ld张图片", (unsigned long)self.selectArray.count] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"是" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_back_add" key:@"slide_to_screen_back_add" value:@"yes"];
         [MBProgressHUD showLoadingHUDInView:self.view];
         NSMutableArray * array = [NSMutableArray new];
         PHFetchResult * result = self.model.result;
@@ -141,8 +141,10 @@
     }];
     UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"否" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.navigationController popViewControllerAnimated:YES];
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_back_add" key:@"slide_to_screen_back_add" value:@"no"];
     }];
     UIAlertAction * action3 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_back_add" key:@"slide_to_screen_back_add" value:@"cancel"];
         
     }];
     [alert addAction:action1];

@@ -152,18 +152,7 @@
 
 - (void)backButtonDidBeClicked
 {
-//    if (_isFormDemand == YES) {
-//        UINavigationController * na = [Helper getRootNavigationController];
-//        if ([NSStringFromClass([na class]) isEqualToString:@"BaseNavigationController"]) {
-//            UIViewController * vc = [na.viewControllers firstObject];
-//            [self.navigationController popToViewController:vc animated:YES];
-//        }
-//    }else{
-//        [self.navigationController popViewControllerAnimated:YES];
-//    }
-    
     [self.navigationController popViewControllerAnimated:YES];
-
 }
 
 - (void)orientationChanged
@@ -242,25 +231,41 @@
 
 - (void)videoShouldBeDemand
 {
-    if (self.model.canPlay && !_isFormDemand ) {
+    if (self.model.canPlay) {
         
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
         if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
             [self interfaceOrientation:UIInterfaceOrientationPortrait];
         }
         
-        [[HomeAnimationView animationView] scanQRCode];
-    }else if (self.model.canPlay && _isFormDemand == YES ){
-        
-        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-            [self interfaceOrientation:UIInterfaceOrientationPortrait];
+        if (([GlobalData shared].isBindRD)){
+            
+            [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:demandHandle];
+            //如果是绑定状态
+            MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+            [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                if ([[result objectForKey:@"result"] integerValue] == 0) {
+                    
+                    DemandViewController *view = [[DemandViewController alloc] init];
+                    view.model = self.model;
+                    [SAVORXAPI successRing];
+                    [HomeAnimationView animationView].currentImage = self.image;
+                    [[HomeAnimationView animationView] startScreenWithViewController:view];
+                    [self.navigationController pushViewController:view animated:YES];
+                    [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
+                }else{
+                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+                }
+                [hud hideAnimated:NO];
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                [hud hideAnimated:NO];
+                [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+            }];
+            
+        }else{
+            [[HomeAnimationView animationView] scanQRCode];
         }
-        
-        [self.navigationController popViewControllerAnimated:YES];
-        if (_coFromWebView) {
-            _coFromWebView(nil);
-        }
+
     }else{
         [MBProgressHUD showTextHUDwithTitle:@"当前视频不支持该操作"];
     }

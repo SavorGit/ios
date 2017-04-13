@@ -184,6 +184,7 @@
     HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.rerdian.com/Public/html/help/helptwo.html"];
     help.title = @"连接步骤";
     [self.navigationController  pushViewController:help  animated:NO];
+    [SAVORXAPI postUMHandleWithContentId:@"link_tv_help" key:nil value:nil];
 }
 
 // 重新连接
@@ -549,6 +550,7 @@
         if (![[result objectForKey:@"ssid"] isEqualToString:[Helper getWifiName]]){
             [GlobalData shared].cacheModel = model;
             [self showAlertWithWifiName:[result objectForKey:@"ssid"]];
+            [SAVORXAPI postUMHandleWithContentId:@"link_tv_wifi_prompt" key:@"link_tv_wifi_prompt" value:@"ensure"];
         }else{
             [[GlobalData shared] bindToRDBoxDevice:model];
             [self.navigationController popViewControllerAnimated:YES];
