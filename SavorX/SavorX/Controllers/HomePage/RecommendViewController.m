@@ -414,6 +414,7 @@
                 [[HomeAnimationView animationView] startScreenWithViewController:view];
                 [self.parentNavigationController pushViewController:view animated:YES];
                 [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
+                [SAVORXAPI postUMHandleWithContentId:@"home_advertising_video" key:nil value:nil];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }

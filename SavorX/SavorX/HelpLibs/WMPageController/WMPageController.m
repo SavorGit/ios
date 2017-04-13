@@ -1055,9 +1055,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"是否与电视断开，\n断开后将无法投屏？"];
     RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-        
+        [SAVORXAPI postUMHandleWithContentId:@"home_break_connect" key:@"home_break_connect" value:@"cancel"];
     } bold:nil];
     RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
+        [SAVORXAPI postUMHandleWithContentId:@"home_break_connect" key:@"home_break_connect" value:@"break"];
         [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
             [[HomeAnimationView animationView] stopScreen];
             [[GlobalData shared] disconnect];

@@ -15,8 +15,6 @@ typedef void (^comeFromWebView)(NSDictionary *parDic);
 @interface HSVideoViewController : BaseViewController
 
 @property (nonatomic, strong) GCCPlayerView * playView; //播放器
-@property (nonatomic, assign) BOOL isFormDemand; // 是否来自Demand
-@property (nonatomic, copy) comeFromWebView coFromWebView;
 
 - (instancetype)initWithModel:(HSVodModel *)model image:(UIImage *)image;
 

@@ -14,7 +14,8 @@
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
 
-@interface ScreenDocumentViewController ()<UIScrollViewDelegate,UIWebViewDelegate>
+
+@interface ScreenDocumentViewController ()<UIScrollViewDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIWebView * webView; //文件浏览控件
 @property (nonatomic, strong) NSURLSessionDataTask * task; //记录当前最后一次请求任务
@@ -54,6 +55,8 @@
     self.webView = [[UIWebView alloc] init];
     self.webView.delegate = self;
     self.webView.scrollView.delegate = self;
+    UIView *webBrowserView = self.webView.scrollView.subviews[0];
+
     [self.view addSubview:self.webView];
 //
     //为竖屏添加约束
@@ -393,6 +396,13 @@
     [self.navigationController popViewControllerAnimated:YES];
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_back" key:nil value:nil];
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    NSLog(@"zheshi shoushi");
+    return YES;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

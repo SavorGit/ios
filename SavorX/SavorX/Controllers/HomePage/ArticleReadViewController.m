@@ -9,7 +9,7 @@
 #import "ArticleReadViewController.h"
 #import "UMCustomSocialManager.h"
 
-@interface ArticleReadViewController ()<UIWebViewDelegate>
+@interface ArticleReadViewController ()<UIWebViewDelegate,UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIImage * image;
 @property (nonatomic, strong) HSVodModel * model;;
@@ -70,6 +70,7 @@
         make.edges.mas_equalTo(0);
     }];
     self.webView.delegate = self;
+    self.webView.scrollView.delegate = self;
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     self.webView.opaque = NO;
@@ -134,6 +135,13 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [MBProgressHUD hideHUDForView:self.webView animated:NO];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
+{
+    if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - kMainScreenHeight <= 20) {
+        [SAVORXAPI postUMHandleWithContentId:@"details_page_article" key:nil value:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

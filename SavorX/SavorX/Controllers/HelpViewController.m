@@ -8,7 +8,7 @@
 
 #import "HelpViewController.h"
 
-@interface HelpViewController ()<UIScrollViewDelegate>
+@interface HelpViewController ()<UIScrollViewDelegate,UIWebViewDelegate>
 
 @property (nonatomic, strong) UIWebView * webView;
 @property (nonatomic, copy) NSString * url;
@@ -40,6 +40,7 @@
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
     self.webView.backgroundColor = [UIColor whiteColor];
     self.webView.opaque = NO;
+    self.webView.delegate = self;
     [self.view addSubview:self.webView];
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
@@ -58,6 +59,13 @@
     }
     
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)webViewDidFinishLoad:(UIWebView *)webView{
+    NSString *currentUrl = self.webView.request.URL.absoluteString;
+    if (![currentUrl isEqualToString:@"http://h5.rerdian.com/Public/html/help/"]) {
+       [SAVORXAPI postUMHandleWithContentId:@"menu_help_web" key:nil value:nil];
+    }
 }
 
 @end

@@ -261,11 +261,19 @@
         return;
     }
     
-    UINavigationController * na = [Helper getRootNavigationController];
-    int j = (int)na.viewControllers.count - 2;
-    if (j < 0) {
-        j = 0;
-    }
+//    UINavigationController * na = [Helper getRootNavigationController];
+//    int j = (int)na.viewControllers.count - 2;
+//    if (j < 0) {
+//        j = 0;
+//    }
+    
+//    UIViewController * vc = na.viewControllers[j];
+//    if ([vc  isKindOfClass:[WebViewController class]] ) {
+////        [self.navigationController popToViewController:vc animated:YES];
+//    }else if ([vc  isKindOfClass:[WMPageController class]]){
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }
+    
 //    UIViewController * vc = na.viewControllers;
 //    if ([vc  isKindOfClass:[WebViewController class]] ) {
 //        [self.navigationController popToViewController:vc animated:YES];
@@ -280,8 +288,7 @@
 //        };
 //    }
     
-    [self.navigationController popViewControllerAnimated:YES];
-    
+     [self.navigationController popViewControllerAnimated:YES];
     
 }
 

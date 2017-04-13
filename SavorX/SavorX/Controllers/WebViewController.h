@@ -19,7 +19,5 @@ typedef void (^comeFromWebView)(NSDictionary *parDic);
 @property (nonatomic, strong) UIImage * image;
 @property (nonatomic, strong) HSVodModel * model;
 @property (nonatomic, strong) GCCPlayerView * playView; //播放器
-@property (nonatomic, assign) BOOL isFormDemand; // 是否来自Demand
-@property (nonatomic, copy) comeFromWebView coFromWebView;
 
 @end

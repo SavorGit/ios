@@ -270,6 +270,7 @@
 //多选图片进行幻灯片操作
 - (void)photoArrayToPlay
 {
+    [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_photo_slide" key:nil value:nil];
     if (self.selectArray.count == 0) {
         [MBProgressHUD showTextHUDwithTitle:@"请至少选择一张图片"];
         return;
