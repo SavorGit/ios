@@ -376,6 +376,7 @@
 
 + (void)ScreenDemandShouldBackToTVWithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
 {
+    MBProgressHUD * hud = [MBProgressHUD showBackDemandInView:[UIApplication sharedApplication].keyWindow];
     if ([GlobalData shared].isBindRD) {
         NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
         
@@ -383,18 +384,26 @@
                                       @"projectId" : [GlobalData shared].projectId};
         
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            [hud hideAnimated:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             successBlock();
-        } failure:failureBlock];
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [hud hideAnimated:NO];
+            [MBProgressHUD showTextHUDwithTitle:@"退出投屏失败" delay:1.f];
+            failureBlock();
+        }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
             
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-            
+            [hud hideAnimated:NO];
             successBlock();
         } failure:^{
+            [hud hideAnimated:NO];
             failureBlock();
         }];
+    }else{
+        [hud hideAnimated:NO];
     }
 }
 

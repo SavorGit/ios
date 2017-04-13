@@ -285,4 +285,18 @@
     return hud;
 }
 
++ (MBProgressHUD *)showBackDemandInView:(UIView *)view
+{
+    MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:view animated:NO];
+    hud.bezelView.layer.cornerRadius = 10;
+    hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+    [UIActivityIndicatorView appearanceWhenContainedIn:[MBProgressHUD class], nil].color = [UIColor whiteColor];
+    hud.bezelView.color = [[UIColor blackColor] colorWithAlphaComponent:.6f];
+    hud.label.text = @"正在退出";
+    hud.label.font = [UIFont systemFontOfSize:15];
+    hud.label.textColor = [UIColor whiteColor];
+    hud.minSize = CGSizeMake(120, 120);
+    return hud;
+}
+
 @end

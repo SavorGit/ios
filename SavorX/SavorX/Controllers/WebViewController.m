@@ -104,19 +104,11 @@
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
-                if (self.model.type == 3) {
-                    DemandViewController *view = [[DemandViewController alloc] init];
-                    view.model = self.model;
-                    [SAVORXAPI successRing];
-                    [[HomeAnimationView animationView] startScreenWithViewController:view];
-                    [self.navigationController pushViewController:view animated:YES];
-                }else{
-                    SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
-                    play.model = self.model;
-                    [[HomeAnimationView animationView] startScreenWithViewController:play];
-                    [self.navigationController pushViewController:play animated:YES];
-                }
-                [self.playView shouldRelease];
+                DemandViewController *view = [[DemandViewController alloc] init];
+                view.model = self.model;
+                [SAVORXAPI successRing];
+                [[HomeAnimationView animationView] startScreenWithViewController:view];
+                [self.navigationController pushViewController:view animated:YES];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
@@ -129,20 +121,14 @@
         //如果是绑定状态
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
-            if (self.model.type == 3) {
-                DemandViewController *view = [[DemandViewController alloc] init];
-                view.model = self.model;
-                [SAVORXAPI successRing];
-                [[HomeAnimationView animationView] startScreenWithViewController:view];
-                [self.navigationController pushViewController:view animated:YES];
-            }else{
-                SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
-                play.model = self.model;
-                [[HomeAnimationView animationView] startScreenWithViewController:play];
-                [self.navigationController pushViewController:play animated:YES];
-            }
+            
+            DemandViewController *view = [[DemandViewController alloc] init];
+            view.model = self.model;
+            [SAVORXAPI successRing];
+            [[HomeAnimationView animationView] startScreenWithViewController:view];
+            [self.navigationController pushViewController:view animated:YES];
+            
             [hud hideAnimated:NO];
-            [self.playView shouldRelease];
         } failure:^{
             [hud hideAnimated:NO];
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
@@ -297,7 +283,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]]) {
+    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[DemandViewController class]]) {
         
     }else{
         [self.playView shouldRelease];
