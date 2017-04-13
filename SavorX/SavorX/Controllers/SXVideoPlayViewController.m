@@ -173,9 +173,9 @@
     
     [self isEnableFooter];
     
-    [self createTimer];
-    
-    if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+        [self createTimer];
+    }else{
         [SAVORXAPI showConnetToTVAlert:@"video"];
     }
 }
@@ -183,6 +183,12 @@
 //创建更新播放进度定时器
 - (void)createTimer
 {
+    if (self.timer) {
+        [self.timer setFireDate:[NSDate distantFuture]];
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+    
     self.timer = [NSTimer timerWithTimeInterval:1.f target:self selector:@selector(updateSiderValue) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
 }
@@ -225,6 +231,7 @@
             NSInteger code = [[result objectForKey:@"result"] integerValue];
             if (code == 0) {
                 CGFloat posFloat = [[result objectForKey:@"pos"] floatValue]/1000;
+                NSLog(@"%lf", posFloat);
                 [self.headBackView.palySlider setValue:posFloat];
                 [self updateTimeLabel:posFloat];
             }else if (code == -1 || code == 1){

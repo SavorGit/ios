@@ -381,6 +381,7 @@
     self.playBtn.selected = YES;
     [self.playBtn setImage:[UIImage imageNamed:@"De_bofang_g"] forState:UIControlStateHighlighted];
     [self updatePlayStatus];
+    [self.playBtn setAdjustsImageWhenHighlighted:NO];
     [self.playBackView addSubview:self.playBtn];
     
     self.volumeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -392,6 +393,7 @@
     [self.volumeButton setImage:[UIImage imageNamed:@"De_laba_g"] forState:UIControlStateHighlighted];
     self.volumeButton.tag = 101;
     [self.volumeButton addTarget:self action:@selector(voidelPlayVolumeAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.volumeButton setAdjustsImageWhenHighlighted:NO];
     [self.playBackView addSubview:self.volumeButton];
     
     UIButton * volumeAdd = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -401,6 +403,7 @@
     [volumeAdd setImage:[UIImage imageNamed:@"De_voljia_g"] forState:UIControlStateHighlighted];
     volumeAdd.tag = 102;
     [volumeAdd addTarget:self action:@selector(voidelPlayVolumeAction:) forControlEvents:UIControlEventTouchUpInside];
+    [volumeAdd setAdjustsImageWhenHighlighted:NO];
     [self.playBackView addSubview:volumeAdd];
     
     UIButton * volumeSmall = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -410,6 +413,7 @@
     [volumeSmall setImage:[UIImage imageNamed:@"De_voljian_g"] forState:UIControlStateHighlighted];
     volumeSmall.tag = 103;
     [volumeSmall addTarget:self action:@selector(voidelPlayVolumeAction:) forControlEvents:UIControlEventTouchUpInside];
+    [volumeSmall setAdjustsImageWhenHighlighted:NO];
     [self.playBackView addSubview:volumeSmall];
 }
 
@@ -741,7 +745,7 @@
     NSInteger action;
     if (button.tag == 101) {
         [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_vol_mute" key:nil value:nil];
-        button.enabled = YES;
+        button.enabled = NO;
         if (button.isSelected) {
             action = 1;
         }else{
@@ -813,6 +817,9 @@
                 break;
                 
             default:
+                
+                volume = 0;
+                
                 break;
         }
         [[GCCUPnPManager defaultManager] setVolume:volume Success:^{

@@ -1058,12 +1058,17 @@ static NSInteger const kWMControllerCountUndefined = -1;
         
     } bold:nil];
     RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
-        [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+        if ([HomeAnimationView animationView].isScreening) {
+            [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+                [[HomeAnimationView animationView] stopScreen];
+                [[GlobalData shared] disconnect];
+            } failure:^{
+                
+            }];
+        }else{
             [[HomeAnimationView animationView] stopScreen];
             [[GlobalData shared] disconnect];
-        } failure:^{
-            
-        }];
+        }
     } bold:YES];
     NSArray *actionArr = [NSArray arrayWithObjects:actionOne,actionTwo, nil];
     [rdAlert addActions:actionArr];

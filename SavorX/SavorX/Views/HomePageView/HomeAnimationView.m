@@ -189,6 +189,7 @@
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     self.currentVC = nil;
+    _isScreening = NO;
 }
 
 - (void)show
@@ -214,9 +215,7 @@
         [self hidden];
         self.transform = CGAffineTransformIdentity;
     }];
-    
     [self stopScreen];
-    _isScreening = NO;
 }
 
 #pragma mark -- 二维码扫描
