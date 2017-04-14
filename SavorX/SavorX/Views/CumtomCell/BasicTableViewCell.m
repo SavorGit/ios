@@ -75,7 +75,7 @@
     [self.canDemand mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(15);
         make.right.mas_equalTo(-15);
-        make.size.mas_equalTo(CGSizeMake(35, 25));
+        make.size.mas_equalTo(CGSizeMake(35, 27));
     }];
     
     self.layer.shadowColor = [UIColor blackColor].CGColor;

@@ -273,7 +273,7 @@
     HomePageCell * cell = [tableView dequeueReusableCellWithIdentifier:@"HotTopicCell" forIndexPath:indexPath];
     
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
-    [cell videoCanDemand:NO];
+    [cell videoCanDemand:YES];
     
     cell.categroyLabel.text = [NSString stringWithFormat:@"# %@", model.category];
     [cell.bgImageView sd_setImageWithURL:[NSURL URLWithString:[model.imageURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
