@@ -73,7 +73,6 @@
     self.webView.scalesPageToFit = YES;
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
     self.webView.scrollView.delegate = self;
-    self.webView.scrollView.maximumZoomScale = 1.1f;
 
     if ([GlobalData shared].isBindDLNA || [GlobalData shared].isBindRD) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
