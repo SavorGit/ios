@@ -251,13 +251,10 @@
         [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 
-                // 获得当前视频图片，回传
-                HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-                
                 DemandViewController *view = [[DemandViewController alloc] init];
                 view.model = model;
                 [SAVORXAPI successRing];
-                [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
                 [[HomeAnimationView animationView] startScreenWithViewController:view];
                 [self.parentNavigationController pushViewController:view animated:YES];
                 [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
@@ -276,9 +273,7 @@
         NSString * path = [model.videoURL stringByAppendingString:@".f20.mp4"];
         [[GCCUPnPManager defaultManager] setAVTransportURL:path Success:^{
             
-            // 获得当前视频图片，回传
-            HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
             
             SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
             play.model = model;

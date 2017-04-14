@@ -34,6 +34,7 @@
 @property (nonatomic, copy) NSString * hotelName;
 @property (nonatomic, assign) NSInteger maxTime;
 @property (nonatomic, copy) NSString * flag;
+@property (nonatomic, strong) NSMutableDictionary * shouldDemandDict;
 
 @end
 
@@ -79,6 +80,9 @@
 
 - (void)setupDatas
 {
+    self.shouldDemandDict = [[NSMutableDictionary alloc] init];
+    [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
+    
     [self.dataSource removeAllObjects];
     MBProgressHUD * hud;
     if ([[NSFileManager defaultManager] fileExistsAtPath:HotelCache]) {
@@ -302,9 +306,7 @@
         [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 
-                // 获得当前视频图片  回传
-                HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-                [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
                 
                 DemandViewController *view = [[DemandViewController alloc] init];
                 view.model = model;
@@ -323,17 +325,12 @@
         
     }else if ([GlobalData shared].isBindDLNA && model.type == 3){
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
-        // 获得当前视频图片  回传
-        HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
         
         //如果是绑定状态
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [[GCCUPnPManager defaultManager] setAVTransportURL:[model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
             
-            // 获得当前视频图片  回传
-            HomePageCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
             
             SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
             play.model = model;
@@ -345,6 +342,11 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
     }else if ([GlobalData shared].scene == RDSceneHaveRDBox && [GlobalData shared].isBindRD == NO) {
+        
+        [self.shouldDemandDict setObject:model forKey:@"model"];
+        [self.shouldDemandDict setObject:@(1) forKey:@"type"];
+        [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
+        
         [[HomeAnimationView animationView] scanQRCode];
         [MBProgressHUD showTextHUDwithTitle:@"连接电视后即可点播视频" delay:1.f];
     }else{
@@ -394,18 +396,18 @@
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
 {
     HSAdsModel * model = [self.adSourcel objectAtIndex:index];
+    HSVodModel * vodModel = [[HSVodModel alloc] init];
+    vodModel.name = model.name;
+    vodModel.imageURL = model.imageURL;
+    vodModel.cid = model.cid;
+    vodModel.title = model.title;
+    vodModel.duration = model.duration;
+    vodModel.canPlay = 1;
     if ([GlobalData shared].isBindRD) {
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [SAVORXAPI demandWithURL:STBURL name:model.name type:2 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 // 获得当前视频图片  回传
-                
-                HSVodModel * vodModel = [[HSVodModel alloc] init];
-                vodModel.name = model.name;
-                vodModel.imageURL = model.imageURL;
-                vodModel.cid = model.cid;
-                vodModel.title = model.title;
-                vodModel.duration = model.duration;
                 
                 DemandViewController *view = [[DemandViewController alloc] init];
                 view.model = vodModel;
@@ -427,6 +429,11 @@
     }else if ([GlobalData shared].isBindDLNA) {
         [MBProgressHUD showTextHUDwithTitle:@"DLNA暂不支持该操作"];
     }else if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+        
+        [self.shouldDemandDict setObject:vodModel forKey:@"model"];
+        [self.shouldDemandDict setObject:@(2) forKey:@"type"];
+        [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
+        
         [[HomeAnimationView animationView] scanQRCode];
     }else {
         [MBProgressHUD showTextHUDwithTitle:@"未连接电视，请稍后重试"];
@@ -503,6 +510,40 @@
         [self.view addSubview:_TopFreshLabel];
     }
     return _TopFreshLabel;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if ([[self.shouldDemandDict objectForKey:@"should"] boolValue]) {
+        HSVodModel * model = [self.shouldDemandDict objectForKey:@"model"];
+        NSInteger type = [[self.shouldDemandDict objectForKey:@"type"] integerValue];
+        if ([GlobalData shared].isBindRD && model.canPlay == 1) {
+            [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
+            //如果是绑定状态
+            [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+            [SAVORXAPI demandWithURL:STBURL name:model.name type:type position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                if ([[result objectForKey:@"result"] integerValue] == 0) {
+                    
+                    [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+                    
+                    DemandViewController *view = [[DemandViewController alloc] init];
+                    view.model = model;
+                    [SAVORXAPI successRing];
+                    [[HomeAnimationView animationView] startScreenWithViewController:view];
+                    [self.parentNavigationController pushViewController:view animated:YES];
+                    [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
+                }else{
+                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+                }
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+            }];
+        }
+        [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

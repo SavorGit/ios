@@ -287,15 +287,13 @@
         
     }else if ([GlobalData shared].isBindDLNA && model.type == 3){
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
-        // 获得当前视频图片，回传
-        BasicTableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
         
         //如果是绑定状态
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [[GCCUPnPManager defaultManager] setAVTransportURL:[model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
             SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
             play.model = model;
-            [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
             [[HomeAnimationView animationView] startScreenWithViewController:play];
             [self.parentNavigationController pushViewController:play animated:YES];
             [MBProgressHUD hideHUDForView:self.view animated:YES];

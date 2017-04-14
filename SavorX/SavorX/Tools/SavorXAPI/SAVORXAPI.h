@@ -94,6 +94,23 @@ typedef NS_ENUM(NSInteger, interactType) {
 + (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)())success failure:(void (^)())failure;
 
 /**
+ *  投屏文件图片请求
+ *
+ *  @param urlStr       请求地址
+ *  @param data         投屏的图片数据
+ *  @param name         投屏的图片名称
+ *  @param type         投屏的图片类型
+ *  @param isThumbnail  是否是缩略图
+ *  @param rotation     投屏的图片角度
+ *  @param success      请求成功的回调
+ *  @param seriesId     投屏图片的标识
+ *  @param failure      请求失败的回调
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
+                                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+
+/**
  *  投屏视频请求
  *
  *  @param urlStr       请求地址

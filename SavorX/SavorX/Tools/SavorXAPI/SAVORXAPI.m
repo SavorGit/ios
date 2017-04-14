@@ -177,8 +177,55 @@
             }
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+        if (type == 2) {
+            
+        }else{
+            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+        }
         failure();
+    }];
+    
+    return task;
+}
+
++ (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName], type, rotation];
+    
+    if (seriesId && seriesId.length > 0) {
+        urlStr = [NSString stringWithFormat:@"%@&seriesId=%@", urlStr, seriesId];
+    }
+    
+    urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURLSessionDataTask * task = [[self sharedManager] POST:urlStr parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFileData:data name:@"fileUpload" fileName:name mimeType:@"image/jpeg"];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary* response = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                 options:kNilOptions
+                                                                   error:nil];
+        if ([response objectForKey:@"projectId"]) {
+            [GlobalData shared].projectId = [response objectForKey:@"projectId"];
+        }
+        
+        if ([[response objectForKey:@"result"] integerValue] == 0) {
+            if (success) {
+                success(task, response);
+            }
+        }else if ([[response objectForKey:@"result"] integerValue] == 2) {
+            
+        }else{
+            if (failure) {
+                NSError* error = [NSError errorWithDomain:@"fileScreen" code:-1 userInfo:@{NSLocalizedDescriptionKey:[response objectForKey:@"info"]}];
+                failure(task, error);
+            }
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (failure) {
+            failure(task, error);
+        }
     }];
     
     return task;

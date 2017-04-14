@@ -359,20 +359,14 @@
             [SAVORXAPI resumeVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
                 if ([[result objectForKey:@"result"] integerValue] != 0) {
                     [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-                    self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
                     [self changeTimerWithPlayStatus];
                 }else{
                     button.selected = !button.selected;
-                    if(!button.selected){
-                        
-                        [button setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
-                    }
                 }
                 self.isHandle = NO;
                 button.enabled = YES;
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
-                self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
                 [self changeTimerWithPlayStatus];
                 self.isHandle = NO;
                 button.enabled = YES;
@@ -380,10 +374,6 @@
         }else if ([GlobalData shared].isBindDLNA) {
             [[GCCUPnPManager defaultManager] playSuccess:^{
                 button.selected = !button.selected;
-                if(!button.selected){
-                    
-                    [button setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
-                }
                 self.isHandle = NO;
                 button.enabled = YES;
             } failure:^{
@@ -406,10 +396,6 @@
                     [self changeTimerWithPlayStatus];
                 }else{
                     button.selected = !button.selected;
-                    if(!button.selected){
-                        
-                        [button setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
-                    }
                 }
                 self.isHandle = NO;
                 button.enabled = YES;
@@ -423,10 +409,7 @@
         }else if ([GlobalData shared].isBindDLNA) {
             [[GCCUPnPManager defaultManager] pauseSuccess:^{
                 button.selected = !button.selected;
-                if(!button.selected){
-                    
-                    [button setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
-                }
+                
                 self.isHandle = NO;
                 button.enabled = YES;
             } failure:^{
@@ -465,10 +448,7 @@
                 }
                 self.isHandle = NO;
                 self.footerView.videoPlayButton.enabled = YES;
-                if(self.footerView.videoPlayButton.selected){
-                    
-                    [self.footerView.videoPlayButton setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
-                }
+                
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
@@ -492,10 +472,7 @@
                 }
                 self.isHandle = NO;
                 self.footerView.videoPlayButton.enabled = YES;
-                if(self.footerView.videoPlayButton.selected){
-                    
-                    [self.footerView.videoPlayButton setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
-                }
+                
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
@@ -520,10 +497,7 @@
             [self.tableView reloadData];
             self.footerView.videoPlayButton.enabled = YES;
             self.footerView.videoPlayButton.selected = NO;
-            if(self.footerView.videoPlayButton.selected){
-                
-                [self.footerView.videoPlayButton setImage:[UIImage imageNamed:@"video_up"] forState:UIControlStateSelected | UIControlStateHighlighted];
-            }
+            
         } failure:^{
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             [MBProgressHUD showTextHUDwithTitle:@"播放失败"];

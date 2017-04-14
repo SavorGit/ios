@@ -13,6 +13,8 @@
 #import "UIImage+Custom.h"
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
 
 
 @interface ScreenDocumentViewController ()<UIScrollViewDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate>
@@ -55,7 +57,6 @@
     self.webView = [[UIWebView alloc] init];
     self.webView.delegate = self;
     self.webView.scrollView.delegate = self;
-    UIView *webBrowserView = self.webView.scrollView.subviews[0];
 
     [self.view addSubview:self.webView];
 //
@@ -72,6 +73,7 @@
     self.webView.scalesPageToFit = YES;
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
     self.webView.scrollView.delegate = self;
+    self.webView.scrollView.maximumZoomScale = 1.1f;
 
     if ([GlobalData shared].isBindDLNA || [GlobalData shared].isBindRD) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
@@ -122,10 +124,7 @@
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
-        self.seriesId = [Helper getTimeStamp];
-        self.isScreen = NO;
-        self.navigationItem.rightBarButtonItem.enabled = YES;
+        [self stop];
         [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_exit" key:nil value:nil];
         if (fromHomeType == YES) {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
@@ -136,6 +135,14 @@
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
         }
     }];
+}
+
+- (void)stop
+{
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.seriesId = [Helper getTimeStamp];
+    self.isScreen = NO;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
 - (void)screenDocment
@@ -219,11 +226,6 @@
         }
     }
     
-    if (self.task) {
-        [self.task cancel];
-    }
-    
-    static NSInteger index = 0; //为保证缓存不影响文件投屏，需要给每次投屏一个标识
     UIImage * screenImage = [GCCScreenImage screenView:self.webView]; //获取截屏
     
     //机顶盒输出尺寸为你1920*1080，为保证全屏显示对尺寸进行对应调整
@@ -235,22 +237,49 @@
     }else{
         size = CGSizeMake(1080 * scale, 1080);
     }
+    
+    if (self.task) {
+        [self.task cancel];
+    }
+    
     UIImage * image = [screenImage ScalingToSize:size];
-    NSString * keyStr = [NSString stringWithFormat:@"savorPhoto%ld.png", index++];
+    NSString * keyStr = [NSString stringWithFormat:@"savorPhoto%@.png", [Helper getTimeStamp]];
         if ([GlobalData shared].isBindRD) {
             [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
-                [SAVORXAPI postImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId success:^{
-                    if (successBlock) {
-                        successBlock();
+                
+                self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId success:^(NSURLSessionDataTask *task, id responseObject) {
+                    if (self.task == task) {
+                        if (successBlock) {
+                            successBlock();
+                        }
+                        self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId success:^(NSURLSessionDataTask *task, id responseObject) {
+                            
+                        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                            
+                        }];
                     }
-                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId success:^{
-                        
-                    } failure:^{
-                        
-                    }];
-                } failure:^{
-                    if (failureBlock) {
-                        failureBlock();
+                } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    
+                    if (error.code == -999) {
+                        return;
+                    }
+                    
+                    if (self.task == task) {
+                        if ([error.domain isEqualToString:@"fileScreen"]) {
+                            RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:error.localizedDescription];
+                            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+                                
+                            } bold:YES];
+                            [alert addActions:@[action]];
+                            [alert show];
+                            [self stop];
+                        }else{
+                            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+                            
+                            if (failureBlock) {
+                                failureBlock();
+                            }
+                        }
                     }
                 }];
             }];
