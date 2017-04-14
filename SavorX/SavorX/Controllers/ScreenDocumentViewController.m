@@ -172,6 +172,11 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self screenButtonDidClickedWithSuccess:nil failure:nil];
         });
+        CGRect rect = self.navigationController.navigationBar.frame;
+        if (rect.size.height < 44) {
+            rect.size.height = 44.f;
+            [self.navigationController.navigationBar setFrame:rect];
+        }
     }else if (orientation == UIInterfaceOrientationLandscapeLeft ||
               orientation == UIInterfaceOrientationLandscapeRight){
         self.orientation = orientation;
@@ -272,6 +277,11 @@
 - (void)PageBack
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if (self.isLockScreen) {
+        [self lockButtonDidClicked];
+    }
+    
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
         [self interfaceOrientation:UIInterfaceOrientationPortrait];
         return;
