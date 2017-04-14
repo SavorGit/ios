@@ -174,6 +174,7 @@
                 DemandViewController *view = [[DemandViewController alloc] init];
                 view.model = self.model;
                 [SAVORXAPI successRing];
+                [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
                 [[HomeAnimationView animationView] startScreenWithViewController:view];
                 [self.navigationController pushViewController:view animated:YES];
             }else{
@@ -327,7 +328,7 @@
                     DemandViewController *view = [[DemandViewController alloc] init];
                     view.model = self.model;
                     [SAVORXAPI successRing];
-                    [HomeAnimationView animationView].currentImage = self.image;
+                    [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
                     [[HomeAnimationView animationView] startScreenWithViewController:view];
                     [self.navigationController pushViewController:view animated:YES];
                     [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];

@@ -14,6 +14,7 @@
 
 #import "WebViewController.h"
 #import "WMPageController.h"
+#import "HSVideoViewController.h"
 
 #define BOTTOMHEIGHT 50.f
 
@@ -885,6 +886,16 @@
     UINavigationController * na = [Helper getRootNavigationController];
     if ([NSStringFromClass([na class]) isEqualToString:@"BaseNavigationController"]) {
         UIViewController * vc = [na.viewControllers firstObject];
+        
+        UIViewController * secondVC = [na.viewControllers objectAtIndex:na.viewControllers.count - 2];
+        if ([secondVC isKindOfClass:[WebViewController class]]) {
+            WebViewController * web = (WebViewController *)secondVC;
+            [web.playView shouldRelease];
+        }else if([secondVC isKindOfClass:[HSVideoViewController class]]){
+            HSVideoViewController * hsVideo = (HSVideoViewController *)secondVC;
+            [hsVideo.playView shouldRelease];
+        }
+        
         [self.navigationController popToViewController:vc animated:YES];
     }
      [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_back" key:nil value:nil];
