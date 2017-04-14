@@ -375,7 +375,7 @@
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }else{
         self.webView.scrollView.userInteractionEnabled = NO;
-        UILabel *contentTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,kScreen_Width, 30)];
+        UILabel *contentTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,kScreen_Width - 20, 30)];
         contentTitleLab.font = [UIFont systemFontOfSize:16.f];
         contentTitleLab.textColor = [UIColor blackColor];
         contentTitleLab.text = self.title;
@@ -383,7 +383,8 @@
         [self.view addSubview:contentTitleLab];
         [contentTitleLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.backImageView).offset(30);
-            make.width.mas_equalTo(kScreen_Width);
+            make.left.mas_equalTo(15);
+            make.width.mas_equalTo(kScreen_Width - 15);
         }];
     }
 }
