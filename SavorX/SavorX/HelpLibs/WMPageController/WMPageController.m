@@ -921,7 +921,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     CGFloat viewWidth = [Helper autoWidthWith:147.f];
     CGFloat viewHeight = [Helper autoHeightWith:117.f];
-    CGFloat viewBottomDistance = [Helper autoHeightWith:120.f];
+    CGFloat viewBottomDistance = [Helper autoHeightWith:130.f];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(viewWidth, viewHeight));
         make.bottom.mas_equalTo(-viewBottomDistance);
