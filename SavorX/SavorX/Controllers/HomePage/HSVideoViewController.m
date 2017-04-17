@@ -244,6 +244,7 @@
 {
     [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
 - (void)hiddenTVButton
