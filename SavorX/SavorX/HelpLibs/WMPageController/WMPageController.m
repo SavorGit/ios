@@ -915,9 +915,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
     HomeAnimationView *view = [HomeAnimationView animationView];
     [self.view addSubview:view];
     view.backgroundColor = [UIColor blackColor];
-    view.alpha = 0.8;
+    view.alpha = 1;
     view.layer.borderWidth = 0.5;
-    view.layer.borderColor = UIColorFromRGB(0xeeeeee).CGColor;
+    view.layer.borderColor = [UIColorFromRGB(0xeeeeee) colorWithAlphaComponent:0.28].CGColor;
+    
     CGFloat viewWidth = [Helper autoWidthWith:147.f];
     CGFloat viewHeight = [Helper autoHeightWith:117.f];
     CGFloat viewBottomDistance = [Helper autoHeightWith:120.f];
