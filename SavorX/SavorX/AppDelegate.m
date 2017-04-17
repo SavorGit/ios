@@ -49,7 +49,6 @@
     [SAVORXAPI configApplication];
     
     [self requestGetLauchImageOrVideo];
-    [SAVORXAPI checkVersionUpgrade];
     
     //友盟推送
     [UMessage startWithAppkey:UmengAppkey launchOptions:launchOptions];

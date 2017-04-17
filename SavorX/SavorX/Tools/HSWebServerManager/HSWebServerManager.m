@@ -117,7 +117,6 @@
                 NSString *filePath = avUrlAsset.URL.path;
                 
                 GCDWebServerFileResponse *response = [GCDWebServerFileResponse responseWithFile:filePath byteRange:request.byteRange];
-                
                 completionBlock(response);
                 
             }];

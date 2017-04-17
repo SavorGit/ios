@@ -201,6 +201,9 @@
     [super viewWillAppear:animated];
     
     [self getDataSource];
+    if (self.dataSource.count == 0) {
+        [self showNoDataViewInView:self.view noDataType:kNoDataType_Favorite];
+    }
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
 }

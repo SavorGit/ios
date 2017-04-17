@@ -62,14 +62,18 @@
     [self.view addSubview:codeImageView];
     [codeImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(0);
-        make.bottom.mas_equalTo(self.shareView.mas_top).offset(-[Helper autoHeightWith:50]);
-        make.size.mas_equalTo(CGSizeMake([Helper autoHeightWith:260], [Helper autoHeightWith:260]));
+        make.bottom.mas_equalTo(self.shareView.mas_top).offset(-[Helper autoHeightWith:65]);
+        make.size.mas_equalTo(CGSizeMake([Helper autoHeightWith:230], [Helper autoHeightWith:230]));
     }];
     if (QRImage) {
         [codeImageView setImage:QRImage];
     }else{
         [codeImageView setImage:[UIImage imageNamed:@"tjxzm"]];
     }
+    codeImageView.layer.shadowColor = [UIColor blackColor].CGColor;
+    codeImageView.layer.shadowOpacity = .2f;
+    codeImageView.layer.shadowRadius = 6.f;
+    codeImageView.layer.shadowOffset = CGSizeMake(1.f, 1.f);
 }
 
 - (void)createShareButtonsView
@@ -242,7 +246,7 @@
     //因为生成的二维码模糊，所以通过createNonInterpolatedUIImageFormCIImage:outputImage来获得高清的二维码图片
     
     // 5.显示二维码
-    UIImage * image = [self createNonInterpolatedUIImageFormCIImage:outputImage withSize:[Helper autoWidthWith:260.f]];
+    UIImage * image = [self createNonInterpolatedUIImageFormCIImage:outputImage withSize:[Helper autoWidthWith:230.f]];
     
     return image;
 }

@@ -3089,4 +3089,10 @@ rightViewBackgroundImageInitialScale = _rightViewBackgroundImageInitialScale;
     return UIInterfaceOrientationMaskPortrait;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [SAVORXAPI checkVersionUpgrade];
+}
+
 @end
