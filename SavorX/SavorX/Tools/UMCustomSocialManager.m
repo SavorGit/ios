@@ -330,8 +330,8 @@
         shareObject.shareImage = image;
         messageObject.text = [NSString stringWithFormat:@"%@\n%@\n%@", title, description, url];
         messageObject.shareObject = shareObject;
+        [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina_click" key:nil value:nil];
         [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
-            
             if (error) {
                 [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
                 [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina" key:@"menu_recommend_sina" value:@"fail"];
@@ -349,6 +349,15 @@
         }
         [object setWebpageUrl:url];
         messageObject.shareObject = object;
+        
+        // 点击时发送友盟
+        if (type == UMSocialPlatformType_QQ) {
+            [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_qq_click" key:nil value:nil];
+        }else if (type == UMSocialPlatformType_WechatSession){
+            [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_weixin_click" key:nil value:nil];
+        }else if (type == UMSocialPlatformType_WechatTimeLine){
+            [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_weixin_friends_click" key:nil value:nil];
+        }
         
         [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
             
