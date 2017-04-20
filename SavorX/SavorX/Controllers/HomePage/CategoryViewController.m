@@ -274,6 +274,7 @@
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = self.categoryID;
                 view.model = model;
                 [SAVORXAPI successRing];
                 [HomeAnimationView animationView].currentImage = cell.bgImageView.image;

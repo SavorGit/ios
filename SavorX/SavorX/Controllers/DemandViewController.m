@@ -348,7 +348,7 @@
     }
     
     [UMCustomSocialManager defaultManager].image = self.backImageView.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:1];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:1 categroyID:self.categroyID];
     [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share" key:nil value:nil];
 }
 

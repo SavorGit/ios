@@ -114,6 +114,7 @@
         [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = self.categoryID;
                 view.model = self.model;
                 [SAVORXAPI successRing];
                 [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
@@ -133,6 +134,7 @@
         [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
             
             DemandViewController *view = [[DemandViewController alloc] init];
+            view.categroyID = self.categoryID;
             view.model = self.model;
             [SAVORXAPI successRing];
             [[HomeAnimationView animationView] startScreenWithViewController:view];
@@ -213,7 +215,7 @@
 - (void)videoShouldBeShare
 {
     [UMCustomSocialManager defaultManager].image = self.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
@@ -221,7 +223,7 @@
 - (void)shareAction:(UIButton *)button
 {
     [UMCustomSocialManager defaultManager].image = self.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
@@ -243,6 +245,7 @@
                 if ([[result objectForKey:@"result"] integerValue] == 0) {
                     
                     DemandViewController *view = [[DemandViewController alloc] init];
+                    view.categroyID = self.categoryID;
                     view.model = self.model;
                     [SAVORXAPI successRing];
                     [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];

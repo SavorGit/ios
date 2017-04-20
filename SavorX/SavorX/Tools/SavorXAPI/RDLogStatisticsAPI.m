@@ -97,6 +97,12 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
 }
 
++ (void)RDShareLogModel:(HSVodModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume
+{
+    NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,share,content,%@,%@,%@,%@,ios,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkId:model.cid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID], [RDLogStatisticsAPI checkIsNullOrEmpty:model.name],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
+    [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
+}
+
 //开启保存日志的线程队列
 + (void)RDLogSaveWithLogItem:(NSString *)logItem
 {

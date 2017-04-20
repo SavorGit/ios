@@ -257,6 +257,7 @@
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = -1;
                 view.model = model;
                 [SAVORXAPI successRing];
                 [[HomeAnimationView animationView] SDSetImage:model.imageURL];

@@ -181,6 +181,7 @@
         [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = self.categoryID;
                 view.model = self.model;
                 [SAVORXAPI successRing];
                 [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
@@ -199,6 +200,7 @@
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
             DemandViewController *view = [[DemandViewController alloc] init];
+            view.categroyID = self.categoryID;
             view.model = self.model;
             [SAVORXAPI successRing];
             [[HomeAnimationView animationView] startScreenWithViewController:view];
@@ -252,7 +254,7 @@
 - (void)videoShouldBeShare
 {
     [UMCustomSocialManager defaultManager].image = self.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
@@ -315,7 +317,7 @@
 - (void)shareAction:(UIButton *)button
 {
     [UMCustomSocialManager defaultManager].image = self.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
 }
 
 - (void)videoShouldBeDemand
@@ -336,6 +338,7 @@
                 if ([[result objectForKey:@"result"] integerValue] == 0) {
                     
                     DemandViewController *view = [[DemandViewController alloc] init];
+                    view.categroyID = self.categoryID;
                     view.model = self.model;
                     [SAVORXAPI successRing];
                     [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
@@ -392,6 +395,7 @@
     [super viewDidAppear:animated];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

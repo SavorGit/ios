@@ -14,6 +14,7 @@
  */
 @interface DemandViewController : BaseViewController
 
+@property (nonatomic, assign) NSInteger categroyID;
 @property (nonatomic, strong) HSVodModel * model;
 
 - (void)shouldRelease;

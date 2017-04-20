@@ -35,6 +35,9 @@ typedef enum : NSUInteger {
 //热点页面的PV - log日志
 + (void)RDPageLogCategoryID:(NSString *)categoryID volume:(NSString *)volume;
 
+//热点分享的log日志
++ (void)RDShareLogModel:(HSVodModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume;
+
 + (void)checkAndUploadLog;
 
 + (void)wantToSeeSee;

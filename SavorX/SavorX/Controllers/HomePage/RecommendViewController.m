@@ -315,6 +315,7 @@
                 [[HomeAnimationView animationView] SDSetImage:model.imageURL];
                 
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = -2;
                 view.model = model;
                 [SAVORXAPI successRing];
                 [[HomeAnimationView animationView] startScreenWithViewController:view];
@@ -419,6 +420,7 @@
                 // 获得当前视频图片  回传
                 
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = -2;
                 view.model = vodModel;
                 [SAVORXAPI successRing];
                 [[HomeAnimationView animationView] SDSetImage:model.imageURL];
@@ -537,6 +539,7 @@
                     [[HomeAnimationView animationView] SDSetImage:model.imageURL];
                     
                     DemandViewController *view = [[DemandViewController alloc] init];
+                    view.categroyID = -2;
                     view.model = model;
                     [SAVORXAPI successRing];
                     [[HomeAnimationView animationView] startScreenWithViewController:view];
