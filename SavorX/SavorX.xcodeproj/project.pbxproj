@@ -134,6 +134,7 @@
 		065ECD7E1E8A8EAF0062E29D /* index4_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD7D1E8A8EAF0062E29D /* index4_1.jpg */; };
 		065ECD801E8A8EB80062E29D /* index5_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD7F1E8A8EB80062E29D /* index5_1.jpg */; };
 		065ECD821E8A8EC10062E29D /* indexp6_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD811E8A8EC10062E29D /* indexp6_1.jpg */; };
+		066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */; };
 		067CB3BF1D603B7200094BB8 /* DiscoverCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */; };
 		067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB7141D60B21C00094BB8 /* OpenFileTool.m */; };
 		06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */; };
@@ -536,6 +537,8 @@
 		065ECD7D1E8A8EAF0062E29D /* index4_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index4_1.jpg; sourceTree = "<group>"; };
 		065ECD7F1E8A8EB80062E29D /* index5_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index5_1.jpg; sourceTree = "<group>"; };
 		065ECD811E8A8EC10062E29D /* indexp6_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = indexp6_1.jpg; sourceTree = "<group>"; };
+		066379D61EA8963C00E91313 /* RDLogStatisticsAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDLogStatisticsAPI.h; sourceTree = "<group>"; };
+		066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDLogStatisticsAPI.m; sourceTree = "<group>"; };
 		067CB3BD1D603B7200094BB8 /* DiscoverCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverCollectionViewCell.h; sourceTree = "<group>"; };
 		067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverCollectionViewCell.m; sourceTree = "<group>"; };
 		067CB7131D60B21C00094BB8 /* OpenFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenFileTool.h; sourceTree = "<group>"; };
@@ -1002,6 +1005,8 @@
 			children = (
 				06153E051D530D9A00BB127F /* SAVORXAPI.h */,
 				06153E061D530D9A00BB127F /* SAVORXAPI.m */,
+				066379D61EA8963C00E91313 /* RDLogStatisticsAPI.h */,
+				066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */,
 			);
 			path = SavorXAPI;
 			sourceTree = "<group>";
@@ -2401,6 +2406,7 @@
 				0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */,
 				060E42111E4CB03E009A94FC /* SDCollectionViewCell.m in Sources */,
 				96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */,
+				066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */,
 				06FA33951D3E171D001F5B37 /* DDASLLogger.m in Sources */,
 				063FA3371D839F1100D03548 /* BadView.m in Sources */,
 				061E0FE91DFFEBD10072605F /* RDBoxModel.m in Sources */,

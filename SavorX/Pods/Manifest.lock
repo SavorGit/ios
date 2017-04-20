@@ -14,6 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.0.4)
   - AFNetworking/UIKit (3.0.4):
     - AFNetworking/NSURLSession
+  - AliyunOSSiOS (2.5.4)
   - BGNetwork (0.2.6):
     - AFNetworking (~> 3.0.2)
   - GCDWebServer (3.3.3):
@@ -31,7 +32,8 @@ PODS:
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
-  - UMengAnalytics-NO-IDFA (4.1.5)
+  - SSZipArchive (1.8.1)
+  - UMengAnalytics-NO-IDFA (4.1.9)
   - UMengUShare/Core (6.1.1):
     - UMengUShare/Network
   - UMengUShare/Network (6.1.1)
@@ -45,6 +47,7 @@ PODS:
     - UMengUShare/Core
 
 DEPENDENCIES:
+  - AliyunOSSiOS (~> 2.5.4)
   - BGNetwork
   - GCDWebServer (~> 3.3.3)
   - IQKeyboardManager (~> 4.0.6)
@@ -53,7 +56,8 @@ DEPENDENCIES:
   - MJRefresh (~> 3.1.12)
   - RHNJKWebViewProgress (~> 0.2.4)
   - SDWebImage (~> 3.8.2)
-  - UMengAnalytics-NO-IDFA
+  - SSZipArchive (~> 1.8.1)
+  - UMengAnalytics-NO-IDFA (~> 4.1.9)
   - UMengUShare/Social/QQ
   - UMengUShare/Social/Sina
   - UMengUShare/Social/WeChat
@@ -61,6 +65,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
+  AliyunOSSiOS: 2bd80cd234763b5cf3948d7eb51769cd1ae694a0
   BGNetwork: 66986f143548bb5308bffd85dfb2bfd544de1450
   GCDWebServer: 1c39a1f0763e4eb492bee021e4270fce097d3555
   IQKeyboardManager: 69002bb4fea60596b710e57d426abc00e5063630
@@ -69,9 +74,10 @@ SPEC CHECKSUMS:
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
   RHNJKWebViewProgress: e3c81e911431f498f6728ef26ea996b0edcc7941
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
-  UMengAnalytics-NO-IDFA: f1b08b540eba6ebad044a574cae6d988cf40cfda
+  SSZipArchive: 04547dfa448be5ed7ecbaf7eaf8a6e9eb9b42997
+  UMengAnalytics-NO-IDFA: 985292af177111685325c90c321094172b95d2cb
   UMengUShare: 0a80f54ee06f71f3de7c57764c36339e8bf9b7e7
 
-PODFILE CHECKSUM: 0fa96f789324d8a4eb2c7bdd7f70e784532bdb32
+PODFILE CHECKSUM: bc5d03eb2cfe13c6acbfba851c1aa67d18e1f906
 
 COCOAPODS: 1.0.1

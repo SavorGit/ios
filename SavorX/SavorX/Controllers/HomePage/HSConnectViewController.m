@@ -9,7 +9,6 @@
 #import "HSConnectViewController.h"
 #import "RDBoxModel.h"
 #import "RDKeyBoard.h"
-#import "GCCKeyChain.h"
 #import "HelpViewController.h"
 
 @interface HSConnectViewController ()<RDKeyBoradDelegate>
@@ -427,7 +426,7 @@
             
         }];
         
-        NSString *boxURL = [NSString stringWithFormat:@"%@/verify?code=%@&deviceId=%@", [GlobalData shared].boxCodeURL, self.numSring, [GCCKeyChain load:keychainID]];
+        NSString *boxURL = [NSString stringWithFormat:@"%@/verify?code=%@&deviceId=%@", [GlobalData shared].boxCodeURL, self.numSring, [GlobalData shared].deviceID];
         
         [SAVORXAPI getWithURL:boxURL parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             

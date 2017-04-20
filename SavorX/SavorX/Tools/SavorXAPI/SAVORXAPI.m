@@ -74,7 +74,7 @@
     if ([[GCCKeyChain load:keychainID] isEqualToString:@"unknow"]) {
         [GCCKeyChain save:keychainID data:identifierNumber];
     }
-    NSLog(@"%@", [GCCKeyChain load:keychainID]);
+    [GlobalData shared].deviceID = [GCCKeyChain load:keychainID];
     [[BGNetworkManager sharedManager] setNetworkConfiguration:[NetworkConfiguration configuration]];
 }
 
@@ -136,7 +136,7 @@
 //投屏图片
 + (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)())success failure:(void (^)())failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName], type, rotation];
+    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation];
     
     if (seriesId && seriesId.length > 0) {
         urlStr = [NSString stringWithFormat:@"%@&seriesId=%@", urlStr, seriesId];
@@ -190,7 +190,7 @@
 
 + (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName], type, rotation];
+    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation];
     
     if (seriesId && seriesId.length > 0) {
         urlStr = [NSString stringWithFormat:@"%@&seriesId=%@", urlStr, seriesId];
@@ -236,7 +236,7 @@
 {
     urlStr = [urlStr stringByAppendingString:@"/vod"];
     
-    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                   @"type" : [NSNumber numberWithInteger:type],
                                   @"name" : name,
                                   @"deviceName" : [GCCGetInfo getIphoneName],
@@ -251,7 +251,7 @@
 {
     urlStr = [urlStr stringByAppendingString:@"/volume"];
     
-    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                   @"action" : [NSNumber numberWithInteger:action],
                                   @"projectId" : [GlobalData shared].projectId};
     
@@ -264,7 +264,7 @@
 {
     urlStr = [urlStr stringByAppendingString:@"/rotate"];
     
-    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                   @"projectId" : [GlobalData shared].projectId};
     
     NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
@@ -274,7 +274,7 @@
 //视频投屏
 + (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/video?deviceId=%@&deviceName=%@", urlStr,[GCCKeyChain load:keychainID], [GCCGetInfo getIphoneName]];
+    urlStr = [NSString stringWithFormat:@"%@/video?deviceId=%@&deviceName=%@", urlStr,[GlobalData shared].deviceID, [GCCGetInfo getIphoneName]];
     
     NSDictionary * parameters = @{@"mediaPath" : mediaPath,
                                   @"position" : position};
@@ -288,7 +288,7 @@
 {
     urlStr = [urlStr stringByAppendingString:@"/pause"];
     
-    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                   @"projectId" : [GlobalData shared].projectId};
     
     NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
@@ -300,7 +300,7 @@
 {
     urlStr = [urlStr stringByAppendingString:@"/resume"];
     
-    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                   @"projectId" : [GlobalData shared].projectId};
     
     NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
@@ -312,7 +312,7 @@
 {
     urlStr = [urlStr stringByAppendingString:@"/seek"];
     
-    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                   @"projectId" : [GlobalData shared].projectId,
                                   @"position" : position};
     
@@ -325,7 +325,7 @@
 {
     urlStr = [urlStr stringByAppendingString:@"/query"];
     
-    NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                   @"projectId" : [GlobalData shared].projectId};
     
     NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
@@ -391,7 +391,7 @@
     if ([GlobalData shared].isBindRD) {
         NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
         
-        NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+        NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                       @"projectId" : [GlobalData shared].projectId};
         
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
@@ -427,7 +427,7 @@
     if ([GlobalData shared].isBindRD) {
         NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
         
-        NSDictionary * parameters = @{@"deviceId" : [GCCKeyChain load:keychainID],
+        NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                       @"projectId" : [GlobalData shared].projectId};
         
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {

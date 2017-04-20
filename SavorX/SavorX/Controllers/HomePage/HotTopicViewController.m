@@ -20,6 +20,7 @@
 #import "SXVideoPlayViewController.h"
 #import "ArticleReadViewController.h"
 #import "HSVideoViewController.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface HotTopicViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -236,6 +237,8 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-1"];
+    
     return cell;
 }
 
@@ -243,6 +246,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    
+     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:@"-1"];
     
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
@@ -366,6 +371,12 @@
         [self.view addSubview:_TopFreshLabel];
     }
     return _TopFreshLabel;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
 }
 
 - (void)didReceiveMemoryWarning {

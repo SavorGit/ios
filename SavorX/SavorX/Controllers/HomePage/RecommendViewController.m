@@ -22,6 +22,7 @@
 #import "ArticleReadViewController.h"
 #import "HSGetLastHotelVodList.h"
 #import "HSVideoViewController.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface RecommendViewController ()<UITableViewDelegate, UITableViewDataSource, SDCycleScrollViewDelegate>
 
@@ -291,6 +292,8 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-2"];
+    
     return cell;
 }
 
@@ -299,6 +302,9 @@
 {
     
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:@"-2"];
+    
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         //如果是绑定状态
@@ -544,6 +550,12 @@
         }
         [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
 }
 
 - (void)didReceiveMemoryWarning {

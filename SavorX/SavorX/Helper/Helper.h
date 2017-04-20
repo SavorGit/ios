@@ -56,6 +56,8 @@
 
 + (NSString *)getHTTPHeaderValue;
 
++ (NSString *)getCurrentTimeWithFormat:(NSString *)format;
+
 + (void)interfaceOrientation:(UIInterfaceOrientation)orientation;
 
 @end

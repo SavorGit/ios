@@ -66,7 +66,14 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //当前缓存的机顶盒信息
 @property (nonatomic, strong) RDBoxModel * cacheModel;
 
+//当前机顶盒的操作唯一标识
 @property (nonatomic, copy) NSString * projectId;
+
+//当前日志的操作时间
+@property (nonatomic, copy) NSString * RDCurrentLogTime;
+
+//设备唯一标识
+@property (nonatomic, copy) NSString * deviceID;
 
 /**
  *  创建单例

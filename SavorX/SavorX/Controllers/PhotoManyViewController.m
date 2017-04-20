@@ -18,7 +18,6 @@
 #import <Photos/Photos.h>
 
 #import "GCCGetInfo.h"
-#import "GCCKeyChain.h"
 
 #define PhotoManyCell @"PhotoManyCell"
 
