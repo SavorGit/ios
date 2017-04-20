@@ -23,6 +23,9 @@
 - (instancetype)initWithURL:(NSString *)url;
 
 @property (nonatomic, assign) id<GCCPlayerViewDelegate> delegate;
+@property (nonatomic, strong) HSVodModel * model;
+@property (nonatomic, assign) NSInteger categoryID; //分类ID
+
 
 - (void)play; //开始播放
 - (void)pause; //暂停播放

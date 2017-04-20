@@ -361,6 +361,7 @@
         if (model.type == 3) {
             WebViewController * web = [[WebViewController alloc] init];
             web.model = model;
+            web.categoryID = -2;
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             web.image = cell.bgImageView.image;
             [self.parentNavigationController pushViewController:web animated:YES];
@@ -368,11 +369,13 @@
         }else if (model.type == 4){
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
+            web.categoryID = -2;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else{
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
+            article.categoryID = -2;
             [self.parentNavigationController pushViewController:article animated:YES];
              [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
         }
