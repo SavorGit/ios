@@ -782,7 +782,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if (self.canPlay) {
         [self.player play];
         self.status = GCCPlayerStatusPlaying;
-        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     }else{
         [self pause];
     }
@@ -795,7 +795,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if (self.status != GCCPlayerStatusEnd) {
         self.status = GCCPlayerStatusPause;
     }
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 //视频停止
@@ -804,7 +804,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [self.player pause];
     self.status = GCCPlayerStatusEnd;
     [self sliderDidSlideToTime:0];
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 //set方法，重写以及时获取播放状态并进行不同的处理
