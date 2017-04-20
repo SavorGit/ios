@@ -8,6 +8,7 @@
 
 #import "ArticleReadViewController.h"
 #import "UMCustomSocialManager.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface ArticleReadViewController ()<UIWebViewDelegate,UIScrollViewDelegate>
 
@@ -26,6 +27,11 @@
         self.image = image;
         self.model = model;
         self.title = model.title;
+        
+        // app退到后台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+        // app进入前台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
     }
     return self;
 }
@@ -35,6 +41,17 @@
     // Do any additional setup after loading the view.
     
     [self setupViews];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)setupViews
@@ -141,7 +158,18 @@
 {
     if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - kMainScreenHeight <= 20) {
         [SAVORXAPI postUMHandleWithContentId:@"details_page_article" key:nil value:nil];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     }
+}
+
+//app进入后台运行
+- (void)appWillDidBackground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+//app进入前台运行
+- (void)appBecomeActivePlayground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -149,6 +177,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
 /*
 #pragma mark - Navigation
 
