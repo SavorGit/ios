@@ -11,6 +11,8 @@
 
 @interface ArticleReadViewController : BaseViewController
 
+@property (nonatomic, assign) NSInteger categoryID; //分类ID
+
 - (instancetype)initWithVodModel:(HSVodModel *)model andImage:(UIImage *)image;
 
 @end

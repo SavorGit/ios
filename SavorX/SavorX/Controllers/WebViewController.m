@@ -14,6 +14,7 @@
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "RDLogStatisticsAPI.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate>
 
@@ -28,6 +29,8 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewDidLoad {
@@ -53,6 +56,8 @@
     [self.playView backgroundImage:self.image];
     [self.playView setVideoTitle:self.model.title];
     [self.view addSubview:self.playView];
+    self.playView.model = self.model;
+    self.playView.categoryID = self.categoryID;
     [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(20);
         make.left.mas_equalTo(0);
@@ -95,6 +100,10 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(phoneBindDevice) name:RDDidBindDeviceNotification object:nil];
+    // app退到后台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+    // app进入前台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)phoneBindDevice
@@ -270,6 +279,7 @@
 {
     [super viewDidAppear:animated];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -291,6 +301,7 @@
     }
     
     [super viewDidDisappear:animated];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -331,6 +342,16 @@
 - (void)navBackButtonClicked:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
+}
+
+//app进入后台运行
+- (void)appWillDidBackground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+//app进入前台运行
+- (void)appBecomeActivePlayground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)didReceiveMemoryWarning {

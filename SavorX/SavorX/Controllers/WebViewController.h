@@ -19,5 +19,6 @@ typedef void (^comeFromWebView)(NSDictionary *parDic);
 @property (nonatomic, strong) UIImage * image;
 @property (nonatomic, strong) HSVodModel * model;
 @property (nonatomic, strong) GCCPlayerView * playView; //播放器
+@property (nonatomic, assign) NSInteger categoryID; //分类ID
 
 @end
