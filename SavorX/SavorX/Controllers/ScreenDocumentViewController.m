@@ -23,8 +23,9 @@
 @property (nonatomic, strong) NSURLSessionDataTask * task; //记录当前最后一次请求任务
 @property (nonatomic, strong) UIButton * lockButton;
 @property (nonatomic, assign) CGPoint content;
-@property (nonatomic, copy) NSString * seriesId;
+@property (nonatomic, copy)   NSString * seriesId;
 @property (nonatomic, assign) BOOL isScreen;
+@property (nonatomic, assign) float currentContentH;
 
 @end
 
@@ -57,9 +58,8 @@
     self.webView = [[UIWebView alloc] init];
     self.webView.delegate = self;
     self.webView.scrollView.delegate = self;
-
     [self.view addSubview:self.webView];
-//
+
     //为竖屏添加约束
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
@@ -67,7 +67,7 @@
         make.bottom.mas_equalTo(0);
         make.right.mas_equalTo(0);  
     }];
-
+    
 //    //webView加载文档
     NSURL * url = [NSURL fileURLWithPath:self.path];
     self.webView.scalesPageToFit = YES;
@@ -393,6 +393,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self.webView.scrollView setContentOffset:self.content animated:NO];
+    _currentContentH = self.webView.scrollView.contentSize.height;
 }
 
 //浏览滑动停止的时候
@@ -407,6 +408,7 @@
 //浏览手动停止的时候
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_drag" key:nil value:nil];
     if (!decelerate) {
         if (self.isScreen) {
             [self screenButtonDidClickedWithSuccess:nil failure:nil];
@@ -418,6 +420,15 @@
 //浏览缩放停止的时候
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
 {
+    if (scrollView.contentSize.height < _currentContentH) {
+        NSLog(@"suoxiao");
+        [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_shrink" key:nil value:nil];
+    }else if (scrollView.contentSize.height > _currentContentH){
+        NSLog(@"zengda");
+        [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_blow_up" key:nil value:nil];
+    }
+    
+    _currentContentH = scrollView.contentSize.height;
     if (self.isScreen) {
         [self screenButtonDidClickedWithSuccess:nil failure:nil];
     }

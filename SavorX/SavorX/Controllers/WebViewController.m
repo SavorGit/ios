@@ -279,7 +279,7 @@
 {
     [super viewDidAppear:animated];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -301,7 +301,7 @@
     }
     
     [super viewDidDisappear:animated];
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -344,14 +344,21 @@
     [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
+{
+    if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - kMainScreenHeight <= 50) {
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    }
+}
+
 //app进入后台运行
 - (void)appWillDidBackground{
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 //app进入前台运行
 - (void)appBecomeActivePlayground{
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)didReceiveMemoryWarning {

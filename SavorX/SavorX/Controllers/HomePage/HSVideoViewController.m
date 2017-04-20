@@ -391,7 +391,7 @@
 {
     [super viewDidAppear:animated];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -409,17 +409,17 @@
         [self.playView shouldRelease];
     }
     [super viewDidDisappear:animated];
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 //app进入后台运行
 - (void)appWillDidBackground{
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 //app进入前台运行
 - (void)appBecomeActivePlayground{
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)didReceiveMemoryWarning {
