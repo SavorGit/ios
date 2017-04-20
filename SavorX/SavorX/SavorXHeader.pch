@@ -65,7 +65,7 @@
 #define HotVodCache [NSString stringWithFormat:@"%@/FileCache/HotVodCache.plist", HTTPServerDocument]
 #define HotelCache [NSString stringWithFormat:@"%@/FileCache/HotelCache%ld.plist", HTTPServerDocument, [GlobalData shared].hotelId]
 
-#define RDLogPath [NSString stringWithFormat:@"%@/%@_%@.log", HTTPServerDocument, [GlobalData shared].deviceID, [Helper getCurrentTimeWithFormat:@"yyyyMMddHHmm"]]
+#define RDLogPath [NSString stringWithFormat:@"%@/RDLog.log", HTTPServerDocument]
 #define RDLogCachePath [NSString stringWithFormat:@"%@/RDLogCache", HTTPServerDocument]
 
 #define NSURLCachePath [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingString:@"/NSURLCachePath"]
