@@ -274,10 +274,15 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
 + (void)uploadZipFileToAliyunWithPath:(NSString *)path success:(void(^)())successBlock failure:(void(^)())failureBlock;
 {
     NSString *endpoint = AliynEndPoint;
+    
+    OSSClientConfiguration * conf = [OSSClientConfiguration new];
+    conf.maxRetryCount = 3; // 网络请求遇到异常失败后的重试次数
+    
+    
     // 由阿里云颁发的AccessKeyId/AccessKeySecret构造一个CredentialProvider。
     // 明文设置secret的方式建议只在测试时使用，更多鉴权模式请参考后面的访问控制章节。
     id<OSSCredentialProvider> credential = [[OSSPlainTextAKSKPairCredentialProvider alloc] initWithPlainTextAccessKey:AliyunAccessKeyID secretKey:AliyunAccessKeySecret];
-    OSSClient * client = [[OSSClient alloc] initWithEndpoint:endpoint credentialProvider:credential];
+    OSSClient * client = [[OSSClient alloc] initWithEndpoint:endpoint credentialProvider:credential clientConfiguration:conf];
     
     OSSPutObjectRequest * put = [OSSPutObjectRequest new];
     put.bucketName = @"redian-development";
