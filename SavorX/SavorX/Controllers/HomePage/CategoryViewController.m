@@ -351,8 +351,9 @@
 
 - (void)showSelfAndCreateLog
 {
-    NSArray * indexs = self.tableView.indexPathsForVisibleRows;
-    for (NSIndexPath * indexPath in indexs) {
+    NSArray * cells = self.tableView.visibleCells;
+    for (UITableViewCell * cell in cells) {
+        NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
         HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
         [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     }

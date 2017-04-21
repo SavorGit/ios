@@ -346,7 +346,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
     if ([self.delegate respondsToSelector:@selector(pageController:didEnterViewController:withInfo:)]) {
         [self.delegate pageController:self didEnterViewController:vc withInfo:info];
     }
-    
     // 当控制器创建时，调用延迟加载的代理方法
     if (_initializedIndex == index && [self.delegate respondsToSelector:@selector(pageController:lazyLoadViewController:withInfo:)]) {
         [self.delegate pageController:self lazyLoadViewController:vc withInfo:info];
@@ -1146,6 +1145,9 @@ static NSInteger const kWMControllerCountUndefined = -1;
     self.isInHotel = YES;
     [self reloadData];
     self.selectIndex = 0;
+    if ([self.delegate respondsToSelector:@selector(pageController:didFirstEnterViewController:withInfo:)]) {
+        [self.delegate pageController:self didFirstEnterViewController:self.currentViewController withInfo:@{@"ok":@"yes"}];
+    }
 }
 
 - (void)disconnectDevice
@@ -1237,13 +1239,43 @@ static NSInteger const kWMControllerCountUndefined = -1;
     if (!self.childControllersCount) { return; }
     
     [self wm_postFullyDisplayedNotificationWithCurrentIndex:self.selectIndex];
-    [self didEnterController:self.currentViewController atIndex:self.selectIndex];
+    [self didFirstEnterController:self.currentViewController atIndex:self.selectIndex];
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    
-    if ([GlobalData shared].scene == RDSceneHaveRDBox ||
-        [GlobalData shared].scene == RDSceneHaveDLNA) {
-//       [[HomeAnimationView animationView] show];
+}
+
+// 完全进入控制器 (即停止滑动后调用)
+- (void)didFirstEnterController:(UIViewController *)vc atIndex:(NSInteger)index {
+    if (!self.childControllersCount) { return; }
+    NSDictionary *info = [self infoWithIndex:index];
+    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithDictionary:info];
+    [dict setObject:@(YES) forKey:@"isFirstEnter"];
+    if ([self.delegate respondsToSelector:@selector(pageController:didFirstEnterViewController:withInfo:)]) {
+        [self.delegate pageController:self didFirstEnterViewController:vc withInfo:dict];
     }
+    // 当控制器创建时，调用延迟加载的代理方法
+    if (_initializedIndex == index && [self.delegate respondsToSelector:@selector(pageController:lazyLoadViewController:withInfo:)]) {
+        [self.delegate pageController:self lazyLoadViewController:vc withInfo:info];
+        _initializedIndex = kWMUndefinedIndex;
+    }
+    
+    // 根据 preloadPolicy 预加载控制器
+    if (self.preloadPolicy == WMPageControllerPreloadPolicyNever) { return; }
+    int start = 0;
+    int end = (int)self.childControllersCount - 1;
+    if (index > self.preloadPolicy) {
+        start = (int)index - self.preloadPolicy;
+    }
+    if (self.childControllersCount - 1 > self.preloadPolicy + index) {
+        end = (int)index + self.preloadPolicy;
+    }
+    for (int i = start; i <= end; i++) {
+        // 如果已存在，不需要预加载
+        if (![self.memCache objectForKey:@(i)] && !self.displayVC[@(i)]) {
+            [self wm_addViewControllerAtIndex:i];
+            [self wm_postAddToSuperViewNotificationWithIndex:i];
+        }
+    }
+    _selectIndex = (int)index;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -1362,7 +1394,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
     CGPoint targetP = CGPointMake(_viewWidth*index, 0);
     [self.scrollView setContentOffset:targetP animated:self.pageAnimatable];
     if (!self.pageAnimatable) {
-//        [self didEnterController:self.currentViewController atIndex:index];
         // 由于不触发 -scrollViewDidScroll: 手动处理控制器
         [self wm_removeSuperfluousViewControllersIfNeeded];
         UIViewController *currentViewController = self.displayVC[@(currentIndex)];
@@ -1372,6 +1403,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [self wm_layoutChildViewControllers];
         self.currentViewController = self.displayVC[@(self.selectIndex)];
         [self wm_postFullyDisplayedNotificationWithCurrentIndex:(int)index];
+        [self didEnterController:self.currentViewController atIndex:index];
     }
 }
 
@@ -1417,14 +1449,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
             break;
         }
     }
-}
-
-- (BOOL)hasCacheWithIndex:(NSInteger)index
-{
-    if (![self.memCache objectForKey:@(index)] && !self.displayVC[@(index)]) {
-        return NO;
-    }
-    return YES;
 }
 
 #pragma mark - WMMenuViewDataSource

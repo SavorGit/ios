@@ -72,9 +72,9 @@
         }];
     }
     
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_OPEN type:RDLOGTYPE_APP model:nil categoryID:nil];
-    
     [RDLogStatisticsAPI checkAndUploadLog];
+    
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_OPEN type:RDLOGTYPE_APP model:nil categoryID:nil];
     
     return YES;
 }
@@ -101,33 +101,41 @@
 
 - (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
 {
-    
-    NSInteger index = [[info objectForKey:@"index"] integerValue];
-    BOOL hasCache = [pageController hasCacheWithIndex:index];
-    
     if ([viewController isKindOfClass:[HotTopicViewController class]]) {
         
         [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
         HotTopicViewController * vc = (HotTopicViewController *)viewController;
-        if (hasCache) {
-            [vc showSelfAndCreateLog];
-        }
+        [vc showSelfAndCreateLog];
         
     }else if ([viewController isKindOfClass:[RecommendViewController class]]){
         
         [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
         RecommendViewController * vc = (RecommendViewController *)viewController;
-        if (hasCache) {
-            [vc showSelfAndCreateLog];
-        }
+        [vc showSelfAndCreateLog];
         
     }else if ([viewController isKindOfClass:[CategoryViewController class]]){
         
         CategoryViewController * vc = (CategoryViewController *)viewController;
         [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", vc.categoryID] volume:@"index"];
-        if (hasCache) {
-            [vc showSelfAndCreateLog];
-        }
+        [vc showSelfAndCreateLog];
+    }
+}
+
+- (void)pageController:(WMPageController *)pageController didFirstEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
+{
+    if ([viewController isKindOfClass:[HotTopicViewController class]]) {
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
+        
+    }else if ([viewController isKindOfClass:[RecommendViewController class]]){
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
+        
+    }else if ([viewController isKindOfClass:[CategoryViewController class]]){
+        
+        CategoryViewController * vc = (CategoryViewController *)viewController;
+        [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", vc.categoryID] volume:@"index"];
+        
     }
 }
 
