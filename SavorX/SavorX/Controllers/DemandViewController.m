@@ -394,7 +394,7 @@
 - (void)createBottomView
 {
     self.playBackView = [[UIView alloc] initWithFrame:CGRectMake(0, kMainBoundsHeight - BOTTOMHEIGHT, kMainBoundsWidth, BOTTOMHEIGHT)];
-    self.playBackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7f];
+    self.playBackView.backgroundColor = [UIColor blackColor];
     [self.view addSubview:self.playBackView];
     
     self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];

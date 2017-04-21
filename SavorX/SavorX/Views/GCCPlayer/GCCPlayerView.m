@@ -189,11 +189,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
                 self.canPlay = YES;
                 CGFloat totalTime = self.player.currentItem.duration.value / self.player.currentItem.duration.timescale;
                 [self.controlView setVideoTotalTime:totalTime];
-                if (self.status != GCCPlayerStatusEnd) {
-                    [self play];
-                }
                 [self.controlView videoDidInit];
-                [self pause];
                 [self createGesture];
             }else if (self.player.currentItem.status == AVPlayerItemStatusFailed){
                 //播放失败
@@ -793,9 +789,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 {
     [self.player pause];
     if (self.status != GCCPlayerStatusEnd) {
+        if (self.status == GCCPlayerStatusPlaying) {
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+        }
         self.status = GCCPlayerStatusPause;
     }
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 //视频停止

@@ -99,8 +99,12 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
 
 + (void)RDShareLogModel:(HSVodModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume
 {
-    NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,share,content,%@,%@,%@,%@,ios,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkId:model.cid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID], [RDLogStatisticsAPI checkIsNullOrEmpty:model.name],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
-    [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
+    const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
+    dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
+    dispatch_async(RDLogQueue, ^{
+        NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,share,content,%@,%@,%@,%@,ios,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkId:model.cid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID], [RDLogStatisticsAPI checkIsNullOrEmpty:model.name],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
+        [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
+    });
 }
 
 //开启保存日志的线程队列
@@ -113,17 +117,17 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
 //将日志写入本地log文件
 + (void)RDLogWriteLogFileWith:(NSString *)logItem
 {
-    NSLog(@"%@", [NSThread currentThread]);
-    
     NSFileManager * manager = [NSFileManager defaultManager];
     
     NSString * path = RDLogPath;
     if ([manager fileExistsAtPath:path]) {
         NSData * data = [logItem dataUsingEncoding:NSUTF8StringEncoding];
-        NSFileHandle * handle = [NSFileHandle fileHandleForWritingAtPath:path];
-        [handle seekToEndOfFile];
-        [handle writeData:data];
-        [handle closeFile];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSFileHandle * handle = [NSFileHandle fileHandleForWritingAtPath:path];
+            [handle seekToEndOfFile];
+            [handle writeData:data];
+            [handle closeFile];
+        });
     }else{
         [logItem writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
     }
