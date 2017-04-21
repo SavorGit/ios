@@ -15,6 +15,7 @@
 #import "WebViewController.h"
 #import "WMPageController.h"
 #import "HSVideoViewController.h"
+#import "RDLogStatisticsAPI.h"
 
 #define BOTTOMHEIGHT 50.f
 
@@ -37,6 +38,7 @@
 @property (nonatomic, assign) NSInteger DLNAVolume;
 @property (nonatomic, strong) UIButton * collectButton;
 @property (nonatomic, strong) UIView *maskingView;
+@property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 
 @end
 
@@ -45,6 +47,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _isComplete = NO;
     [self createUI];
     [self setupDatas];
 }
@@ -366,6 +369,7 @@
         make.bottom.mas_equalTo(-BOTTOMHEIGHT);
     }];
     self.webView.delegate = self;
+    self.webView.scrollView.delegate = self;
     
     if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
         return;
@@ -879,6 +883,17 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [MBProgressHUD hideHUDForView:self.webView animated:NO];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
+{
+    if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - self.webView.frame.size.height <= 100) {
+        if (_isComplete == NO) {
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categroyID]];
+            _isComplete = YES;
+        }
+        
+    }
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender

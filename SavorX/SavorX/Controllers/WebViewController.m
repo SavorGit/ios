@@ -35,8 +35,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _isComplete = NO;
     
+    _isComplete = NO;
     [self createUI];
 }
 
