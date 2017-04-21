@@ -37,7 +37,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     self.dataSource = [NSMutableArray new];
     [self setupDatas]; //请求数据
 }
@@ -237,7 +236,9 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-1"];
+    if ([Helper getCurrentControllerInWMPage] == self) {
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-1"];
+    }
     
     return cell;
 }
@@ -333,6 +334,15 @@
     return [Helper autoHeightWith:5.f];
 }
 
+- (void)showSelfAndCreateLog
+{
+    NSArray * indexs = self.tableView.indexPathsForVisibleRows;
+    for (NSIndexPath * indexPath in indexs) {
+        HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-1"];
+    }
+}
+
 #pragma mark -- 懒加载
 - (UITableView *)tableView
 {
@@ -375,12 +385,6 @@
         [self.view addSubview:_TopFreshLabel];
     }
     return _TopFreshLabel;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
 }
 
 - (void)didReceiveMemoryWarning {

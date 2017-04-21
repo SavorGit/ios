@@ -24,8 +24,6 @@
 
 @interface CategoryViewController ()<UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, assign) NSInteger categoryID;
-
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, copy) NSString * cachePath;
@@ -252,7 +250,9 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    if ([Helper getCurrentControllerInWMPage] == self) {
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    }
     
     return cell;
 }
@@ -349,6 +349,15 @@
     return [Helper autoHeightWith:5.f];
 }
 
+- (void)showSelfAndCreateLog
+{
+    NSArray * indexs = self.tableView.indexPathsForVisibleRows;
+    for (NSIndexPath * indexPath in indexs) {
+        HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    }
+}
+
 #pragma mark -- 懒加载
 - (UITableView *)tableView
 {
@@ -393,12 +402,6 @@
         [self.view addSubview:_TopFreshLabel];
     }
     return _TopFreshLabel;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", self.categoryID] volume:@"index"];
 }
 
 - (void)didReceiveMemoryWarning {

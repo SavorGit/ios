@@ -29,8 +29,11 @@
 #import "HSLauchImageOrVideoRequest.h"
 #import "DefalutLaunchViewController.h"
 #import "RDLogStatisticsAPI.h"
+#import "HotTopicViewController.h"
+#import "RecommendViewController.h"
+#import "CategoryViewController.h"
 
-@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate>
+@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate, WMPageControllerDelegate>
 
 @property (nonatomic, assign) BOOL is3D_Touch;
 
@@ -81,6 +84,7 @@
 {
     LeftViewController *leftVc = [[LeftViewController alloc] init];
     WMPageController *centerVC = [[WMPageController alloc] init];
+    centerVC.delegate = self;
     //2、初始化导航控制器
     BaseNavigationController *centerNav = [[BaseNavigationController alloc]initWithRootViewController:centerVC];
     
@@ -93,6 +97,38 @@
     sliderVC.leftViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(66, 66);
     
     return sliderVC;
+}
+
+- (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
+{
+    
+    NSInteger index = [[info objectForKey:@"index"] integerValue];
+    BOOL hasCache = [pageController hasCacheWithIndex:index];
+    
+    if ([viewController isKindOfClass:[HotTopicViewController class]]) {
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
+        HotTopicViewController * vc = (HotTopicViewController *)viewController;
+        if (hasCache) {
+            [vc showSelfAndCreateLog];
+        }
+        
+    }else if ([viewController isKindOfClass:[RecommendViewController class]]){
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
+        RecommendViewController * vc = (RecommendViewController *)viewController;
+        if (hasCache) {
+            [vc showSelfAndCreateLog];
+        }
+        
+    }else if ([viewController isKindOfClass:[CategoryViewController class]]){
+        
+        CategoryViewController * vc = (CategoryViewController *)viewController;
+        [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", vc.categoryID] volume:@"index"];
+        if (hasCache) {
+            [vc showSelfAndCreateLog];
+        }
+    }
 }
 
 -(void)gotoGuidePageView

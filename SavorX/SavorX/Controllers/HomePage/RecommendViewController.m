@@ -81,6 +81,7 @@
 
 - (void)setupDatas
 {
+    
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     
@@ -292,7 +293,9 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-2"];
+    if ([Helper getCurrentControllerInWMPage] == self) {
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-2"];
+    }
     
     return cell;
 }
@@ -451,6 +454,15 @@
     }
 }
 
+- (void)showSelfAndCreateLog
+{
+    NSArray * indexs = self.tableView.indexPathsForVisibleRows;
+    for (NSIndexPath * indexPath in indexs) {
+        HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-2"];
+    }
+}
+
 #pragma mark -- 懒加载
 - (UITableView *)tableView
 {
@@ -556,12 +568,6 @@
         }
         [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -19,6 +19,8 @@
 
 + (UINavigationController *)getRootNavigationController;
 
++ (UIViewController *)getCurrentControllerInWMPage;
+
 //获取当前时间
 + (NSInteger)getCurrentTime;
 

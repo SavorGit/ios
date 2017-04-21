@@ -1362,6 +1362,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     CGPoint targetP = CGPointMake(_viewWidth*index, 0);
     [self.scrollView setContentOffset:targetP animated:self.pageAnimatable];
     if (!self.pageAnimatable) {
+//        [self didEnterController:self.currentViewController atIndex:index];
         // 由于不触发 -scrollViewDidScroll: 手动处理控制器
         [self wm_removeSuperfluousViewControllersIfNeeded];
         UIViewController *currentViewController = self.displayVC[@(currentIndex)];
@@ -1371,7 +1372,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [self wm_layoutChildViewControllers];
         self.currentViewController = self.displayVC[@(self.selectIndex)];
         [self wm_postFullyDisplayedNotificationWithCurrentIndex:(int)index];
-        [self didEnterController:self.currentViewController atIndex:index];
     }
 }
 
@@ -1417,6 +1417,14 @@ static NSInteger const kWMControllerCountUndefined = -1;
             break;
         }
     }
+}
+
+- (BOOL)hasCacheWithIndex:(NSInteger)index
+{
+    if (![self.memCache objectForKey:@(index)] && !self.displayVC[@(index)]) {
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark - WMMenuViewDataSource
