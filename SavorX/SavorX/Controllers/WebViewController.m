@@ -16,11 +16,11 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "RDLogStatisticsAPI.h"
 
-@interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate>
+@interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
 @property (nonatomic, strong) MPVolumeView * volumeView;
-
+@property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 @end
 
 @implementation WebViewController
@@ -36,10 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    self.volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(-100, -100, 40, 40)];
-//    [self.volumeView setHidden:NO];
-//    [self.view addSubview:self.volumeView];
-    
+    _isComplete = NO;
     [self createUI];
 }
 
@@ -90,6 +87,7 @@
         make.width.mas_equalTo(kMainBoundsWidth);
         make.bottom.mas_equalTo(0);
     }];
+    self.webView.scrollView.delegate = self;
     self.webView.delegate = self;
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
@@ -349,8 +347,12 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
 {
-    if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - kMainScreenHeight <= 50) {
-        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - self.webView.frame.size.height <= 100) {
+        if (_isComplete == NO) {
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+            _isComplete = YES;
+        }
+
     }
 }
 
