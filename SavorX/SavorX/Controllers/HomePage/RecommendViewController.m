@@ -36,6 +36,7 @@
 @property (nonatomic, assign) NSInteger maxTime;
 @property (nonatomic, copy) NSString * flag;
 @property (nonatomic, strong) NSMutableDictionary * shouldDemandDict;
+@property (nonatomic, assign) NSInteger lastAdIndex;
 
 @end
 
@@ -406,6 +407,25 @@
     return [Helper autoHeightWith:5.f];
 }
 
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didScrollToIndex:(NSInteger)index
+{
+    static NSInteger lastIndex = 0;
+    
+    HSAdsModel * model = [self.adSourcel objectAtIndex:index];
+    HSVodModel * vodModel = [[HSVodModel alloc] init];
+    vodModel.name = model.name;
+    vodModel.imageURL = model.imageURL;
+    vodModel.cid = model.cid;
+    vodModel.title = model.title;
+    vodModel.duration = model.duration;
+    vodModel.canPlay = 1;
+
+    if ([Helper getCurrentControllerInWMPage] == self && index != lastIndex) {
+        lastIndex = index;
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:vodModel categoryID:@"-2"];
+    }
+}
+
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
 {
     HSAdsModel * model = [self.adSourcel objectAtIndex:index];
@@ -416,6 +436,9 @@
     vodModel.title = model.title;
     vodModel.duration = model.duration;
     vodModel.canPlay = 1;
+    
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:vodModel categoryID:@"-2"];
+    
     if ([GlobalData shared].isBindRD) {
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [SAVORXAPI demandWithURL:STBURL name:model.name type:2 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
