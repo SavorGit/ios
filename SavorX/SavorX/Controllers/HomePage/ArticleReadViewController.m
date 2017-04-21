@@ -16,6 +16,7 @@
 @property (nonatomic, strong) HSVodModel * model;;
 @property (nonatomic, strong) UIButton * collectButton;
 @property (nonatomic, strong) UIWebView * webView;
+@property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 
 @end
 
@@ -38,7 +39,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    _isComplete = NO;
     
     [self setupViews];
 }
@@ -157,8 +158,12 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
 {
     if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - self.webView.frame.size.height <= 100) {
-        [SAVORXAPI postUMHandleWithContentId:@"details_page_article" key:nil value:nil];
-        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+        if (_isComplete == NO) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_article" key:nil value:nil];
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+            _isComplete = YES;
+        }
+
     }
 }
 
