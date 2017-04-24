@@ -72,6 +72,9 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //当前日志的操作时间
 @property (nonatomic, copy) NSString * RDCurrentLogTime;
 
+//当前video日志的操作时间
+@property (nonatomic, copy) NSString * RDCurrentVideoLogTime;
+
 //设备唯一标识
 @property (nonatomic, copy) NSString * deviceID;
 

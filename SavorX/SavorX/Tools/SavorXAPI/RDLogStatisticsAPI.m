@@ -21,11 +21,17 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
     dispatch_async(RDLogQueue, ^{
         if (action == RDLOGACTION_START) {
-            [GlobalData shared].RDCurrentLogTime = [Helper getTimeStamp];
+            
+            if (type == RDLOGTYPE_VIDEO) {
+                [GlobalData shared].RDCurrentVideoLogTime = [Helper getTimeStamp];
+            }else{
+                [GlobalData shared].RDCurrentLogTime = [Helper getTimeStamp];
+            }
+            
             [RDLogStatisticsAPI RDCreateLogWithAction:action type:type model:model categoryID:categoryID needNewTime:NO];
         }else if (action == RDLOGACTION_OPEN) {
             
-            NSString * logitem = [NSString stringWithFormat:@"%@,,,%@,,open,app,,,%@,,ios,",  [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID]];
+            NSString * logitem = [NSString stringWithFormat:@"%@,,,%@,open,app,,,%@,,ios,",  [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID]];
             [RDLogStatisticsAPI RDLogSaveWithLogItem:logitem];
             
         }else if (action == RDLOGACTION_COMPELETE || action == RDLOGACTION_END){
@@ -88,7 +94,13 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
             break;
     }
     
-    NSString * time = [GlobalData shared].RDCurrentLogTime;
+    NSString * time;
+    if (type == RDLOGTYPE_VIDEO) {
+        time = [GlobalData shared].RDCurrentVideoLogTime;
+    }else{
+        time = [GlobalData shared].RDCurrentLogTime;
+    }
+    
     if (needNewTime) {
         time = [Helper getTimeStamp];
     }
@@ -231,7 +243,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
         NSString * logPath = RDLogPath;
         NSString * logCachePath = RDLogCachePath;
         
-        NSString * tempFileName = [NSString stringWithFormat:@"%@_%@", [GlobalData shared].deviceID, [Helper getCurrentTimeWithFormat:@"yyyyMMddHHmm"]];
+        NSString * tempFileName = [NSString stringWithFormat:@"%@_%@", [GlobalData shared].deviceID, [Helper getCurrentTimeWithFormat:@"yyyyMMddHHmmss"]];
         
         NSString * zipPath = [logCachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.zip", tempFileName]];
         
@@ -295,7 +307,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     OSSClient * client = [[OSSClient alloc] initWithEndpoint:endpoint credentialProvider:credential clientConfiguration:conf];
     
     OSSPutObjectRequest * put = [OSSPutObjectRequest new];
-    put.bucketName = @"redian-development";
+    put.bucketName = AliyunBucketName;
     put.objectKey = [NSString stringWithFormat:@"log/mobile/ios/1/%@/%@", [Helper getCurrentTimeWithFormat:@"yyyyMMdd"], path.lastPathComponent];
     put.uploadingFileURL = [NSURL fileURLWithPath:path];
     OSSTask * putTask = [client putObject:put];

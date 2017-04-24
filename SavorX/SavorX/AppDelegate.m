@@ -74,7 +74,9 @@
     
     [RDLogStatisticsAPI checkAndUploadLog];
     
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_OPEN type:RDLOGTYPE_APP model:nil categoryID:nil];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_OPEN type:RDLOGTYPE_APP model:nil categoryID:nil];
+    });
     
     return YES;
 }

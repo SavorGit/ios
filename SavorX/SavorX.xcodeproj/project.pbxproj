@@ -2683,10 +2683,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/UMessage_Sdk_1.4.0",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5963538d-4228-45ed-ac6f-fe59f98f61ec";
-				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
+				PROVISIONING_PROFILE = "93b19460-9998-4e94-9117-2c59612b4220";
+				PROVISIONING_PROFILE_SPECIFIER = TesthotTopicesDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2721,10 +2721,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/UMessage_Sdk_1.4.0",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8b90d375-ca2e-48cb-a477-d4473735e0f9";
-				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "f29f1af0-f167-4237-97c6-f2998d2d3a79";
+				PROVISIONING_PROFILE_SPECIFIER = "TestHotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
