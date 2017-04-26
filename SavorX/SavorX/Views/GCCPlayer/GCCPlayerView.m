@@ -214,7 +214,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             
             // 当缓冲好的时候
             if (self.player.currentItem.playbackLikelyToKeepUp){
-                [self.controlView stopLoading];
+                if (self.status == GCCPlayerStatusPlaying) {
+                    [self.controlView stopLoading];
+                }else{
+                    [self.controlView seekTimeWithPause];
+                }
             }else{
                 [self.controlView loading];
             }
@@ -705,7 +709,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             [self.player play];
         }
         if (self.player.currentItem.playbackLikelyToKeepUp){
-            [self.controlView stopLoading];
+            if (self.status == GCCPlayerStatusPlaying) {
+                [self.controlView stopLoading];
+            }else{
+                [self.controlView seekTimeWithPause];
+            }
         }
         self.isPan = NO;
     }];

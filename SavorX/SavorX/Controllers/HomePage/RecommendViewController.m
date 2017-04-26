@@ -409,7 +409,7 @@
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didScrollToIndex:(NSInteger)index
 {
-    static NSInteger lastIndex = 0;
+//    static NSInteger lastIndex = 0;
     
     HSAdsModel * model = [self.adSourcel objectAtIndex:index];
     HSVodModel * vodModel = [[HSVodModel alloc] init];
@@ -421,10 +421,10 @@
     vodModel.canPlay = 1;
     vodModel.type = -100;
 
-    if ([Helper getCurrentControllerInWMPage] == self && index != lastIndex) {
-        lastIndex = index;
-        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
-    }
+//    if ([Helper getCurrentControllerInWMPage] == self && index != lastIndex) {
+//        lastIndex = index;
+//        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
+//    }
 }
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
@@ -439,7 +439,7 @@
     vodModel.canPlay = 1;
     vodModel.type = -100;
     
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
+//    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
     
     if ([GlobalData shared].isBindRD) {
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];

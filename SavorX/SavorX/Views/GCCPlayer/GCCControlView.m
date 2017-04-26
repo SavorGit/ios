@@ -647,11 +647,17 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 
 - (void)progressSliderTouchBegan:(UISlider *)slider
 {
+    if (!self.slider.isUserInteractionEnabled) {
+        return;
+    }
     self.isSlider = YES;
 }
 
 - (void)progressSliderValueChanged:(UISlider *)slider
 {
+    if (!self.slider.isUserInteractionEnabled) {
+        return;
+    }
     NSInteger currentTime = self.totalTime * self.slider.value;
     // 当前时长进度progress
     NSInteger proMin           = currentTime / 60;//当前秒
@@ -661,6 +667,9 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 
 - (void)progressSliderTouchEnded:(UISlider *)slider
 {
+    if (!self.slider.isUserInteractionEnabled) {
+        return;
+    }
     [self cancleWaitToHiddenToolView];
     [self waitToHiddenToolView];
     self.isSlider = NO;
@@ -681,9 +690,6 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 
 - (void)play
 {
-    if (!self.slider.userInteractionEnabled) {
-        self.slider.userInteractionEnabled = YES;
-    }
     [self.playButton setSelected:YES];
     if (!self.isShow) {
         [UIView animateWithDuration:.5f animations:^{
@@ -725,6 +731,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     NSInteger durMin           = time / 60;//总秒
     NSInteger durSec           = time % 60;//总分钟
     self.totalTimeLabel.text = [NSString stringWithFormat:@"%02zd:%02zd", durMin, durSec];
+    self.slider.userInteractionEnabled = YES;
 }
 
 - (void)setBufferValue:(CGFloat)value
@@ -762,6 +769,12 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     if (self.loadingView.isAnimating) {
         [self.loadingView stopAnimating];
     }
+}
+
+- (void)seekTimeWithPause
+{
+    [self stopLoading];
+    self.playButton.alpha = 1.f;
 }
 
 //播放暂停按钮被点击

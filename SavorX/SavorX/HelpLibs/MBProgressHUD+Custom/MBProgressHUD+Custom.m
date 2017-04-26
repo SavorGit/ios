@@ -277,6 +277,7 @@
 
 + (MBProgressHUD *)showWebLoadingHUDInView:(UIView *)view
 {
+    [UIActivityIndicatorView appearanceWhenContainedIn:[MBProgressHUD class], nil].color = [UIColor blackColor];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
     hud.userInteractionEnabled = NO;
     hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
@@ -287,10 +288,10 @@
 
 + (MBProgressHUD *)showBackDemandInView:(UIView *)view
 {
+    [UIActivityIndicatorView appearanceWhenContainedIn:[MBProgressHUD class], nil].color = [UIColor whiteColor];
     MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:view animated:NO];
     hud.bezelView.layer.cornerRadius = 10;
     hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
-    [UIActivityIndicatorView appearanceWhenContainedIn:[MBProgressHUD class], nil].color = [UIColor whiteColor];
     hud.bezelView.color = [[UIColor blackColor] colorWithAlphaComponent:.6f];
     hud.label.text = @"正在退出";
     hud.label.font = [UIFont systemFontOfSize:15];

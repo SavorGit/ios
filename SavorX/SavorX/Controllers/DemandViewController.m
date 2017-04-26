@@ -750,13 +750,23 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categroyID]];
+    if (self.model.type != -100) {
+        //如果是非酒楼宣传片，则进行统计
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categroyID]];
+        if (self.model.type == 4) {
+            //如果是纯视频，则直接complete
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categroyID]];
+        }
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categroyID]];
+    if (self.model.type != -100) {
+        //如果是非酒楼宣传片，则进行统计
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categroyID]];
+    }
 }
 
 - (void)cheakIsFavorite
@@ -893,12 +903,14 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
 {
-    if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - self.webView.frame.size.height <= 100) {
-        if (_isComplete == NO) {
-            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categroyID]];
-            _isComplete = YES;
+    if (self.model.type != -100) {
+        if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - self.webView.frame.size.height <= 100) {
+            if (_isComplete == NO) {
+                [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categroyID]];
+                _isComplete = YES;
+            }
+            
         }
-        
     }
 }
 
