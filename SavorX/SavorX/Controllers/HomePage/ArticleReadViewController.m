@@ -145,14 +145,14 @@
     return YES;
 }
 
-- (void)navBackButtonClicked:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
-}
-
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [MBProgressHUD hideHUDForView:self.webView animated:NO];
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
