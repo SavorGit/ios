@@ -90,6 +90,11 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
         }
             break;
             
+        case -100:
+        {
+            volume = @"video";
+        }
+            break;
         default:
             break;
     }
@@ -207,6 +212,10 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
             
         case RDLOGTYPE_PAGE:
             typeString = @"page";
+            break;
+            
+        case RDLOGTYPE_ADS:
+            typeString = @"ads";
             break;
             
         default:

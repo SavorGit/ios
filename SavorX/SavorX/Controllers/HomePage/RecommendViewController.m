@@ -419,10 +419,11 @@
     vodModel.title = model.title;
     vodModel.duration = model.duration;
     vodModel.canPlay = 1;
+    vodModel.type = -100;
 
     if ([Helper getCurrentControllerInWMPage] == self && index != lastIndex) {
         lastIndex = index;
-        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:vodModel categoryID:@"-2"];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
     }
 }
 
@@ -436,8 +437,9 @@
     vodModel.title = model.title;
     vodModel.duration = model.duration;
     vodModel.canPlay = 1;
+    vodModel.type = -100;
     
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:vodModel categoryID:@"-2"];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
     
     if ([GlobalData shared].isBindRD) {
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];

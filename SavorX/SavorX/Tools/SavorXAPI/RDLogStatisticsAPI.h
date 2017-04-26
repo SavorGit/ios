@@ -24,7 +24,8 @@ typedef enum : NSUInteger {
     RDLOGTYPE_CONTENT,
     RDLOGTYPE_VIDEO,
     RDLOGTYPE_EXTURL,
-    RDLOGTYPE_PAGE
+    RDLOGTYPE_PAGE,
+    RDLOGTYPE_ADS
 } RDLOGTYPE; //log的类型
 
 @interface RDLogStatisticsAPI : NSObject
