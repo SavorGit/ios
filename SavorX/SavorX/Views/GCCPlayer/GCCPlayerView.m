@@ -870,6 +870,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if (!_imageView) {
         _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.clipsToBounds = YES;
     }
     return _imageView;
 }

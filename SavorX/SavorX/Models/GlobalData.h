@@ -63,6 +63,9 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //当前酒楼ID
 @property (nonatomic, assign) NSInteger hotelId;
 
+//区域ID
+@property (nonatomic, copy) NSString * areaId;
+
 //当前缓存的机顶盒信息
 @property (nonatomic, strong) RDBoxModel * cacheModel;
 

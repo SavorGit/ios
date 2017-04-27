@@ -30,6 +30,9 @@
 //获取当前时间戳
 +(NSString *)getTimeStamp;
 
+//获取当前13位时间戳
++(NSString *)getTimeStampMS;
+
 /** 获取NSBundele中的资源图片 */
 + (UIImage *)imageAtApplicationDirectoryWithName:(NSString *)fileName;
 

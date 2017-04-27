@@ -23,15 +23,15 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
         if (action == RDLOGACTION_START) {
             
             if (type == RDLOGTYPE_VIDEO) {
-                [GlobalData shared].RDCurrentVideoLogTime = [Helper getTimeStamp];
+                [GlobalData shared].RDCurrentVideoLogTime = [Helper getTimeStampMS];
             }else{
-                [GlobalData shared].RDCurrentLogTime = [Helper getTimeStamp];
+                [GlobalData shared].RDCurrentLogTime = [Helper getTimeStampMS];
             }
             
             [RDLogStatisticsAPI RDCreateLogWithAction:action type:type model:model categoryID:categoryID needNewTime:NO];
         }else if (action == RDLOGACTION_OPEN) {
             
-            NSString * logitem = [NSString stringWithFormat:@"%@,,,%@,open,app,,,%@,,ios,",  [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID]];
+            NSString * logitem = [NSString stringWithFormat:@"%@,,,%@,open,app,,,%@,,ios,",  [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID]];
             [RDLogStatisticsAPI RDLogSaveWithLogItem:logitem];
             
         }else if (action == RDLOGACTION_COMPELETE || action == RDLOGACTION_END){
@@ -48,7 +48,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
     dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
     dispatch_async(RDLogQueue, ^{
-        NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,show,page,,%@,%@,,ios,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
+        NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,show,page,,%@,%@,,ios,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
         [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
     });
 }
@@ -107,10 +107,10 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     }
     
     if (needNewTime) {
-        time = [Helper getTimeStamp];
+        time = [Helper getTimeStampMS];
     }
     
-    NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,ios,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:time], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]],[RDLogStatisticsAPI getActionStringWithAction:action],[RDLogStatisticsAPI getTypeStringWithType:type],[RDLogStatisticsAPI checkId:model.cid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],[RDLogStatisticsAPI checkIsNullOrEmpty:model.name],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
+    NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,ios,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:time], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]],[RDLogStatisticsAPI getActionStringWithAction:action],[RDLogStatisticsAPI getTypeStringWithType:type],[RDLogStatisticsAPI checkId:model.cid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],[RDLogStatisticsAPI checkIsNullOrEmpty:model.mediaId],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
     [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
 }
 
@@ -119,7 +119,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
     dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
     dispatch_async(RDLogQueue, ^{
-        NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,share,content,%@,%@,%@,%@,ios,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStamp]], [RDLogStatisticsAPI checkId:model.cid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID], [RDLogStatisticsAPI checkIsNullOrEmpty:model.name],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
+        NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,share,content,%@,%@,%@,%@,ios,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkId:model.cid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID], [RDLogStatisticsAPI checkIsNullOrEmpty:model.mediaId],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
         [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
     });
 }
@@ -137,17 +137,17 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     NSFileManager * manager = [NSFileManager defaultManager];
     
     NSString * path = RDLogPath;
-    if ([manager fileExistsAtPath:path]) {
-        NSData * data = [logItem dataUsingEncoding:NSUTF8StringEncoding];
-        dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([manager fileExistsAtPath:path]) {
+            NSData * data = [logItem dataUsingEncoding:NSUTF8StringEncoding];
             NSFileHandle * handle = [NSFileHandle fileHandleForWritingAtPath:path];
             [handle seekToEndOfFile];
             [handle writeData:data];
             [handle closeFile];
-        });
-    }else{
-        [logItem writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
-    }
+        }else{
+            [logItem writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        }
+    });
 }
 
 //通过动作类型获取log类型值
@@ -284,7 +284,9 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
                         
                         //上传成功后删除log文件
                         NSLog(@"OSS文件上传成功");
-                        [manager removeItemAtPath:logPath error:nil];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [manager removeItemAtPath:logPath error:nil];
+                        });
                     } failure:^{
                         
                         //上传失败后若本地log文件大于200M，则对log进行删除
@@ -292,7 +294,9 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
                         long long folderSize = 0;
                         folderSize += [[manager attributesOfItemAtPath:logPath error:nil] fileSize];
                         if (folderSize > 200 * 1024 * 1024) {
-                            [manager removeItemAtPath:logPath error:nil];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [manager removeItemAtPath:logPath error:nil];
+                            });
                         }
                         
                     }];
@@ -317,7 +321,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     
     OSSPutObjectRequest * put = [OSSPutObjectRequest new];
     put.bucketName = AliyunBucketName;
-    put.objectKey = [NSString stringWithFormat:@"log/mobile/ios/1/%@/%@", [Helper getCurrentTimeWithFormat:@"yyyyMMdd"], path.lastPathComponent];
+    put.objectKey = [NSString stringWithFormat:@"log/mobile/ios/%@/%@/%@", [GlobalData shared].areaId, [Helper getCurrentTimeWithFormat:@"yyyyMMdd"], path.lastPathComponent];
     put.uploadingFileURL = [NSURL fileURLWithPath:path];
     OSSTask * putTask = [client putObject:put];
     [putTask continueWithBlock:^id _Nullable(OSSTask * _Nonnull task) {

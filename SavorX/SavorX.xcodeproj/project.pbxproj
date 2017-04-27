@@ -2685,8 +2685,8 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "fcc84087-6bd4-439a-853d-41f6aca4f912";
-				PROVISIONING_PROFILE_SPECIFIER = TestHotTopicesDevelopment;
+				PROVISIONING_PROFILE = "93b19460-9998-4e94-9117-2c59612b4220";
+				PROVISIONING_PROFILE_SPECIFIER = TesthotTopicesDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;

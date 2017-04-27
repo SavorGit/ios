@@ -51,6 +51,19 @@ static GlobalData* single = nil;
     self.scene = RDSceneNothing;
     self.hotelId = 0;
     self.projectId = @"projectId";
+    
+    [self getAreaId];
+}
+
+- (void)getAreaId
+{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults objectForKey:RDAreaID]) {
+        NSString * areaId = [userDefaults objectForKey:RDAreaID];
+        if (!isEmptyString(areaId)) {
+            _areaId = areaId;
+        }
+    }
 }
 
 - (void)bindToDLNADevice:(DeviceModel *)model
@@ -201,6 +214,16 @@ static GlobalData* single = nil;
 - (void)clearCacheModel
 {
     self.cacheModel = [[RDBoxModel alloc] init];
+}
+
+- (void)setAreaId:(NSString *)areaId
+{
+    if (![_areaId isEqualToString:areaId]) {
+        _areaId = areaId;
+        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:areaId forKey:RDAreaID];
+        [userDefaults synchronize];
+    }
 }
 
 @end

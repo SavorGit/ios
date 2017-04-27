@@ -123,6 +123,7 @@
 #define LastTime @"LastTime"
 #define HasLaunched @"HasLaunched"
 #define keychainID @"HotTopicsKeychainID"
+#define RDAreaID @"RDAreaID"
 #define crashType @"crashType"
 #define RDDownLoadURL @"http://www.rerdian.com/d"
 

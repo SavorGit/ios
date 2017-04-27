@@ -34,6 +34,9 @@
 //开始搜索小平台
 - (void)startSearchPlatform;
 
+//getIP
+- (void)callQRcodeFromPlatform;
+
 //单例
 + (GCCDLNA *)defaultManager;
 

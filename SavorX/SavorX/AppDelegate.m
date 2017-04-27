@@ -72,9 +72,7 @@
         }];
     }
     
-    [RDLogStatisticsAPI checkAndUploadLog];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_OPEN type:RDLOGTYPE_APP model:nil categoryID:nil];
     });
     
@@ -177,6 +175,7 @@
             [GlobalData shared].isWifiStatus = NO;
             [[GlobalData shared] disconnect];
             [[GCCDLNA defaultManager] stopSearchDevice];
+            [[GCCDLNA defaultManager] callQRcodeFromPlatform];
         }
     }];
     
@@ -436,6 +435,8 @@
                 }
             }
             [[GCCDLNA defaultManager] startSearchPlatform];
+        }else{
+            [[GCCDLNA defaultManager] callQRcodeFromPlatform];
         }
         
         //检测当前绑定状态是否断开
@@ -555,6 +556,8 @@
             if (![self.window viewWithTag:1234] && [self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
+        }else{
+            [[GCCDLNA defaultManager] callQRcodeFromPlatform];
         }
         
         //检测当前绑定状态是否断开

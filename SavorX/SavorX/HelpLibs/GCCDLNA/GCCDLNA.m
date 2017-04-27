@@ -11,6 +11,7 @@
 #import "GDataXMLNode.h"
 #import "DeviceModel.h"
 #import "HSGetIpRequest.h"
+#import "RDLogStatisticsAPI.h"
 
 static NSString *ssdpForPlatform = @"238.255.255.250"; //监听小平台ssdp地址
 static NSString *ssdpForDLNA = @"239.255.255.250"; //搜索DLNA设备地址
@@ -28,6 +29,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 @property (nonatomic, strong) NSMutableArray * locationSource;
 @property (nonatomic, strong) GCDAsyncUdpSocket * socket;
 @property (nonatomic, assign) BOOL isSearchPlatform;
+@property (nonatomic, assign) BOOL hasUploadLog;
 
 @end
 
@@ -46,6 +48,7 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 - (instancetype)init
 {
     if (self = [super init]) {
+        self.hasUploadLog = NO;
         self.locationSource = [NSMutableArray new];
         self.socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
         NSError *error = nil;
@@ -168,27 +171,30 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
         NSInteger code = [response[@"code"] integerValue];
         if(code == 10000){
             
-            NSString *ipInfo = response[@"result"][@"ip"];
+            NSString *localIp = response[@"result"][@"localIp"];
+            NSString *hotelId = response[@"result"][@"hotelId"];
             NSString *type = response[@"result"][@"type"];
             NSString *command_port = response[@"result"][@"command_port"];
-            if(![ipInfo isKindOfClass:[NSNull class]] && ipInfo.length > 0){
-                
-                NSArray * array = [ipInfo componentsSeparatedByString:@"*"];
-                if (array.count > 1) {
+            [GlobalData shared].areaId = response[@"result"][@"area_id"];
+            
+            if (!self.hasUploadLog && !isEmptyString([GlobalData shared].areaId)) {
+                [RDLogStatisticsAPI checkAndUploadLog];
+                self.hasUploadLog = YES;
+            }
+            
+            if (!isEmptyString(localIp) && !isEmptyString(hotelId)) {
+                if ([GlobalData shared].secondCallCodeURL.length > 0) {
+                    NSString * codeURL = [NSString stringWithFormat:@"http://%@:%@/%@",localIp,command_port,[type lowercaseString]];
                     
-                    if ([GlobalData shared].secondCallCodeURL.length > 0) {
-                        NSString * codeURL = [NSString stringWithFormat:@"http://%@:%@/%@",[array firstObject],command_port,[type lowercaseString]];
-                        
-                        if (![[GlobalData shared].secondCallCodeURL isEqualToString:codeURL]) {
-                            [GlobalData shared].thirdCallCodeURL = codeURL;
-                        }
-                    }else{
-                        [GlobalData shared].secondCallCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@",[array firstObject],command_port,[type lowercaseString]];
+                    if (![[GlobalData shared].secondCallCodeURL isEqualToString:codeURL]) {
+                        [GlobalData shared].thirdCallCodeURL = codeURL;
                     }
-                    [GlobalData shared].hotelId = [[array objectAtIndex:1] integerValue];
-                    [GlobalData shared].scene = RDSceneHaveRDBox;
-                    self.isSearch = NO;
+                }else{
+                    [GlobalData shared].secondCallCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@",localIp,command_port,[type lowercaseString]];
                 }
+                [GlobalData shared].hotelId = [hotelId integerValue];
+                [GlobalData shared].scene = RDSceneHaveRDBox;
+                self.isSearch = NO;
             }
         }
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {

@@ -411,6 +411,10 @@
 {
 //    static NSInteger lastIndex = 0;
     
+    if (index < 0 && index > self.adSourcel.count - 1) {
+        return;
+    }
+    
     HSAdsModel * model = [self.adSourcel objectAtIndex:index];
     HSVodModel * vodModel = [[HSVodModel alloc] init];
     vodModel.name = model.name;
@@ -429,6 +433,11 @@
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
 {
+    if (index < 0 && index > self.adSourcel.count - 1) {
+        [MBProgressHUD showTextHUDwithTitle:@"暂不支持该操作"];
+        return;
+    }
+    
     HSAdsModel * model = [self.adSourcel objectAtIndex:index];
     HSVodModel * vodModel = [[HSVodModel alloc] init];
     vodModel.name = model.name;

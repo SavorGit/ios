@@ -90,6 +90,13 @@
     return timeString;
 }
 
++ (NSString *)getTimeStampMS
+{
+    NSTimeInterval time = [[NSDate date] timeIntervalSince1970] * 1000;
+    NSString *timeString = [NSString stringWithFormat:@"%.0f", time];
+    return timeString;
+}
+
 //获取NSBundele中的资源图片
 + (UIImage *)imageAtApplicationDirectoryWithName:(NSString *)fileName {
     if(fileName) {

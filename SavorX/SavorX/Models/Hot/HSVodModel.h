@@ -23,5 +23,6 @@
 @property (nonatomic, copy) NSString * shareContent;
 @property (nonatomic, assign) NSInteger createTime;
 @property (nonatomic, assign) NSInteger type;
+@property (nonatomic, copy) NSString * mediaId;
 
 @end
