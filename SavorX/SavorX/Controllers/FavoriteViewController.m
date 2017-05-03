@@ -98,7 +98,7 @@
         [cell videoCanDemand:NO];
     }
     
-    cell.categroyLabel.text = [NSString stringWithFormat:@"# %@", model.category];
+//    cell.categroyLabel.text = [NSString stringWithFormat:@"# %@", model.category];
     [cell.bgImageView sd_setImageWithURL:[NSURL URLWithString:[model.imageURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     cell.titleLabel.text = model.title;
     
