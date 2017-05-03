@@ -18,6 +18,7 @@
 #import "UINavigationBar+PS.h"
 #import "GCCDLNA.h"
 #import "SplashViewController.h"
+#import "OpenInstallSDK.h"
 
 #import "LGSideMenuController.h"
 #import "UIViewController+LGSideMenuController.h"
@@ -32,8 +33,9 @@
 #import "HotTopicViewController.h"
 #import "RecommendViewController.h"
 #import "CategoryViewController.h"
+#import "HSInstallationInforUpload.h"
 
-@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate, WMPageControllerDelegate>
+@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
 @property (nonatomic, assign) BOOL is3D_Touch;
 
@@ -76,8 +78,47 @@
         [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_OPEN type:RDLOGTYPE_APP model:nil categoryID:nil];
     });
     
+    //初始化OpenInstall
+    [OpenInstallSDK setAppKey:@"w7gvub" withDelegate:self];
+    
     return YES;
 }
+
+//通过OpenInstall 获取自定义参数。
+- (void)getInstallParamsFromOpenInstall:(NSDictionary *)params withError: (NSError *)error {
+    if (!error) {
+        NSLog(@"OpenInstall 自定义数据：%@", [params description]);
+        
+        if (params) {
+            NSString *paramsStr = [NSString stringWithFormat:@"%@",params];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"安装参数" message:paramsStr preferredStyle:  UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }]];
+            
+            //弹出提示框(便于调试，调试完成后删除此代码)
+            [self.window.rootViewController presentViewController:alert animated:true completion:nil];
+            
+            NSDictionary *tmpDic = params;
+            NSString *hotelid = isEmptyString(tmpDic[@"hotelid"])?@"":tmpDic[@"hotelid"];
+            NSString *waiterid = isEmptyString(tmpDic[@"waiterid"])?@"":tmpDic[@"waiterid"];
+            NSString *st = isEmptyString(tmpDic[@"st"])?@"":tmpDic[@"st"];
+            HSInstallationInforUpload *request = [[HSInstallationInforUpload alloc] initWithHotelId:hotelid waiterId:waiterid andSt:st];
+            [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+//                NSDictionary * dict = response[@"result"];
+                
+            } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+            }];
+            
+        }
+        
+        
+    } else {
+        NSLog(@"OpenInstall error %@", error);
+    }
+}
+
+
 
 //创建根视图控制器
 - (LGSideMenuController *)createRootViewController

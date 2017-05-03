@@ -67,8 +67,10 @@
 #define HotVodCache [NSString stringWithFormat:@"%@/FileCache/HotVodCache.plist", HTTPServerDocument]
 #define HotelCache [NSString stringWithFormat:@"%@/FileCache/HotelCache%ld.plist", HTTPServerDocument, [GlobalData shared].hotelId]
 
+//#define RDLogPath [NSString stringWithFormat:@"%@/RDLog.log", @"/Users/lijiawei/Desktop"]
 #define RDLogPath [NSString stringWithFormat:@"%@/RDLog.log", HTTPServerDocument]
 #define RDLogCachePath [NSString stringWithFormat:@"%@/RDLogCache", HTTPServerDocument]
+
 
 #define NSURLCachePath [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingString:@"/NSURLCachePath"]
 #define ADIMAGEURL @"http://www.savorx.cn/download/mobile/mobilenew/savorx100cover.jpg" // 封面图片地址
