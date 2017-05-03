@@ -95,6 +95,7 @@
 //-------------------其他-------------------------
 
 #define FileManage [NSFileManager defaultManager]
+#define UserDefault [NSUserDefaults standardUserDefaults]
 
 #define VCBackgroundColor [UIColor colorWithHexString:@"#f5f5f5"]
 #define FontColor [UIColor colorWithHexString:@"#d8b964"]
