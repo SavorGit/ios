@@ -2685,7 +2685,7 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
 				CODE_SIGN_ENTITLEMENTS = SavorX/SavorX.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 922V2U92Z9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2707,10 +2707,10 @@
 					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0649d0e1-5a1d-480d-a519-1bb11a064978";
-				PROVISIONING_PROFILE_SPECIFIER = "TestHotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "b781ec87-faaf-4a81-bbe4-195375e66372";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2746,10 +2746,10 @@
 					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0649d0e1-5a1d-480d-a519-1bb11a064978";
-				PROVISIONING_PROFILE_SPECIFIER = "TestHotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "898d6788-1d6f-434d-a4c1-4b837ac7e1c7";
+				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
