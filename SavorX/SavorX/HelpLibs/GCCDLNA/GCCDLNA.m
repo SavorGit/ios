@@ -175,7 +175,8 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
             NSString *hotelId = response[@"result"][@"hotelId"];
             NSString *type = response[@"result"][@"type"];
             NSString *command_port = response[@"result"][@"command_port"];
-            [GlobalData shared].areaId = response[@"result"][@"area_id"];
+            NSInteger areaIdInt = [response[@"result"][@"area_id"] integerValue];
+            [GlobalData shared].areaId = [NSString stringWithFormat:@"%ld", areaIdInt];
             
             if (!self.hasUploadLog && !isEmptyString([GlobalData shared].areaId)) {
                 [RDLogStatisticsAPI checkAndUploadLog];
