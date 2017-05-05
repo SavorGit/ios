@@ -103,13 +103,6 @@
 - (void)getInstallParamsFromOpenInstall:(NSDictionary *)params withError: (NSError *)error {
     if (!error) {
         if (params) {
-            NSString *paramsStr = [NSString stringWithFormat:@"%@",params];
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"安装参数" message:paramsStr preferredStyle:  UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            }]];
-            //弹出提示框(便于调试，调试完成后删除此代码)
-            [self.window.rootViewController presentViewController:alert animated:true completion:nil];
-            
             NSDictionary *tmpDic = params;
             NSString *hotelid = isEmptyString(tmpDic[@"hotelid"])?@"":tmpDic[@"hotelid"];
             NSString *waiterid = isEmptyString(tmpDic[@"waiterid"])?@"":tmpDic[@"waiterid"];

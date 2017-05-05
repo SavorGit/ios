@@ -41,6 +41,6 @@ typedef enum : NSUInteger {
 
 + (void)checkAndUploadLog;
 
-+ (void)wantToSeeSee;
+//+ (void)wantToSeeSee;
 
 @end

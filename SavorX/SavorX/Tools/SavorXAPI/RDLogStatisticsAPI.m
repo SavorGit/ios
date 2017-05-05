@@ -338,43 +338,43 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     }];
 }
 
-+ (void)wantToSeeSee
-{
-    
-    NSFileManager * manager = [NSFileManager defaultManager];
-    
-    NSString * logPath = RDLogPath;
-    NSString * logCachePath = RDLogCachePath;
-    
-    NSString * tempFileName = [NSString stringWithFormat:@"%@_%@", [GlobalData shared].deviceID, [Helper getCurrentTimeWithFormat:@"yyyyMMddHHmm"]];
-    
-    if ([manager fileExistsAtPath:logCachePath]) {
-        //清理之前的日志压缩文件
-        NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:logCachePath] objectEnumerator];
-        NSString* fileName;
-        while ((fileName = [childFilesEnumerator nextObject]) != nil){
-            NSString* fileAbsolutePath = [logCachePath stringByAppendingPathComponent:fileName];
-            [manager removeItemAtPath:fileAbsolutePath error:nil];
-        }
-    }
-    
-    //对log文件进行压缩
-    if ([manager fileExistsAtPath:logPath]) {
-        
-        if (![manager fileExistsAtPath:logCachePath]) {
-            [manager createDirectoryAtPath:logCachePath withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-        
-        NSString * tempLogPath = [logCachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.log", tempFileName]];
-        
-        [manager copyItemAtPath:logPath toPath:tempLogPath error:nil];
-        
-        if ([manager fileExistsAtPath:tempLogPath]) {
-            
-            [[NSFileManager defaultManager] copyItemAtPath:tempLogPath toPath:[NSString stringWithFormat:@"/Users/guochuncheng/Desktop/%@_%@.log", [GlobalData shared].deviceID, [Helper getCurrentTimeWithFormat:@"yyyyMMddHHmm"]] error:nil];
-            [[NSFileManager defaultManager] removeItemAtPath:logPath error:nil];
-        }
-    }
-}
+//+ (void)wantToSeeSee
+//{
+//    
+//    NSFileManager * manager = [NSFileManager defaultManager];
+//    
+//    NSString * logPath = RDLogPath;
+//    NSString * logCachePath = RDLogCachePath;
+//    
+//    NSString * tempFileName = [NSString stringWithFormat:@"%@_%@", [GlobalData shared].deviceID, [Helper getCurrentTimeWithFormat:@"yyyyMMddHHmm"]];
+//    
+//    if ([manager fileExistsAtPath:logCachePath]) {
+//        //清理之前的日志压缩文件
+//        NSEnumerator *childFilesEnumerator = [[manager subpathsAtPath:logCachePath] objectEnumerator];
+//        NSString* fileName;
+//        while ((fileName = [childFilesEnumerator nextObject]) != nil){
+//            NSString* fileAbsolutePath = [logCachePath stringByAppendingPathComponent:fileName];
+//            [manager removeItemAtPath:fileAbsolutePath error:nil];
+//        }
+//    }
+//    
+//    //对log文件进行压缩
+//    if ([manager fileExistsAtPath:logPath]) {
+//        
+//        if (![manager fileExistsAtPath:logCachePath]) {
+//            [manager createDirectoryAtPath:logCachePath withIntermediateDirectories:YES attributes:nil error:nil];
+//        }
+//        
+//        NSString * tempLogPath = [logCachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.log", tempFileName]];
+//        
+//        [manager copyItemAtPath:logPath toPath:tempLogPath error:nil];
+//        
+//        if ([manager fileExistsAtPath:tempLogPath]) {
+//            
+//            [[NSFileManager defaultManager] copyItemAtPath:tempLogPath toPath:[NSString stringWithFormat:@"/Users/guochuncheng/Desktop/%@_%@.log", [GlobalData shared].deviceID, [Helper getCurrentTimeWithFormat:@"yyyyMMddHHmm"]] error:nil];
+//            [[NSFileManager defaultManager] removeItemAtPath:logPath error:nil];
+//        }
+//    }
+//}
 
 @end
