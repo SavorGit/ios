@@ -412,23 +412,25 @@
 {
 //    static NSInteger lastIndex = 0;
     
-    if (index < 0 && index > self.adSourcel.count - 1) {
-        return;
-    }
-    
-    HSAdsModel * model = [self.adSourcel objectAtIndex:index];
-    HSVodModel * vodModel = [[HSVodModel alloc] init];
-    vodModel.name = model.name;
-    vodModel.imageURL = model.imageURL;
-    vodModel.cid = model.cid;
-    vodModel.title = model.title;
-    vodModel.duration = model.duration;
-    vodModel.canPlay = 1;
-    vodModel.type = -100;
-
-//    if ([Helper getCurrentControllerInWMPage] == self && index != lastIndex) {
-//        lastIndex = index;
-//        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
+//    if (index < 0 && index > self.adSourcel.count - 1) {
+//        return;
+//    }
+//    
+//    if (self.adSourcel && self.adSourcel.count) {
+//        HSAdsModel * model = [self.adSourcel objectAtIndex:index];
+//        HSVodModel * vodModel = [[HSVodModel alloc] init];
+//        vodModel.name = model.name;
+//        vodModel.imageURL = model.imageURL;
+//        vodModel.cid = model.cid;
+//        vodModel.title = model.title;
+//        vodModel.duration = model.duration;
+//        vodModel.canPlay = 1;
+//        vodModel.type = -100;
+//        
+//        if ([Helper getCurrentControllerInWMPage] == self && index != lastIndex) {
+//            lastIndex = index;
+//            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
+//        }
 //    }
 }
 
