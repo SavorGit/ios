@@ -116,7 +116,6 @@
     ScreenDocumentViewController * viewController = [[ScreenDocumentViewController alloc] init];
     viewController.title = [filePath lastPathComponent];
     viewController.path = filePath;
-    [[HomeAnimationView animationView] startScreenWithViewController:viewController];
     [base.navigationController pushViewController:viewController animated:YES];
 }
 
