@@ -1028,7 +1028,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     self.titleViewBtn.frame = CGRectMake(0, 0, 150, 30);
     self.titleViewBtn.userInteractionEnabled = NO;
     [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
-    self.titleViewBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    self.titleViewBtn.titleLabel.font = [UIFont boldSystemFontOfSize:17];
     [self.titleViewBtn addTarget:self action:@selector(disconnentClick) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.titleView = self.titleViewBtn;
     

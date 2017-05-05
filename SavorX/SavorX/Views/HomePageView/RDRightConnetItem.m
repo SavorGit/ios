@@ -28,6 +28,7 @@
     if (self = [super initWithFrame:CGRectMake(0, 0, 80, 35)]) {
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self setTitle:@"连接电视" forState:UIControlStateNormal];
+        self.titleLabel.font = [UIFont systemFontOfSize:16];
         [self addNotifiCation];
     }
     return self;
