@@ -10,6 +10,6 @@
 
 @interface HomePageCell : BasicTableViewCell
 
-@property (nonatomic, strong) UILabel * categroyLabel; //分类显示
+//@property (nonatomic, strong) UILabel * categroyLabel; //分类显示
 
 @end

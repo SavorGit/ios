@@ -114,7 +114,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.1.2</string>
+	<string>2.1.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -149,6 +149,14 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>QQ41ebd640</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>oppd0opu</string>
 			</array>
 		</dict>
 	</array>

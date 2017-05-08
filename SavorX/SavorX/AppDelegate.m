@@ -18,6 +18,7 @@
 #import "UINavigationBar+PS.h"
 #import "GCCDLNA.h"
 #import "SplashViewController.h"
+#import "OpenInstallSDK.h"
 
 #import "LGSideMenuController.h"
 #import "UIViewController+LGSideMenuController.h"
@@ -28,8 +29,13 @@
 #import "VideoLauchMovieViewController.h"
 #import "HSLauchImageOrVideoRequest.h"
 #import "DefalutLaunchViewController.h"
+#import "RDLogStatisticsAPI.h"
+#import "HotTopicViewController.h"
+#import "RecommendViewController.h"
+#import "CategoryViewController.h"
+#import "HSInstallationInforUpload.h"
 
-@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate>
+@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
 @property (nonatomic, assign) BOOL is3D_Touch;
 
@@ -68,14 +74,118 @@
         }];
     }
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_OPEN type:RDLOGTYPE_APP model:nil categoryID:nil];
+    });
+    
+    //初始化OpenInstall
+    [OpenInstallSDK setAppKey:@"w7gvub" withDelegate:self];
+    
+    NSString *isupLoad = [UserDefault objectForKey:@"isUpLoad"];
+    // 上传标识不为空且不为isSuccess字段时，调用接口上传
+    if (![isupLoad isEqualToString:@"isSuccess"] && !isEmptyString(isupLoad)) {
+        NSString *hotelid = [UserDefault objectForKey:@"hotelid"];
+        NSString *waiterid = [UserDefault objectForKey:@"waiterid"];
+        NSString *st = [UserDefault objectForKey:@"st"];
+        [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
+                [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
+                        [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
+                        }];
+                }];
+        }];
+    }
+    
     return YES;
 }
 
+#pragma mark OpenInstall
+//通过OpenInstall 获取自定义参数。
+- (void)getInstallParamsFromOpenInstall:(NSDictionary *)params withError: (NSError *)error {
+    if (!error) {
+        if (params) {
+            NSDictionary *tmpDic = params;
+            NSString *hotelid = isEmptyString(tmpDic[@"hotelid"])?@"":tmpDic[@"hotelid"];
+            NSString *waiterid = isEmptyString(tmpDic[@"waiterid"])?@"":tmpDic[@"waiterid"];
+            NSString *st = isEmptyString(tmpDic[@"st"])?@"":tmpDic[@"st"];
+            
+            // 若不成功继续上传，最多上传三次
+            [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
+                [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
+                    [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
+                    }];
+                }];
+            }];
+        }
+        
+    } else {
+        NSLog(@"OpenInstall error %@", error);
+    }
+}
+
+// 上传安装信息到服务器
+- (void)requestUploadInstallationInfor:(NSString *)hotelid waiterid:(NSString *)waiterid andSt:(NSString *)st failure:(void(^)())failure{
+    
+    HSInstallationInforUpload *request = [[HSInstallationInforUpload alloc] initWithHotelId:hotelid waiterId:waiterid andSt:st];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        NSInteger code = [response[@"code"] integerValue];
+        if (code == 10000) {
+            if ([UserDefault objectForKey:@"hotelid"]) {
+                [UserDefault removeObjectForKey:@"hotelid"];
+            }
+            if ([UserDefault objectForKey:@"waiterid"]) {
+                [UserDefault removeObjectForKey:@"waiterid"];
+            }
+            if ([UserDefault objectForKey:@"st"]) {
+                [UserDefault removeObjectForKey:@"st"];
+            }
+            if ([UserDefault objectForKey:@"isUpLoad"]) {
+                [UserDefault removeObjectForKey:@"isUpLoad"];
+            }
+            
+            [UserDefault setObject:@"isSuccess" forKey:@"isUpLoad"];
+            [UserDefault synchronize];
+            
+        }else{
+            if (![[UserDefault objectForKey:@"isUpLoad"] isEqualToString:@"noSuccess"]) {
+                [UserDefault setObject:@"noSuccess" forKey:@"isUpLoad"];
+                [UserDefault setObject:hotelid forKey:@"hotelid"];
+                [UserDefault setObject:waiterid forKey:@"waiterid"];
+                [UserDefault setObject:st forKey:@"st"];
+                [UserDefault synchronize];
+            }
+            failure();
+        }
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        if (![[UserDefault objectForKey:@"isUpLoad"] isEqualToString:@"noSuccess"]) {
+            [UserDefault setObject:@"noSuccess" forKey:@"isUpLoad"];
+            [UserDefault setObject:hotelid forKey:@"hotelid"];
+            [UserDefault setObject:waiterid forKey:@"waiterid"];
+            [UserDefault setObject:st forKey:@"st"];
+            [UserDefault synchronize];
+        }
+        failure();
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+        if (![[UserDefault objectForKey:@"isUpLoad"] isEqualToString:@"noSuccess"]) {
+            [UserDefault setObject:@"noSuccess" forKey:@"isUpLoad"];
+            [UserDefault setObject:hotelid forKey:@"hotelid"];
+            [UserDefault setObject:waiterid forKey:@"waiterid"];
+            [UserDefault setObject:st forKey:@"st"];
+            [UserDefault synchronize];
+        }
+        failure();
+    }];
+}
+
+#pragma mark RootViewController
 //创建根视图控制器
 - (LGSideMenuController *)createRootViewController
 {
     LeftViewController *leftVc = [[LeftViewController alloc] init];
     WMPageController *centerVC = [[WMPageController alloc] init];
+    centerVC.delegate = self;
     //2、初始化导航控制器
     BaseNavigationController *centerNav = [[BaseNavigationController alloc]initWithRootViewController:centerVC];
     
@@ -88,6 +198,46 @@
     sliderVC.leftViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(66, 66);
     
     return sliderVC;
+}
+
+- (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
+{
+    if ([viewController isKindOfClass:[HotTopicViewController class]]) {
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
+        HotTopicViewController * vc = (HotTopicViewController *)viewController;
+        [vc showSelfAndCreateLog];
+        
+    }else if ([viewController isKindOfClass:[RecommendViewController class]]){
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
+        RecommendViewController * vc = (RecommendViewController *)viewController;
+        [vc showSelfAndCreateLog];
+        
+    }else if ([viewController isKindOfClass:[CategoryViewController class]]){
+        
+        CategoryViewController * vc = (CategoryViewController *)viewController;
+        [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", vc.categoryID] volume:@"index"];
+        [vc showSelfAndCreateLog];
+    }
+}
+
+- (void)pageController:(WMPageController *)pageController didFirstEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
+{
+    if ([viewController isKindOfClass:[HotTopicViewController class]]) {
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
+        
+    }else if ([viewController isKindOfClass:[RecommendViewController class]]){
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
+        
+    }else if ([viewController isKindOfClass:[CategoryViewController class]]){
+        
+        CategoryViewController * vc = (CategoryViewController *)viewController;
+        [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", vc.categoryID] volume:@"index"];
+        
+    }
 }
 
 -(void)gotoGuidePageView
@@ -126,6 +276,7 @@
             [GlobalData shared].isWifiStatus = NO;
             [[GlobalData shared] disconnect];
             [[GCCDLNA defaultManager] stopSearchDevice];
+            [[GCCDLNA defaultManager] callQRcodeFromPlatform];
         }
     }];
     
@@ -164,7 +315,6 @@
 //启动程序欢迎页设置
 - (void)createLaunch
 {
-    
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:HasLaunched] boolValue];
     if (temp) {
         
@@ -385,6 +535,8 @@
                 }
             }
             [[GCCDLNA defaultManager] startSearchPlatform];
+        }else{
+            [[GCCDLNA defaultManager] callQRcodeFromPlatform];
         }
         
         //检测当前绑定状态是否断开
@@ -504,6 +656,8 @@
             if (![self.window viewWithTag:1234] && [self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
+        }else{
+            [[GCCDLNA defaultManager] callQRcodeFromPlatform];
         }
         
         //检测当前绑定状态是否断开

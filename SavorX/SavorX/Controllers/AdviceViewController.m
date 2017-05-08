@@ -8,7 +8,6 @@
 
 #import "AdviceViewController.h"
 #import "UIColor+YYAdditions.h"
-#import "GCCKeyChain.h"
 #import "FeedbackView.h"
 #import "HSSubmitFeedbackRequest.h"
 

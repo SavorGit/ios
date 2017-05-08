@@ -31,18 +31,24 @@
 
 #if TEST_DEV_TYPE
 
+#define AliyunBucketName @"redian-produce"
 #define HOSTURL @"http://mobile.rerdian.com/" //正式地址
 
 #else
 
+#define AliyunBucketName @"redian-development"
 #define HOSTURL @"http://devp.testapi.rerdian.com/"  //测试地址
 
 #endif
 
-#define kVersionCode 2017041701
+#define kVersionCode 2017050501
 
 //-------------------友盟-------------------------
 #define UmengAppkey @"57be6121e0f55a9171000905"
+
+#define AliynEndPoint @"https://oss-cn-beijing.aliyuncs.com/"
+#define AliyunAccessKeyID @"LTAI6QZ3c2qBvmjs"
+#define AliyunAccessKeySecret @"bvE6fELl7Dgiyb5z2rP4tuYWZrQGzM"
 
 #define STBURL [NSString stringWithFormat:@"http://%@",[GlobalData shared].RDBoxDevice.BoxIP] //机顶盒地址
 #define HTTPServerDocument [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
@@ -60,6 +66,12 @@
 #define CategoryCache [NSString stringWithFormat:@"%@/FileCache/categoryCache", HTTPServerDocument]
 #define HotVodCache [NSString stringWithFormat:@"%@/FileCache/HotVodCache.plist", HTTPServerDocument]
 #define HotelCache [NSString stringWithFormat:@"%@/FileCache/HotelCache%ld.plist", HTTPServerDocument, [GlobalData shared].hotelId]
+
+//#define RDLogPath [NSString stringWithFormat:@"%@/RDLog.log", @"/Users/lijiawei/Desktop"]
+#define RDLogPath [NSString stringWithFormat:@"%@/RDLog.log", HTTPServerDocument]
+#define RDLogCachePath [NSString stringWithFormat:@"%@/RDLogCache", HTTPServerDocument]
+
+
 #define NSURLCachePath [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingString:@"/NSURLCachePath"]
 #define ADIMAGEURL @"http://www.savorx.cn/download/mobile/mobilenew/savorx100cover.jpg" // 封面图片地址
 
@@ -83,6 +95,7 @@
 //-------------------其他-------------------------
 
 #define FileManage [NSFileManager defaultManager]
+#define UserDefault [NSUserDefaults standardUserDefaults]
 
 #define VCBackgroundColor [UIColor colorWithHexString:@"#f5f5f5"]
 #define FontColor [UIColor colorWithHexString:@"#d8b964"]
@@ -113,6 +126,7 @@
 #define LastTime @"LastTime"
 #define HasLaunched @"HasLaunched"
 #define keychainID @"HotTopicsKeychainID"
+#define RDAreaID @"RDAreaID"
 #define crashType @"crashType"
 #define RDDownLoadURL @"http://www.rerdian.com/d"
 

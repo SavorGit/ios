@@ -20,7 +20,6 @@
 #import "RDAlertView.h"
 #import "RDCheackSence.h"
 #import "GCCDLNA.h"
-#import "GCCKeyChain.h"
 #import "SDWebImageManager.h"
 
 #define HasAlertScreen @"HasAlertScreen"
@@ -373,7 +372,7 @@
             }
         }];
         
-        NSString *boxURL = [NSString stringWithFormat:@"%@/showCode?deviceId=%@", [GlobalData shared].boxCodeURL, [GCCKeyChain load:keychainID]];
+        NSString *boxURL = [NSString stringWithFormat:@"%@/showCode?deviceId=%@", [GlobalData shared].boxCodeURL, [GlobalData shared].deviceID];
         [SAVORXAPI getWithURL:boxURL parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [hud hideAnimated:NO];
             NSInteger code = [result[@"code"] integerValue];

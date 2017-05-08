@@ -20,6 +20,7 @@
 #import "SXVideoPlayViewController.h"
 #import "ArticleReadViewController.h"
 #import "HSVideoViewController.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface HotTopicViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -36,7 +37,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     self.dataSource = [NSMutableArray new];
     [self setupDatas]; //请求数据
 }
@@ -222,7 +222,7 @@
     
     [cell.bgImageView sd_setImageWithURL:[NSURL URLWithString:[model.imageURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     cell.titleLabel.text = model.title;
-    cell.categroyLabel.text = [NSString stringWithFormat:@"# %@", model.category];
+//    cell.categroyLabel.text = [NSString stringWithFormat:@"# %@", model.category];
     
     if (model.type == 3 || model.type == 4) {
         cell.timeLabel.hidden = NO;
@@ -236,6 +236,10 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    if ([Helper getCurrentControllerInWMPage] == self) {
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-1"];
+    }
+    
     return cell;
 }
 
@@ -243,6 +247,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    
+     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:@"-1"];
     
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
@@ -252,6 +258,7 @@
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = -1;
                 view.model = model;
                 [SAVORXAPI successRing];
                 [[HomeAnimationView animationView] SDSetImage:model.imageURL];
@@ -290,6 +297,7 @@
         if (model.type == 3) {
             WebViewController * web = [[WebViewController alloc] init];
             web.model = model;
+            web.categoryID = -1;
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             web.image = cell.bgImageView.image;
             [self.parentNavigationController pushViewController:web animated:YES];
@@ -297,11 +305,13 @@
         }else if (model.type == 4){
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
+            web.categoryID = -1;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else{
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
+            article.categoryID = -1;
             [self.parentNavigationController pushViewController:article animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
 
@@ -322,6 +332,16 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return [Helper autoHeightWith:5.f];
+}
+
+- (void)showSelfAndCreateLog
+{
+    NSArray * cells = self.tableView.visibleCells;
+    for (UITableViewCell * cell in cells) {
+        NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+        HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-1"];
+    }
 }
 
 #pragma mark -- 懒加载

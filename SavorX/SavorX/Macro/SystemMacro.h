@@ -28,6 +28,9 @@
 
 #define kEncryptOrDecryptKey  @"z&-etago0n!"
 
+#define isNull(x)             (!x || [x isKindOfClass:[NSNull class]])
+#define isEmptyString(x)      (isNull(x) || [x isEqual:@""] || [x isEqual:@"(null)"])
+
 //**渠道号**//
 #define kChannelId     @"10000"
 

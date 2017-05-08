@@ -22,6 +22,7 @@
 #import "ArticleReadViewController.h"
 #import "HSGetLastHotelVodList.h"
 #import "HSVideoViewController.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface RecommendViewController ()<UITableViewDelegate, UITableViewDataSource, SDCycleScrollViewDelegate>
 
@@ -35,6 +36,7 @@
 @property (nonatomic, assign) NSInteger maxTime;
 @property (nonatomic, copy) NSString * flag;
 @property (nonatomic, strong) NSMutableDictionary * shouldDemandDict;
+@property (nonatomic, assign) NSInteger lastAdIndex;
 
 @end
 
@@ -50,6 +52,7 @@
     self.hotelName = @"";
     
     [self setupDatas];
+
 }
 
 - (void)retryToGetData
@@ -80,6 +83,7 @@
 
 - (void)setupDatas
 {
+    
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     
@@ -275,7 +279,7 @@
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
     [cell videoCanDemand:YES];
     
-    cell.categroyLabel.text = [NSString stringWithFormat:@"# %@", model.category];
+//    cell.categroyLabel.text = [NSString stringWithFormat:@"# %@", model.category];
     [cell.bgImageView sd_setImageWithURL:[NSURL URLWithString:[model.imageURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     cell.titleLabel.text = model.title;
     
@@ -291,6 +295,10 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    if ([Helper getCurrentControllerInWMPage] == self) {
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-2"];
+    }
+    
     return cell;
 }
 
@@ -299,6 +307,9 @@
 {
     
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:@"-2"];
+    
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         //如果是绑定状态
@@ -309,6 +320,7 @@
                 [[HomeAnimationView animationView] SDSetImage:model.imageURL];
                 
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = -2;
                 view.model = model;
                 [SAVORXAPI successRing];
                 [[HomeAnimationView animationView] startScreenWithViewController:view];
@@ -355,6 +367,7 @@
         if (model.type == 3) {
             WebViewController * web = [[WebViewController alloc] init];
             web.model = model;
+            web.categoryID = -2;
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             web.image = cell.bgImageView.image;
             [self.parentNavigationController pushViewController:web animated:YES];
@@ -362,11 +375,13 @@
         }else if (model.type == 4){
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
+            web.categoryID = -2;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else{
             BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
             ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
+            article.categoryID = -2;
             [self.parentNavigationController pushViewController:article animated:YES];
              [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
         }
@@ -393,8 +408,39 @@
     return [Helper autoHeightWith:5.f];
 }
 
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didScrollToIndex:(NSInteger)index
+{
+//    static NSInteger lastIndex = 0;
+    
+//    if (index < 0 && index > self.adSourcel.count - 1) {
+//        return;
+//    }
+//    
+//    if (self.adSourcel && self.adSourcel.count) {
+//        HSAdsModel * model = [self.adSourcel objectAtIndex:index];
+//        HSVodModel * vodModel = [[HSVodModel alloc] init];
+//        vodModel.name = model.name;
+//        vodModel.imageURL = model.imageURL;
+//        vodModel.cid = model.cid;
+//        vodModel.title = model.title;
+//        vodModel.duration = model.duration;
+//        vodModel.canPlay = 1;
+//        vodModel.type = -100;
+//        
+//        if ([Helper getCurrentControllerInWMPage] == self && index != lastIndex) {
+//            lastIndex = index;
+//            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
+//        }
+//    }
+}
+
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
 {
+    if (index < 0 && index > self.adSourcel.count - 1) {
+        [MBProgressHUD showTextHUDwithTitle:@"暂不支持该操作"];
+        return;
+    }
+    
     HSAdsModel * model = [self.adSourcel objectAtIndex:index];
     HSVodModel * vodModel = [[HSVodModel alloc] init];
     vodModel.name = model.name;
@@ -403,6 +449,10 @@
     vodModel.title = model.title;
     vodModel.duration = model.duration;
     vodModel.canPlay = 1;
+    vodModel.type = -100;
+    
+//    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
+    
     if ([GlobalData shared].isBindRD) {
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [SAVORXAPI demandWithURL:STBURL name:model.name type:2 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
@@ -410,6 +460,7 @@
                 // 获得当前视频图片  回传
                 
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = -2;
                 view.model = vodModel;
                 [SAVORXAPI successRing];
                 [[HomeAnimationView animationView] SDSetImage:model.imageURL];
@@ -437,6 +488,16 @@
         [[HomeAnimationView animationView] scanQRCode];
     }else {
         [MBProgressHUD showTextHUDwithTitle:@"未连接电视，请稍后重试"];
+    }
+}
+
+- (void)showSelfAndCreateLog
+{
+    NSArray * cells = self.tableView.visibleCells;
+    for (UITableViewCell * cell in cells) {
+        NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+        HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:@"-2"];
     }
 }
 
@@ -528,6 +589,7 @@
                     [[HomeAnimationView animationView] SDSetImage:model.imageURL];
                     
                     DemandViewController *view = [[DemandViewController alloc] init];
+                    view.categroyID = -2;
                     view.model = model;
                     [SAVORXAPI successRing];
                     [[HomeAnimationView animationView] startScreenWithViewController:view];

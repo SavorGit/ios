@@ -14,6 +14,7 @@
 #import "PhotoTool.h"
 #import "ZFBrightnessView.h"
 #import "ZFVolumeView.h"
+#import "RDLogStatisticsAPI.h"
 
 typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     GCCPlayerStatusInitial, //初始状态
@@ -188,11 +189,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
                 self.canPlay = YES;
                 CGFloat totalTime = self.player.currentItem.duration.value / self.player.currentItem.duration.timescale;
                 [self.controlView setVideoTotalTime:totalTime];
-                if (self.status != GCCPlayerStatusEnd) {
-                    [self play];
-                }
                 [self.controlView videoDidInit];
-                [self pause];
                 [self createGesture];
             }else if (self.player.currentItem.status == AVPlayerItemStatusFailed){
                 //播放失败
@@ -217,7 +214,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             
             // 当缓冲好的时候
             if (self.player.currentItem.playbackLikelyToKeepUp){
-                [self.controlView stopLoading];
+                if (self.status == GCCPlayerStatusPlaying) {
+                    [self.controlView stopLoading];
+                }else{
+                    [self.controlView seekTimeWithPause];
+                }
             }else{
                 [self.controlView loading];
             }
@@ -708,7 +709,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             [self.player play];
         }
         if (self.player.currentItem.playbackLikelyToKeepUp){
-            [self.controlView stopLoading];
+            if (self.status == GCCPlayerStatusPlaying) {
+                [self.controlView stopLoading];
+            }else{
+                [self.controlView seekTimeWithPause];
+            }
         }
         self.isPan = NO;
     }];
@@ -781,6 +786,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if (self.canPlay) {
         [self.player play];
         self.status = GCCPlayerStatusPlaying;
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     }else{
         [self pause];
     }
@@ -791,6 +797,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 {
     [self.player pause];
     if (self.status != GCCPlayerStatusEnd) {
+        if (self.status == GCCPlayerStatusPlaying) {
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+        }
         self.status = GCCPlayerStatusPause;
     }
 }
@@ -801,6 +810,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [self.player pause];
     self.status = GCCPlayerStatusEnd;
     [self sliderDidSlideToTime:0];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_VIDEO model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 //set方法，重写以及时获取播放状态并进行不同的处理
@@ -860,6 +870,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if (!_imageView) {
         _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _imageView.clipsToBounds = YES;
     }
     return _imageView;
 }

@@ -7,7 +7,6 @@
 //
 
 #import "HSFirstUseRequest.h"
-#import "GCCKeyChain.h"
 
 @implementation HSFirstUseRequest
 

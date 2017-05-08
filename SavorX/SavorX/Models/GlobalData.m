@@ -51,6 +51,19 @@ static GlobalData* single = nil;
     self.scene = RDSceneNothing;
     self.hotelId = 0;
     self.projectId = @"projectId";
+    
+    [self getAreaId];
+}
+
+- (void)getAreaId
+{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults objectForKey:RDAreaID]) {
+        NSString * areaId = [userDefaults objectForKey:RDAreaID];
+        if (!isEmptyString(areaId)) {
+            _areaId = areaId;
+        }
+    }
 }
 
 - (void)bindToDLNADevice:(DeviceModel *)model
@@ -120,13 +133,25 @@ static GlobalData* single = nil;
     if (![[[NSUserDefaults standardUserDefaults] objectForKey:hasUseHotelID] boolValue]
         && hotelId != 0) {
         
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:hasUseHotelID];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
         HSFirstUseRequest * request = [[HSFirstUseRequest alloc] initWithHotelId:hotelId];
         [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-            [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:hasUseHotelID];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            
         } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
             
+            if ([[response objectForKey:@"code"] integerValue] == 20001) {
+                
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasUseHotelID];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            
         } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+            
+            [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasUseHotelID];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             
         }];
     }
@@ -201,6 +226,16 @@ static GlobalData* single = nil;
 - (void)clearCacheModel
 {
     self.cacheModel = [[RDBoxModel alloc] init];
+}
+
+- (void)setAreaId:(NSString *)areaId
+{
+    if (![_areaId isEqualToString:areaId]) {
+        _areaId = areaId;
+        NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:areaId forKey:RDAreaID];
+        [userDefaults synchronize];
+    }
 }
 
 @end

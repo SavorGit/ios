@@ -258,7 +258,7 @@
     }
     
     //检测图片,PDF,DOC,EXCEL,PPT,VIDEO,PHASSET缓存
-    NSArray * paths = @[ImageDocument, PDFDocument, DOCDocument, EXCELDocument, PPTDocument, VideoDocument, SystemImage, CategoryListCache, CategoryCache, HotVodCache, HotelCache];
+    NSArray * paths = @[ImageDocument, PDFDocument, DOCDocument, EXCELDocument, PPTDocument, VideoDocument, SystemImage, CategoryListCache, FileCachePath, HotVodCache, HotelCache];
     for (NSString * path in paths) {
         BOOL isDirectory;
         if ([manager fileExistsAtPath:path isDirectory:&isDirectory]) {
@@ -297,7 +297,7 @@
     folderSize += [self fileSizeAtPath:VideoDocument];
     folderSize += [self fileSizeAtPath:SystemImage];
     folderSize += [self fileSizeAtPath:CategoryListCache];
-    folderSize += [self fileSizeAtPath:CategoryCache];
+    folderSize += [self fileSizeAtPath:FileCachePath];
     folderSize += [self fileSizeAtPath:HotVodCache];
     folderSize += [self fileSizeAtPath:HotelCache];
     

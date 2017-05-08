@@ -110,6 +110,8 @@ typedef NS_ENUM(NSUInteger, WMPageControllerPreloadPolicy) {
  */
 - (void)pageController:(WMPageController * _Nonnull)pageController didEnterViewController:(__kindof UIViewController * _Nonnull)viewController withInfo:(NSDictionary * _Nonnull)info;
 
+- (void)pageController:(WMPageController *_Nullable)pageController didFirstEnterViewController:(__kindof UIViewController *_Nullable)viewController withInfo:(NSDictionary *_Nullable)info;
+
 @end
 
 @interface WMPageController : HomeBaseViewController <WMMenuViewDelegate, WMMenuViewDataSource, UIScrollViewDelegate, WMPageControllerDataSource, WMPageControllerDelegate>
@@ -313,6 +315,7 @@ typedef NS_ENUM(NSUInteger, WMPageControllerPreloadPolicy) {
     (会引起一个小问题，第一个和最后一个控制器会变得可以斜滑, 还未解决)
  */
 @property (assign, nonatomic) BOOL otherGestureRecognizerSimultaneously;
+
 /**
  *  构造方法，请使用该方法创建控制器. 或者实现数据源方法. /
  *  Init method，recommend to use this instead of `-init`. Or you can implement datasource by yourself.

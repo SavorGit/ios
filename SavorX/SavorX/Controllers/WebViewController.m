@@ -14,12 +14,13 @@
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "RDLogStatisticsAPI.h"
 
-@interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate>
+@interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
 @property (nonatomic, strong) MPVolumeView * volumeView;
-
+@property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 @end
 
 @implementation WebViewController
@@ -28,15 +29,14 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    self.volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(-100, -100, 40, 40)];
-//    [self.volumeView setHidden:NO];
-//    [self.view addSubview:self.volumeView];
-    
+    _isComplete = NO;
     [self createUI];
 }
 
@@ -53,6 +53,8 @@
     [self.playView backgroundImage:self.image];
     [self.playView setVideoTitle:self.model.title];
     [self.view addSubview:self.playView];
+    self.playView.model = self.model;
+    self.playView.categoryID = self.categoryID;
     [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(20);
         make.left.mas_equalTo(0);
@@ -85,6 +87,7 @@
         make.width.mas_equalTo(kMainBoundsWidth);
         make.bottom.mas_equalTo(0);
     }];
+    self.webView.scrollView.delegate = self;
     self.webView.delegate = self;
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
@@ -95,6 +98,10 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(phoneBindDevice) name:RDDidBindDeviceNotification object:nil];
+    // app退到后台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+    // app进入前台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)phoneBindDevice
@@ -105,6 +112,7 @@
         [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = self.categoryID;
                 view.model = self.model;
                 [SAVORXAPI successRing];
                 [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
@@ -124,6 +132,7 @@
         [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
             
             DemandViewController *view = [[DemandViewController alloc] init];
+            view.categroyID = self.categoryID;
             view.model = self.model;
             [SAVORXAPI successRing];
             [[HomeAnimationView animationView] startScreenWithViewController:view];
@@ -204,7 +213,7 @@
 - (void)videoShouldBeShare
 {
     [UMCustomSocialManager defaultManager].image = self.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
@@ -212,7 +221,7 @@
 - (void)shareAction:(UIButton *)button
 {
     [UMCustomSocialManager defaultManager].image = self.image;
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0];
+    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
@@ -234,6 +243,7 @@
                 if ([[result objectForKey:@"result"] integerValue] == 0) {
                     
                     DemandViewController *view = [[DemandViewController alloc] init];
+                    view.categroyID = self.categoryID;
                     view.model = self.model;
                     [SAVORXAPI successRing];
                     [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
@@ -270,6 +280,7 @@
 {
     [super viewDidAppear:animated];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -291,6 +302,7 @@
     }
     
     [super viewDidDisappear:animated];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -331,6 +343,27 @@
 - (void)navBackButtonClicked:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
+{
+    if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - self.webView.frame.size.height <= 100) {
+        if (_isComplete == NO) {
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+            _isComplete = YES;
+        }
+
+    }
+}
+
+//app进入后台运行
+- (void)appWillDidBackground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+//app进入前台运行
+- (void)appBecomeActivePlayground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)didReceiveMemoryWarning {

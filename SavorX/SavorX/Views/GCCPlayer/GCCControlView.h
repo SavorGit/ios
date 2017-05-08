@@ -36,6 +36,7 @@
 - (void)stop; //停止
 - (void)loading; //缓冲
 - (void)stopLoading; //停止缓冲
+- (void)seekTimeWithPause; //暂停状态拖动到某一时间
 
 - (void)videoDidInit;
 

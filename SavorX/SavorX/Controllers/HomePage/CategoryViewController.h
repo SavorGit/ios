@@ -10,8 +10,12 @@
 
 @interface CategoryViewController : HomeBaseViewController
 
+@property (nonatomic, assign) NSInteger categoryID;
+
 @property (nonatomic, strong) UINavigationController * parentNavigationController;
 
 - (instancetype)initWithCategoryID:(NSInteger)categoryID;
+
+- (void)showSelfAndCreateLog;
 
 @end

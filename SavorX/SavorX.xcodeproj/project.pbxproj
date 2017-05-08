@@ -134,6 +134,7 @@
 		065ECD7E1E8A8EAF0062E29D /* index4_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD7D1E8A8EAF0062E29D /* index4_1.jpg */; };
 		065ECD801E8A8EB80062E29D /* index5_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD7F1E8A8EB80062E29D /* index5_1.jpg */; };
 		065ECD821E8A8EC10062E29D /* indexp6_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD811E8A8EC10062E29D /* indexp6_1.jpg */; };
+		066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */; };
 		067CB3BF1D603B7200094BB8 /* DiscoverCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */; };
 		067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB7141D60B21C00094BB8 /* OpenFileTool.m */; };
 		06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */; };
@@ -316,6 +317,8 @@
 		962EFA9C1E88A4F20074450A /* shanchu2.png in Resources */ = {isa = PBXBuildFile; fileRef = 962EFA961E88A4F20074450A /* shanchu2.png */; };
 		962EFA9D1E88A4F20074450A /* shanchu2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 962EFA971E88A4F20074450A /* shanchu2@2x.png */; };
 		962EFA9E1E88A4F20074450A /* shanchu2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 962EFA981E88A4F20074450A /* shanchu2@3x.png */; };
+		963AEA161EB2DEA700578A0A /* libOpenInstallSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 963AEA141EB2DEA700578A0A /* libOpenInstallSDK.a */; };
+		964177951EB86C2100AA839E /* HSInstallationInforUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 964177941EB86C2100AA839E /* HSInstallationInforUpload.m */; };
 		96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */; };
 		9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */; };
 		9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A71E7159210060CE0B /* DocGuided.png */; };
@@ -536,6 +539,8 @@
 		065ECD7D1E8A8EAF0062E29D /* index4_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index4_1.jpg; sourceTree = "<group>"; };
 		065ECD7F1E8A8EB80062E29D /* index5_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index5_1.jpg; sourceTree = "<group>"; };
 		065ECD811E8A8EC10062E29D /* indexp6_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = indexp6_1.jpg; sourceTree = "<group>"; };
+		066379D61EA8963C00E91313 /* RDLogStatisticsAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDLogStatisticsAPI.h; sourceTree = "<group>"; };
+		066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDLogStatisticsAPI.m; sourceTree = "<group>"; };
 		067CB3BD1D603B7200094BB8 /* DiscoverCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverCollectionViewCell.h; sourceTree = "<group>"; };
 		067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverCollectionViewCell.m; sourceTree = "<group>"; };
 		067CB7131D60B21C00094BB8 /* OpenFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenFileTool.h; sourceTree = "<group>"; };
@@ -821,6 +826,10 @@
 		962EFA961E88A4F20074450A /* shanchu2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shanchu2.png; sourceTree = "<group>"; };
 		962EFA971E88A4F20074450A /* shanchu2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shanchu2@2x.png"; sourceTree = "<group>"; };
 		962EFA981E88A4F20074450A /* shanchu2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shanchu2@3x.png"; sourceTree = "<group>"; };
+		963AEA141EB2DEA700578A0A /* libOpenInstallSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOpenInstallSDK.a; sourceTree = "<group>"; };
+		963AEA151EB2DEA700578A0A /* OpenInstallSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInstallSDK.h; sourceTree = "<group>"; };
+		964177931EB86C2100AA839E /* HSInstallationInforUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSInstallationInforUpload.h; sourceTree = "<group>"; };
+		964177941EB86C2100AA839E /* HSInstallationInforUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSInstallationInforUpload.m; sourceTree = "<group>"; };
 		96608FF01E80D47900D28A61 /* VideoLauchMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLauchMovieViewController.h; sourceTree = "<group>"; };
 		96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLauchMovieViewController.m; sourceTree = "<group>"; };
 		9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoGuidedTwoDimensionalCode.h; sourceTree = "<group>"; };
@@ -839,6 +848,7 @@
 				069CDFDB1D991FAB00A0C1A6 /* UserNotifications.framework in Frameworks */,
 				0628B0A41D715DB900DB63D4 /* UMMobClick.framework in Frameworks */,
 				06BD18D91E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a in Frameworks */,
+				963AEA161EB2DEA700578A0A /* libOpenInstallSDK.a in Frameworks */,
 				0614AA3F1D66AC310080D710 /* ImageIO.framework in Frameworks */,
 				0614AA3D1D66A7790080D710 /* libstdc++.tbd in Frameworks */,
 				0614AA3B1D66A76E0080D710 /* libz.tbd in Frameworks */,
@@ -1002,6 +1012,8 @@
 			children = (
 				06153E051D530D9A00BB127F /* SAVORXAPI.h */,
 				06153E061D530D9A00BB127F /* SAVORXAPI.m */,
+				066379D61EA8963C00E91313 /* RDLogStatisticsAPI.h */,
+				066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */,
 			);
 			path = SavorXAPI;
 			sourceTree = "<group>";
@@ -1243,6 +1255,8 @@
 				064F8B921E532838006280FD /* HSGetIpRequest.m */,
 				960EDB141E8361F700717406 /* HSLauchImageOrVideoRequest.h */,
 				960EDB151E8361F700717406 /* HSLauchImageOrVideoRequest.m */,
+				964177931EB86C2100AA839E /* HSInstallationInforUpload.h */,
+				964177941EB86C2100AA839E /* HSInstallationInforUpload.m */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -1456,6 +1470,7 @@
 		06FA30E71D3E0C70001F5B37 /* SavorX */ = {
 			isa = PBXGroup;
 			children = (
+				963AEA131EB2DEA600578A0A /* OpenInstallSDK */,
 				4772FF891DFA570D00758697 /* Additional */,
 				4780582A1DF989850091C305 /* Helper */,
 				478058311DF989850091C305 /* Macro */,
@@ -2018,6 +2033,15 @@
 			path = DemandBottomControl;
 			sourceTree = "<group>";
 		};
+		963AEA131EB2DEA600578A0A /* OpenInstallSDK */ = {
+			isa = PBXGroup;
+			children = (
+				963AEA141EB2DEA700578A0A /* libOpenInstallSDK.a */,
+				963AEA151EB2DEA700578A0A /* OpenInstallSDK.h */,
+			);
+			path = OpenInstallSDK;
+			sourceTree = "<group>";
+		};
 		9670C4A21E70F5DE0060CE0B /* videoGuide */ = {
 			isa = PBXGroup;
 			children = (
@@ -2113,6 +2137,9 @@
 								enabled = 1;
 							};
 							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.SafariKeychain = {
 								enabled = 1;
 							};
 						};
@@ -2401,6 +2428,7 @@
 				0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */,
 				060E42111E4CB03E009A94FC /* SDCollectionViewCell.m in Sources */,
 				96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */,
+				066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */,
 				06FA33951D3E171D001F5B37 /* DDASLLogger.m in Sources */,
 				063FA3371D839F1100D03548 /* BadView.m in Sources */,
 				061E0FE91DFFEBD10072605F /* RDBoxModel.m in Sources */,
@@ -2433,6 +2461,7 @@
 				0639C6F01D794603002A04C1 /* AnimationImageView.m in Sources */,
 				474C76371DFB9BED001129C9 /* NoNetWorkView.m in Sources */,
 				060C37361D6C42930058BBBE /* GCDAsyncUdpSocket.m in Sources */,
+				964177951EB86C2100AA839E /* HSInstallationInforUpload.m in Sources */,
 				478058361DF989850091C305 /* DesUtil.m in Sources */,
 				47D6F6531E4ACD450030C8C4 /* voideoPlayFooterView.m in Sources */,
 				06FA30EA1D3E0C70001F5B37 /* main.m in Sources */,
@@ -2675,11 +2704,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SavorX/HelpLibs/UMessage_Sdk_1.4.0",
+					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5963538d-4228-45ed-ac6f-fe59f98f61ec";
+				PROVISIONING_PROFILE = "b781ec87-faaf-4a81-bbe4-195375e66372";
 				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2713,12 +2743,13 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SavorX/HelpLibs/UMessage_Sdk_1.4.0",
+					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8b90d375-ca2e-48cb-a477-d4473735e0f9";
-				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "a9b07ad7-2902-4449-90fd-3b5c922f42ed";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDistribution;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

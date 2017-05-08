@@ -7,7 +7,6 @@
 //
 
 #import "HSSubmitFeedbackRequest.h"
-#import "GCCKeyChain.h"
 
 @implementation HSSubmitFeedbackRequest
 
@@ -15,7 +14,7 @@
     if (self = [super init]) {
         self.methodName = [@"feed/feedback/feedInsert?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setValue:[GCCKeyChain load:keychainID] forParamKey:@"deviceId"];
+        [self setValue:[GlobalData shared].deviceID forParamKey:@"deviceId"];
         [self setValue:suggestion forParamKey:@"suggestion"];
         [self setValue:contactWay forParamKey:@"contactWay"];
         

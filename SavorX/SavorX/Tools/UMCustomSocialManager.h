@@ -34,7 +34,7 @@
  *  controller   需要展示视图的控制器
  *  type         页面来源
  */
-- (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type;
+- (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type categroyID:(NSInteger)categroyID;
 
 - (void)shareRDApplicationToPlatform:(UMSocialPlatformType)type currentViewController:(UIViewController *)VC;
 

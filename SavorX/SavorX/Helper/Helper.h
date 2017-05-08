@@ -19,6 +19,8 @@
 
 + (UINavigationController *)getRootNavigationController;
 
++ (UIViewController *)getCurrentControllerInWMPage;
+
 //获取当前时间
 + (NSInteger)getCurrentTime;
 
@@ -27,6 +29,9 @@
 
 //获取当前时间戳
 +(NSString *)getTimeStamp;
+
+//获取当前13位时间戳
++(NSString *)getTimeStampMS;
 
 /** 获取NSBundele中的资源图片 */
 + (UIImage *)imageAtApplicationDirectoryWithName:(NSString *)fileName;
@@ -55,6 +60,8 @@
 + (NSString *)getURLPublic;
 
 + (NSString *)getHTTPHeaderValue;
+
++ (NSString *)getCurrentTimeWithFormat:(NSString *)format;
 
 + (void)interfaceOrientation:(UIInterfaceOrientation)orientation;
 

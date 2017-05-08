@@ -14,7 +14,6 @@
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
-#import "GCCKeyChain.h"
 #import "PhotoTool.h"
 
 @implementation OpenFileTool
@@ -117,7 +116,6 @@
     ScreenDocumentViewController * viewController = [[ScreenDocumentViewController alloc] init];
     viewController.title = [filePath lastPathComponent];
     viewController.path = filePath;
-    [[HomeAnimationView animationView] startScreenWithViewController:viewController];
     [base.navigationController pushViewController:viewController animated:YES];
 }
 
