@@ -61,10 +61,16 @@
     [self setupDatas];
 }
 
+//页面顶部下弹状态栏显示
 - (void)showTopFreshLabelWithTitle:(NSString *)title
 {
+    //移除当前动画
     [self.TopFreshLabel.layer removeAllAnimations];
+    
+    //取消延时重置状态栏
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetTopFreshLabel) object:nil];
+    
+    //重新设置状态栏下弹动画
     self.TopFreshLabel.text = title;
     self.TopFreshLabel.frame = CGRectMake(0, -35, kMainBoundsWidth, 35);
     [UIView animateWithDuration:.5f animations:^{
@@ -74,6 +80,7 @@
     }];
 }
 
+//重置页面顶部下弹状态栏
 - (void)resetTopFreshLabel
 {
     [UIView animateWithDuration:.5f animations:^{
@@ -83,13 +90,14 @@
 
 - (void)setupDatas
 {
-    
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     
     [self.dataSource removeAllObjects];
     MBProgressHUD * hud;
     if ([[NSFileManager defaultManager] fileExistsAtPath:HotelCache]) {
+        
+        //如果本地缓存的有数据，则先从本地读取缓存的数据
         NSDictionary * dict = [NSDictionary dictionaryWithContentsOfFile:HotelCache];
         
         //解析获取首页数据列表
@@ -124,7 +132,10 @@
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
     
+    //初始化数据接口
     HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId flag:nil];
+    
+    //开始通过网络获取首页的数据
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary * dict = response[@"result"];
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
@@ -176,22 +187,29 @@
     }];
 }
 
+//上拉加载更多的处理
 - (void)getMoreData
 {
+    //初始化数据接口
     HSHotelVodListRequest * request = [[HSHotelVodListRequest alloc] initWithHotelID:[GlobalData shared].hotelId createTime:self.maxTime];
+    
+    //开始通过网络获取首页的数据
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary * dict = response[@"result"];
         
+        //获取返回的条目数组
         NSArray * vodArray = [dict objectForKey:@"vodList"];
         
         if (vodArray.count == 0) {
+            //如果返回的数量为0，则状态为没有更多数据了
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
             return;
         }
         
         if (vodArray) {
+            //如果返回的结构存在，则将数据添加至数据源中，刷新当前列表
             for (NSInteger i = 0; i < vodArray.count; i++) {
                 NSDictionary * vodDict = [vodArray objectAtIndex:i];
                 HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
@@ -211,9 +229,13 @@
     }];
 }
 
+//刷新首页数据
 - (void)refreshDataSource
 {
+    //初始化数据接口
     HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId flag:self.flag];
+    
+    //请求数据接口
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary * dict = response[@"result"];
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
@@ -274,9 +296,11 @@
     }];
 }
 
+//设置顶部滚动轮播器
 - (void)setupTopScrollView
 {
     if (self.adSourcel.count == 0) {
+        //如果顶部ad的数据源为0，则不进行数据刷新
         return;
     }
     
@@ -284,10 +308,13 @@
     
     NSMutableArray * array = [NSMutableArray new];
     
+    //如果顶部ad数量不为0，则取出对应下标的imageURL进行轮播展示
     for (NSInteger i = 0; i < self.adSourcel.count; i++) {
         HSAdsModel * model = [self.adSourcel objectAtIndex:i];
         [array addObject:model.imageURL];
     }
+    
+    //设置顶部滚动轮播器
     self.scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 5, width, [Helper autoHomePageCellImageHeight]) imageURLStringsGroup:array];
     [self.scrollView setHotelTitle:self.hotelName];
     self.scrollView.delegate = self;

@@ -43,15 +43,20 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     
+    //初始化应用window窗口
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
+    //设置lauch页面
     [self createLaunch];
     
+    //配置APP相关信息
     [SAVORXAPI configApplication];
     
+    //请求启动效果，图片或者视频
     [self requestGetLauchImageOrVideo];
     
+    //处理启动时候的相关事务
     [self handleLaunchWorkWithOptions:launchOptions];
     
     return YES;
