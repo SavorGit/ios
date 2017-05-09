@@ -326,7 +326,6 @@
 		9670C4AC1E7159210060CE0B /* DocGuided@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A91E7159210060CE0B /* DocGuided@3x.png */; };
 		96BCE3BE1EC0128E00B1A3F7 /* SmashEggsGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */; };
 		96BCE3CA1EC19DE100B1A3F7 /* HSEggsResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */; };
-		96BCE3CD1EC1A36100B1A3F7 /* HSForEggsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3CC1EC1A36100B1A3F7 /* HSForEggsModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -844,8 +843,6 @@
 		96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmashEggsGameViewController.m; sourceTree = "<group>"; };
 		96BCE3C81EC19DE100B1A3F7 /* HSEggsResultModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSEggsResultModel.h; sourceTree = "<group>"; };
 		96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSEggsResultModel.m; sourceTree = "<group>"; };
-		96BCE3CB1EC1A36100B1A3F7 /* HSForEggsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSForEggsModel.h; sourceTree = "<group>"; };
-		96BCE3CC1EC1A36100B1A3F7 /* HSForEggsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSForEggsModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2076,8 +2073,6 @@
 			children = (
 				96BCE3C81EC19DE100B1A3F7 /* HSEggsResultModel.h */,
 				96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */,
-				96BCE3CB1EC1A36100B1A3F7 /* HSForEggsModel.h */,
-				96BCE3CC1EC1A36100B1A3F7 /* HSForEggsModel.m */,
 			);
 			path = EggsGame;
 			sourceTree = "<group>";
@@ -2449,7 +2444,6 @@
 				9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */,
 				06EA38BC1D5971DA0081DDCC /* AlbumListViewController.m in Sources */,
 				96BCE3BE1EC0128E00B1A3F7 /* SmashEggsGameViewController.m in Sources */,
-				96BCE3CD1EC1A36100B1A3F7 /* HSForEggsModel.m in Sources */,
 				061FEFD71E2DAD64003CD111 /* CategoryViewController.m in Sources */,
 				0690766B1E51FE8E00CA1AC4 /* PhotoManyCollectionViewCell.m in Sources */,
 				064F0E2B1DD3087700D9EFD1 /* AddSliderCollectionViewCell.m in Sources */,
