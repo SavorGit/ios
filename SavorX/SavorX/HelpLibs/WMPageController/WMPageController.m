@@ -1502,6 +1502,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     return _homeButton;
 }
 
+//收到节目的推送，跳转至相关的页面
 - (void)didReceiveRemoteNotification:(HSVodModel *)model
 {
     NSInteger categoryID = -1;

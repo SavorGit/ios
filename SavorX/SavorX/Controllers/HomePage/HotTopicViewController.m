@@ -41,10 +41,16 @@
     [self setupDatas]; //请求数据
 }
 
+//页面顶部下弹状态栏显示
 - (void)showTopFreshLabelWithTitle:(NSString *)title
 {
+    //移除当前动画
     [self.TopFreshLabel.layer removeAllAnimations];
+    
+    //取消延时重置状态栏
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetTopFreshLabel) object:nil];
+    
+    //重新设置状态栏下弹动画
     self.TopFreshLabel.text = title;
     self.TopFreshLabel.frame = CGRectMake(0, -35, kMainBoundsWidth, 35);
     [UIView animateWithDuration:.5f animations:^{
@@ -54,6 +60,7 @@
     }];
 }
 
+//重置页面顶部下弹状态栏
 - (void)resetTopFreshLabel
 {
     [UIView animateWithDuration:.5f animations:^{
@@ -66,21 +73,28 @@
     [self.dataSource removeAllObjects];
     MBProgressHUD * hud;
     if ([[NSFileManager defaultManager] fileExistsAtPath:HotVodCache]) {
+        
+        //如果本地缓存的有数据，则先从本地读取缓存的数据
         NSDictionary *dataDict = [NSDictionary dictionaryWithContentsOfFile:HotVodCache];
         NSArray *listAry = [dataDict objectForKey:@"list"];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
+        
+        //解析获取热点数据列表
         for(NSDictionary *dict in listAry){
-            
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
+        
         [self.tableView reloadData];
     }else{
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
     
+    //初始化数据接口
     HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithFlag:nil];
+    
+    //请求热点数据
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
@@ -88,8 +102,9 @@
         NSArray *listAry = [dataDict objectForKey:@"list"];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
+        
+        //解析获取热点数据列表
         for(NSDictionary *dict in listAry){
-            
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
@@ -112,9 +127,13 @@
     }];
 }
 
+//上拉获取更多数据
 - (void)getMoreData
 {
+    //初始化数据接口
     HSVodListRequest * request = [[HSVodListRequest alloc] initWithCreateTime:self.maxTime];
+    
+    //请求数据接口
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary *dic = (NSDictionary *)response;
@@ -122,15 +141,17 @@
         NSArray *listAry = [dataDict objectForKey:@"list"];
         
         if (listAry.count == 0) {
+            //如果数据的数量为0，则状态为没有更多数据了
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
             return;
         }
         
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
+        
+        //如果数据数量不为0，则将数据添加至数据源，刷新当前列表
         NSMutableArray *mutableArr = [NSMutableArray array];
         for(NSDictionary *dict in listAry){
-            
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [mutableArr addObject:model];
         }
@@ -148,9 +169,13 @@
     }];
 }
 
+//下拉刷新页面数据
 - (void)refreshDataSource
 {
+    //初始化数据接口
     HSGetLastVodList * request = [[HSGetLastVodList alloc] initWithFlag:self.flag];
+    
+    //请求数据接口
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
@@ -158,8 +183,9 @@
         NSArray *listAry = [dataDict objectForKey:@"list"];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
+        
+        //解析当前数据，获得列表展示内容
         for(NSDictionary *dict in listAry){
-            
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }

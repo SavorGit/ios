@@ -52,10 +52,16 @@
     [self setupDatas];
 }
 
+//页面顶部下弹状态栏显示
 - (void)showTopFreshLabelWithTitle:(NSString *)title
 {
+    //移除当前动画
     [self.TopFreshLabel.layer removeAllAnimations];
+    
+    //取消延时重置状态栏
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetTopFreshLabel) object:nil];
+    
+    //重新设置状态栏下弹动画
     self.TopFreshLabel.text = title;
     self.TopFreshLabel.frame = CGRectMake(0, -35, kMainBoundsWidth, 35);
     [UIView animateWithDuration:.5f animations:^{
@@ -65,6 +71,7 @@
     }];
 }
 
+//重置页面顶部下弹状态栏
 - (void)resetTopFreshLabel
 {
     [UIView animateWithDuration:.5f animations:^{
@@ -79,6 +86,8 @@
     [self.dataSource removeAllObjects];
     MBProgressHUD * hud;
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
+        
+        //如果本地缓存的有数据，则先从本地读取缓存的数据
         NSDictionary * dataDict = [NSDictionary dictionaryWithContentsOfFile:self.cachePath];
         NSArray * listAry = dataDict[@"list"];
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
@@ -93,8 +102,10 @@
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
     
+    //初始化数据接口
     HSLatestTopicListRequest * request = [[HSLatestTopicListRequest alloc] initWithCategoryId:self.categoryID flag:nil];
     
+    //请求数据接口
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
@@ -103,8 +114,9 @@
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
         self.flag = [dataDict objectForKey:@"flag"];
         [SAVORXAPI saveFileOnPath:self.cachePath withDictionary:dataDict];
+        
+        //解析获取当前分类下数据列表
         for(NSDictionary *dict in listAry){
-            
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
@@ -129,9 +141,13 @@
     }];
 }
 
+//下拉刷新页面数据
 - (void)refreshData
 {
+    //初始化数据接口
     HSLatestTopicListRequest * request = [[HSLatestTopicListRequest alloc] initWithCategoryId:self.categoryID flag:self.flag];
+    
+    //请求数据接口
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary * dataDict = [dic objectForKey:@"result"];
@@ -140,8 +156,9 @@
         self.flag = [dataDict objectForKey:@"flag"];
         [SAVORXAPI saveFileOnPath:self.cachePath withDictionary:dataDict];
         [self.dataSource removeAllObjects];
+        
+        //解析获取当前分类下数据列表
         for(NSDictionary *dict in listAry){
-            
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
@@ -173,25 +190,29 @@
     [self setupDatas];
 }
 
-//根据页面和页面大小获取页面数据
+//上拉获取更多数据
 - (void)getMoreData
 {
+    //初始化数据接口
     HSTopicListRequest * request = [[HSTopicListRequest alloc] initWithCategoryId:self.categoryID time:self.maxTime];
     
+    //请求数据接口
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary * dataDict = [dic objectForKey:@"result"];
         NSArray *listAry = dataDict[@"list"];
         
         if (listAry.count == 0) {
+            //如果获取数据的数量为0，则状态为没有更多数据了
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
             return;
         }
         
         self.maxTime = [[dataDict objectForKey:@"maxTime"] integerValue];
+        
+        //如果获取的数据数量不为0，则将数据添加至数据源，刷新当前列表
         for(NSDictionary *dict in listAry){
-            
             HSVodModel *model = [[HSVodModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
