@@ -325,7 +325,6 @@
 		9670C4AB1E7159210060CE0B /* DocGuided@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A81E7159210060CE0B /* DocGuided@2x.png */; };
 		9670C4AC1E7159210060CE0B /* DocGuided@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A91E7159210060CE0B /* DocGuided@3x.png */; };
 		96BCE3BE1EC0128E00B1A3F7 /* SmashEggsGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */; };
-		96BCE3C11EC04EC500B1A3F7 /* GameResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3C01EC04EC500B1A3F7 /* GameResultViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -841,8 +840,6 @@
 		9670C4A91E7159210060CE0B /* DocGuided@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DocGuided@3x.png"; sourceTree = "<group>"; };
 		96BCE3BC1EC0128E00B1A3F7 /* SmashEggsGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmashEggsGameViewController.h; sourceTree = "<group>"; };
 		96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmashEggsGameViewController.m; sourceTree = "<group>"; };
-		96BCE3BF1EC04EC500B1A3F7 /* GameResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameResultViewController.h; sourceTree = "<group>"; };
-		96BCE3C01EC04EC500B1A3F7 /* GameResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameResultViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2063,8 +2060,6 @@
 			children = (
 				96BCE3BC1EC0128E00B1A3F7 /* SmashEggsGameViewController.h */,
 				96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */,
-				96BCE3BF1EC04EC500B1A3F7 /* GameResultViewController.h */,
-				96BCE3C01EC04EC500B1A3F7 /* GameResultViewController.m */,
 			);
 			path = SmashingEggsGame;
 			sourceTree = "<group>";
@@ -2520,7 +2515,6 @@
 				06FB9D611DF97D0E0053BE0A /* MBProgressHUD+Custom.m in Sources */,
 				474C76351DFB9BED001129C9 /* NoDataView.m in Sources */,
 				476F44C51E2DBC1000F99090 /* LeftViewController.m in Sources */,
-				96BCE3C11EC04EC500B1A3F7 /* GameResultViewController.m in Sources */,
 				0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */,
 				478058511DF99A5B0091C305 /* HSLatestTopicListRequest.m in Sources */,
 				4772FF901DFA9C5900758697 /* BaseView.m in Sources */,

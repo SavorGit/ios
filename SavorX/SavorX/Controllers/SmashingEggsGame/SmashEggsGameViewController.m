@@ -7,7 +7,7 @@
 //
 
 #import "SmashEggsGameViewController.h"
-#import "GameResultViewController.h"
+//#import "GameResultViewController.h"
 
 @interface SmashEggsGameViewController ()
 
