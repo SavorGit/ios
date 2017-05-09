@@ -38,7 +38,7 @@
 - (void)playOrientationPortraitWithOnlyVideo;
 - (void)hiddenTVButton;
 
-- (void)backgroundImage:(UIImage *)image;
+- (void)backgroundImage:(NSString *)url;
 
 - (void)shouldRelease;
 

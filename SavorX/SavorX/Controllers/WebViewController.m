@@ -50,7 +50,7 @@
     self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
     self.playView.backgroundColor = [UIColor blackColor];
     self.playView.delegate = self;
-    [self.playView backgroundImage:self.image];
+    [self.playView backgroundImage:self.model.imageURL];
     [self.playView setVideoTitle:self.model.title];
     [self.view addSubview:self.playView];
     self.playView.model = self.model;
@@ -212,7 +212,6 @@
 
 - (void)videoShouldBeShare
 {
-    [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
@@ -220,7 +219,6 @@
 //分享按钮被点击
 - (void)shareAction:(UIButton *)button
 {
-    [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }

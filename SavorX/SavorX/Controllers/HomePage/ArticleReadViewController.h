@@ -13,6 +13,6 @@
 
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 
-- (instancetype)initWithVodModel:(HSVodModel *)model andImage:(UIImage *)image;
+- (instancetype)initWithVodModel:(HSVodModel *)model;
 
 @end

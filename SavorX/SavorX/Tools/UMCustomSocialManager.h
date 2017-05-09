@@ -12,8 +12,6 @@
 
 @interface UMCustomSocialManager : NSObject
 
-@property (nonatomic, strong) UIImage * image;
-
 /**
  *  单例       用户管理友盟分享视图
  */

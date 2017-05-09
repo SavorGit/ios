@@ -9,6 +9,7 @@
 #import "GCCControlView.h"
 #import "UIColor+YYAdditions.h"
 #import "Masonry.h"
+#import "UIImageView+WebCache.h"
 
 static const CGFloat ControlViewHiddenAnimationTime = 0.3f;
 static const CGFloat ControlViewHiddenWaitTime = 4.f;
@@ -353,9 +354,9 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     }
 }
 
-- (void)backgroundImage:(UIImage *)image
+- (void)backgroundImage:(NSString *)url
 {
-    [self.imageView setImage:image];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     [self.endView insertSubview:self.imageView belowSubview:self.replayButton];
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
