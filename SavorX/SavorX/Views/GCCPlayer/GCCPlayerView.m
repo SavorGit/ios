@@ -15,6 +15,7 @@
 #import "ZFBrightnessView.h"
 #import "ZFVolumeView.h"
 #import "RDLogStatisticsAPI.h"
+#import "UIImageView+WebCache.h"
 
 typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     GCCPlayerStatusInitial, //初始状态
@@ -94,11 +95,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     return self;
 }
 
-- (void)backgroundImage:(UIImage *)image
+- (void)backgroundImage:(NSString *)url
 {
-    [self.imageView setImage:image];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     [self insertSubview:self.imageView belowSubview:self.controlView];
-    [self.controlView backgroundImage:image];
+    [self.controlView backgroundImage:url];
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];

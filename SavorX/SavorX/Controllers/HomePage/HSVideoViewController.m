@@ -26,7 +26,6 @@
 @property (nonatomic, strong) UIView * videoView;
 @property (nonatomic, strong) UILabel * titleLabel;
 @property (nonatomic, strong) HSVodModel * model;
-@property (nonatomic, strong) UIImage * image;
 
 @end
 
@@ -40,11 +39,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-- (instancetype)initWithModel:(HSVodModel *)model image:(UIImage *)image
+- (instancetype)initWithModel:(HSVodModel *)model
 {
     if (self = [super init]) {
         self.model = model;
-        self.image = image;
     }
     return self;
 }
@@ -71,7 +69,7 @@
     self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
     self.playView.backgroundColor = [UIColor blackColor];
     [self.playView setVideoTitle:self.model.title];
-    [self.playView backgroundImage:self.image];
+    [self.playView backgroundImage:self.model.imageURL];
     [self.videoView addSubview:self.playView];
     self.playView.delegate = self;
     self.playView.model = self.model;
@@ -253,7 +251,6 @@
 
 - (void)videoShouldBeShare
 {
-    [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
@@ -316,7 +313,6 @@
 
 - (void)shareAction:(UIButton *)button
 {
-    [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
 }
 

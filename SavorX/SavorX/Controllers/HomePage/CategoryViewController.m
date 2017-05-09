@@ -264,8 +264,6 @@
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     if ([GlobalData shared].isBindRD && model.canPlay == 1) {
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
-        // 获得当前视频图片，回传
-        BasicTableViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
         
         //如果是绑定状态
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
@@ -277,7 +275,7 @@
                 view.categroyID = self.categoryID;
                 view.model = model;
                 [SAVORXAPI successRing];
-                [HomeAnimationView animationView].currentImage = cell.bgImageView.image;
+                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
                 [[HomeAnimationView animationView] startScreenWithViewController:view];
                 [self.parentNavigationController pushViewController:view animated:YES];
                 [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
@@ -313,19 +311,15 @@
             WebViewController * web = [[WebViewController alloc] init];
             web.model = model;
             web.categoryID = self.categoryID;
-            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            web.image = cell.bgImageView.image;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else if (model.type == 4){
-            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
+            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model];
             web.categoryID = self.categoryID;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else{
-            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
+            ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model];
             article.categoryID = self.categoryID;
             [self.parentNavigationController pushViewController:article animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];

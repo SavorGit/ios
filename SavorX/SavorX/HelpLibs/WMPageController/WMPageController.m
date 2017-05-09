@@ -10,7 +10,6 @@
 #import "UIViewController+LGSideMenuController.h"
 #import "CategoryViewController.h"
 #import "HotTopicViewController.h"
-#import "RecommendViewController.h"
 #import "HSCategoryListRequest.h"
 #import "HSCategoryModel.h"
 #import "RecommendViewController.h"
@@ -21,6 +20,11 @@
 #import "HomeAnimationView.h"
 #import "RDAlertView.h"
 #import "RDRightConnetItem.h"
+#import "GCCDLNA.h"
+#import "WebViewController.h"
+#import "HSVideoViewController.h"
+#import "DemandViewController.h"
+#import "ArticleReadViewController.h"
 
 NSString *const WMControllerDidAddToSuperViewNotification = @"WMControllerDidAddToSuperViewNotification";
 NSString *const WMControllerDidFullyDisplayedNotification = @"WMControllerDidFullyDisplayedNotification";
@@ -907,6 +911,33 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     [self wm_addMenuView];
     
+    [self handleLaunchWork];
+}
+
+- (void)handleLaunchWork
+{
+    if ([GlobalData shared].is3DTouchEnable) {
+        
+        if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
+            
+            if ([GlobalData shared].isWifiStatus) {
+                [[GCCDLNA defaultManager] startSearchPlatform];
+            }
+            
+            [[HomeAnimationView animationView] scanQRCode];
+            
+        }else if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.homeButton popOptionsWithAnimation];
+            });
+            
+        }
+    }
+    
+    if ([GlobalData shared].isLaunchedByNotification) {
+        [self didReceiveRemoteNotification:[GlobalData shared].launchModel];
+    }
 }
 
 - (void)creatSmallWindow{
@@ -1469,6 +1500,62 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [self.view addSubview:_homeButton];
     }
     return _homeButton;
+}
+
+- (void)didReceiveRemoteNotification:(HSVodModel *)model
+{
+    NSInteger categoryID = -1;
+    
+    if ([GlobalData shared].isBindRD && model.canPlay == 1) {
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
+        
+        //如果是绑定状态
+        [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+        
+        [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            if ([[result objectForKey:@"result"] integerValue] == 0) {
+                
+                DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = categoryID;
+                view.model = model;
+                [SAVORXAPI successRing];
+                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+                [[HomeAnimationView animationView] startScreenWithViewController:view];
+                [self.navigationController pushViewController:view animated:YES];
+                [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
+            }else{
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+            }
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+        }];
+        
+    }else{
+        [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
+        //如果不是绑定状态
+        if (model.type == 3) {
+            WebViewController * web = [[WebViewController alloc] init];
+            web.model = model;
+            web.categoryID = categoryID;
+            
+            [self.navigationController pushViewController:web animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
+        }else if (model.type == 4){
+            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model];
+            
+            [self.navigationController pushViewController:web animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
+        }else{
+            ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model];
+            article.categoryID = categoryID;
+            
+            [self.navigationController pushViewController:article animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
+            
+        }
+    }
 }
 
 @end

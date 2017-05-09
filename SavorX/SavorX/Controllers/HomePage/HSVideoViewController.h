@@ -18,6 +18,6 @@ typedef void (^comeFromWebView)(NSDictionary *parDic);
 
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 
-- (instancetype)initWithModel:(HSVodModel *)model image:(UIImage *)image;
+- (instancetype)initWithModel:(HSVodModel *)model;
 
 @end

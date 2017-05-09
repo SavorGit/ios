@@ -91,18 +91,30 @@
     MBProgressHUD * hud;
     if ([[NSFileManager defaultManager] fileExistsAtPath:HotelCache]) {
         NSDictionary * dict = [NSDictionary dictionaryWithContentsOfFile:HotelCache];
+        
+        //解析获取首页数据列表
         NSArray * vodArray = [dict objectForKey:@"vodList"];
         for (NSInteger i = 0; i < vodArray.count; i++) {
             NSDictionary * vodDict = [vodArray objectAtIndex:i];
             HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
             [self.dataSource addObject:model];
         }
+        
+        //解析获取顶部广告列表
         NSArray * adArray = [dict objectForKey:@"adsList"];
         for (NSInteger i = 0; i < adArray.count; i++) {
             NSDictionary * adDict = [adArray objectAtIndex:i];
             HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
             [self.adSourcel addObject:model];
         }
+        
+        //解析获取顶部奖品item
+        NSDictionary * awardInfo = [dict objectForKey:@"award"];
+        if (awardInfo) {
+            HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
+            [self.adSourcel addObject:model];
+        }
+        
         self.hotelName = [dict objectForKey:@"hotelName"];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
@@ -118,18 +130,30 @@
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
         [self.dataSource removeAllObjects];
         [self.adSourcel removeAllObjects];
+        
+        //解析获取首页数据列表
         NSArray * vodArray = [dict objectForKey:@"vodList"];
         for (NSInteger i = 0; i < vodArray.count; i++) {
             NSDictionary * vodDict = [vodArray objectAtIndex:i];
             HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
             [self.dataSource addObject:model];
         }
+        
+        //解析获取顶部广告列表
         NSArray * adArray = [dict objectForKey:@"adsList"];
         for (NSInteger i = 0; i < adArray.count; i++) {
             NSDictionary * adDict = [adArray objectAtIndex:i];
             HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
             [self.adSourcel addObject:model];
         }
+        
+        //解析获取顶部奖品item
+        NSDictionary * awardInfo = [dict objectForKey:@"award"];
+        if (awardInfo) {
+            HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
+            [self.adSourcel addObject:model];
+        }
+        
         self.hotelName = [dict objectForKey:@"hotelName"];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
@@ -195,18 +219,30 @@
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
         [self.dataSource removeAllObjects];
         [self.adSourcel removeAllObjects];
+        
+        //解析获取首页数据列表
         NSArray * vodArray = [dict objectForKey:@"vodList"];
         for (NSInteger i = 0; i < vodArray.count; i++) {
             NSDictionary * vodDict = [vodArray objectAtIndex:i];
             HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
             [self.dataSource addObject:model];
         }
+        
+        //解析获取顶部广告列表
         NSArray * adArray = [dict objectForKey:@"adsList"];
         for (NSInteger i = 0; i < adArray.count; i++) {
             NSDictionary * adDict = [adArray objectAtIndex:i];
             HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
             [self.adSourcel addObject:model];
         }
+        
+        //解析获取顶部奖品item
+        NSDictionary * awardInfo = [dict objectForKey:@"award"];
+        if (awardInfo) {
+            HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
+            [self.adSourcel addObject:model];
+        }
+        
         self.hotelName = [dict objectForKey:@"hotelName"];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
@@ -368,19 +404,15 @@
             WebViewController * web = [[WebViewController alloc] init];
             web.model = model;
             web.categoryID = -2;
-            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            web.image = cell.bgImageView.image;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else if (model.type == 4){
-            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
+            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model];
             web.categoryID = -2;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else{
-            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
+            ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model];
             article.categoryID = -2;
             [self.parentNavigationController pushViewController:article animated:YES];
              [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
@@ -442,6 +474,13 @@
     }
     
     HSAdsModel * model = [self.adSourcel objectAtIndex:index];
+    
+    if (model.type == HSAdsModelType_AWARD) {
+        //如果是奖品类型
+        
+        return;
+    }
+    
     HSVodModel * vodModel = [[HSVodModel alloc] init];
     vodModel.name = model.name;
     vodModel.imageURL = model.imageURL;

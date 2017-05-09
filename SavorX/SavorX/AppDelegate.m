@@ -11,17 +11,13 @@
 
 #import <UMSocialCore/UMSocialCore.h>
 #import "UMessage.h"
-#import "GCCGetInfo.h"
 #import <UserNotifications/UserNotifications.h>
 
-#import "SXDlnaViewController.h"
-#import "UINavigationBar+PS.h"
 #import "GCCDLNA.h"
 #import "SplashViewController.h"
 #import "OpenInstallSDK.h"
 
 #import "LGSideMenuController.h"
-#import "UIViewController+LGSideMenuController.h"
 #import "BaseNavigationController.h"
 #import "LeftViewController.h"
 #import "WMPageController.h"
@@ -56,8 +52,17 @@
     
     [self requestGetLauchImageOrVideo];
     
+    [self handleLaunchWorkWithOptions:launchOptions];
+    
+    return YES;
+}
+
+//处理启动时候的相关事务
+- (void)handleLaunchWorkWithOptions:(NSDictionary *)launchOptions
+{
     //友盟推送
     [UMessage startWithAppkey:UmengAppkey launchOptions:launchOptions];
+    [UMessage setAutoAlert:NO];
     [UMessage registerForRemoteNotifications];
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10")) {
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
@@ -74,6 +79,7 @@
         }];
     }
     
+    //延时写入启动日志，为防止写入后，下面的立即将“open”操作进行上传
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_OPEN type:RDLOGTYPE_APP model:nil categoryID:nil];
     });
@@ -88,14 +94,12 @@
         NSString *waiterid = [UserDefault objectForKey:@"waiterid"];
         NSString *st = [UserDefault objectForKey:@"st"];
         [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
+            [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
                 [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
-                        [self requestUploadInstallationInfor:hotelid waiterid:waiterid andSt:st failure:^{
-                        }];
                 }];
+            }];
         }];
     }
-    
-    return YES;
 }
 
 #pragma mark OpenInstall
@@ -295,12 +299,44 @@
     }else{
         //应用处于前台时的本地推送接受
     }
-    
+    completionHandler(UNNotificationPresentationOptionSound|UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionAlert);
 }
 
 //iOS10新增：处理后台点击通知的代理方法
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler{
     NSDictionary * userInfo = response.notification.request.content.userInfo;
+    
+    if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+        
+    }else if ([[userInfo objectForKey:@"type"] integerValue] == 2){
+        
+        //如果type等于2，代表是一个进入详情的item推送
+        NSDictionary * dict = [userInfo objectForKey:@"params"];
+        
+        if (dict && [dict isKindOfClass:[NSDictionary class]]) {
+            //如果收到的推送是一个节目的推送则初始化该节目的一个model
+            HSVodModel * model = [[HSVodModel alloc] initWithDictionary:dict];
+            
+            if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
+                //如果根视图是LGSide，则可以正常进行跳转
+                LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
+                BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
+                if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
+                    [baseNa popToRootViewControllerAnimated:NO];
+                }
+                if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
+                    WMPageController * page = (WMPageController *)baseNa.topViewController;
+                    [page didReceiveRemoteNotification:model];
+                }
+            }else{
+                //如果根视图不是LGSide，则进行存储，等待首页加载完成后进行处理
+                [GlobalData shared].isLaunchedByNotification = YES;
+                [GlobalData shared].launchModel = model;
+            }
+        }
+        
+    }
+    
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         //应用处于后台时的远程推送接受
         //必须加这句代码
@@ -494,9 +530,23 @@
 //app注册推送deviceToken
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    NSLog(@"%@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
-                  stringByReplacingOccurrencesOfString: @">" withString: @""]
-                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
+    NSString * token = [[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
+                         stringByReplacingOccurrencesOfString: @">" withString: @""]
+                        stringByReplacingOccurrencesOfString: @" " withString: @""];
+    
+    
+    NSLog(@"%@",token);
+    
+//    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"" message:token preferredStyle:UIAlertControllerStyleAlert];
+//    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        
+//    }];
+//    [alert addAction:action];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.window.rootViewController presentViewController:alert animated:NO completion:^{
+//            
+//        }];
+//    });
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -563,6 +613,13 @@
             }
             
         }
+    }else{
+        if ([Helper isWifiStatus]) {
+            [GlobalData shared].isWifiStatus = YES;
+        }
+        
+        [GlobalData shared].is3DTouchEnable = YES;
+        [GlobalData shared].shortcutItem = shortcutItem;
     }
 }
 

@@ -10,6 +10,7 @@
 #import <UShareUI/UShareUI.h>
 #import "GCCKeyChain.h"
 #import "RDLogStatisticsAPI.h"
+#import "SDImageCache.h"
 
 @interface UMCustomSocialManager ()
 
@@ -94,8 +95,10 @@
                     messageObject.text = text;
                     //创建图片内容对象
                     UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
-                if ([UMCustomSocialManager defaultManager].image) {
-                    shareObject.shareImage = [UMCustomSocialManager defaultManager].image;
+                
+                UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+                if (image) {
+                    shareObject.shareImage = image;
                 }else{
                     shareObject.shareImage = [UIImage imageNamed:@"shareDefalut"];
                 }
@@ -204,8 +207,9 @@
                 messageObject.text = text;
                 //创建图片内容对象
                 UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
-                if ([UMCustomSocialManager defaultManager].image) {
-                    shareObject.shareImage = [UMCustomSocialManager defaultManager].image;
+                UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+                if (image) {
+                    shareObject.shareImage = image;
                 }else{
                     shareObject.shareImage = [UIImage imageNamed:@"shareDefalut"];
                 }
@@ -263,10 +267,8 @@
 {
     NSString * url = [self.model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    UIImage * image;
-    if ([UMCustomSocialManager defaultManager].image) {
-        image = [UMCustomSocialManager defaultManager].image;
-    }else{
+    UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+    if (!image) {
         image = [UIImage imageNamed:@"shareDefalut"];
     }
     
@@ -295,10 +297,8 @@
 {
     NSString * url = [self.model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    UIImage * image;
-    if ([UMCustomSocialManager defaultManager].image) {
-        image = [UMCustomSocialManager defaultManager].image;
-    }else{
+    UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+    if (!image) {
         image = [UIImage imageNamed:@"shareDefalut"];
     }
     
