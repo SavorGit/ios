@@ -325,6 +325,7 @@
 		9670C4AB1E7159210060CE0B /* DocGuided@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A81E7159210060CE0B /* DocGuided@2x.png */; };
 		9670C4AC1E7159210060CE0B /* DocGuided@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A91E7159210060CE0B /* DocGuided@3x.png */; };
 		96BCE3BE1EC0128E00B1A3F7 /* SmashEggsGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */; };
+		96BCE3CA1EC19DE100B1A3F7 /* HSEggsResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -840,6 +841,8 @@
 		9670C4A91E7159210060CE0B /* DocGuided@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DocGuided@3x.png"; sourceTree = "<group>"; };
 		96BCE3BC1EC0128E00B1A3F7 /* SmashEggsGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmashEggsGameViewController.h; sourceTree = "<group>"; };
 		96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmashEggsGameViewController.m; sourceTree = "<group>"; };
+		96BCE3C81EC19DE100B1A3F7 /* HSEggsResultModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSEggsResultModel.h; sourceTree = "<group>"; };
+		96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSEggsResultModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1579,6 +1582,7 @@
 		06FA32E31D3E165A001F5B37 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				96BCE3C71EC19A7500B1A3F7 /* EggsGame */,
 				061E0FD51DFFEBB30072605F /* RDBox */,
 				06FB9D651DF9890C0053BE0A /* Discover */,
 				06FB9D681DF9890C0053BE0A /* Hot */,
@@ -2064,6 +2068,15 @@
 			path = SmashingEggsGame;
 			sourceTree = "<group>";
 		};
+		96BCE3C71EC19A7500B1A3F7 /* EggsGame */ = {
+			isa = PBXGroup;
+			children = (
+				96BCE3C81EC19DE100B1A3F7 /* HSEggsResultModel.h */,
+				96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */,
+			);
+			path = EggsGame;
+			sourceTree = "<group>";
+		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2436,6 +2449,7 @@
 				064F0E2B1DD3087700D9EFD1 /* AddSliderCollectionViewCell.m in Sources */,
 				06153E071D530D9A00BB127F /* SAVORXAPI.m in Sources */,
 				06FA33941D3E171D001F5B37 /* DDAbstractDatabaseLogger.m in Sources */,
+				96BCE3CA1EC19DE100B1A3F7 /* HSEggsResultModel.m in Sources */,
 				060E42131E4CB03E009A94FC /* UIView+SDExtension.m in Sources */,
 				06B5554D1E8A6A210068BF70 /* DefalutLaunchViewController.m in Sources */,
 				47F997691DFFA7750009BDFB /* SXDlnaViewController.m in Sources */,
@@ -2762,8 +2776,8 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "898d6788-1d6f-434d-a4c1-4b837ac7e1c7";
-				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "a9b07ad7-2902-4449-90fd-3b5c922f42ed";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDistribution;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

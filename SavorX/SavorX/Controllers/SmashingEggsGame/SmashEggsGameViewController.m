@@ -7,13 +7,22 @@
 //
 
 #import "SmashEggsGameViewController.h"
-//#import "GameResultViewController.h"
+#import "HSEggsResultModel.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import <CoreAudio/CoreAudioTypes.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface SmashEggsGameViewController ()
 
 @property(nonatomic ,strong) UILabel *titleLabel;
 @property(nonatomic ,strong) UITextView *ruleTextView;
 @property(nonatomic ,strong) UIImageView *imgBgView;
+@property(nonatomic ,strong) UILabel *timeLabel;
+@property(nonatomic ,assign) int timeCount;
+@property(nonatomic ,strong) NSTimer *timer;
+@property(nonatomic ,strong) UIView *maskingView;
+@property(nonatomic ,strong) UIView *textBgView;
+@property(nonatomic ,assign) BOOL isShake;
 @end
 
 @implementation SmashEggsGameViewController
@@ -22,6 +31,7 @@
     [super viewDidLoad];
     
     [self creatSubViews];
+    _isShake = NO;
     
     // Do any additional setup after loading the view.
 }
@@ -55,11 +65,11 @@
     }];
     [self creatEggMiddleView];
     
-    UIView *textBgView = [[UIView alloc] init];
-    textBgView.backgroundColor = [UIColor lightGrayColor];
-    textBgView.userInteractionEnabled = YES;
-    [self.view addSubview:textBgView];
-    [textBgView mas_makeConstraints:^(MASConstraintMaker *make) {
+    _textBgView = [[UIView alloc] init];
+    _textBgView.backgroundColor = [UIColor lightGrayColor];
+    _textBgView.userInteractionEnabled = YES;
+    [self.view addSubview:_textBgView];
+    [_textBgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 230));
         make.top.mas_equalTo(_imgBgView.mas_bottom).offset(20);
         make.left.mas_equalTo(20);
@@ -71,7 +81,7 @@
     gameRuleLab.backgroundColor = [UIColor lightGrayColor];
     gameRuleLab.textAlignment = NSTextAlignmentLeft;
     gameRuleLab.text = @"游戏规则:";
-    [textBgView addSubview:gameRuleLab];
+    [_textBgView addSubview:gameRuleLab];
     [gameRuleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 30));
         make.top.mas_equalTo(5);
@@ -81,11 +91,12 @@
     _ruleTextView = [[UITextView alloc] init];
     _ruleTextView.textColor = [UIColor blackColor];
     _ruleTextView.font = [UIFont systemFontOfSize:16];
+    _ruleTextView.editable = NO;
     _ruleTextView.delegate = self;
     _ruleTextView.backgroundColor = [UIColor whiteColor];
     _ruleTextView.text = @"1.中阿斯顿哈佛阿萨德佛萨佛所诉公司规定暗红色的佛哦啊水电费；\n2.阿什顿佛啊搜到个红色的公司大国萨谷搜矮冬瓜撒打工啊搜到过建瓯市打工撒殴打过大过撒的嘎嘎十多个后撒点过后十多个；\n3.阿萨德红告诉低功耗哦啊是公婆阿萨德国际化破挥洒的公平三大后方和萨拉低功耗拉黑属地管理和萨拉电光火石拉活过来按时阿萨德骨灰盒撒旦改好啦属地管理撒旦个\n4.啊胡搜的分红阿萨德烘干房会受到个红色打火锅搜啊和郭鹏三大个航拍啊收到刚回来的撒谎过来撒东华理工合适的拉回公司打工回拉萨电话费拉萨的活雷锋";
     _ruleTextView.scrollEnabled = YES;
-    [textBgView addSubview:_ruleTextView];
+    [_textBgView addSubview:_ruleTextView];
     [_ruleTextView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40 - 20, 190));
         make.top.mas_equalTo(gameRuleLab.mas_bottom);
@@ -96,16 +107,6 @@
 }
 
 - (void)creatEggMiddleView{
-    
-//    _imgBgView = [[UIImageView alloc] init];
-//    _imgBgView.backgroundColor = [UIColor lightGrayColor];
-//    _imgBgView.userInteractionEnabled = YES;
-//    [self.view addSubview:_imgBgView];
-//    [_imgBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 260));
-//        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(20);
-//        make.left.mas_equalTo(20);
-//    }];
     
     UIImageView *eggOneImgView = [[UIImageView alloc] init];
     eggOneImgView.backgroundColor = [UIColor redColor];
@@ -135,6 +136,10 @@
         
     }];
     
+    UITapGestureRecognizer *singleTTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    singleTTap.numberOfTouchesRequired = 1;
+    [eggTwoImgView addGestureRecognizer:singleTTap];
+    
     UIImageView *eggThreeImgView = [[UIImageView alloc] init];
     eggThreeImgView.backgroundColor = [UIColor cyanColor];
     eggThreeImgView.userInteractionEnabled = YES;
@@ -146,20 +151,14 @@
         make.top.mas_equalTo(_imgBgView.mas_top).offset(20);
         
     }];
+    
+    UITapGestureRecognizer *singleThTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    singleThTap.numberOfTouchesRequired = 1;
+    [eggThreeImgView addGestureRecognizer:singleThTap];
 
 }
 
 - (void)creatPrizeMiddleView{
-    
-//    _imgBgView = [[UIImageView alloc] init];
-//    _imgBgView.backgroundColor = [UIColor lightGrayColor];
-//    _imgBgView.userInteractionEnabled = YES;
-//    [self.view addSubview:_imgBgView];
-//    [_imgBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 260));
-//        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(20);
-//        make.left.mas_equalTo(20);
-//    }];
     
     UILabel *phoneNameLab = [[UILabel alloc] init];
     phoneNameLab.font = [UIFont systemFontOfSize:12];
@@ -248,21 +247,247 @@
         make.top.mas_equalTo(prizeTimeLab.mas_bottom).offset(5);
         make.left.mas_equalTo(0);
     }];
+    
+    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [shareBtn setTitle:@"邀请好友参加" forState:UIControlStateNormal];
+    [shareBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [shareBtn setBackgroundColor:[UIColor lightGrayColor]];
+    [shareBtn addTarget:self action:@selector(sharePress:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:shareBtn];
+    [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(120, 30));
+        make.top.mas_equalTo(_imgBgView.mas_bottom).offset(10);
+        make.centerX.equalTo(self.view);
+    }];
+    
+    _textBgView = [[UIView alloc] init];
+    _textBgView.backgroundColor = [UIColor lightGrayColor];
+    _textBgView.userInteractionEnabled = YES;
+    [self.view addSubview:_textBgView];
+    [_textBgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 200));
+        make.top.mas_equalTo(shareBtn.mas_bottom).offset(20);
+        make.left.mas_equalTo(20);
+    }];
+    
+    UILabel *gameRuleLab = [[UILabel alloc] init];
+    gameRuleLab.font = [UIFont systemFontOfSize:12];
+    gameRuleLab.textColor = UIColorFromRGB(0xf5f5f5);
+    gameRuleLab.backgroundColor = [UIColor lightGrayColor];
+    gameRuleLab.textAlignment = NSTextAlignmentLeft;
+    gameRuleLab.text = @"游戏规则:";
+    [_textBgView addSubview:gameRuleLab];
+    [gameRuleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 30));
+        make.top.mas_equalTo(5);
+        make.left.mas_equalTo(5);
+    }];
+    
+    _ruleTextView = [[UITextView alloc] init];
+    _ruleTextView.textColor = [UIColor blackColor];
+    _ruleTextView.font = [UIFont systemFontOfSize:16];
+    _ruleTextView.editable = NO;
+    _ruleTextView.delegate = self;
+    _ruleTextView.backgroundColor = [UIColor whiteColor];
+    _ruleTextView.text = @"1.中阿斯顿哈佛阿萨德佛萨佛所诉公司规定暗红色的佛哦啊水电费；\n2.阿什顿佛啊搜到个红色的公司大国萨谷搜矮冬瓜撒打工啊搜到过建瓯市打工撒殴打过大过撒的嘎嘎十多个后撒点过后十多个；\n3.阿萨德红告诉低功耗哦啊是公婆阿萨德国际化破挥洒的公平三大后方和萨拉低功耗拉黑属地管理和萨拉电光火石拉活过来按时阿萨德骨灰盒撒旦改好啦属地管理撒旦个\n4.啊胡搜的分红阿萨德烘干房会受到个红色打火锅搜啊和郭鹏三大个航拍啊收到刚回来的撒谎过来撒东华理工合适的拉回公司打工回拉萨电话费拉萨的活雷锋";
+    _ruleTextView.scrollEnabled = YES;
+    [_textBgView addSubview:_ruleTextView];
+    [_ruleTextView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40 - 20, 160));
+        make.top.mas_equalTo(gameRuleLab.mas_bottom);
+        make.left.mas_equalTo(10);
+    }];
 
 }
 
+- (void)sharePress:(UIButton *)button{
+    
+}
+
 - (void)handleTap:(UIGestureRecognizer *)recognizer{
+    
+    
     UIImageView *view = (UIImageView *)recognizer.view;
     NSInteger index = view.tag;
-    if (index == 10010) {
-        
-        [_imgBgView removeAllSubviews];
-        
-        [self creatPrizeMiddleView];
-        
-//        GameResultViewController *GRVC = [[GameResultViewController alloc] init];
-//        [self.navigationController pushViewController:GRVC animated:YES];
+    switch (index) {
+        case 10010:
+        {
+            [_imgBgView removeAllSubviews];
+            [_textBgView removeFromSuperview];
+            [self creatPrizeMiddleView];
+        }
+            break;
+        case 10011:
+        {
+            [self creatMaskingView];
+        }
+            break;
+        case 10012:
+        {
+            [_imgBgView removeAllSubviews];
+            [_textBgView removeFromSuperview];
+            [self creatPrizeMiddleView];
+            
+        }
+            break;
+        default:
+            break;
     }
+
+}
+
+- (void)creatMaskingView{
+    _maskingView = [[UIView alloc] init];
+    _maskingView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
+    _maskingView.backgroundColor = [UIColor blackColor];
+    _maskingView.alpha = 0.85;
+    [self.view addSubview:_maskingView];
+    
+    _timeLabel = [[UILabel alloc] init];
+    _timeLabel.font = [UIFont boldSystemFontOfSize:80];
+    _timeLabel.textColor = [UIColor orangeColor];
+    _timeLabel.backgroundColor = [UIColor clearColor];
+    _timeLabel.textAlignment = NSTextAlignmentCenter;
+    _timeLabel.text = @"5";
+    [_maskingView addSubview:_timeLabel];
+    [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 80));
+        make.centerX.equalTo(self.view);
+        make.centerY.equalTo(self.view);
+    }];
+    
+    _timer= [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeHandel) userInfo:nil repeats:YES];
+    _timeCount = 5;
+
+}
+
+- (void)creatPlayHammerViews{
+    
+    UILabel *hammerTitleLab = [[UILabel alloc] init];
+    hammerTitleLab.font = [UIFont boldSystemFontOfSize:16];
+    hammerTitleLab.textColor = [UIColor orangeColor];
+    hammerTitleLab.backgroundColor = [UIColor clearColor];
+    hammerTitleLab.textAlignment = NSTextAlignmentCenter;
+    hammerTitleLab.text = @"用力摇动手机即可砸蛋";
+    [_maskingView addSubview:hammerTitleLab];
+    [hammerTitleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 30));
+        make.centerX.equalTo(_maskingView);
+        make.top.mas_equalTo(_maskingView.top).offset(100);
+    }];
+    
+    UIImageView *hammerImgView = [[UIImageView alloc] init];
+    hammerImgView.backgroundColor = [UIColor blueColor];
+    hammerImgView.userInteractionEnabled = YES;
+    [_maskingView addSubview:hammerImgView];
+    [hammerImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 300));
+        make.top.mas_equalTo(hammerTitleLab.mas_bottom).offset(20);
+        make.left.mas_equalTo(10);
+        
+    }];
+
+}
+
+- (void)timeHandel{
+     _timeCount--;
+    _timeLabel.text = [NSString stringWithFormat:@"%i",_timeCount];
+    if (_timeCount <= 0) {
+        if (_timer.isValid) {
+            [_timer invalidate];
+            _timer = nil;
+            
+            [_maskingView removeAllSubviews];
+            [self creatPlayHammerViews];
+            
+            _isShake = YES;
+        }
+    }
+    NSLog(@"zheshiceshi");
+}
+
+- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if (_isShake == YES) {
+        NSLog(@"开始摇一摇");
+    }
+
+}
+- (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+//    NSLog(@"摇一摇被取消");
+}
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if (_isShake == YES) {
+        
+        if (motion ==UIEventSubtypeMotionShake )
+        {
+            //播放音效
+            SystemSoundID   soundID;  // shake_sound_male.wav
+            NSString *path = [[NSBundle mainBundle ] pathForResource:@"glass" ofType:@"wav"];
+            AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:path], &soundID);
+            AudioServicesPlaySystemSound (soundID);
+            //设置震动
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        }
+        NSLog(@"摇一摇停止");
+    }
+}
+
+- (void)requestForEggsNetWork{
+    
+    //如果是绑定状态
+    if ([GlobalData shared].isBindRD) {
+        [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在连接"];
+        
+        [SAVORXAPI  gameForEggsWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            if ([[result objectForKey:@"result"] integerValue] == 0) {
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+            }else{
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+            }
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+        }];
+        
+    }
+}
+
+- (void)requestHitEggNetWork{
+    
+    //如果是绑定状态
+    if ([GlobalData shared].isBindRD) {
+        [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在连接"];
+        
+        [SAVORXAPI  gameSmashedEggWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            if ([[result objectForKey:@"result"] integerValue] == 0) {
+                HSEggsResultModel *erModel = [[HSEggsResultModel alloc] initWithDictionary:result];
+                
+            }else{
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+            }
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+        }];
+        
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    if (_timer.isValid) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning {
