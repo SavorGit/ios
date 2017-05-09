@@ -230,6 +230,30 @@
     return task;
 }
 
+//游戏投蛋
++ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr  success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/egg"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
+                                  @"deviceName" : [GCCGetInfo getIphoneName]};
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
+//游戏砸蛋
++ (NSURLSessionDataTask *)gameSmashedEggWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/hitEgg"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
+                                  @"projectId" : [GlobalData shared].projectId };
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
 //点播视频
 + (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {

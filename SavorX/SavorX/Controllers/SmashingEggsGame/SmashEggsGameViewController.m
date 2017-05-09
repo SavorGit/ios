@@ -7,6 +7,7 @@
 //
 
 #import "SmashEggsGameViewController.h"
+#import "HSEggsResultModel.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreAudio/CoreAudioTypes.h>
 #import <AVFoundation/AVFoundation.h>
@@ -463,8 +464,7 @@
         
         [SAVORXAPI  gameSmashedEggWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
-                
-                
+                HSEggsResultModel *erModel = [[HSEggsResultModel alloc] initWithDictionary:result];
                 
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
