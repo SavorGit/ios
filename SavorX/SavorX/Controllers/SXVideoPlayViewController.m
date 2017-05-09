@@ -525,9 +525,13 @@
 // 退出投屏
 -(void)stopVoideoPlay:(BOOL)fromHomeType{
     
-    [SAVORXAPI ScreenDemandShouldBackToTV:fromHomeType];
-    [self shouldRelease];
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.isPlayEnd) {
+        [self restartVod];
+    }else{
+        [SAVORXAPI ScreenDemandShouldBackToTV:fromHomeType];
+        [self shouldRelease];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 -(void)voidelPlayVolumeAction:(NSInteger)action{
@@ -622,6 +626,12 @@
     [self isEnableFooter];
     [self restartVod];
     [self.tableView reloadData];
+}
+
+- (void)setIsPlayEnd:(BOOL)isPlayEnd
+{
+    _isPlayEnd = isPlayEnd;
+    [self.footerView setQuitButtonStates:isPlayEnd];
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender

@@ -296,6 +296,7 @@
     
 }
 
+//tv按钮被点击，即重新点播该视频
 - (void)tvAciton
 {
     [self restartVod];
