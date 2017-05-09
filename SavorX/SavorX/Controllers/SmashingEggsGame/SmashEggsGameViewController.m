@@ -11,6 +11,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreAudio/CoreAudioTypes.h>
 #import <AVFoundation/AVFoundation.h>
+#import "HomeAnimationView.h"
 
 @interface SmashEggsGameViewController ()
 
@@ -23,6 +24,8 @@
 @property(nonatomic ,strong) UIView *maskingView;
 @property(nonatomic ,strong) UIView *textBgView;
 @property(nonatomic ,assign) BOOL isShake;
+@property(nonatomic ,strong) UILabel *prizeLevelLab;
+@property (nonatomic, strong) NSMutableDictionary * shouldDemandDict;
 @end
 
 @implementation SmashEggsGameViewController
@@ -31,7 +34,11 @@
     [super viewDidLoad];
     
     [self creatSubViews];
+    
+    self.title = @"砸蛋游戏";
     _isShake = NO;
+    self.shouldDemandDict = [[NSMutableDictionary alloc] init];
+    [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     
     // Do any additional setup after loading the view.
 }
@@ -186,14 +193,14 @@
         make.centerX.equalTo(self.view);
     }];
     
-    UILabel *prizeLevelLab = [[UILabel alloc] init];
-    prizeLevelLab.font = [UIFont systemFontOfSize:30];
-    prizeLevelLab.textColor = UIColorFromRGB(0xf5f5f5);
-    prizeLevelLab.backgroundColor = [UIColor lightGrayColor];
-    prizeLevelLab.textAlignment = NSTextAlignmentCenter;
-    prizeLevelLab.text = @"特等奖";
-    [_imgBgView addSubview:prizeLevelLab];
-    [prizeLevelLab mas_makeConstraints:^(MASConstraintMaker *make) {
+    _prizeLevelLab = [[UILabel alloc] init];
+    _prizeLevelLab.font = [UIFont systemFontOfSize:30];
+    _prizeLevelLab.textColor = UIColorFromRGB(0xf5f5f5);
+    _prizeLevelLab.backgroundColor = [UIColor lightGrayColor];
+    _prizeLevelLab.textAlignment = NSTextAlignmentCenter;
+    _prizeLevelLab.text = @"特等奖";
+    [_imgBgView addSubview:_prizeLevelLab];
+    [_prizeLevelLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(150, 60));
         make.top.mas_equalTo(congratueLab.mas_bottom).offset(15);
         make.centerX.equalTo(self.view);
@@ -304,38 +311,19 @@
     
 }
 
+// 点击选择金蛋
 - (void)handleTap:(UIGestureRecognizer *)recognizer{
     
-    
-    UIImageView *view = (UIImageView *)recognizer.view;
-    NSInteger index = view.tag;
-    switch (index) {
-        case 10010:
-        {
-            [_imgBgView removeAllSubviews];
-            [_textBgView removeFromSuperview];
-            [self creatPrizeMiddleView];
-        }
-            break;
-        case 10011:
-        {
-            [self creatMaskingView];
-        }
-            break;
-        case 10012:
-        {
-            [_imgBgView removeAllSubviews];
-            [_textBgView removeFromSuperview];
-            [self creatPrizeMiddleView];
-            
-        }
-            break;
-        default:
-            break;
+    if (([GlobalData shared].isBindRD)) {
+        [self creatMaskingView];
+    }else{
+        [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
+        [[HomeAnimationView animationView] scanQRCode];
     }
 
 }
 
+// 创建蒙层倒计时
 - (void)creatMaskingView{
     _maskingView = [[UIView alloc] init];
     _maskingView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
@@ -361,6 +349,7 @@
 
 }
 
+// 创建锤子砸蛋中页面
 - (void)creatPlayHammerViews{
     
     UILabel *hammerTitleLab = [[UILabel alloc] init];
@@ -389,6 +378,7 @@
 
 }
 
+// 倒计时控制器
 - (void)timeHandel{
      _timeCount--;
     _timeLabel.text = [NSString stringWithFormat:@"%i",_timeCount];
@@ -410,6 +400,7 @@
 {
     if (_isShake == YES) {
         NSLog(@"开始摇一摇");
+        [self requestHitEggNetWork];
     }
 
 }
@@ -435,6 +426,7 @@
     }
 }
 
+// 请求砸蛋连接
 - (void)requestForEggsNetWork{
     
     //如果是绑定状态
@@ -453,9 +445,12 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
         
+    }else{
+        [[HomeAnimationView animationView] scanQRCode];
     }
 }
 
+// 请求砸蛋结果
 - (void)requestHitEggNetWork{
     
     //如果是绑定状态
@@ -465,6 +460,11 @@
         [SAVORXAPI  gameSmashedEggWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 HSEggsResultModel *erModel = [[HSEggsResultModel alloc] initWithDictionary:result];
+                _prizeLevelLab.text = erModel.info;
+                
+                [_imgBgView removeAllSubviews];
+                [_textBgView removeFromSuperview];
+                [self creatPrizeMiddleView];
                 
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
@@ -475,6 +475,14 @@
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
         
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if ([[self.shouldDemandDict objectForKey:@"should"] boolValue]) {
+        [self creatMaskingView];
+        [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     }
 }
 
