@@ -178,8 +178,8 @@
 
     
     UILabel *gameRuleLab = [[UILabel alloc] init];
-    gameRuleLab.font = [UIFont systemFontOfSize:15];
-    gameRuleLab.textColor = [UIColor blackColor];
+    gameRuleLab.font = [UIFont systemFontOfSize:17];
+    gameRuleLab.textColor = UIColorFromRGB(0x222222);
     gameRuleLab.textAlignment = NSTextAlignmentLeft;
     gameRuleLab.text = @"游戏规则";
     [gameRuleimgView addSubview:gameRuleLab];
@@ -190,7 +190,7 @@
     }];
     
     _ruleTextView = [[UITextView alloc] init];
-    _ruleTextView.textColor = [UIColor whiteColor];
+    _ruleTextView.textColor = UIColorFromRGB(0xf3ebdb);
     _ruleTextView.backgroundColor = [UIColor clearColor];
     _ruleTextView.font = [UIFont systemFontOfSize:12];
     _ruleTextView.editable = NO;
@@ -201,7 +201,7 @@
     [_ruleTextView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(301, 150));
         make.top.mas_equalTo(gameRuleimgView.mas_bottom);
-        make.left.mas_equalTo(10);
+        make.left.mas_equalTo(15);
     }];
     
 }
@@ -279,7 +279,7 @@
     _timeLabel.textColor = [UIColor orangeColor];
     _timeLabel.backgroundColor = [UIColor clearColor];
     _timeLabel.textAlignment = NSTextAlignmentCenter;
-    _timeLabel.text = @"5";
+    _timeLabel.text = @"3";
     [_maskingView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 80));
@@ -295,31 +295,29 @@
 // 创建锤子砸蛋中页面
 - (void)creatPlayHammerViews{
     
-//    [self creatPrizeMiddleView];
+    [self creatPrizeMiddleView];
     
-    UILabel *hammerTitleLab = [[UILabel alloc] init];
-    hammerTitleLab.font = [UIFont boldSystemFontOfSize:16];
-    hammerTitleLab.textColor = [UIColor orangeColor];
-    hammerTitleLab.backgroundColor = [UIColor clearColor];
-    hammerTitleLab.textAlignment = NSTextAlignmentCenter;
-    hammerTitleLab.text = @"用力摇动手机即可砸蛋";
-    [_maskingView addSubview:hammerTitleLab];
-    [hammerTitleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 30));
-        make.centerX.equalTo(_maskingView);
-        make.top.mas_equalTo(_maskingView.top).offset(100);
-    }];
-    
-    UIImageView *hammerImgView = [[UIImageView alloc] init];
-    hammerImgView.backgroundColor = [UIColor blueColor];
-    hammerImgView.userInteractionEnabled = YES;
-    [_maskingView addSubview:hammerImgView];
-    [hammerImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 300));
-        make.top.mas_equalTo(hammerTitleLab.mas_bottom).offset(20);
-        make.left.mas_equalTo(10);
-        
-    }];
+//    UIImageView *haTitleImgView = [[UIImageView alloc] init];
+//    haTitleImgView.image = [UIImage imageNamed:@"yaoyiyao"];
+//    haTitleImgView.userInteractionEnabled = YES;
+//    [_maskingView addSubview:haTitleImgView];
+//    [haTitleImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake(215, 73));
+//        make.centerX.equalTo(_maskingView);
+//        make.top.mas_equalTo(_maskingView.top).offset(100);
+//        
+//    }];
+//    
+//    UIImageView *hammerImgView = [[UIImageView alloc] init];
+//    hammerImgView.backgroundColor = [UIColor blueColor];
+//    hammerImgView.userInteractionEnabled = YES;
+//    [_maskingView addSubview:hammerImgView];
+//    [hammerImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 300));
+//        make.top.mas_equalTo(haTitleImgView.mas_bottom).offset(20);
+//        make.left.mas_equalTo(10);
+//        
+//    }];
 }
 
 // 倒计时控制器

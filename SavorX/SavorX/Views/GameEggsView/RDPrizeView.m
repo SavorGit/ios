@@ -20,6 +20,12 @@
 }
 
 - (void)creatSubViews:(HSEggsResultModel *)model{
+    
+    UIImageView *bgImgView = [[UIImageView alloc] init];
+    bgImgView.frame = CGRectMake(0, 0, self.size.width, self.size.height);
+    bgImgView.image = [UIImage imageNamed:@"zjjg_bg"];
+    [self addSubview:bgImgView];
+    
     UILabel *congratueLab = [[UILabel alloc] init];
     congratueLab.font = [UIFont systemFontOfSize:16];
     congratueLab.textColor = UIColorFromRGB(0xf5f5f5);
