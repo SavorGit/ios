@@ -199,12 +199,12 @@
     _ruleTextView.font = [UIFont systemFontOfSize:12];
     _ruleTextView.editable = NO;
     _ruleTextView.delegate = self;
-    _ruleTextView.text = @"1.中阿斯顿哈佛阿萨德佛萨佛所诉公司规定暗红色的佛哦啊水电费；\n\n2.阿什顿佛啊搜到个红色的公司大国萨谷搜矮冬瓜撒打工啊搜到过建瓯市打工撒殴打过大过撒的嘎嘎十多个后撒点过后十多个；\n\n3.阿萨德红告诉低功耗哦啊是公婆阿萨德国际化破挥洒的公平三大后方和萨拉低功耗拉黑属地管理和萨拉电光火石拉活过来按时阿萨德骨灰盒撒旦改好啦属地管理撒旦个\n4.啊胡搜的分红阿萨德烘干房会受到个红色打火锅搜啊和郭鹏三大个航拍啊收到刚回来的撒谎过来撒东华理工合适的拉回公司打工回拉萨电话费拉萨的活雷锋";
+    _ruleTextView.text = @"1.此游戏为手机与电视同步互动游戏，参与此活动者需先连接电视；\n\n2.每个用户连接电视后，可选择上面任意一个蛋砸开；\n\n3.游戏时间：每天11:00-14:00/17:00-21:00";
     _ruleTextView.scrollEnabled = NO;
     [_textBgView addSubview:_ruleTextView];
     [_ruleTextView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(301, 150));
-        make.top.mas_equalTo(gameRuleimgView.mas_bottom);
+        make.top.mas_equalTo(gameRuleimgView.mas_bottom).offset(10);
         make.left.mas_equalTo(15);
     }];
     
@@ -227,7 +227,6 @@
 //点击金蛋的代理回调
 - (void)RDGoldenEggs:(RDGoldenEggs *)eggsView didSelectEggWithIndex:(NSInteger)index
 {
-    
     NSLog(@"点击了第%ld个金蛋", index + 1);
     
     if ([RDAwardTool awardCanAwardWithAPILottery_num:self.adModel.lottery_num] == NO) {
@@ -253,15 +252,6 @@
 // 创建中奖结果页面
 - (void)creatPrizeMiddleView:(HSEggsResultModel *)model{
     
-    UIButton *prCloseimgBtn = [[UIButton alloc] init];
-    [prCloseimgBtn setImage:[UIImage imageNamed:@"zjjg_guanbi"] forState:UIControlStateNormal];
-    [_maskingView addSubview:prCloseimgBtn];
-    [prCloseimgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(32, 61));
-        make.left.mas_equalTo(kMainBoundsWidth - 60);
-        make.centerY.equalTo(self.view).offset(-61);
-    }];
-    
     RDPrizeView *prizeView = [[RDPrizeView alloc] initWithFrame:CGRectMake(0, 0, 294, 244) withModel:model];
     prizeView.delegate = self;
     [_maskingView addSubview:prizeView];
@@ -271,6 +261,20 @@
         make.center.equalTo(self.view);
         make.centerY.equalTo(self.view);
     }];
+    
+    UIButton *prCloseimgBtn = [[UIButton alloc] init];
+    [prCloseimgBtn setImage:[UIImage imageNamed:@"zjjg_guanbi"] forState:UIControlStateNormal];
+    [prCloseimgBtn addTarget:self action:@selector(prizeClosed) forControlEvents:UIControlEventTouchUpInside];
+    [_maskingView addSubview:prCloseimgBtn];
+    [prCloseimgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(32, 61));
+        make.left.mas_equalTo(kMainBoundsWidth - 90);
+        make.bottom.mas_equalTo(prizeView.mas_top);
+    }];
+}
+
+- (void)prizeClosed{
+    [_maskingView removeFromSuperview];
 }
 
 - (void)sharePress:(UIButton *)button{
@@ -325,11 +329,26 @@
     hammerImgView.userInteractionEnabled = YES;
     [_maskingView addSubview:hammerImgView];
     [hammerImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 300));
-        make.top.mas_equalTo(haTitleImgView.mas_bottom).offset(20);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 260));
+        make.top.mas_equalTo(haTitleImgView.mas_bottom).offset(10);
         make.left.mas_equalTo(10);
         
     }];
+    
+    UIButton *haCloseImgBtn = [[UIButton alloc] init];
+    [haCloseImgBtn setImage:[UIImage imageNamed:@"yao_guanbi"] forState:UIControlStateNormal];
+    [haCloseImgBtn addTarget:self action:@selector(haClosed) forControlEvents:UIControlEventTouchUpInside];
+    [_maskingView addSubview:haCloseImgBtn];
+    [haCloseImgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(32, 32));
+        make.centerX.equalTo(self.view);
+        make.top.mas_equalTo(hammerImgView.mas_bottom).offset(70);
+    }];
+    
+}
+- (void)haClosed{
+    
+    [_maskingView removeFromSuperview];
 }
 
 // 倒计时控制器

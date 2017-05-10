@@ -48,7 +48,7 @@
     phoneNameLab.text = [NSString stringWithFormat:@"%@的IPhone",[GCCGetInfo getIphoneName]];
     [bgImgView addSubview:phoneNameLab];
     [phoneNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(150, 30));
+        make.size.mas_equalTo(CGSizeMake(260, 30));
         make.top.mas_equalTo(congratueLab.mas_bottom).offset(5);
         make.left.mas_equalTo(10);
     }];
@@ -115,6 +115,14 @@
     }else if (model.win == 0){
         congratueLab.text = @"很遗憾，没有中奖";
         prizeFormLab.text = @"您可邀请好友参加此活动哦~";
+        prizeTimeLab.text = @"";
+        alertLab.text = @"";
+        
+        [prizeFormLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 40));
+            make.bottom.mas_equalTo(self.mas_bottom).offset(0);
+            make.centerX.equalTo(self);
+        }];
     }
 
 }
