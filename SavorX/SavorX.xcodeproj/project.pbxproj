@@ -66,6 +66,8 @@
 		0627E0C11E3231DA00DAED92 /* LGSideMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0627E0BC1E3231DA00DAED92 /* LGSideMenuView.m */; };
 		0627E0C21E3231DA00DAED92 /* UIViewController+LGSideMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0627E0BE1E3231DA00DAED92 /* UIViewController+LGSideMenuController.m */; };
 		0628B0A41D715DB900DB63D4 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0628B0A31D715DB900DB63D4 /* UMMobClick.framework */; };
+		062CEFD21EC2FAC400EA6AE0 /* RDAwardTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 062CEFD11EC2FAC400EA6AE0 /* RDAwardTool.m */; };
+		062CEFD51EC3053200EA6AE0 /* HSAwardUploadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 062CEFD41EC3053200EA6AE0 /* HSAwardUploadRequest.m */; };
 		062D4F791DEC02BA0093942A /* GCCControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 062D4F4B1DEC02BA0093942A /* GCCControlView.m */; };
 		062D4F7A1DEC02BA0093942A /* GCCPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 062D4F4D1DEC02BA0093942A /* GCCPlayerView.m */; };
 		062D4F7B1DEC02BA0093942A /* bigSlider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 062D4F4F1DEC02BA0093942A /* bigSlider@2x.png */; };
@@ -452,6 +454,10 @@
 		0627E0BD1E3231DA00DAED92 /* UIViewController+LGSideMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LGSideMenuController.h"; sourceTree = "<group>"; };
 		0627E0BE1E3231DA00DAED92 /* UIViewController+LGSideMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LGSideMenuController.m"; sourceTree = "<group>"; };
 		0628B0A31D715DB900DB63D4 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMMobClick.framework; sourceTree = "<group>"; };
+		062CEFD01EC2FAC400EA6AE0 /* RDAwardTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAwardTool.h; sourceTree = "<group>"; };
+		062CEFD11EC2FAC400EA6AE0 /* RDAwardTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAwardTool.m; sourceTree = "<group>"; };
+		062CEFD31EC3053200EA6AE0 /* HSAwardUploadRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSAwardUploadRequest.h; sourceTree = "<group>"; };
+		062CEFD41EC3053200EA6AE0 /* HSAwardUploadRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSAwardUploadRequest.m; sourceTree = "<group>"; };
 		062D4F4A1DEC02BA0093942A /* GCCControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCCControlView.h; sourceTree = "<group>"; };
 		062D4F4B1DEC02BA0093942A /* GCCControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCCControlView.m; sourceTree = "<group>"; };
 		062D4F4C1DEC02BA0093942A /* GCCPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCCPlayerView.h; sourceTree = "<group>"; };
@@ -1167,6 +1173,15 @@
 			path = LGSideMenuController;
 			sourceTree = "<group>";
 		};
+		062CEFCF1EC2F9FC00EA6AE0 /* RDAwardTool */ = {
+			isa = PBXGroup;
+			children = (
+				062CEFD01EC2FAC400EA6AE0 /* RDAwardTool.h */,
+				062CEFD11EC2FAC400EA6AE0 /* RDAwardTool.m */,
+			);
+			path = RDAwardTool;
+			sourceTree = "<group>";
+		};
 		062D4F491DEC02BA0093942A /* GCCPlayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1263,6 +1278,8 @@
 				960EDB151E8361F700717406 /* HSLauchImageOrVideoRequest.m */,
 				964177931EB86C2100AA839E /* HSInstallationInforUpload.h */,
 				964177941EB86C2100AA839E /* HSInstallationInforUpload.m */,
+				062CEFD31EC3053200EA6AE0 /* HSAwardUploadRequest.h */,
+				062CEFD41EC3053200EA6AE0 /* HSAwardUploadRequest.m */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -1657,6 +1674,7 @@
 		06FA33B11D3E1FF2001F5B37 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				062CEFCF1EC2F9FC00EA6AE0 /* RDAwardTool */,
 				060650591E014CF100E43024 /* HSWebServerManager */,
 				06F9B2A51D6EEDBD00C7F0A4 /* GCCKeyChain */,
 				06F9B29E1D6ED8CE00C7F0A4 /* GCCGetInfo */,
@@ -2454,6 +2472,7 @@
 				06B5554D1E8A6A210068BF70 /* DefalutLaunchViewController.m in Sources */,
 				47F997691DFFA7750009BDFB /* SXDlnaViewController.m in Sources */,
 				0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */,
+				062CEFD21EC2FAC400EA6AE0 /* RDAwardTool.m in Sources */,
 				060E42111E4CB03E009A94FC /* SDCollectionViewCell.m in Sources */,
 				96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */,
 				066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */,
@@ -2527,6 +2546,7 @@
 				4772FF841DFA544B00758697 /* BaseViewController.m in Sources */,
 				060E420D1E4CB03E009A94FC /* TAAbstractDotView.m in Sources */,
 				06FB9D611DF97D0E0053BE0A /* MBProgressHUD+Custom.m in Sources */,
+				062CEFD51EC3053200EA6AE0 /* HSAwardUploadRequest.m in Sources */,
 				474C76351DFB9BED001129C9 /* NoDataView.m in Sources */,
 				476F44C51E2DBC1000F99090 /* LeftViewController.m in Sources */,
 				0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */,

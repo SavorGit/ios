@@ -32,6 +32,6 @@
  *
  *  @param service 信息的标识，key
  */
-+ (void)delete:(NSString *)service;
++ (void)deleteDataForKey:(NSString *)service;
 
 @end

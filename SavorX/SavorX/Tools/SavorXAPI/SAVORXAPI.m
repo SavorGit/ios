@@ -71,7 +71,7 @@
     [MobClick startWithConfigure:UMConfigInstance];
     
     NSString* identifierNumber = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    if ([[GCCKeyChain load:keychainID] isEqualToString:@"unknow"]) {
+    if (![GCCKeyChain load:keychainID]) {
         [GCCKeyChain save:keychainID data:identifierNumber];
     }
     [GlobalData shared].deviceID = [GCCKeyChain load:keychainID];
@@ -694,7 +694,6 @@
         }];
     }
 }
-
 
 + (void)showAlert:(UIAlertController *)alert
 {
