@@ -46,11 +46,6 @@
         } @finally {
         }
     }
-    
-    if (keyData) {
-        CFRelease(keyData);
-    }
-    
     return ret;
 }
 
