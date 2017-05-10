@@ -7,6 +7,7 @@
 //
 
 #import "RDPrizeView.h"
+#import "GCCGetInfo.h"
 
 @implementation RDPrizeView
 
@@ -27,54 +28,59 @@
     [self addSubview:bgImgView];
     
     UILabel *congratueLab = [[UILabel alloc] init];
-    congratueLab.font = [UIFont systemFontOfSize:16];
+    congratueLab.font = [UIFont systemFontOfSize:20];
     congratueLab.textColor = UIColorFromRGB(0xf5f5f5);
     congratueLab.backgroundColor = [UIColor clearColor];
     congratueLab.textAlignment = NSTextAlignmentCenter;
     congratueLab.text = @"恭喜您，中奖了~~~";
-    [self addSubview:congratueLab];
+    [bgImgView addSubview:congratueLab];
     [congratueLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(200, 50));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 50));
         make.top.mas_equalTo(self.top).offset(5);
         make.centerX.equalTo(self);
     }];
     
     UILabel *phoneNameLab = [[UILabel alloc] init];
-    phoneNameLab.font = [UIFont systemFontOfSize:12];
-    phoneNameLab.textColor = UIColorFromRGB(0xf5f5f5);
+    phoneNameLab.font = [UIFont systemFontOfSize:16];
+    phoneNameLab.textColor = [UIColor redColor];
     phoneNameLab.backgroundColor = [UIColor clearColor];
     phoneNameLab.textAlignment = NSTextAlignmentLeft;
-    phoneNameLab.text = @"游戏者的手机";
-    [self addSubview:phoneNameLab];
+    phoneNameLab.text = [NSString stringWithFormat:@"%@的IPhone",[GCCGetInfo getIphoneName]];
+    [bgImgView addSubview:phoneNameLab];
     [phoneNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(100, 30));
-        make.top.mas_equalTo(congratueLab.mas_bottom);
-        make.left.mas_equalTo(5);
+        make.size.mas_equalTo(CGSizeMake(150, 30));
+        make.top.mas_equalTo(congratueLab.mas_bottom).offset(5);
+        make.left.mas_equalTo(10);
     }];
     
-    UILabel *prizeLevelLab = [[UILabel alloc] init];
-    prizeLevelLab.font = [UIFont systemFontOfSize:30];
-    prizeLevelLab.textColor = UIColorFromRGB(0xf5f5f5);
-    prizeLevelLab.backgroundColor = [UIColor clearColor];
-    prizeLevelLab.textAlignment = NSTextAlignmentCenter;
-    prizeLevelLab.text = @"特等奖";
-    [self addSubview:prizeLevelLab];
-    [prizeLevelLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(150, 60));
-        make.top.mas_equalTo(phoneNameLab.mas_bottom);
+    UIImageView *prizeLevelImg = [[UIImageView alloc] init];
+    prizeLevelImg.image = [UIImage imageNamed:@"yidj"];
+    [bgImgView addSubview:prizeLevelImg];
+    [prizeLevelImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(113, 36));
+        make.top.mas_equalTo(phoneNameLab.mas_bottom).offset(20);
         make.centerX.equalTo(self);
     }];
+    if (model.prize_level == 1) {
+        prizeLevelImg.image = [UIImage imageNamed:@"yidj"];
+    }else if (model.prize_level == 2){
+        prizeLevelImg.image = [UIImage imageNamed:@"erdj"];
+    }else if (model.prize_level == 3){
+        prizeLevelImg.image = [UIImage imageNamed:@"sadj"];
+    }else{
+        prizeLevelImg.image = [UIImage imageNamed:@"xxcy"];
+    }
     
     UILabel *prizeFormLab = [[UILabel alloc] init];
-    prizeFormLab.font = [UIFont systemFontOfSize:14];
+    prizeFormLab.font = [UIFont systemFontOfSize:18];
     prizeFormLab.textColor = [UIColor blackColor];
     prizeFormLab.backgroundColor = [UIColor clearColor];
     prizeFormLab.textAlignment = NSTextAlignmentCenter;
     prizeFormLab.text = @"快去找服务员领取奖品吧";
-    [self addSubview:prizeFormLab];
+    [bgImgView addSubview:prizeFormLab];
     [prizeFormLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(160, 30));
-        make.top.mas_equalTo(self.mas_bottom).offset(- 80);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 50));
+        make.top.mas_equalTo(self.mas_bottom).offset(- 60);
         make.centerX.equalTo(self);
     }];
     
@@ -84,10 +90,10 @@
     prizeTimeLab.backgroundColor = [UIColor clearColor];
     prizeTimeLab.textAlignment = NSTextAlignmentCenter;
     prizeTimeLab.text = @"有效领奖时间:60分钟,";
-    [self addSubview:prizeTimeLab];
+    [bgImgView addSubview:prizeTimeLab];
     [prizeTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(140, 30));
-        make.top.mas_equalTo(self.mas_bottom).offset(-40);
+        make.top.mas_equalTo(self.mas_bottom).offset(-30);
         make.left.mas_equalTo(20);
     }];
     
@@ -97,12 +103,19 @@
     alertLab.backgroundColor = [UIColor clearColor];
     alertLab.textAlignment = NSTextAlignmentCenter;
     alertLab.text = @"关闭后将无法领取";
-    [self addSubview:alertLab];
+    [bgImgView addSubview:alertLab];
     [alertLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(140, 30));
-        make.top.mas_equalTo(self.mas_bottom).offset(-40);
+        make.top.mas_equalTo(self.mas_bottom).offset(-30);
         make.left.mas_equalTo(prizeTimeLab.mas_right);
     }];
+    
+    if (model.win == 1) {
+        congratueLab.text = @"恭喜您，中奖了~~~";
+    }else if (model.win == 0){
+        congratueLab.text = @"很遗憾，没有中奖";
+        prizeFormLab.text = @"您可邀请好友参加此活动哦~";
+    }
 
 }
 @end

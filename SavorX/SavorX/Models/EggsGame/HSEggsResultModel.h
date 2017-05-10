@@ -23,9 +23,15 @@
 @property (nonatomic, assign) NSInteger prize_id;
 
 //中奖提示语
-@property (nonatomic, copy) NSString *prize_name;
+@property (nonatomic, assign) NSInteger prize_level;
 
-//中奖时间
+//中奖信息
+@property (nonatomic, copy) NSString *info;
+
+//抽奖时间
 @property (nonatomic, copy) NSString *prize_time;
+
+//result
+@property (nonatomic, assign) NSInteger result;
 
 @end

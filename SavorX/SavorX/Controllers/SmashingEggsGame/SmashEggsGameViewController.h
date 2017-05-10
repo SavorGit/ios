@@ -7,7 +7,10 @@
 //
 
 #import "BaseViewController.h"
+#import "HSAdsModel.h"
 
 @interface SmashEggsGameViewController : BaseViewController
+
+@property(nonatomic ,strong) HSAdsModel *adModel;
 
 @end

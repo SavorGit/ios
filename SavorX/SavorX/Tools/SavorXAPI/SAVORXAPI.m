@@ -231,12 +231,14 @@
 }
 
 //游戏投蛋
-+ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr  success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
++ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr hunger:(NSInteger)hunger date:(NSString *)date  success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     urlStr = [urlStr stringByAppendingString:@"/egg"];
     
     NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
-                                  @"deviceName" : [GCCGetInfo getIphoneName]};
+                                  @"deviceName" : [GCCGetInfo getIphoneName],
+                                  @"hunger" : [NSNumber numberWithInteger:hunger],
+                                  @"date" :   date };
     
     NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
     return task;
