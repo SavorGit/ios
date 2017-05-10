@@ -115,6 +115,25 @@
     return NO;
 }
 
++ (NSInteger)awardGetLottery_num
+{
+    //检测钥匙串存储的抽奖信息有效性
+    if ([RDAwardTool checkRDAwardDateIsEnable]) {
+        //如果存在有效抽奖信息，则取出信息
+        NSDictionary * dict = [GCCKeyChain load:RDAwardInfo];
+        
+        //处理当前的抽奖总次数
+        NSInteger number = [[dict objectForKey:RDAwardNumber] integerValue];
+        
+        if (number < 0) {
+            number = 0;
+        }
+        
+        return number;
+    }
+    return 0;
+}
+
 //检测当前的抽奖信息是否有效
 + (BOOL)checkRDAwardDateIsEnable
 {
@@ -135,6 +154,15 @@
         }
     }
     return NO;
+}
+
++ (void)awardAddMoreChance
+{
+    NSDictionary * dict = @{RDAwardDate : [Helper getCurrentTimeWithFormat:@"yyyyMMdd"],
+                            RDAwardNumber : [NSNumber numberWithInteger:5],
+                            RDAwardCurrentNumber : [NSNumber numberWithInteger:0],
+                            RDAwardHangerNumber : [NSNumber numberWithInteger:(arc4random() % 5 + 1)]};
+    [GCCKeyChain save:RDAwardInfo data:dict];
 }
 
 @end

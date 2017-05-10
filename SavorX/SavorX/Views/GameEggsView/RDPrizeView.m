@@ -118,7 +118,7 @@
         prizeTimeLab.text = @"";
         alertLab.text = @"";
         
-        [prizeFormLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        [prizeFormLab mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 40));
             make.bottom.mas_equalTo(self.mas_bottom).offset(0);
             make.centerX.equalTo(self);

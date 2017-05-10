@@ -23,4 +23,10 @@
 //是否应该中奖
 + (BOOL)awardShouldWin;
 
+//获取当前所剩的次数
++ (NSInteger)awardGetLottery_num;
+
+//增加更多的机会
++ (void)awardAddMoreChance;
+
 @end

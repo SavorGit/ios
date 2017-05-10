@@ -18,6 +18,7 @@
 #import <CoreAudio/CoreAudioTypes.h>
 #import <AVFoundation/AVFoundation.h>
 #import "HomeAnimationView.h"
+#import "RDHammer.h"
 
 @interface SmashEggsGameViewController ()<UITextViewDelegate,RDGoldenEggsDelegate,AVAudioPlayerDelegate,RDPrizeViewDelegate>
 
@@ -35,6 +36,7 @@
 @property (nonatomic, strong) UIImageView *upBgView;
 @property (nonatomic, strong) AVAudioPlayer *player;
 @property (nonatomic, strong) NSURL *videoUrl;
+@property (nonatomic, weak) RDHammer * hammer;
 
 @end
 
@@ -48,11 +50,18 @@
     [self creatBgVoice];
     [_player play];
  
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"恢复机会" style:UIBarButtonItemStyleDone target:self action:@selector(addMoreChance)];
+}
+
+- (void)addMoreChance
+{
+    [RDAwardTool awardAddMoreChance];
+    _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
 }
 
 // 初始化基本参数
 - (void)initOtherParmars{
-    _videoUrl = [[NSBundle mainBundle] URLForResource:@"glass" withExtension:@"wav"];
+    _videoUrl = [[NSBundle mainBundle] URLForResource:@"selectEggs" withExtension:@"mp3"];
     self.title = @"砸蛋游戏";
     _isShake = NO;
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
@@ -135,7 +144,7 @@
     _titleLabel.textColor = UIColorFromRGB(0xfbeed9);
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
-    _titleLabel.text = @"您当前有1次机会";
+    _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
     [bgScrollView addSubview:_titleLabel];
     CGFloat textLabelWidth = [Helper autoWidthWith:150.f];
     CGFloat textLabelHeight = [Helper autoHeightWith:20.f];
@@ -227,8 +236,6 @@
 //点击金蛋的代理回调
 - (void)RDGoldenEggs:(RDGoldenEggs *)eggsView didSelectEggWithIndex:(NSInteger)index
 {
-    NSLog(@"点击了第%ld个金蛋", index + 1);
-    
     if ([RDAwardTool awardCanAwardWithAPILottery_num:self.adModel.lottery_num] == NO) {
         RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"今天的抽奖机会用完了\n明天再来吧~"];
         RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
@@ -236,12 +243,14 @@
         } bold:NO];
         [alertView addActions:@[action]];
         [alertView show];
+        return;
     }
 
     
     if (([GlobalData shared].isBindRD)) {
         [self creatMaskingView];
         [self stop];
+        [self.eggsView stopShakeAnimation];
     }else{
         [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
         [[HomeAnimationView animationView] scanQRCode];
@@ -257,9 +266,7 @@
     [_maskingView addSubview:prizeView];
     [prizeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(294, 244));
-        make.left.mas_equalTo(40);
         make.center.equalTo(self.view);
-        make.centerY.equalTo(self.view);
     }];
     
     UIButton *prCloseimgBtn = [[UIButton alloc] init];
@@ -275,6 +282,7 @@
 
 - (void)prizeClosed{
     [_maskingView removeFromSuperview];
+    [self eggsViewStartAnimation];
 }
 
 - (void)sharePress:(UIButton *)button{
@@ -324,16 +332,15 @@
         
     }];
     
-    UIImageView *hammerImgView = [[UIImageView alloc] init];
-    hammerImgView.backgroundColor = [UIColor blueColor];
-    hammerImgView.userInteractionEnabled = YES;
-    [_maskingView addSubview:hammerImgView];
-    [hammerImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 260));
+    RDHammer *hammer = [[RDHammer alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth - 20, 250)];
+    [_maskingView addSubview:hammer];
+    [hammer mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 250));
         make.top.mas_equalTo(haTitleImgView.mas_bottom).offset(10);
         make.left.mas_equalTo(10);
         
     }];
+    self.hammer = hammer;
     
     UIButton *haCloseImgBtn = [[UIButton alloc] init];
     [haCloseImgBtn setImage:[UIImage imageNamed:@"yao_guanbi"] forState:UIControlStateNormal];
@@ -342,13 +349,15 @@
     [haCloseImgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(32, 32));
         make.centerX.equalTo(self.view);
-        make.top.mas_equalTo(hammerImgView.mas_bottom).offset(70);
+        make.top.mas_equalTo(hammer.mas_bottom).offset(70);
     }];
     
 }
 - (void)haClosed{
     
     [_maskingView removeFromSuperview];
+    [self eggsViewStartAnimation];
+    _isShake = NO;
 }
 
 // 倒计时控制器
@@ -356,12 +365,10 @@
      _timeCount--;
     _timeLabel.text = [NSString stringWithFormat:@"%i",_timeCount];
     if (_timeCount <= 0) {
-        if (_timer.isValid) {
-            [_timer invalidate];
-            _timer = nil;
-            
-            _isShake = YES;
-        }
+        [_timer invalidate];
+        _timer = nil;
+        
+        _isShake = YES;
     }
 }
 
@@ -369,24 +376,34 @@
 {
     if (_isShake == YES) {
         NSLog(@"开始摇一摇");
+        [self.hammer startShakeAnimation];
         [self requestHitEggNetWork];
-        _videoUrl = [[NSBundle mainBundle] URLForResource:@"glass" withExtension:@"wav"];
+        _videoUrl = [[NSBundle mainBundle] URLForResource:@"glass" withExtension:@"mp3"];
         [self creatBgVoice];
         [self play];
+        [self.hammer startShakeAnimation];
     }
 
 }
 
+- (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+//    if (_isShake == YES) {
+        [self.hammer stopShakeAnimation];
+        [self stop];
+    [self.hammer stopShakeAnimation];
+        NSLog(@"摇一摇停止");
+//    }
+}
+
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
-    if (_isShake == YES) {
-        
-        if (motion ==UIEventSubtypeMotionShake )
-        {
-            [self stop];
-        }
+//    if (_isShake == YES) {
+        [self.hammer stopShakeAnimation];
+        [self stop];
+    [self.hammer stopShakeAnimation];
         NSLog(@"摇一摇停止");
-    }
+//    }
 }
 
 // 请求砸蛋连接
@@ -406,6 +423,9 @@
         [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 
+                [_timer invalidate];
+                _timer = nil;
+                _isShake = YES;
                 [_maskingView removeAllSubviews];
                 [self creatPlayHammerViews];
                 
@@ -413,12 +433,14 @@
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
                 [_maskingView removeAllSubviews];
                 [_maskingView removeFromSuperview];
+                [self eggsViewStartAnimation];
             }
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [MBProgressHUD showTextHUDwithTitle:@"请求失败，请重试"];
             [_maskingView removeAllSubviews];
             [_maskingView removeFromSuperview];
+            [self eggsViewStartAnimation];
         }];
         
     }else{
@@ -437,9 +459,18 @@
                 HSEggsResultModel *erModel = [[HSEggsResultModel alloc] initWithDictionary:result];
                 
                 if (erModel.done == 1) {
+                    
+                    if (isEmptyString([GlobalData shared].projectId)) {
+                        return;
+                    }
+                    
+                    _isShake = NO;
+                    
+                    [GlobalData shared].projectId = @"";
+                    
                     //进行了一次抽奖
                     [RDAwardTool awardHasAwardWithResultModel:erModel];
-                    
+                    _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
                     if (erModel.win == 1) {
                         NSLog(@"获得奖品了");
                     }else{
@@ -448,9 +479,6 @@
                     [_maskingView removeAllSubviews];
                     [self creatPrizeMiddleView:erModel];
                 }
-                NSLog(@"%@",result);
-                [_maskingView removeAllSubviews];
-                [self creatPrizeMiddleView:erModel];
                 
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
@@ -481,9 +509,27 @@
     }
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+        
+    } failure:^{
+        
+    }];
+}
+
 - (BOOL)canBecomeFirstResponder
 {
     return YES;
+}
+
+- (void)eggsViewStartAnimation
+{
+    _videoUrl = [[NSBundle mainBundle] URLForResource:@"selectEggs" withExtension:@"mp3"];
+    [self creatBgVoice];
+    [self play];
+    [self.eggsView startShakeAnimation];
 }
 
 - (void)didReceiveMemoryWarning {
