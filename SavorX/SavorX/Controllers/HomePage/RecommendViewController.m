@@ -499,80 +499,76 @@
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
 {
-    HSAdsModel * model = [self.adSourcel objectAtIndex:index];
-    SmashEggsGameViewController *SEVC = [[SmashEggsGameViewController alloc] init];
-    SEVC.adModel = model;
-    [self.parentNavigationController pushViewController:SEVC animated:YES];
     
-//    if (index < 0 && index > self.adSourcel.count - 1) {
-//        [MBProgressHUD showTextHUDwithTitle:@"暂不支持该操作"];
-//        return;
-//    }
-//    
-//    HSAdsModel * model = [self.adSourcel objectAtIndex:index];
-//    
-//    if (model.type == HSAdsModelType_AWARD) {
-//        //如果是奖品类型
-//        if ([GlobalData shared].isBindRD){
-//            SmashEggsGameViewController *SEVC = [[SmashEggsGameViewController alloc] init];
-//            SEVC.adModel = model;
-//            [self.parentNavigationController pushViewController:SEVC animated:YES];
-//        }else{
-//            [self.shouldDemandDict setObject:model forKey:@"model"];
-//            [self.shouldDemandDict setObject:@(3) forKey:@"type"];
-//            [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
-//            [[HomeAnimationView animationView] scanQRCode];
-//        }
-//        return;
-//    }
-//    
-//    HSVodModel * vodModel = [[HSVodModel alloc] init];
-//    vodModel.name = model.name;
-//    vodModel.imageURL = model.imageURL;
-//    vodModel.cid = model.cid;
-//    vodModel.title = model.title;
-//    vodModel.duration = model.duration;
-//    vodModel.canPlay = 1;
-//    vodModel.type = -100;
-//    
-////    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
-//    
-//    if ([GlobalData shared].isBindRD) {
-//        [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-//        [SAVORXAPI demandWithURL:STBURL name:model.name type:2 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-//            if ([[result objectForKey:@"result"] integerValue] == 0) {
-//                // 获得当前视频图片  回传
-//                
-//                DemandViewController *view = [[DemandViewController alloc] init];
-//                view.categroyID = -2;
-//                view.model = vodModel;
-//                [SAVORXAPI successRing];
-//                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
-//                [[HomeAnimationView animationView] startScreenWithViewController:view];
-//                [self.parentNavigationController pushViewController:view animated:YES];
-//                [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-//                [SAVORXAPI postUMHandleWithContentId:@"home_advertising_video" key:nil value:nil];
-//            }else{
-//                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-//            }
-//            [MBProgressHUD hideHUDForView:self.view animated:YES];
-//        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-//            [MBProgressHUD hideHUDForView:self.view animated:YES];
-//            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-//        }];
-//        
-//    }else if ([GlobalData shared].isBindDLNA) {
-//        [MBProgressHUD showTextHUDwithTitle:@"DLNA暂不支持该操作"];
-//    }else if ([GlobalData shared].scene == RDSceneHaveRDBox) {
-//        
-//        [self.shouldDemandDict setObject:vodModel forKey:@"model"];
-//        [self.shouldDemandDict setObject:@(2) forKey:@"type"];
-//        [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
-//        
-//        [[HomeAnimationView animationView] scanQRCode];
-//    }else {
-//        [MBProgressHUD showTextHUDwithTitle:@"未连接电视，请稍后重试"];
-//    }
+    if (index < 0 && index > self.adSourcel.count - 1) {
+        [MBProgressHUD showTextHUDwithTitle:@"暂不支持该操作"];
+        return;
+    }
+    
+    HSAdsModel * model = [self.adSourcel objectAtIndex:index];
+    
+    if (model.type == HSAdsModelType_AWARD) {
+        //如果是奖品类型
+        if ([GlobalData shared].isBindRD){
+            SmashEggsGameViewController *SEVC = [[SmashEggsGameViewController alloc] init];
+            SEVC.adModel = model;
+            [self.parentNavigationController pushViewController:SEVC animated:YES];
+        }else{
+            [self.shouldDemandDict setObject:model forKey:@"model"];
+            [self.shouldDemandDict setObject:@(3) forKey:@"type"];
+            [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
+            [[HomeAnimationView animationView] scanQRCode];
+        }
+        return;
+    }
+    
+    HSVodModel * vodModel = [[HSVodModel alloc] init];
+    vodModel.name = model.name;
+    vodModel.imageURL = model.imageURL;
+    vodModel.cid = model.cid;
+    vodModel.title = model.title;
+    vodModel.duration = model.duration;
+    vodModel.canPlay = 1;
+    vodModel.type = -100;
+    
+//    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_ADS model:vodModel categoryID:@"-2"];
+    
+    if ([GlobalData shared].isBindRD) {
+        [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+        [SAVORXAPI demandWithURL:STBURL name:model.name type:2 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            if ([[result objectForKey:@"result"] integerValue] == 0) {
+                // 获得当前视频图片  回传
+                
+                DemandViewController *view = [[DemandViewController alloc] init];
+                view.categroyID = -2;
+                view.model = vodModel;
+                [SAVORXAPI successRing];
+                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+                [[HomeAnimationView animationView] startScreenWithViewController:view];
+                [self.parentNavigationController pushViewController:view animated:YES];
+                [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
+                [SAVORXAPI postUMHandleWithContentId:@"home_advertising_video" key:nil value:nil];
+            }else{
+                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+            }
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+        }];
+        
+    }else if ([GlobalData shared].isBindDLNA) {
+        [MBProgressHUD showTextHUDwithTitle:@"DLNA暂不支持该操作"];
+    }else if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+        
+        [self.shouldDemandDict setObject:vodModel forKey:@"model"];
+        [self.shouldDemandDict setObject:@(2) forKey:@"type"];
+        [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
+        
+        [[HomeAnimationView animationView] scanQRCode];
+    }else {
+        [MBProgressHUD showTextHUDwithTitle:@"未连接电视，请稍后重试"];
+    }
 }
 
 - (void)showSelfAndCreateLog
