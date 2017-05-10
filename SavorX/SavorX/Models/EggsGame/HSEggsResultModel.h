@@ -19,7 +19,13 @@
 //是否中奖，0否1是
 @property (nonatomic, assign) NSInteger win;
 
+//奖品ID
+@property (nonatomic, assign) NSInteger prize_id;
+
 //中奖提示语
-@property (nonatomic, copy) NSString *info;
+@property (nonatomic, copy) NSString *prize_name;
+
+//中奖时间
+@property (nonatomic, copy) NSString *prize_time;
 
 @end

@@ -342,6 +342,11 @@
 		96BCE41D1EC2B30900B1A3F7 /* zajindanup_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 96BCE4171EC2B30900B1A3F7 /* zajindanup_bg.png */; };
 		96BCE41E1EC2B30900B1A3F7 /* zajindanup_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96BCE4181EC2B30900B1A3F7 /* zajindanup_bg@2x.png */; };
 		96BCE41F1EC2B30900B1A3F7 /* zajindanup_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96BCE4191EC2B30900B1A3F7 /* zajindanup_bg@3x.png */; };
+		96BCE4231EC2C05300B1A3F7 /* RDGoldenEggs.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */; };
+		96BCE4291EC2F3DB00B1A3F7 /* RDPrizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */; };
+		96BCE42D1EC2FB1400B1A3F7 /* youxigz_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 96BCE42A1EC2FB1400B1A3F7 /* youxigz_bg.png */; };
+		96BCE42E1EC2FB1400B1A3F7 /* youxigz_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96BCE42B1EC2FB1400B1A3F7 /* youxigz_bg@2x.png */; };
+		96BCE42F1EC2FB1400B1A3F7 /* youxigz_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96BCE42C1EC2FB1400B1A3F7 /* youxigz_bg@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -875,6 +880,13 @@
 		96BCE4171EC2B30900B1A3F7 /* zajindanup_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zajindanup_bg.png; sourceTree = "<group>"; };
 		96BCE4181EC2B30900B1A3F7 /* zajindanup_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zajindanup_bg@2x.png"; sourceTree = "<group>"; };
 		96BCE4191EC2B30900B1A3F7 /* zajindanup_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zajindanup_bg@3x.png"; sourceTree = "<group>"; };
+		96BCE4211EC2C05300B1A3F7 /* RDGoldenEggs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDGoldenEggs.h; sourceTree = "<group>"; };
+		96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDGoldenEggs.m; sourceTree = "<group>"; };
+		96BCE4271EC2F3DB00B1A3F7 /* RDPrizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPrizeView.h; sourceTree = "<group>"; };
+		96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPrizeView.m; sourceTree = "<group>"; };
+		96BCE42A1EC2FB1400B1A3F7 /* youxigz_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youxigz_bg.png; sourceTree = "<group>"; };
+		96BCE42B1EC2FB1400B1A3F7 /* youxigz_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youxigz_bg@2x.png"; sourceTree = "<group>"; };
+		96BCE42C1EC2FB1400B1A3F7 /* youxigz_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youxigz_bg@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1332,6 +1344,7 @@
 		0684DF1D1D519095006756D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				96BCE4201EC2C05300B1A3F7 /* GameEggsView */,
 				0689915A1E854EE900BC9EFE /* RDKeyBoard */,
 				06FFCCA61E6E864900ADEA94 /* RDAlertView */,
 				4733B7511E305C01006889A2 /* HomePageView */,
@@ -2122,6 +2135,9 @@
 		96BCE3D31EC1D99B00B1A3F7 /* GameEggs */ = {
 			isa = PBXGroup;
 			children = (
+				96BCE42A1EC2FB1400B1A3F7 /* youxigz_bg.png */,
+				96BCE42B1EC2FB1400B1A3F7 /* youxigz_bg@2x.png */,
+				96BCE42C1EC2FB1400B1A3F7 /* youxigz_bg@3x.png */,
 				96BCE4141EC2B30900B1A3F7 /* zajindandown_bg.png */,
 				96BCE4151EC2B30900B1A3F7 /* zajindandown_bg@2x.png */,
 				96BCE4161EC2B30900B1A3F7 /* zajindandown_bg@3x.png */,
@@ -2139,6 +2155,17 @@
 				96BCE3FA1EC1DE4C00B1A3F7 /* zdwenan@3x.png */,
 			);
 			path = GameEggs;
+			sourceTree = "<group>";
+		};
+		96BCE4201EC2C05300B1A3F7 /* GameEggsView */ = {
+			isa = PBXGroup;
+			children = (
+				96BCE4211EC2C05300B1A3F7 /* RDGoldenEggs.h */,
+				96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */,
+				96BCE4271EC2F3DB00B1A3F7 /* RDPrizeView.h */,
+				96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */,
+			);
+			path = GameEggsView;
 			sourceTree = "<group>";
 		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
@@ -2311,6 +2338,7 @@
 				062D4F9B1DEC02BA0093942A /* RDScreen.png in Resources */,
 				9670C4AB1E7159210060CE0B /* DocGuided@2x.png in Resources */,
 				962EFA881E84F7980074450A /* voljian@2x.png in Resources */,
+				96BCE42E1EC2FB1400B1A3F7 /* youxigz_bg@2x.png in Resources */,
 				96BCE3FE1EC1DE4C00B1A3F7 /* yaoqing_anniu.png in Resources */,
 				06F1583C1D5C85960050BCA6 /* VideoCollectionViewCell.xib in Resources */,
 				062D4F9E1DEC02BA0093942A /* RDShare.png in Resources */,
@@ -2354,6 +2382,7 @@
 				062D4F831DEC02BA0093942A /* RDCollectNO.png in Resources */,
 				96BCE41D1EC2B30900B1A3F7 /* zajindanup_bg.png in Resources */,
 				960EDB401E83EF7000717406 /* connecting1@2x.png in Resources */,
+				96BCE42D1EC2FB1400B1A3F7 /* youxigz_bg.png in Resources */,
 				96BCE41C1EC2B30900B1A3F7 /* zajindandown_bg@3x.png in Resources */,
 				962EFA9D1E88A4F20074450A /* shanchu2@2x.png in Resources */,
 				06F5C9E41E4DE73E00E05492 /* RDFullScreen@2x.png in Resources */,
@@ -2418,6 +2447,7 @@
 				962EFA811E84F7980074450A /* voljia.png in Resources */,
 				960EDB2E1E83DB0300717406 /* connecting2@2x.png in Resources */,
 				062D4F8B1DEC02BA0093942A /* RDDown@3x.png in Resources */,
+				96BCE42F1EC2FB1400B1A3F7 /* youxigz_bg@3x.png in Resources */,
 				962EFA8F1E84F7980074450A /* zanting@3x.png in Resources */,
 				062D4F991DEC02BA0093942A /* RDReplay@2x.png in Resources */,
 				962EFA7F1E84F7980074450A /* labajingyin_g@2x.png in Resources */,
@@ -2552,6 +2582,7 @@
 				06FB9D771DF989180053BE0A /* BaseModel.m in Sources */,
 				062D4F7A1DEC02BA0093942A /* GCCPlayerView.m in Sources */,
 				061E0FD31DFFD9A40072605F /* GCCUPnPManager.m in Sources */,
+				96BCE4231EC2C05300B1A3F7 /* RDGoldenEggs.m in Sources */,
 				06AB944F1D880C8000A29D36 /* rotationImageView.m in Sources */,
 				06FD5F1F1DC1A8510043D898 /* SliderViewController.m in Sources */,
 				06FFCCAC1E6E864900ADEA94 /* RDAlertView.m in Sources */,
@@ -2649,6 +2680,7 @@
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
 				060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */,
 				06569D4E1DC888CE00F934B2 /* AddPhotoListViewController.m in Sources */,
+				96BCE4291EC2F3DB00B1A3F7 /* RDPrizeView.m in Sources */,
 				063AA2451DB8AA97007F4C70 /* AddLibraryViewController.m in Sources */,
 				47D6F63D1E4AB68C0030C8C4 /* SXVideoPlayViewController.m in Sources */,
 				47FE2CB91E1BB53200D3D0B4 /* SplashViewController.m in Sources */,
