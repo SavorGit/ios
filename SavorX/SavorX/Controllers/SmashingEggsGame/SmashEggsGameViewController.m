@@ -13,7 +13,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "HomeAnimationView.h"
 
-@interface SmashEggsGameViewController ()
+@interface SmashEggsGameViewController ()<UITextViewDelegate>
 
 @property(nonatomic ,strong) UILabel *titleLabel;
 @property(nonatomic ,strong) UITextView *ruleTextView;
@@ -22,7 +22,7 @@
 @property(nonatomic ,assign) int timeCount;
 @property(nonatomic ,strong) NSTimer *timer;
 @property(nonatomic ,strong) UIView *maskingView;
-@property(nonatomic ,strong) UIView *textBgView;
+@property(nonatomic ,strong) UIImageView *textBgView;
 @property(nonatomic ,assign) BOOL isShake;
 @property(nonatomic ,strong) UILabel *prizeLevelLab;
 @property (nonatomic, strong) NSMutableDictionary * shouldDemandDict;
@@ -40,10 +40,61 @@
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     
-    // Do any additional setup after loading the view.
 }
 
 - (void)creatSubViews{
+    
+    UIScrollView *bgScrollView = [[UIScrollView alloc] init];
+    bgScrollView.contentSize = CGSizeMake(kMainBoundsWidth, 412 + 476);
+    bgScrollView.showsVerticalScrollIndicator = NO;
+    [self.view addSubview:bgScrollView];
+    [bgScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, kMainBoundsHeight));
+        make.top.mas_equalTo(0);
+    }];
+    
+    UIImageView *upBgView = [[UIImageView alloc] init];
+    upBgView.backgroundColor = [UIColor clearColor];
+    [upBgView setImage:[UIImage imageNamed:@"zajindanup_bg"]];
+    upBgView.userInteractionEnabled = YES;
+    [bgScrollView addSubview:upBgView];
+    [upBgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 412));
+        make.top.mas_equalTo(self.view.top);
+        make.centerX.equalTo(self.view);
+    }];
+    
+    UIImageView *downBgView = [[UIImageView alloc] init];
+    downBgView.backgroundColor = [UIColor clearColor];
+    downBgView.image = [UIImage imageNamed:@"zajindandown_bg"];
+    downBgView.userInteractionEnabled = YES;
+    [bgScrollView addSubview:downBgView];
+    [downBgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 476));
+        make.top.mas_equalTo(upBgView.mas_bottom);
+    }];
+    
+    UIImageView *lucyLgImgView = [[UIImageView alloc] init];
+    lucyLgImgView.backgroundColor = [UIColor clearColor];
+    lucyLgImgView.image = [UIImage imageNamed:@"zdwenan"];
+    lucyLgImgView.userInteractionEnabled = YES;
+    [bgScrollView addSubview:lucyLgImgView];
+    [lucyLgImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(256, 176));
+        make.top.mas_equalTo(40);
+        make.centerX.equalTo(self.view);
+    }];
+    
+    _imgBgView = [[UIImageView alloc] init];
+    _imgBgView.backgroundColor = [UIColor clearColor];
+    _imgBgView.userInteractionEnabled = YES;
+    [bgScrollView addSubview:_imgBgView];
+    [_imgBgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 123));
+        make.bottom.mas_equalTo(upBgView.mas_bottom).offset(-25);
+        make.left.mas_equalTo(0);
+    }];
+    [self creatEggMiddleView];
     
     _titleLabel = [[UILabel alloc] init];
     _titleLabel.font = [UIFont systemFontOfSize:12];
@@ -51,34 +102,33 @@
     _titleLabel.backgroundColor = [UIColor lightGrayColor];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.text = @"您当前有1次机会";
-    [self.view addSubview:_titleLabel];
+    [bgScrollView addSubview:_titleLabel];
     CGFloat textLabelWidth = [Helper autoWidthWith:150.f];
     CGFloat textLabelHeight = [Helper autoHeightWith:30.f];
-    CGFloat textLabTopDistance = [Helper autoHeightWith:20.f];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(textLabelWidth, textLabelHeight));
-        make.top.mas_equalTo(textLabTopDistance);
+        make.top.mas_equalTo(_imgBgView.mas_bottom).offset(10);
         make.centerX.equalTo(self.view);
     }];
     
-    _imgBgView = [[UIImageView alloc] init];
-    _imgBgView.backgroundColor = [UIColor lightGrayColor];
-    _imgBgView.userInteractionEnabled = YES;
-    [self.view addSubview:_imgBgView];
-    [_imgBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 260));
-        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(20);
-        make.left.mas_equalTo(20);
+    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [shareBtn setImage:[UIImage imageNamed:@"yaoqing_anniu"] forState:UIControlStateNormal];
+    [shareBtn setBackgroundColor:[UIColor clearColor]];
+    [shareBtn addTarget:self action:@selector(sharePress:) forControlEvents:UIControlEventTouchUpInside];
+    [bgScrollView addSubview:shareBtn];
+    [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(167, 48));
+        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
+        make.centerX.equalTo(self.view);
     }];
-    [self creatEggMiddleView];
     
-    _textBgView = [[UIView alloc] init];
+    _textBgView = [[UIImageView alloc] init];
     _textBgView.backgroundColor = [UIColor lightGrayColor];
     _textBgView.userInteractionEnabled = YES;
-    [self.view addSubview:_textBgView];
+    [bgScrollView addSubview:_textBgView];
     [_textBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 230));
-        make.top.mas_equalTo(_imgBgView.mas_bottom).offset(20);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 200));
+        make.top.mas_equalTo(shareBtn.mas_bottom).offset(10);
         make.left.mas_equalTo(20);
     }];
     
@@ -90,8 +140,8 @@
     gameRuleLab.text = @"游戏规则:";
     [_textBgView addSubview:gameRuleLab];
     [gameRuleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(100, 30));
-        make.top.mas_equalTo(5);
+        make.size.mas_equalTo(CGSizeMake(100, 20));
+        make.top.mas_equalTo(0);
         make.left.mas_equalTo(5);
     }];
     
@@ -99,31 +149,32 @@
     _ruleTextView.textColor = [UIColor blackColor];
     _ruleTextView.font = [UIFont systemFontOfSize:16];
     _ruleTextView.editable = NO;
+    _ruleTextView.userInteractionEnabled = NO;
     _ruleTextView.delegate = self;
     _ruleTextView.backgroundColor = [UIColor whiteColor];
     _ruleTextView.text = @"1.中阿斯顿哈佛阿萨德佛萨佛所诉公司规定暗红色的佛哦啊水电费；\n2.阿什顿佛啊搜到个红色的公司大国萨谷搜矮冬瓜撒打工啊搜到过建瓯市打工撒殴打过大过撒的嘎嘎十多个后撒点过后十多个；\n3.阿萨德红告诉低功耗哦啊是公婆阿萨德国际化破挥洒的公平三大后方和萨拉低功耗拉黑属地管理和萨拉电光火石拉活过来按时阿萨德骨灰盒撒旦改好啦属地管理撒旦个\n4.啊胡搜的分红阿萨德烘干房会受到个红色打火锅搜啊和郭鹏三大个航拍啊收到刚回来的撒谎过来撒东华理工合适的拉回公司打工回拉萨电话费拉萨的活雷锋";
-    _ruleTextView.scrollEnabled = YES;
+    _ruleTextView.scrollEnabled = NO;
     [_textBgView addSubview:_ruleTextView];
     [_ruleTextView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40 - 20, 190));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40 - 20, 170));
         make.top.mas_equalTo(gameRuleLab.mas_bottom);
         make.left.mas_equalTo(10);
     }];
-    
     
 }
 
 - (void)creatEggMiddleView{
     
     UIImageView *eggOneImgView = [[UIImageView alloc] init];
-    eggOneImgView.backgroundColor = [UIColor redColor];
+    eggOneImgView.backgroundColor = [UIColor clearColor];
+    eggOneImgView.image = [UIImage imageNamed:@"jindan"];
     eggOneImgView.userInteractionEnabled = YES;
     eggOneImgView.tag = 10010;
     [_imgBgView addSubview:eggOneImgView];
     [eggOneImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake((kMainBoundsWidth - 40 - 40)/3, 220));
-        make.left.mas_equalTo(10);
-        make.top.mas_equalTo(_imgBgView.mas_top).offset(20);
+        make.size.mas_equalTo(CGSizeMake(96,123));
+        make.left.mas_equalTo(((kMainBoundsWidth - 96*3)/4));
+        make.top.mas_equalTo(_imgBgView.mas_top).offset(0);
         
     }];
     
@@ -132,14 +183,15 @@
     [eggOneImgView addGestureRecognizer:singleTap];
     
     UIImageView *eggTwoImgView = [[UIImageView alloc] init];
-    eggTwoImgView.backgroundColor = [UIColor blueColor];
+    eggTwoImgView.backgroundColor = [UIColor clearColor];
+    eggTwoImgView.image = [UIImage imageNamed:@"jindan"];
     eggTwoImgView.userInteractionEnabled = YES;
     eggTwoImgView.tag = 10011;
     [_imgBgView addSubview:eggTwoImgView];
     [eggTwoImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake((kMainBoundsWidth - 40 - 40)/3, 220));
-        make.left.mas_equalTo(eggOneImgView.mas_right).offset(10);
-        make.top.mas_equalTo(_imgBgView.mas_top).offset(20);
+        make.size.mas_equalTo(CGSizeMake(96,123));
+        make.left.mas_equalTo(eggOneImgView.mas_right).offset(((kMainBoundsWidth - 96*3)/4));
+        make.top.mas_equalTo(_imgBgView.mas_top).offset(0);
         
     }];
     
@@ -148,14 +200,15 @@
     [eggTwoImgView addGestureRecognizer:singleTTap];
     
     UIImageView *eggThreeImgView = [[UIImageView alloc] init];
-    eggThreeImgView.backgroundColor = [UIColor cyanColor];
+    eggThreeImgView.backgroundColor = [UIColor clearColor];
+    eggThreeImgView.image = [UIImage imageNamed:@"jindan"];
     eggThreeImgView.userInteractionEnabled = YES;
     eggThreeImgView.tag = 10012;
     [_imgBgView addSubview:eggThreeImgView];
     [eggThreeImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake((kMainBoundsWidth - 40 - 40)/3, 220));
-        make.left.mas_equalTo(eggTwoImgView.mas_right).offset(10);
-        make.top.mas_equalTo(_imgBgView.mas_top).offset(20);
+        make.size.mas_equalTo(CGSizeMake(96,123));
+        make.left.mas_equalTo(eggTwoImgView.mas_right).offset(((kMainBoundsWidth - 96*3)/4));
+        make.top.mas_equalTo(_imgBgView.mas_top).offset(0);
         
     }];
     
@@ -167,53 +220,55 @@
 
 - (void)creatPrizeMiddleView{
     
-    UILabel *phoneNameLab = [[UILabel alloc] init];
-    phoneNameLab.font = [UIFont systemFontOfSize:12];
-    phoneNameLab.textColor = UIColorFromRGB(0xf5f5f5);
-    phoneNameLab.backgroundColor = [UIColor lightGrayColor];
-    phoneNameLab.textAlignment = NSTextAlignmentLeft;
-    phoneNameLab.text = @"游戏者的手机";
-    [_imgBgView addSubview:phoneNameLab];
-    [phoneNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(100, 30));
-        make.top.mas_equalTo(5);
-        make.left.mas_equalTo(5);
+    UIImageView *prizeBgImgView = [[UIImageView alloc] init];
+    prizeBgImgView.backgroundColor = [UIColor blueColor];
+    prizeBgImgView.layer.cornerRadius = 6.0;
+    [_maskingView addSubview:prizeBgImgView];
+    [prizeBgImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 80, 230));
+        make.left.mas_equalTo(40);
+        make.center.equalTo(self.view);
+        make.centerY.equalTo(self.view);
+        
     }];
     
     UILabel *congratueLab = [[UILabel alloc] init];
     congratueLab.font = [UIFont systemFontOfSize:16];
     congratueLab.textColor = UIColorFromRGB(0xf5f5f5);
-    congratueLab.backgroundColor = [UIColor lightGrayColor];
+    congratueLab.backgroundColor = [UIColor clearColor];
     congratueLab.textAlignment = NSTextAlignmentCenter;
     congratueLab.text = @"恭喜您，中奖了~~~";
-    [_imgBgView addSubview:congratueLab];
+    [prizeBgImgView addSubview:congratueLab];
     [congratueLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(200, 50));
-        make.top.mas_equalTo(phoneNameLab.mas_bottom);
+        make.top.mas_equalTo(prizeBgImgView.top).offset(5);
         make.centerX.equalTo(self.view);
     }];
     
+    UILabel *phoneNameLab = [[UILabel alloc] init];
+    phoneNameLab.font = [UIFont systemFontOfSize:12];
+    phoneNameLab.textColor = UIColorFromRGB(0xf5f5f5);
+    phoneNameLab.backgroundColor = [UIColor clearColor];
+    phoneNameLab.textAlignment = NSTextAlignmentLeft;
+    phoneNameLab.text = @"游戏者的手机";
+    [prizeBgImgView addSubview:phoneNameLab];
+    [phoneNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 30));
+        make.top.mas_equalTo(congratueLab.mas_bottom);
+        make.left.mas_equalTo(5);
+    }];
+
     _prizeLevelLab = [[UILabel alloc] init];
     _prizeLevelLab.font = [UIFont systemFontOfSize:30];
     _prizeLevelLab.textColor = UIColorFromRGB(0xf5f5f5);
-    _prizeLevelLab.backgroundColor = [UIColor lightGrayColor];
+    _prizeLevelLab.backgroundColor = [UIColor clearColor];
     _prizeLevelLab.textAlignment = NSTextAlignmentCenter;
     _prizeLevelLab.text = @"特等奖";
-    [_imgBgView addSubview:_prizeLevelLab];
+    [prizeBgImgView addSubview:_prizeLevelLab];
     [_prizeLevelLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(150, 60));
-        make.top.mas_equalTo(congratueLab.mas_bottom).offset(15);
+        make.top.mas_equalTo(phoneNameLab.mas_bottom);
         make.centerX.equalTo(self.view);
-    }];
-    
-    UIImageView *bottomBgView = [[UIImageView alloc] init];
-    bottomBgView.backgroundColor = [UIColor whiteColor];
-    bottomBgView.userInteractionEnabled = YES;
-    [_imgBgView addSubview:bottomBgView];
-    [bottomBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40 - 10, 80));
-        make.bottom.mas_equalTo(_imgBgView.mas_bottom).offset(-10);
-        make.left.mas_equalTo(5);
     }];
     
     UILabel *prizeFormLab = [[UILabel alloc] init];
@@ -222,11 +277,11 @@
     prizeFormLab.backgroundColor = [UIColor clearColor];
     prizeFormLab.textAlignment = NSTextAlignmentCenter;
     prizeFormLab.text = @"快去找服务员领取奖品吧";
-    [bottomBgView addSubview:prizeFormLab];
+    [prizeBgImgView addSubview:prizeFormLab];
     [prizeFormLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(160, 30));
-        make.top.mas_equalTo(bottomBgView.mas_top).offset(10);
-        make.left.mas_equalTo(5);
+        make.top.mas_equalTo(prizeBgImgView.mas_bottom).offset(- 80);
+        make.centerX.equalTo(prizeBgImgView);
     }];
     
     UILabel *prizeTimeLab = [[UILabel alloc] init];
@@ -234,76 +289,27 @@
     prizeTimeLab.textColor = [UIColor blackColor];
     prizeTimeLab.backgroundColor = [UIColor clearColor];
     prizeTimeLab.textAlignment = NSTextAlignmentCenter;
-    prizeTimeLab.text = @"有效领奖时间:60分钟";
-    [bottomBgView addSubview:prizeTimeLab];
+    prizeTimeLab.text = @"有效领奖时间:60分钟,";
+    [prizeBgImgView addSubview:prizeTimeLab];
     [prizeTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(140, 30));
-        make.top.mas_equalTo(bottomBgView.mas_top).offset(10);
-        make.left.mas_equalTo(prizeFormLab.mas_right).offset(10);
-    }];
-    
-    UILabel *alertLab = [[UILabel alloc] init];
-    alertLab.font = [UIFont systemFontOfSize:15];
-    alertLab.textColor = [UIColor blackColor];
-    alertLab.backgroundColor = [UIColor whiteColor];
-    alertLab.textAlignment = NSTextAlignmentCenter;
-    alertLab.text = @"请勿关闭此页面，关闭后，您将失去兑奖资格";
-    [bottomBgView addSubview:alertLab];
-    [alertLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40 - 10, 30));
-        make.top.mas_equalTo(prizeTimeLab.mas_bottom).offset(5);
-        make.left.mas_equalTo(0);
-    }];
-    
-    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [shareBtn setTitle:@"邀请好友参加" forState:UIControlStateNormal];
-    [shareBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [shareBtn setBackgroundColor:[UIColor lightGrayColor]];
-    [shareBtn addTarget:self action:@selector(sharePress:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:shareBtn];
-    [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(120, 30));
-        make.top.mas_equalTo(_imgBgView.mas_bottom).offset(10);
-        make.centerX.equalTo(self.view);
-    }];
-    
-    _textBgView = [[UIView alloc] init];
-    _textBgView.backgroundColor = [UIColor lightGrayColor];
-    _textBgView.userInteractionEnabled = YES;
-    [self.view addSubview:_textBgView];
-    [_textBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 200));
-        make.top.mas_equalTo(shareBtn.mas_bottom).offset(20);
+        make.top.mas_equalTo(prizeBgImgView.mas_bottom).offset(-40);
         make.left.mas_equalTo(20);
     }];
     
-    UILabel *gameRuleLab = [[UILabel alloc] init];
-    gameRuleLab.font = [UIFont systemFontOfSize:12];
-    gameRuleLab.textColor = UIColorFromRGB(0xf5f5f5);
-    gameRuleLab.backgroundColor = [UIColor lightGrayColor];
-    gameRuleLab.textAlignment = NSTextAlignmentLeft;
-    gameRuleLab.text = @"游戏规则:";
-    [_textBgView addSubview:gameRuleLab];
-    [gameRuleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(100, 30));
-        make.top.mas_equalTo(5);
-        make.left.mas_equalTo(5);
+    UILabel *alertLab = [[UILabel alloc] init];
+    alertLab.font = [UIFont systemFontOfSize:14];
+    alertLab.textColor = [UIColor redColor];
+    alertLab.backgroundColor = [UIColor clearColor];
+    alertLab.textAlignment = NSTextAlignmentCenter;
+    alertLab.text = @"关闭后将无法领取";
+    [prizeBgImgView addSubview:alertLab];
+    [alertLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(140, 30));
+        make.top.mas_equalTo(prizeBgImgView.mas_bottom).offset(-40);
+        make.left.mas_equalTo(prizeTimeLab.mas_right);
     }];
-    
-    _ruleTextView = [[UITextView alloc] init];
-    _ruleTextView.textColor = [UIColor blackColor];
-    _ruleTextView.font = [UIFont systemFontOfSize:16];
-    _ruleTextView.editable = NO;
-    _ruleTextView.delegate = self;
-    _ruleTextView.backgroundColor = [UIColor whiteColor];
-    _ruleTextView.text = @"1.中阿斯顿哈佛阿萨德佛萨佛所诉公司规定暗红色的佛哦啊水电费；\n2.阿什顿佛啊搜到个红色的公司大国萨谷搜矮冬瓜撒打工啊搜到过建瓯市打工撒殴打过大过撒的嘎嘎十多个后撒点过后十多个；\n3.阿萨德红告诉低功耗哦啊是公婆阿萨德国际化破挥洒的公平三大后方和萨拉低功耗拉黑属地管理和萨拉电光火石拉活过来按时阿萨德骨灰盒撒旦改好啦属地管理撒旦个\n4.啊胡搜的分红阿萨德烘干房会受到个红色打火锅搜啊和郭鹏三大个航拍啊收到刚回来的撒谎过来撒东华理工合适的拉回公司打工回拉萨电话费拉萨的活雷锋";
-    _ruleTextView.scrollEnabled = YES;
-    [_textBgView addSubview:_ruleTextView];
-    [_ruleTextView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40 - 20, 160));
-        make.top.mas_equalTo(gameRuleLab.mas_bottom);
-        make.left.mas_equalTo(10);
-    }];
+
 
 }
 
@@ -352,29 +358,31 @@
 // 创建锤子砸蛋中页面
 - (void)creatPlayHammerViews{
     
-    UILabel *hammerTitleLab = [[UILabel alloc] init];
-    hammerTitleLab.font = [UIFont boldSystemFontOfSize:16];
-    hammerTitleLab.textColor = [UIColor orangeColor];
-    hammerTitleLab.backgroundColor = [UIColor clearColor];
-    hammerTitleLab.textAlignment = NSTextAlignmentCenter;
-    hammerTitleLab.text = @"用力摇动手机即可砸蛋";
-    [_maskingView addSubview:hammerTitleLab];
-    [hammerTitleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 30));
-        make.centerX.equalTo(_maskingView);
-        make.top.mas_equalTo(_maskingView.top).offset(100);
-    }];
+    [self creatPrizeMiddleView];
     
-    UIImageView *hammerImgView = [[UIImageView alloc] init];
-    hammerImgView.backgroundColor = [UIColor blueColor];
-    hammerImgView.userInteractionEnabled = YES;
-    [_maskingView addSubview:hammerImgView];
-    [hammerImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 300));
-        make.top.mas_equalTo(hammerTitleLab.mas_bottom).offset(20);
-        make.left.mas_equalTo(10);
-        
-    }];
+//    UILabel *hammerTitleLab = [[UILabel alloc] init];
+//    hammerTitleLab.font = [UIFont boldSystemFontOfSize:16];
+//    hammerTitleLab.textColor = [UIColor orangeColor];
+//    hammerTitleLab.backgroundColor = [UIColor clearColor];
+//    hammerTitleLab.textAlignment = NSTextAlignmentCenter;
+//    hammerTitleLab.text = @"用力摇动手机即可砸蛋";
+//    [_maskingView addSubview:hammerTitleLab];
+//    [hammerTitleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 30));
+//        make.centerX.equalTo(_maskingView);
+//        make.top.mas_equalTo(_maskingView.top).offset(100);
+//    }];
+//    
+//    UIImageView *hammerImgView = [[UIImageView alloc] init];
+//    hammerImgView.backgroundColor = [UIColor blueColor];
+//    hammerImgView.userInteractionEnabled = YES;
+//    [_maskingView addSubview:hammerImgView];
+//    [hammerImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 300));
+//        make.top.mas_equalTo(hammerTitleLab.mas_bottom).offset(20);
+//        make.left.mas_equalTo(10);
+//        
+//    }];
 
 }
 
@@ -462,8 +470,7 @@
                 HSEggsResultModel *erModel = [[HSEggsResultModel alloc] initWithDictionary:result];
                 _prizeLevelLab.text = erModel.info;
                 
-                [_imgBgView removeAllSubviews];
-                [_textBgView removeFromSuperview];
+                [_maskingView removeAllSubviews];
                 [self creatPrizeMiddleView];
                 
             }else{
