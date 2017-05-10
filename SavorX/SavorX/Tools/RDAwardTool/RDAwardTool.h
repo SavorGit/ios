@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "HSEggsResultModel.h"
 
 @interface RDAwardTool : NSObject
 
@@ -14,7 +15,7 @@
 + (BOOL)awardCanAwardWithAPILottery_num:(NSInteger)lottery_num;
 
 //进行了一次抽奖
-+ (void)awardHasAwardWithResult:(BOOL)isSuccess;
++ (void)awardHasAwardWithResultModel:(HSEggsResultModel *)model;
 
 //保存抽奖次数
 + (void)awardSaveAwardNumber:(NSInteger)number;

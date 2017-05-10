@@ -24,6 +24,7 @@
 #import "HSVideoViewController.h"
 #import "RDLogStatisticsAPI.h"
 #import "SmashEggsGameViewController.h"
+#import "RDAwardTool.h"
 
 @interface RecommendViewController ()<UITableViewDelegate, UITableViewDataSource, SDCycleScrollViewDelegate>
 
@@ -164,6 +165,7 @@
         if (awardInfo) {
             HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
             [self.adSourcel addObject:model];
+            [RDAwardTool awardSaveAwardNumber:model.lottery_num];
         }
         
         self.hotelName = [dict objectForKey:@"hotelName"];
@@ -264,6 +266,7 @@
         if (awardInfo) {
             HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
             [self.adSourcel addObject:model];
+            [RDAwardTool awardSaveAwardNumber:model.lottery_num];
         }
         
         self.hotelName = [dict objectForKey:@"hotelName"];
