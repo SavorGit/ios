@@ -31,6 +31,7 @@ typedef enum : NSUInteger {
 //奖品类型参数
 @property (nonatomic, copy) NSString * award_start_time;
 @property (nonatomic, copy) NSString * award_end_time;
+@property (nonatomic, assign) NSInteger lottery_num;
 
 - (id)initAwardWithDictionary:(NSDictionary *)dictionary;
 
