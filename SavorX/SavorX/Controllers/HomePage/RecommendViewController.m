@@ -23,6 +23,7 @@
 #import "HSGetLastHotelVodList.h"
 #import "HSVideoViewController.h"
 #import "RDLogStatisticsAPI.h"
+#import "SmashEggsGameViewController.h"
 
 @interface RecommendViewController ()<UITableViewDelegate, UITableViewDataSource, SDCycleScrollViewDelegate>
 
@@ -504,7 +505,15 @@
     
     if (model.type == HSAdsModelType_AWARD) {
         //如果是奖品类型
-        
+        if ([GlobalData shared].isBindRD){
+            SmashEggsGameViewController *SEVC = [[SmashEggsGameViewController alloc] init];
+            [self.parentNavigationController pushViewController:SEVC animated:YES];
+        }else{
+            [self.shouldDemandDict setObject:model forKey:@"model"];
+            [self.shouldDemandDict setObject:@(3) forKey:@"type"];
+            [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
+            [[HomeAnimationView animationView] scanQRCode];
+        }
         return;
     }
     
@@ -645,6 +654,18 @@
     if ([[self.shouldDemandDict objectForKey:@"should"] boolValue]) {
         HSVodModel * model = [self.shouldDemandDict objectForKey:@"model"];
         NSInteger type = [[self.shouldDemandDict objectForKey:@"type"] integerValue];
+        
+        // 如果是奖品类型，择跳转到游戏页面
+        if (type == 3 && model.type == HSAdsModelType_AWARD) {
+            //如果是奖品类型
+            if ([GlobalData shared].isBindRD){
+                SmashEggsGameViewController *SEVC = [[SmashEggsGameViewController alloc] init];
+                [self.parentNavigationController pushViewController:SEVC animated:YES];
+            }
+            [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
+            return;
+        }
+        
         if ([GlobalData shared].isBindRD && model.canPlay == 1) {
             [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
             //如果是绑定状态
