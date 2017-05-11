@@ -265,11 +265,13 @@
 // 创建中奖结果页面
 - (void)creatPrizeMiddleView:(HSEggsResultModel *)model{
     
-    RDPrizeView *prizeView = [[RDPrizeView alloc] initWithFrame:CGRectMake(0, 0, 294, 244) withModel:model];
+    CGFloat prizeViewWidth  = [Helper autoWidthWith:294];
+    CGFloat prizeViewHeight  = [Helper autoHeightWith:244];
+    RDPrizeView *prizeView = [[RDPrizeView alloc] initWithFrame:CGRectMake(0, 0, prizeViewWidth, prizeViewHeight) withModel:model];
     prizeView.delegate = self;
     [_maskingView addSubview:prizeView];
     [prizeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(294, 244));
+        make.size.mas_equalTo(CGSizeMake(prizeViewWidth, prizeViewHeight));
         make.center.equalTo(self.view);
     }];
     
@@ -279,11 +281,10 @@
     [_maskingView addSubview:prCloseimgBtn];
     CGFloat prCloseWidth = [Helper autoWidthWith:32.f];
     CGFloat prCloseHeight = [Helper autoHeightWith:61.f];
-    CGFloat prCloseToleft = [Helper autoHeightWith:kMainBoundsWidth - 90];
     [prCloseimgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(prCloseWidth, prCloseHeight));
-        make.left.mas_equalTo(prCloseToleft);
-        make.bottom.mas_equalTo(prizeView.mas_top);
+        make.right.mas_equalTo(prizeView.mas_right).offset(- 15);
+        make.bottom.mas_equalTo(prizeView.mas_top).offset(1);
     }];
 }
 
@@ -356,7 +357,7 @@
     [haCloseImgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(32, 32));
         make.centerX.equalTo(self.view);
-        make.top.mas_equalTo(hammer.mas_bottom).offset(70);
+        make.top.mas_equalTo(kMainBoundsHeight - 50 - 64);
     }];
     
 }
