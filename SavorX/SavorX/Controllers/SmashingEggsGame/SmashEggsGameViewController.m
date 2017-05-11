@@ -21,7 +21,7 @@
 #import "RDHammer.h"
 #import "ShareRDViewController.h"
 
-@interface SmashEggsGameViewController ()<UITextViewDelegate,RDGoldenEggsDelegate,AVAudioPlayerDelegate,RDPrizeViewDelegate>
+@interface SmashEggsGameViewController ()<UITextViewDelegate,RDGoldenEggsDelegate,AVAudioPlayerDelegate>
 
 @property (nonatomic ,strong) UILabel *titleLabel;
 @property (nonatomic ,strong) UITextView *ruleTextView;
@@ -268,7 +268,6 @@
     CGFloat prizeViewWidth  = [Helper autoWidthWith:294];
     CGFloat prizeViewHeight  = [Helper autoHeightWith:244];
     RDPrizeView *prizeView = [[RDPrizeView alloc] initWithFrame:CGRectMake(0, 0, prizeViewWidth, prizeViewHeight) withModel:model];
-    prizeView.delegate = self;
     [_maskingView addSubview:prizeView];
     [prizeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(prizeViewWidth, prizeViewHeight));
