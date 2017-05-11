@@ -19,6 +19,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "HomeAnimationView.h"
 #import "RDHammer.h"
+#import "ShareRDViewController.h"
 
 @interface SmashEggsGameViewController ()<UITextViewDelegate,RDGoldenEggsDelegate,AVAudioPlayerDelegate,RDPrizeViewDelegate>
 
@@ -248,7 +249,7 @@
 
     
     if (([GlobalData shared].isBindRD)) {
-        [self creatMaskingView];
+        [self requestForEggsNetWork];
         [self stop];
         [self.eggsView stopShakeAnimation];
     }else{
@@ -283,21 +284,25 @@
 - (void)prizeClosed{
     [_maskingView removeFromSuperview];
     [self eggsViewStartAnimation];
+    [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+        
+    } failure:^{
+        
+    }];
 }
 
 - (void)sharePress:(UIButton *)button{
-    
+    ShareRDViewController * share = [[ShareRDViewController alloc] init];
+    share.title = @"推荐";
+    [self.navigationController pushViewController:share animated:YES];
 }
 
 // 创建蒙层倒计时
 - (void)creatMaskingView{
     
-    [self requestForEggsNetWork];
-    
     _maskingView = [[UIView alloc] init];
     _maskingView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
-    _maskingView.backgroundColor = [UIColor blackColor];
-    _maskingView.alpha = 0.85;
+    _maskingView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.9f];
     [self.view addSubview:_maskingView];
     
     _timeLabel = [[UILabel alloc] init];
@@ -358,6 +363,11 @@
     [_maskingView removeFromSuperview];
     [self eggsViewStartAnimation];
     _isShake = NO;
+    [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+        
+    } failure:^{
+        
+    }];
 }
 
 // 倒计时控制器
@@ -367,7 +377,8 @@
     if (_timeCount <= 0) {
         [_timer invalidate];
         _timer = nil;
-        
+        [_maskingView removeAllSubviews];
+        [self creatPlayHammerViews];
         _isShake = YES;
     }
 }
@@ -380,6 +391,7 @@
         [self requestHitEggNetWork];
         _videoUrl = [[NSBundle mainBundle] URLForResource:@"glass" withExtension:@"mp3"];
         [self creatBgVoice];
+        _player.numberOfLoops = 0;
         [self play];
         [self.hammer startShakeAnimation];
     }
@@ -388,22 +400,16 @@
 
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
-//    if (_isShake == YES) {
+    if (_isShake) {
         [self.hammer stopShakeAnimation];
-        [self stop];
-    [self.hammer stopShakeAnimation];
-        NSLog(@"摇一摇停止");
-//    }
+    }
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
-//    if (_isShake == YES) {
+    if (_isShake) {
         [self.hammer stopShakeAnimation];
-        [self stop];
-    [self.hammer stopShakeAnimation];
-        NSLog(@"摇一摇停止");
-//    }
+    }
 }
 
 // 请求砸蛋连接
@@ -420,26 +426,20 @@
     //如果是绑定状态
     if ([GlobalData shared].isBindRD) {
         
+        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+        
         [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
-                
-                [_timer invalidate];
-                _timer = nil;
-                _isShake = YES;
-                [_maskingView removeAllSubviews];
-                [self creatPlayHammerViews];
+                [self creatMaskingView];
                 
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-                [_maskingView removeAllSubviews];
-                [_maskingView removeFromSuperview];
                 [self eggsViewStartAnimation];
             }
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [hud hideAnimated:NO];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [hud hideAnimated:NO];
             [MBProgressHUD showTextHUDwithTitle:@"请求失败，请重试"];
-            [_maskingView removeAllSubviews];
-            [_maskingView removeFromSuperview];
             [self eggsViewStartAnimation];
         }];
         
@@ -465,6 +465,7 @@
                     }
                     
                     _isShake = NO;
+                    [self.hammer stopShakeAnimation];
                     
                     [GlobalData shared].projectId = @"";
                     
@@ -483,7 +484,6 @@
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [MBProgressHUD showTextHUDwithTitle:DemandFailure];
         }];
@@ -494,7 +494,6 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([[self.shouldDemandDict objectForKey:@"should"] boolValue]) {
-        [self creatMaskingView];
         [self requestForEggsNetWork];
         [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     }
