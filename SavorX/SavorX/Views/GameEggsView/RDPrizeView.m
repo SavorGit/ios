@@ -28,8 +28,8 @@
     [self addSubview:bgImgView];
     
     UILabel *congratueLab = [[UILabel alloc] init];
-    congratueLab.font = [UIFont systemFontOfSize:20];
-    congratueLab.textColor = [UIColor whiteColor];
+    congratueLab.font = [UIFont systemFontOfSize:22];
+    congratueLab.textColor = UIColorFromRGB(0xfffaeb);
     congratueLab.backgroundColor = [UIColor clearColor];
     congratueLab.textAlignment = NSTextAlignmentCenter;
     congratueLab.text = @"恭喜您，中奖啦~";
@@ -41,46 +41,27 @@
     }];
     
     UILabel *phoneNameLab = [[UILabel alloc] init];
-    phoneNameLab.font = [UIFont systemFontOfSize:16];
-    phoneNameLab.textColor = [UIColor redColor];
+    phoneNameLab.font = [UIFont systemFontOfSize:14];
+    phoneNameLab.textColor = UIColorFromRGB(0xe14d43);
     phoneNameLab.backgroundColor = [UIColor clearColor];
     phoneNameLab.textAlignment = NSTextAlignmentLeft;
-    phoneNameLab.text = [NSString stringWithFormat:@"%@的IPhone",[GCCGetInfo getIphoneName]];
+    phoneNameLab.text = [NSString stringWithFormat:@"%@",[GCCGetInfo getIphoneName]];
     [bgImgView addSubview:phoneNameLab];
     CGFloat phoneNameLabWidth  = [Helper autoWidthWith:260];
-    CGFloat phoneNameLabHeight  = [Helper autoHeightWith:30];
+    CGFloat phoneNameLabHeight  = [Helper autoHeightWith:20];
     [phoneNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(phoneNameLabWidth, phoneNameLabHeight));
-        make.top.mas_equalTo(congratueLab.mas_bottom).offset(5);
+        make.top.mas_equalTo(congratueLab.mas_bottom).offset(10);
         make.left.mas_equalTo(10);
     }];
     
-//    UILabel *getPriTimeLab = [[UILabel alloc] init];
-//    getPriTimeLab.font = [UIFont systemFontOfSize:16];
-//    getPriTimeLab.textColor = [UIColor redColor];
-//    getPriTimeLab.backgroundColor = [UIColor clearColor];
-//    getPriTimeLab.textAlignment = NSTextAlignmentLeft;
-//    getPriTimeLab.text = @"2017-05-11 16:12";
-//    [bgImgView addSubview:getPriTimeLab];
-//    CGFloat getPriWidth  = [Helper autoWidthWith:kMainBoundsWidth - 260];
-//    CGFloat getPribHeight  = [Helper autoHeightWith:30];
-//    [phoneNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(getPriWidth, getPribHeight));
-//        make.top.mas_equalTo(congratueLab.mas_bottom).offset(5);
-//        make.left.mas_equalTo(10);
-//    }];
-    
     
     UIImageView *prizeLevelImg = [[UIImageView alloc] init];
-    prizeLevelImg.image = [UIImage imageNamed:@"yidj"];
+    prizeLevelImg.contentMode = UIViewContentModeScaleAspectFit;
     [bgImgView addSubview:prizeLevelImg];
-    CGFloat prizeLeveWidth  = [Helper autoWidthWith:113];
-    CGFloat prizeLeveHeight  = [Helper autoHeightWith:36];
-    CGFloat prizeLeveToTop  = [Helper autoHeightWith:20];
     [prizeLevelImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(prizeLeveWidth, prizeLeveHeight));
-        make.top.mas_equalTo(phoneNameLab.mas_bottom).offset(prizeLeveToTop);
-        make.centerX.equalTo(self);
+        make.size.mas_equalTo(CGSizeMake(152, 36));
+        make.center.equalTo(bgImgView);
     }];
     if (model.prize_level == 1) {
         prizeLevelImg.image = [UIImage imageNamed:@"yidj"];
@@ -92,20 +73,24 @@
         prizeLevelImg.image = [UIImage imageNamed:@"xxcy"];
     }
     
-    UILabel *prizeFormLab = [[UILabel alloc] init];
-    prizeFormLab.font = [UIFont systemFontOfSize:18];
-    if (kMainBoundsWidth == 320) {
-        prizeFormLab.font = [UIFont systemFontOfSize:15];
+    UILabel *getPriTimeLab = [[UILabel alloc] init];
+    getPriTimeLab.font = [UIFont systemFontOfSize:12];
+    getPriTimeLab.textColor = UIColorFromRGB(0xe14d43);
+    getPriTimeLab.backgroundColor = [UIColor clearColor];
+    getPriTimeLab.textAlignment =  NSTextAlignmentCenter;
+    NSString *timeStr;
+    if (!isEmptyString(model.prize_time)) {
+        timeStr = [model.prize_time substringToIndex:[model.prize_time length] - 3];
+    }else{
+        timeStr = @"";
     }
-    prizeFormLab.textColor = [UIColor lightGrayColor];
-    prizeFormLab.backgroundColor = [UIColor clearColor];
-    prizeFormLab.textAlignment = NSTextAlignmentCenter;
-    prizeFormLab.text = @"快去找服务员领取奖品吧";
-    [bgImgView addSubview:prizeFormLab];
-    CGFloat prizeFormToBottom  = [Helper autoHeightWith:12];
-    [prizeFormLab mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 50));
-        make.bottom.mas_equalTo(self.mas_bottom).offset(- prizeFormToBottom);
+    getPriTimeLab.text = [NSString stringWithFormat:@"(%@)",timeStr];
+    [bgImgView addSubview:getPriTimeLab];
+    CGFloat getPriWidth  = [Helper autoWidthWith: 120];
+    CGFloat getPribHeight  = [Helper autoHeightWith:20];
+    [getPriTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(getPriWidth, getPribHeight));
+        make.top.mas_equalTo(prizeLevelImg.mas_bottom);
         make.centerX.equalTo(self);
     }];
     
@@ -114,20 +99,20 @@
     if (kMainBoundsWidth == 320) {
         prizeTimeLab.font = [UIFont systemFontOfSize:11];
     }
-    prizeTimeLab.textColor = [UIColor lightGrayColor];
+    prizeTimeLab.textColor = UIColorFromRGB(0x676767);
     prizeTimeLab.backgroundColor = [UIColor clearColor];
     prizeTimeLab.textAlignment = NSTextAlignmentCenter;
-    prizeTimeLab.text = @"有效领奖时间:60分钟,";
+    prizeTimeLab.text = @"有效领奖时间:1小时,";
     [bgImgView addSubview:prizeTimeLab];
     CGFloat prizeViewWidth  = [Helper autoWidthWith:294];
     CGFloat priAlertWidth  = [Helper autoWidthWith:260];
     CGFloat prTLabToLeft = [Helper autoHeightWith:(prizeViewWidth - priAlertWidth)/2];
     
     CGFloat prizeTimeWidth  = [Helper autoWidthWith:140];
-    CGFloat prizeTimeHeight  = [Helper autoHeightWith:30];
+    CGFloat prizeTimeHeight  = [Helper autoHeightWith:20];
     [prizeTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(prizeTimeWidth, prizeTimeHeight));
-        make.top.mas_equalTo(self.mas_bottom).offset(-30);
+        make.bottom.mas_equalTo(self.mas_bottom).offset(-10);
         make.left.mas_equalTo(bgImgView.mas_left).offset(prTLabToLeft);
     }];
     
@@ -136,17 +121,34 @@
     if (kMainBoundsWidth == 320) {
         alertLab.font = [UIFont systemFontOfSize:11];
     }
-    alertLab.textColor = [UIColor redColor];
+    alertLab.textColor = UIColorFromRGB(0xe14d43);
     alertLab.backgroundColor = [UIColor clearColor];
     alertLab.textAlignment = NSTextAlignmentCenter;
     alertLab.text = @"关闭后将无法领取";
     [bgImgView addSubview:alertLab];
     CGFloat alertWidth  = [Helper autoWidthWith:120];
-    CGFloat alertHeight  = [Helper autoHeightWith:30];
+    CGFloat alertHeight  = [Helper autoHeightWith:20];
     [alertLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(alertWidth, alertHeight));
-        make.top.mas_equalTo(self.mas_bottom).offset(-30);
+        make.bottom.mas_equalTo(self.mas_bottom).offset(-10);
         make.left.mas_equalTo(prizeTimeLab.mas_right);
+    }];
+    
+    UILabel *prizeFormLab = [[UILabel alloc] init];
+    prizeFormLab.font = [UIFont systemFontOfSize:17];
+    if (kMainBoundsWidth == 320) {
+        prizeFormLab.font = [UIFont systemFontOfSize:15];
+    }
+    prizeFormLab.textColor = UIColorFromRGB(0x676767);
+    prizeFormLab.backgroundColor = [UIColor clearColor];
+    prizeFormLab.textAlignment = NSTextAlignmentCenter;
+    prizeFormLab.text = @"快去找服务员领取奖品吧";
+    [bgImgView addSubview:prizeFormLab];
+    CGFloat prizeFormToBottom  = [Helper autoHeightWith:4];
+    [prizeFormLab mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(prizeViewWidth, 22));
+        make.bottom.mas_equalTo(prizeTimeLab.mas_top).offset(- prizeFormToBottom);
+        make.centerX.equalTo(self);
     }];
     
     if (model.win == 1) {
