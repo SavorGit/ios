@@ -514,16 +514,19 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     
-    [self stop];
-    if (_timer.isValid) {
-        [_timer invalidate];
-        _timer = nil;
-    }
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
+    [self stop];
+    if (_timer.isValid) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+    
     [SAVORXAPI screenEggsStopGame];
     [SAVORXAPI postUMHandleWithContentId:@"game_page_back" key:nil value:nil];
 }
