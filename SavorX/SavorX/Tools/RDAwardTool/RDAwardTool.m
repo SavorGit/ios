@@ -88,7 +88,7 @@
         NSDictionary * dict = @{RDAwardDate : [Helper getCurrentTimeWithFormat:@"yyyyMMdd"],
                                 RDAwardNumber : [NSNumber numberWithInteger:number],
                                 RDAwardCurrentNumber : [NSNumber numberWithInteger:0],
-                                RDAwardHangerNumber : [NSNumber numberWithInteger:(arc4random() % 5 + 1)]};
+                                RDAwardHangerNumber : [NSNumber numberWithInteger:(arc4random() % number + 1)]};
         [GCCKeyChain save:RDAwardInfo data:dict];
     }
 }
