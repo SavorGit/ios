@@ -206,7 +206,7 @@
     _ruleTextView = [[UITextView alloc] init];
     _ruleTextView.textColor = UIColorFromRGB(0xf3ebdb);
     _ruleTextView.backgroundColor = [UIColor clearColor];
-    _ruleTextView.font = [UIFont systemFontOfSize:12];
+    _ruleTextView.font = [UIFont systemFontOfSize:15];
     _ruleTextView.editable = NO;
     _ruleTextView.delegate = self;
     _ruleTextView.text = @"1.此游戏为手机与电视同步互动游戏，参与此活动者需先连接电视；\n\n2.每个用户连接电视后，可选择上面任意一个蛋砸开；\n\n3.游戏时间：每天11:00-14:00/17:00-21:00";
@@ -240,6 +240,7 @@
 //点击金蛋的代理回调
 - (void)RDGoldenEggs:(RDGoldenEggs *)eggsView didSelectEggWithIndex:(NSInteger)index
 {
+
     if ([RDAwardTool awardCanAwardWithAPILottery_num:self.adModel.lottery_num] == NO) {
         RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"今天的抽奖机会用完了\n明天再来吧~"];
         RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
