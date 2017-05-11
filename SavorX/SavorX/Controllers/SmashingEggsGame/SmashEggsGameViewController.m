@@ -212,10 +212,13 @@
     _ruleTextView.text = @"1.此游戏为手机与电视同步互动游戏，参与此活动者需先连接电视；\n\n2.每个用户连接电视后，可选择上面任意一个蛋砸开；\n\n3.游戏时间：每天11:00-14:00/17:00-21:00";
     _ruleTextView.scrollEnabled = NO;
     [_textBgView addSubview:_ruleTextView];
+    CGFloat ruleTextWidth = [Helper autoWidthWith:301.f];
+    CGFloat ruleTextHeight = [Helper autoHeightWith:150.f];
+    CGFloat ruleTextToLeft = [Helper autoWidthWith:15];
     [_ruleTextView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(301, 150));
+        make.size.mas_equalTo(CGSizeMake(ruleTextWidth, ruleTextHeight));
         make.top.mas_equalTo(gameRuleimgView.mas_bottom).offset(10);
-        make.left.mas_equalTo(15);
+        make.left.mas_equalTo(_textBgView.mas_left).offset(ruleTextToLeft);
     }];
     
 }
@@ -227,9 +230,9 @@
     [_eggsView startShakeAnimation];
     [self.view addSubview:_eggsView];
     [_eggsView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 123));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 123));
         make.bottom.mas_equalTo(_upBgView.mas_bottom).offset(-25);
-        make.left.mas_equalTo(0);
+        make.left.mas_equalTo(10);
     }];
 
 }
@@ -262,11 +265,13 @@
 // 创建中奖结果页面
 - (void)creatPrizeMiddleView:(HSEggsResultModel *)model{
     
-    RDPrizeView *prizeView = [[RDPrizeView alloc] initWithFrame:CGRectMake(0, 0, 294, 244) withModel:model];
+    CGFloat prizeViewWidth  = [Helper autoWidthWith:294];
+    CGFloat prizeViewHeight  = [Helper autoHeightWith:244];
+    RDPrizeView *prizeView = [[RDPrizeView alloc] initWithFrame:CGRectMake(0, 0, prizeViewWidth, prizeViewHeight) withModel:model];
     prizeView.delegate = self;
     [_maskingView addSubview:prizeView];
     [prizeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(294, 244));
+        make.size.mas_equalTo(CGSizeMake(prizeViewWidth, prizeViewHeight));
         make.center.equalTo(self.view);
     }];
     
@@ -274,10 +279,12 @@
     [prCloseimgBtn setImage:[UIImage imageNamed:@"zjjg_guanbi"] forState:UIControlStateNormal];
     [prCloseimgBtn addTarget:self action:@selector(prizeClosed) forControlEvents:UIControlEventTouchUpInside];
     [_maskingView addSubview:prCloseimgBtn];
+    CGFloat prCloseWidth = [Helper autoWidthWith:32.f];
+    CGFloat prCloseHeight = [Helper autoHeightWith:61.f];
     [prCloseimgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(32, 61));
-        make.left.mas_equalTo(kMainBoundsWidth - 90);
-        make.bottom.mas_equalTo(prizeView.mas_top);
+        make.size.mas_equalTo(CGSizeMake(prCloseWidth, prCloseHeight));
+        make.right.mas_equalTo(prizeView.mas_right).offset(- 15);
+        make.bottom.mas_equalTo(prizeView.mas_top).offset(1);
     }];
 }
 
@@ -350,7 +357,7 @@
     [haCloseImgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(32, 32));
         make.centerX.equalTo(self.view);
-        make.top.mas_equalTo(hammer.mas_bottom).offset(70);
+        make.top.mas_equalTo(kMainBoundsHeight - 50 - 64);
     }];
     
 }
