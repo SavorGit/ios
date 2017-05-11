@@ -428,7 +428,7 @@
         
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
         
-        [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)1 date:(NSString *)currentDate success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 [self creatMaskingView];
                 
