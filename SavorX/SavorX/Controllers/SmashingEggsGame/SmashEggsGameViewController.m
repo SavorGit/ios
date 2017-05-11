@@ -484,6 +484,10 @@
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
+            if (![GlobalData shared].isBindRD || ![GlobalData shared].isWifiStatus) {
+                [SAVORXAPI showAlertWithMessage:@"游戏超时啦, 请重新启动"];
+            }
+            
         }];
         
     }

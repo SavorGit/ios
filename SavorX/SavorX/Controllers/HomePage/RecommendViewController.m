@@ -118,13 +118,6 @@
             [self.adSourcel addObject:model];
         }
         
-        //解析获取顶部奖品item
-        NSDictionary * awardInfo = [dict objectForKey:@"award"];
-        if (awardInfo) {
-            HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
-            [self.adSourcel addObject:model];
-        }
-        
         self.hotelName = [dict objectForKey:@"hotelName"];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
@@ -152,20 +145,20 @@
             [self.dataSource addObject:model];
         }
         
-        //解析获取顶部广告列表
-        NSArray * adArray = [dict objectForKey:@"adsList"];
-        for (NSInteger i = 0; i < adArray.count; i++) {
-            NSDictionary * adDict = [adArray objectAtIndex:i];
-            HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
-            [self.adSourcel addObject:model];
-        }
-        
         //解析获取顶部奖品item
         NSDictionary * awardInfo = [dict objectForKey:@"award"];
         if (awardInfo) {
             HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
             [self.adSourcel addObject:model];
             [RDAwardTool awardSaveAwardNumber:model.lottery_num];
+        }
+        
+        //解析获取顶部广告列表
+        NSArray * adArray = [dict objectForKey:@"adsList"];
+        for (NSInteger i = 0; i < adArray.count; i++) {
+            NSDictionary * adDict = [adArray objectAtIndex:i];
+            HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
+            [self.adSourcel addObject:model];
         }
         
         self.hotelName = [dict objectForKey:@"hotelName"];
@@ -253,20 +246,20 @@
             [self.dataSource addObject:model];
         }
         
-        //解析获取顶部广告列表
-        NSArray * adArray = [dict objectForKey:@"adsList"];
-        for (NSInteger i = 0; i < adArray.count; i++) {
-            NSDictionary * adDict = [adArray objectAtIndex:i];
-            HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
-            [self.adSourcel addObject:model];
-        }
-        
         //解析获取顶部奖品item
         NSDictionary * awardInfo = [dict objectForKey:@"award"];
         if (awardInfo) {
             HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
             [self.adSourcel addObject:model];
             [RDAwardTool awardSaveAwardNumber:model.lottery_num];
+        }
+        
+        //解析获取顶部广告列表
+        NSArray * adArray = [dict objectForKey:@"adsList"];
+        for (NSInteger i = 0; i < adArray.count; i++) {
+            NSDictionary * adDict = [adArray objectAtIndex:i];
+            HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
+            [self.adSourcel addObject:model];
         }
         
         self.hotelName = [dict objectForKey:@"hotelName"];
