@@ -74,7 +74,7 @@
     NSError *err;
     //初始化播放器
     _player = [[AVAudioPlayer alloc] initWithContentsOfURL:_videoUrl error:&err];
-    _player.volume = 0.5;
+    _player.volume = 0.3;
     _player.delegate = self;
     _player.numberOfLoops = -1;
     //设置播放速率
@@ -284,11 +284,7 @@
 - (void)prizeClosed{
     [_maskingView removeFromSuperview];
     [self eggsViewStartAnimation];
-    [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        
-    } failure:^{
-        
-    }];
+    [SAVORXAPI screenEggsStopGame];
 }
 
 - (void)sharePress:(UIButton *)button{
@@ -363,11 +359,7 @@
     [_maskingView removeFromSuperview];
     [self eggsViewStartAnimation];
     _isShake = NO;
-    [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        
-    } failure:^{
-        
-    }];
+    [SAVORXAPI screenEggsStopGame];
 }
 
 // 倒计时控制器
@@ -400,15 +392,17 @@
 
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
-    if (_isShake) {
+    if (_isShake == YES) {
         [self.hammer stopShakeAnimation];
+        NSLog(@"取消摇一摇");
     }
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
-    if (_isShake) {
+    if (_isShake == YES) {
         [self.hammer stopShakeAnimation];
+        NSLog(@"结束摇一摇");
     }
 }
 
@@ -460,14 +454,12 @@
                 
                 if (erModel.done == 1) {
                     
-                    if (isEmptyString([GlobalData shared].projectId)) {
+                    if (_isShake == NO) {
                         return;
                     }
                     
                     _isShake = NO;
                     [self.hammer stopShakeAnimation];
-                    
-                    [GlobalData shared].projectId = @"";
                     
                     //进行了一次抽奖
                     [RDAwardTool awardHasAwardWithResultModel:erModel];
@@ -511,11 +503,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        
-    } failure:^{
-        
-    }];
+    [SAVORXAPI screenEggsStopGame];
 }
 
 - (BOOL)canBecomeFirstResponder

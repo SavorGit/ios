@@ -244,4 +244,6 @@ typedef NS_ENUM(NSInteger, interactType) {
 
 + (void)checkVersionUpgrade;
 
++ (void)screenEggsStopGame
+
 @end

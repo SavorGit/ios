@@ -479,6 +479,22 @@
     }
 }
 
++ (void)screenEggsStopGame
+{
+    if ([GlobalData shared].isBindRD) {
+        NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
+        
+        NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
+                                      @"projectId" : [GlobalData shared].projectId};
+        
+        [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+        }];
+    }
+}
+
 + (void)postUMHandleWithContentId:(NSInteger)contentId withType:(handleType)type
 {
     NSDictionary * parameters = @{@"contentID" : [NSString stringWithFormat:@"%ld", (long)contentId]};
