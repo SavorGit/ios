@@ -213,7 +213,7 @@
 {
     self.sideMenuController.leftViewAnimationSpeed = .2f;
     [self hideLeftViewAnimated:nil];
-    ShareRDViewController * share = [[ShareRDViewController alloc] init];
+    ShareRDViewController * share = [[ShareRDViewController alloc] initWithType:SHARERDTYPE_APPLICATION];
     share.title = @"推荐";
    [(UINavigationController *)self.sideMenuController.rootViewController pushViewController:share  animated:NO];
     self.sideMenuController.leftViewAnimationSpeed = .5f;

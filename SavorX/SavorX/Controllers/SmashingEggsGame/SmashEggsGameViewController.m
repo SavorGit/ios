@@ -295,7 +295,7 @@
 }
 
 - (void)sharePress:(UIButton *)button{
-    ShareRDViewController * share = [[ShareRDViewController alloc] init];
+    ShareRDViewController * share = [[ShareRDViewController alloc] initWithType:SHARERDTYPE_GAME];
     share.title = @"推荐";
     [self.navigationController pushViewController:share animated:YES];
 }

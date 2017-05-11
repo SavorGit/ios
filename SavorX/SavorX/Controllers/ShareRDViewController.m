@@ -13,6 +13,7 @@
 @interface ShareRDViewController ()
 
 @property (nonatomic, strong) UIView * shareView;
+@property (nonatomic, assign) SHARERDTYPE type;
 
 @end
 
@@ -23,6 +24,14 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
+
+- (instancetype)initWithType:(SHARERDTYPE)type
+{
+    if (self = [super init]) {
+        self.type = type;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -194,21 +203,26 @@
 {
     UMSocialPlatformType type = tap.view.tag - 101;
     
+    NSString * text = @"我觉得小热点很好用, 推荐给您~";
+    if (self.type == SHARERDTYPE_GAME) {
+        text = @"快点儿来参加抽奖活动哦~";
+    }
+    
     switch (type) {
         case UMSocialPlatformType_WechatSession:
-            [[UMCustomSocialManager defaultManager] shareRDApplicationToPlatform:UMSocialPlatformType_WechatSession currentViewController:self];
+            [[UMCustomSocialManager defaultManager] shareRDApplicationToPlatform:UMSocialPlatformType_WechatSession currentViewController:self title:text];
             break;
             
         case UMSocialPlatformType_WechatTimeLine:
-            [[UMCustomSocialManager defaultManager] shareRDApplicationToPlatform:UMSocialPlatformType_WechatTimeLine currentViewController:self];
+            [[UMCustomSocialManager defaultManager] shareRDApplicationToPlatform:UMSocialPlatformType_WechatTimeLine currentViewController:self title:text];
             break;
             
         case UMSocialPlatformType_QQ:
-            [[UMCustomSocialManager defaultManager] shareRDApplicationToPlatform:UMSocialPlatformType_QQ currentViewController:self];
+            [[UMCustomSocialManager defaultManager] shareRDApplicationToPlatform:UMSocialPlatformType_QQ currentViewController:self title:text];
             break;
             
         case UMSocialPlatformType_Sina:
-            [[UMCustomSocialManager defaultManager] shareRDApplicationToPlatform:UMSocialPlatformType_Sina currentViewController:self];
+            [[UMCustomSocialManager defaultManager] shareRDApplicationToPlatform:UMSocialPlatformType_Sina currentViewController:self title:text];
             break;
             
         case UMSocialPlatformType_UnKnown:

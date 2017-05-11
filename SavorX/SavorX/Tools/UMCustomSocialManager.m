@@ -322,10 +322,10 @@
     }];
 }
 
-- (void)shareRDApplicationToPlatform:(UMSocialPlatformType)type currentViewController:(UIViewController *)VC
+- (void)shareRDApplicationToPlatform:(UMSocialPlatformType)type currentViewController:(UIViewController *)VC title:(NSString *)text
 {
     NSString * url = [NSString stringWithFormat:@"%@?st=usershare&clientname=ios&deviceid=%@", RDDownLoadURL, [GCCKeyChain load:keychainID]];
-    NSString * title = @"我觉得小热点很好用, 推荐给您~";
+    NSString * title = text;
     NSString * description = @"投屏神器, 进入饭局的才是热点";
     
     UIImage * image;

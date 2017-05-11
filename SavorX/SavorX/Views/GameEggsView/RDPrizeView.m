@@ -80,7 +80,11 @@
     getPriTimeLab.textAlignment =  NSTextAlignmentCenter;
     NSString *timeStr;
     if (!isEmptyString(model.prize_time)) {
-        timeStr = [model.prize_time substringToIndex:[model.prize_time length] - 3];
+        NSTimeInterval time = [model.prize_time doubleValue] / 1000;
+        NSDate * date = [NSDate dateWithTimeIntervalSince1970:time];
+        NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+        timeStr = [formatter stringFromDate:date];
     }else{
         timeStr = @"";
     }
