@@ -7,6 +7,7 @@
 //
 
 #import "HSAwardUploadRequest.h"
+#import "GCCKeyChain.h"
 
 @implementation HSAwardUploadRequest
 
@@ -18,7 +19,8 @@
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setValue:[NSString stringWithFormat:@"%ld", prizeid] forParamKey:@"prizeid"];
         [self setValue:prizeTime forParamKey:@"time"];
-        
+        [self setValue:[GCCKeyChain load:keychainID] forParamKey:@"deviceid"];
+        [self setValue:[GlobalData shared].RDBoxDevice.BoxID forParamKey:@"mac"];
     }
     return self;
 }
