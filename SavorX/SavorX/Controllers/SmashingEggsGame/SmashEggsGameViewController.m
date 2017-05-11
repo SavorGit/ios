@@ -211,10 +211,13 @@
     _ruleTextView.text = @"1.此游戏为手机与电视同步互动游戏，参与此活动者需先连接电视；\n\n2.每个用户连接电视后，可选择上面任意一个蛋砸开；\n\n3.游戏时间：每天11:00-14:00/17:00-21:00";
     _ruleTextView.scrollEnabled = NO;
     [_textBgView addSubview:_ruleTextView];
+    CGFloat ruleTextWidth = [Helper autoWidthWith:301.f];
+    CGFloat ruleTextHeight = [Helper autoHeightWith:150.f];
+    CGFloat ruleTextToLeft = [Helper autoWidthWith:15];
     [_ruleTextView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(301, 150));
+        make.size.mas_equalTo(CGSizeMake(ruleTextWidth, ruleTextHeight));
         make.top.mas_equalTo(gameRuleimgView.mas_bottom).offset(10);
-        make.left.mas_equalTo(15);
+        make.left.mas_equalTo(_textBgView.mas_left).offset(ruleTextToLeft);
     }];
     
 }
@@ -226,9 +229,9 @@
     [_eggsView startShakeAnimation];
     [self.view addSubview:_eggsView];
     [_eggsView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 123));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 123));
         make.bottom.mas_equalTo(_upBgView.mas_bottom).offset(-25);
-        make.left.mas_equalTo(0);
+        make.left.mas_equalTo(10);
     }];
 
 }
@@ -273,9 +276,12 @@
     [prCloseimgBtn setImage:[UIImage imageNamed:@"zjjg_guanbi"] forState:UIControlStateNormal];
     [prCloseimgBtn addTarget:self action:@selector(prizeClosed) forControlEvents:UIControlEventTouchUpInside];
     [_maskingView addSubview:prCloseimgBtn];
+    CGFloat prCloseWidth = [Helper autoWidthWith:32.f];
+    CGFloat prCloseHeight = [Helper autoHeightWith:61.f];
+    CGFloat prCloseToleft = [Helper autoHeightWith:kMainBoundsWidth - 90];
     [prCloseimgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(32, 61));
-        make.left.mas_equalTo(kMainBoundsWidth - 90);
+        make.size.mas_equalTo(CGSizeMake(prCloseWidth, prCloseHeight));
+        make.left.mas_equalTo(prCloseToleft);
         make.bottom.mas_equalTo(prizeView.mas_top);
     }];
 }
