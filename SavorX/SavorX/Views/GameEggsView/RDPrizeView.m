@@ -55,6 +55,22 @@
         make.left.mas_equalTo(10);
     }];
     
+//    UILabel *getPriTimeLab = [[UILabel alloc] init];
+//    getPriTimeLab.font = [UIFont systemFontOfSize:16];
+//    getPriTimeLab.textColor = [UIColor redColor];
+//    getPriTimeLab.backgroundColor = [UIColor clearColor];
+//    getPriTimeLab.textAlignment = NSTextAlignmentLeft;
+//    getPriTimeLab.text = @"2017-05-11 16:12";
+//    [bgImgView addSubview:getPriTimeLab];
+//    CGFloat getPriWidth  = [Helper autoWidthWith:kMainBoundsWidth - 260];
+//    CGFloat getPribHeight  = [Helper autoHeightWith:30];
+//    [phoneNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake(getPriWidth, getPribHeight));
+//        make.top.mas_equalTo(congratueLab.mas_bottom).offset(5);
+//        make.left.mas_equalTo(10);
+//    }];
+    
+    
     UIImageView *prizeLevelImg = [[UIImageView alloc] init];
     prizeLevelImg.image = [UIImage imageNamed:@"yidj"];
     [bgImgView addSubview:prizeLevelImg];
@@ -133,9 +149,9 @@
         make.left.mas_equalTo(prizeTimeLab.mas_right);
     }];
     
-    if (model.win == 0) {
+    if (model.win == 1) {
         congratueLab.text = @"恭喜您，中奖啦~";
-    }else if (model.win == 1){
+    }else if (model.win == 0){
         congratueLab.text = @"很遗憾，没有中奖";
         prizeFormLab.text = @"您可邀请好友参加此活动哦~";
         prizeTimeLab.text = @"";
