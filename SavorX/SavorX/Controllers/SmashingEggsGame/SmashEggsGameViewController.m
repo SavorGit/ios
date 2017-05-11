@@ -392,7 +392,7 @@
         [self creatBgVoice];
         _player.numberOfLoops = 0;
         [self play];
-        [self.hammer startShakeAnimation];
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
 
 }
@@ -484,7 +484,7 @@
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+            
         }];
         
     }
