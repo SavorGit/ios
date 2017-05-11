@@ -211,7 +211,7 @@
 
 - (void)screenButtonDidClickedWithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
 {
-    if (self.isScreen && !self.isScreen) {
+    if (!self.isScreen) {
         return;
     }
     
