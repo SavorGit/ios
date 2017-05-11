@@ -151,6 +151,7 @@
             HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
             [self.adSourcel addObject:model];
             [RDAwardTool awardSaveAwardNumber:model.lottery_num];
+            [SAVORXAPI postUMHandleWithContentId:@"home_game_show" key:nil value:nil];
         }
         
         //解析获取顶部广告列表
@@ -252,6 +253,7 @@
             HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
             [self.adSourcel addObject:model];
             [RDAwardTool awardSaveAwardNumber:model.lottery_num];
+            [SAVORXAPI postUMHandleWithContentId:@"home_game_show" key:nil value:nil];
         }
         
         //解析获取顶部广告列表
@@ -501,6 +503,8 @@
     HSAdsModel * model = [self.adSourcel objectAtIndex:index];
     
     if (model.type == HSAdsModelType_AWARD) {
+        
+        [SAVORXAPI postUMHandleWithContentId:@"home_game_click" key:nil value:nil];
         //如果是奖品类型
         if ([GlobalData shared].isBindRD){
             SmashEggsGameViewController *SEVC = [[SmashEggsGameViewController alloc] init];
@@ -655,6 +659,7 @@
         
         // 如果是奖品类型，择跳转到游戏页面
         if (type == 3 && model.type == HSAdsModelType_AWARD) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_game_click" key:nil value:nil];
             //如果是奖品类型
             if ([GlobalData shared].isBindRD){
                 HSAdsModel * model = [self.shouldDemandDict objectForKey:@"model"];

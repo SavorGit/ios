@@ -65,12 +65,16 @@
     }];
     if (model.prize_level == 1) {
         prizeLevelImg.image = [UIImage imageNamed:@"yidj"];
+        [SAVORXAPI postUMHandleWithContentId:@"game_page_result" key:@"game_page_result" value:@"prize_a"];
     }else if (model.prize_level == 2){
         prizeLevelImg.image = [UIImage imageNamed:@"erdj"];
+        [SAVORXAPI postUMHandleWithContentId:@"game_page_result" key:@"game_page_result" value:@"prize_b"];
     }else if (model.prize_level == 3){
         prizeLevelImg.image = [UIImage imageNamed:@"sadj"];
+        [SAVORXAPI postUMHandleWithContentId:@"game_page_result" key:@"game_page_result" value:@"prize_c"];
     }else{
         prizeLevelImg.image = [UIImage imageNamed:@"xxcy"];
+        [SAVORXAPI postUMHandleWithContentId:@"game_page_result" key:@"game_page_result" value:@"prize_z"];
     }
     
     UILabel *getPriTimeLab = [[UILabel alloc] init];
