@@ -191,6 +191,12 @@
     _isScreening = NO;
 }
 
+- (void)stopScreenWithEggGame
+{
+    [self quitScreenHidden];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+}
+
 - (void)show
 {
     if ([GlobalData shared].isWifiStatus) {

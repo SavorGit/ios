@@ -26,6 +26,8 @@
 
 - (void)callQRcodeFromPlatform;
 
+- (void)stopScreenWithEggGame;
+
 - (void)SDSetImage:(NSString *)path;
 
 @property (nonatomic, strong) UIImage *currentImage;

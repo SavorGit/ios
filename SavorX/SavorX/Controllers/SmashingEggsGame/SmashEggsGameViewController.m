@@ -469,6 +469,7 @@
         
         [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
+                [[HomeAnimationView animationView] stopScreenWithEggGame];
                 [self creatMaskingView];
                 
             }else{
@@ -551,6 +552,15 @@
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (!_player.isPlaying) {
+        [self play];
+    }
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+}
+
 - (void)viewWillDisappear:(BOOL)animated{
     
 }
@@ -565,8 +575,9 @@
         _timer = nil;
     }
     
-    [super viewDidDisappear:animated];
     [SAVORXAPI screenEggsStopGame];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+    [super viewDidDisappear:animated];
 }
 
 - (BOOL)canBecomeFirstResponder

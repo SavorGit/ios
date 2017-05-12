@@ -146,7 +146,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         [UIView animateWithDuration:.1f animations:^{
             self.center = RDHomeScreenButtonCenterInHotel;
         } completion:^(BOOL finished) {
-            
+            [self popOptionsWithAnimation];
         }];
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
         if (!self.isBoxSence) {
@@ -182,7 +182,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
             [UIView animateWithDuration:.1f animations:^{
                 self.center = RDHomeScreenButtonCenterOutHotel;
             } completion:^(BOOL finished) {
-                [self popOptionsWithAnimation];
+                
             }];
         }];
 //        [self animationCloseButton:self.niceVideoButton completion:nil];
