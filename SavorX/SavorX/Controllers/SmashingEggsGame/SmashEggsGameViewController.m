@@ -240,7 +240,8 @@
 //点击金蛋的代理回调
 - (void)RDGoldenEggs:(RDGoldenEggs *)eggsView didSelectEggWithIndex:(NSInteger)index
 {
-
+    [SAVORXAPI postUMHandleWithContentId:@"game_page_choose" key:nil value:nil];
+    
     if ([RDAwardTool awardCanAwardWithAPILottery_num:self.adModel.lottery_num] == NO) {
         RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"今天的抽奖机会用完了\n明天再来吧~"];
         RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
@@ -289,12 +290,18 @@
 }
 
 - (void)prizeClosed{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"game_page_result_finish" key:nil value:nil];
+    
     [_maskingView removeFromSuperview];
     [self eggsViewStartAnimation];
     [SAVORXAPI screenEggsStopGame];
 }
 
 - (void)sharePress:(UIButton *)button{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"game_page_recommend" key:nil value:nil];
+    
     ShareRDViewController * share = [[ShareRDViewController alloc] initWithType:SHARERDTYPE_GAME];
     share.title = @"推荐";
     [self.navigationController pushViewController:share animated:YES];
@@ -329,6 +336,8 @@
 // 创建锤子砸蛋中页面
 - (void)creatPlayHammerViews{
     
+    [SAVORXAPI postUMHandleWithContentId:@"game_page_hit" key:nil value:nil];
+    
     UIImageView *haTitleImgView = [[UIImageView alloc] init];
     haTitleImgView.image = [UIImage imageNamed:@"yaoyiyao"];
     haTitleImgView.userInteractionEnabled = YES;
@@ -362,6 +371,8 @@
     
 }
 - (void)haClosed{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"game_page_hammer_back" key:nil value:nil];
     
     [_maskingView removeFromSuperview];
     [self eggsViewStartAnimation];
@@ -481,10 +492,11 @@
                 }
                 
             }else{
+                [SAVORXAPI postUMHandleWithContentId:@"game_page_result" key:@"game_page_result" value:@"prize_failure"];
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            
+            [SAVORXAPI postUMHandleWithContentId:@"game_page_result" key:@"game_page_result" value:@"prize_failure"];
             if (![GlobalData shared].isBindRD || ![GlobalData shared].isWifiStatus) {
                 [SAVORXAPI showAlertWithMessage:@"游戏超时啦, 请重新启动"];
             }
@@ -504,15 +516,18 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [SAVORXAPI postUMHandleWithContentId:@"game_page_back" key:nil value:nil];
+    
     [self stop];
     if (_timer.isValid) {
         [_timer invalidate];
         _timer = nil;
     }
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
+    
     [super viewDidDisappear:animated];
     [SAVORXAPI screenEggsStopGame];
 }
