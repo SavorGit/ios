@@ -32,6 +32,7 @@
 @property (nonatomic ,strong) UIView *maskingView;
 @property (nonatomic ,strong) UIImageView *textBgView;
 @property (nonatomic ,assign) BOOL isShake;
+@property (nonatomic, assign) BOOL isMotionning; //记录当前是否正在摇动
 @property (nonatomic ,strong) UILabel *prizeLevelLab;
 @property (nonatomic, strong) NSMutableDictionary *shouldDemandDict;
 @property (nonatomic, strong) UIImageView *upBgView;
@@ -48,7 +49,7 @@
     
     [self initOtherParmars];
     [self creatSubViews];
-    [self creatBgVoice];
+    [self creatBgVoiceWithLoops:-1];
     [_player play];
  
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"恢复机会" style:UIBarButtonItemStyleDone target:self action:@selector(addMoreChance)];
@@ -69,14 +70,21 @@
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
 }
 
-- (void)creatBgVoice{
+- (void)creatBgVoiceWithLoops:(NSInteger)loop{
 
     NSError *err;
+    
+    if (_player) {
+        if (_player.isPlaying) {
+            [_player stop];
+        }
+    }
+    
     //初始化播放器
     _player = [[AVAudioPlayer alloc] initWithContentsOfURL:_videoUrl error:&err];
     _player.volume = 0.3;
     _player.delegate = self;
-    _player.numberOfLoops = -1;
+    _player.numberOfLoops = loop;
     //设置播放速率
     _player.rate = 1.0;
     //准备播放
@@ -209,7 +217,10 @@
     _ruleTextView.font = [UIFont systemFontOfSize:15];
     _ruleTextView.editable = NO;
     _ruleTextView.delegate = self;
-    _ruleTextView.text = @"1.此游戏为手机与电视同步互动游戏，参与此活动者需先连接电视；\n\n2.每个用户连接电视后，可选择上面任意一个蛋砸开；\n\n3.游戏时间：每天11:00-14:00/17:00-21:00";
+    _ruleTextView.text = @"1.此游戏为手机与电视同步互动游戏，参与此活动者须先连接电视；\n\n2.每个用户链接电视后，可选择上面任意一个蛋砸开；\n\n3.每个手机每天可以参与五次砸蛋";
+    if (kMainBoundsWidth == 320) {
+        _ruleTextView.font = [UIFont systemFontOfSize:13];
+    }
     _ruleTextView.scrollEnabled = NO;
     [_textBgView addSubview:_ruleTextView];
     CGFloat ruleTextWidth = [Helper autoWidthWith:301.f];
@@ -221,6 +232,20 @@
         make.left.mas_equalTo(_textBgView.mas_left).offset(ruleTextToLeft);
     }];
     
+    UILabel * bottomLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    bottomLabel.textColor = UIColorFromRGB(0xf3ebdb);
+    bottomLabel.backgroundColor = [UIColor clearColor];
+    bottomLabel.font = [UIFont systemFontOfSize:15];
+    bottomLabel.textAlignment = NSTextAlignmentCenter;
+    bottomLabel.text = @"本活动最终解释权归\"小热点\"所有";
+    bottomLabel.userInteractionEnabled = YES;
+    [downBgView addSubview:bottomLabel];
+    [bottomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.bottom.mas_equalTo(-80);
+        make.height.mas_equalTo(20);
+    }];
 }
 
 - (void)creatEggMiddleView{
@@ -399,9 +424,9 @@
         NSLog(@"开始摇一摇");
         [self.hammer startShakeAnimation];
         [self requestHitEggNetWork];
+        self.isMotionning = YES;
         _videoUrl = [[NSBundle mainBundle] URLForResource:@"glass" withExtension:@"mp3"];
-        [self creatBgVoice];
-        _player.numberOfLoops = 0;
+        [self creatBgVoiceWithLoops:0];
         [self play];
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
@@ -411,6 +436,7 @@
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
     if (_isShake == YES) {
+        self.isMotionning = NO;
         [self.hammer stopShakeAnimation];
         NSLog(@"取消摇一摇");
     }
@@ -419,6 +445,7 @@
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
     if (_isShake == YES) {
+        self.isMotionning = NO;
         [self.hammer stopShakeAnimation];
         NSLog(@"结束摇一摇");
     }
@@ -477,6 +504,7 @@
                     }
                     
                     _isShake = NO;
+                    self.isMotionning = NO;
                     [self.hammer stopShakeAnimation];
                     
                     //进行了一次抽奖
@@ -504,6 +532,15 @@
         }];
         
     }
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    
+    if (self.isMotionning) {
+        [self.player play];
+    }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -540,7 +577,7 @@
 - (void)eggsViewStartAnimation
 {
     _videoUrl = [[NSBundle mainBundle] URLForResource:@"selectEggs" withExtension:@"mp3"];
-    [self creatBgVoice];
+    [self creatBgVoiceWithLoops:-1];
     [self play];
     [self.eggsView startShakeAnimation];
 }
