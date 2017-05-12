@@ -79,6 +79,9 @@
     
     UILabel *getPriTimeLab = [[UILabel alloc] init];
     getPriTimeLab.font = [UIFont systemFontOfSize:12];
+    if (kMainBoundsWidth == 320) {
+        getPriTimeLab.font = [UIFont systemFontOfSize:11];
+    }
     getPriTimeLab.textColor = UIColorFromRGB(0xe14d43);
     getPriTimeLab.backgroundColor = [UIColor clearColor];
     getPriTimeLab.textAlignment =  NSTextAlignmentCenter;
