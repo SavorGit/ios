@@ -18,7 +18,7 @@
         self.methodName = [@"Award/Award/recordAwardLog?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setValue:[NSString stringWithFormat:@"%ld", prizeid] forParamKey:@"prizeid"];
-        [self setValue:prizeTime forParamKey:@"time"];
+        [self setValue:prizeTime forParamKey:@"award_time"];
         [self setValue:[GCCKeyChain load:keychainID] forParamKey:@"deviceid"];
         [self setValue:[GlobalData shared].RDBoxDevice.BoxID forParamKey:@"mac"];
     }
