@@ -479,9 +479,6 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 - (void)showWithBox
 {
-    [UIView animateWithDuration:.1f animations:^{
-        self.center = RDHomeScreenButtonCenterInHotel;
-    }];
     self.isBoxSence = YES;
     self.alpha = 1.f;
 }
