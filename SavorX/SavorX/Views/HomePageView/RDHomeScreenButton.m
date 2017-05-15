@@ -15,7 +15,7 @@ static CGFloat RDHomeScreenPopAnimationTime = .5f;
 static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 #define RDHomeScreenButtonCenterInHotel CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height / 2 - kStatusBarHeight - kNaviBarHeight);
-#define RDHomeScreenButtonCenterOutHotel CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - kStatusBarHeight - kNaviBarHeight);
+#define RDHomeScreenButtonCenterOutHotel CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - kStatusBarHeight - kNaviBarHeight - 2);
 
 @interface RDHomeScreenButton ()<LGSideMenuControllerDelegate, UINavigationControllerDelegate>
 
@@ -134,7 +134,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
             [UIView animateWithDuration:.1f animations:^{
                 self.center = RDHomeScreenButtonCenterInHotel;
             } completion:^(BOOL finished) {
-                [self popOptionsWithAnimation];
+                
             }];
         }];
 //        [self animationCloseButton:self.niceVideoButton completion:nil];
@@ -146,7 +146,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         [UIView animateWithDuration:.1f animations:^{
             self.center = RDHomeScreenButtonCenterInHotel;
         } completion:^(BOOL finished) {
-            [self popOptionsWithAnimation];
+            
         }];
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
         if (!self.isBoxSence) {
@@ -174,16 +174,11 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     if (self.isShowOptions) {
         self.isShowOptions = NO;
         
-        [self animationCloseButton:self.photoButton completion:nil];
-        [self animationCloseButton:self.videoButton completion:nil];
-        [self animationCloseButton:self.sliderButton completion:nil];
-        [self animationCloseButton:self.documentButton completion:^(BOOL finished) {
-            [self.backgroundView removeFromSuperview];
-            [UIView animateWithDuration:.1f animations:^{
-                self.center = RDHomeScreenButtonCenterOutHotel;
-            } completion:^(BOOL finished) {
-                
-            }];
+        [self closeOptionsWithNoAnimation];
+        [UIView animateWithDuration:.1f animations:^{
+            self.center = RDHomeScreenButtonCenterOutHotel;
+        } completion:^(BOOL finished) {
+            
         }];
 //        [self animationCloseButton:self.niceVideoButton completion:nil];
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
@@ -350,6 +345,19 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     if (!self.isBoxSence) {
         [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
     }
+}
+
+//关闭菜单
+- (void)closeOptionsWithNoAnimation{
+    
+    self.isShowOptions = NO;
+    
+    CGPoint center = self.repeatButton.center;
+    self.photoButton.center = center;
+    self.videoButton.center = center;
+    self.sliderButton.center = center;
+    self.documentButton.center = center;
+    [self.backgroundView removeFromSuperview];
 }
 
 - (void)closeWithMust{
