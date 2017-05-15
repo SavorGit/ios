@@ -52,7 +52,7 @@
     [self creatBgVoiceWithLoops:-1];
     [_player play];
  
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"恢复机会" style:UIBarButtonItemStyleDone target:self action:@selector(addMoreChance)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"恢复机会" style:UIBarButtonItemStyleDone target:self action:@selector(addMoreChance)];
 }
 
 - (void)addMoreChance
