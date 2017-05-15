@@ -159,7 +159,7 @@
     CGFloat textLabelHeight = [Helper autoHeightWith:20.f];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(textLabelWidth, textLabelHeight));
-        make.top.mas_equalTo(_eggsView.mas_bottom).offset(37);
+        make.top.mas_equalTo(_eggsView.mas_bottom).offset(62);
         make.centerX.equalTo(self.view);
     }];
     
@@ -170,7 +170,7 @@
     [bgScrollView addSubview:shareBtn];
     [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(167, 48));
-        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(15);
+        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
         make.centerX.equalTo(self.view);
     }];
     
@@ -183,7 +183,7 @@
     [bgScrollView addSubview:_textBgView];
     [_textBgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 200));
-        make.top.mas_equalTo(shareBtn.mas_bottom).offset(38);
+        make.top.mas_equalTo(shareBtn.mas_bottom).offset(35);
         make.left.mas_equalTo(20);
     }];
     
@@ -342,7 +342,7 @@
     
     _timeLabel = [[UILabel alloc] init];
     _timeLabel.font = [UIFont boldSystemFontOfSize:80];
-    _timeLabel.textColor = [UIColor orangeColor];
+    _timeLabel.textColor = [UIColor whiteColor];
     _timeLabel.backgroundColor = [UIColor clearColor];
     _timeLabel.textAlignment = NSTextAlignmentCenter;
     _timeLabel.text = @"3";

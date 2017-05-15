@@ -51,7 +51,7 @@
     CGFloat phoneNameLabHeight  = [Helper autoHeightWith:20];
     [phoneNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(phoneNameLabWidth, phoneNameLabHeight));
-        make.top.mas_equalTo(congratueLab.mas_bottom).offset(10);
+        make.top.mas_equalTo(congratueLab.mas_bottom).offset(15);
         make.left.mas_equalTo(10);
     }];
     
