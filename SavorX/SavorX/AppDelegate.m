@@ -541,17 +541,6 @@
     
     
     NSLog(@"%@",token);
-    
-//    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"" message:token preferredStyle:UIAlertControllerStyleAlert];
-//    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        
-//    }];
-//    [alert addAction:action];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.window.rootViewController presentViewController:alert animated:NO completion:^{
-//            
-//        }];
-//    });
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo

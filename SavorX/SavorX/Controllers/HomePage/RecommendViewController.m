@@ -54,7 +54,6 @@
     self.hotelName = @"";
     
     [self setupDatas];
-
 }
 
 - (void)retryToGetData

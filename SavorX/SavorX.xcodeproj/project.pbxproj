@@ -2797,10 +2797,10 @@
 					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cb863683-cf37-477f-a082-f29ed365e4f4";
-				PROVISIONING_PROFILE_SPECIFIER = TestHotTopicesDevelopment;
+				PROVISIONING_PROFILE = "b781ec87-faaf-4a81-bbe4-195375e66372";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2836,10 +2836,10 @@
 					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cec12aa6-fb60-4168-afb6-f2eeb0dd3c96";
-				PROVISIONING_PROFILE_SPECIFIER = "TestHotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "a9b07ad7-2902-4449-90fd-3b5c922f42ed";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDistribution;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

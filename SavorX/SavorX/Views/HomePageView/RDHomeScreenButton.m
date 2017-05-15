@@ -15,7 +15,7 @@ static CGFloat RDHomeScreenPopAnimationTime = .5f;
 static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 #define RDHomeScreenButtonCenterInHotel CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height / 2 - kStatusBarHeight - kNaviBarHeight);
-#define RDHomeScreenButtonCenterOutHotel CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height / 2 - 20);
+#define RDHomeScreenButtonCenterOutHotel CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - kStatusBarHeight - kNaviBarHeight);
 
 @interface RDHomeScreenButton ()<LGSideMenuControllerDelegate, UINavigationControllerDelegate>
 
@@ -244,7 +244,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     if (![self checkIsCanShowInWindow]) {
         return;
     }
-    
+    [self.repeatButton setBackgroundImage:self.currentBackgroundImage forState:UIControlStateNormal];
     [[UIApplication sharedApplication].keyWindow addSubview:self.backgroundView];
     [MBProgressHUD showTextHUDwithTitle:@"发现电视, 可以投屏"];
     self.repeatButton.center = [self viewCenter];
@@ -268,6 +268,8 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     if (!self.isBoxSence) {
         self.alpha = 1.f;
     }
+    
+    [self.repeatButton setBackgroundImage:self.currentBackgroundImage forState:UIControlStateNormal];
     self.isShowOptions = YES;
     [[SDImageCache sharedImageCache] clearMemory];
     
@@ -481,12 +483,14 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     self.isBoxSence = YES;
     self.alpha = 1.f;
+    [self setBackgroundImage:[UIImage imageNamed:@"toupin"] forState:UIControlStateNormal];
 }
 
 - (void)showWithNoBox
 {
     self.isBoxSence = NO;
     self.alpha = .6f;
+    [self setBackgroundImage:[UIImage imageNamed:@"toupin4G"] forState:UIControlStateNormal];
 }
 
 //检测是否可以在window上添加投屏菜单蒙层

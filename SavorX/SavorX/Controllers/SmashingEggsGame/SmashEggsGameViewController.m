@@ -52,7 +52,7 @@
     [self creatBgVoiceWithLoops:-1];
     [_player play];
  
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"恢复机会" style:UIBarButtonItemStyleDone target:self action:@selector(addMoreChance)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"恢复机会" style:UIBarButtonItemStyleDone target:self action:@selector(addMoreChance)];
 }
 
 - (void)addMoreChance
@@ -471,7 +471,7 @@
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 [[HomeAnimationView animationView] stopScreenWithEggGame];
                 [self creatMaskingView];
-                
+                [self performSelector:@selector(eggGameStopWithTimeOut) withObject:nil afterDelay:120];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
                 [self eggsViewStartAnimation];
@@ -490,15 +490,21 @@
 
 // 请求砸蛋结果
 - (void)requestHitEggNetWork{
-    
     //如果是绑定状态
     if ([GlobalData shared].isBindRD) {
         
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(eggGameStopWithTimeOut) object:nil];
+        [self performSelector:@selector(eggGameStopWithTimeOut) withObject:nil afterDelay:120];
+        
         [SAVORXAPI  gameSmashedEggWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            
             if ([[result objectForKey:@"result"] integerValue] == 0) {
+                
                 HSEggsResultModel *erModel = [[HSEggsResultModel alloc] initWithDictionary:result];
                 
                 if (erModel.done == 1) {
+                    
+                    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(eggGameStopWithTimeOut) object:nil];
                     
                     if (_isShake == NO) {
                         return;
@@ -591,6 +597,11 @@
     [self creatBgVoiceWithLoops:-1];
     [self play];
     [self.eggsView startShakeAnimation];
+}
+
+- (void)eggGameStopWithTimeOut
+{
+    [self haClosed];
 }
 
 - (void)didReceiveMemoryWarning {
