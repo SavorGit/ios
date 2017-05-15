@@ -174,12 +174,16 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
             NSString *localIp = response[@"result"][@"localIp"];
             NSString *hotelId = response[@"result"][@"hotelId"];
             NSString *type = response[@"result"][@"type"];
-            if (isEmptyString(response[@"result"][@"type"])) {
-                type = @"";
-            }
             NSString *command_port = response[@"result"][@"command_port"];
             NSInteger areaIdInt = [response[@"result"][@"area_id"] integerValue];
             [GlobalData shared].areaId = [NSString stringWithFormat:@"%ld", areaIdInt];
+            
+            if (isEmptyString(type)) {
+                type = @"";
+            }
+            if (isEmptyString(command_port)) {
+                command_port = @"";
+            }
             
             if (!self.hasUploadLog && !isEmptyString([GlobalData shared].areaId)) {
                 [RDLogStatisticsAPI checkAndUploadLog];
@@ -194,9 +198,20 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
                         [GlobalData shared].thirdCallCodeURL = codeURL;
                     }
                 }else{
+                    
+                    if (isEmptyString(localIp)) {
+                        localIp = @"";
+                    }
+                    
                     [GlobalData shared].secondCallCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@",localIp,command_port,[type lowercaseString]];
                 }
-                [GlobalData shared].hotelId = [hotelId integerValue];
+                
+                if (isEmptyString(hotelId)) {
+                    [GlobalData shared].hotelId = 0;
+                }else{
+                    [GlobalData shared].hotelId = [hotelId integerValue];
+                }
+                
                 [GlobalData shared].scene = RDSceneHaveRDBox;
                 self.isSearch = NO;
             }
