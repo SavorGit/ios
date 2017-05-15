@@ -298,7 +298,7 @@
     [_maskingView addSubview:prizeView];
     [prizeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(prizeViewWidth, prizeViewHeight));
-        make.center.equalTo(self.view);
+        make.center.equalTo(_maskingView);
     }];
     
     UIButton *prCloseimgBtn = [[UIButton alloc] init];
@@ -318,7 +318,7 @@
     
     [SAVORXAPI postUMHandleWithContentId:@"game_page_result_finish" key:nil value:nil];
     
-    [_maskingView removeFromSuperview];
+    [self dismissViewWithAnimationDuration:0.3f];
     [self eggsViewStartAnimation];
     [SAVORXAPI screenEggsStopGame];
 }
@@ -338,7 +338,11 @@
     _maskingView = [[UIView alloc] init];
     _maskingView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
     _maskingView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.92f];
-    [[UIApplication sharedApplication].keyWindow addSubview:_maskingView];
+//    [[UIApplication sharedApplication].keyWindow addSubview:_maskingView];
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    _maskingView.bottom = keyWindow.top;
+    [keyWindow addSubview:_maskingView];
+    [self showViewWithAnimationDuration:.3f];
     
     _timeLabel = [[UILabel alloc] init];
     _timeLabel.font = [UIFont boldSystemFontOfSize:80];
@@ -355,6 +359,33 @@
     _timer= [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeHandel) userInfo:nil repeats:YES];
     _timeCount = 3;
 
+}
+
+#pragma mark - show view
+-(void)showViewWithAnimationDuration:(float)duration{
+    
+    [UIView animateWithDuration:duration animations:^{
+        
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        _maskingView.bottom = keyWindow.bottom;
+        
+    } completion:^(BOOL finished) {
+    }];
+}
+
+-(void)dismissViewWithAnimationDuration:(float)duration{
+    
+    [UIView animateWithDuration:duration animations:^{
+        
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        
+        _maskingView.bottom = keyWindow.top;
+        
+    } completion:^(BOOL finished) {
+        
+        [_maskingView removeFromSuperview];
+        
+    }];
 }
 
 // 创建锤子砸蛋中页面
@@ -389,7 +420,7 @@
     [_maskingView addSubview:haCloseImgBtn];
     [haCloseImgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(32, 32));
-        make.centerX.equalTo(self.view);
+        make.centerX.equalTo(_maskingView);
         make.top.mas_equalTo(kMainBoundsHeight - 15 - 64);
     }];
     
@@ -400,7 +431,7 @@
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(eggGameStopWithTimeOut) object:nil];
     
-    [_maskingView removeFromSuperview];
+     [self dismissViewWithAnimationDuration:0.3f];
     [self eggsViewStartAnimation];
     _isShake = NO;
     [SAVORXAPI screenEggsStopGame];
@@ -602,7 +633,8 @@
 - (void)eggGameStopWithTimeOut
 {
     [SAVORXAPI postUMHandleWithContentId:@"game_page_hammer_back" key:nil value:nil];
-    [_maskingView removeFromSuperview];
+
+    [self dismissViewWithAnimationDuration:0.3f];
     [self eggsViewStartAnimation];
     _isShake = NO;
 }

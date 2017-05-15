@@ -174,6 +174,9 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
             NSString *localIp = response[@"result"][@"localIp"];
             NSString *hotelId = response[@"result"][@"hotelId"];
             NSString *type = response[@"result"][@"type"];
+            if (isEmptyString(response[@"result"][@"type"])) {
+                type = @"";
+            }
             NSString *command_port = response[@"result"][@"command_port"];
             NSInteger areaIdInt = [response[@"result"][@"area_id"] integerValue];
             [GlobalData shared].areaId = [NSString stringWithFormat:@"%ld", areaIdInt];
