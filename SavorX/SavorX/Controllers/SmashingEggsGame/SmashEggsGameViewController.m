@@ -159,7 +159,7 @@
     CGFloat textLabelHeight = [Helper autoHeightWith:20.f];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(textLabelWidth, textLabelHeight));
-        make.top.mas_equalTo(_eggsView.mas_bottom).offset(37);
+        make.top.mas_equalTo(_eggsView.mas_bottom).offset(62);
         make.centerX.equalTo(self.view);
     }];
     
@@ -170,7 +170,7 @@
     [bgScrollView addSubview:shareBtn];
     [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(167, 48));
-        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(15);
+        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
         make.centerX.equalTo(self.view);
     }];
     
@@ -183,7 +183,7 @@
     [bgScrollView addSubview:_textBgView];
     [_textBgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 40, 200));
-        make.top.mas_equalTo(shareBtn.mas_bottom).offset(38);
+        make.top.mas_equalTo(shareBtn.mas_bottom).offset(35);
         make.left.mas_equalTo(20);
     }];
     
@@ -337,20 +337,19 @@
     
     _maskingView = [[UIView alloc] init];
     _maskingView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
-    _maskingView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.9f];
-    [self.view addSubview:_maskingView];
+    _maskingView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.92f];
+    [[UIApplication sharedApplication].keyWindow addSubview:_maskingView];
     
     _timeLabel = [[UILabel alloc] init];
     _timeLabel.font = [UIFont boldSystemFontOfSize:80];
-    _timeLabel.textColor = [UIColor orangeColor];
+    _timeLabel.textColor = [UIColor whiteColor];
     _timeLabel.backgroundColor = [UIColor clearColor];
     _timeLabel.textAlignment = NSTextAlignmentCenter;
     _timeLabel.text = @"3";
     [_maskingView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 80));
-        make.centerX.equalTo(self.view);
-        make.centerY.equalTo(self.view);
+        make.center.equalTo([UIApplication sharedApplication].keyWindow);
     }];
     
     _timer= [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeHandel) userInfo:nil repeats:YES];
@@ -378,7 +377,7 @@
     [_maskingView addSubview:hammer];
     [hammer mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 250));
-        make.top.mas_equalTo(haTitleImgView.mas_bottom).offset(10);
+        make.top.mas_equalTo(haTitleImgView.mas_bottom).offset(30);
         make.left.mas_equalTo(10);
         
     }];
@@ -391,7 +390,7 @@
     [haCloseImgBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(32, 32));
         make.centerX.equalTo(self.view);
-        make.top.mas_equalTo(kMainBoundsHeight - 50 - 64);
+        make.top.mas_equalTo(kMainBoundsHeight - 15 - 64);
     }];
     
 }
@@ -549,7 +548,6 @@
     if (self.isMotionning) {
         [self.player play];
     }
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
