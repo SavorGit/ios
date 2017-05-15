@@ -97,12 +97,12 @@
     }
     getPriTimeLab.text = [NSString stringWithFormat:@"(%@)",timeStr];
     [bgImgView addSubview:getPriTimeLab];
-    CGFloat getPriWidth  = [Helper autoWidthWith: 120];
     CGFloat getPribHeight  = [Helper autoHeightWith:20];
     [getPriTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(getPriWidth, getPribHeight));
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
         make.top.mas_equalTo(prizeLevelImg.mas_bottom);
-        make.centerX.equalTo(self);
+        make.height.mas_equalTo(getPribHeight);
     }];
     
     UILabel *prizeTimeLab = [[UILabel alloc] init];

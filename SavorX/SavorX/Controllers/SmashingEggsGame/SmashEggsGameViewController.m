@@ -217,7 +217,7 @@
     _ruleTextView.font = [UIFont systemFontOfSize:15];
     _ruleTextView.editable = NO;
     _ruleTextView.delegate = self;
-    _ruleTextView.text = @"1.此游戏为手机与电视同步互动游戏，参与此活动者须先连接电视；\n\n2.每个用户链接电视后，可选择上面任意一个蛋砸开；\n\n3.每个手机每天可以参与五次砸蛋";
+    _ruleTextView.text = @"1.此游戏为手机与电视同步互动游戏，参与此活动者须先连接电视；\n\n2.每个用户连接电视后，可选择上面任意一个蛋砸开；\n\n3.每个手机每天可以参与五次砸蛋";
     if (kMainBoundsWidth == 320) {
         _ruleTextView.font = [UIFont systemFontOfSize:13];
     }
@@ -398,6 +398,8 @@
 - (void)haClosed{
     
     [SAVORXAPI postUMHandleWithContentId:@"game_page_hammer_back" key:nil value:nil];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(eggGameStopWithTimeOut) object:nil];
     
     [_maskingView removeFromSuperview];
     [self eggsViewStartAnimation];
@@ -601,7 +603,10 @@
 
 - (void)eggGameStopWithTimeOut
 {
-    [self haClosed];
+    [SAVORXAPI postUMHandleWithContentId:@"game_page_hammer_back" key:nil value:nil];
+    [_maskingView removeFromSuperview];
+    [self eggsViewStartAnimation];
+    _isShake = NO;
 }
 
 - (void)didReceiveMemoryWarning {
