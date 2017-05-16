@@ -93,6 +93,8 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //记录启动应用的通知携带的信息
 @property (nonatomic, strong) HSVodModel * launchModel;
 
+@property (nonatomic, strong) NSString * deviceToken;
+
 /**
  *  创建单例
  *

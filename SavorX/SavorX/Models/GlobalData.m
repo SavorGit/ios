@@ -51,6 +51,7 @@ static GlobalData* single = nil;
     self.scene = RDSceneNothing;
     self.hotelId = 0;
     self.projectId = @"projectId";
+    self.deviceToken = @"";
     
     [self getAreaId];
 }

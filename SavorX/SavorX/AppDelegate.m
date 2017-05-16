@@ -539,7 +539,7 @@
                          stringByReplacingOccurrencesOfString: @">" withString: @""]
                         stringByReplacingOccurrencesOfString: @" " withString: @""];
     
-    
+    [GlobalData shared].deviceToken = token;
     NSLog(@"%@",token);
 }
 

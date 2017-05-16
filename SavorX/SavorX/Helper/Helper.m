@@ -265,6 +265,9 @@
     NSString *mdStr = [timeString stringByAppendingString:@"savor4321abcd1234"];
     NSString * result = [Helper getMd5_32Bit:mdStr];
     result = [NSString stringWithFormat:@"time=%@&sign=%@&deviceId=%@", timeString, result, [GCCKeyChain load:keychainID]];
+    if (!isEmptyString([GlobalData shared].deviceToken)) {
+        result = [NSString stringWithFormat:@"%@&deviceToken=%@", result, [GlobalData shared].deviceToken];
+    }
     return result;
 }
 
