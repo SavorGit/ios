@@ -34,6 +34,7 @@
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.tag = 10 + i;
         imageView.userInteractionEnabled = YES;
+        [imageView setExclusiveTouch:YES];
         [imageView setImage:image];
         
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(eggDidBeClicked:)];

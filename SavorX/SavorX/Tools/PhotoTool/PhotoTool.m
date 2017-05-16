@@ -64,7 +64,7 @@
         NSArray * collectionsFetchResults = @[syncedAlbums, userCollections];
         
         
-        //    列出所有相册智能相册
+        //列出所有相册智能相册
         PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
         
         [smartAlbums enumerateObjectsUsingBlock:^(PHAssetCollection *collection, NSUInteger idx, BOOL * _Nonnull stop) {
