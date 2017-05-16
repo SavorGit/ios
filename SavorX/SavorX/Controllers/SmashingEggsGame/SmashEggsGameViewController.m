@@ -250,7 +250,7 @@
 
 - (void)creatEggMiddleView{
     
-    _eggsView = [[RDGoldenEggs alloc] initWithFrame:CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, 123) andEggImage:[UIImage imageNamed:@"jindan"]];
+    _eggsView = [[RDGoldenEggs alloc] initWithFrame:CGRectMake(0, 100, kMainBoundsWidth - 20, 123) andEggImage:[UIImage imageNamed:@"jindan"]];
     _eggsView.delegate = self;
     [_eggsView startShakeAnimation];
     [self.view addSubview:_eggsView];
@@ -280,8 +280,6 @@
     
     if (([GlobalData shared].isBindRD)) {
         [self requestForEggsNetWork];
-        [self stop];
-        [self.eggsView stopShakeAnimation];
     }else{
         [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
         [[HomeAnimationView animationView] scanQRCode];
@@ -369,13 +367,16 @@
 
 #pragma mark - show view
 -(void)showViewWithAnimationDuration:(float)duration{
-    
+    self.eggsView.userInteractionEnabled = NO;
     [UIView animateWithDuration:duration animations:^{
         
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         _maskingView.bottom = keyWindow.bottom;
         
     } completion:^(BOOL finished) {
+        
+        self.eggsView.userInteractionEnabled = YES;
+        
     }];
 }
 
@@ -507,18 +508,18 @@
         
         [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
+                [self stop];
+                [self.eggsView stopShakeAnimation];
                 [[HomeAnimationView animationView] stopScreenWithEggGame];
                 [self creatMaskingView];
                 [self performSelector:@selector(eggGameStopWithTimeOut) withObject:nil afterDelay:120];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-                [self eggsViewStartAnimation];
             }
             [hud hideAnimated:NO];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [hud hideAnimated:NO];
             [MBProgressHUD showTextHUDwithTitle:@"请求失败，请重试"];
-            [self eggsViewStartAnimation];
         }];
         
     }else{
