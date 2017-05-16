@@ -462,7 +462,7 @@
         [self play];
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
-
+    
 }
 
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
