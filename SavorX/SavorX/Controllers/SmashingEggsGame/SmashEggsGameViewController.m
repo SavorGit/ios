@@ -335,10 +335,13 @@
 // 创建蒙层倒计时
 - (void)creatMaskingView{
     
-    if (_maskingView) {
-        [_maskingView removeFromSuperview];
+    UIView * view = [[UIApplication sharedApplication].keyWindow viewWithTag:10000];
+    if (view) {
+        [view removeFromSuperview];
     }
+    
     _maskingView = [[UIView alloc] init];
+    _maskingView.tag = 10000;
     _maskingView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
     _maskingView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.92f];
 
