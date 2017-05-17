@@ -52,13 +52,6 @@
     [self creatBgVoiceWithLoops:-1];
     [_player play];
  
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"恢复机会" style:UIBarButtonItemStyleDone target:self action:@selector(addMoreChance)];
-}
-
-- (void)addMoreChance
-{
-    [RDAwardTool awardAddMoreChance];
-    _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
 }
 
 // 初始化基本参数
