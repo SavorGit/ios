@@ -60,9 +60,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
 // 标题点击按钮
 @property (nonatomic, strong) UIButton *titleViewBtn;
 
-// 连接电视按钮
-@property (nonatomic, strong) RDRightConnetItem* rightItem;
-
 @end
 
 @implementation WMPageController
@@ -1051,9 +1048,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     self.navigationItem.leftBarButtonItem = backItem;
     
-    self.rightItem = [RDRightConnetItem buttonWithType:UIButtonTypeCustom];
-    [self.rightItem addTarget:self action:@selector(rightAction) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"连接电视" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
     
     self.titleViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.titleViewBtn.frame = CGRectMake(0, 0, 150, 30);
@@ -1189,10 +1184,9 @@ static NSInteger const kWMControllerCountUndefined = -1;
         if (self.selectIndex > 1) {
             self.selectIndex -= 1;
         }
-        [self.rightItem stopAnimation];
     }
     [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightItem];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"连接电视" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
     self.titleViewBtn.userInteractionEnabled = NO;
 }
 
