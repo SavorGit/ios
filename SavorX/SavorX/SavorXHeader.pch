@@ -41,7 +41,7 @@
 
 #endif
 
-#define kVersionCode 2017050501
+#define kVersionCode 2017051701
 
 //-------------------友盟-------------------------
 #define UmengAppkey @"57be6121e0f55a9171000905"
