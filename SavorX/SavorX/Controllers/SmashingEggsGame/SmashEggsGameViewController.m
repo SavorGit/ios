@@ -548,6 +548,9 @@
                     
                     //进行了一次抽奖
                     [RDAwardTool awardHasAwardWithResultModel:erModel];
+                    if (self.adModel.lottery_num > 0) {
+                        self.adModel.lottery_num = self.adModel.lottery_num - 1;
+                    }
                     _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
                     if (erModel.win == 1) {
                         NSLog(@"获得奖品了");

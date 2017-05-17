@@ -31,6 +31,13 @@
         NSDictionary * dict = [GCCKeyChain load:RDAwardInfo];
         //将本地存储的有效次数赋值到number
         number = [[dict objectForKey:RDAwardNumber] integerValue];
+    }else{
+        //如果当前存储的无效，则把现在的数量存在本地
+        NSDictionary * dict = @{RDAwardDate : [Helper getCurrentTimeWithFormat:@"yyyyMMdd"],
+                                RDAwardNumber : [NSNumber numberWithInteger:lottery_num],
+                                RDAwardCurrentNumber : [NSNumber numberWithInteger:0],
+                                RDAwardHangerNumber : [NSNumber numberWithInteger:(arc4random() % lottery_num + 1)]};
+        [GCCKeyChain save:RDAwardInfo data:dict];
     }
     
     if (number > 0) {
