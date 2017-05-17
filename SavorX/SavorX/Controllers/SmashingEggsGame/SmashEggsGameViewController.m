@@ -453,7 +453,6 @@
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
     if (_isShake == YES) {
-        NSLog(@"开始摇一摇");
         [self.hammer startShakeAnimation];
         [self requestHitEggNetWork];
         self.isMotionning = YES;
@@ -470,7 +469,6 @@
     if (_isShake == YES) {
         self.isMotionning = NO;
         [self.hammer stopShakeAnimation];
-        NSLog(@"取消摇一摇");
     }
 }
 
@@ -479,7 +477,6 @@
     if (_isShake == YES) {
         self.isMotionning = NO;
         [self.hammer stopShakeAnimation];
-        NSLog(@"结束摇一摇");
     }
 }
 
@@ -552,11 +549,6 @@
                         self.adModel.lottery_num = self.adModel.lottery_num - 1;
                     }
                     _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
-                    if (erModel.win == 1) {
-                        NSLog(@"获得奖品了");
-                    }else{
-                        NSLog(@"没有获得奖品");
-                    }
                     [_maskingView removeAllSubviews];
                     [self creatPrizeMiddleView:erModel];
                 }
