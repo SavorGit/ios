@@ -84,11 +84,6 @@
         }];
     }
     
-    //延时写入启动日志，为防止写入后，下面的立即将“open”操作进行上传
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_OPEN type:RDLOGTYPE_APP model:nil categoryID:nil];
-    });
-    
     //初始化OpenInstall
     [OpenInstallSDK setAppKey:@"w7gvub" withDelegate:self];
     
