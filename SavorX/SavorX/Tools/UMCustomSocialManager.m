@@ -134,7 +134,7 @@
         switch (platformType) {
                 //微信聊天
             case UMSocialPlatformType_WechatSession:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"微信"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"weixin"];
                 if (type == 0) {
                    [self shareWebPageToPlatform:UMSocialPlatformType_WechatSession andController:controller andType:type andUmKeyString:@"details_page_share_weixin"];
                 }else if (type == 1) {
@@ -145,7 +145,7 @@
                 
                 //微信朋友圈
             case UMSocialPlatformType_WechatTimeLine:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"朋友圈"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"weixin_friends"];
                 if (type == 0) {
                    [self shareWebPageToPlatform:UMSocialPlatformType_WechatTimeLine andController:controller andType:type andUmKeyString:@"details_page_share_weixin_friends"];
                 }else if (type == 1){
@@ -156,7 +156,7 @@
                 
                 //微信收藏
             case UMSocialPlatformType_WechatFavorite:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"微信收藏"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"weixin_collection"];
                 if (type == 0) {
                     [self shareWebPageToPlatform:UMSocialPlatformType_WechatFavorite andController:controller andType:type andUmKeyString:@"details_page_share_weixin_collection"];
                 }else if (type == 1){
@@ -167,7 +167,7 @@
                 
                 //QQ聊天
             case UMSocialPlatformType_QQ:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"QQ"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"qq"];
                 if (type == 0) {
                     [self shareWebPageToPlatform:UMSocialPlatformType_QQ andController:controller andType:type andUmKeyString:@"details_page_share_qq"];
                 }else if (type == 1){
@@ -178,7 +178,7 @@
                 
                 //QQ空间
             case UMSocialPlatformType_Qzone:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"QQ空间"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"qq_zone"];
                 if (type == 0) {
                     [self shareWebPageToPlatform:UMSocialPlatformType_Qzone andController:controller andType:type andUmKeyString:@"details_page_share_qq_zone"];
                 }else if (type == 1){
@@ -191,7 +191,7 @@
             case UMSocialPlatformType_Sina:
                 
             {
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"新浪微博"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"sina"];
                 
                 NSString * url = [model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                 NSString * text = [NSString stringWithFormat:@"小热点 | %@\n%@", model.title, url];
