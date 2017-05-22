@@ -10,6 +10,22 @@
 
 @implementation HSAdsModel
 
+- (id)initWithDictionary:(NSDictionary *)dictionary
+{
+    if (self = [super initWithDictionary:dictionary]) {
+        self.type = HSAdsModelType_AD;
+    }
+    return self;
+}
+
+- (id)initAwardWithDictionary:(NSDictionary *)dictionary
+{
+    if (self = [super initWithDictionary:dictionary]) {
+        self.type = HSAdsModelType_AWARD;
+    }
+    return self;
+}
+
 -(NSDictionary *)attrMapDict{
     
     return @{@"cid":@"id"};

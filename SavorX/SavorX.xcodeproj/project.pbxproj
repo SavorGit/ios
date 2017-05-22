@@ -66,6 +66,11 @@
 		0627E0C11E3231DA00DAED92 /* LGSideMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0627E0BC1E3231DA00DAED92 /* LGSideMenuView.m */; };
 		0627E0C21E3231DA00DAED92 /* UIViewController+LGSideMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0627E0BE1E3231DA00DAED92 /* UIViewController+LGSideMenuController.m */; };
 		0628B0A41D715DB900DB63D4 /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0628B0A31D715DB900DB63D4 /* UMMobClick.framework */; };
+		062CEFD21EC2FAC400EA6AE0 /* RDAwardTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 062CEFD11EC2FAC400EA6AE0 /* RDAwardTool.m */; };
+		062CEFD51EC3053200EA6AE0 /* HSAwardUploadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 062CEFD41EC3053200EA6AE0 /* HSAwardUploadRequest.m */; };
+		062CF0281EC3449D00EA6AE0 /* RDHammer.m in Sources */ = {isa = PBXBuildFile; fileRef = 062CF0271EC3449D00EA6AE0 /* RDHammer.m */; };
+		062CF02A1EC3498300EA6AE0 /* selectEggs.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 062CF0291EC3498300EA6AE0 /* selectEggs.mp3 */; };
+		062CF02C1EC3498D00EA6AE0 /* glass.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 062CF02B1EC3498D00EA6AE0 /* glass.mp3 */; };
 		062D4F791DEC02BA0093942A /* GCCControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 062D4F4B1DEC02BA0093942A /* GCCControlView.m */; };
 		062D4F7A1DEC02BA0093942A /* GCCPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 062D4F4D1DEC02BA0093942A /* GCCPlayerView.m */; };
 		062D4F7B1DEC02BA0093942A /* bigSlider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 062D4F4F1DEC02BA0093942A /* bigSlider@2x.png */; };
@@ -324,6 +329,10 @@
 		9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A71E7159210060CE0B /* DocGuided.png */; };
 		9670C4AB1E7159210060CE0B /* DocGuided@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A81E7159210060CE0B /* DocGuided@2x.png */; };
 		9670C4AC1E7159210060CE0B /* DocGuided@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A91E7159210060CE0B /* DocGuided@3x.png */; };
+		96BCE3BE1EC0128E00B1A3F7 /* SmashEggsGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */; };
+		96BCE3CA1EC19DE100B1A3F7 /* HSEggsResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */; };
+		96BCE4231EC2C05300B1A3F7 /* RDGoldenEggs.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */; };
+		96BCE4291EC2F3DB00B1A3F7 /* RDPrizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -450,6 +459,14 @@
 		0627E0BD1E3231DA00DAED92 /* UIViewController+LGSideMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LGSideMenuController.h"; sourceTree = "<group>"; };
 		0627E0BE1E3231DA00DAED92 /* UIViewController+LGSideMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LGSideMenuController.m"; sourceTree = "<group>"; };
 		0628B0A31D715DB900DB63D4 /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMMobClick.framework; sourceTree = "<group>"; };
+		062CEFD01EC2FAC400EA6AE0 /* RDAwardTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAwardTool.h; sourceTree = "<group>"; };
+		062CEFD11EC2FAC400EA6AE0 /* RDAwardTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAwardTool.m; sourceTree = "<group>"; };
+		062CEFD31EC3053200EA6AE0 /* HSAwardUploadRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSAwardUploadRequest.h; sourceTree = "<group>"; };
+		062CEFD41EC3053200EA6AE0 /* HSAwardUploadRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSAwardUploadRequest.m; sourceTree = "<group>"; };
+		062CF0261EC3449D00EA6AE0 /* RDHammer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHammer.h; sourceTree = "<group>"; };
+		062CF0271EC3449D00EA6AE0 /* RDHammer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHammer.m; sourceTree = "<group>"; };
+		062CF0291EC3498300EA6AE0 /* selectEggs.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = selectEggs.mp3; sourceTree = "<group>"; };
+		062CF02B1EC3498D00EA6AE0 /* glass.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = glass.mp3; sourceTree = "<group>"; };
 		062D4F4A1DEC02BA0093942A /* GCCControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCCControlView.h; sourceTree = "<group>"; };
 		062D4F4B1DEC02BA0093942A /* GCCControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCCControlView.m; sourceTree = "<group>"; };
 		062D4F4C1DEC02BA0093942A /* GCCPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCCPlayerView.h; sourceTree = "<group>"; };
@@ -837,6 +854,14 @@
 		9670C4A71E7159210060CE0B /* DocGuided.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DocGuided.png; sourceTree = "<group>"; };
 		9670C4A81E7159210060CE0B /* DocGuided@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DocGuided@2x.png"; sourceTree = "<group>"; };
 		9670C4A91E7159210060CE0B /* DocGuided@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DocGuided@3x.png"; sourceTree = "<group>"; };
+		96BCE3BC1EC0128E00B1A3F7 /* SmashEggsGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmashEggsGameViewController.h; sourceTree = "<group>"; };
+		96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmashEggsGameViewController.m; sourceTree = "<group>"; };
+		96BCE3C81EC19DE100B1A3F7 /* HSEggsResultModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSEggsResultModel.h; sourceTree = "<group>"; };
+		96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSEggsResultModel.m; sourceTree = "<group>"; };
+		96BCE4211EC2C05300B1A3F7 /* RDGoldenEggs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDGoldenEggs.h; sourceTree = "<group>"; };
+		96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDGoldenEggs.m; sourceTree = "<group>"; };
+		96BCE4271EC2F3DB00B1A3F7 /* RDPrizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPrizeView.h; sourceTree = "<group>"; };
+		96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPrizeView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1161,6 +1186,15 @@
 			path = LGSideMenuController;
 			sourceTree = "<group>";
 		};
+		062CEFCF1EC2F9FC00EA6AE0 /* RDAwardTool */ = {
+			isa = PBXGroup;
+			children = (
+				062CEFD01EC2FAC400EA6AE0 /* RDAwardTool.h */,
+				062CEFD11EC2FAC400EA6AE0 /* RDAwardTool.m */,
+			);
+			path = RDAwardTool;
+			sourceTree = "<group>";
+		};
 		062D4F491DEC02BA0093942A /* GCCPlayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1257,6 +1291,8 @@
 				960EDB151E8361F700717406 /* HSLauchImageOrVideoRequest.m */,
 				964177931EB86C2100AA839E /* HSInstallationInforUpload.h */,
 				964177941EB86C2100AA839E /* HSInstallationInforUpload.m */,
+				062CEFD31EC3053200EA6AE0 /* HSAwardUploadRequest.h */,
+				062CEFD41EC3053200EA6AE0 /* HSAwardUploadRequest.m */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -1293,6 +1329,7 @@
 		0684DF1D1D519095006756D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				96BCE4201EC2C05300B1A3F7 /* GameEggsView */,
 				0689915A1E854EE900BC9EFE /* RDKeyBoard */,
 				06FFCCA61E6E864900ADEA94 /* RDAlertView */,
 				4733B7511E305C01006889A2 /* HomePageView */,
@@ -1523,6 +1560,7 @@
 		06FA311B1D3E0CC6001F5B37 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				96BCE3BB1EC010F300B1A3F7 /* SmashingEggsGame */,
 				06B555471E8A6A210068BF70 /* DefalutLaunchViewController */,
 				476F44C11E2DBBD100F99090 /* leftPage */,
 				061FEFD41E2DAD14003CD111 /* HomePage */,
@@ -1575,6 +1613,7 @@
 		06FA32E31D3E165A001F5B37 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				96BCE3C71EC19A7500B1A3F7 /* EggsGame */,
 				061E0FD51DFFEBB30072605F /* RDBox */,
 				06FB9D651DF9890C0053BE0A /* Discover */,
 				06FB9D681DF9890C0053BE0A /* Hot */,
@@ -1649,6 +1688,7 @@
 		06FA33B11D3E1FF2001F5B37 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				062CEFCF1EC2F9FC00EA6AE0 /* RDAwardTool */,
 				060650591E014CF100E43024 /* HSWebServerManager */,
 				06F9B2A51D6EEDBD00C7F0A4 /* GCCKeyChain */,
 				06F9B29E1D6ED8CE00C7F0A4 /* GCCGetInfo */,
@@ -2045,10 +2085,51 @@
 		9670C4A21E70F5DE0060CE0B /* videoGuide */ = {
 			isa = PBXGroup;
 			children = (
+				96BCE3CE1EC1A60C00B1A3F7 /* gameVoice */,
 				065ECD611E8A703F0062E29D /* DefaultLaunch.mp4 */,
 				06B555121E8A587D0068BF70 /* documentVideoGuided.mp4 */,
 			);
 			path = videoGuide;
+			sourceTree = "<group>";
+		};
+		96BCE3BB1EC010F300B1A3F7 /* SmashingEggsGame */ = {
+			isa = PBXGroup;
+			children = (
+				96BCE3BC1EC0128E00B1A3F7 /* SmashEggsGameViewController.h */,
+				96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */,
+			);
+			path = SmashingEggsGame;
+			sourceTree = "<group>";
+		};
+		96BCE3C71EC19A7500B1A3F7 /* EggsGame */ = {
+			isa = PBXGroup;
+			children = (
+				96BCE3C81EC19DE100B1A3F7 /* HSEggsResultModel.h */,
+				96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */,
+			);
+			path = EggsGame;
+			sourceTree = "<group>";
+		};
+		96BCE3CE1EC1A60C00B1A3F7 /* gameVoice */ = {
+			isa = PBXGroup;
+			children = (
+				062CF02B1EC3498D00EA6AE0 /* glass.mp3 */,
+				062CF0291EC3498300EA6AE0 /* selectEggs.mp3 */,
+			);
+			path = gameVoice;
+			sourceTree = "<group>";
+		};
+		96BCE4201EC2C05300B1A3F7 /* GameEggsView */ = {
+			isa = PBXGroup;
+			children = (
+				96BCE4211EC2C05300B1A3F7 /* RDGoldenEggs.h */,
+				96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */,
+				96BCE4271EC2F3DB00B1A3F7 /* RDPrizeView.h */,
+				96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */,
+				062CF0261EC3449D00EA6AE0 /* RDHammer.h */,
+				062CF0271EC3449D00EA6AE0 /* RDHammer.m */,
+			);
+			path = GameEggsView;
 			sourceTree = "<group>";
 		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
@@ -2182,6 +2263,7 @@
 			files = (
 				062D4F841DEC02BA0093942A /* RDCollectNO@2x.png in Resources */,
 				962EFA7A1E84F7980074450A /* laba_g@3x.png in Resources */,
+				062CF02C1EC3498D00EA6AE0 /* glass.mp3 in Resources */,
 				065ECD621E8A703F0062E29D /* DefaultLaunch.mp4 in Resources */,
 				065ECD821E8A8EC10062E29D /* indexp6_1.jpg in Resources */,
 				062D4FA01DEC02BA0093942A /* RDShare@3x.png in Resources */,
@@ -2289,6 +2371,7 @@
 				062D4F931DEC02BA0093942A /* RDPause@2x.png in Resources */,
 				962EFA861E84F7980074450A /* voljia_g@3x.png in Resources */,
 				06FA30F51D3E0C70001F5B37 /* Assets.xcassets in Resources */,
+				062CF02A1EC3498300EA6AE0 /* selectEggs.mp3 in Resources */,
 				960EDB361E83DB0300717406 /* ljtvsanweishu_bg.png in Resources */,
 				47F4A27C1E4965AD001C93F0 /* FeedbackView.xib in Resources */,
 				47C90F211E13AB5C0089AC7B /* SXEmptyCell.xib in Resources */,
@@ -2417,15 +2500,18 @@
 				060E420F1E4CB03E009A94FC /* TADotView.m in Sources */,
 				9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */,
 				06EA38BC1D5971DA0081DDCC /* AlbumListViewController.m in Sources */,
+				96BCE3BE1EC0128E00B1A3F7 /* SmashEggsGameViewController.m in Sources */,
 				061FEFD71E2DAD64003CD111 /* CategoryViewController.m in Sources */,
 				0690766B1E51FE8E00CA1AC4 /* PhotoManyCollectionViewCell.m in Sources */,
 				064F0E2B1DD3087700D9EFD1 /* AddSliderCollectionViewCell.m in Sources */,
 				06153E071D530D9A00BB127F /* SAVORXAPI.m in Sources */,
 				06FA33941D3E171D001F5B37 /* DDAbstractDatabaseLogger.m in Sources */,
+				96BCE3CA1EC19DE100B1A3F7 /* HSEggsResultModel.m in Sources */,
 				060E42131E4CB03E009A94FC /* UIView+SDExtension.m in Sources */,
 				06B5554D1E8A6A210068BF70 /* DefalutLaunchViewController.m in Sources */,
 				47F997691DFFA7750009BDFB /* SXDlnaViewController.m in Sources */,
 				0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */,
+				062CEFD21EC2FAC400EA6AE0 /* RDAwardTool.m in Sources */,
 				060E42111E4CB03E009A94FC /* SDCollectionViewCell.m in Sources */,
 				96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */,
 				066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */,
@@ -2444,6 +2530,7 @@
 				06FB9D771DF989180053BE0A /* BaseModel.m in Sources */,
 				062D4F7A1DEC02BA0093942A /* GCCPlayerView.m in Sources */,
 				061E0FD31DFFD9A40072605F /* GCCUPnPManager.m in Sources */,
+				96BCE4231EC2C05300B1A3F7 /* RDGoldenEggs.m in Sources */,
 				06AB944F1D880C8000A29D36 /* rotationImageView.m in Sources */,
 				06FD5F1F1DC1A8510043D898 /* SliderViewController.m in Sources */,
 				06FFCCAC1E6E864900ADEA94 /* RDAlertView.m in Sources */,
@@ -2454,6 +2541,7 @@
 				060E42101E4CB03E009A94FC /* TAPageControl.m in Sources */,
 				06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */,
 				063B1D531D7D63D30036C02B /* PhotoSliderViewController.m in Sources */,
+				062CF0281EC3449D00EA6AE0 /* RDHammer.m in Sources */,
 				47FE2CBD1E1BB64E00D3D0B4 /* UIImage+SplitImageIntoTwoParts.m in Sources */,
 				064F8B931E532838006280FD /* HSGetIpRequest.m in Sources */,
 				06ED754C1D643A3700C56DD2 /* MineTableViewCell.m in Sources */,
@@ -2499,6 +2587,7 @@
 				4772FF841DFA544B00758697 /* BaseViewController.m in Sources */,
 				060E420D1E4CB03E009A94FC /* TAAbstractDotView.m in Sources */,
 				06FB9D611DF97D0E0053BE0A /* MBProgressHUD+Custom.m in Sources */,
+				062CEFD51EC3053200EA6AE0 /* HSAwardUploadRequest.m in Sources */,
 				474C76351DFB9BED001129C9 /* NoDataView.m in Sources */,
 				476F44C51E2DBC1000F99090 /* LeftViewController.m in Sources */,
 				0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */,
@@ -2541,6 +2630,7 @@
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
 				060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */,
 				06569D4E1DC888CE00F934B2 /* AddPhotoListViewController.m in Sources */,
+				96BCE4291EC2F3DB00B1A3F7 /* RDPrizeView.m in Sources */,
 				063AA2451DB8AA97007F4C70 /* AddLibraryViewController.m in Sources */,
 				47D6F63D1E4AB68C0030C8C4 /* SXVideoPlayViewController.m in Sources */,
 				47FE2CB91E1BB53200D3D0B4 /* SplashViewController.m in Sources */,

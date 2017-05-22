@@ -8,6 +8,13 @@
 
 #import "BaseViewController.h"
 
+typedef enum : NSUInteger {
+    SHARERDTYPE_APPLICATION,
+    SHARERDTYPE_GAME
+} SHARERDTYPE;
+
 @interface ShareRDViewController : BaseViewController
+
+- (instancetype)initWithType:(SHARERDTYPE)type;
 
 @end

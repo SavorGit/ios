@@ -29,16 +29,23 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
             }
             
             [RDLogStatisticsAPI RDCreateLogWithAction:action type:type model:model categoryID:categoryID needNewTime:NO];
-        }else if (action == RDLOGACTION_OPEN) {
-            
-            NSString * logitem = [NSString stringWithFormat:@"%@,,,%@,open,app,,,%@,,ios,,,,%@,",  [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],  [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].areaId]];
-            [RDLogStatisticsAPI RDLogSaveWithLogItem:logitem];
-            
         }else if (action == RDLOGACTION_COMPELETE || action == RDLOGACTION_END){
             [RDLogStatisticsAPI RDCreateLogWithAction:action type:type model:model categoryID:categoryID needNewTime:NO];
         }else {
             [RDLogStatisticsAPI RDCreateLogWithAction:action type:type model:model categoryID:categoryID needNewTime:YES];
         }
+    });
+}
+
+//热点启动日志
++ (void)RDItemLogOpenWithHotelID:(NSInteger)hotelID
+{
+    const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
+    dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
+    
+    dispatch_async(RDLogQueue, ^{
+        NSString * logitem = [NSString stringWithFormat:@"%@,%@,%@,%@,open,app,,,%@,,ios,,,,%@,",  [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkId:hotelID], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],  [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].areaId]];
+        [RDLogStatisticsAPI RDLogSaveWithLogItem:logitem];
     });
 }
 

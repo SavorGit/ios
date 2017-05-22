@@ -12,7 +12,6 @@
 
 @interface ArticleReadViewController ()<UIWebViewDelegate,UIScrollViewDelegate>
 
-@property (nonatomic, strong) UIImage * image;
 @property (nonatomic, strong) HSVodModel * model;;
 @property (nonatomic, strong) UIButton * collectButton;
 @property (nonatomic, strong) UIWebView * webView;
@@ -22,10 +21,9 @@
 
 @implementation ArticleReadViewController
 
-- (instancetype)initWithVodModel:(HSVodModel *)model andImage:(UIImage *)image
+- (instancetype)initWithVodModel:(HSVodModel *)model
 {
     if (self = [super init]) {
-        self.image = image;
         self.model = model;
         self.title = model.title;
         
@@ -98,7 +96,6 @@
 
 - (void)shareAction
 {
-    [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }

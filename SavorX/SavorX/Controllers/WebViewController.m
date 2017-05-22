@@ -27,6 +27,7 @@
 
 -(void)dealloc{
     
+    //移除页面相关通知监听
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
@@ -47,10 +48,11 @@
     
     self.title = self.model.title;
     
+    //初始化播放器
     self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
     self.playView.backgroundColor = [UIColor blackColor];
     self.playView.delegate = self;
-    [self.playView backgroundImage:self.image];
+    [self.playView backgroundImage:self.model.imageURL];
     [self.playView setVideoTitle:self.model.title];
     [self.view addSubview:self.playView];
     self.playView.model = self.model;
@@ -78,6 +80,7 @@
         [self.playView setIsCollect:iscollect];
     }
     
+    //初始化webView
     self.webView = [[UIWebView alloc] init];
     self.webView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.webView];
@@ -96,6 +99,7 @@
     
     [MBProgressHUD showWebLoadingHUDInView:self.webView];
     
+    //添加页面相关的通知监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(phoneBindDevice) name:RDDidBindDeviceNotification object:nil];
     // app退到后台
@@ -104,6 +108,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
+//当手机连接到机顶盒
 - (void)phoneBindDevice
 {
     if ([GlobalData shared].isBindRD && self.model.canPlay == 1) {
@@ -146,11 +151,13 @@
     }
 }
 
+//返回按钮被点击
 - (void)backButtonDidBeClicked
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+//手机的方向发生了变化
 - (void)orientationChanged
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -210,9 +217,9 @@
     }
 }
 
+//视频分享按钮被点击
 - (void)videoShouldBeShare
 {
-    [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
@@ -220,11 +227,11 @@
 //分享按钮被点击
 - (void)shareAction:(UIButton *)button
 {
-    [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
+//视频的点播按钮被点击
 - (void)videoShouldBeDemand
 {
     if (self.model.canPlay) {

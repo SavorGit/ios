@@ -71,7 +71,7 @@
     self.title = self.model.title;
     
     self.backImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    [self.backImageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageURL]];
+    [self.backImageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageURL] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     [self.view addSubview:self.backImageView];
     self.backImageView.userInteractionEnabled = YES;
     [self.backImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -296,6 +296,7 @@
     
 }
 
+//tv按钮被点击，即重新点播该视频
 - (void)tvAciton
 {
     [self restartVod];
@@ -350,7 +351,6 @@
         return;
     }
     
-    [UMCustomSocialManager defaultManager].image = self.backImageView.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:1 categroyID:self.categroyID];
     [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share" key:nil value:nil];
 }

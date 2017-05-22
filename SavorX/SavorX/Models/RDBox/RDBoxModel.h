@@ -13,7 +13,7 @@
 // 机顶盒地址
 @property (nonatomic, copy) NSString *BoxIP;
 
-// 机顶盒ID
+// 机顶盒ID(MAC)
 @property (nonatomic, copy) NSString *BoxID;
 
 //酒楼ID

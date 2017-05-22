@@ -71,7 +71,7 @@
     [MobClick startWithConfigure:UMConfigInstance];
     
     NSString* identifierNumber = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    if ([[GCCKeyChain load:keychainID] isEqualToString:@"unknow"]) {
+    if (![GCCKeyChain load:keychainID]) {
         [GCCKeyChain save:keychainID data:identifierNumber];
     }
     [GlobalData shared].deviceID = [GCCKeyChain load:keychainID];
@@ -227,6 +227,32 @@
         }
     }];
     
+    return task;
+}
+
+//游戏投蛋
++ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr hunger:(NSInteger)hunger date:(NSString *)date  success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/egg"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
+                                  @"deviceName" : [GCCGetInfo getIphoneName],
+                                  @"hunger" : [NSNumber numberWithInteger:hunger],
+                                  @"date" :   date };
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
+//游戏砸蛋
++ (NSURLSessionDataTask *)gameSmashedEggWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/hitEgg"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
+                                  @"projectId" : [GlobalData shared].projectId };
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
     return task;
 }
 
@@ -453,6 +479,22 @@
     }
 }
 
++ (void)screenEggsStopGame
+{
+    if ([GlobalData shared].isBindRD) {
+        NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
+        
+        NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
+                                      @"projectId" : [GlobalData shared].projectId};
+        
+        [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+        }];
+    }
+}
+
 + (void)postUMHandleWithContentId:(NSInteger)contentId withType:(handleType)type
 {
     NSDictionary * parameters = @{@"contentID" : [NSString stringWithFormat:@"%ld", (long)contentId]};
@@ -670,7 +712,6 @@
         }];
     }
 }
-
 
 + (void)showAlert:(UIAlertController *)alert
 {

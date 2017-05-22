@@ -65,18 +65,16 @@
 {
     HSVodModel * model = [self.dataSource objectAtIndex:indexPath.section];
     model.canPlay = NO;
-    BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     if (model.type == 3) {
         WebViewController * web = [[WebViewController alloc] init];
         web.model = model;
         web.title = model.title;
-        web.image = cell.bgImageView.image;
         [self.navigationController pushViewController:web animated:YES];
     }else if (model.type == 4){
-        HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
+        HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model];
         [self.navigationController pushViewController:web animated:YES];
     }else{
-        ArticleReadViewController * read = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
+        ArticleReadViewController * read = [[ArticleReadViewController alloc] initWithVodModel:model];
         [self.navigationController pushViewController:read animated:YES];
     }
     [SAVORXAPI postUMHandleWithContentId:@"menu_collection_details" key:nil value:nil];

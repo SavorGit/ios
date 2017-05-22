@@ -54,6 +54,24 @@ typedef NS_ENUM(NSInteger, interactType) {
 + (NSURLSessionDataTask *)getWithURL:(NSString *)urlStr parameters:(NSDictionary *)parameters success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
 
 /**
+ *  游戏投蛋请求
+ *
+ *  @param urlStr     请求地址
+ *  @param hunger     期望中奖
+ *  @param date       投蛋时间
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr  hunger:(NSInteger)hunger date:(NSString *)date   success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
+
+/**
+ *  游戏砸蛋请求
+ *
+ *  @param urlStr     请求地址
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)gameSmashedEggWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
+
+/**
  *  点播视频请求
  *
  *  @param urlStr     请求地址
@@ -225,5 +243,7 @@ typedef NS_ENUM(NSInteger, interactType) {
 + (void)saveFileOnPath:(NSString *)path withDictionary:(NSDictionary *)dict;
 
 + (void)checkVersionUpgrade;
+
++ (void)screenEggsStopGame;
 
 @end

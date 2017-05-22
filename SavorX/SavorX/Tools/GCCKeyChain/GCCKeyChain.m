@@ -46,16 +46,10 @@
         } @finally {
         }
     }
-    if ((__bridge CFDictionaryRef)(keychainQuery)) {
-        CFRelease((__bridge CFDictionaryRef)(keychainQuery));
-    }
-    if (nil == ret) {
-        ret = @"unknow";
-    }
     return ret;
 }
 
-+ (void)delete:(NSString *)service {
++ (void)deleteDataForKey:(NSString *)service {
     NSMutableDictionary *keychainQuery = [self getKeychainQuery:service];
     SecItemDelete((__bridge_retained CFDictionaryRef)keychainQuery);
 //    CFRelease((__bridge CFDictionaryRef)(keychainQuery));

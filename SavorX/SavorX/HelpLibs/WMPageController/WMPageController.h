@@ -365,4 +365,6 @@ typedef NS_ENUM(NSUInteger, WMPageControllerPreloadPolicy) {
 
 - (void)disconnentClick;
 
+- (void)didReceiveRemoteNotification:(HSVodModel *_Nullable)model;
+
 @end

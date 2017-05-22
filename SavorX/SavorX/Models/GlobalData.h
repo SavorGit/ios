@@ -81,6 +81,20 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //设备唯一标识
 @property (nonatomic, copy) NSString * deviceID;
 
+//是否是3DTouch启动的应用程序
+@property (nonatomic, assign) BOOL is3DTouchEnable;
+
+//记录当前3DTouch点击的item
+@property (nonatomic, strong) UIApplicationShortcutItem * shortcutItem;
+
+//是否是通过通知启动的应用
+@property (nonatomic, assign) BOOL isLaunchedByNotification;
+
+//记录启动应用的通知携带的信息
+@property (nonatomic, strong) HSVodModel * launchModel;
+
+@property (nonatomic, strong) NSString * deviceToken;
+
 /**
  *  创建单例
  *

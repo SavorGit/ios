@@ -51,7 +51,7 @@
 - (void)setSliderValue:(CGFloat)value currentTime:(NSInteger)currentTime totalTime:(NSInteger)totalTime; //设置当前播放进度
 - (void)setVideoIsCollect:(BOOL)isCollect; //设置是否收藏状态
 
-- (void)backgroundImage:(UIImage *)image;
+- (void)backgroundImage:(NSString *)url;
 
 - (void)changeControlViewShowStatus; //改变控制栏显示状态
 

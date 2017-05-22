@@ -20,6 +20,8 @@
 
 -(void)voideoPlayFooterViewisEnable:(BOOL)isEnable;
 
+- (void)setQuitButtonStates:(BOOL)isPlayEnd;
+
 @end
 
 

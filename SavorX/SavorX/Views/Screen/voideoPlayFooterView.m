@@ -97,4 +97,9 @@
     }
 }
 
+- (void)setQuitButtonStates:(BOOL)isPlayEnd
+{
+    [self.quitBtn setSelected:isPlayEnd];
+}
+
 @end

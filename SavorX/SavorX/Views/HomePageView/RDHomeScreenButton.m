@@ -14,6 +14,9 @@
 static CGFloat RDHomeScreenPopAnimationTime = .5f;
 static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
+#define RDHomeScreenButtonCenterInHotel CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height / 2 - kStatusBarHeight - kNaviBarHeight);
+#define RDHomeScreenButtonCenterOutHotel CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - kStatusBarHeight - kNaviBarHeight - 2);
+
 @interface RDHomeScreenButton ()<LGSideMenuControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UIView * backgroundView;
@@ -22,7 +25,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 @property (nonatomic, strong) UIButton * photoButton;
 @property (nonatomic, strong) UIButton * videoButton;
 @property (nonatomic, strong) UIButton * sliderButton;
-@property (nonatomic, strong) UIButton * niceVideoButton;
+//@property (nonatomic, strong) UIButton * niceVideoButton;
 @property (nonatomic, strong) UIButton * documentButton;
 
 @property (nonatomic, assign) BOOL isBoxSence; //记录当前时候是在酒店环境
@@ -60,7 +63,11 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 
 - (void)createViews
 {
-    self.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height - self.frame.size.height / 2 - 30 - kStatusBarHeight - kNaviBarHeight);
+    if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+        self.center = RDHomeScreenButtonCenterInHotel;
+    }else{
+        self.center = RDHomeScreenButtonCenterOutHotel;
+    }
     
     self.layer.cornerRadius = self.frame.size.width / 2;
     self.layer.masksToBounds = YES;
@@ -72,7 +79,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     self.videoButton = [self createButtonWithTag:101 image:[UIImage imageNamed:@"shipin"]];
     self.sliderButton = [self createButtonWithTag:102 image:[UIImage imageNamed:@"huandengpian"]];
     self.documentButton = [self createButtonWithTag:103 image:[UIImage imageNamed:@"wenjian"]];
-    self.niceVideoButton = [self createButtonWithTag:104 image:[UIImage imageNamed:@"dianbo"]];
+//    self.niceVideoButton = [self createButtonWithTag:104 image:[UIImage imageNamed:@"dianbo"]];
     
     [self createRepeatButton];
     
@@ -80,7 +87,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [self.backgroundView addSubview:self.videoButton];
     [self.backgroundView addSubview:self.sliderButton];
     [self.backgroundView addSubview:self.documentButton];
-    [self.backgroundView addSubview:self.niceVideoButton];
+//    [self.backgroundView addSubview:self.niceVideoButton];
     [self.backgroundView addSubview:self.repeatButton];
     
     [self setBackgroundImage:[UIImage imageNamed:@"toupin"] forState:UIControlStateNormal];
@@ -102,10 +109,48 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     if (!self.isBoxSence) {
         [self showWithBox];
-        if (self.isShowOptions) {
-            [self animationAddNiceVideoButton];
-        }else{
-            [self popWithNoAnimation];
+        
+        [self animationFoundBoxSence];
+        
+//        if (self.isShowOptions) {
+//            [self animationAddNiceVideoButton];
+//        }else{
+//            [self popWithNoAnimation];
+//        }
+    }
+}
+
+//动画切换至盒子环境
+- (void)animationFoundBoxSence
+{
+    if (self.isShowOptions) {
+        self.isShowOptions = NO;
+        
+        [self animationCloseButton:self.photoButton completion:nil];
+        [self animationCloseButton:self.videoButton completion:nil];
+        [self animationCloseButton:self.sliderButton completion:nil];
+        [self animationCloseButton:self.documentButton completion:^(BOOL finished) {
+            [self.backgroundView removeFromSuperview];
+            [UIView animateWithDuration:.1f animations:^{
+                self.center = RDHomeScreenButtonCenterInHotel;
+            } completion:^(BOOL finished) {
+                
+            }];
+        }];
+//        [self animationCloseButton:self.niceVideoButton completion:nil];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
+        if (!self.isBoxSence) {
+            [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
+        }
+    }else{
+        [UIView animateWithDuration:.1f animations:^{
+            self.center = RDHomeScreenButtonCenterInHotel;
+        } completion:^(BOOL finished) {
+            
+        }];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
+        if (!self.isBoxSence) {
+            [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
         }
     }
 }
@@ -115,8 +160,40 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     if (self.isBoxSence) {
         [self showWithNoBox];
-        if (self.isShowOptions) {
-            [self animationRemoveNiceVideoButton];
+        
+        [self animationLoseBoxSence];
+//        if (self.isShowOptions) {
+//            [self animationRemoveNiceVideoButton];
+//        }
+    }
+}
+
+//动画切换至运营商环境
+- (void)animationLoseBoxSence
+{
+    if (self.isShowOptions) {
+        self.isShowOptions = NO;
+        
+        [self closeOptionsWithNoAnimation];
+        [UIView animateWithDuration:.1f animations:^{
+            self.center = RDHomeScreenButtonCenterOutHotel;
+        } completion:^(BOOL finished) {
+            
+        }];
+//        [self animationCloseButton:self.niceVideoButton completion:nil];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
+        if (!self.isBoxSence) {
+            [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
+        }
+    }else{
+        [UIView animateWithDuration:.1f animations:^{
+            self.center = RDHomeScreenButtonCenterOutHotel;
+        } completion:^(BOOL finished) {
+            
+        }];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
+        if (!self.isBoxSence) {
+            [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
         }
     }
 }
@@ -126,21 +203,17 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     CGPoint point = self.repeatButton.center;
     
-    double tempSin = sin(M_PI / 4);
-    double tempCos = cos(M_PI / 4);
+    double tempSin1 = sin(M_PI / (180 / 22.5));
+    double tempSin2 = sin(M_PI / (180 / 67.5));
     CGFloat distance = self.frame.size.width / 2 + self.photoButton.frame.size.width / 2 + (20.f / 375 * [UIScreen mainScreen].bounds.size.width);
-    CGPoint point1 = CGPointMake(point.x - distance, point.y);
-    CGPoint point2 = CGPointMake(point.x - distance * tempCos, point.y - distance * tempSin);
-    CGPoint point3 = CGPointMake(point.x, point.y - distance);
-    CGPoint point4 = CGPointMake(point.x + distance * tempSin, point.y - distance * tempCos);
-    CGPoint point5 = CGPointMake(point.x + distance, point.y);
+    CGPoint point1 = CGPointMake(point.x - distance * tempSin2, point.y - distance * tempSin1);
+    CGPoint point2 = CGPointMake(point.x - distance * tempSin1, point.y - distance * tempSin2);
+    CGPoint point3 = CGPointMake(point.x + distance * tempSin1, point.y - distance * tempSin2);
+    CGPoint point4 = CGPointMake(point.x + distance * tempSin2, point.y - distance * tempSin1);
     [self animationView:self.photoButton moveToPoint:point1 completion:nil];
     [self animationView:self.videoButton moveToPoint:point2 completion:nil];
     [self animationView:self.sliderButton moveToPoint:point3 completion:nil];
     [self animationView:self.documentButton moveToPoint:point4 completion:nil];
-    [self animationView:self.niceVideoButton moveToPoint:point5 completion:^(BOOL finished) {
-        
-    }];
 }
 
 //动态移除精彩视频按钮
@@ -159,9 +232,6 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [self animationView:self.videoButton moveToPoint:point2 completion:nil];
     [self animationView:self.sliderButton moveToPoint:point3 completion:nil];
     [self animationView:self.documentButton moveToPoint:point4 completion:nil];
-    [self animationCloseButton:self.niceVideoButton completion:^(BOOL finished) {
-        
-    }];
 }
 
 - (void)popWithNoAnimation
@@ -169,7 +239,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     if (![self checkIsCanShowInWindow]) {
         return;
     }
-    
+    [self.repeatButton setBackgroundImage:self.currentBackgroundImage forState:UIControlStateNormal];
     [[UIApplication sharedApplication].keyWindow addSubview:self.backgroundView];
     [MBProgressHUD showTextHUDwithTitle:@"发现电视, 可以投屏"];
     self.repeatButton.center = [self viewCenter];
@@ -178,7 +248,6 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     self.videoButton.center = point;
     self.sliderButton.center = point;
     self.documentButton.center = point;
-    self.niceVideoButton.center = point;
 }
 
 //弹出菜单
@@ -194,6 +263,8 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     if (!self.isBoxSence) {
         self.alpha = 1.f;
     }
+    
+    [self.repeatButton setBackgroundImage:self.currentBackgroundImage forState:UIControlStateNormal];
     self.isShowOptions = YES;
     [[SDImageCache sharedImageCache] clearMemory];
     
@@ -210,27 +281,27 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     self.videoButton.center = point;
     self.sliderButton.center = point;
     self.documentButton.center = point;
-    self.niceVideoButton.center = point;
+//    self.niceVideoButton.center = point;
     
-    if (self.isBoxSence) {
-        
-        double tempSin = sin(M_PI / 4);
-        double tempCos = cos(M_PI / 4);
-        CGFloat distance = self.frame.size.width / 2 + self.photoButton.frame.size.width / 2 + (20.f / 375 * [UIScreen mainScreen].bounds.size.width);
-        CGPoint point1 = CGPointMake(point.x - distance, point.y);
-        CGPoint point2 = CGPointMake(point.x - distance * tempCos, point.y - distance * tempSin);
-        CGPoint point3 = CGPointMake(point.x, point.y - distance);
-        CGPoint point4 = CGPointMake(point.x + distance * tempSin, point.y - distance * tempCos);
-        CGPoint point5 = CGPointMake(point.x + distance, point.y);
-        [self animationView:self.photoButton moveToPoint:point1 completion:nil];
-        [self animationView:self.videoButton moveToPoint:point2 completion:nil];
-        [self animationView:self.sliderButton moveToPoint:point3 completion:nil];
-        [self animationView:self.documentButton moveToPoint:point4 completion:nil];
-        [self animationView:self.niceVideoButton moveToPoint:point5 completion:^(BOOL finished) {
-            
-        }];
-        
-    }else{
+//    if (self.isBoxSence) {
+//        
+//        double tempSin = sin(M_PI / 4);
+//        double tempCos = cos(M_PI / 4);
+//        CGFloat distance = self.frame.size.width / 2 + self.photoButton.frame.size.width / 2 + (20.f / 375 * [UIScreen mainScreen].bounds.size.width);
+//        CGPoint point1 = CGPointMake(point.x - distance, point.y);
+//        CGPoint point2 = CGPointMake(point.x - distance * tempCos, point.y - distance * tempSin);
+//        CGPoint point3 = CGPointMake(point.x, point.y - distance);
+//        CGPoint point4 = CGPointMake(point.x + distance * tempSin, point.y - distance * tempCos);
+//        CGPoint point5 = CGPointMake(point.x + distance, point.y);
+//        [self animationView:self.photoButton moveToPoint:point1 completion:nil];
+//        [self animationView:self.videoButton moveToPoint:point2 completion:nil];
+//        [self animationView:self.sliderButton moveToPoint:point3 completion:nil];
+//        [self animationView:self.documentButton moveToPoint:point4 completion:nil];
+//        [self animationView:self.niceVideoButton moveToPoint:point5 completion:^(BOOL finished) {
+//            
+//        }];
+//        
+//    }else{
         double tempSin1 = sin(M_PI / (180 / 22.5));
         double tempSin2 = sin(M_PI / (180 / 67.5));
         CGFloat distance = self.frame.size.width / 2 + self.photoButton.frame.size.width / 2 + (20.f / 375 * [UIScreen mainScreen].bounds.size.width);
@@ -244,7 +315,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         [self animationView:self.documentButton moveToPoint:point4 completion:^(BOOL finished) {
             
         }];
-    }
+//    }
 }
 
 - (void)animationView:(UIButton *)button moveToPoint:(CGPoint)point completion:(void (^)(BOOL finished))completion
@@ -269,11 +340,24 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [self animationCloseButton:self.documentButton completion:^(BOOL finished) {
         [self.backgroundView removeFromSuperview];
     }];
-    [self animationCloseButton:self.niceVideoButton completion:nil];
+//    [self animationCloseButton:self.niceVideoButton completion:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
     if (!self.isBoxSence) {
         [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
     }
+}
+
+//关闭菜单
+- (void)closeOptionsWithNoAnimation{
+    
+    self.isShowOptions = NO;
+    
+    CGPoint center = self.repeatButton.center;
+    self.photoButton.center = center;
+    self.videoButton.center = center;
+    self.sliderButton.center = center;
+    self.documentButton.center = center;
+    [self.backgroundView removeFromSuperview];
 }
 
 - (void)closeWithMust{
@@ -286,7 +370,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
     [self animationCloseButton:self.documentButton completion:^(BOOL finished) {
         [self.backgroundView removeFromSuperview];
     }];
-    [self animationCloseButton:self.niceVideoButton completion:nil];
+//    [self animationCloseButton:self.niceVideoButton completion:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
     if (!self.isBoxSence) {
         self.alpha = 1.f;
@@ -340,7 +424,7 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
         [self animationCloseButton:self.documentButton completion:^(BOOL finished) {
             [self.backgroundView removeFromSuperview];
         }];
-        [self animationCloseButton:self.niceVideoButton completion:nil];
+//        [self animationCloseButton:self.niceVideoButton completion:nil];
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
         if (!self.isBoxSence) {
             [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
@@ -407,12 +491,14 @@ static CGFloat RDHomeScreenCloseAnimationTime = .3f;
 {
     self.isBoxSence = YES;
     self.alpha = 1.f;
+    [self setBackgroundImage:[UIImage imageNamed:@"toupin"] forState:UIControlStateNormal];
 }
 
 - (void)showWithNoBox
 {
     self.isBoxSence = NO;
     self.alpha = .6f;
+    [self setBackgroundImage:[UIImage imageNamed:@"toupin4G"] forState:UIControlStateNormal];
 }
 
 //检测是否可以在window上添加投屏菜单蒙层

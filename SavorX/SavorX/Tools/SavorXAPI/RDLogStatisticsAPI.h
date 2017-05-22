@@ -33,6 +33,9 @@ typedef enum : NSUInteger {
 //热点条目（对应文章）的log日志
 + (void)RDItemLogAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(HSVodModel *)model categoryID:(NSString *)categoryID;
 
+//热点启动日志
++ (void)RDItemLogOpenWithHotelID:(NSInteger)hotelID;
+
 //热点页面的PV - log日志
 + (void)RDPageLogCategoryID:(NSString *)categoryID volume:(NSString *)volume;
 

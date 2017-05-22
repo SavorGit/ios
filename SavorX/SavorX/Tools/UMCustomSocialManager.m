@@ -10,6 +10,7 @@
 #import <UShareUI/UShareUI.h>
 #import "GCCKeyChain.h"
 #import "RDLogStatisticsAPI.h"
+#import "SDImageCache.h"
 
 @interface UMCustomSocialManager ()
 
@@ -94,8 +95,10 @@
                     messageObject.text = text;
                     //创建图片内容对象
                     UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
-                if ([UMCustomSocialManager defaultManager].image) {
-                    shareObject.shareImage = [UMCustomSocialManager defaultManager].image;
+                
+                UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+                if (image) {
+                    shareObject.shareImage = image;
                 }else{
                     shareObject.shareImage = [UIImage imageNamed:@"shareDefalut"];
                 }
@@ -131,7 +134,7 @@
         switch (platformType) {
                 //微信聊天
             case UMSocialPlatformType_WechatSession:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"微信"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"weixin"];
                 if (type == 0) {
                    [self shareWebPageToPlatform:UMSocialPlatformType_WechatSession andController:controller andType:type andUmKeyString:@"details_page_share_weixin"];
                 }else if (type == 1) {
@@ -142,7 +145,7 @@
                 
                 //微信朋友圈
             case UMSocialPlatformType_WechatTimeLine:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"朋友圈"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"weixin_friends"];
                 if (type == 0) {
                    [self shareWebPageToPlatform:UMSocialPlatformType_WechatTimeLine andController:controller andType:type andUmKeyString:@"details_page_share_weixin_friends"];
                 }else if (type == 1){
@@ -153,7 +156,7 @@
                 
                 //微信收藏
             case UMSocialPlatformType_WechatFavorite:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"微信收藏"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"weixin_collection"];
                 if (type == 0) {
                     [self shareWebPageToPlatform:UMSocialPlatformType_WechatFavorite andController:controller andType:type andUmKeyString:@"details_page_share_weixin_collection"];
                 }else if (type == 1){
@@ -164,7 +167,7 @@
                 
                 //QQ聊天
             case UMSocialPlatformType_QQ:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"QQ"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"qq"];
                 if (type == 0) {
                     [self shareWebPageToPlatform:UMSocialPlatformType_QQ andController:controller andType:type andUmKeyString:@"details_page_share_qq"];
                 }else if (type == 1){
@@ -175,7 +178,7 @@
                 
                 //QQ空间
             case UMSocialPlatformType_Qzone:
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"QQ空间"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"qq_zone"];
                 if (type == 0) {
                     [self shareWebPageToPlatform:UMSocialPlatformType_Qzone andController:controller andType:type andUmKeyString:@"details_page_share_qq_zone"];
                 }else if (type == 1){
@@ -188,7 +191,7 @@
             case UMSocialPlatformType_Sina:
                 
             {
-                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"新浪微博"];
+                [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"sina"];
                 
                 NSString * url = [model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                 NSString * text = [NSString stringWithFormat:@"小热点 | %@\n%@", model.title, url];
@@ -204,8 +207,9 @@
                 messageObject.text = text;
                 //创建图片内容对象
                 UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
-                if ([UMCustomSocialManager defaultManager].image) {
-                    shareObject.shareImage = [UMCustomSocialManager defaultManager].image;
+                UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+                if (image) {
+                    shareObject.shareImage = image;
                 }else{
                     shareObject.shareImage = [UIImage imageNamed:@"shareDefalut"];
                 }
@@ -263,10 +267,8 @@
 {
     NSString * url = [self.model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    UIImage * image;
-    if ([UMCustomSocialManager defaultManager].image) {
-        image = [UMCustomSocialManager defaultManager].image;
-    }else{
+    UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+    if (!image) {
         image = [UIImage imageNamed:@"shareDefalut"];
     }
     
@@ -295,10 +297,8 @@
 {
     NSString * url = [self.model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    UIImage * image;
-    if ([UMCustomSocialManager defaultManager].image) {
-        image = [UMCustomSocialManager defaultManager].image;
-    }else{
+    UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+    if (!image) {
         image = [UIImage imageNamed:@"shareDefalut"];
     }
     
@@ -322,10 +322,10 @@
     }];
 }
 
-- (void)shareRDApplicationToPlatform:(UMSocialPlatformType)type currentViewController:(UIViewController *)VC
+- (void)shareRDApplicationToPlatform:(UMSocialPlatformType)type currentViewController:(UIViewController *)VC title:(NSString *)text
 {
     NSString * url = [NSString stringWithFormat:@"%@?st=usershare&clientname=ios&deviceid=%@", RDDownLoadURL, [GCCKeyChain load:keychainID]];
-    NSString * title = @"我觉得小热点很好用, 推荐给您~";
+    NSString * title = text;
     NSString * description = @"投屏神器, 进入饭局的才是热点";
     
     UIImage * image;

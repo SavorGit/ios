@@ -23,6 +23,8 @@
 #import "HSGetLastHotelVodList.h"
 #import "HSVideoViewController.h"
 #import "RDLogStatisticsAPI.h"
+#import "SmashEggsGameViewController.h"
+#import "RDAwardTool.h"
 
 @interface RecommendViewController ()<UITableViewDelegate, UITableViewDataSource, SDCycleScrollViewDelegate>
 
@@ -52,7 +54,6 @@
     self.hotelName = @"";
     
     [self setupDatas];
-
 }
 
 - (void)retryToGetData
@@ -61,10 +62,16 @@
     [self setupDatas];
 }
 
+//页面顶部下弹状态栏显示
 - (void)showTopFreshLabelWithTitle:(NSString *)title
 {
+    //移除当前动画
     [self.TopFreshLabel.layer removeAllAnimations];
+    
+    //取消延时重置状态栏
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetTopFreshLabel) object:nil];
+    
+    //重新设置状态栏下弹动画
     self.TopFreshLabel.text = title;
     self.TopFreshLabel.frame = CGRectMake(0, -35, kMainBoundsWidth, 35);
     [UIView animateWithDuration:.5f animations:^{
@@ -74,6 +81,7 @@
     }];
 }
 
+//重置页面顶部下弹状态栏
 - (void)resetTopFreshLabel
 {
     [UIView animateWithDuration:.5f animations:^{
@@ -83,26 +91,32 @@
 
 - (void)setupDatas
 {
-    
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     
     [self.dataSource removeAllObjects];
     MBProgressHUD * hud;
     if ([[NSFileManager defaultManager] fileExistsAtPath:HotelCache]) {
+        
+        //如果本地缓存的有数据，则先从本地读取缓存的数据
         NSDictionary * dict = [NSDictionary dictionaryWithContentsOfFile:HotelCache];
+        
+        //解析获取首页数据列表
         NSArray * vodArray = [dict objectForKey:@"vodList"];
         for (NSInteger i = 0; i < vodArray.count; i++) {
             NSDictionary * vodDict = [vodArray objectAtIndex:i];
             HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
             [self.dataSource addObject:model];
         }
+        
+        //解析获取顶部广告列表
         NSArray * adArray = [dict objectForKey:@"adsList"];
         for (NSInteger i = 0; i < adArray.count; i++) {
             NSDictionary * adDict = [adArray objectAtIndex:i];
             HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
             [self.adSourcel addObject:model];
         }
+        
         self.hotelName = [dict objectForKey:@"hotelName"];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
@@ -112,24 +126,41 @@
         hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
     
+    //初始化数据接口
     HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId flag:nil];
+    
+    //开始通过网络获取首页的数据
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary * dict = response[@"result"];
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
         [self.dataSource removeAllObjects];
         [self.adSourcel removeAllObjects];
+        
+        //解析获取首页数据列表
         NSArray * vodArray = [dict objectForKey:@"vodList"];
         for (NSInteger i = 0; i < vodArray.count; i++) {
             NSDictionary * vodDict = [vodArray objectAtIndex:i];
             HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
             [self.dataSource addObject:model];
         }
+        
+        //解析获取顶部奖品item
+        NSDictionary * awardInfo = [dict objectForKey:@"award"];
+        if (awardInfo) {
+            HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
+            [self.adSourcel addObject:model];
+            [RDAwardTool awardSaveAwardNumber:model.lottery_num];
+            [SAVORXAPI postUMHandleWithContentId:@"home_game_show" key:nil value:nil];
+        }
+        
+        //解析获取顶部广告列表
         NSArray * adArray = [dict objectForKey:@"adsList"];
         for (NSInteger i = 0; i < adArray.count; i++) {
             NSDictionary * adDict = [adArray objectAtIndex:i];
             HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
             [self.adSourcel addObject:model];
         }
+        
         self.hotelName = [dict objectForKey:@"hotelName"];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
@@ -152,22 +183,29 @@
     }];
 }
 
+//上拉加载更多的处理
 - (void)getMoreData
 {
+    //初始化数据接口
     HSHotelVodListRequest * request = [[HSHotelVodListRequest alloc] initWithHotelID:[GlobalData shared].hotelId createTime:self.maxTime];
+    
+    //开始通过网络获取首页的数据
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary * dict = response[@"result"];
         
+        //获取返回的条目数组
         NSArray * vodArray = [dict objectForKey:@"vodList"];
         
         if (vodArray.count == 0) {
+            //如果返回的数量为0，则状态为没有更多数据了
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
             return;
         }
         
         if (vodArray) {
+            //如果返回的结构存在，则将数据添加至数据源中，刷新当前列表
             for (NSInteger i = 0; i < vodArray.count; i++) {
                 NSDictionary * vodDict = [vodArray objectAtIndex:i];
                 HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
@@ -187,26 +225,44 @@
     }];
 }
 
+//刷新首页数据
 - (void)refreshDataSource
 {
+    //初始化数据接口
     HSGetLastHotelVodList * request = [[HSGetLastHotelVodList alloc] initWithHotelId:[GlobalData shared].hotelId flag:self.flag];
+    
+    //请求数据接口
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         NSDictionary * dict = response[@"result"];
         [SAVORXAPI saveFileOnPath:HotelCache withDictionary:dict];
         [self.dataSource removeAllObjects];
         [self.adSourcel removeAllObjects];
+        
+        //解析获取首页数据列表
         NSArray * vodArray = [dict objectForKey:@"vodList"];
         for (NSInteger i = 0; i < vodArray.count; i++) {
             NSDictionary * vodDict = [vodArray objectAtIndex:i];
             HSVodModel * model = [[HSVodModel alloc] initWithDictionary:vodDict];
             [self.dataSource addObject:model];
         }
+        
+        //解析获取顶部奖品item
+        NSDictionary * awardInfo = [dict objectForKey:@"award"];
+        if (awardInfo) {
+            HSAdsModel * model = [[HSAdsModel alloc] initAwardWithDictionary:awardInfo];
+            [self.adSourcel addObject:model];
+            [RDAwardTool awardSaveAwardNumber:model.lottery_num];
+            [SAVORXAPI postUMHandleWithContentId:@"home_game_show" key:nil value:nil];
+        }
+        
+        //解析获取顶部广告列表
         NSArray * adArray = [dict objectForKey:@"adsList"];
         for (NSInteger i = 0; i < adArray.count; i++) {
             NSDictionary * adDict = [adArray objectAtIndex:i];
             HSAdsModel * model = [[HSAdsModel alloc] initWithDictionary:adDict];
             [self.adSourcel addObject:model];
         }
+        
         self.hotelName = [dict objectForKey:@"hotelName"];
         self.maxTime = [[dict objectForKey:@"maxTime"] integerValue];
         self.flag = [dict objectForKey:@"flag"];
@@ -238,9 +294,11 @@
     }];
 }
 
+//设置顶部滚动轮播器
 - (void)setupTopScrollView
 {
     if (self.adSourcel.count == 0) {
+        //如果顶部ad的数据源为0，则不进行数据刷新
         return;
     }
     
@@ -248,10 +306,13 @@
     
     NSMutableArray * array = [NSMutableArray new];
     
+    //如果顶部ad数量不为0，则取出对应下标的imageURL进行轮播展示
     for (NSInteger i = 0; i < self.adSourcel.count; i++) {
         HSAdsModel * model = [self.adSourcel objectAtIndex:i];
         [array addObject:model.imageURL];
     }
+    
+    //设置顶部滚动轮播器
     self.scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 5, width, [Helper autoHomePageCellImageHeight]) imageURLStringsGroup:array];
     [self.scrollView setHotelTitle:self.hotelName];
     self.scrollView.delegate = self;
@@ -368,19 +429,15 @@
             WebViewController * web = [[WebViewController alloc] init];
             web.model = model;
             web.categoryID = -2;
-            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            web.image = cell.bgImageView.image;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else if (model.type == 4){
-            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model image:cell.bgImageView.image];
+            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model];
             web.categoryID = -2;
             [self.parentNavigationController pushViewController:web animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         }else{
-            BasicTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-            ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model andImage:cell.bgImageView.image];
+            ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model];
             article.categoryID = -2;
             [self.parentNavigationController pushViewController:article animated:YES];
              [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
@@ -436,12 +493,31 @@
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
 {
+    
     if (index < 0 && index > self.adSourcel.count - 1) {
         [MBProgressHUD showTextHUDwithTitle:@"暂不支持该操作"];
         return;
     }
     
     HSAdsModel * model = [self.adSourcel objectAtIndex:index];
+    
+    if (model.type == HSAdsModelType_AWARD) {
+        
+        [SAVORXAPI postUMHandleWithContentId:@"home_game_click" key:nil value:nil];
+        //如果是奖品类型
+        if ([GlobalData shared].isBindRD){
+            SmashEggsGameViewController *SEVC = [[SmashEggsGameViewController alloc] init];
+            SEVC.adModel = model;
+            [self.parentNavigationController pushViewController:SEVC animated:YES];
+        }else{
+            [self.shouldDemandDict setObject:model forKey:@"model"];
+            [self.shouldDemandDict setObject:@(3) forKey:@"type"];
+            [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
+            [[HomeAnimationView animationView] scanQRCode];
+        }
+        return;
+    }
+    
     HSVodModel * vodModel = [[HSVodModel alloc] init];
     vodModel.name = model.name;
     vodModel.imageURL = model.imageURL;
@@ -579,6 +655,21 @@
     if ([[self.shouldDemandDict objectForKey:@"should"] boolValue]) {
         HSVodModel * model = [self.shouldDemandDict objectForKey:@"model"];
         NSInteger type = [[self.shouldDemandDict objectForKey:@"type"] integerValue];
+        
+        // 如果是奖品类型，择跳转到游戏页面
+        if (type == 3 && model.type == HSAdsModelType_AWARD) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_game_click" key:nil value:nil];
+            //如果是奖品类型
+            if ([GlobalData shared].isBindRD){
+                HSAdsModel * model = [self.shouldDemandDict objectForKey:@"model"];
+                SmashEggsGameViewController *SEVC = [[SmashEggsGameViewController alloc] init];
+                SEVC.adModel = model;
+                [self.parentNavigationController pushViewController:SEVC animated:YES];
+            }
+            [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
+            return;
+        }
+        
         if ([GlobalData shared].isBindRD && model.canPlay == 1) {
             [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
             //如果是绑定状态

@@ -189,7 +189,7 @@
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         [self.navigationController setHidesBarsOnTap:YES];
         [self.webView reload];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self screenButtonDidClickedWithSuccess:nil failure:nil];
         });
     }
@@ -211,7 +211,7 @@
 
 - (void)screenButtonDidClickedWithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
 {
-    if (self.isScreen && !self.isScreen) {
+    if (!self.isScreen) {
         return;
     }
     

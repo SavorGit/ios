@@ -26,7 +26,6 @@
 @property (nonatomic, strong) UIView * videoView;
 @property (nonatomic, strong) UILabel * titleLabel;
 @property (nonatomic, strong) HSVodModel * model;
-@property (nonatomic, strong) UIImage * image;
 
 @end
 
@@ -34,17 +33,17 @@
 
 -(void)dealloc{
     
+    //移除页面相关的监听
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-- (instancetype)initWithModel:(HSVodModel *)model image:(UIImage *)image
+- (instancetype)initWithModel:(HSVodModel *)model
 {
     if (self = [super init]) {
         self.model = model;
-        self.image = image;
     }
     return self;
 }
@@ -68,10 +67,11 @@
         make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height).mas_offset(30);
     }];
     
+    //初始化播放器
     self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
     self.playView.backgroundColor = [UIColor blackColor];
     [self.playView setVideoTitle:self.model.title];
-    [self.playView backgroundImage:self.image];
+    [self.playView backgroundImage:self.model.imageURL];
     [self.videoView addSubview:self.playView];
     self.playView.delegate = self;
     self.playView.model = self.model;
@@ -165,6 +165,7 @@
         [self hiddenTVButton];
     }
     
+    //添加页面相关的通知监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(phoneBindDevice) name:RDDidBindDeviceNotification object:nil];
     // app退到后台
@@ -173,6 +174,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
+//当手机连接到机顶盒
 - (void)phoneBindDevice
 {
     if ([GlobalData shared].isBindRD && self.model.canPlay == 1) {
@@ -213,9 +215,10 @@
     }
 }
 
+//返回按钮被点击
 - (void)backButtonDidBeClicked
 {
-        [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 //收藏按钮被点击
@@ -251,19 +254,21 @@
     }
 }
 
+//视频分享按钮被点击
 - (void)videoShouldBeShare
 {
-    [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
+//隐藏投屏按钮
 - (void)hiddenTVButton
 {
     [self.playView hiddenTVButton];
     self.TVButton.hidden = YES;
 }
 
+//设置当前条目的收藏状态
 - (void)setIsCollect:(BOOL)isCollect
 {
     [self.playView setIsCollect:isCollect];
@@ -276,6 +281,7 @@
     }
 }
 
+//手机的方向发生了改变
 - (void)orientationChanged
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -314,12 +320,13 @@
     [self.navigationController setNeedsStatusBarAppearanceUpdate];
 }
 
+//分享动作被触发
 - (void)shareAction:(UIButton *)button
 {
-    [UMCustomSocialManager defaultManager].image = self.image;
     [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
 }
 
+//点播动作被触发
 - (void)videoShouldBeDemand
 {
     if (self.model.canPlay) {

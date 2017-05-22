@@ -31,6 +31,11 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 @property (nonatomic, assign) BOOL isSearchPlatform;
 @property (nonatomic, assign) BOOL hasUploadLog;
 
+@property (nonatomic, assign) BOOL hasWriteOpen; //是否已经写入OPEN日志
+@property (nonatomic, assign) NSInteger hotelId_GetIp; //getIp获取的酒楼ID
+@property (nonatomic, assign) NSInteger hotelId_Platform; //小平台获取的酒楼ID
+@property (nonatomic, assign) NSInteger hotelId_Box; //盒子获取的酒楼ID
+
 @end
 
 @implementation GCCDLNA
@@ -49,6 +54,10 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
 {
     if (self = [super init]) {
         self.hasUploadLog = NO;
+        self.hasWriteOpen = NO;
+        self.hotelId_GetIp = 0;
+        self.hotelId_Platform = 0;
+        self.hotelId_Box = 0;
         self.locationSource = [NSMutableArray new];
         self.socket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
         NSError *error = nil;
@@ -178,6 +187,13 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
             NSInteger areaIdInt = [response[@"result"][@"area_id"] integerValue];
             [GlobalData shared].areaId = [NSString stringWithFormat:@"%ld", areaIdInt];
             
+            if (isEmptyString(type)) {
+                type = @"";
+            }
+            if (isEmptyString(command_port)) {
+                command_port = @"";
+            }
+            
             if (!self.hasUploadLog && !isEmptyString([GlobalData shared].areaId)) {
                 [RDLogStatisticsAPI checkAndUploadLog];
                 self.hasUploadLog = YES;
@@ -191,9 +207,21 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
                         [GlobalData shared].thirdCallCodeURL = codeURL;
                     }
                 }else{
+                    
+                    if (isEmptyString(localIp)) {
+                        localIp = @"";
+                    }
+                    
                     [GlobalData shared].secondCallCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@",localIp,command_port,[type lowercaseString]];
                 }
-                [GlobalData shared].hotelId = [hotelId integerValue];
+                
+                if (isEmptyString(hotelId)) {
+                    [GlobalData shared].hotelId = 0;
+                }else{
+                    [GlobalData shared].hotelId = [hotelId integerValue];
+                    self.hotelId_GetIp = [hotelId integerValue];
+                }
+                
                 [GlobalData shared].scene = RDSceneHaveRDBox;
                 self.isSearch = NO;
             }
@@ -216,6 +244,8 @@ static NSString *serviceRendering = @"urn:schemas-upnp-org:service:RenderingCont
     }
     
     self.isSearch = NO;
+    
+    [self checkOpenLogIsNeedToWrite];
 }
 
 - (void)resetSearch
@@ -294,11 +324,13 @@ withFilterContext:(nullable id)filterContext{
                 [GlobalData shared].secondCallCodeURL = [NSString stringWithFormat:@"http://%@:%@/small", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"]];
             }
             [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
+            self.hotelId_Box = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
             [GlobalData shared].scene = RDSceneHaveRDBox;
             self.isSearch = NO;
         }else{
             [GlobalData shared].callQRCodeURL = [NSString stringWithFormat:@"http://%@:%@/%@", [dict objectForKey:@"Savor-HOST"], [dict objectForKey:@"Savor-Port-Command"], [[dict objectForKey:@"Savor-Type"] lowercaseString]];
             [GlobalData shared].hotelId = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
+            self.hotelId_Platform = [[dict objectForKey:@"Savor-Hotel-ID"] integerValue];
             [GlobalData shared].scene = RDSceneHaveRDBox;
             self.isSearch = NO;
         }
@@ -418,6 +450,24 @@ withFilterContext:(nullable id)filterContext{
         }
     }
     return nil;
+}
+
+- (void)checkOpenLogIsNeedToWrite
+{
+    if (self.hasWriteOpen) {
+        return;
+    }
+    
+    self.hasWriteOpen = YES;
+    if (self.hotelId_Platform != 0) {
+        [RDLogStatisticsAPI RDItemLogOpenWithHotelID:self.hotelId_Platform];
+    }else if (self.hotelId_Box != 0) {
+        [RDLogStatisticsAPI RDItemLogOpenWithHotelID:self.hotelId_Box];
+    }else if (self.hotelId_GetIp != 0) {
+        [RDLogStatisticsAPI RDItemLogOpenWithHotelID:self.hotelId_GetIp];
+    }else{
+        [RDLogStatisticsAPI RDItemLogOpenWithHotelID:0];
+    }
 }
 
 @end
