@@ -148,7 +148,7 @@
     CFArrayRef wifiInterfaces = CNCopySupportedInterfaces();
     
     if (!wifiInterfaces) {
-        return nil;
+        return NO;
     }
     
     NSArray *interfaces = (__bridge NSArray *)wifiInterfaces;

@@ -411,8 +411,9 @@
     return nil;
 }
 
-+ (void)ScreenDemandShouldBackToTV:(BOOL)fromHomeType
++ (void)ScreenDemandShouldBackToTV:(BOOL)fromHomeType success:(void (^)())successBlock failure:(void (^)())failureBlock
 {
+    MBProgressHUD * hud = [MBProgressHUD showBackDemandInView:[UIApplication sharedApplication].keyWindow];
     if ([GlobalData shared].isBindRD) {
         NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
         
@@ -420,29 +421,46 @@
                                       @"projectId" : [GlobalData shared].projectId};
         
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            [hud hideAnimated:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
             if (fromHomeType == YES) {
                 [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
             }
+            if (successBlock) {
+                successBlock();
+            }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [hud hideAnimated:NO];
             if (fromHomeType == YES) {
                 [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
+            }
+            if (failureBlock) {
+                failureBlock();
             }
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
-            
+            [hud hideAnimated:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
             if (fromHomeType == YES) {
                 [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
             }
+            if (successBlock) {
+                successBlock();
+            }
         } failure:^{
+            [hud hideAnimated:NO];
             if (fromHomeType == YES) {
                 [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
             }
+            if (failureBlock) {
+                failureBlock();
+            }
         }];
+    }else{
+        [hud hideAnimated:NO];
     }
 }
 
@@ -458,21 +476,29 @@
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [hud hideAnimated:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-            successBlock();
+            if (successBlock) {
+                successBlock();
+            }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [hud hideAnimated:NO];
             [MBProgressHUD showTextHUDwithTitle:@"退出投屏失败" delay:1.f];
-            failureBlock();
+            if (failureBlock) {
+                failureBlock();
+            }
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
             
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             [hud hideAnimated:NO];
-            successBlock();
+            if (successBlock) {
+                successBlock();
+            }
         } failure:^{
             [hud hideAnimated:NO];
-            failureBlock();
+            if (failureBlock) {
+                failureBlock();
+            }
         }];
     }else{
         [hud hideAnimated:NO];

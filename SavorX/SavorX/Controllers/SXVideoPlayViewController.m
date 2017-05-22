@@ -52,6 +52,7 @@
     _footerView = nil;
     [UIApplication sharedApplication].statusBarStyle = UISearchBarStyleDefault;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
     NSLog(@"视频播放释放了");
 }
 
@@ -150,6 +151,7 @@
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(voideoPlayStatusCellConnectAction) name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidPlayEnd) name:RDBoxQuitScreenNotification object:nil];
     
     self.tableView.tableHeaderView = self.headBackView;
     if (kMainBoundsWidth < 375) {
@@ -235,10 +237,7 @@
                 [self.headBackView.palySlider setValue:posFloat];
                 [self updateTimeLabel:posFloat];
             }else if (code == -1 || code == 1){
-                self.headBackView.mininumLabel.text = @"00:00";
-                self.headBackView.palySlider.value = 0;
-                self.footerView.videoPlayButton.selected = YES;
-                self.isPlayEnd = YES;
+                [self videoDidPlayEnd];
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -248,10 +247,7 @@
     }else if ([GlobalData shared].isBindDLNA){
         [[GCCUPnPManager defaultManager] getPlayProgressSuccess:^(NSString *totalDuration, NSString *currentDuration, float progress) {
             if (progress >= 1 - 1 / self.headBackView.palySlider.maximumValue) {
-                self.headBackView.mininumLabel.text = @"00:00";
-                self.headBackView.palySlider.value = 0;
-                self.footerView.videoPlayButton.selected = YES;
-                self.isPlayEnd = YES;
+                [self videoDidPlayEnd];
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             }else{
                 CGFloat posFloat = [[GCCUPnPManager defaultManager] timeIntegerFromString:totalDuration] * progress;
@@ -315,13 +311,7 @@
                     [self.timer setFireDate:[NSDate distantPast]];
                 }else{
                     [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-                    self.headBackView.mininumLabel.text = @"00:00";
-                    self.headBackView.palySlider.value = 0;
-                    self.footerView.videoPlayButton.selected = YES;
-                    self.isPlayEnd = YES;
-                    [self.timer invalidate];
-                    self.timer = nil;
-                    
+                    [self videoDidPlayEnd];
                 }
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
@@ -528,9 +518,12 @@
     if (self.isPlayEnd) {
         [self restartVod];
     }else{
-        [SAVORXAPI ScreenDemandShouldBackToTV:fromHomeType];
-        [self shouldRelease];
-        [self.navigationController popViewControllerAnimated:YES];
+        [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+            [self videoDidPlayEnd];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+        } failure:^{
+            
+        }];
     }
 }
 
@@ -654,6 +647,19 @@
         [self.footerView voideoPlayFooterViewisEnable:YES];
     }else{
         [self.footerView voideoPlayFooterViewisEnable:NO];
+    }
+}
+
+- (void)videoDidPlayEnd
+{
+    self.headBackView.mininumLabel.text = @"00:00";
+    self.headBackView.palySlider.value = 0;
+    self.footerView.videoPlayButton.selected = YES;
+    self.isPlayEnd = YES;
+    [self.timer invalidate];
+    self.timer = nil;
+    if (self.task) {
+        [self.task cancel];
     }
 }
 

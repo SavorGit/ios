@@ -109,6 +109,13 @@
         self.isScreen = NO;
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenCurrentImage) name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenBeQiutWithBox) name:RDBoxQuitScreenNotification object:nil];
+}
+
+- (void)screenBeQiutWithBox
+{
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+    self.isScreen = NO;
 }
 
 - (void)screenCurrentImage
@@ -571,6 +578,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
     NSLog(@"相册投屏释放了");
 }
 

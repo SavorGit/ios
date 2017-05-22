@@ -208,7 +208,8 @@ typedef NS_ENUM(NSInteger, interactType) {
 /**
  *  电视机退出投屏点播
  */
-+ (void)ScreenDemandShouldBackToTV:(BOOL)fromHomeType;
++ (void)ScreenDemandShouldBackToTV:(BOOL)fromHomeType success:(void(^)())successBlock failure:(void(^)())failureBlock;
+
 
 /**
  *  电视机退出投屏点播

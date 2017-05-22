@@ -18,6 +18,7 @@ NSString * const RDDidFoundBoxSenceNotification = @"RDDidFoundBoxSenceNotificati
 NSString * const RDDidFoundDLNASenceNotification = @"RDDidFoundDLNASenceNotification";
 
 NSString * const RDQiutScreenNotification = @"RDQiutScreenNotification";
+NSString * const RDBoxQuitScreenNotification = @"RDBoxQuitScreenNotification";
 
 #define hasUseHotelID @"hasUseHotelID"
 #define hasAlertDemandHelp @"hasAlertDemandHelp"

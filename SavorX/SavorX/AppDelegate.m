@@ -717,7 +717,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     //如果是绑定状态，尝试发送退出消息
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        [SAVORXAPI ScreenDemandShouldBackToTV:nil];
+        [SAVORXAPI ScreenDemandShouldBackToTV:nil success:nil failure:nil];
     }
 }
 

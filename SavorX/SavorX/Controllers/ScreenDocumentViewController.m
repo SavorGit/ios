@@ -100,6 +100,14 @@
     //监听用户手机屏幕方向变化
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ApplicationDidBindToDevice) name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenDidQiutWithBox) name:RDBoxQuitScreenNotification object:nil];
+}
+
+- (void)screenDidQiutWithBox
+{
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.seriesId = [Helper getTimeStamp];
+    self.isScreen = NO;
 }
 
 - (void)lockButtonDidClicked
@@ -175,9 +183,11 @@
         self.orientation = orientation;
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         [self.navigationController setHidesBarsOnTap:NO];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self screenButtonDidClickedWithSuccess:nil failure:nil];
-        });
+        if (self.isScreen) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self screenButtonDidClickedWithSuccess:nil failure:nil];
+            });
+        }
         CGRect rect = self.navigationController.navigationBar.frame;
         if (rect.size.height < 44) {
             rect.size.height = 44.f;
@@ -189,9 +199,11 @@
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         [self.navigationController setHidesBarsOnTap:YES];
         [self.webView reload];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self screenButtonDidClickedWithSuccess:nil failure:nil];
-        });
+        if (self.isScreen) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self screenButtonDidClickedWithSuccess:nil failure:nil];
+            });
+        }
     }
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_rotating" key:nil value:nil];
 }
@@ -211,10 +223,6 @@
 
 - (void)screenButtonDidClickedWithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
 {
-    if (!self.isScreen) {
-        return;
-    }
-    
     for (UIView * view in self.webView.subviews) {
         if (view.subviews.count) {
             for (UIView * subView in view.subviews) {
@@ -259,11 +267,10 @@
                     }
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     
-                    if (error.code == -999) {
-                        return;
-                    }
-                    
                     if (self.task == task) {
+                        if (failureBlock) {
+                            failureBlock();
+                        }
                         if ([error.domain isEqualToString:@"fileScreen"]) {
                             RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:error.localizedDescription];
                             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
@@ -274,10 +281,6 @@
                             [self stop];
                         }else{
                             [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-                            
-                            if (failureBlock) {
-                                failureBlock();
-                            }
                         }
                     }
                 }];
@@ -439,6 +442,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {

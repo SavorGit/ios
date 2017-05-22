@@ -81,6 +81,19 @@
     [self setupBottomView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenCurrentImage) name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenDidQiutWithBox) name:RDBoxQuitScreenNotification object:nil];
+}
+
+- (void)screenDidQiutWithBox
+{
+    self.playButton.selected = NO;
+    [self.timer setFireDate:[NSDate distantFuture]];
+    [self.timer invalidate];
+    self.timer = nil;
+    self.isScreen = NO;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+    self.seriesId = [Helper getTimeStamp];
+    self.statusLabel.text = @"幻灯片";
 }
 
 - (void)setupBottomView
@@ -619,6 +632,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
     [self.timer invalidate];
     self.timer = nil;
 }

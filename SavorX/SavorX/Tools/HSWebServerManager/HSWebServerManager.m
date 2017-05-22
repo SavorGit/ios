@@ -9,6 +9,7 @@
 #import "HSWebServerManager.h"
 #import "GCDWebServerDataResponse.h"
 #import "GCDWebServerFileResponse.h"
+#import "RDAlertView.h"
 
 @implementation HSWebServerManager
 
@@ -40,6 +41,58 @@
 - (void)start
 {
     [webServer removeAllHandlers];
+    
+    [webServer addHandlerForMethod:@"GET" path:@"/stopProjection" requestClass:[GCDWebServerRequest class] processBlock:^GCDWebServerResponse *(__kindof GCDWebServerRequest *request) {
+        
+        NSDictionary * params = request.query;
+        
+        if ([params objectForKey:@"type"]) {
+            
+            /*获取操作type
+             type = 1 投屏被抢投，手机退出投屏
+             type = 2 机顶盒主动或者意外退出投屏，通知手机退出投屏
+             */
+            NSInteger type = [[params objectForKey:@"type"] integerValue];
+            
+            //获取机顶盒当前的状态信息
+            NSString * tipMsg = @"电视已经退出投屏";
+            if ([params objectForKey:@"tipMsg"]) {
+                tipMsg = [params objectForKey:@"tipMsg"];
+            }
+            
+            if (type == 1) {
+                //type = 1 投屏被抢投，手机退出投屏
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
+                    
+                    RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
+                    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
+                        
+                    } bold:YES];
+                    [view addActions:@[action]];
+                    [view show];
+                });
+            }else if (type == 2){
+                //type = 2 机顶盒主动或者意外退出投屏，通知手机退出投屏
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
+                    
+                    RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
+                    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
+                        
+                    } bold:YES];
+                    [view addActions:@[action]];
+                    [view show];
+                });
+            }
+            NSLog(@"请求状态为: %ld， 请求信息为: %@", type, tipMsg);
+        }
+        
+        return [GCDWebServerResponse responseWithStatusCode:200];
+        
+    }];
     
     [webServer addHandlerForMethod:@"GET" path:@"/image" requestClass:[GCDWebServerRequest class] asyncProcessBlock:^(__kindof GCDWebServerRequest *request, GCDWebServerCompletionBlock completionBlock) {
         
@@ -128,7 +181,7 @@
         
     }];
     
-    [webServer startWithPort:1680 bonjourName:nil];
+    [webServer startWithPort:8080 bonjourName:nil];
 }
 
 - (void)stop
