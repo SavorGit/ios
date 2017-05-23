@@ -257,7 +257,7 @@
 }
 
 //点播视频
-+ (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
++ (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     urlStr = [urlStr stringByAppendingString:@"/vod"];
     
@@ -265,7 +265,8 @@
                                   @"type" : [NSNumber numberWithInteger:type],
                                   @"name" : name,
                                   @"deviceName" : [GCCGetInfo getIphoneName],
-                                  @"position" : [NSNumber numberWithFloat:position]};
+                                  @"position" : [NSNumber numberWithFloat:position],
+                                  @"force" : [NSNumber numberWithInteger:force]};
     
     NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
     return task;
