@@ -75,6 +75,10 @@
     
     self.titleLabel.text = model.name;
     self.distanceLabel.text = model.km;
+    
+    CGSize size = [model.addr sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(self.width - 50,10000.0f)lineBreakMode:UILineBreakModeWordWrap];
+    self.addressLabel.frame = CGRectMake(10, CGRectGetMaxY(_titleLabel.frame), size.width , size.height);
+    self.addressLabel.numberOfLines = 0; 
     self.addressLabel.text = model.addr;
     
 }
