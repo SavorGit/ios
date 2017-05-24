@@ -11,12 +11,21 @@
 @interface RestaurantListModel : BaseModel
 
 //餐厅名字
-@property (nonatomic, assign) NSString *title;
+@property (nonatomic, copy) NSString *name;
 
 //距离
-@property (nonatomic, assign) NSString *distance;
+@property (nonatomic, copy) NSString *km;
 
 //地址
-@property (nonatomic, assign) NSString *address;
+@property (nonatomic, copy) NSString *addr;
+
+//id
+@property (nonatomic, assign) NSInteger id;
+
+//纬度
+@property (nonatomic, copy) NSString *lat;
+
+//经度
+@property (nonatomic, copy) NSString *lng;
 
 @end

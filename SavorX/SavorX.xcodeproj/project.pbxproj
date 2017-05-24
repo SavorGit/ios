@@ -327,6 +327,7 @@
 		965240D71ED532CE0090E1C8 /* RestaurantListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240D61ED532CE0090E1C8 /* RestaurantListModel.m */; };
 		965240DB1ED532E30090E1C8 /* RestaurantListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240DA1ED532E30090E1C8 /* RestaurantListTableViewCell.m */; };
 		965240DF1ED532F30090E1C8 /* RestaurantListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240DE1ED532F30090E1C8 /* RestaurantListViewController.m */; };
+		965240E21ED559930090E1C8 /* HSRestaurantListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */; };
 		96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */; };
 		9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */; };
 		9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A71E7159210060CE0B /* DocGuided.png */; };
@@ -856,6 +857,8 @@
 		965240DA1ED532E30090E1C8 /* RestaurantListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestaurantListTableViewCell.m; sourceTree = "<group>"; };
 		965240DD1ED532F30090E1C8 /* RestaurantListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestaurantListViewController.h; sourceTree = "<group>"; };
 		965240DE1ED532F30090E1C8 /* RestaurantListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestaurantListViewController.m; sourceTree = "<group>"; };
+		965240E01ED559930090E1C8 /* HSRestaurantListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSRestaurantListRequest.h; sourceTree = "<group>"; };
+		965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSRestaurantListRequest.m; sourceTree = "<group>"; };
 		96608FF01E80D47900D28A61 /* VideoLauchMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLauchMovieViewController.h; sourceTree = "<group>"; };
 		96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLauchMovieViewController.m; sourceTree = "<group>"; };
 		9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoGuidedTwoDimensionalCode.h; sourceTree = "<group>"; };
@@ -1302,6 +1305,8 @@
 				964177941EB86C2100AA839E /* HSInstallationInforUpload.m */,
 				062CEFD31EC3053200EA6AE0 /* HSAwardUploadRequest.h */,
 				062CEFD41EC3053200EA6AE0 /* HSAwardUploadRequest.m */,
+				965240E01ED559930090E1C8 /* HSRestaurantListRequest.h */,
+				965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -2588,6 +2593,7 @@
 				06ED754C1D643A3700C56DD2 /* MineTableViewCell.m in Sources */,
 				47D6F64E1E4ACA090030C8C4 /* VoideoPlayStatusCell.m in Sources */,
 				0639C6F01D794603002A04C1 /* AnimationImageView.m in Sources */,
+				965240E21ED559930090E1C8 /* HSRestaurantListRequest.m in Sources */,
 				474C76371DFB9BED001129C9 /* NoNetWorkView.m in Sources */,
 				060C37361D6C42930058BBBE /* GCDAsyncUdpSocket.m in Sources */,
 				964177951EB86C2100AA839E /* HSInstallationInforUpload.m in Sources */,

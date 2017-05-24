@@ -10,12 +10,14 @@
 #import "RestaurantListTableViewCell.h"
 #import "RestaurantListModel.h"
 #import "MJRefresh.h"
+#import "HSRestaurantListRequest.h"
 
 @interface RestaurantListViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, strong) UILabel * TopFreshLabel;
+@property (nonatomic, copy) NSString * cachePath;
 
 @end
 
@@ -25,18 +27,76 @@
     [super viewDidLoad];
     
     self.dataSource = [NSMutableArray new];
+    self.cachePath = [NSString stringWithFormat:@"%@RestaurantList.plist", CategoryCache];
     [self setUpDatas];
 }
 
 - (void)setUpDatas{
-    for (int i = 0; i < 10; i ++ ) {
-        RestaurantListModel *model = [[RestaurantListModel alloc] init];
-        model.title = @"餐厅名字";
-        model.distance = @"100m";
-        model.address = @"地址：北京市朝阳区大望路永峰大厦六楼";
-        [self.dataSource addObject:model];
+    
+    [MBProgressHUD showCustomLoadingHUDInView:self.view];
+    
+    [self.dataSource removeAllObjects];
+    MBProgressHUD * hud;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
+        
+        //如果本地缓存的有数据，则先从本地读取缓存的数据
+        NSArray * listArray = [NSArray arrayWithContentsOfFile:self.cachePath];
+        for(NSDictionary *dict in listArray){
+            
+            RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
+            [self.dataSource addObject:model];
+        }
+        [self.tableView reloadData];
+        
+    }else{
+        hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
-    [self.tableView reloadData];
+
+    
+    HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:@"116.479168" lat:@"35.462766" pageNum:1];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray * listArray = [dic objectForKey:@"result"];
+        [SAVORXAPI saveFileOnPath:self.cachePath withArray:listArray];
+        
+        //解析获取当前分类下数据列表
+        for(NSDictionary *dict in listArray){
+            RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
+            [self.dataSource addObject:model];
+        }
+        [self.tableView reloadData];
+
+        if (hud) {
+            [hud hideAnimated:NO];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        if (hud) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+            [hud hideAnimated:NO];
+        }
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+        if (hud) {
+            [self showNoNetWorkView];
+            [hud hideAnimated:NO];
+        }
+    }];
+    
+    
+//    for (int i = 0; i < 10; i ++ ) {
+//        RestaurantListModel *model = [[RestaurantListModel alloc] init];
+//        model.title = @"餐厅名字";
+//        model.distance = @"100m";
+//        model.address = @"地址：北京市朝阳区大望路永峰大厦六楼";
+//        [self.dataSource addObject:model];
+//    }
+//    [self.tableView reloadData];
 }
 
 #pragma mark -- 懒加载
@@ -89,9 +149,9 @@
     
     RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.section];
 
-    cell.titleLabel.text = model.title;
-    cell.distanceLabel.text = model.distance;
-    cell.addressLabel.text = model.address;
+    cell.titleLabel.text = model.name;
+    cell.distanceLabel.text = model.km;
+    cell.addressLabel.text = model.addr;
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
