@@ -45,11 +45,7 @@
     if ([[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[LGSideMenuController class]]) {
         LGSideMenuController * side = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
         BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
-        if ([baseNa.topViewController isKindOfClass:[WMPageController class]]) {
-            
-            WMPageController * page = (WMPageController *)baseNa.topViewController;
-            [page.homeButton closeWithMust];
-        }else if ([baseNa.topViewController isKindOfClass:[HSConnectViewController class]]){
+        if ([baseNa.topViewController isKindOfClass:[HSConnectViewController class]]){
             [baseNa popViewControllerAnimated:NO];
         }
     }
