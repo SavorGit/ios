@@ -8,6 +8,9 @@
 
 #import "RDScreenLocationView.h"
 #import "Masonry.h"
+#import "RestaurantListModel.h"
+#import "HSHomeRestaurantList.h"
+#import "RestaurantListTableViewCell.h"
 
 @interface RDScreenLocationView ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -17,6 +20,8 @@
 @property (nonatomic, strong) UITableView * listView; //展示列表
 @property (nonatomic, strong) UIView * bottomTabView; //底部选择器
 @property (nonatomic, assign) BOOL isShow;
+@property (nonatomic, strong) NSMutableArray * dataSource; //数据源
+@property (nonatomic, copy) NSString * cachePath;
 
 @end
 
@@ -38,6 +43,7 @@
         {
             [self addSubview:self.loadingView];
             [self makeConstraintsWithUpstatusView:self.loadingView];
+            [self setUpDatas];
         }
             break;
             
@@ -59,6 +65,59 @@
         default:
             break;
     }
+}
+
+// 初始化数据
+- (void)setUpDatas{
+    
+    [self.dataSource removeAllObjects];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
+        
+        //如果本地缓存的有数据，则先从本地读取缓存的数据
+        NSArray * listArray = [NSArray arrayWithContentsOfFile:self.cachePath];
+        for(NSDictionary *dict in listArray){
+            
+            RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
+            [self.dataSource addObject:model];
+        }
+        [self showWithStatus:RDScreenLocation_Compelete];
+        
+    }else{
+    }
+    
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self];
+    HSHomeRestaurantList *request = [[HSHomeRestaurantList alloc] initWithLng:@"116.479168" lat:@"35.462766"];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray * listArray = [dic objectForKey:@"result"];
+        [SAVORXAPI saveFileOnPath:self.cachePath withArray:listArray];
+        
+        //解析获取当前分类下数据列表
+        for(NSDictionary *dict in listArray){
+            RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
+            [self.dataSource addObject:model];
+        }
+         [self showWithStatus:RDScreenLocation_Compelete];
+        
+        if (hud) {
+            [hud hideAnimated:NO];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        if (hud) {
+            [hud hideAnimated:NO];
+        }
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+        if (hud) {
+            [hud hideAnimated:NO];
+        }
+    }];
 }
 
 //动画显示
@@ -123,6 +182,8 @@
 {
     if (self = [super initWithFrame:[UIScreen mainScreen].bounds]) {
         [self setupViews];
+         self.dataSource = [NSMutableArray new];
+         self.cachePath = [NSString stringWithFormat:@"%@RestaurantHomeList.plist", CategoryCache];
     }
     return self;
 }
@@ -229,16 +290,27 @@
 #pragma mark -- UITableViewDelegate && UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return self.dataSource.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RDLocationCell" forIndexPath:indexPath];
-    cell.textLabel.text = @"测试一下";
-    cell.backgroundColor = [UIColor clearColor];
+    RestaurantListTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RDLocationCell" forIndexPath:indexPath];
+    
+    RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    [cell configModelData:model];
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.backgroundColor = [UIColor clearColor];
+    cell.bgView.backgroundColor = [UIColor clearColor];
+    
     return cell;
+    
+//    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RDLocationCell" forIndexPath:indexPath];
+//    cell.textLabel.text = @"测试一下";
+//    cell.backgroundColor = [UIColor clearColor];
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -299,7 +371,7 @@
 {
     if (!_listView) {
         _listView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        [_listView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"RDLocationCell"];
+        [_listView registerClass:[RestaurantListTableViewCell class] forCellReuseIdentifier:@"RDLocationCell"];
         _listView.backgroundColor = [UIColor clearColor];
         _listView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _listView.delegate = self;
