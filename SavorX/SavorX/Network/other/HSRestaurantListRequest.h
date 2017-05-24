@@ -8,6 +8,7 @@
 
 #import <BGNetwork/BGNetwork.h>
 
+// 此类用于获取所有餐厅列表
 @interface HSRestaurantListRequest : BGNetworkRequest
 
 - (instancetype)initWithHotelId:(NSInteger )hotelId lng:(NSString *)lng lat:(NSString *)lat pageNum:(NSUInteger )pageNum;

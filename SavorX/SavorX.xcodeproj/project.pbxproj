@@ -328,6 +328,7 @@
 		965240DB1ED532E30090E1C8 /* RestaurantListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240DA1ED532E30090E1C8 /* RestaurantListTableViewCell.m */; };
 		965240DF1ED532F30090E1C8 /* RestaurantListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240DE1ED532F30090E1C8 /* RestaurantListViewController.m */; };
 		965240E21ED559930090E1C8 /* HSRestaurantListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */; };
+		965240E51ED57F270090E1C8 /* HSHomeRestaurantList.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240E41ED57F270090E1C8 /* HSHomeRestaurantList.m */; };
 		96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */; };
 		9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */; };
 		9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A71E7159210060CE0B /* DocGuided.png */; };
@@ -859,6 +860,8 @@
 		965240DE1ED532F30090E1C8 /* RestaurantListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestaurantListViewController.m; sourceTree = "<group>"; };
 		965240E01ED559930090E1C8 /* HSRestaurantListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSRestaurantListRequest.h; sourceTree = "<group>"; };
 		965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSRestaurantListRequest.m; sourceTree = "<group>"; };
+		965240E31ED57F270090E1C8 /* HSHomeRestaurantList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSHomeRestaurantList.h; sourceTree = "<group>"; };
+		965240E41ED57F270090E1C8 /* HSHomeRestaurantList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSHomeRestaurantList.m; sourceTree = "<group>"; };
 		96608FF01E80D47900D28A61 /* VideoLauchMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLauchMovieViewController.h; sourceTree = "<group>"; };
 		96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLauchMovieViewController.m; sourceTree = "<group>"; };
 		9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoGuidedTwoDimensionalCode.h; sourceTree = "<group>"; };
@@ -1307,6 +1310,8 @@
 				062CEFD41EC3053200EA6AE0 /* HSAwardUploadRequest.m */,
 				965240E01ED559930090E1C8 /* HSRestaurantListRequest.h */,
 				965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */,
+				965240E31ED57F270090E1C8 /* HSHomeRestaurantList.h */,
+				965240E41ED57F270090E1C8 /* HSHomeRestaurantList.m */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -2674,6 +2679,7 @@
 				06FFCCAB1E6E864900ADEA94 /* RDAlertAction.m in Sources */,
 				478058261DF985730091C305 /* HSCategoryListRequest.m in Sources */,
 				061FEFE81E2DB061003CD111 /* WMPageController.m in Sources */,
+				965240E51ED57F270090E1C8 /* HSHomeRestaurantList.m in Sources */,
 				06EA38D21D5980FC0081DDCC /* PhotoShowViewController.m in Sources */,
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
 				060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */,

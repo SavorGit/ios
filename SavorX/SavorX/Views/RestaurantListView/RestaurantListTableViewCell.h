@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RestaurantListModel.h"
 
 @interface RestaurantListTableViewCell : UITableViewCell
 
@@ -18,5 +19,6 @@
 
 @property (nonatomic, strong) UILabel *addressLabel;
 
+- (void)configModelData:(RestaurantListModel *)model;
 
 @end

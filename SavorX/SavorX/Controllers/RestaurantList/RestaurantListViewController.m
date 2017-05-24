@@ -33,10 +33,7 @@
 
 - (void)setUpDatas{
     
-    [MBProgressHUD showCustomLoadingHUDInView:self.view];
-    
     [self.dataSource removeAllObjects];
-    MBProgressHUD * hud;
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
         
@@ -50,10 +47,9 @@
         [self.tableView reloadData];
         
     }else{
-        hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     }
-
     
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:@"116.479168" lat:@"35.462766" pageNum:1];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -108,7 +104,8 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = UIColorFromRGB(0xf5f5f5);
+        _tableView.backgroundColor = [UIColor colorWithRed:245 green:245 blue:245 alpha:0];
+        _tableView.showsVerticalScrollIndicator = NO;
         [self.view addSubview:_tableView];
         
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -148,12 +145,11 @@
     RestaurantListTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RestauranCell" forIndexPath:indexPath];
     
     RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.section];
-
-    cell.titleLabel.text = model.name;
-    cell.distanceLabel.text = model.km;
-    cell.addressLabel.text = model.addr;
+    
+    [cell configModelData:model];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.backgroundColor = [UIColor clearColor];
         
     return cell;
 }
@@ -161,7 +157,7 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 140;
+    return 100;
 }
 
 #pragma mark - 下拉刷新，上拉加载更多
