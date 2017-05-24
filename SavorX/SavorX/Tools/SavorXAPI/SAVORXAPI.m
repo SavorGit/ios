@@ -22,6 +22,9 @@
 #import "HSversionUpgradeRequest.h"
 #import "UIImageView+WebCache.h"
 #import "RDAlertView.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
+
 
 #define version_code @"version_code"
 
@@ -133,9 +136,9 @@
 }
 
 //投屏图片
-+ (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)())success failure:(void (^)())failure
++ (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId force:(NSInteger)force success:(void (^)())success failure:(void (^)())failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation];
+    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld&force=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation,force];
     
     if (seriesId && seriesId.length > 0) {
         urlStr = [NSString stringWithFormat:@"%@&seriesId=%@", urlStr, seriesId];
@@ -161,6 +164,36 @@
                 success();
             }
         }else if ([[response objectForKey:@"result"] integerValue] == 2) {
+        }
+        else if ([[response objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [response objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                if (failure) {
+                    failure();
+                }
+            } bold:NO];
+            // 如果返回状态为4，且用户选择继续投屏，则把本方法重新调用一遍，force传1
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                
+                [SAVORXAPI postImageWithURL:urlStr data:data name:name type:type isThumbnail:isThumbnail rotation:rotation seriesId:seriesId force:1 success:^{
+                    
+                    if (success) {
+                        success();
+                    }
+                    
+                } failure:^{
+                    
+                    if (failure) {
+                        failure();
+                    }
+                    
+                }];
+                
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
             
         }else{
             if (failure) {
@@ -187,9 +220,10 @@
     return task;
 }
 
-+ (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+// 投屏文档
++ (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation];
+    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld&force=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation,force];
     
     if (seriesId && seriesId.length > 0) {
         urlStr = [NSString stringWithFormat:@"%@&seriesId=%@", urlStr, seriesId];
@@ -214,6 +248,38 @@
                 success(task, response);
             }
         }else if ([[response objectForKey:@"result"] integerValue] == 2) {
+        }else if ([[response objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [response objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                if (failure) {
+                    failure(task, nil);
+                }
+            } bold:NO];
+            // 如果返回状态为4，且用户选择继续投屏，则把本方法重新调用一遍，force传1
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                
+                [SAVORXAPI postFileImageWithURL:urlStr data:data name:name type:type isThumbnail:isThumbnail rotation:rotation seriesId:seriesId force:1 success:^(NSURLSessionDataTask *task, id responseObject) {
+                    
+                    NSDictionary* response = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                             options:kNilOptions
+                                                                               error:nil];
+                    if (success) {
+                        success(task, response);
+                    }
+                    
+                } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    
+                    if (failure) {
+                        failure(task, error);
+                    }
+                    
+                }];
+                
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
             
         }else{
             if (failure) {
@@ -298,9 +364,9 @@
 }
 
 //视频投屏
-+ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
++ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/video?deviceId=%@&deviceName=%@", urlStr,[GlobalData shared].deviceID, [GCCGetInfo getIphoneName]];
+    urlStr = [NSString stringWithFormat:@"%@/video?deviceId=%@&deviceName=%@&force=%ld", urlStr,[GlobalData shared].deviceID, [GCCGetInfo getIphoneName],force];
     
     NSDictionary * parameters = @{@"mediaPath" : mediaPath,
                                   @"position" : position};

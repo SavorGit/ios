@@ -21,6 +21,8 @@
 #import "ArticleReadViewController.h"
 #import "HSVideoViewController.h"
 #import "RDLogStatisticsAPI.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
 
 @interface HotTopicViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -338,7 +340,15 @@
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
-            [self demandVideoWithModel:model force:1];
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithModel:model force:1];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
             
         }else{
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];

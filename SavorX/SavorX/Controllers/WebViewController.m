@@ -15,6 +15,8 @@
 #import "GCCUPnPManager.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "RDLogStatisticsAPI.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
 
@@ -112,25 +114,9 @@
 - (void)phoneBindDevice
 {
     if ([GlobalData shared].isBindRD && self.model.canPlay == 1) {
-        //如果是绑定状态
-        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-        [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            if ([[result objectForKey:@"result"] integerValue] == 0) {
-                DemandViewController *view = [[DemandViewController alloc] init];
-                view.categroyID = self.categoryID;
-                view.model = self.model;
-                [SAVORXAPI successRing];
-                [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
-                [[HomeAnimationView animationView] startScreenWithViewController:view];
-                [self.navigationController pushViewController:view animated:YES];
-            }else{
-                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-            }
-            [hud hideAnimated:NO];
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-        }];
+
+        [self demandVideoWithforce:0];
+        
     }else if ([GlobalData shared].isBindDLNA){
         //如果是绑定状态
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
@@ -244,27 +230,8 @@
         if (([GlobalData shared].isBindRD)){
             
             [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:demandHandle];
-            //如果是绑定状态
-            MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-            [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                if ([[result objectForKey:@"result"] integerValue] == 0) {
-                    
-                    DemandViewController *view = [[DemandViewController alloc] init];
-                    view.categroyID = self.categoryID;
-                    view.model = self.model;
-                    [SAVORXAPI successRing];
-                    [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
-                    [[HomeAnimationView animationView] startScreenWithViewController:view];
-                    [self.navigationController pushViewController:view animated:YES];
-                    [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-                }else{
-                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-                }
-                [hud hideAnimated:NO];
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [hud hideAnimated:NO];
-                [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-            }];
+            
+            [self demandVideoWithforce:0];
             
         }else{
             [[HomeAnimationView animationView] scanQRCode];
@@ -273,6 +240,44 @@
     }else{
         [MBProgressHUD showTextHUDwithTitle:@"当前视频不支持该操作"];
     }
+}
+
+- (void)demandVideoWithforce:(NSInteger)force{
+    
+    //如果是绑定状态
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+    [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            
+            DemandViewController *view = [[DemandViewController alloc] init];
+            view.categroyID = self.categoryID;
+            view.model = self.model;
+            [SAVORXAPI successRing];
+            [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
+            [[HomeAnimationView animationView] startScreenWithViewController:view];
+            [self.navigationController pushViewController:view animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithforce:1];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }else{
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        [hud hideAnimated:NO];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [hud hideAnimated:NO];
+        [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+    }];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated

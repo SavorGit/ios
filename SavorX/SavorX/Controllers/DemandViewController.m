@@ -659,7 +659,7 @@
     self.screenButton.enabled = NO;
     if ([GlobalData shared].isBindRD) {
         
-        [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 force:0  success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 [[HomeAnimationView animationView] startScreenWithViewController:self];
                 self.isPlayEnd = NO;

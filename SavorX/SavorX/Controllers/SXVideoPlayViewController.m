@@ -14,6 +14,9 @@
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
 #import "UINavigationBar+PS.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
+
 
 #define Max_OffsetY  50
 #define WeakSelf(x)      __weak typeof (self) x = self
@@ -424,52 +427,10 @@
     if ([GlobalData shared].isBindRD) {
         if (self.model) {
             
-            [SAVORXAPI demandWithURL:STBURL name:self.model.name type:self.type position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                if ([[result objectForKey:@"result"] integerValue] == 0) {
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    self.isPlayEnd = NO;
-                    self.footerView.videoPlayButton.selected = NO;
-                    [self createTimer];
-                    [self.tableView reloadData];
-                }else{
-                    self.footerView.videoPlayButton.selected = YES;
-                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-                }
-                self.isHandle = NO;
-                self.footerView.videoPlayButton.enabled = YES;
-                
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
-                self.isHandle = NO;
-                self.footerView.videoPlayButton.selected = YES;
-                self.footerView.videoPlayButton.enabled = YES;
-            }];
+            [self demandVideoWithforce:0];
         }else{
             asseturlStr = [NSString stringWithFormat:@"%@%@", [HTTPServerManager getCurrentHTTPServerIP], self.videoUrl];
-            [SAVORXAPI postVideoWithURL:STBURL mediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                if ([[result objectForKey:@"result"] integerValue] == 0) {
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    self.isPlayEnd = NO;
-                    self.footerView.videoPlayButton.selected = NO;
-                    [self createTimer];
-                    [self.tableView reloadData];
-                }else{
-                    self.footerView.videoPlayButton.selected = YES;
-                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-                }
-                self.isHandle = NO;
-                self.footerView.videoPlayButton.enabled = YES;
-                
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
-                self.isHandle = NO;
-                self.footerView.videoPlayButton.selected = YES;
-                self.footerView.videoPlayButton.enabled = YES;
-            }];
+            [self demandVideoWithPostMedPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0];
         }
     }else if ([GlobalData shared].isBindDLNA) {
         if (self.model) {
@@ -498,7 +459,85 @@
     }
 }
 
-- (void)changeTimerWithPlayStatus
+- (void)demandVideoWithPostMedPath:(NSString *)mediaPath force:(NSInteger)force{
+    
+    [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            [[HomeAnimationView animationView] startScreenWithViewController:self];
+            self.isPlayEnd = NO;
+            self.footerView.videoPlayButton.selected = NO;
+            [self createTimer];
+            [self.tableView reloadData];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithPostMedPath:mediaPath force:1];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }else{
+            self.footerView.videoPlayButton.selected = YES;
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        self.isHandle = NO;
+        self.footerView.videoPlayButton.enabled = YES;
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
+        self.isHandle = NO;
+        self.footerView.videoPlayButton.selected = YES;
+        self.footerView.videoPlayButton.enabled = YES;
+    }];
+}
+
+- (void)demandVideoWithforce:(NSInteger)force{
+    
+    [SAVORXAPI demandWithURL:STBURL name:self.model.name type:self.type position:0 force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            [[HomeAnimationView animationView] startScreenWithViewController:self];
+            self.isPlayEnd = NO;
+            self.footerView.videoPlayButton.selected = NO;
+            [self createTimer];
+            [self.tableView reloadData];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithforce:1];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }
+        else{
+            self.footerView.videoPlayButton.selected = YES;
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        self.isHandle = NO;
+        self.footerView.videoPlayButton.enabled = YES;
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
+        self.isHandle = NO;
+        self.footerView.videoPlayButton.selected = YES;
+        self.footerView.videoPlayButton.enabled = YES;
+    }];
+    
+}
+
+-(void)changeTimerWithPlayStatus
 {
     if (self.footerView.videoPlayButton.selected) {
         [self.timer setFireDate:[NSDate distantPast]];

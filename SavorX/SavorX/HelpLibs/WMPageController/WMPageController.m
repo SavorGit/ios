@@ -1506,25 +1506,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         //如果是绑定状态
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         
-        [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            if ([[result objectForKey:@"result"] integerValue] == 0) {
-                
-                DemandViewController *view = [[DemandViewController alloc] init];
-                view.categroyID = categoryID;
-                view.model = model;
-                [SAVORXAPI successRing];
-                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
-                [[HomeAnimationView animationView] startScreenWithViewController:view];
-                [self.navigationController pushViewController:view animated:YES];
-                [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-            }else{
-                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-            }
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-        }];
+        [self demandVideoWithModel:model force:0 categoryID:categoryID];
         
     }else{
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
@@ -1552,4 +1534,39 @@ static NSInteger const kWMControllerCountUndefined = -1;
     }
 }
 
+- (void)demandVideoWithModel:(HSVodModel *)model force:(NSInteger)force categoryID:(NSInteger)categoryID{
+    
+    [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 force:force  success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            
+            DemandViewController *view = [[DemandViewController alloc] init];
+            view.categroyID = categoryID;
+            view.model = model;
+            [SAVORXAPI successRing];
+            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+            [[HomeAnimationView animationView] startScreenWithViewController:view];
+            [self.navigationController pushViewController:view animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithModel:model force:1 categoryID:categoryID];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }
+        else{
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+    }];
+}
 @end

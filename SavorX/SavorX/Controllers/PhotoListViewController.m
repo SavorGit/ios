@@ -219,7 +219,7 @@
                 
                 [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                     
-                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil success:^{
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                         [hud hideAnimated:NO];
                         [self.navigationController pushViewController:vc animated:YES];
                         [HomeAnimationView animationView].currentImage = result;
@@ -227,7 +227,7 @@
                         [SAVORXAPI successRing];
                         
                         [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_play" key:nil value:nil];
-                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil success:^{
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
                             
                         } failure:^{
                             
@@ -296,7 +296,7 @@
             
             [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                 
-                [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil success:^{
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
                     // 获取第一张幻灯片图片，回传
                     [HomeAnimationView animationView].currentImage = result;
@@ -305,7 +305,7 @@
                     [self.navigationController pushViewController:third animated:YES];
                     [SAVORXAPI successRing];
                     
-                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil success:^{
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
                         
                     } failure:^{
                         

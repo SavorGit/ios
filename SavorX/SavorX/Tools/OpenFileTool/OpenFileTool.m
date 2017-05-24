@@ -15,6 +15,8 @@
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
 #import "PhotoTool.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
 
 @implementation OpenFileTool
 
@@ -56,23 +58,11 @@
     NSString *asseturlStr = [NSString stringWithFormat:@"%@%@", [HTTPServerManager getCurrentHTTPServerIP], videoUrl];
     
     if ([GlobalData shared].isBindRD) {
-        [SAVORXAPI postVideoWithURL:STBURL mediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            if ([[result objectForKey:@"result"] integerValue] == 0) {
-                SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
-                video.videoUrl = videoUrl;
-                video.totalTime = totalTime;
-                video.title = [filePath lastPathComponent];
-                UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-                [HomeAnimationView animationView].currentImage = firstImage;
-                [[HomeAnimationView animationView] startScreenWithViewController:video];
-                [[Helper getRootNavigationController] pushViewController:video animated:YES];
-            }else{
-                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-            }
-            [hud hideAnimated:NO];
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            [hud hideAnimated:NO];
-        }];
+        
+        [OpenFileTool demandVideoWithMediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0 videoUrl:videoUrl movieURL:movieURL totalTime:totalTime filePath:filePath];
+        
+         [hud hideAnimated:NO];
+        
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{
             [hud hideAnimated:NO];
@@ -90,6 +80,39 @@
             [hud hideAnimated:NO];
         }];
     }
+}
+
++ (void)demandVideoWithMediaPath:(NSString *)mediaPath force:(NSInteger)force  videoUrl:(NSString *)videoUrl  movieURL:(NSURL *)movieURL totalTime:(NSInteger )totalTime filePath:(NSString *)filePath{
+    
+    [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
+            video.videoUrl = videoUrl;
+            video.totalTime = totalTime;
+            video.title = [filePath lastPathComponent];
+            UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
+            [HomeAnimationView animationView].currentImage = firstImage;
+            [[HomeAnimationView animationView] startScreenWithViewController:video];
+            [[Helper getRootNavigationController] pushViewController:video animated:YES];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithMediaPath:mediaPath force:1 videoUrl:videoUrl movieURL:movieURL totalTime:totalTime filePath:filePath];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }
+        else{
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+       
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+    }];
 }
 
 + (void)screenDocmentWithPath:(NSString *)filePath

@@ -254,12 +254,12 @@
         if ([GlobalData shared].isBindRD) {
             [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
                 
-                self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId success:^(NSURLSessionDataTask *task, id responseObject) {
+                self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
                     if (self.task == task) {
                         if (successBlock) {
                             successBlock();
                         }
-                        self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId success:^(NSURLSessionDataTask *task, id responseObject) {
+                        self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
                             
                         } failure:^(NSURLSessionDataTask *task, NSError *error) {
                             
