@@ -597,7 +597,7 @@
             if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
                 WMPageController * page = (WMPageController *)baseNa.topViewController;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [page.homeButton popOptionsWithAnimation];
+                    [page screenButtonDidClicked];
                 });
             }
             

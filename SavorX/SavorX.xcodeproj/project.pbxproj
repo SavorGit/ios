@@ -119,6 +119,7 @@
 		063B1D531D7D63D30036C02B /* PhotoSliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 063B1D521D7D63D30036C02B /* PhotoSliderViewController.m */; };
 		063DC13D1E6D5E1C00449A7B /* RDHomeScreenButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 063DC13C1E6D5E1C00449A7B /* RDHomeScreenButton.m */; };
 		063FA3371D839F1100D03548 /* BadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 063FA3361D839F1100D03548 /* BadView.m */; };
+		0645F7FB1ED580A8004678E8 /* RDScreenLocationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0645F7FA1ED580A8004678E8 /* RDScreenLocationView.m */; };
 		0647BC351E506285002284BB /* HSFirstUseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647BC341E506285002284BB /* HSFirstUseRequest.m */; };
 		0647BC381E5063DF002284BB /* HSversionUpgradeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647BC371E5063DF002284BB /* HSversionUpgradeRequest.m */; };
 		0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647EACA1E70E93500C39160 /* RDRightConnetItem.m */; };
@@ -530,6 +531,8 @@
 		063DC13C1E6D5E1C00449A7B /* RDHomeScreenButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHomeScreenButton.m; sourceTree = "<group>"; };
 		063FA3351D839F1100D03548 /* BadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BadView.h; sourceTree = "<group>"; };
 		063FA3361D839F1100D03548 /* BadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BadView.m; sourceTree = "<group>"; };
+		0645F7F91ED580A8004678E8 /* RDScreenLocationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationView.h; sourceTree = "<group>"; };
+		0645F7FA1ED580A8004678E8 /* RDScreenLocationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationView.m; sourceTree = "<group>"; };
 		0647BC331E506285002284BB /* HSFirstUseRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSFirstUseRequest.h; sourceTree = "<group>"; };
 		0647BC341E506285002284BB /* HSFirstUseRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSFirstUseRequest.m; sourceTree = "<group>"; };
 		0647BC361E5063DF002284BB /* HSversionUpgradeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSversionUpgradeRequest.h; sourceTree = "<group>"; };
@@ -1779,6 +1782,8 @@
 		4733B7511E305C01006889A2 /* HomePageView */ = {
 			isa = PBXGroup;
 			children = (
+				0645F7F91ED580A8004678E8 /* RDScreenLocationView.h */,
+				0645F7FA1ED580A8004678E8 /* RDScreenLocationView.m */,
 				0647EAC91E70E93500C39160 /* RDRightConnetItem.h */,
 				0647EACA1E70E93500C39160 /* RDRightConnetItem.m */,
 				06FFCCAD1E6EBF6A00ADEA94 /* RDCheackSence.h */,
@@ -2538,6 +2543,7 @@
 				0614A9E11D6699980080D710 /* FavoriteViewController.m in Sources */,
 				06F9B2A31D6ED8CE00C7F0A4 /* GCCGetInfo.m in Sources */,
 				47F997621DFFA58F0009BDFB /* SXWiFiHelpView.m in Sources */,
+				0645F7FB1ED580A8004678E8 /* RDScreenLocationView.m in Sources */,
 				965240DF1ED532F30090E1C8 /* RestaurantListViewController.m in Sources */,
 				0627E0C11E3231DA00DAED92 /* LGSideMenuView.m in Sources */,
 				0647EACF1E70F37E00C39160 /* ZFBrightnessView.m in Sources */,

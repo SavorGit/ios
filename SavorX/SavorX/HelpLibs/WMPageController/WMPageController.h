@@ -308,8 +308,6 @@ typedef NS_ENUM(NSUInteger, WMPageControllerPreloadPolicy) {
 /** MenuView 内部视图与左右的间距 */
 @property (nonatomic, assign) CGFloat menuViewContentMargin;
 
-@property (nonatomic, strong) RDHomeScreenButton * homeButton;
-
 /**
  *  左滑时同时启用其他手势，比如系统左滑、sidemenu左滑。默认 NO
     (会引起一个小问题，第一个和最后一个控制器会变得可以斜滑, 还未解决)
@@ -360,6 +358,8 @@ typedef NS_ENUM(NSUInteger, WMPageControllerPreloadPolicy) {
 - (void)willResignActive:(NSNotification * _Nonnull)notification;
 /** 当 app 即将回到前台接收到的通知 */
 - (void)willEnterForeground:(NSNotification * _Nonnull)notification;
+
+- (void)screenButtonDidClicked;
 
 - (void)rightAction;
 

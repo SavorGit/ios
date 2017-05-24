@@ -24,13 +24,14 @@
 #import "HSVideoViewController.h"
 #import "DemandViewController.h"
 #import "ArticleReadViewController.h"
+#import "RDScreenLocationView.h"
 
 NSString *const WMControllerDidAddToSuperViewNotification = @"WMControllerDidAddToSuperViewNotification";
 NSString *const WMControllerDidFullyDisplayedNotification = @"WMControllerDidFullyDisplayedNotification";
 
 static NSInteger const kWMUndefinedIndex = -1;
 static NSInteger const kWMControllerCountUndefined = -1;
-@interface WMPageController ()<RDHomeScreenButtonDelegate> {
+@interface WMPageController ()<RDHomeScreenButtonDelegate, RDScreenLocationViewDelegate> {
     CGFloat _viewHeight, _viewWidth, _viewX, _viewY, _targetX, _superviewHeight;
     BOOL    _hasInited, _shouldNotScroll, _isTabBarHidden;
     NSInteger _initializedIndex, _controllerConut, _markedSelectIndex;
@@ -58,6 +59,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 // 标题点击按钮
 @property (nonatomic, strong) UIButton *titleViewBtn;
+
+@property (nonatomic, strong) RDHomeScreenButton * homeButton;
+
+@property (nonatomic, strong) RDScreenLocationView * locationView;
 
 @end
 
@@ -923,11 +928,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
             [[HomeAnimationView animationView] scanQRCode];
             
         }else if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.homeButton popOptionsWithAnimation];
-            });
-            
+            [self screenButtonDidClicked];
         }
     }
     
@@ -964,10 +965,22 @@ static NSInteger const kWMControllerCountUndefined = -1;
 - (void)SingleTapQuitScreen{
     [[HomeAnimationView animationView] quitScreen];
 }
-- (void)RDHomeScreenButtonDidChooseType:(RDScreenType)type
+
+- (void)screenButtonDidClicked
 {
-    switch (type) {
-        case RDScreenTypePhoto:
+    [self.locationView showWithStatus:RDScreenLocation_Loading];
+}
+
+#pragma mark -- 首页按钮以及弹窗的代理回调
+- (void)RDHomeScreenButtonDidBeClicked
+{
+    [self.locationView showWithStatus:RDScreenLocation_Loading];
+}
+
+- (void)RDScreenLocationViewDidSelectTabButtonWithIndex:(NSInteger)index
+{
+    switch (index) {
+        case 0:
         {
             if (self.canGetPhoto) {
                 AlbumListViewController * album = [[AlbumListViewController alloc] init];
@@ -980,7 +993,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }
             break;
             
-        case RDScreenTypeVideo:
+        case 1:
         {
             if (self.canGetPhoto) {
                 VideoListViewController * video = [[VideoListViewController alloc] init];
@@ -993,7 +1006,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }
             break;
             
-        case RDScreenTypeSlider:
+        case 2:
         {
             if (self.canGetPhoto) {
                 SliderViewController * album = [[SliderViewController alloc] init];
@@ -1006,7 +1019,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }
             break;
             
-        case RDScreenTypeDocument:
+        case 3:
         {
             self.count++;
             DocumentListViewController * document = [[DocumentListViewController alloc] init];
@@ -1021,18 +1034,15 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }
             break;
             
-        case RDScreenTypeNiceVideo:
-        {
-            if (self.isInHotel) {
-                [self setSelectIndex:0];
-                [SAVORXAPI postUMHandleWithContentId:@"home_bunch_planting" key:nil value:nil];
-            }
-        }
-            break;
-            
         default:
             break;
     }
+}
+
+//查看更多
+- (void)RDScreenLocationViewDidSelectMoreButton
+{
+    
 }
 
 - (void)setupViews
@@ -1493,6 +1503,15 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [self.view addSubview:_homeButton];
     }
     return _homeButton;
+}
+
+- (RDScreenLocationView *)locationView
+{
+    if (!_locationView) {
+        _locationView = [[RDScreenLocationView alloc] init];
+        _locationView.delegate = self;
+    }
+    return _locationView;
 }
 
 //收到节目的推送，跳转至相关的页面
