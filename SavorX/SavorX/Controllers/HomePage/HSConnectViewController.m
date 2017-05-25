@@ -302,176 +302,190 @@
 
 - (void)getBoxInfo
 {
-    if ([GlobalData shared].callQRCodeURL.length > 0) {
-        NSString *hosturl = [NSString stringWithFormat:@"%@/command/box-info/%@", [GlobalData shared].callQRCodeURL, self.numSring];
+    __block BOOL hasSuccess = NO; //记录是否绑定成功过
+    __block NSInteger hasFailure = 0; //记录失败的次数
+    
+    NSString *platformUrl = [NSString stringWithFormat:@"%@/command/box-info/%@", [GlobalData shared].callQRCodeURL, self.numSring];
+    
+    [SAVORXAPI getWithURL:platformUrl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         
-        [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            
-            NSInteger code = [[result objectForKey:@"code"] integerValue];
-            if (code == 10000) {
-                [self getBoxInfoWithResult:result];
-            }else{
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
-                self.textLabel.text = [result objectForKey:@"msg"];
+        NSInteger code = [[result objectForKey:@"code"] integerValue];
+        if (code == 10000) {
+            if (hasSuccess) {
+                return;
             }
-            [self hidenMaskingLoadingView];
-            self.failConectLabel.hidden = YES;
-            self.reConnectBtn.hidden = YES;
-            self.textLabel.hidden = NO;
-            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
+            hasSuccess = YES;
             
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            
-            [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
-            [self hidenMaskingLoadingView];
-            self.failConectLabel.hidden = NO;
-            self.reConnectBtn.hidden = NO;
-            self.textLabel.hidden = YES;
-            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
-            
-        }];
-    }else{
-        __block BOOL hasSuccess = NO; //记录是否绑定成功过
-        __block NSInteger hasFailure = 0; //记录失败的次数
-        
-        NSString *hosturl = [NSString stringWithFormat:@"%@/command/box-info/%@", [GlobalData shared].secondCallCodeURL, self.numSring];
-        
-        [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            
-            NSInteger code = [[result objectForKey:@"code"] integerValue];
-            if (code == 10000) {
-                
-                if (hasSuccess) {
-                    return;
-                }
-                hasSuccess = YES;
-                
-                [self getBoxInfoWithResult:result];
-            }else{
-                
-                hasFailure += 1;
-                if (hasFailure < 3) {
-                    return;
-                }
-                
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
-                self.textLabel.text = [result objectForKey:@"msg"];
-            }
-            
-            [self hidenMaskingLoadingView];
-            self.failConectLabel.hidden = YES;
-            self.reConnectBtn.hidden = YES;
-            self.textLabel.hidden = NO;
-            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
-            
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [self getBoxInfoWithResult:result];
+        }else{
             
             hasFailure += 1;
-            if (hasFailure < 3) {
+            if (hasFailure < 4) {
                 return;
             }
             
-            [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
-            [self hidenMaskingLoadingView];
-            self.failConectLabel.hidden = NO;
-            self.reConnectBtn.hidden = NO;
-            self.textLabel.hidden = YES;
-            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
-            
-        }];
+            [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
+            self.textLabel.text = [result objectForKey:@"msg"];
+        }
+        [self hidenMaskingLoadingView];
+        self.failConectLabel.hidden = YES;
+        self.reConnectBtn.hidden = YES;
+        self.textLabel.hidden = NO;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
-        NSString *boxPlatformURL = [NSString stringWithFormat:@"%@/command/box-info/%@", [GlobalData shared].thirdCallCodeURL, self.numSring];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
-        [SAVORXAPI getWithURL:boxPlatformURL parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        hasFailure += 1;
+        if (hasFailure < 4) {
+            return;
+        }
+        
+        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [self hidenMaskingLoadingView];
+        self.failConectLabel.hidden = NO;
+        self.reConnectBtn.hidden = NO;
+        self.textLabel.hidden = YES;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
+        
+    }];
+    
+    NSString *hosturl = [NSString stringWithFormat:@"%@/command/box-info/%@", [GlobalData shared].secondCallCodeURL, self.numSring];
+    
+    [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        
+        NSInteger code = [[result objectForKey:@"code"] integerValue];
+        if (code == 10000) {
             
-            NSInteger code = [[result objectForKey:@"code"] integerValue];
-            if (code == 10000) {
-                
-                if (hasSuccess) {
-                    return;
-                }
-                hasSuccess = YES;
-                
-                [self getBoxInfoWithResult:result];
-            }else{
-                
-                hasFailure += 1;
-                if (hasFailure < 3) {
-                    return;
-                }
-                
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
-                self.textLabel.text = [result objectForKey:@"msg"];
+            if (hasSuccess) {
+                return;
             }
+            hasSuccess = YES;
             
-            [self hidenMaskingLoadingView];
-            self.failConectLabel.hidden = YES;
-            self.reConnectBtn.hidden = YES;
-            self.textLabel.hidden = NO;
-            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
-            
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [self getBoxInfoWithResult:result];
+        }else{
             
             hasFailure += 1;
-            if (hasFailure < 3) {
+            if (hasFailure < 4) {
                 return;
             }
             
-            [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
-            [self hidenMaskingLoadingView];
-            self.failConectLabel.hidden = NO;
-            self.reConnectBtn.hidden = NO;
-            self.textLabel.hidden = YES;
-            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
-            
-        }];
+            [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
+            self.textLabel.text = [result objectForKey:@"msg"];
+        }
         
-        NSString *boxURL = [NSString stringWithFormat:@"%@/verify?code=%@&deviceId=%@", [GlobalData shared].boxCodeURL, self.numSring, [GlobalData shared].deviceID];
+        [self hidenMaskingLoadingView];
+        self.failConectLabel.hidden = YES;
+        self.reConnectBtn.hidden = YES;
+        self.textLabel.hidden = NO;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
-        [SAVORXAPI getWithURL:boxURL parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        hasFailure += 1;
+        if (hasFailure < 4) {
+            return;
+        }
+        
+        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [self hidenMaskingLoadingView];
+        self.failConectLabel.hidden = NO;
+        self.reConnectBtn.hidden = NO;
+        self.textLabel.hidden = YES;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
+        
+    }];
+    
+    NSString *boxPlatformURL = [NSString stringWithFormat:@"%@/command/box-info/%@", [GlobalData shared].thirdCallCodeURL, self.numSring];
+    
+    [SAVORXAPI getWithURL:boxPlatformURL parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        
+        NSInteger code = [[result objectForKey:@"code"] integerValue];
+        if (code == 10000) {
             
-            NSInteger code = [[result objectForKey:@"code"] integerValue];
-            if (code == 10000) {
-                
-                if (hasSuccess) {
-                    return;
-                }
-                hasSuccess = YES;
-                
-                [self getBoxInfoWithResult:result];
-            }else{
-                
-                hasFailure += 1;
-                if (hasFailure < 3) {
-                    return;
-                }
-                
-                [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
-                self.textLabel.text = [result objectForKey:@"msg"];
+            if (hasSuccess) {
+                return;
             }
+            hasSuccess = YES;
             
-            [self hidenMaskingLoadingView];
-            self.failConectLabel.hidden = YES;
-            self.reConnectBtn.hidden = YES;
-            self.textLabel.hidden = NO;
-            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
-            
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [self getBoxInfoWithResult:result];
+        }else{
             
             hasFailure += 1;
-            if (hasFailure < 3) {
+            if (hasFailure < 4) {
                 return;
             }
             
-            [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
-            [self hidenMaskingLoadingView];
-            self.failConectLabel.hidden = NO;
-            self.reConnectBtn.hidden = NO;
-            self.textLabel.hidden = YES;
-            [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
+            [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
+            self.textLabel.text = [result objectForKey:@"msg"];
+        }
+        
+        [self hidenMaskingLoadingView];
+        self.failConectLabel.hidden = YES;
+        self.reConnectBtn.hidden = YES;
+        self.textLabel.hidden = NO;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        hasFailure += 1;
+        if (hasFailure < 4) {
+            return;
+        }
+        
+        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [self hidenMaskingLoadingView];
+        self.failConectLabel.hidden = NO;
+        self.reConnectBtn.hidden = NO;
+        self.textLabel.hidden = YES;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
+        
+    }];
+    
+    NSString *boxURL = [NSString stringWithFormat:@"%@/verify?code=%@&deviceId=%@", [GlobalData shared].boxCodeURL, self.numSring, [GlobalData shared].deviceID];
+    
+    [SAVORXAPI getWithURL:boxURL parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        
+        NSInteger code = [[result objectForKey:@"code"] integerValue];
+        if (code == 10000) {
             
-        }];
-    }
+            if (hasSuccess) {
+                return;
+            }
+            hasSuccess = YES;
+            
+            [self getBoxInfoWithResult:result];
+        }else{
+            
+            hasFailure += 1;
+            if (hasFailure < 4) {
+                return;
+            }
+            
+            [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
+            self.textLabel.text = [result objectForKey:@"msg"];
+        }
+        
+        [self hidenMaskingLoadingView];
+        self.failConectLabel.hidden = YES;
+        self.reConnectBtn.hidden = YES;
+        self.textLabel.hidden = NO;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        hasFailure += 1;
+        if (hasFailure < 4) {
+            return;
+        }
+        
+        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [self hidenMaskingLoadingView];
+        self.failConectLabel.hidden = NO;
+        self.reConnectBtn.hidden = NO;
+        self.textLabel.hidden = YES;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
+        
+    }];
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {
