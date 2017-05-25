@@ -14,7 +14,7 @@
 @property (nonatomic, copy) NSString *name;
 
 //距离
-@property (nonatomic, copy) NSString *km;
+@property (nonatomic, copy) NSString *dis;
 
 //地址
 @property (nonatomic, copy) NSString *addr;

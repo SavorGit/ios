@@ -73,7 +73,7 @@
     if (model.id == [GlobalData shared].hotelId) {
         distanceStr = @"当前餐厅";
     }else{
-        distanceStr = [NSString stringWithFormat:@"%@m",model.km];
+        distanceStr = [NSString stringWithFormat:@"%@",model.dis];
     }
     self.distanceLabel.text = distanceStr;
     

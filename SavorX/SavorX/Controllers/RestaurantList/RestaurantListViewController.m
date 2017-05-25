@@ -11,6 +11,7 @@
 #import "RestaurantListModel.h"
 #import "MJRefresh.h"
 #import "HSRestaurantListRequest.h"
+#import "RDLocationManager.h"
 
 @interface RestaurantListViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -19,6 +20,8 @@
 @property (nonatomic, strong) UILabel * TopFreshLabel;
 @property (nonatomic, copy) NSString * cachePath;
 @property (nonatomic, assign) int page;
+@property (nonatomic, strong) NSString *latitudeStr;
+@property (nonatomic, strong) NSString *longitudeStr;
 
 @end
 
@@ -48,8 +51,12 @@
             [self.dataSource addObject:model];
         }
         [self.tableView reloadData];
-        
     }
+    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+        self.latitudeStr = [NSString stringWithFormat:@"%f",latitude];
+        self.longitudeStr = [NSString stringWithFormat:@"%f",longitude];
+        [self setUpDatas];
+    }];
     
 }
 
@@ -57,7 +64,7 @@
 - (void)setUpDatas{
 
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
-    HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:@"116.479168" lat:@"35.462766" pageNum:_page];
+    HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:self.longitudeStr lat:self.latitudeStr pageNum:_page];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
