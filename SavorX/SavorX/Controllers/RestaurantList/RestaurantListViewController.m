@@ -151,12 +151,12 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor clearColor];
     
-    cell.bgView.layer.masksToBounds = YES;
+//    cell.bgView.layer.masksToBounds = YES;
     cell.bgView.layer.cornerRadius = 3.0;
     cell.bgView.layer.shadowColor = [UIColor blackColor].CGColor;//shadowColor阴影颜色
-    cell.bgView.layer.shadowOffset = CGSizeMake(2,2);
-    cell.bgView.layer.shadowOpacity = 0.2;//阴影透明度，默认0
-    cell.bgView.layer.shadowRadius = 3;//阴影半径，默认3
+    cell.bgView.layer.shadowOffset = CGSizeMake(0,0);
+    cell.bgView.layer.shadowOpacity = 0.30;//阴影透明度，默认0
+    cell.bgView.layer.shadowRadius = 2;//阴影半径，默认3
     
     return cell;
 }
