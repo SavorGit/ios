@@ -21,12 +21,6 @@
     
     _bgView = [[UIView alloc]init];
     _bgView.backgroundColor = [UIColor whiteColor];
-    _bgView.layer.masksToBounds = YES;
-    _bgView.layer.cornerRadius = 3.0;
-    _bgView.layer.shadowColor = [UIColor blackColor].CGColor;//shadowColor阴影颜色
-    _bgView.layer.shadowOffset = CGSizeMake(2,2);
-    _bgView.layer.shadowOpacity = 0.6;//阴影透明度，默认0
-    _bgView.layer.shadowRadius = 3;//阴影半径，默认3
     [self.contentView addSubview:_bgView];
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 90));
@@ -42,7 +36,7 @@
     _titleLabel.text = @"餐厅名";
     [_bgView addSubview:_titleLabel];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(self.width - 100, 25));
+        make.size.mas_equalTo(CGSizeMake(self.width - 100, 20));
         make.top.mas_equalTo(5);
         make.left.mas_equalTo(10);
     }];
@@ -74,7 +68,18 @@
 - (void)configModelData:(RestaurantListModel *)model{
     
     self.titleLabel.text = model.name;
-    self.distanceLabel.text = model.km;
+    
+    NSString *distanceStr;
+    if (model.id == [GlobalData shared].hotelId) {
+        distanceStr = @"当前餐厅";
+    }else{
+        distanceStr = [NSString stringWithFormat:@"%@m",model.km];
+    }
+    self.distanceLabel.text = distanceStr;
+    
+    CGSize size = [model.addr sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(self.width - 50,10000.0f)lineBreakMode:UILineBreakModeWordWrap];
+    self.addressLabel.frame = CGRectMake(10, CGRectGetMaxY(_titleLabel.frame) + 15, size.width , size.height);
+    self.addressLabel.numberOfLines = 0; 
     self.addressLabel.text = model.addr;
     
 }
