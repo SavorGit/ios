@@ -99,7 +99,9 @@
             RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
-         [self showWithStatus:RDScreenLocation_Compelete];
+        if (self.superview) {
+            [self showWithStatus:RDScreenLocation_Compelete];
+        }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
