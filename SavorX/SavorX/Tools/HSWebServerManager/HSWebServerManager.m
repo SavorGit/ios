@@ -55,12 +55,15 @@
             NSInteger type = [[params objectForKey:@"type"] integerValue];
             
             //获取机顶盒当前的状态信息
-            NSString * tipMsg = @"电视已经退出投屏";
+            NSString * tipMsg = @"其它手机";
             if ([params objectForKey:@"tipMsg"]) {
                 tipMsg = [params objectForKey:@"tipMsg"];
             }
             
             if (type == 1) {
+                
+                tipMsg = [tipMsg stringByAppendingString:@"正在操作投屏, 您的投屏已经退出了"];
+                
                 //type = 1 投屏被抢投，手机退出投屏
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
@@ -74,6 +77,9 @@
                     [view show];
                 });
             }else if (type == 2){
+                
+                tipMsg = @"您的投屏已经退出了";
+                
                 //type = 2 机顶盒主动或者意外退出投屏，通知手机退出投屏
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
