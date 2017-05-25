@@ -86,7 +86,6 @@
     }else{
     }
     
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self];
     HSHomeRestaurantList *request = [[HSHomeRestaurantList alloc] initWithLng:@"116.479168" lat:@"35.462766"];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -102,21 +101,11 @@
         }
          [self showWithStatus:RDScreenLocation_Compelete];
         
-        if (hud) {
-            [hud hideAnimated:NO];
-        }
-        
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        if (hud) {
-            [hud hideAnimated:NO];
-        }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
-        if (hud) {
-            [hud hideAnimated:NO];
-        }
     }];
 }
 
