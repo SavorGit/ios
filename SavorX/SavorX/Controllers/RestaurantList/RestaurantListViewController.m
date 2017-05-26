@@ -168,7 +168,9 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = [UIColor colorWithRed:245 green:245 blue:245 alpha:0];
+//        _tableView.backgroundColor = [UIColor colorWithRed:245 green:245 blue:245 alpha:0];
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.backgroundView = nil;
         _tableView.showsVerticalScrollIndicator = NO;
         [self.view addSubview:_tableView];
         
@@ -214,8 +216,8 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor clearColor];
+    cell.contentView.backgroundColor = [UIColor clearColor];
     
-//    cell.bgView.layer.masksToBounds = YES;
     cell.bgView.layer.cornerRadius = 3.0;
     cell.bgView.layer.shadowColor = [UIColor blackColor].CGColor;//shadowColor阴影颜色
     cell.bgView.layer.shadowOffset = CGSizeMake(0,0);
@@ -230,6 +232,11 @@
 {
     return 100;
 }
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return [Helper autoHeightWith:15.f];
+//}
 
 #pragma mark - 下拉刷新，上拉加载更多
 //页面顶部下弹状态栏显示
