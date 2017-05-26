@@ -25,6 +25,7 @@
 #import "DemandViewController.h"
 #import "ArticleReadViewController.h"
 #import "RDScreenLocationView.h"
+#import "RestaurantListViewController.h"
 
 NSString *const WMControllerDidAddToSuperViewNotification = @"WMControllerDidAddToSuperViewNotification";
 NSString *const WMControllerDidFullyDisplayedNotification = @"WMControllerDidFullyDisplayedNotification";
@@ -1042,7 +1043,8 @@ static NSInteger const kWMControllerCountUndefined = -1;
 //查看更多
 - (void)RDScreenLocationViewDidSelectMoreButton
 {
-    
+    RestaurantListViewController *restVC = [[RestaurantListViewController alloc] init];
+    [self.navigationController pushViewController:restVC animated:YES];
 }
 
 - (void)setupViews

@@ -54,8 +54,8 @@
 
 -(void)setupDatas{
 
-    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"更多餐厅",@"清除缓存",@"当前版本"];
-    _imageArys = @[@"shoucang", @"yijianfankui", @"bangzhu",@"gengduocanting", @"qingchu", @"banben"];
+    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"支持投屏的餐厅",@"清除缓存",@"当前版本"];
+    _imageArys = @[@"shoucang", @"yijianfankui", @"bangzhu",@"canting", @"qingchu", @"banben"];
 }
 
 #pragma mark -- UITableViewDataSource

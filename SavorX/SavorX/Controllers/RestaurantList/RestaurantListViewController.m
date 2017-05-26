@@ -11,6 +11,7 @@
 #import "RestaurantListModel.h"
 #import "MJRefresh.h"
 #import "HSRestaurantListRequest.h"
+#import "RDLocationManager.h"
 
 @interface RestaurantListViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -18,6 +19,9 @@
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, strong) UILabel * TopFreshLabel;
 @property (nonatomic, copy) NSString * cachePath;
+@property (nonatomic, assign) int page;
+@property (nonatomic, strong) NSString *latitudeStr;
+@property (nonatomic, strong) NSString *longitudeStr;
 
 @end
 
@@ -28,12 +32,14 @@
     
     self.dataSource = [NSMutableArray new];
     self.cachePath = [NSString stringWithFormat:@"%@RestaurantList.plist", CategoryCache];
+    
+    _page = 1;
+    [self readCacheData];
     [self setUpDatas];
 }
 
-- (void)setUpDatas{
-    
-    [self.dataSource removeAllObjects];
+// 读取缓存的数据
+- (void)readCacheData{
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
         
@@ -45,19 +51,35 @@
             [self.dataSource addObject:model];
         }
         [self.tableView reloadData];
-        
-    }else{
     }
+    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+        self.latitudeStr = [NSString stringWithFormat:@"%f",latitude];
+        self.longitudeStr = [NSString stringWithFormat:@"%f",longitude];
+        [self setUpDatas];
+    }];
     
+}
+
+//初始化请求第一页，下拉刷新
+- (void)setUpDatas{
+
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
-    HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:@"116.479168" lat:@"35.462766" pageNum:1];
+    HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:self.longitudeStr lat:self.latitudeStr pageNum:_page];
+    
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
         NSArray * listArray = [dic objectForKey:@"result"];
-        [SAVORXAPI saveFileOnPath:self.cachePath withArray:listArray];
+        if (listArray.count == 0) {
+            [self showTopFreshLabelWithTitle:@"当前已为最新内容"];
+            if (hud) {
+                [hud hideAnimated:NO];
+            }
+            return;
+        }
         
+        [SAVORXAPI saveFileOnPath:self.cachePath withArray:listArray];
         //解析获取当前分类下数据列表
         for(NSDictionary *dict in listArray){
             RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
@@ -84,16 +106,58 @@
         }
     }];
     
-    
-//    for (int i = 0; i < 10; i ++ ) {
-//        RestaurantListModel *model = [[RestaurantListModel alloc] init];
-//        model.title = @"餐厅名字";
-//        model.distance = @"100m";
-//        model.address = @"地址：北京市朝阳区大望路永峰大厦六楼";
-//        [self.dataSource addObject:model];
-//    }
-//    [self.tableView reloadData];
 }
+
+- (void)upMoreDatas{
+    
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+    HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:@"116.479168" lat:@"35.462766" pageNum:_page];
+    
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray * listArray = [dic objectForKey:@"result"];
+        
+        if (listArray.count == 0) {
+            _page = _page -1;
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            if (hud) {
+                [hud hideAnimated:NO];
+            }
+            return;
+        }
+        
+        [SAVORXAPI saveFileOnPath:self.cachePath withArray:listArray];
+        //解析获取当前分类下数据列表
+        for(NSDictionary *dict in listArray){
+            RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
+            [self.dataSource addObject:model];
+        }
+        [self.tableView reloadData];
+        
+        if (hud) {
+            [hud hideAnimated:NO];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        _page = _page -1;
+        if (hud) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+            [hud hideAnimated:NO];
+        }
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+        _page = _page -1;
+        if (hud) {
+            [self.tableView.mj_footer endRefrenshWithNoNetWork];
+            [self showNoNetWorkView];
+            [hud hideAnimated:NO];
+        }
+    }];
+}
+
 
 #pragma mark -- 懒加载
 - (UITableView *)tableView
@@ -104,7 +168,9 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = [UIColor colorWithRed:245 green:245 blue:245 alpha:0];
+//        _tableView.backgroundColor = [UIColor colorWithRed:245 green:245 blue:245 alpha:0];
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.backgroundView = nil;
         _tableView.showsVerticalScrollIndicator = NO;
         [self.view addSubview:_tableView];
         
@@ -150,8 +216,8 @@
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor clearColor];
+    cell.contentView.backgroundColor = [UIColor clearColor];
     
-//    cell.bgView.layer.masksToBounds = YES;
     cell.bgView.layer.cornerRadius = 3.0;
     cell.bgView.layer.shadowColor = [UIColor blackColor].CGColor;//shadowColor阴影颜色
     cell.bgView.layer.shadowOffset = CGSizeMake(0,0);
@@ -166,6 +232,11 @@
 {
     return 100;
 }
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return [Helper autoHeightWith:15.f];
+//}
 
 #pragma mark - 下拉刷新，上拉加载更多
 //页面顶部下弹状态栏显示
@@ -210,10 +281,15 @@
 
 //下拉刷新页面数据
 - (void)refreshData{
+    _page = 1;
+    [self setUpDatas];
     [self.tableView.mj_header endRefreshing];
+    [self.tableView.mj_footer resetNoMoreData];
 }
 
 - (void)getMoreData{
+    _page = _page + 1;
+    [self upMoreDatas];
     [self.tableView.mj_footer endRefreshing];
 }
 

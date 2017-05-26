@@ -11,6 +11,8 @@
 #import "RestaurantListModel.h"
 #import "HSHomeRestaurantList.h"
 #import "RestaurantListTableViewCell.h"
+#import "RDLocationManager.h"
+#import "RestaurantListViewController.h"
 
 @interface RDScreenLocationView ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -43,7 +45,7 @@
         {
             [self addSubview:self.loadingView];
             [self makeConstraintsWithUpstatusView:self.loadingView];
-            [self setUpDatas];
+            [self readCacheDatas];
         }
             break;
             
@@ -67,11 +69,10 @@
     }
 }
 
-// 初始化数据
-- (void)setUpDatas{
+//读取缓存数据
+- (void)readCacheDatas{
     
     [self.dataSource removeAllObjects];
-    
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
         
         //如果本地缓存的有数据，则先从本地读取缓存的数据
@@ -82,11 +83,19 @@
             [self.dataSource addObject:model];
         }
         [self showWithStatus:RDScreenLocation_Compelete];
-        
-    }else{
     }
     
-    HSHomeRestaurantList *request = [[HSHomeRestaurantList alloc] initWithLng:@"116.479168" lat:@"35.462766"];
+    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+        NSString *latitudeStr = [NSString stringWithFormat:@"%f",latitude];
+        NSString *longitudeStr = [NSString stringWithFormat:@"%f",longitude];
+        [self setUpDatasWithLatitude:latitudeStr longitude:longitudeStr];
+    }];
+}
+
+// 初始化数据
+- (void)setUpDatasWithLatitude:(NSString *)latitude longitude:(NSString *)longitude{
+
+    HSHomeRestaurantList *request = [[HSHomeRestaurantList alloc] initWithLng:longitude lat:latitude];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.dataSource removeAllObjects];
@@ -104,10 +113,10 @@
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
+         [self showWithStatus:RDScreenLocation_Faild];
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+         [self showWithStatus:RDScreenLocation_Faild];
     }];
 }
 
@@ -422,12 +431,16 @@
         _faildView = [[UIView alloc] initWithFrame:CGRectZero];
         UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         [imageView setImage:[UIImage imageNamed:@"shibai"]];
+        imageView.userInteractionEnabled = YES;
         [_faildView addSubview:imageView];
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.mas_equalTo(0);
             make.centerY.mas_equalTo(-30);
             make.size.mas_equalTo(CGSizeMake(61, 51));
         }];
+        UITapGestureRecognizer *singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(failViewTap)];
+        singleTapRecognizer.numberOfTapsRequired = 1;
+        [_faildView addGestureRecognizer:singleTapRecognizer];
         
         UILabel * label = [[UILabel alloc] initWithFrame:CGRectZero];
         label.font = [UIFont systemFontOfSize:16];
@@ -445,4 +458,9 @@
     return _faildView;
 }
 
+- (void)failViewTap{
+    
+    [self showWithStatus:RDScreenLocation_Loading];
+    
+}
 @end

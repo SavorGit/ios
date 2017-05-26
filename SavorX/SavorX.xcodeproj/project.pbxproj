@@ -330,6 +330,13 @@
 		965240DF1ED532F30090E1C8 /* RestaurantListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240DE1ED532F30090E1C8 /* RestaurantListViewController.m */; };
 		965240E21ED559930090E1C8 /* HSRestaurantListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */; };
 		965240E51ED57F270090E1C8 /* HSHomeRestaurantList.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240E41ED57F270090E1C8 /* HSHomeRestaurantList.m */; };
+		965240FD1ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240F71ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework */; };
+		965240FE1ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240F81ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework */; };
+		965240FF1ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240F91ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework */; };
+		965241001ED6BE8E0090E1C8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240FB1ED6BE8E0090E1C8 /* libcrypto.a */; };
+		965241011ED6BE8E0090E1C8 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240FC1ED6BE8E0090E1C8 /* libssl.a */; };
+		965241041ED6BE9E0090E1C8 /* RDLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 965241031ED6BE9E0090E1C8 /* RDLocationManager.m */; };
+		965241061ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 965241051ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd */; };
 		96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */; };
 		9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */; };
 		9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A71E7159210060CE0B /* DocGuided.png */; };
@@ -865,6 +872,14 @@
 		965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSRestaurantListRequest.m; sourceTree = "<group>"; };
 		965240E31ED57F270090E1C8 /* HSHomeRestaurantList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSHomeRestaurantList.h; sourceTree = "<group>"; };
 		965240E41ED57F270090E1C8 /* HSHomeRestaurantList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSHomeRestaurantList.m; sourceTree = "<group>"; };
+		965240F71ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Base.framework; sourceTree = "<group>"; };
+		965240F81ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Location.framework; sourceTree = "<group>"; };
+		965240F91ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Utils.framework; sourceTree = "<group>"; };
+		965240FB1ED6BE8E0090E1C8 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
+		965240FC1ED6BE8E0090E1C8 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
+		965241021ED6BE9E0090E1C8 /* RDLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDLocationManager.h; sourceTree = "<group>"; };
+		965241031ED6BE9E0090E1C8 /* RDLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDLocationManager.m; sourceTree = "<group>"; };
+		965241051ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		96608FF01E80D47900D28A61 /* VideoLauchMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLauchMovieViewController.h; sourceTree = "<group>"; };
 		96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLauchMovieViewController.m; sourceTree = "<group>"; };
 		9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoGuidedTwoDimensionalCode.h; sourceTree = "<group>"; };
@@ -887,10 +902,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				965241061ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd in Frameworks */,
 				069D46C41DB5E91D00F85D72 /* libxml2.tbd in Frameworks */,
+				965240FE1ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework in Frameworks */,
+				965241011ED6BE8E0090E1C8 /* libssl.a in Frameworks */,
+				965240FD1ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework in Frameworks */,
 				069CDFDB1D991FAB00A0C1A6 /* UserNotifications.framework in Frameworks */,
 				0628B0A41D715DB900DB63D4 /* UMMobClick.framework in Frameworks */,
 				06BD18D91E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a in Frameworks */,
+				965241001ED6BE8E0090E1C8 /* libcrypto.a in Frameworks */,
 				963AEA161EB2DEA700578A0A /* libOpenInstallSDK.a in Frameworks */,
 				0614AA3F1D66AC310080D710 /* ImageIO.framework in Frameworks */,
 				0614AA3D1D66A7790080D710 /* libstdc++.tbd in Frameworks */,
@@ -900,6 +920,7 @@
 				0614AA351D66A73D0080D710 /* CoreGraphics.framework in Frameworks */,
 				0614AA331D66A7320080D710 /* libiconv.tbd in Frameworks */,
 				0614AA311D66A7150080D710 /* SystemConfiguration.framework in Frameworks */,
+				965240FF1ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework in Frameworks */,
 				0684DF231D5191F6006756D4 /* WebKit.framework in Frameworks */,
 				06FA32611D3E1192001F5B37 /* Security.framework in Frameworks */,
 				26A8176745C4493D3EE874EA /* libPods-SavorX.a in Frameworks */,
@@ -1600,6 +1621,7 @@
 		06FA311F1D3E0EA0001F5B37 /* HelpLibs */ = {
 			isa = PBXGroup;
 			children = (
+				965240F61ED6BE8E0090E1C8 /* BaiduMap_IOSSDK_v3.3.1_Lib */,
 				060E41FD1E4CB03E009A94FC /* SDCycleScrollView */,
 				062E99CB1E49C2F30042C924 /* UIImage+WaterMark */,
 				0627E0B61E3231DA00DAED92 /* LGSideMenuController */,
@@ -1616,6 +1638,7 @@
 		06FA325F1D3E1184001F5B37 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				965241051ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd */,
 				069D46C31DB5E91D00F85D72 /* libxml2.tbd */,
 				069CDFDA1D991FAB00A0C1A6 /* UserNotifications.framework */,
 				0628B0A31D715DB900DB63D4 /* UMMobClick.framework */,
@@ -1713,6 +1736,7 @@
 		06FA33B11D3E1FF2001F5B37 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				965240E61ED6B8640090E1C8 /* RDLocationTool */,
 				062CEFCF1EC2F9FC00EA6AE0 /* RDAwardTool */,
 				060650591E014CF100E43024 /* HSWebServerManager */,
 				06F9B2A51D6EEDBD00C7F0A4 /* GCCKeyChain */,
@@ -2134,6 +2158,35 @@
 				965240DE1ED532F30090E1C8 /* RestaurantListViewController.m */,
 			);
 			path = RestaurantList;
+			sourceTree = "<group>";
+		};
+		965240E61ED6B8640090E1C8 /* RDLocationTool */ = {
+			isa = PBXGroup;
+			children = (
+				965241021ED6BE9E0090E1C8 /* RDLocationManager.h */,
+				965241031ED6BE9E0090E1C8 /* RDLocationManager.m */,
+			);
+			path = RDLocationTool;
+			sourceTree = "<group>";
+		};
+		965240F61ED6BE8E0090E1C8 /* BaiduMap_IOSSDK_v3.3.1_Lib */ = {
+			isa = PBXGroup;
+			children = (
+				965240F71ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework */,
+				965240F81ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework */,
+				965240F91ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework */,
+				965240FA1ED6BE8E0090E1C8 /* thirdlibs */,
+			);
+			path = BaiduMap_IOSSDK_v3.3.1_Lib;
+			sourceTree = "<group>";
+		};
+		965240FA1ED6BE8E0090E1C8 /* thirdlibs */ = {
+			isa = PBXGroup;
+			children = (
+				965240FB1ED6BE8E0090E1C8 /* libcrypto.a */,
+				965240FC1ED6BE8E0090E1C8 /* libssl.a */,
+			);
+			path = thirdlibs;
 			sourceTree = "<group>";
 		};
 		9670C4A21E70F5DE0060CE0B /* videoGuide */ = {
@@ -2614,6 +2667,7 @@
 				06FFCCAF1E6EBF6A00ADEA94 /* RDCheackSence.m in Sources */,
 				4780584E1DF9908D0091C305 /* HSSubmitFeedbackRequest.m in Sources */,
 				06FA33991D3E171D001F5B37 /* ContextFilterLogFormatter.m in Sources */,
+				965241041ED6BE9E0090E1C8 /* RDLocationManager.m in Sources */,
 				062E99CE1E49C2F30042C924 /* UIImage+WaterMark.m in Sources */,
 				0688C4931E97760100D7D2A9 /* ShareRDViewController.m in Sources */,
 				06F5C9DF1E4D9F7200E05492 /* HSAdsModel.m in Sources */,
@@ -2841,6 +2895,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SavorX/SavorXHeader.pch;
@@ -2855,12 +2910,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/SavorX/HelpLibs/UMessage_Sdk_1.4.0",
 					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
+					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b781ec87-faaf-4a81-bbe4-195375e66372";
-				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
+				PROVISIONING_PROFILE = "cb863683-cf37-477f-a082-f29ed365e4f4";
+				PROVISIONING_PROFILE_SPECIFIER = TestHotTopicesDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2880,6 +2936,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SavorX/SavorXHeader.pch;
@@ -2894,12 +2951,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/SavorX/HelpLibs/UMessage_Sdk_1.4.0",
 					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
+					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a9b07ad7-2902-4449-90fd-3b5c922f42ed";
-				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDistribution;
+				PROVISIONING_PROFILE = "cec12aa6-fb60-4168-afb6-f2eeb0dd3c96";
+				PROVISIONING_PROFILE_SPECIFIER = "TestHotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

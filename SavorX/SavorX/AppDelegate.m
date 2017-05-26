@@ -30,8 +30,9 @@
 #import "RecommendViewController.h"
 #import "CategoryViewController.h"
 #import "HSInstallationInforUpload.h"
+#import <BaiduMapAPI_Base/BMKBaseComponent.h>
 
-@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
+@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
 @property (nonatomic, assign) BOOL is3D_Touch;
 @property (nonatomic, copy) NSString * ssid;
@@ -100,6 +101,20 @@
                 }];
             }];
         }];
+    }
+    
+    if ([BMKMapManager setCoordinateTypeUsedInBaiduMapSDK:BMK_COORDTYPE_BD09LL]) {
+        NSLog(@"经纬度类型设置成功");
+    }else{
+        NSLog(@"经纬度类型设置失败");
+    }
+    
+    BMKMapManager * manager = [[BMKMapManager alloc] init];
+    BOOL ret = [manager start:@"m7ZzBoKRq8XkUGWtpIr2fQ3RgvK85lau" generalDelegate:self];
+    if (ret) {
+        NSLog(@"地图初始化成功");
+    }else{
+        NSLog(@"地图初始化失败");
     }
 }
 
