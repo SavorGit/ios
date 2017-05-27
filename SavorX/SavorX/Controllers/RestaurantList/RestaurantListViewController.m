@@ -93,7 +93,7 @@
 
 - (void)upMoreDatas{
     
-    HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:@"116.479168" lat:@"35.462766" pageNum:_page];
+    HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:self.longitudeStr lat:self.latitudeStr pageNum:_page];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -144,7 +144,7 @@
         [self.view addSubview:_tableView];
         
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
+            make.top.mas_equalTo(10);
             make.left.mas_equalTo(0);
             make.bottom.mas_equalTo(0);
             make.right.mas_equalTo(0);
