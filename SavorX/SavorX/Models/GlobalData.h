@@ -96,8 +96,6 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 
 @property (nonatomic, strong) NSString * deviceToken;
 
-@property (nonatomic, assign) BOOL isBoxQiut;
-
 /**
  *  创建单例
  *
