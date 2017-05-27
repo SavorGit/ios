@@ -138,6 +138,7 @@
 //投屏图片
 + (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId force:(NSInteger)force success:(void (^)())success failure:(void (^)())failure
 {
+    [GlobalData shared].isBoxQiut = NO;
     NSString * hostURL = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld&force=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation,force];
     
     if (seriesId && seriesId.length > 0) {
@@ -166,6 +167,10 @@
         }else if ([[response objectForKey:@"result"] integerValue] == 2) {
         }
         else if ([[response objectForKey:@"result"] integerValue] == 4) {
+            
+            if ([GlobalData shared].isBoxQiut) {
+                return;
+            }
             
             NSString *infoStr = [response objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
