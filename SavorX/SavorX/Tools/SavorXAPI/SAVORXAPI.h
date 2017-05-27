@@ -247,4 +247,6 @@ typedef NS_ENUM(NSInteger, interactType) {
 
 + (void)screenEggsStopGame;
 
++ (void)cancelAllURLTask;
+
 @end

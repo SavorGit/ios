@@ -361,8 +361,6 @@
         return;
     }
     
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
-    
     PHAsset * asset = [self.PHAssetSource objectAtIndex:self.currentIndex];
     CGFloat width = asset.pixelWidth;
     CGFloat height = asset.pixelHeight;
@@ -378,6 +376,10 @@
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         
         if ([GlobalData shared].isBindRD) {
+            
+            [MBProgressHUD hideHUDForView:self.view animated:NO];
+            MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+            
             [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
                     self.playButton.selected = YES;

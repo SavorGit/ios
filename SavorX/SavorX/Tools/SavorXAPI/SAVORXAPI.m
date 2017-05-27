@@ -815,4 +815,9 @@
     [[Helper getRootNavigationController] presentViewController:alert animated:YES completion:nil];
 }
 
++ (void)cancelAllURLTask
+{
+    [[self sharedManager].operationQueue cancelAllOperations];
+}
+
 @end
