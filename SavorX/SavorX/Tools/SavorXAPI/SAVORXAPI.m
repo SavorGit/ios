@@ -138,15 +138,15 @@
 //投屏图片
 + (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId force:(NSInteger)force success:(void (^)())success failure:(void (^)())failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld&force=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation,force];
+    NSString * hostURL = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld&force=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation,force];
     
     if (seriesId && seriesId.length > 0) {
-        urlStr = [NSString stringWithFormat:@"%@&seriesId=%@", urlStr, seriesId];
+        hostURL = [NSString stringWithFormat:@"%@&seriesId=%@", hostURL, seriesId];
     }
     
-    urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    hostURL = [hostURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSURLSessionDataTask * task = [[self sharedManager] POST:urlStr parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    NSURLSessionDataTask * task = [[self sharedManager] POST:hostURL parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         [formData appendPartWithFileData:data name:@"fileUpload" fileName:name mimeType:@"image/jpeg"];
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -223,15 +223,15 @@
 // 投屏文档
 + (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld&force=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation,force];
+    NSString * hostURL = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld&force=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation,force];
     
     if (seriesId && seriesId.length > 0) {
-        urlStr = [NSString stringWithFormat:@"%@&seriesId=%@", urlStr, seriesId];
+        hostURL = [NSString stringWithFormat:@"%@&seriesId=%@", hostURL, seriesId];
     }
     
-    urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    hostURL = [hostURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSURLSessionDataTask * task = [[self sharedManager] POST:urlStr parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    NSURLSessionDataTask * task = [[self sharedManager] POST:hostURL parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         [formData appendPartWithFileData:data name:@"fileUpload" fileName:name mimeType:@"image/jpeg"];
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -261,12 +261,8 @@
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 
                 [SAVORXAPI postFileImageWithURL:urlStr data:data name:name type:type isThumbnail:isThumbnail rotation:rotation seriesId:seriesId force:1 success:^(NSURLSessionDataTask *task, id responseObject) {
-                    
-                    NSDictionary* response = [NSJSONSerialization JSONObjectWithData:responseObject
-                                                                             options:kNilOptions
-                                                                               error:nil];
                     if (success) {
-                        success(task, response);
+                        success(task, responseObject);
                     }
                     
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {

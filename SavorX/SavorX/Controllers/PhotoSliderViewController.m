@@ -33,6 +33,7 @@
 @property (nonatomic, strong) UIButton * secondTimeButton;
 @property (nonatomic, strong) UIButton * thirdTimeButton;
 @property (nonatomic, assign) BOOL isAnimation;
+@property (nonatomic, assign) BOOL isBoxQiut;
 
 @end
 
@@ -84,6 +85,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenDidQiutWithBox) name:RDBoxQuitScreenNotification object:nil];
 }
 
+- (void)rightItemDidClickedToScreenImage
+{
+    self.isBoxQiut = NO;
+    [self screenCurrentImage];
+}
+
 - (void)screenDidQiutWithBox
 {
     self.playButton.selected = NO;
@@ -91,7 +98,8 @@
     [self.timer invalidate];
     self.timer = nil;
     self.isScreen = NO;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+    self.isBoxQiut = YES;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(rightItemDidClickedToScreenImage)];
     self.seriesId = [Helper getTimeStamp];
     self.statusLabel.text = @"幻灯片";
 }
@@ -198,7 +206,7 @@
         self.isScreen = YES;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
     }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(rightItemDidClickedToScreenImage)];
         [SAVORXAPI showConnetToTVAlert:@"sliderPhoto"];
         self.isScreen = NO;
         self.playButton.selected = NO;
@@ -337,7 +345,7 @@
         [self.task cancel];
     }
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(rightItemDidClickedToScreenImage)];
         self.seriesId = [Helper getTimeStamp];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.statusLabel.text = @"幻灯片";
@@ -360,6 +368,11 @@
         [[HomeAnimationView animationView] scanQRCode];
         return;
     }
+    
+    if (self.isBoxQiut) {
+        return;
+    }
+    
     self.playButton.selected = YES;
     [self.timer setFireDate:[NSDate distantFuture]];
     [self.timer invalidate];
@@ -404,7 +417,7 @@
                             [self.task cancel];
                         }
                         [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(rightItemDidClickedToScreenImage)];
                         self.statusLabel.text = @"幻灯片";
                     }];
                 }];
@@ -470,7 +483,7 @@
                             }
                             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                             [MBProgressHUD showTextHUDwithTitle:@"幻灯片投屏失败" delay:1.5f];
-                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(rightItemDidClickedToScreenImage)];
                             self.statusLabel.text = @"幻灯片";
                         }];
                     }];
@@ -584,7 +597,7 @@
                                 [self.task cancel];
                             }
                             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(rightItemDidClickedToScreenImage)];
                             self.statusLabel.text = @"幻灯片";
                         }];
                     }];

@@ -93,7 +93,6 @@
                     [view show];
                 });
             }
-            NSLog(@"请求状态为: %ld， 请求信息为: %@", type, tipMsg);
         }
         
         return [GCDWebServerResponse responseWithStatusCode:200];
