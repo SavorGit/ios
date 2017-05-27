@@ -215,7 +215,9 @@
         if (type == 2) {
             
         }else{
-            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+            if (error.code != -999) {
+                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+            }
         }
         failure();
     }];
@@ -813,6 +815,10 @@
 + (void)cancelAllURLTask
 {
     [[self sharedManager].operationQueue cancelAllOperations];
+    [[self sharedManager].uploadTasks makeObjectsPerformSelector:@selector(cancel)];
+    [[self sharedManager].tasks makeObjectsPerformSelector:@selector(cancel)];
+    [[self sharedManager].downloadTasks makeObjectsPerformSelector:@selector(cancel)];
+    [[self sharedManager].dataTasks makeObjectsPerformSelector:@selector(cancel)];
 }
 
 @end

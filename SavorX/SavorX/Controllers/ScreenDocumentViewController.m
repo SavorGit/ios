@@ -280,7 +280,9 @@
                             [alert show];
                             [self stop];
                         }else{
-                            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+                            if (error.code != -999) {
+                                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+                            }
                         }
                     }
                 }];
