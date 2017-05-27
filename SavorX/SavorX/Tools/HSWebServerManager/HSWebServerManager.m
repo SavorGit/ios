@@ -68,7 +68,6 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                     [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
-                    [GlobalData shared].isBoxQiut = YES;
                     [SAVORXAPI cancelAllURLTask];
                     
                     RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
@@ -86,7 +85,6 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                     [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
-                    [GlobalData shared].isBoxQiut = YES;
                     
                     RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
                     RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
