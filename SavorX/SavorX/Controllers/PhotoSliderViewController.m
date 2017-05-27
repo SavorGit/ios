@@ -360,61 +360,53 @@
         [[HomeAnimationView animationView] scanQRCode];
         return;
     }
-    self.playButton.selected = YES;
-    [self.timer setFireDate:[NSDate distantFuture]];
-    [self.timer invalidate];
-    self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-    [[HomeAnimationView animationView] startScreenWithViewController:self];
-    self.isScreen = YES;
-    self.statusLabel.text = @"正在播放图片";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        PHAsset * asset = [self.PHAssetSource objectAtIndex:self.currentIndex];
-        CGFloat width = asset.pixelWidth;
-        CGFloat height = asset.pixelHeight;
-        CGFloat scale = width / height;
-        CGFloat tempScale = 1920 / 1080.f;
-        CGSize size;
-        if (scale > tempScale) {
-            size = CGSizeMake(1920, 1920 / scale);
-        }else{
-            size = CGSizeMake(1080 * scale, 1080);
-        }
-        NSString * name = asset.localIdentifier;
-        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-            
-            if ([GlobalData shared].isBindRD) {
-                [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
-                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
-                        
-                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
-                            
-                        } failure:^{
-                            
-                        }];
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+    
+    PHAsset * asset = [self.PHAssetSource objectAtIndex:self.currentIndex];
+    CGFloat width = asset.pixelWidth;
+    CGFloat height = asset.pixelHeight;
+    CGFloat scale = width / height;
+    CGFloat tempScale = 1920 / 1080.f;
+    CGSize size;
+    if (scale > tempScale) {
+        size = CGSizeMake(1920, 1920 / scale);
+    }else{
+        size = CGSizeMake(1080 * scale, 1080);
+    }
+    NSString * name = asset.localIdentifier;
+    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        
+        if ([GlobalData shared].isBindRD) {
+            [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
+                    self.playButton.selected = YES;
+                    [self.timer setFireDate:[NSDate distantFuture]];
+                    [self.timer invalidate];
+                    self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
+                    [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    self.isScreen = YES;
+                    self.statusLabel.text = @"正在播放图片";
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                    
+                    [hud hideAnimated:NO];
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
                         
                     } failure:^{
-                        self.playButton.selected = NO;
-                        [self.timer invalidate];
-                        self.timer = nil;
-                        self.isScreen = NO;
-                        if (self.task) {
-                            [self.task cancel];
-                        }
-                        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-                        self.statusLabel.text = @"幻灯片";
+                        
                     }];
+                    
+                } failure:^{
+                    [hud hideAnimated:NO];
                 }];
-            }else if ([GlobalData shared].isBindDLNA) {
-                [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                    [self screenDLNAImageWithKeyStr:keyStr];
-                }];
-            }
-        }];
-    }
+            }];
+        }else if ([GlobalData shared].isBindDLNA) {
+            [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
+                [self screenDLNAImageWithKeyStr:keyStr];
+            }];
+        }
+    }];
 }
 
 //图片滑动切换
