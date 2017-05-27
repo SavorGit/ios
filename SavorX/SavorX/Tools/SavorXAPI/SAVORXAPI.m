@@ -172,6 +172,9 @@
                 return;
             }
             
+            if ([[UIApplication sharedApplication].keyWindow viewWithTag:333]) {
+                return;
+            }
             NSString *infoStr = [response objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
