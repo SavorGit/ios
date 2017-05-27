@@ -63,7 +63,6 @@
 //初始化请求第一页，下拉刷新
 - (void)setUpDatas{
 
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:self.longitudeStr lat:self.latitudeStr pageNum:_page];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -73,9 +72,6 @@
         NSArray * listArray = [dic objectForKey:@"result"];
         if (listArray.count == 0) {
             [self showTopFreshLabelWithTitle:@"当前已为最新内容"];
-            if (hud) {
-                [hud hideAnimated:NO];
-            }
             return;
         }
         
@@ -86,31 +82,17 @@
             [self.dataSource addObject:model];
         }
         [self.tableView reloadData];
-
-        if (hud) {
-            [hud hideAnimated:NO];
-        }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        if (hud) {
-            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
-            [hud hideAnimated:NO];
-        }
-        
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
-        if (hud) {
-            [self showNoNetWorkView];
-            [hud hideAnimated:NO];
-        }
     }];
     
 }
 
 - (void)upMoreDatas{
     
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
     HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:@"116.479168" lat:@"35.462766" pageNum:_page];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -121,9 +103,6 @@
         if (listArray.count == 0) {
             _page = _page -1;
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            if (hud) {
-                [hud hideAnimated:NO];
-            }
             return;
         }
         
@@ -135,26 +114,16 @@
         }
         [self.tableView reloadData];
         
-        if (hud) {
-            [hud hideAnimated:NO];
-        }
-        
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         _page = _page -1;
-        if (hud) {
-            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
-            [hud hideAnimated:NO];
-        }
+        [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         _page = _page -1;
-        if (hud) {
-            [self.tableView.mj_footer endRefrenshWithNoNetWork];
-            [self showNoNetWorkView];
-            [hud hideAnimated:NO];
-        }
+        [self.tableView.mj_footer endRefrenshWithNoNetWork];
+        [self showNoNetWorkView];
     }];
 }
 
