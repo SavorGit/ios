@@ -76,7 +76,8 @@
     }
     self.distanceLabel.text = distanceStr;
     
-    CGSize size = [model.addr sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(self.width - 50,10000.0f)lineBreakMode:UILineBreakModeWordWrap];
+    NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
+    CGSize size = [model.addr boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 50, 0) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
     self.addressLabel.frame = CGRectMake(10, CGRectGetMaxY(_titleLabel.frame), size.width , size.height);
     self.addressLabel.numberOfLines = 0; 
     self.addressLabel.text = model.addr;
