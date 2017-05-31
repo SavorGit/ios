@@ -318,6 +318,10 @@
         //应用处于前台时的远程推送接受
         //必须加这句代码
         [UMessage didReceiveRemoteNotification:userInfo];
+        [SAVORXAPI postUMHandleWithContentId:@"receive_notification" key:nil value:nil];
+        if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+        }
         
     }else{
         //应用处于前台时的本地推送接受
@@ -329,7 +333,11 @@
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler{
     NSDictionary * userInfo = response.notification.request.content.userInfo;
     
+     [SAVORXAPI postUMHandleWithContentId:@"click_notification" key:nil value:nil];
+    
     if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+        
+        [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
         
     }else if ([[userInfo objectForKey:@"type"] integerValue] == 2){
         
@@ -364,6 +372,10 @@
         //应用处于后台时的远程推送接受
         //必须加这句代码
         [UMessage didReceiveRemoteNotification:userInfo];
+        [SAVORXAPI postUMHandleWithContentId:@"receive_notification" key:nil value:nil];
+        if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+        }
         
     }else{
         //应用处于后台时的本地推送接受
@@ -564,6 +576,10 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [UMessage didReceiveRemoteNotification:userInfo];
+    [SAVORXAPI postUMHandleWithContentId:@"receive_notification" key:nil value:nil];
+    if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+        [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+    }
 }
 
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler

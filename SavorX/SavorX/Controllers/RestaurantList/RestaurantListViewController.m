@@ -41,6 +41,8 @@
     [super viewDidLoad];
     
     self.title = @"提供投屏的餐厅";
+    [SAVORXAPI postUMHandleWithContentId:@"hotel_map_list" key:nil value:nil];
+    
     self.dataSource = [NSMutableArray new];
     self.cachePath = [NSString stringWithFormat:@"%@RestaurantList.plist", CategoryCache];
     
@@ -270,6 +272,9 @@
 
 //下拉刷新页面数据
 - (void)refreshData{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"hotel_map_list_refresh" key:nil value:nil];
+    
     _page = 1;
     [self setUpDatas];
     [self.tableView.mj_header endRefreshing];
@@ -277,6 +282,9 @@
 }
 
 - (void)getMoreData{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"hotel_map_list_last" key:nil value:nil];
+    
     _page = _page + 1;
     [self upMoreDatas];
     [self.tableView.mj_footer endRefreshing];

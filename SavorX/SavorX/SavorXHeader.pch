@@ -30,16 +30,16 @@
 #define TEST_DEV_TYPE 0 //测试环境切换宏，1代表线上环境，0代表测试环境
 
 #if TEST_DEV_TYPE
-
 #define AliyunBucketName @"redian-produce"
 #define HOSTURL @"http://mobile.rerdian.com/" //正式地址
+#define NSLog(...) {}
 
 #else
-
 #define AliyunBucketName @"redian-development"
 #define HOSTURL @"http://devp.testapi.rerdian.com/"  //测试地址
-
+#define NSLog(...) NSLog(__VA_ARGS__)
 #endif
+
 
 #define kVersionCode 2017051701
 
