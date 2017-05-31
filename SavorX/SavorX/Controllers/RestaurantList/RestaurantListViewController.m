@@ -30,6 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.title = @"可投屏餐厅";
     self.dataSource = [NSMutableArray new];
     self.cachePath = [NSString stringWithFormat:@"%@RestaurantList.plist", CategoryCache];
     

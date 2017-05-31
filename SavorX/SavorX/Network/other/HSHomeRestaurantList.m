@@ -14,7 +14,7 @@
     
     if (self = [super init]) {
         
-        self.methodName = [NSString stringWithFormat:@"Screendistance/distance/getHotelDistance?lat=%@&lng=%@&hotelid=%ld",lat,lng,[GlobalData shared].hotelId];
+        self.methodName = [NSString stringWithFormat:@"Screendistance/distance/getHotelDistance?%@&lat=%@&lng=%@&hotelid=%ld", [Helper getURLPublic], lat, lng, [GlobalData shared].hotelId];
         self.httpMethod = BGNetworkRequestHTTPGet;
         
     }
