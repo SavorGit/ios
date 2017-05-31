@@ -289,14 +289,21 @@
     
     [mgr setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         
-        if (status == AFNetworkReachabilityStatusReachableViaWiFi) {
-            [GlobalData shared].isWifiStatus = YES;
-            [[GCCDLNA defaultManager] startSearchPlatform];
-        }else{
-            [GlobalData shared].isWifiStatus = NO;
-            [[GlobalData shared] disconnect];
+        if (status == AFNetworkReachabilityStatusUnknown) {
+            [GlobalData shared].networkStatus = RDNetworkStatusUnknown;
+        }else if (status == AFNetworkReachabilityStatusNotReachable) {
+            [GlobalData shared].scene = RDSceneNothing;
             [[GCCDLNA defaultManager] stopSearchDevice];
-            [[GCCDLNA defaultManager] callQRcodeFromPlatform];
+            [GlobalData shared].networkStatus = RDNetworkStatusNotReachable;
+        }else if (status == AFNetworkReachabilityStatusReachableViaWiFi) {
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
+            [[GCCDLNA defaultManager] startSearchPlatform];
+        }else if (status == AFNetworkReachabilityStatusReachableViaWWAN){
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWWAN;
+            [GlobalData shared].scene = RDSceneNothing;
+            [[GCCDLNA defaultManager] stopSearchDevice];
+        }else{
+            [GlobalData shared].networkStatus = RDNetworkStatusUnknown;
         }
     }];
     
@@ -575,7 +582,7 @@
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
         }else if ([Helper isWifiStatus]){
-            [GlobalData shared].isWifiStatus = YES;
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
                 if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
                     [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
@@ -620,7 +627,7 @@
         }
     }else{
         if ([Helper isWifiStatus]) {
-            [GlobalData shared].isWifiStatus = YES;
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
         }
         
         [GlobalData shared].is3DTouchEnable = YES;
@@ -705,7 +712,7 @@
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
         }else if ([Helper isWifiStatus]){
-            [GlobalData shared].isWifiStatus = YES;
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
                 if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
                     [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];

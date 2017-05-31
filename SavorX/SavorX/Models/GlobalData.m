@@ -187,9 +187,7 @@ static GlobalData* single = nil;
         _scene = scene;
         if (scene == RDSceneNothing) {
             [[NSNotificationCenter defaultCenter] postNotificationName:RDDidNotFoundSenceNotification object:nil];
-            if (_isBindRD || _isBindDLNA) {
-                [self disconnect];
-            }
+            [self disconnect];
             self.hotelId = 0;
             self.callQRCodeURL = @"";
         }else{
@@ -205,11 +203,11 @@ static GlobalData* single = nil;
     }
 }
 
-- (void)setIsWifiStatus:(BOOL)isWifiStatus
+- (void)setNetworkStatus:(NSInteger)networkStatus
 {
-    if (_isWifiStatus != isWifiStatus) {
-        _isWifiStatus = isWifiStatus;
-        if (!isWifiStatus) {
+    if (_networkStatus != networkStatus) {
+        _networkStatus = networkStatus;
+        if (_networkStatus != RDNetworkStatusReachableViaWiFi) {
             self.scene = RDSceneNothing;
             [MBProgressHUD removeTextHUD];
         }

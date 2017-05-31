@@ -25,7 +25,10 @@
 
 + (BOOL)checkHttpServerIsWifi
 {
-    return [GlobalData shared].isWifiStatus;
+    if ([GlobalData shared].networkStatus == RDNetworkStatusReachableViaWiFi) {
+        return YES;
+    }
+    return NO;
 }
 
 + (BOOL)checkHttpServerWithBoxIP:(NSString *)boxIP

@@ -16,6 +16,7 @@
 #import "RDLogStatisticsAPI.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
+#import "RestaurantListViewController.h"
 
 @interface HSVideoViewController ()<GCCPlayerViewDelegate>
 
@@ -350,6 +351,11 @@
 //点播动作被触发
 - (void)videoShouldBeDemand
 {
+    if ([GlobalData shared].scene != RDSceneHaveRDBox) {
+        RestaurantListViewController *restVC = [[RestaurantListViewController alloc] initWithScreenAlert];
+        [self.navigationController pushViewController:restVC animated:YES];
+    }
+    
     if (self.model.canPlay) {
         
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -416,7 +422,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[HSVideoViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[DemandViewController class]]) {
+    UIViewController * topVC = [Helper getRootNavigationController].topViewController;
+    if ([topVC isKindOfClass:[HSConnectViewController class]] || [topVC isKindOfClass:[HSVideoViewController class]] || [topVC isKindOfClass:[DemandViewController class]] || [topVC isKindOfClass:[RestaurantListViewController class]]) {
         
     }else{
         [self.playView shouldRelease];

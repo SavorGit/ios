@@ -12,6 +12,7 @@
 #import "MJRefresh.h"
 #import "HSRestaurantListRequest.h"
 #import "RDLocationManager.h"
+#import "RDAlertView.h"
 
 @interface RestaurantListViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -22,20 +23,33 @@
 @property (nonatomic, assign) int page;
 @property (nonatomic, strong) NSString *latitudeStr;
 @property (nonatomic, strong) NSString *longitudeStr;
+@property (nonatomic, assign) BOOL isScreenAlert;
 
 @end
 
 @implementation RestaurantListViewController
 
+- (instancetype)initWithScreenAlert
+{
+    if (self = [super init]) {
+        self.isScreenAlert = YES;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"可投屏餐厅";
+    self.title = @"提供投屏的餐厅";
     self.dataSource = [NSMutableArray new];
     self.cachePath = [NSString stringWithFormat:@"%@RestaurantList.plist", CategoryCache];
     
     _page = 1;
     [self readCacheData];
+    
+    if (self.isScreenAlert) {
+        [self showScreenAlert];
+    }
 }
 
 // 读取缓存的数据
@@ -274,6 +288,16 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void)showScreenAlert
+{
+    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"进入餐厅连接包间wifi, 精彩内容即可投屏到电视上!"];
+    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+        
+    } bold:YES];
+    [alert addActions:@[action]];
+    [alert show];
 }
 
 @end

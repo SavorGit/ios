@@ -922,7 +922,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         
         if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
             
-            if ([GlobalData shared].isWifiStatus) {
+            if ([GlobalData shared].networkStatus == RDNetworkStatusReachableViaWiFi) {
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
             
@@ -975,7 +975,14 @@ static NSInteger const kWMControllerCountUndefined = -1;
 #pragma mark -- 首页按钮以及弹窗的代理回调
 - (void)RDHomeScreenButtonDidBeClicked
 {
-    [self.locationView showWithStatus:RDScreenLocation_Loading];
+    if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+        [self.locationView showWithStatus:RDScreenLocation_Loading];
+    }else if ([GlobalData shared].networkStatus == RDNetworkStatusNotReachable){
+        [MBProgressHUD showTextHUDwithTitle:@"当前网络不可用" delay:1.5f];
+    }else{
+        RestaurantListViewController *restVC = [[RestaurantListViewController alloc] initWithScreenAlert];
+        [self.navigationController pushViewController:restVC animated:YES];
+    }
 }
 
 - (void)RDScreenLocationViewDidSelectTabButtonWithIndex:(NSInteger)index

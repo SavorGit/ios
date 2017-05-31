@@ -425,7 +425,7 @@
     [array insertObject:[array lastObject] atIndex:0];
     [array addObject:[array objectAtIndex:1]];
     slider.PHAssetSource = array;
-    if ([GlobalData shared].isWifiStatus) {
+    if ([GlobalData shared].networkStatus == RDNetworkStatusReachableViaWiFi) {
         if ([GlobalData shared].isBindRD) {
                 
             MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
