@@ -351,9 +351,11 @@
             NSString *infoStr = [result objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"cancel"];
             } bold:NO];
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 [self demandVideoWithModel:model force:1];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"ensure"];
             } bold:NO];
             [alertView addActions:@[action,actionOne]];
             [alertView show];

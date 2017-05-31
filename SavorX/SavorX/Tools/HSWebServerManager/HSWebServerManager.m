@@ -62,6 +62,8 @@
             
             if (type == 1) {
                 
+                [SAVORXAPI postUMHandleWithContentId:@"competitioned_hint" key:nil value:nil];
+                
                 tipMsg = [tipMsg stringByAppendingString:@"正在操作投屏, 您的投屏已经退出了"];
                 
                 //type = 1 投屏被抢投，手机退出投屏

@@ -1045,6 +1045,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 {
     RestaurantListViewController *restVC = [[RestaurantListViewController alloc] init];
     [self.navigationController pushViewController:restVC animated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"home_hotel_more" key:nil value:nil];
 }
 
 - (void)setupViews
@@ -1257,6 +1258,11 @@ static NSInteger const kWMControllerCountUndefined = -1;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    // 正在投屏返回首页
+    if ([HomeAnimationView animationView].isScreening) {
+        [SAVORXAPI postUMHandleWithContentId:@"home_toscreen_state" key:nil value:nil];
+    }
     
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     self.sideMenuController.leftViewSwipeGestureEnabled = YES;
@@ -1573,9 +1579,11 @@ static NSInteger const kWMControllerCountUndefined = -1;
             NSString *infoStr = [result objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"cancel"];
             } bold:NO];
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 [self demandVideoWithModel:model force:1 categoryID:categoryID];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"ensure"];
             } bold:NO];
             [alertView addActions:@[action,actionOne]];
             [alertView show];

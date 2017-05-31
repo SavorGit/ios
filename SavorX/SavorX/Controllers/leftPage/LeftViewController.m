@@ -127,6 +127,7 @@
             RestaurantListViewController * restVC = [[RestaurantListViewController alloc] init];
             restVC.title = [_itemArys objectAtIndex:indexPath.row];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:restVC  animated:NO];
+            [SAVORXAPI postUMHandleWithContentId:@"menu_hotel_map_list" key:nil value:nil];
         }
     }
     else if (indexPath.section == 1){
