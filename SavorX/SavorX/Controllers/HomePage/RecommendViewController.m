@@ -220,6 +220,8 @@
         [SAVORXAPI postUMHandleWithContentId:@"home_load" key:@"home_load" value:@"success"];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
+        [self.tableView.mj_footer endRefreshing];
+        
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self.tableView.mj_footer endRefrenshWithNoNetWork];
         [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];

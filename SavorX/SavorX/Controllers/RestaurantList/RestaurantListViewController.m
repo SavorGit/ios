@@ -103,11 +103,18 @@
             RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer resetNoMoreData];
         [self.tableView reloadData];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
+        [self.tableView.mj_header endRefreshing];
+        
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+        [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
+        [self.tableView.mj_header endRefreshing];
         
     }];
     
@@ -134,21 +141,21 @@
             RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:model];
         }
+        [self.tableView.mj_footer endRefreshing];
         [self.tableView reloadData];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         _page = _page -1;
-        [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+        [self.tableView.mj_footer endRefreshing];
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         _page = _page -1;
+        [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
         [self.tableView.mj_footer endRefrenshWithNoNetWork];
-        [self showNoNetWorkView];
     }];
 }
-
 
 #pragma mark -- 懒加载
 - (UITableView *)tableView
@@ -277,8 +284,6 @@
     
     _page = 1;
     [self setUpDatas];
-    [self.tableView.mj_header endRefreshing];
-    [self.tableView.mj_footer resetNoMoreData];
 }
 
 - (void)getMoreData{
@@ -287,7 +292,6 @@
     
     _page = _page + 1;
     [self upMoreDatas];
-    [self.tableView.mj_footer endRefreshing];
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {
