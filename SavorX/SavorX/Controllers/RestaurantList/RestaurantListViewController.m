@@ -35,13 +35,14 @@
     
     _page = 1;
     [self readCacheData];
-    [self setUpDatas];
 }
 
 // 读取缓存的数据
 - (void)readCacheData{
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
+    BOOL isCache = [[NSFileManager defaultManager] fileExistsAtPath:self.cachePath];
+    
+    if (isCache) {
         
         //如果本地缓存的有数据，则先从本地读取缓存的数据
         NSArray * listArray = [NSArray arrayWithContentsOfFile:self.cachePath];
@@ -52,10 +53,14 @@
         }
         [self.tableView reloadData];
     }
-    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude, BOOL isUpdate) {
         self.latitudeStr = [NSString stringWithFormat:@"%f",latitude];
         self.longitudeStr = [NSString stringWithFormat:@"%f",longitude];
-        [self setUpDatas];
+        if (isUpdate) {
+            [self setUpDatas];
+        }else if (!isCache){
+            [self setUpDatas];
+        }
     }];
     
 }

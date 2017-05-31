@@ -74,7 +74,7 @@
     }else{
         self.lastLatitude = userLocation.location.coordinate.latitude;
         self.lastLongitude = userLocation.location.coordinate.longitude;
-        self.block(self.lastLatitude, self.lastLongitude);
+        self.block(self.lastLatitude, self.lastLongitude, YES);
     }
 }
 
@@ -92,10 +92,12 @@
     BMKMapPoint currentPoint = BMKMapPointForCoordinate(location.location.coordinate);
     CLLocationDistance distance = BMKMetersBetweenMapPoints(lastPotion,currentPoint);
     NSLog(@"移动了%lf米", distance);
-    if (distance >= 5.f) {
+    if (distance >= 100.f) {
         self.lastLatitude = latitude;
         self.lastLongitude = longitude;
-        self.block(latitude, longitude);
+        self.block(latitude, longitude, YES);
+    }else{
+        self.block(self.lastLatitude, self.lastLongitude, NO);
     }
 }
 
@@ -114,6 +116,7 @@
 - (void)didFailToLocateUserWithError:(NSError *)error
 {
     NSLog(@"请求定位失败，错误信息:\n%@", error.description);
+    self.block(self.lastLatitude, self.lastLongitude, YES);
 }
 
 @end
