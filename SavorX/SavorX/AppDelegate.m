@@ -319,8 +319,10 @@
         //必须加这句代码
         [UMessage didReceiveRemoteNotification:userInfo];
         [SAVORXAPI postUMHandleWithContentId:@"receive_notification" key:nil value:nil];
-        if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
-            [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+        if ([userInfo objectForKey:@"type"]) {
+            if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+                [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+            }
         }
         
     }else{
@@ -373,8 +375,10 @@
         //必须加这句代码
         [UMessage didReceiveRemoteNotification:userInfo];
         [SAVORXAPI postUMHandleWithContentId:@"receive_notification" key:nil value:nil];
-        if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
-            [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+        if ([userInfo objectForKey:@"type"]) {
+            if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+                [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+            }
         }
         
     }else{
@@ -577,8 +581,10 @@
 {
     [UMessage didReceiveRemoteNotification:userInfo];
     [SAVORXAPI postUMHandleWithContentId:@"receive_notification" key:nil value:nil];
-    if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
-        [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+    if ([userInfo objectForKey:@"type"]) {
+        if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+        }
     }
 }
 
