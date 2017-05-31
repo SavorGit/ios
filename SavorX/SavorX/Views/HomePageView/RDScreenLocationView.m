@@ -302,7 +302,7 @@
 {
     RestaurantListTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RDLocationCell" forIndexPath:indexPath];
     
-    RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [cell configModelData:model];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -310,12 +310,6 @@
     cell.bgView.backgroundColor = [UIColor clearColor];
     
     return cell;
-    
-//    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RDLocationCell" forIndexPath:indexPath];
-//    cell.textLabel.text = @"测试一下";
-//    cell.backgroundColor = [UIColor clearColor];
-//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
