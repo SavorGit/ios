@@ -10,4 +10,7 @@
 
 @interface RestaurantListViewController : BaseViewController
 
+//进入页面之后弹窗
+- (instancetype)initWithScreenAlert;
+
 @end

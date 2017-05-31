@@ -199,7 +199,7 @@
 
 - (void)show
 {
-    if ([GlobalData shared].isWifiStatus) {
+    if ([GlobalData shared].networkStatus == RDNetworkStatusReachableViaWiFi) {
         self.hidden = NO;
     }
 }
@@ -233,7 +233,7 @@
         return;
     }
     
-    if (![GlobalData shared].isWifiStatus) {
+    if ([GlobalData shared].networkStatus != RDNetworkStatusReachableViaWiFi) {
         [self goToSetting];
         return;
     }
@@ -267,7 +267,7 @@
 - (void)callQRcodeFromPlatform
 {
     
-    if ([GlobalData shared].isWifiStatus) {
+    if ([GlobalData shared].networkStatus == RDNetworkStatusReachableViaWiFi) {
         //判断用户当前是否允许小热点使用相机权限
         [self CameroIsReady];
         

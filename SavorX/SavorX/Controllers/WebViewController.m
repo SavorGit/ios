@@ -17,6 +17,7 @@
 #import "RDLogStatisticsAPI.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
+#import "RestaurantListViewController.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
 
@@ -220,6 +221,11 @@
 //视频的点播按钮被点击
 - (void)videoShouldBeDemand
 {
+    if ([GlobalData shared].scene != RDSceneHaveRDBox) {
+        RestaurantListViewController *restVC = [[RestaurantListViewController alloc] initWithScreenAlert];
+        [self.navigationController pushViewController:restVC animated:YES];
+    }
+    
     if (self.model.canPlay) {
         
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -309,7 +315,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[HSConnectViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[DemandViewController class]]) {
+    UIViewController * topVC = [Helper getRootNavigationController].topViewController;
+    if ([topVC isKindOfClass:[HSConnectViewController class]] || [topVC isKindOfClass:[WebViewController class]] || [topVC isKindOfClass:[DemandViewController class]] || [topVC isKindOfClass:[RestaurantListViewController class]]) {
         
     }else{
         [self.playView shouldRelease];

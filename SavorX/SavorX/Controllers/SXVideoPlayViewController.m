@@ -636,6 +636,7 @@
                 break;
                 
             default:
+                volume = 0;
                 break;
         }
         [[GCCUPnPManager defaultManager] setVolume:volume Success:^{

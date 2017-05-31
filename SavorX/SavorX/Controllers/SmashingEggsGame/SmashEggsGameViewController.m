@@ -559,7 +559,7 @@
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [SAVORXAPI postUMHandleWithContentId:@"game_page_result" key:@"game_page_result" value:@"prize_failure"];
-            if (![GlobalData shared].isBindRD || ![GlobalData shared].isWifiStatus) {
+            if (![GlobalData shared].isBindRD || [GlobalData shared].networkStatus != RDNetworkStatusReachableViaWiFi) {
                 [SAVORXAPI showAlertWithMessage:@"游戏超时啦, 请重新启动"];
             }
             

@@ -54,7 +54,7 @@
 
 -(void)setupDatas{
 
-    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"支持投屏的餐厅",@"清除缓存",@"当前版本"];
+    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"提供投屏的餐厅",@"清除缓存",@"当前版本"];
     _imageArys = @[@"shoucang", @"yijianfankui", @"bangzhu",@"canting", @"qingchu", @"banben"];
 }
 
@@ -125,7 +125,6 @@
         }else if (indexPath.row == 3){
             [self hideLeftViewAnimated:nil];
             RestaurantListViewController * restVC = [[RestaurantListViewController alloc] init];
-            restVC.title = [_itemArys objectAtIndex:indexPath.row];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:restVC  animated:NO];
             [SAVORXAPI postUMHandleWithContentId:@"menu_hotel_map_list" key:nil value:nil];
         }
