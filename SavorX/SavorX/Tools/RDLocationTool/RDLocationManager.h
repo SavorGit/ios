@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <BaiduMapAPI_Location/BMKLocationComponent.h>
 
-typedef void (^RDCheckUserLocationBlock)(CLLocationDegrees latitude, CLLocationDegrees longitude);
+typedef void (^RDCheckUserLocationBlock)(CLLocationDegrees latitude, CLLocationDegrees longitude, BOOL isUpdate);
 @interface RDLocationManager : NSObject
 
 + (instancetype)manager;

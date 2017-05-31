@@ -73,7 +73,8 @@
 - (void)readCacheDatas{
     
     [self.dataSource removeAllObjects];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
+    BOOL isCache = [[NSFileManager defaultManager] fileExistsAtPath:self.cachePath];
+    if (isCache) {
         
         //如果本地缓存的有数据，则先从本地读取缓存的数据
         NSArray * listArray = [NSArray arrayWithContentsOfFile:self.cachePath];
@@ -85,10 +86,14 @@
         [self showWithStatus:RDScreenLocation_Compelete];
     }
     
-    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude, BOOL isUpdate) {
         NSString *latitudeStr = [NSString stringWithFormat:@"%f",latitude];
         NSString *longitudeStr = [NSString stringWithFormat:@"%f",longitude];
-        [self setUpDatasWithLatitude:latitudeStr longitude:longitudeStr];
+        if (isUpdate) {
+            [self setUpDatasWithLatitude:latitudeStr longitude:longitudeStr];
+        }else if (!isCache) {
+            [self setUpDatasWithLatitude:latitudeStr longitude:longitudeStr];
+        }
     }];
 }
 
