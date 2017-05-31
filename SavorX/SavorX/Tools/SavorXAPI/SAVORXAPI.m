@@ -173,12 +173,15 @@
             NSString *infoStr = [response objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"pic"}];
                 if (failure) {
                     failure();
                 }
             } bold:NO];
             // 如果返回状态为4，且用户选择继续投屏，则把本方法重新调用一遍，force传1
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"pic"}];
                 
                 [SAVORXAPI postImageWithURL:urlStr data:data name:name type:type isThumbnail:isThumbnail rotation:rotation seriesId:seriesId force:1 success:^{
                     
@@ -258,12 +261,17 @@
             NSString *infoStr = [response objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"file"}];
+                
                 if (failure) {
                     failure(task, nil);
                 }
             } bold:NO];
             // 如果返回状态为4，且用户选择继续投屏，则把本方法重新调用一遍，force传1
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"file"}];
                 
                 [SAVORXAPI postFileImageWithURL:urlStr data:data name:name type:type isThumbnail:isThumbnail rotation:rotation seriesId:seriesId force:1 success:^(NSURLSessionDataTask *task, id responseObject) {
                     if (success) {
