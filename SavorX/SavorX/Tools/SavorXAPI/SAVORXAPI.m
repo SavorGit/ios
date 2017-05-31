@@ -631,6 +631,12 @@
     }
 }
 
++ (void)postUMHandleWithContentId:(NSString *)eventId withParmDic:(NSDictionary *)parmDic{
+    if (parmDic != nil) {
+        [MobClick event:eventId attributes:parmDic];
+    }
+}
+
 + (void)showAlertWithMessage:(NSString *)message
 {
     RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:message];

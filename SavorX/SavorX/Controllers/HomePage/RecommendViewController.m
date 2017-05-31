@@ -448,11 +448,11 @@
             NSString *infoStr = [result objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"cancel"];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
             } bold:NO];
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 [self demandVideoWithModel:model force:1];
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"ensure"];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"}];
             } bold:NO];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
@@ -591,11 +591,11 @@
             NSString *infoStr = [result objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"cancel"];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
             } bold:NO];
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 [self demandCycleVideoWithModel:model vodModel:vodModel force:1];
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"ensure"];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"}];
             } bold:NO];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
@@ -742,11 +742,11 @@
             NSString *infoStr = [result objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"cancel"];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
             } bold:NO];
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 [self demandCycleVideoWithModel:model type:type force:1];
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" key:@"to_screen_competition_hint" value:@"ensure"];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"}];
             } bold:NO];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
