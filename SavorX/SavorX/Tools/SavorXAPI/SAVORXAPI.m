@@ -171,7 +171,7 @@
                 return;
             }
             NSString *infoStr = [response objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"pic"}];
                 if (failure) {
@@ -259,7 +259,7 @@
         }else if ([[response objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [response objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"file"}];
@@ -306,16 +306,49 @@
 }
 
 //游戏投蛋
-+ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr hunger:(NSInteger)hunger date:(NSString *)date  success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
++ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr hunger:(NSInteger)hunger date:(NSString *)date force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    urlStr = [urlStr stringByAppendingString:@"/egg"];
+    NSString * hostURL = [urlStr stringByAppendingString:@"/egg"];
     
     NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                   @"deviceName" : [GCCGetInfo getIphoneName],
                                   @"hunger" : [NSNumber numberWithInteger:hunger],
-                                  @"date" :   date };
+                                  @"date" :   date,
+                                  @"force" : [NSNumber numberWithInteger:force]};
     
-    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    NSURLSessionDataTask * task = [self getWithURL:hostURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        
+        NSInteger code = [[result objectForKey:@"result"] integerValue];
+        if(code == 4) {
+            if ([[UIApplication sharedApplication].keyWindow viewWithTag:333]) {
+                return;
+            }
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                NSError * error = [NSError errorWithDomain:@"com.eggCancle" code:677 userInfo:nil];
+                if (failure) {
+                    failure(task, error);
+                }
+            } bold:NO];
+            
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [SAVORXAPI gameForEggsWithURL:urlStr hunger:hunger date:date force:1 success:success failure:failure];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+        }else{
+            if (success) {
+                success(task, result);
+            }
+        }
+        
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failure) {
+            failure(task, error);
+        }
+    }];
     return task;
 }
 

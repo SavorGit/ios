@@ -13,6 +13,7 @@
 #import "RestaurantListTableViewCell.h"
 #import "RDLocationManager.h"
 #import "RestaurantListViewController.h"
+#import "WMPageController.h"
 
 @interface RDScreenLocationView ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -31,6 +32,11 @@
 
 - (void)showWithStatus:(RDScreenLocationStatus)status
 {
+    UIViewController * topVC = [Helper getRootNavigationController].topViewController;
+    if (![topVC isKindOfClass:[WMPageController class]]) {
+        return;
+    }
+    
     if (!self.isShow) {
         [self showWithAnimation];
     }

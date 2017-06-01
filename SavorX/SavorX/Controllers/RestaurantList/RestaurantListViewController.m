@@ -135,7 +135,6 @@
             return;
         }
         
-        [SAVORXAPI saveFileOnPath:self.cachePath withArray:listArray];
         //解析获取当前分类下数据列表
         for(NSDictionary *dict in listArray){
             RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
