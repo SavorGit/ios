@@ -55,6 +55,8 @@
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     [SAVORXAPI postUMHandleWithContentId:@"details_end_reading" key:@"details_end_reading" value:[Helper getCurrentTimeWithFormat:@"YYYYMMddHHmmss"]];
+    self.webView.delegate = nil;
+    self.webView.scrollView.delegate = nil;
 }
 
 - (void)setupViews

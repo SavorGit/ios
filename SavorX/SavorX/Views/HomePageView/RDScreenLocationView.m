@@ -22,7 +22,6 @@
 @property (nonatomic, strong) UIView * compeleteView; //加载完成的展示控件
 @property (nonatomic, strong) UITableView * listView; //展示列表
 @property (nonatomic, strong) UIView * bottomTabView; //底部选择器
-@property (nonatomic, assign) BOOL isShow;
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, copy) NSString * cachePath;
 
@@ -32,7 +31,7 @@
 
 - (void)showWithStatus:(RDScreenLocationStatus)status
 {
-    if (!self.isShow) {
+    if (!self.superview) {
         [self showWithAnimation];
     }
     
@@ -130,7 +129,6 @@
 - (void)showWithAnimation
 {
     [[UIApplication sharedApplication].keyWindow addSubview:self];
-    self.isShow = YES;
     [UIView animateWithDuration:.2f animations:^{
         self.alpha = 1.f;
     } completion:^(BOOL finished) {
@@ -154,7 +152,6 @@
 - (void)hiddenWithAnimation
 {
     [HSHomeRestaurantList cancelRequest];
-    self.isShow = NO;
     for (NSInteger i = 0; i < 4; i++) {
         UIButton * button = [self.bottomTabView viewWithTag:10 + i];
         CGPoint center = button.center;

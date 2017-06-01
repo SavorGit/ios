@@ -290,8 +290,6 @@
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
         
         //如果是绑定状态
-        [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-        
         [self demandVideoWithModel:model force:0];
         
     }else if ([GlobalData shared].isBindDLNA && model.type == 3){
@@ -336,6 +334,7 @@
 
 - (void)demandVideoWithModel:(HSVodModel *)model force:(NSInteger)force{
     
+    [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
     [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0  force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             
