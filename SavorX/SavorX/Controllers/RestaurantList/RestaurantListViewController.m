@@ -52,6 +52,7 @@
     if (self.isScreenAlert) {
         [self showScreenAlert];
     }
+
 }
 
 // 读取缓存的数据
@@ -69,6 +70,7 @@
             [self.dataSource addObject:model];
         }
         [self.tableView reloadData];
+        
     }
     [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude, BOOL isUpdate) {
         self.latitudeStr = [NSString stringWithFormat:@"%f",latitude];
@@ -165,7 +167,6 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//        _tableView.backgroundColor = [UIColor colorWithRed:245 green:245 blue:245 alpha:0];
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.backgroundView = nil;
         _tableView.showsVerticalScrollIndicator = NO;
@@ -195,12 +196,12 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.dataSource.count;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return self.dataSource.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -217,7 +218,7 @@
     cell.bgView.layer.shadowOpacity = 0.30;//阴影透明度，默认0
     cell.bgView.layer.shadowRadius = 2;//阴影半径，默认3
     
-    RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.row];
     
     [cell configModelData:model];
     
