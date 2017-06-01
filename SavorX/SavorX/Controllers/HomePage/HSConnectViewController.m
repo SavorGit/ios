@@ -576,6 +576,13 @@
         model.sid = [result objectForKey:@"ssid"];
         [GlobalData shared].cacheModel = model;
         [self showAlertWithWifiName:[result objectForKey:@"ssid"]];
+    }else{
+        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [self hidenMaskingLoadingView];
+        self.failConectLabel.hidden = NO;
+        self.reConnectBtn.hidden = NO;
+        self.textLabel.hidden = YES;
+        [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
     }
 }
 

@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, interactType) {
  *  @param date       投蛋时间
  * @return NSURLSessionDataTask对象
  */
-+ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr  hunger:(NSInteger)hunger date:(NSString *)date   success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
++ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr  hunger:(NSInteger)hunger date:(NSString *)date force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
 
 /**
  *  游戏砸蛋请求

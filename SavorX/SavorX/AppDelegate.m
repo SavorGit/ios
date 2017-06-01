@@ -337,37 +337,39 @@
     
      [SAVORXAPI postUMHandleWithContentId:@"click_notification" key:nil value:nil];
     
-    if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
-        
-        [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
-        
-    }else if ([[userInfo objectForKey:@"type"] integerValue] == 2){
-        
-        //如果type等于2，代表是一个进入详情的item推送
-        NSDictionary * dict = [userInfo objectForKey:@"params"];
-        
-        if (dict && [dict isKindOfClass:[NSDictionary class]]) {
-            //如果收到的推送是一个节目的推送则初始化该节目的一个model
-            HSVodModel * model = [[HSVodModel alloc] initWithDictionary:dict];
+    if ([userInfo objectForKey:@"type"]) {
+        if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
             
-            if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
-                //如果根视图是LGSide，则可以正常进行跳转
-                LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
-                BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
-                if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
-                    [baseNa popToRootViewControllerAnimated:NO];
+            [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+            
+        }else if ([[userInfo objectForKey:@"type"] integerValue] == 2){
+            
+            //如果type等于2，代表是一个进入详情的item推送
+            NSDictionary * dict = [userInfo objectForKey:@"params"];
+            
+            if (dict && [dict isKindOfClass:[NSDictionary class]]) {
+                //如果收到的推送是一个节目的推送则初始化该节目的一个model
+                HSVodModel * model = [[HSVodModel alloc] initWithDictionary:dict];
+                
+                if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
+                    //如果根视图是LGSide，则可以正常进行跳转
+                    LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
+                    BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
+                    if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
+                        [baseNa popToRootViewControllerAnimated:NO];
+                    }
+                    if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
+                        WMPageController * page = (WMPageController *)baseNa.topViewController;
+                        [page didReceiveRemoteNotification:model];
+                    }
+                }else{
+                    //如果根视图不是LGSide，则进行存储，等待首页加载完成后进行处理
+                    [GlobalData shared].isLaunchedByNotification = YES;
+                    [GlobalData shared].launchModel = model;
                 }
-                if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
-                    WMPageController * page = (WMPageController *)baseNa.topViewController;
-                    [page didReceiveRemoteNotification:model];
-                }
-            }else{
-                //如果根视图不是LGSide，则进行存储，等待首页加载完成后进行处理
-                [GlobalData shared].isLaunchedByNotification = YES;
-                [GlobalData shared].launchModel = model;
             }
+            
         }
-        
     }
     
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {

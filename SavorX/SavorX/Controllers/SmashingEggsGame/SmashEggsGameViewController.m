@@ -496,7 +496,7 @@
         
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
         
-        [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate force:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 [self stop];
                 [self.eggsView stopShakeAnimation];
@@ -509,7 +509,9 @@
             [hud hideAnimated:NO];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"请求失败，请重试"];
+            if (error.code != 677) {
+                [MBProgressHUD showTextHUDwithTitle:@"请求失败，请重试"];
+            }
         }];
         
     }else{

@@ -13,6 +13,7 @@
 #import "RestaurantListTableViewCell.h"
 #import "RDLocationManager.h"
 #import "RestaurantListViewController.h"
+#import "WMPageController.h"
 
 @interface RDScreenLocationView ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -31,6 +32,11 @@
 
 - (void)showWithStatus:(RDScreenLocationStatus)status
 {
+    UIViewController * topVC = [Helper getRootNavigationController].topViewController;
+    if (![topVC isKindOfClass:[WMPageController class]]) {
+        return;
+    }
+    
     if (!self.isShow) {
         [self showWithAnimation];
     }
@@ -302,7 +308,7 @@
 {
     RestaurantListTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RDLocationCell" forIndexPath:indexPath];
     
-    RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [cell configModelData:model];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -310,12 +316,6 @@
     cell.bgView.backgroundColor = [UIColor clearColor];
     
     return cell;
-    
-//    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RDLocationCell" forIndexPath:indexPath];
-//    cell.textLabel.text = @"测试一下";
-//    cell.backgroundColor = [UIColor clearColor];
-//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
