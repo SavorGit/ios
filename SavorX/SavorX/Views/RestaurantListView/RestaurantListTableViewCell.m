@@ -53,12 +53,13 @@
     }];
     
     _addressLabel = [[UILabel alloc]init];
-    _addressLabel.text = @"地址：北京市朝阳区大望路永峰大厦601";
+    _addressLabel.text = @"";
     _addressLabel.font = [UIFont systemFontOfSize:14];
     _addressLabel.textColor = UIColorFromRGB(0x444444);
-    [_bgView addSubview:_addressLabel];
+    _addressLabel.numberOfLines = 2;
+     [_bgView addSubview:_addressLabel];
     [_addressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(self.width, 20));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 50, 34));
         make.top.mas_equalTo(_titleLabel.mas_bottom);
         make.left.mas_equalTo(10);
     }];
@@ -76,11 +77,12 @@
     }
     self.distanceLabel.text = distanceStr;
     
-    NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
-    CGSize size = [model.addr boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 50, 0) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
-    self.addressLabel.frame = CGRectMake(10, CGRectGetMaxY(_titleLabel.frame), size.width , size.height);
-    self.addressLabel.numberOfLines = 0; 
     self.addressLabel.text = model.addr;
+    
+//    NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
+//    CGSize size = [model.addr boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 50, 0) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+//    self.addressLabel.frame = CGRectMake(10, CGRectGetMaxY(_titleLabel.frame), size.width , size.height);
+//    self.addressLabel.text = model.addr;
     
 }
 
