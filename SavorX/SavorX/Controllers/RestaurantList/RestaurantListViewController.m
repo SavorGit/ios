@@ -94,10 +94,6 @@
         [self.dataSource removeAllObjects];
         NSDictionary *dic = (NSDictionary *)response;
         NSArray * listArray = [dic objectForKey:@"result"];
-        if (listArray.count == 0) {
-            [self showTopFreshLabelWithTitle:@"当前已为最新内容"];
-            return;
-        }
         
         [SAVORXAPI saveFileOnPath:self.cachePath withArray:listArray];
         //解析获取当前分类下数据列表

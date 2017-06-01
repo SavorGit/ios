@@ -32,11 +32,6 @@
 
 - (void)showWithStatus:(RDScreenLocationStatus)status
 {
-    UIViewController * topVC = [Helper getRootNavigationController].topViewController;
-    if (![topVC isKindOfClass:[WMPageController class]]) {
-        return;
-    }
-    
     if (!self.isShow) {
         [self showWithAnimation];
     }
@@ -158,6 +153,7 @@
 //动画隐藏
 - (void)hiddenWithAnimation
 {
+    [HSHomeRestaurantList cancelRequest];
     self.isShow = NO;
     for (NSInteger i = 0; i < 4; i++) {
         UIButton * button = [self.bottomTabView viewWithTag:10 + i];
@@ -280,12 +276,12 @@
 
 - (void)tabButtonDidBeClicked:(UIButton *)button
 {
+    [self hiddenWithAnimation];
     if (self.delegate && [self.delegate respondsToSelector:@selector(RDScreenLocationViewDidSelectTabButtonWithIndex:)]) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.delegate RDScreenLocationViewDidSelectTabButtonWithIndex:button.tag - 10];
         });
     }
-    [self hiddenWithAnimation];
 }
 
 - (void)moreButtonDidBeClicked
