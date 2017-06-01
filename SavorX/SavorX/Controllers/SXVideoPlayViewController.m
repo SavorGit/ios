@@ -470,7 +470,7 @@
             [self createTimer];
             [self.tableView reloadData];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
-            
+            self.isPlayEnd = YES;
             NSString *infoStr = [result objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
@@ -484,6 +484,7 @@
             [alertView show];
             
         }else{
+            self.isPlayEnd = YES;
             self.footerView.videoPlayButton.selected = YES;
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
         }
@@ -510,7 +511,7 @@
             [self createTimer];
             [self.tableView reloadData];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
-            
+            self.isPlayEnd = YES;
             NSString *infoStr = [result objectForKey:@"info"];
             RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
@@ -525,6 +526,7 @@
             
         }
         else{
+            self.isPlayEnd = YES;
             self.footerView.videoPlayButton.selected = YES;
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
         }

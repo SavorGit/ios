@@ -17,11 +17,27 @@
 #import "PhotoTool.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
+#import "LGSideMenuController.h"
+#import "RDScreenLocationView.h"
 
 @implementation OpenFileTool
 
 + (void)screenFileWithPath:(NSString *)path
 {
+    if ([[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass:[LGSideMenuController class]]) {
+        LGSideMenuController * lgSide = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        if (lgSide.isLeftViewShowing) {
+            [lgSide hideLeftView:nil];
+        }
+        
+        for (UIView * view in [UIApplication sharedApplication].keyWindow.subviews) {
+            if ([view isKindOfClass:[RDScreenLocationView class]]) {
+                RDScreenLocationView * locationView = (RDScreenLocationView *)view;
+                [locationView hiddenWithAnimation];
+            }
+        }
+    }
+    
     NSArray * tempArray = [path componentsSeparatedByString:NSHomeDirectory()];
     NSString * inboxPath = [NSHomeDirectory() stringByAppendingString:[tempArray lastObject]];
     FileType type = [OpenFileTool getFileTypeWithPath:inboxPath];
