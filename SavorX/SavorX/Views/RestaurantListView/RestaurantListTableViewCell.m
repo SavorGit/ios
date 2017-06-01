@@ -53,15 +53,24 @@
     }];
     
     _addressLabel = [[UILabel alloc]init];
-    _addressLabel.text = @"地址：北京市朝阳区大望路永峰大厦601";
+    _addressLabel.text = @"北京市朝阳区大望路永峰大厦六楼601室";
+    _addressLabel.frame = CGRectMake(10, 40, kMainBoundsWidth - 50 , kMainBoundsWidth - 50);
     _addressLabel.font = [UIFont systemFontOfSize:14];
     _addressLabel.textColor = UIColorFromRGB(0x444444);
-    [_bgView addSubview:_addressLabel];
-    [_addressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(self.width, 20));
-        make.top.mas_equalTo(_titleLabel.mas_bottom);
-        make.left.mas_equalTo(10);
-    }];
+    _addressLabel.numberOfLines = 0;
+     [_bgView addSubview:_addressLabel];
+    
+    NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
+    CGSize size = [_addressLabel.text  boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 50, 0) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+    _addressLabel.frame = CGRectMake(10, 40, size.width , size.height);
+    
+   
+    
+//    [_addressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake(size.width, size.height));
+//        make.top.mas_equalTo(_titleLabel.mas_bottom);
+//        make.left.mas_equalTo(10);
+//    }];
 }
 
 - (void)configModelData:(RestaurantListModel *)model{
@@ -76,10 +85,10 @@
     }
     self.distanceLabel.text = distanceStr;
     
+
     NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
     CGSize size = [model.addr boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 50, 0) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
     self.addressLabel.frame = CGRectMake(10, CGRectGetMaxY(_titleLabel.frame), size.width , size.height);
-    self.addressLabel.numberOfLines = 0; 
     self.addressLabel.text = model.addr;
     
 }

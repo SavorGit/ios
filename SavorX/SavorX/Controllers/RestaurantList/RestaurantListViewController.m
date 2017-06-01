@@ -201,10 +201,6 @@
 {
     RestaurantListTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RestauranCell" forIndexPath:indexPath];
     
-    RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.section];
-    
-    [cell configModelData:model];
-    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor clearColor];
     cell.contentView.backgroundColor = [UIColor clearColor];
@@ -214,6 +210,10 @@
     cell.bgView.layer.shadowOffset = CGSizeMake(0,0);
     cell.bgView.layer.shadowOpacity = 0.30;//阴影透明度，默认0
     cell.bgView.layer.shadowRadius = 2;//阴影半径，默认3
+    
+    RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.section];
+    
+    [cell configModelData:model];
     
     return cell;
 }
