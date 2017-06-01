@@ -32,11 +32,6 @@
 
 - (void)showWithStatus:(RDScreenLocationStatus)status
 {
-    UIViewController * topVC = [Helper getRootNavigationController].topViewController;
-    if (![topVC isKindOfClass:[WMPageController class]]) {
-        return;
-    }
-    
     if (!self.isShow) {
         [self showWithAnimation];
     }
@@ -158,6 +153,7 @@
 //动画隐藏
 - (void)hiddenWithAnimation
 {
+    [HSHomeRestaurantList cancelRequest];
     self.isShow = NO;
     for (NSInteger i = 0; i < 4; i++) {
         UIButton * button = [self.bottomTabView viewWithTag:10 + i];
