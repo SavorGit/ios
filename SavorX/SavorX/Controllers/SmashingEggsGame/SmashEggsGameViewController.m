@@ -61,6 +61,7 @@
     _isShake = NO;
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(haClosed) name:RDBoxQuitScreenNotification object:nil];
 }
 
 - (void)creatBgVoiceWithLoops:(NSInteger)loop{
@@ -634,6 +635,11 @@
     [self dismissViewWithAnimationDuration:0.3f];
     [self eggsViewStartAnimation];
     _isShake = NO;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
