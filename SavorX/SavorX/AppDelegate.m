@@ -292,7 +292,6 @@
         if (status == AFNetworkReachabilityStatusUnknown) {
             [GlobalData shared].networkStatus = RDNetworkStatusUnknown;
         }else if (status == AFNetworkReachabilityStatusNotReachable) {
-            [GlobalData shared].scene = RDSceneNothing;
             [[GCCDLNA defaultManager] stopSearchDevice];
             [GlobalData shared].networkStatus = RDNetworkStatusNotReachable;
         }else if (status == AFNetworkReachabilityStatusReachableViaWiFi) {
@@ -300,7 +299,6 @@
             [[GCCDLNA defaultManager] startSearchPlatform];
         }else if (status == AFNetworkReachabilityStatusReachableViaWWAN){
             [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWWAN;
-            [GlobalData shared].scene = RDSceneNothing;
             [[GCCDLNA defaultManager] stopSearchDevice];
         }else{
             [GlobalData shared].networkStatus = RDNetworkStatusUnknown;

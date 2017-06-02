@@ -902,6 +902,8 @@
 
 - (void)shouldRelease
 {
+    self.webView.delegate = nil;
+    self.webView.scrollView.delegate = nil;
     if (self.timer) {
         [self.timer setFireDate:[NSDate distantFuture]];
         [self.timer invalidate];
@@ -920,9 +922,7 @@
     self.maskingView.hidden = YES;
     self.screenButton.hidden = NO;
     self.screenButton.enabled = YES;
-    [self.timer setFireDate:[NSDate distantFuture]];
-    [self.timer invalidate];
-    self.timer = nil;
+    [self shouldRelease];
     [self quitBack];
 }
 

@@ -29,4 +29,7 @@ typedef enum : NSUInteger {
 
 - (void)showWithStatus:(RDScreenLocationStatus)status;
 
+//动画隐藏
+- (void)hiddenWithAnimation;
+
 @end

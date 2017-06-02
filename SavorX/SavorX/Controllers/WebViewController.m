@@ -320,6 +320,8 @@
         
     }else{
         [self.playView shouldRelease];
+        self.webView.delegate = nil;
+        self.webView.scrollView.delegate = nil;
     }
     
     [super viewDidDisappear:animated];
