@@ -254,35 +254,37 @@
         if ([GlobalData shared].isBindRD) {
             [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
                 
+                [self.task cancel];
+                
                 self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
-                    if (self.task == task) {
-                        if (successBlock) {
-                            successBlock();
-                        }
-                        self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
-                            
-                        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                            
-                        }];
+                    if (successBlock) {
+                        successBlock();
                     }
+                    self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
+                        
+                    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                        
+                    }];
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     
-                    if (self.task == task) {
-                        if (failureBlock) {
-                            failureBlock();
-                        }
-                        if ([error.domain isEqualToString:@"fileScreen"]) {
-                            RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:error.localizedDescription];
-                            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
-                                
-                            } bold:YES];
-                            [alert addActions:@[action]];
-                            [alert show];
-                            [self stop];
-                        }else{
-                            if (error.code != -999) {
-                                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-                            }
+                    if (failureBlock) {
+                        failureBlock();
+                    }
+                    if ([error.domain isEqualToString:@"cancleFileScreen"]) {
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+                        self.isScreen = NO;
+                    }
+                    if ([error.domain isEqualToString:@"fileScreen"]) {
+                        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:error.localizedDescription];
+                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+                            
+                        } bold:YES];
+                        [alert addActions:@[action]];
+                        [alert show];
+                        [self stop];
+                    }else{
+                        if (error.code != -999) {
+                            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
                         }
                     }
                 }];
@@ -310,11 +312,7 @@
 - (void)PageBack
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    if (self.isLockScreen) {
-        [self lockButtonDidClicked];
-    }
-    
+        
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
         [self interfaceOrientation:UIInterfaceOrientationPortrait];
         return;
@@ -378,9 +376,6 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                 
                 [[HomeAnimationView animationView] stopScreen];
-                
-                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
-                self.isScreen = NO;
             }];
         });
     }

@@ -10,6 +10,7 @@
 #import "GCDWebServerDataResponse.h"
 #import "GCDWebServerFileResponse.h"
 #import "RDAlertView.h"
+#import "HomeAnimationView.h"
 
 @implementation HSWebServerManager
 
@@ -44,59 +45,63 @@
     
     [webServer addHandlerForMethod:@"GET" path:@"/stopProjection" requestClass:[GCDWebServerRequest class] processBlock:^GCDWebServerResponse *(__kindof GCDWebServerRequest *request) {
         
-        NSDictionary * params = request.query;
-        
-        if ([params objectForKey:@"type"]) {
+        if ([HomeAnimationView animationView].isScreening) {
+            NSDictionary * params = request.query;
             
-            /*获取操作type
-             type = 1 投屏被抢投，手机退出投屏
-             type = 2 机顶盒主动或者意外退出投屏，通知手机退出投屏
-             */
-            NSInteger type = [[params objectForKey:@"type"] integerValue];
-            
-            //获取机顶盒当前的状态信息
-            NSString * tipMsg = @"其它手机";
-            if ([params objectForKey:@"tipMsg"]) {
-                tipMsg = [params objectForKey:@"tipMsg"];
-            }
-            
-            if (type == 1) {
+            if ([params objectForKey:@"type"]) {
                 
-                [SAVORXAPI postUMHandleWithContentId:@"competitioned_hint" key:nil value:nil];
+                /*获取操作type
+                 type = 1 投屏被抢投，手机退出投屏
+                 type = 2 机顶盒主动或者意外退出投屏，通知手机退出投屏
+                 */
+                NSInteger type = [[params objectForKey:@"type"] integerValue];
                 
-                tipMsg = [tipMsg stringByAppendingString:@"正在操作投屏, 您的投屏已经退出了"];
+                //获取机顶盒当前的状态信息
+                NSString * tipMsg = @"其它手机";
+                if ([params objectForKey:@"tipMsg"]) {
+                    tipMsg = [params objectForKey:@"tipMsg"];
+                }
                 
-                //type = 1 投屏被抢投，手机退出投屏
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
-                    [SAVORXAPI cancelAllURLTask];
+                if (type == 1) {
                     
-                    RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
-                    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
-                        
-                    } bold:YES];
-                    [view addActions:@[action]];
-                    [view show];
-                });
-            }else if (type == 2){
-                
-                tipMsg = @"您的投屏已经退出了";
-                
-                //type = 2 机顶盒主动或者意外退出投屏，通知手机退出投屏
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
-                    [SAVORXAPI cancelAllURLTask];
+                    [SAVORXAPI postUMHandleWithContentId:@"competitioned_hint" key:nil value:nil];
                     
-                    RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
-                    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
+                    tipMsg = [tipMsg stringByAppendingString:@"正在操作投屏, 您的投屏已经退出了"];
+                    
+                    //type = 1 投屏被抢投，手机退出投屏
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
+                        [SAVORXAPI cancelAllURLTask];
                         
-                    } bold:YES];
-                    [view addActions:@[action]];
-                    [view show];
-                });
+                        RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
+                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
+                            
+                        } bold:YES];
+                        [view addActions:@[action]];
+                        [view show];
+                    });
+                }else if (type == 2){
+                    
+                    tipMsg = @"您的投屏已经退出了";
+                    
+                    //type = 2 机顶盒主动或者意外退出投屏，通知手机退出投屏
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
+                        [SAVORXAPI cancelAllURLTask];
+                        
+                        RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
+                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
+                            
+                        } bold:YES];
+                        [view addActions:@[action]];
+                        [view show];
+                    });
+                }
             }
+        }else{
+            
         }
         
         return [GCDWebServerResponse responseWithStatusCode:200];

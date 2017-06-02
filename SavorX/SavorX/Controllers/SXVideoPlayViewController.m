@@ -156,13 +156,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(voideoPlayStatusCellConnectAction) name:RDDidBindDeviceNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidPlayEnd) name:RDBoxQuitScreenNotification object:nil];
     
-    self.tableView.tableHeaderView = self.headBackView;
     if (kMainBoundsWidth < 375) {
         UIView * view = self.footerView;
         view.frame = CGRectMake(0, 0, kMainBoundsWidth, 400);
         self.tableView.tableFooterView = view;
+        
+        CGFloat height = 230.f / 375.f * kMainBoundsWidth;
+        self.headBackView.frame = CGRectMake(0, 0, kMainBoundsWidth, height + 99);
+        self.tableView.tableHeaderView = self.headBackView;
     }else{
         self.tableView.tableFooterView =  self.footerView;
+        self.tableView.tableHeaderView = self.headBackView;
     }
     [self.headBackView.palySlider setThumbImage:[UIImage imageNamed:@"slider_thumb"] forState:UIControlStateNormal];
     self.headBackView.palySlider.minimumValue = 1;
@@ -472,7 +476,7 @@
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             self.isPlayEnd = YES;
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
             } bold:NO];
@@ -513,7 +517,7 @@
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             self.isPlayEnd = YES;
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
             } bold:NO];

@@ -292,12 +292,14 @@
         if (status == AFNetworkReachabilityStatusUnknown) {
             [GlobalData shared].networkStatus = RDNetworkStatusUnknown;
         }else if (status == AFNetworkReachabilityStatusNotReachable) {
+            [self screenShouldBeStop];
             [[GCCDLNA defaultManager] stopSearchDevice];
             [GlobalData shared].networkStatus = RDNetworkStatusNotReachable;
         }else if (status == AFNetworkReachabilityStatusReachableViaWiFi) {
             [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
             [[GCCDLNA defaultManager] startSearchPlatform];
         }else if (status == AFNetworkReachabilityStatusReachableViaWWAN){
+            [self screenShouldBeStop];
             [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWWAN;
             [[GCCDLNA defaultManager] stopSearchDevice];
         }else{
@@ -721,10 +723,12 @@
     if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
         if ([GlobalData shared].isBindRD) {
             if (![HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].RDBoxDevice.BoxIP]) {
+                [self screenShouldBeStop];
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
             if (![[Helper getWifiName] isEqualToString:[GlobalData shared].RDBoxDevice.sid]) {
+                [self screenShouldBeStop];
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
@@ -763,6 +767,21 @@
         if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
             [[HomeAnimationView animationView] stopScreen];
         }
+    }
+}
+
+- (void)screenShouldBeStop
+{
+    if ([HomeAnimationView animationView].isScreening) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([GlobalData shared].networkStatus == RDNetworkStatusNotReachable) {
+                [MBProgressHUD showNetworkStatusTextHUDWithTitle:@"网络不可用，已经断开连接" delay:1.5f];
+            }else{
+                [MBProgressHUD showNetworkStatusTextHUDWithTitle:@"与电视断开连接，请重试" delay:1.5f];
+            }
+        });
     }
 }
 

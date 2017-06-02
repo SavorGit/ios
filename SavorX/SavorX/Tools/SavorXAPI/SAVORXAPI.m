@@ -171,7 +171,7 @@
                 return;
             }
             NSString *infoStr = [response objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"pic"}];
                 if (failure) {
@@ -259,13 +259,14 @@
         }else if ([[response objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [response objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"file"}];
                 
+                NSError * error = [NSError errorWithDomain:@"cancleFileScreen" code:-999 userInfo:nil];
                 if (failure) {
-                    failure(task, nil);
+                    failure(task, error);
                 }
             } bold:NO];
             // 如果返回状态为4，且用户选择继续投屏，则把本方法重新调用一遍，force传1
@@ -324,7 +325,7 @@
                 return;
             }
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 NSError * error = [NSError errorWithDomain:@"com.eggCancle" code:677 userInfo:nil];
                 if (failure) {

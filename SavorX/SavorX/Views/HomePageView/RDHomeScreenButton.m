@@ -31,6 +31,7 @@
 {
     if (self = [super initWithFrame:frame]) {
         [self createViews];
+        [self setExclusiveTouch:YES];
     }
     return self;
 }

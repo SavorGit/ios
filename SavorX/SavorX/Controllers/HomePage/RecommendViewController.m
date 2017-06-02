@@ -447,7 +447,7 @@
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
             } bold:NO];
@@ -590,7 +590,7 @@
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
             } bold:NO];
@@ -729,19 +729,22 @@
     [SAVORXAPI demandWithURL:STBURL name:model.name type:type position:0 force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             
-            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
-            
             DemandViewController *view = [[DemandViewController alloc] init];
             view.categroyID = -2;
             view.model = model;
             [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+                [[HomeAnimationView animationView] startScreenWithViewController:view];
+            });
+            
             [self.parentNavigationController pushViewController:view animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投",infoStr]];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
             RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
             } bold:NO];
