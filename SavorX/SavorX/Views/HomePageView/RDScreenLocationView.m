@@ -10,7 +10,7 @@
 #import "Masonry.h"
 #import "RestaurantListModel.h"
 #import "HSHomeRestaurantList.h"
-#import "RestaurantListTableViewCell.h"
+#import "RDScreenLocationViewCell.h"
 #import "RDLocationManager.h"
 #import "RestaurantListViewController.h"
 #import "WMPageController.h"
@@ -299,14 +299,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    RestaurantListTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RDLocationCell" forIndexPath:indexPath];
+    RDScreenLocationViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"RDLocationCell" forIndexPath:indexPath];
     
     RestaurantListModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [cell configModelData:model];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor clearColor];
-    cell.bgView.backgroundColor = [UIColor clearColor];
     
     return cell;
 }
@@ -356,9 +355,9 @@
         
         [_compeleteView addSubview:self.listView];
         [self.listView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(upView.mas_bottom).offset(0);
+            make.top.equalTo(upView.mas_bottom).offset(20);
             make.left.mas_equalTo(0);
-            make.bottom.mas_equalTo(button.mas_top).offset(-10);
+            make.bottom.mas_equalTo(button.mas_top).offset(-30);
             make.right.mas_equalTo(0);
         }];
     }
@@ -369,7 +368,7 @@
 {
     if (!_listView) {
         _listView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        [_listView registerClass:[RestaurantListTableViewCell class] forCellReuseIdentifier:@"RDLocationCell"];
+        [_listView registerClass:[RDScreenLocationViewCell class] forCellReuseIdentifier:@"RDLocationCell"];
         _listView.backgroundColor = [UIColor clearColor];
         _listView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _listView.delegate = self;

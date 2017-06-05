@@ -346,6 +346,7 @@
 		96BCE3CA1EC19DE100B1A3F7 /* HSEggsResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */; };
 		96BCE4231EC2C05300B1A3F7 /* RDGoldenEggs.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */; };
 		96BCE4291EC2F3DB00B1A3F7 /* RDPrizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */; };
+		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -895,6 +896,8 @@
 		96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDGoldenEggs.m; sourceTree = "<group>"; };
 		96BCE4271EC2F3DB00B1A3F7 /* RDPrizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPrizeView.h; sourceTree = "<group>"; };
 		96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPrizeView.m; sourceTree = "<group>"; };
+		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
+		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2147,6 +2150,8 @@
 			children = (
 				965240D91ED532E30090E1C8 /* RestaurantListTableViewCell.h */,
 				965240DA1ED532E30090E1C8 /* RestaurantListTableViewCell.m */,
+				96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */,
+				96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */,
 			);
 			path = RestaurantListView;
 			sourceTree = "<group>";
@@ -2687,6 +2692,7 @@
 				061B4EBB1E4850B2000D5E07 /* PhotoHandleView.m in Sources */,
 				06F07B7D1D768EE900AD7B7E /* HelpViewController.m in Sources */,
 				4733B7541E305C21006889A2 /* HomeAnimationView.m in Sources */,
+				96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */,
 				0627E0C21E3231DA00DAED92 /* UIViewController+LGSideMenuController.m in Sources */,
 				069076651E51904C00CA1AC4 /* ArticleReadViewController.m in Sources */,
 				0620412D1DC742100073C8A8 /* SliderListViewController.m in Sources */,
