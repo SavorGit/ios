@@ -389,7 +389,6 @@
             [SAVORXAPI pauseVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
                 if ([[result objectForKey:@"result"] integerValue] != 0) {
                     [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-                    self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
                     [self changeTimerWithPlayStatus];
                 }else{
                     button.selected = !button.selected;
@@ -398,7 +397,6 @@
                 button.enabled = YES;
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
-                self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
                 [self changeTimerWithPlayStatus];
                 self.isHandle = NO;
                 button.enabled = YES;

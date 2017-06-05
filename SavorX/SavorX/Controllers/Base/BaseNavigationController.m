@@ -10,6 +10,7 @@
 #import "ScreenDocumentViewController.h"
 #import "WebViewController.h"
 #import "UIViewController+LGSideMenuController.h"
+#import "WMPageController.h"
 
 @interface BaseNavigationController ()
 
@@ -37,6 +38,14 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
+    
+    if ([self.topViewController isKindOfClass:[WMPageController class]]) {
+        WMPageController * vc = (WMPageController *)self.topViewController;
+        if (vc.isShowScreenView) {
+            return UIStatusBarStyleDefault;
+        }
+    }
+    
     return UIStatusBarStyleLightContent;
 }
 

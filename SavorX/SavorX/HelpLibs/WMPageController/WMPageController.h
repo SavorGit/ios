@@ -308,6 +308,8 @@ typedef NS_ENUM(NSUInteger, WMPageControllerPreloadPolicy) {
 /** MenuView 内部视图与左右的间距 */
 @property (nonatomic, assign) CGFloat menuViewContentMargin;
 
+@property (nonatomic, assign) BOOL isShowScreenView;
+
 /**
  *  左滑时同时启用其他手势，比如系统左滑、sidemenu左滑。默认 NO
     (会引起一个小问题，第一个和最后一个控制器会变得可以斜滑, 还未解决)

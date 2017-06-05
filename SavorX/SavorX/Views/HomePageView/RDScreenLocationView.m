@@ -253,7 +253,7 @@
         make.right.mas_equalTo(1);
         make.height.mas_equalTo(50);
     }];
-    [backButton addTarget:self action:@selector(hiddenWithAnimation) forControlEvents:UIControlEventTouchUpInside];
+    [backButton addTarget:self action:@selector(backButtonDidClicked) forControlEvents:UIControlEventTouchUpInside];
     
     UILabel * tabTitlteLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     tabTitlteLabel.text = @"请选择您要投屏的资料";
@@ -269,6 +269,16 @@
     }];
     
     self.alpha = 0.f;
+}
+
+- (void)backButtonDidClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(RDScreenLocationViewDidClose)]) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.delegate RDScreenLocationViewDidClose];
+        });
+    }
+    [self hiddenWithAnimation];
 }
 
 - (void)tabButtonDidBeClicked:(UIButton *)button

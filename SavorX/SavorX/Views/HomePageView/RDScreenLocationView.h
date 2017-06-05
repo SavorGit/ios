@@ -17,6 +17,8 @@ typedef enum : NSUInteger {
 @class RDScreenLocationView;
 @protocol RDScreenLocationViewDelegate <NSObject>
 
+- (void)RDScreenLocationViewDidClose;
+
 - (void)RDScreenLocationViewDidSelectTabButtonWithIndex:(NSInteger)index;
 
 - (void)RDScreenLocationViewDidSelectMoreButton;

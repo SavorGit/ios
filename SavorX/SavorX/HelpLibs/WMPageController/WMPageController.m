@@ -977,6 +977,8 @@ static NSInteger const kWMControllerCountUndefined = -1;
 {
     if ([GlobalData shared].scene == RDSceneHaveRDBox) {
         [self.locationView showWithStatus:RDScreenLocation_Loading];
+        self.isShowScreenView = YES;
+        [self setNeedsStatusBarAppearanceUpdate];
     }else if ([GlobalData shared].networkStatus == RDNetworkStatusNotReachable){
         [MBProgressHUD showTextHUDwithTitle:@"当前网络不可用" delay:1.5f];
     }else{
@@ -987,6 +989,8 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 - (void)RDScreenLocationViewDidSelectTabButtonWithIndex:(NSInteger)index
 {
+    self.isShowScreenView = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
     switch (index) {
         case 0:
         {
@@ -1050,9 +1054,17 @@ static NSInteger const kWMControllerCountUndefined = -1;
 //查看更多
 - (void)RDScreenLocationViewDidSelectMoreButton
 {
+    self.isShowScreenView = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
     RestaurantListViewController *restVC = [[RestaurantListViewController alloc] init];
     [self.navigationController pushViewController:restVC animated:YES];
     [SAVORXAPI postUMHandleWithContentId:@"home_hotel_more" key:nil value:nil];
+}
+
+- (void)RDScreenLocationViewDidClose
+{
+    self.isShowScreenView = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)setupViews
@@ -1605,4 +1617,5 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [MBProgressHUD showTextHUDwithTitle:DemandFailure];
     }];
 }
+
 @end
