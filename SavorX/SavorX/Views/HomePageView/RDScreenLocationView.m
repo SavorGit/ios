@@ -323,7 +323,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height = self.frame.size.height / 3 * 2;
-    height = height - 183;
+    height = height - 173 - 20;
     height = height / 3;
     
     return height;
@@ -367,7 +367,7 @@
         [self.listView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(upView.mas_bottom).offset(20);
             make.left.mas_equalTo(0);
-            make.bottom.mas_equalTo(button.mas_top).offset(-30);
+            make.bottom.mas_equalTo(button.mas_top).offset(-20);
             make.right.mas_equalTo(0);
         }];
     }
@@ -381,6 +381,7 @@
         [_listView registerClass:[RDScreenLocationViewCell class] forCellReuseIdentifier:@"RDLocationCell"];
         _listView.backgroundColor = [UIColor clearColor];
         _listView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _listView.showsVerticalScrollIndicator = NO;
         _listView.delegate = self;
         _listView.dataSource = self;
     }

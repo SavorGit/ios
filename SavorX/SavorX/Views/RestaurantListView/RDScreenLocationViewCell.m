@@ -50,8 +50,8 @@
     _addressLabel.numberOfLines = 2;
     [self addSubview:_addressLabel];
     [_addressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 50, 34));
-        make.top.mas_equalTo(_titleLabel.mas_bottom);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 34));
+        make.top.equalTo(_titleLabel.mas_bottom).offset(7);
         make.left.mas_equalTo(15);
     }];
 }
@@ -68,7 +68,15 @@
     }
     self.distanceLabel.text = distanceStr;
     
-    self.addressLabel.text = [model.addr stringByAppendingString:@"用讽刺儿子了户互粉互䦹覅就"];
+    NSString * detailStr = model.addr;
+    NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:14]};
+    CGSize size = [detailStr boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 30, 34) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+    [_addressLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, size.height));
+    }];
+
+    
+    self.addressLabel.text = detailStr;
         
 }
 

@@ -80,7 +80,7 @@
 
 - (void)shouldPushHelp
 {
-    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.rerdian.com/Public/html/help/helpone.html"];
+    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"];
     help.title = @"文件投屏步骤";
     [self.navigationController  pushViewController:help  animated:NO];
 }

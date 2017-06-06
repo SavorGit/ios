@@ -180,7 +180,7 @@
 
 - (void)shouldPushHelp
 {
-    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.rerdian.com/Public/html/help/helptwo.html"];
+    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helptwo.html"];
     help.title = @"连接步骤";
     [self.navigationController  pushViewController:help  animated:YES];
     [SAVORXAPI postUMHandleWithContentId:@"link_tv_help" key:nil value:nil];
