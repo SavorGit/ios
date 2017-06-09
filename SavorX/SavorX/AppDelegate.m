@@ -30,12 +30,14 @@
 #import "RecommendViewController.h"
 #import "CategoryViewController.h"
 #import "HSInstallationInforUpload.h"
+#import "HSFirstUseRequest.h"
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
 @property (nonatomic, assign) BOOL is3D_Touch;
 @property (nonatomic, copy) NSString * ssid;
+#define hasFirstOpenID @"hasFirstOpenID"
 
 @end
 
@@ -217,7 +219,40 @@
     sliderVC.leftViewWidth = width / 3 * 2;
     sliderVC.leftViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(66, 66);
     
+    [self installFirstForRequest];
+    
     return sliderVC;
+}
+
+// 首次安装调用
+- (void)installFirstForRequest{
+    
+    if (![[[NSUserDefaults standardUserDefaults] objectForKey:hasFirstOpenID] boolValue]
+        ) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:hasFirstOpenID];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        HSFirstUseRequest * request = [[HSFirstUseRequest alloc] initWithHotelId:[GlobalData shared].hotelId];
+        
+        [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            
+        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            
+            if ([[response objectForKey:@"code"] integerValue] == 20001) {
+                
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasFirstOpenID];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            
+        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+            
+            [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasFirstOpenID];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+        }];
+    }
 }
 
 - (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info

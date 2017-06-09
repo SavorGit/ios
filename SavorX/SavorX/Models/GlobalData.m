@@ -20,7 +20,6 @@ NSString * const RDDidFoundDLNASenceNotification = @"RDDidFoundDLNASenceNotifica
 NSString * const RDQiutScreenNotification = @"RDQiutScreenNotification";
 NSString * const RDBoxQuitScreenNotification = @"RDBoxQuitScreenNotification";
 
-#define hasUseHotelID @"hasUseHotelID"
 #define hasAlertDemandHelp @"hasAlertDemandHelp"
 
 static GlobalData* single = nil;
@@ -131,31 +130,6 @@ static GlobalData* single = nil;
         if (hotelId != 0) {
             [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundHotelIdNotification object:nil];
         }
-    }
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:hasUseHotelID] boolValue]
-        && hotelId != 0) {
-        
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:hasUseHotelID];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        HSFirstUseRequest * request = [[HSFirstUseRequest alloc] initWithHotelId:hotelId];
-        [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-            
-        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-            
-            if ([[response objectForKey:@"code"] integerValue] == 20001) {
-                
-            }else{
-                [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasUseHotelID];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-            
-        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-            
-            [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasUseHotelID];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-        }];
     }
 }
 
