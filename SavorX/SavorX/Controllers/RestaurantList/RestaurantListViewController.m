@@ -72,13 +72,33 @@
         [self.tableView reloadData];
         
     }
-    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude, BOOL isUpdate) {
-        self.latitudeStr = [NSString stringWithFormat:@"%f",latitude];
-        self.longitudeStr = [NSString stringWithFormat:@"%f",longitude];
-        if (isUpdate) {
+    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+        if ([GlobalData shared].VCLatitude == 0.f) {
+            
+            [GlobalData shared].VCLatitude = latitude;
+            [GlobalData shared].VCLongitude = longitude;
+            
+            self.latitudeStr = [NSString stringWithFormat:@"%lf", latitude];
+            self.longitudeStr = [NSString stringWithFormat:@"%lf", longitude];
+            
             [self setUpDatas];
-        }else if (!isCache){
+            
+        }else if ([[RDLocationManager manager] checkLocationDataIsNeedUpdateWithLastPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake([GlobalData shared].VCLatitude, [GlobalData shared].VCLongitude)) currentPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latitude, longitude))]){
+            
+            [GlobalData shared].VCLatitude = latitude;
+            [GlobalData shared].VCLongitude = longitude;
+            
+            self.latitudeStr = [NSString stringWithFormat:@"%lf", latitude];
+            self.longitudeStr = [NSString stringWithFormat:@"%lf", longitude];
+            
             [self setUpDatas];
+            
+        }else{
+            
+            if (!isCache) {
+                [self setUpDatas];
+            }
+            
         }
     }];
     

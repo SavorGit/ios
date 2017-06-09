@@ -97,22 +97,6 @@
     } completion:^(BOOL finished) {
         
     }];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(delayReset4GAlpha) object:nil];
-    if (!self.isBoxSence) {
-        [self performSelector:@selector(delayReset4GAlpha) withObject:nil afterDelay:3.f];
-    }
-}
-
-//延时重置4G透明度
-- (void)delayReset4GAlpha
-{
-    if (!self.isBoxSence) {
-        [UIView animateWithDuration:.4f animations:^{
-            self.alpha = .6f;
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
 }
 
 - (void)showWithBox

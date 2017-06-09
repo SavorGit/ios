@@ -101,7 +101,20 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 //记录启动应用的通知携带的信息
 @property (nonatomic, strong) HSVodModel * launchModel;
 
+//记录APNS注册的推送token
 @property (nonatomic, strong) NSString * deviceToken;
+
+@property (nonatomic, assign) double latitude;
+
+@property (nonatomic, assign) double longitude;
+
+@property (nonatomic, assign) double viewLatitude;
+
+@property (nonatomic, assign) double viewLongitude;
+
+@property (nonatomic, assign) double VCLatitude;
+
+@property (nonatomic, assign) double VCLongitude;
 
 /**
  *  创建单例

@@ -86,13 +86,27 @@
         [self showWithStatus:RDScreenLocation_Compelete];
     }
     
-    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude, BOOL isUpdate) {
-        NSString *latitudeStr = [NSString stringWithFormat:@"%f",latitude];
-        NSString *longitudeStr = [NSString stringWithFormat:@"%f",longitude];
-        if (isUpdate) {
-            [self setUpDatasWithLatitude:latitudeStr longitude:longitudeStr];
-        }else if (!isCache) {
-            [self setUpDatasWithLatitude:latitudeStr longitude:longitudeStr];
+    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+        if ([GlobalData shared].viewLatitude == 0.f) {
+            
+            [GlobalData shared].viewLatitude = latitude;
+            [GlobalData shared].viewLongitude = longitude;
+            
+            [self setUpDatasWithLatitude:[NSString stringWithFormat:@"%lf", [GlobalData shared].viewLatitude] longitude:[NSString stringWithFormat:@"%lf", [GlobalData shared].viewLongitude]];
+            
+        }else if ([[RDLocationManager manager] checkLocationDataIsNeedUpdateWithLastPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake([GlobalData shared].viewLatitude, [GlobalData shared].viewLongitude)) currentPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latitude, longitude))]){
+            
+            [GlobalData shared].viewLatitude = latitude;
+            [GlobalData shared].viewLongitude = longitude;
+            
+            [self setUpDatasWithLatitude:[NSString stringWithFormat:@"%lf", latitude] longitude:[NSString stringWithFormat:@"%lf", longitude]];
+            
+        }else{
+            
+            if (!isCache) {
+                [self setUpDatasWithLatitude:[NSString stringWithFormat:@"%lf", [GlobalData shared].viewLatitude] longitude:[NSString stringWithFormat:@"%lf", [GlobalData shared].viewLongitude]];
+            }
+            
         }
     }];
 }
@@ -417,7 +431,7 @@
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         paragraphStyle.lineSpacing = 5;
         paragraphStyle.alignment = NSTextAlignmentCenter;
-        NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:@"正快速帮您查找支持投屏的餐厅\n客官请稍后~"];
+        NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:@"正快速帮您查找支持投屏的餐厅\n客官请稍候~"];
         [str addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, str.length)];
         label.attributedText = str;
         [_loadingView addSubview:label];
