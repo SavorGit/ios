@@ -31,6 +31,7 @@
 #import "CategoryViewController.h"
 #import "HSInstallationInforUpload.h"
 #import "HSFirstUseRequest.h"
+#import "RDLocationManager.h"
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
@@ -219,7 +220,9 @@
     sliderVC.leftViewWidth = width / 3 * 2;
     sliderVC.leftViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(66, 66);
     
-    [self installFirstForRequest];
+    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+    }];
+    [self performSelector:@selector(installFirstForRequest) withObject:nil afterDelay:10.f];
     
     return sliderVC;
 }
