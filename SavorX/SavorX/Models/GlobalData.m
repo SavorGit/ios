@@ -53,6 +53,12 @@ static GlobalData* single = nil;
     self.hotelId = 0;
     self.projectId = @"projectId";
     self.deviceToken = @"";
+    self.latitude = 0.f;
+    self.longitude = 0.f;
+    self.viewLatitude = 0.f;
+    self.viewLongitude = 0.f;
+    self.VCLatitude = 0.f;
+    self.VCLongitude = 0.f;
     
     [self getAreaId];
 }

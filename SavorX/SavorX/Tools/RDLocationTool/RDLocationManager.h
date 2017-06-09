@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <BaiduMapAPI_Location/BMKLocationComponent.h>
+#import <BaiduMapAPI_Utils/BMKUtilsComponent.h>
 
-typedef void (^RDCheckUserLocationBlock)(CLLocationDegrees latitude, CLLocationDegrees longitude, BOOL isUpdate);
+typedef void (^RDCheckUserLocationBlock)(CLLocationDegrees latitude, CLLocationDegrees longitude);
 @interface RDLocationManager : NSObject
 
 + (instancetype)manager;
@@ -19,5 +20,7 @@ typedef void (^RDCheckUserLocationBlock)(CLLocationDegrees latitude, CLLocationD
 
 //停止检测用户当前位置
 - (void)stopCheckUserLocation;
+
+- (BOOL)checkLocationDataIsNeedUpdateWithLastPoint:(BMKMapPoint)lastPoint currentPoint:(BMKMapPoint)point;
 
 @end

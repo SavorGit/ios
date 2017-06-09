@@ -7,12 +7,9 @@
 //
 
 #import "RDLocationManager.h"
-#import <BaiduMapAPI_Utils/BMKUtilsComponent.h>
 
 @interface RDLocationManager ()<BMKLocationServiceDelegate>
 
-@property (nonatomic, assign) CLLocationDegrees lastLatitude; //记录上次的纬度
-@property (nonatomic, assign) CLLocationDegrees lastLongitude; //记录上次的经度
 @property (nonatomic, strong) BMKLocationService * service; //百度地图定位服务
 @property (nonatomic, copy) RDCheckUserLocationBlock block;
 
@@ -29,8 +26,6 @@
     dispatch_once(&onceToken, ^{
         
         manager = [[self alloc] init];
-        manager.lastLatitude = 0.f;
-        manager.lastLongitude = 0.f;
         manager.service = [[BMKLocationService alloc] init];
         manager.service.desiredAccuracy = kCLLocationAccuracyBest;
         manager.service.delegate = manager;
@@ -69,36 +64,9 @@
 {
     [self.service stopUserLocationService];
     
-    if (self.lastLatitude != 0 && self.lastLongitude != 0) {
-        [self handleUserLocation:userLocation];
-    }else{
-        self.lastLatitude = userLocation.location.coordinate.latitude;
-        self.lastLongitude = userLocation.location.coordinate.longitude;
-        self.block(self.lastLatitude, self.lastLongitude, YES);
-    }
-}
-
-//处理获取的用户当前位置
-- (void)handleUserLocation:(BMKUserLocation *)location
-{
-    CLLocationDegrees latitude = location.location.coordinate.latitude;
-    CLLocationDegrees longitude = location.location.coordinate.longitude;
-    
-    NSLog(@"当前定位纬度 %lf,当前定位经度 %lf",latitude,longitude);
-    
-    NSLog(@"上次当前定位纬度 %lf,当前定位经度 %lf", self.lastLatitude, self.lastLongitude);
-    
-    BMKMapPoint lastPotion = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(self.lastLatitude, self.lastLongitude));
-    BMKMapPoint currentPoint = BMKMapPointForCoordinate(location.location.coordinate);
-    CLLocationDistance distance = BMKMetersBetweenMapPoints(lastPotion,currentPoint);
-    NSLog(@"移动了%lf米", distance);
-    if (distance >= 100.f) {
-        self.lastLatitude = latitude;
-        self.lastLongitude = longitude;
-        self.block(latitude, longitude, YES);
-    }else{
-        self.block(self.lastLatitude, self.lastLongitude, NO);
-    }
+    [GlobalData shared].latitude = userLocation.location.coordinate.latitude;
+    [GlobalData shared].longitude = userLocation.location.coordinate.longitude;
+    self.block(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
 }
 
 /**
@@ -116,7 +84,18 @@
 - (void)didFailToLocateUserWithError:(NSError *)error
 {
     NSLog(@"请求定位失败，错误信息:\n%@", error.description);
-    self.block(self.lastLatitude, self.lastLongitude, YES);
+    self.block(0.f, 0.f);
+}
+
+- (BOOL)checkLocationDataIsNeedUpdateWithLastPoint:(BMKMapPoint)lastPoint currentPoint:(BMKMapPoint)point
+{
+    CLLocationDistance distance = BMKMetersBetweenMapPoints(lastPoint,point);
+    NSLog(@"移动了%lf米", distance);
+    if (distance >= 100.f) {
+        return YES;
+    }else{
+        return NO;
+    }
 }
 
 @end

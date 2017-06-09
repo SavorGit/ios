@@ -37,8 +37,8 @@
 
 #else
 #define AliyunBucketName @"redian-development"
-#define HOSTURL @"http://devp.testapi.rerdian.com/"  //测试地址
-#define AliynEndPoint @"https://oss-cn-beijing.aliyuncs.com/"
+#define HOSTURL @"http://devp.mobile.littlehotspot.com/"  //测试地址
+#define AliynEndPoint @"http://devp.oss.littlehotspot.com/"
 #define NSLog(...) NSLog(__VA_ARGS__)
 #endif
 
