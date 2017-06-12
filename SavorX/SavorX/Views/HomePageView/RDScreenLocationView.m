@@ -381,7 +381,7 @@
         [self.listView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(upView.mas_bottom).offset(20);
             make.left.mas_equalTo(0);
-            make.bottom.mas_equalTo(button.mas_top).offset(-20);
+            make.bottom.mas_equalTo(button.mas_top).offset(-15);
             make.right.mas_equalTo(0);
         }];
     }
