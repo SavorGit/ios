@@ -100,6 +100,14 @@
     //监听用户手机屏幕方向变化
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ApplicationDidBindToDevice) name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenDidQiutWithBox) name:RDBoxQuitScreenNotification object:nil];
+}
+
+- (void)screenDidQiutWithBox
+{
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.seriesId = [Helper getTimeStamp];
+    self.isScreen = NO;
 }
 
 - (void)lockButtonDidClicked
@@ -175,9 +183,11 @@
         self.orientation = orientation;
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         [self.navigationController setHidesBarsOnTap:NO];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self screenButtonDidClickedWithSuccess:nil failure:nil];
-        });
+        if (self.isScreen) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self screenButtonDidClickedWithSuccess:nil failure:nil];
+            });
+        }
         CGRect rect = self.navigationController.navigationBar.frame;
         if (rect.size.height < 44) {
             rect.size.height = 44.f;
@@ -189,9 +199,11 @@
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         [self.navigationController setHidesBarsOnTap:YES];
         [self.webView reload];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self screenButtonDidClickedWithSuccess:nil failure:nil];
-        });
+        if (self.isScreen) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self screenButtonDidClickedWithSuccess:nil failure:nil];
+            });
+        }
     }
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_rotating" key:nil value:nil];
 }
@@ -211,10 +223,6 @@
 
 - (void)screenButtonDidClickedWithSuccess:(void (^)())successBlock failure:(void (^)())failureBlock
 {
-    if (!self.isScreen) {
-        return;
-    }
-    
     for (UIView * view in self.webView.subviews) {
         if (view.subviews.count) {
             for (UIView * subView in view.subviews) {
@@ -246,38 +254,37 @@
         if ([GlobalData shared].isBindRD) {
             [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
                 
-                self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId success:^(NSURLSessionDataTask *task, id responseObject) {
-                    if (self.task == task) {
-                        if (successBlock) {
-                            successBlock();
-                        }
-                        self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId success:^(NSURLSessionDataTask *task, id responseObject) {
-                            
-                        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                            
-                        }];
+                [self.task cancel];
+                
+                self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
+                    if (successBlock) {
+                        successBlock();
                     }
+                    self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
+                        
+                    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                        
+                    }];
                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
                     
-                    if (error.code == -999) {
-                        return;
+                    if (failureBlock) {
+                        failureBlock();
                     }
-                    
-                    if (self.task == task) {
-                        if ([error.domain isEqualToString:@"fileScreen"]) {
-                            RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:error.localizedDescription];
-                            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
-                                
-                            } bold:YES];
-                            [alert addActions:@[action]];
-                            [alert show];
-                            [self stop];
-                        }else{
-                            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+                    if ([error.domain isEqualToString:@"cancleFileScreen"]) {
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+                        self.isScreen = NO;
+                    }
+                    if ([error.domain isEqualToString:@"fileScreen"]) {
+                        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:error.localizedDescription];
+                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
                             
-                            if (failureBlock) {
-                                failureBlock();
-                            }
+                        } bold:YES];
+                        [alert addActions:@[action]];
+                        [alert show];
+                        [self stop];
+                    }else{
+                        if (error.code != -999) {
+                            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
                         }
                     }
                 }];
@@ -305,11 +312,7 @@
 - (void)PageBack
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    if (self.isLockScreen) {
-        [self lockButtonDidClicked];
-    }
-    
+        
     if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
         [self interfaceOrientation:UIInterfaceOrientationPortrait];
         return;
@@ -373,9 +376,6 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                 
                 [[HomeAnimationView animationView] stopScreen];
-                
-                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
-                self.isScreen = NO;
             }];
         });
     }
@@ -439,6 +439,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {

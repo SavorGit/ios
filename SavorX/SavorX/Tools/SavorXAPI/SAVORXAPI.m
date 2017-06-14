@@ -22,6 +22,9 @@
 #import "HSversionUpgradeRequest.h"
 #import "UIImageView+WebCache.h"
 #import "RDAlertView.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
+
 
 #define version_code @"version_code"
 
@@ -133,17 +136,17 @@
 }
 
 //投屏图片
-+ (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)())success failure:(void (^)())failure
++ (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId force:(NSInteger)force success:(void (^)())success failure:(void (^)())failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation];
+    NSString * hostURL = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld&force=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation,force];
     
     if (seriesId && seriesId.length > 0) {
-        urlStr = [NSString stringWithFormat:@"%@&seriesId=%@", urlStr, seriesId];
+        hostURL = [NSString stringWithFormat:@"%@&seriesId=%@", hostURL, seriesId];
     }
     
-    urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    hostURL = [hostURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSURLSessionDataTask * task = [[self sharedManager] POST:urlStr parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    NSURLSessionDataTask * task = [[self sharedManager] POST:hostURL parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         [formData appendPartWithFileData:data name:@"fileUpload" fileName:name mimeType:@"image/jpeg"];
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -161,6 +164,42 @@
                 success();
             }
         }else if ([[response objectForKey:@"result"] integerValue] == 2) {
+        }
+        else if ([[response objectForKey:@"result"] integerValue] == 4) {
+            
+            if ([[UIApplication sharedApplication].keyWindow viewWithTag:333]) {
+                return;
+            }
+            NSString *infoStr = [response objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"pic"}];
+                if (failure) {
+                    failure();
+                }
+            } bold:NO];
+            // 如果返回状态为4，且用户选择继续投屏，则把本方法重新调用一遍，force传1
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"pic"}];
+                
+                [SAVORXAPI postImageWithURL:urlStr data:data name:name type:type isThumbnail:isThumbnail rotation:rotation seriesId:seriesId force:1 success:^{
+                    
+                    if (success) {
+                        success();
+                    }
+                    
+                } failure:^{
+                    
+                    if (failure) {
+                        failure();
+                    }
+                    
+                }];
+                
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
             
         }else{
             if (failure) {
@@ -179,7 +218,9 @@
         if (type == 2) {
             
         }else{
-            [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+            if (error.code != -999) {
+                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+            }
         }
         failure();
     }];
@@ -187,17 +228,18 @@
     return task;
 }
 
-+ (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+// 投屏文档
++ (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation];
+    NSString * hostURL = [NSString stringWithFormat:@"%@/pic?isThumbnail=%d&imageId=%@&deviceId=%@&deviceName=%@&imageType=%ld&rotation=%ld&force=%ld", urlStr, isThumbnail, name, [GlobalData shared].deviceID, [GCCGetInfo getIphoneName], type, rotation,force];
     
     if (seriesId && seriesId.length > 0) {
-        urlStr = [NSString stringWithFormat:@"%@&seriesId=%@", urlStr, seriesId];
+        hostURL = [NSString stringWithFormat:@"%@&seriesId=%@", hostURL, seriesId];
     }
     
-    urlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    hostURL = [hostURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSURLSessionDataTask * task = [[self sharedManager] POST:urlStr parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    NSURLSessionDataTask * task = [[self sharedManager] POST:hostURL parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         [formData appendPartWithFileData:data name:@"fileUpload" fileName:name mimeType:@"image/jpeg"];
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -214,6 +256,40 @@
                 success(task, response);
             }
         }else if ([[response objectForKey:@"result"] integerValue] == 2) {
+        }else if ([[response objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [response objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"file"}];
+                
+                NSError * error = [NSError errorWithDomain:@"cancleFileScreen" code:-999 userInfo:nil];
+                if (failure) {
+                    failure(task, error);
+                }
+            } bold:NO];
+            // 如果返回状态为4，且用户选择继续投屏，则把本方法重新调用一遍，force传1
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"file"}];
+                
+                [SAVORXAPI postFileImageWithURL:urlStr data:data name:name type:type isThumbnail:isThumbnail rotation:rotation seriesId:seriesId force:1 success:^(NSURLSessionDataTask *task, id responseObject) {
+                    if (success) {
+                        success(task, responseObject);
+                    }
+                    
+                } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    
+                    if (failure) {
+                        failure(task, error);
+                    }
+                    
+                }];
+                
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
             
         }else{
             if (failure) {
@@ -231,16 +307,49 @@
 }
 
 //游戏投蛋
-+ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr hunger:(NSInteger)hunger date:(NSString *)date  success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
++ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr hunger:(NSInteger)hunger date:(NSString *)date force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    urlStr = [urlStr stringByAppendingString:@"/egg"];
+    NSString * hostURL = [urlStr stringByAppendingString:@"/egg"];
     
     NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID,
                                   @"deviceName" : [GCCGetInfo getIphoneName],
                                   @"hunger" : [NSNumber numberWithInteger:hunger],
-                                  @"date" :   date };
+                                  @"date" :   date,
+                                  @"force" : [NSNumber numberWithInteger:force]};
     
-    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    NSURLSessionDataTask * task = [self getWithURL:hostURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        
+        NSInteger code = [[result objectForKey:@"result"] integerValue];
+        if(code == 4) {
+            if ([[UIApplication sharedApplication].keyWindow viewWithTag:333]) {
+                return;
+            }
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                NSError * error = [NSError errorWithDomain:@"com.eggCancle" code:677 userInfo:nil];
+                if (failure) {
+                    failure(task, error);
+                }
+            } bold:NO];
+            
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [SAVORXAPI gameForEggsWithURL:urlStr hunger:hunger date:date force:1 success:success failure:failure];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+        }else{
+            if (success) {
+                success(task, result);
+            }
+        }
+        
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failure) {
+            failure(task, error);
+        }
+    }];
     return task;
 }
 
@@ -257,7 +366,7 @@
 }
 
 //点播视频
-+ (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
++ (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     urlStr = [urlStr stringByAppendingString:@"/vod"];
     
@@ -265,7 +374,8 @@
                                   @"type" : [NSNumber numberWithInteger:type],
                                   @"name" : name,
                                   @"deviceName" : [GCCGetInfo getIphoneName],
-                                  @"position" : [NSNumber numberWithFloat:position]};
+                                  @"position" : [NSNumber numberWithFloat:position],
+                                  @"force" : [NSNumber numberWithInteger:force]};
     
     NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
     return task;
@@ -297,9 +407,9 @@
 }
 
 //视频投屏
-+ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
++ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    urlStr = [NSString stringWithFormat:@"%@/video?deviceId=%@&deviceName=%@", urlStr,[GlobalData shared].deviceID, [GCCGetInfo getIphoneName]];
+    urlStr = [NSString stringWithFormat:@"%@/video?deviceId=%@&deviceName=%@&force=%ld", urlStr,[GlobalData shared].deviceID, [GCCGetInfo getIphoneName],force];
     
     NSDictionary * parameters = @{@"mediaPath" : mediaPath,
                                   @"position" : position};
@@ -411,8 +521,9 @@
     return nil;
 }
 
-+ (void)ScreenDemandShouldBackToTV:(BOOL)fromHomeType
++ (void)ScreenDemandShouldBackToTV:(BOOL)fromHomeType success:(void (^)())successBlock failure:(void (^)())failureBlock
 {
+    MBProgressHUD * hud = [MBProgressHUD showBackDemandInView:[UIApplication sharedApplication].keyWindow];
     if ([GlobalData shared].isBindRD) {
         NSString * urlStr = [STBURL stringByAppendingString:@"/stop"];
         
@@ -420,29 +531,46 @@
                                       @"projectId" : [GlobalData shared].projectId};
         
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            [hud hideAnimated:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
             if (fromHomeType == YES) {
                 [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
             }
+            if (successBlock) {
+                successBlock();
+            }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            [hud hideAnimated:NO];
             if (fromHomeType == YES) {
                 [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
+            }
+            if (failureBlock) {
+                failureBlock();
             }
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
-            
+            [hud hideAnimated:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
             if (fromHomeType == YES) {
                 [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
             }
+            if (successBlock) {
+                successBlock();
+            }
         } failure:^{
+            [hud hideAnimated:NO];
             if (fromHomeType == YES) {
                 [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
             }
+            if (failureBlock) {
+                failureBlock();
+            }
         }];
+    }else{
+        [hud hideAnimated:NO];
     }
 }
 
@@ -458,21 +586,29 @@
         [self getWithURL:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             [hud hideAnimated:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-            successBlock();
+            if (successBlock) {
+                successBlock();
+            }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [hud hideAnimated:NO];
             [MBProgressHUD showTextHUDwithTitle:@"退出投屏失败" delay:1.f];
-            failureBlock();
+            if (failureBlock) {
+                failureBlock();
+            }
         }];
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] stopSuccess:^{
             
             [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             [hud hideAnimated:NO];
-            successBlock();
+            if (successBlock) {
+                successBlock();
+            }
         } failure:^{
             [hud hideAnimated:NO];
-            failureBlock();
+            if (failureBlock) {
+                failureBlock();
+            }
         }];
     }else{
         [hud hideAnimated:NO];
@@ -534,6 +670,12 @@
         [MobClick event:eventId attributes:@{key : value}];
     }else{
         [MobClick event:eventId];
+    }
+}
+
++ (void)postUMHandleWithContentId:(NSString *)eventId withParmDic:(NSDictionary *)parmDic{
+    if (parmDic != nil) {
+        [MobClick event:eventId attributes:parmDic];
     }
 }
 
@@ -716,6 +858,15 @@
 + (void)showAlert:(UIAlertController *)alert
 {
     [[Helper getRootNavigationController] presentViewController:alert animated:YES completion:nil];
+}
+
++ (void)cancelAllURLTask
+{
+    [[self sharedManager].operationQueue cancelAllOperations];
+    [[self sharedManager].uploadTasks makeObjectsPerformSelector:@selector(cancel)];
+    [[self sharedManager].tasks makeObjectsPerformSelector:@selector(cancel)];
+    [[self sharedManager].downloadTasks makeObjectsPerformSelector:@selector(cancel)];
+    [[self sharedManager].dataTasks makeObjectsPerformSelector:@selector(cancel)];
 }
 
 @end

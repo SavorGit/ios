@@ -63,7 +63,7 @@
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
     NSString *currentUrl = self.webView.request.URL.absoluteString;
-    if (![currentUrl isEqualToString:@"http://h5.rerdian.com/Public/html/help/"]) {
+    if (![currentUrl isEqualToString:@"http://h5.littlehotspot.com/Public/html/help/"]) {
        [SAVORXAPI postUMHandleWithContentId:@"menu_help_web" key:nil value:nil];
     }
 }

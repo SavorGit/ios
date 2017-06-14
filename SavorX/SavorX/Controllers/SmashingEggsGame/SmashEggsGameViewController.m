@@ -61,6 +61,7 @@
     _isShake = NO;
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(haClosed) name:RDBoxQuitScreenNotification object:nil];
 }
 
 - (void)creatBgVoiceWithLoops:(NSInteger)loop{
@@ -496,7 +497,7 @@
         
         MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
         
-        [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate force:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 [self stop];
                 [self.eggsView stopShakeAnimation];
@@ -509,7 +510,9 @@
             [hud hideAnimated:NO];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"请求失败，请重试"];
+            if (error.code != 677) {
+                [MBProgressHUD showTextHUDwithTitle:@"请求失败，请重试"];
+            }
         }];
         
     }else{
@@ -559,7 +562,7 @@
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [SAVORXAPI postUMHandleWithContentId:@"game_page_result" key:@"game_page_result" value:@"prize_failure"];
-            if (![GlobalData shared].isBindRD || ![GlobalData shared].isWifiStatus) {
+            if (![GlobalData shared].isBindRD || [GlobalData shared].networkStatus != RDNetworkStatusReachableViaWiFi) {
                 [SAVORXAPI showAlertWithMessage:@"游戏超时啦, 请重新启动"];
             }
             
@@ -632,6 +635,11 @@
     [self dismissViewWithAnimationDuration:0.3f];
     [self eggsViewStartAnimation];
     _isShake = NO;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {

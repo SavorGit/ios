@@ -14,6 +14,9 @@
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
 #import "UINavigationBar+PS.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
+
 
 #define Max_OffsetY  50
 #define WeakSelf(x)      __weak typeof (self) x = self
@@ -52,6 +55,7 @@
     _footerView = nil;
     [UIApplication sharedApplication].statusBarStyle = UISearchBarStyleDefault;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
     NSLog(@"视频播放释放了");
 }
 
@@ -150,14 +154,19 @@
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(voideoPlayStatusCellConnectAction) name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidPlayEnd) name:RDBoxQuitScreenNotification object:nil];
     
-    self.tableView.tableHeaderView = self.headBackView;
     if (kMainBoundsWidth < 375) {
         UIView * view = self.footerView;
         view.frame = CGRectMake(0, 0, kMainBoundsWidth, 400);
         self.tableView.tableFooterView = view;
+        
+        CGFloat height = 230.f / 375.f * kMainBoundsWidth;
+        self.headBackView.frame = CGRectMake(0, 0, kMainBoundsWidth, height + 99);
+        self.tableView.tableHeaderView = self.headBackView;
     }else{
         self.tableView.tableFooterView =  self.footerView;
+        self.tableView.tableHeaderView = self.headBackView;
     }
     [self.headBackView.palySlider setThumbImage:[UIImage imageNamed:@"slider_thumb"] forState:UIControlStateNormal];
     self.headBackView.palySlider.minimumValue = 1;
@@ -235,10 +244,7 @@
                 [self.headBackView.palySlider setValue:posFloat];
                 [self updateTimeLabel:posFloat];
             }else if (code == -1 || code == 1){
-                self.headBackView.mininumLabel.text = @"00:00";
-                self.headBackView.palySlider.value = 0;
-                self.footerView.videoPlayButton.selected = YES;
-                self.isPlayEnd = YES;
+                [self videoDidPlayEnd];
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -248,10 +254,7 @@
     }else if ([GlobalData shared].isBindDLNA){
         [[GCCUPnPManager defaultManager] getPlayProgressSuccess:^(NSString *totalDuration, NSString *currentDuration, float progress) {
             if (progress >= 1 - 1 / self.headBackView.palySlider.maximumValue) {
-                self.headBackView.mininumLabel.text = @"00:00";
-                self.headBackView.palySlider.value = 0;
-                self.footerView.videoPlayButton.selected = YES;
-                self.isPlayEnd = YES;
+                [self videoDidPlayEnd];
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             }else{
                 CGFloat posFloat = [[GCCUPnPManager defaultManager] timeIntegerFromString:totalDuration] * progress;
@@ -315,13 +318,7 @@
                     [self.timer setFireDate:[NSDate distantPast]];
                 }else{
                     [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-                    self.headBackView.mininumLabel.text = @"00:00";
-                    self.headBackView.palySlider.value = 0;
-                    self.footerView.videoPlayButton.selected = YES;
-                    self.isPlayEnd = YES;
-                    [self.timer invalidate];
-                    self.timer = nil;
-                    
+                    [self videoDidPlayEnd];
                 }
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
@@ -392,7 +389,6 @@
             [SAVORXAPI pauseVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
                 if ([[result objectForKey:@"result"] integerValue] != 0) {
                     [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
-                    self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
                     [self changeTimerWithPlayStatus];
                 }else{
                     button.selected = !button.selected;
@@ -401,7 +397,6 @@
                 button.enabled = YES;
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
-                self.footerView.videoPlayButton.selected = !self.footerView.videoPlayButton;
                 [self changeTimerWithPlayStatus];
                 self.isHandle = NO;
                 button.enabled = YES;
@@ -434,52 +429,10 @@
     if ([GlobalData shared].isBindRD) {
         if (self.model) {
             
-            [SAVORXAPI demandWithURL:STBURL name:self.model.name type:self.type position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                if ([[result objectForKey:@"result"] integerValue] == 0) {
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    self.isPlayEnd = NO;
-                    self.footerView.videoPlayButton.selected = NO;
-                    [self createTimer];
-                    [self.tableView reloadData];
-                }else{
-                    self.footerView.videoPlayButton.selected = YES;
-                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-                }
-                self.isHandle = NO;
-                self.footerView.videoPlayButton.enabled = YES;
-                
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
-                self.isHandle = NO;
-                self.footerView.videoPlayButton.selected = YES;
-                self.footerView.videoPlayButton.enabled = YES;
-            }];
+            [self demandVideoWithforce:0];
         }else{
             asseturlStr = [NSString stringWithFormat:@"%@%@", [HTTPServerManager getCurrentHTTPServerIP], self.videoUrl];
-            [SAVORXAPI postVideoWithURL:STBURL mediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                if ([[result objectForKey:@"result"] integerValue] == 0) {
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    self.isPlayEnd = NO;
-                    self.footerView.videoPlayButton.selected = NO;
-                    [self createTimer];
-                    [self.tableView reloadData];
-                }else{
-                    self.footerView.videoPlayButton.selected = YES;
-                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-                }
-                self.isHandle = NO;
-                self.footerView.videoPlayButton.enabled = YES;
-                
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
-                self.isHandle = NO;
-                self.footerView.videoPlayButton.selected = YES;
-                self.footerView.videoPlayButton.enabled = YES;
-            }];
+            [self demandVideoWithPostMedPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0];
         }
     }else if ([GlobalData shared].isBindDLNA) {
         if (self.model) {
@@ -508,7 +461,91 @@
     }
 }
 
-- (void)changeTimerWithPlayStatus
+- (void)demandVideoWithPostMedPath:(NSString *)mediaPath force:(NSInteger)force{
+    
+    [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            [[HomeAnimationView animationView] startScreenWithViewController:self];
+            self.isPlayEnd = NO;
+            self.footerView.videoPlayButton.selected = NO;
+            [self createTimer];
+            [self.tableView reloadData];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            self.isPlayEnd = YES;
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithPostMedPath:mediaPath force:1];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"}];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }else{
+            self.isPlayEnd = YES;
+            self.footerView.videoPlayButton.selected = YES;
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        self.isHandle = NO;
+        self.footerView.videoPlayButton.enabled = YES;
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
+        self.isHandle = NO;
+        self.footerView.videoPlayButton.selected = YES;
+        self.footerView.videoPlayButton.enabled = YES;
+    }];
+}
+
+- (void)demandVideoWithforce:(NSInteger)force{
+    
+    [SAVORXAPI demandWithURL:STBURL name:self.model.name type:self.type position:0 force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            [[HomeAnimationView animationView] startScreenWithViewController:self];
+            self.isPlayEnd = NO;
+            self.footerView.videoPlayButton.selected = NO;
+            [self createTimer];
+            [self.tableView reloadData];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            self.isPlayEnd = YES;
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"}];
+                [self demandVideoWithforce:1];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }
+        else{
+            self.isPlayEnd = YES;
+            self.footerView.videoPlayButton.selected = YES;
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        self.isHandle = NO;
+        self.footerView.videoPlayButton.enabled = YES;
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
+        self.isHandle = NO;
+        self.footerView.videoPlayButton.selected = YES;
+        self.footerView.videoPlayButton.enabled = YES;
+    }];
+    
+}
+
+-(void)changeTimerWithPlayStatus
 {
     if (self.footerView.videoPlayButton.selected) {
         [self.timer setFireDate:[NSDate distantPast]];
@@ -528,9 +565,12 @@
     if (self.isPlayEnd) {
         [self restartVod];
     }else{
-        [SAVORXAPI ScreenDemandShouldBackToTV:fromHomeType];
-        [self shouldRelease];
-        [self.navigationController popViewControllerAnimated:YES];
+        [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+            [self videoDidPlayEnd];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+        } failure:^{
+            
+        }];
     }
 }
 
@@ -600,6 +640,7 @@
                 break;
                 
             default:
+                volume = 0;
                 break;
         }
         [[GCCUPnPManager defaultManager] setVolume:volume Success:^{
@@ -654,6 +695,19 @@
         [self.footerView voideoPlayFooterViewisEnable:YES];
     }else{
         [self.footerView voideoPlayFooterViewisEnable:NO];
+    }
+}
+
+- (void)videoDidPlayEnd
+{
+    self.headBackView.mininumLabel.text = @"00:00";
+    self.headBackView.palySlider.value = 0;
+    self.footerView.videoPlayButton.selected = YES;
+    self.isPlayEnd = YES;
+    [self.timer invalidate];
+    self.timer = nil;
+    if (self.task) {
+        [self.task cancel];
     }
 }
 

@@ -119,6 +119,7 @@
 		063B1D531D7D63D30036C02B /* PhotoSliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 063B1D521D7D63D30036C02B /* PhotoSliderViewController.m */; };
 		063DC13D1E6D5E1C00449A7B /* RDHomeScreenButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 063DC13C1E6D5E1C00449A7B /* RDHomeScreenButton.m */; };
 		063FA3371D839F1100D03548 /* BadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 063FA3361D839F1100D03548 /* BadView.m */; };
+		0645F7FB1ED580A8004678E8 /* RDScreenLocationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0645F7FA1ED580A8004678E8 /* RDScreenLocationView.m */; };
 		0647BC351E506285002284BB /* HSFirstUseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647BC341E506285002284BB /* HSFirstUseRequest.m */; };
 		0647BC381E5063DF002284BB /* HSversionUpgradeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647BC371E5063DF002284BB /* HSversionUpgradeRequest.m */; };
 		0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647EACA1E70E93500C39160 /* RDRightConnetItem.m */; };
@@ -324,6 +325,18 @@
 		962EFA9E1E88A4F20074450A /* shanchu2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 962EFA981E88A4F20074450A /* shanchu2@3x.png */; };
 		963AEA161EB2DEA700578A0A /* libOpenInstallSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 963AEA141EB2DEA700578A0A /* libOpenInstallSDK.a */; };
 		964177951EB86C2100AA839E /* HSInstallationInforUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 964177941EB86C2100AA839E /* HSInstallationInforUpload.m */; };
+		965240D71ED532CE0090E1C8 /* RestaurantListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240D61ED532CE0090E1C8 /* RestaurantListModel.m */; };
+		965240DB1ED532E30090E1C8 /* RestaurantListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240DA1ED532E30090E1C8 /* RestaurantListTableViewCell.m */; };
+		965240DF1ED532F30090E1C8 /* RestaurantListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240DE1ED532F30090E1C8 /* RestaurantListViewController.m */; };
+		965240E21ED559930090E1C8 /* HSRestaurantListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */; };
+		965240E51ED57F270090E1C8 /* HSHomeRestaurantList.m in Sources */ = {isa = PBXBuildFile; fileRef = 965240E41ED57F270090E1C8 /* HSHomeRestaurantList.m */; };
+		965240FD1ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240F71ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework */; };
+		965240FE1ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240F81ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework */; };
+		965240FF1ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240F91ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework */; };
+		965241001ED6BE8E0090E1C8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240FB1ED6BE8E0090E1C8 /* libcrypto.a */; };
+		965241011ED6BE8E0090E1C8 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240FC1ED6BE8E0090E1C8 /* libssl.a */; };
+		965241041ED6BE9E0090E1C8 /* RDLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 965241031ED6BE9E0090E1C8 /* RDLocationManager.m */; };
+		965241061ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 965241051ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd */; };
 		96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */; };
 		9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */; };
 		9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A71E7159210060CE0B /* DocGuided.png */; };
@@ -333,6 +346,7 @@
 		96BCE3CA1EC19DE100B1A3F7 /* HSEggsResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */; };
 		96BCE4231EC2C05300B1A3F7 /* RDGoldenEggs.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */; };
 		96BCE4291EC2F3DB00B1A3F7 /* RDPrizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */; };
+		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -525,6 +539,8 @@
 		063DC13C1E6D5E1C00449A7B /* RDHomeScreenButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHomeScreenButton.m; sourceTree = "<group>"; };
 		063FA3351D839F1100D03548 /* BadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BadView.h; sourceTree = "<group>"; };
 		063FA3361D839F1100D03548 /* BadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BadView.m; sourceTree = "<group>"; };
+		0645F7F91ED580A8004678E8 /* RDScreenLocationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationView.h; sourceTree = "<group>"; };
+		0645F7FA1ED580A8004678E8 /* RDScreenLocationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationView.m; sourceTree = "<group>"; };
 		0647BC331E506285002284BB /* HSFirstUseRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSFirstUseRequest.h; sourceTree = "<group>"; };
 		0647BC341E506285002284BB /* HSFirstUseRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSFirstUseRequest.m; sourceTree = "<group>"; };
 		0647BC361E5063DF002284BB /* HSversionUpgradeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSversionUpgradeRequest.h; sourceTree = "<group>"; };
@@ -847,6 +863,24 @@
 		963AEA151EB2DEA700578A0A /* OpenInstallSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInstallSDK.h; sourceTree = "<group>"; };
 		964177931EB86C2100AA839E /* HSInstallationInforUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSInstallationInforUpload.h; sourceTree = "<group>"; };
 		964177941EB86C2100AA839E /* HSInstallationInforUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSInstallationInforUpload.m; sourceTree = "<group>"; };
+		965240D51ED532CE0090E1C8 /* RestaurantListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestaurantListModel.h; sourceTree = "<group>"; };
+		965240D61ED532CE0090E1C8 /* RestaurantListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestaurantListModel.m; sourceTree = "<group>"; };
+		965240D91ED532E30090E1C8 /* RestaurantListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestaurantListTableViewCell.h; sourceTree = "<group>"; };
+		965240DA1ED532E30090E1C8 /* RestaurantListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestaurantListTableViewCell.m; sourceTree = "<group>"; };
+		965240DD1ED532F30090E1C8 /* RestaurantListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestaurantListViewController.h; sourceTree = "<group>"; };
+		965240DE1ED532F30090E1C8 /* RestaurantListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestaurantListViewController.m; sourceTree = "<group>"; };
+		965240E01ED559930090E1C8 /* HSRestaurantListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSRestaurantListRequest.h; sourceTree = "<group>"; };
+		965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSRestaurantListRequest.m; sourceTree = "<group>"; };
+		965240E31ED57F270090E1C8 /* HSHomeRestaurantList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSHomeRestaurantList.h; sourceTree = "<group>"; };
+		965240E41ED57F270090E1C8 /* HSHomeRestaurantList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSHomeRestaurantList.m; sourceTree = "<group>"; };
+		965240F71ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Base.framework; sourceTree = "<group>"; };
+		965240F81ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Location.framework; sourceTree = "<group>"; };
+		965240F91ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BaiduMapAPI_Utils.framework; sourceTree = "<group>"; };
+		965240FB1ED6BE8E0090E1C8 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
+		965240FC1ED6BE8E0090E1C8 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
+		965241021ED6BE9E0090E1C8 /* RDLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDLocationManager.h; sourceTree = "<group>"; };
+		965241031ED6BE9E0090E1C8 /* RDLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDLocationManager.m; sourceTree = "<group>"; };
+		965241051ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		96608FF01E80D47900D28A61 /* VideoLauchMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLauchMovieViewController.h; sourceTree = "<group>"; };
 		96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLauchMovieViewController.m; sourceTree = "<group>"; };
 		9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoGuidedTwoDimensionalCode.h; sourceTree = "<group>"; };
@@ -862,6 +896,8 @@
 		96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDGoldenEggs.m; sourceTree = "<group>"; };
 		96BCE4271EC2F3DB00B1A3F7 /* RDPrizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPrizeView.h; sourceTree = "<group>"; };
 		96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPrizeView.m; sourceTree = "<group>"; };
+		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
+		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -869,10 +905,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				965241061ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd in Frameworks */,
 				069D46C41DB5E91D00F85D72 /* libxml2.tbd in Frameworks */,
+				965240FE1ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework in Frameworks */,
+				965241011ED6BE8E0090E1C8 /* libssl.a in Frameworks */,
+				965240FD1ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework in Frameworks */,
 				069CDFDB1D991FAB00A0C1A6 /* UserNotifications.framework in Frameworks */,
 				0628B0A41D715DB900DB63D4 /* UMMobClick.framework in Frameworks */,
 				06BD18D91E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a in Frameworks */,
+				965241001ED6BE8E0090E1C8 /* libcrypto.a in Frameworks */,
 				963AEA161EB2DEA700578A0A /* libOpenInstallSDK.a in Frameworks */,
 				0614AA3F1D66AC310080D710 /* ImageIO.framework in Frameworks */,
 				0614AA3D1D66A7790080D710 /* libstdc++.tbd in Frameworks */,
@@ -882,6 +923,7 @@
 				0614AA351D66A73D0080D710 /* CoreGraphics.framework in Frameworks */,
 				0614AA331D66A7320080D710 /* libiconv.tbd in Frameworks */,
 				0614AA311D66A7150080D710 /* SystemConfiguration.framework in Frameworks */,
+				965240FF1ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework in Frameworks */,
 				0684DF231D5191F6006756D4 /* WebKit.framework in Frameworks */,
 				06FA32611D3E1192001F5B37 /* Security.framework in Frameworks */,
 				26A8176745C4493D3EE874EA /* libPods-SavorX.a in Frameworks */,
@@ -1293,6 +1335,10 @@
 				964177941EB86C2100AA839E /* HSInstallationInforUpload.m */,
 				062CEFD31EC3053200EA6AE0 /* HSAwardUploadRequest.h */,
 				062CEFD41EC3053200EA6AE0 /* HSAwardUploadRequest.m */,
+				965240E01ED559930090E1C8 /* HSRestaurantListRequest.h */,
+				965240E11ED559930090E1C8 /* HSRestaurantListRequest.m */,
+				965240E31ED57F270090E1C8 /* HSHomeRestaurantList.h */,
+				965240E41ED57F270090E1C8 /* HSHomeRestaurantList.m */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -1329,6 +1375,7 @@
 		0684DF1D1D519095006756D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				965240D81ED532E30090E1C8 /* RestaurantListView */,
 				96BCE4201EC2C05300B1A3F7 /* GameEggsView */,
 				0689915A1E854EE900BC9EFE /* RDKeyBoard */,
 				06FFCCA61E6E864900ADEA94 /* RDAlertView */,
@@ -1560,6 +1607,7 @@
 		06FA311B1D3E0CC6001F5B37 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				965240DC1ED532F30090E1C8 /* RestaurantList */,
 				96BCE3BB1EC010F300B1A3F7 /* SmashingEggsGame */,
 				06B555471E8A6A210068BF70 /* DefalutLaunchViewController */,
 				476F44C11E2DBBD100F99090 /* leftPage */,
@@ -1576,6 +1624,7 @@
 		06FA311F1D3E0EA0001F5B37 /* HelpLibs */ = {
 			isa = PBXGroup;
 			children = (
+				965240F61ED6BE8E0090E1C8 /* BaiduMap_IOSSDK_v3.3.1_Lib */,
 				060E41FD1E4CB03E009A94FC /* SDCycleScrollView */,
 				062E99CB1E49C2F30042C924 /* UIImage+WaterMark */,
 				0627E0B61E3231DA00DAED92 /* LGSideMenuController */,
@@ -1592,6 +1641,7 @@
 		06FA325F1D3E1184001F5B37 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				965241051ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd */,
 				069D46C31DB5E91D00F85D72 /* libxml2.tbd */,
 				069CDFDA1D991FAB00A0C1A6 /* UserNotifications.framework */,
 				0628B0A31D715DB900DB63D4 /* UMMobClick.framework */,
@@ -1613,6 +1663,7 @@
 		06FA32E31D3E165A001F5B37 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				965240D41ED532CE0090E1C8 /* RestaurantListModel */,
 				96BCE3C71EC19A7500B1A3F7 /* EggsGame */,
 				061E0FD51DFFEBB30072605F /* RDBox */,
 				06FB9D651DF9890C0053BE0A /* Discover */,
@@ -1688,6 +1739,7 @@
 		06FA33B11D3E1FF2001F5B37 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				965240E61ED6B8640090E1C8 /* RDLocationTool */,
 				062CEFCF1EC2F9FC00EA6AE0 /* RDAwardTool */,
 				060650591E014CF100E43024 /* HSWebServerManager */,
 				06F9B2A51D6EEDBD00C7F0A4 /* GCCKeyChain */,
@@ -1757,6 +1809,8 @@
 		4733B7511E305C01006889A2 /* HomePageView */ = {
 			isa = PBXGroup;
 			children = (
+				0645F7F91ED580A8004678E8 /* RDScreenLocationView.h */,
+				0645F7FA1ED580A8004678E8 /* RDScreenLocationView.m */,
 				0647EAC91E70E93500C39160 /* RDRightConnetItem.h */,
 				0647EACA1E70E93500C39160 /* RDRightConnetItem.m */,
 				06FFCCAD1E6EBF6A00ADEA94 /* RDCheackSence.h */,
@@ -2080,6 +2134,64 @@
 				963AEA151EB2DEA700578A0A /* OpenInstallSDK.h */,
 			);
 			path = OpenInstallSDK;
+			sourceTree = "<group>";
+		};
+		965240D41ED532CE0090E1C8 /* RestaurantListModel */ = {
+			isa = PBXGroup;
+			children = (
+				965240D51ED532CE0090E1C8 /* RestaurantListModel.h */,
+				965240D61ED532CE0090E1C8 /* RestaurantListModel.m */,
+			);
+			path = RestaurantListModel;
+			sourceTree = "<group>";
+		};
+		965240D81ED532E30090E1C8 /* RestaurantListView */ = {
+			isa = PBXGroup;
+			children = (
+				965240D91ED532E30090E1C8 /* RestaurantListTableViewCell.h */,
+				965240DA1ED532E30090E1C8 /* RestaurantListTableViewCell.m */,
+				96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */,
+				96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */,
+			);
+			path = RestaurantListView;
+			sourceTree = "<group>";
+		};
+		965240DC1ED532F30090E1C8 /* RestaurantList */ = {
+			isa = PBXGroup;
+			children = (
+				965240DD1ED532F30090E1C8 /* RestaurantListViewController.h */,
+				965240DE1ED532F30090E1C8 /* RestaurantListViewController.m */,
+			);
+			path = RestaurantList;
+			sourceTree = "<group>";
+		};
+		965240E61ED6B8640090E1C8 /* RDLocationTool */ = {
+			isa = PBXGroup;
+			children = (
+				965241021ED6BE9E0090E1C8 /* RDLocationManager.h */,
+				965241031ED6BE9E0090E1C8 /* RDLocationManager.m */,
+			);
+			path = RDLocationTool;
+			sourceTree = "<group>";
+		};
+		965240F61ED6BE8E0090E1C8 /* BaiduMap_IOSSDK_v3.3.1_Lib */ = {
+			isa = PBXGroup;
+			children = (
+				965240F71ED6BE8E0090E1C8 /* BaiduMapAPI_Base.framework */,
+				965240F81ED6BE8E0090E1C8 /* BaiduMapAPI_Location.framework */,
+				965240F91ED6BE8E0090E1C8 /* BaiduMapAPI_Utils.framework */,
+				965240FA1ED6BE8E0090E1C8 /* thirdlibs */,
+			);
+			path = BaiduMap_IOSSDK_v3.3.1_Lib;
+			sourceTree = "<group>";
+		};
+		965240FA1ED6BE8E0090E1C8 /* thirdlibs */ = {
+			isa = PBXGroup;
+			children = (
+				965240FB1ED6BE8E0090E1C8 /* libcrypto.a */,
+				965240FC1ED6BE8E0090E1C8 /* libssl.a */,
+			);
+			path = thirdlibs;
 			sourceTree = "<group>";
 		};
 		9670C4A21E70F5DE0060CE0B /* videoGuide */ = {
@@ -2489,6 +2601,8 @@
 				0614A9E11D6699980080D710 /* FavoriteViewController.m in Sources */,
 				06F9B2A31D6ED8CE00C7F0A4 /* GCCGetInfo.m in Sources */,
 				47F997621DFFA58F0009BDFB /* SXWiFiHelpView.m in Sources */,
+				0645F7FB1ED580A8004678E8 /* RDScreenLocationView.m in Sources */,
+				965240DF1ED532F30090E1C8 /* RestaurantListViewController.m in Sources */,
 				0627E0C11E3231DA00DAED92 /* LGSideMenuView.m in Sources */,
 				0647EACF1E70F37E00C39160 /* ZFBrightnessView.m in Sources */,
 				47F9975E1DFFA4060009BDFB /* SXWiFiCell.m in Sources */,
@@ -2543,10 +2657,12 @@
 				063B1D531D7D63D30036C02B /* PhotoSliderViewController.m in Sources */,
 				062CF0281EC3449D00EA6AE0 /* RDHammer.m in Sources */,
 				47FE2CBD1E1BB64E00D3D0B4 /* UIImage+SplitImageIntoTwoParts.m in Sources */,
+				965240DB1ED532E30090E1C8 /* RestaurantListTableViewCell.m in Sources */,
 				064F8B931E532838006280FD /* HSGetIpRequest.m in Sources */,
 				06ED754C1D643A3700C56DD2 /* MineTableViewCell.m in Sources */,
 				47D6F64E1E4ACA090030C8C4 /* VoideoPlayStatusCell.m in Sources */,
 				0639C6F01D794603002A04C1 /* AnimationImageView.m in Sources */,
+				965240E21ED559930090E1C8 /* HSRestaurantListRequest.m in Sources */,
 				474C76371DFB9BED001129C9 /* NoNetWorkView.m in Sources */,
 				060C37361D6C42930058BBBE /* GCDAsyncUdpSocket.m in Sources */,
 				964177951EB86C2100AA839E /* HSInstallationInforUpload.m in Sources */,
@@ -2556,6 +2672,7 @@
 				06FFCCAF1E6EBF6A00ADEA94 /* RDCheackSence.m in Sources */,
 				4780584E1DF9908D0091C305 /* HSSubmitFeedbackRequest.m in Sources */,
 				06FA33991D3E171D001F5B37 /* ContextFilterLogFormatter.m in Sources */,
+				965241041ED6BE9E0090E1C8 /* RDLocationManager.m in Sources */,
 				062E99CE1E49C2F30042C924 /* UIImage+WaterMark.m in Sources */,
 				0688C4931E97760100D7D2A9 /* ShareRDViewController.m in Sources */,
 				06F5C9DF1E4D9F7200E05492 /* HSAdsModel.m in Sources */,
@@ -2575,6 +2692,7 @@
 				061B4EBB1E4850B2000D5E07 /* PhotoHandleView.m in Sources */,
 				06F07B7D1D768EE900AD7B7E /* HelpViewController.m in Sources */,
 				4733B7541E305C21006889A2 /* HomeAnimationView.m in Sources */,
+				96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */,
 				0627E0C21E3231DA00DAED92 /* UIViewController+LGSideMenuController.m in Sources */,
 				069076651E51904C00CA1AC4 /* ArticleReadViewController.m in Sources */,
 				0620412D1DC742100073C8A8 /* SliderListViewController.m in Sources */,
@@ -2590,6 +2708,7 @@
 				062CEFD51EC3053200EA6AE0 /* HSAwardUploadRequest.m in Sources */,
 				474C76351DFB9BED001129C9 /* NoDataView.m in Sources */,
 				476F44C51E2DBC1000F99090 /* LeftViewController.m in Sources */,
+				965240D71ED532CE0090E1C8 /* RestaurantListModel.m in Sources */,
 				0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */,
 				478058511DF99A5B0091C305 /* HSLatestTopicListRequest.m in Sources */,
 				4772FF901DFA9C5900758697 /* BaseView.m in Sources */,
@@ -2626,6 +2745,7 @@
 				06FFCCAB1E6E864900ADEA94 /* RDAlertAction.m in Sources */,
 				478058261DF985730091C305 /* HSCategoryListRequest.m in Sources */,
 				061FEFE81E2DB061003CD111 /* WMPageController.m in Sources */,
+				965240E51ED57F270090E1C8 /* HSHomeRestaurantList.m in Sources */,
 				06EA38D21D5980FC0081DDCC /* PhotoShowViewController.m in Sources */,
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
 				060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */,
@@ -2781,6 +2901,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SavorX/SavorXHeader.pch;
@@ -2795,6 +2916,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/SavorX/HelpLibs/UMessage_Sdk_1.4.0",
 					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
+					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
@@ -2820,6 +2942,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SavorX/SavorXHeader.pch;
@@ -2834,12 +2957,13 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/SavorX/HelpLibs/UMessage_Sdk_1.4.0",
 					"$(PROJECT_DIR)/SavorX/OpenInstallSDK",
+					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a9b07ad7-2902-4449-90fd-3b5c922f42ed";
-				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDistribution;
+				PROVISIONING_PROFILE = "898d6788-1d6f-434d-a4c1-4b837ac7e1c7";
+				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

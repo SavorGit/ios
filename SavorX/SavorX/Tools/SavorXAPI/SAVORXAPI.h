@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, interactType) {
  *  @param date       投蛋时间
  * @return NSURLSessionDataTask对象
  */
-+ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr  hunger:(NSInteger)hunger date:(NSString *)date   success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
++ (NSURLSessionDataTask *)gameForEggsWithURL:(NSString *)urlStr  hunger:(NSInteger)hunger date:(NSString *)date force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
 
 /**
  *  游戏砸蛋请求
@@ -82,7 +82,7 @@ typedef NS_ENUM(NSInteger, interactType) {
  *  @param position   点播视频的初始进度
  * @return NSURLSessionDataTask对象
  */
-+ (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
++ (NSURLSessionDataTask *)demandWithURL:(NSString *)urlStr name:(NSString *)name type:(NSInteger)type position:(CGFloat)position force:(NSInteger)force success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
 
 /**
  *  音量控制请求
@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger, interactType) {
  *  @param failure      请求失败的回调
  * @return NSURLSessionDataTask对象
  */
-+ (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)())success failure:(void (^)())failure;
++ (NSURLSessionDataTask *)postImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId  force:(NSInteger)force success:(void (^)())success failure:(void (^)())failure;
 
 /**
  *  投屏文件图片请求
@@ -125,7 +125,7 @@ typedef NS_ENUM(NSInteger, interactType) {
  *  @param failure      请求失败的回调
  * @return NSURLSessionDataTask对象
  */
-+ (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
++ (NSURLSessionDataTask *)postFileImageWithURL:(NSString *)urlStr data:(NSData *)data name:(NSString *)name type:(NSInteger)type isThumbnail:(BOOL)isThumbnail rotation:(NSInteger)rotation seriesId:(NSString *)seriesId force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                                        failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 
 /**
@@ -138,7 +138,7 @@ typedef NS_ENUM(NSInteger, interactType) {
  *  @param failure      请求失败的回调
  * @return NSURLSessionDataTask对象
  */
-+ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
++ (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
 
 /**
  *  视频暂停请求
@@ -208,7 +208,8 @@ typedef NS_ENUM(NSInteger, interactType) {
 /**
  *  电视机退出投屏点播
  */
-+ (void)ScreenDemandShouldBackToTV:(BOOL)fromHomeType;
++ (void)ScreenDemandShouldBackToTV:(BOOL)fromHomeType success:(void(^)())successBlock failure:(void(^)())failureBlock;
+
 
 /**
  *  电视机退出投屏点播
@@ -232,6 +233,14 @@ typedef NS_ENUM(NSInteger, interactType) {
  */
 + (void)postUMHandleWithContentId:(NSString *)eventId key:(NSString *)key value:(NSString *)value;
 
+/**
+ *  友盟上传事件
+ *
+ *  @param eventId   事件ID
+ *  @param parmDic   事件参数对应的字典
+ */
++ (void)postUMHandleWithContentId:(NSString *)eventId withParmDic:(NSDictionary *)parmDic;
+
 + (void)showAlertWithMessage:(NSString *)message;
 
 + (void)showConnetToTVAlert:(NSString *)type;
@@ -245,5 +254,7 @@ typedef NS_ENUM(NSInteger, interactType) {
 + (void)checkVersionUpgrade;
 
 + (void)screenEggsStopGame;
+
++ (void)cancelAllURLTask;
 
 @end

@@ -16,6 +16,13 @@ typedef enum : NSUInteger {
     RDSceneNothing,
 } RDScene;
 
+typedef enum : NSUInteger {
+    RDNetworkStatusUnknown = -1,
+    RDNetworkStatusNotReachable = 0,
+    RDNetworkStatusReachableViaWWAN = 1,
+    RDNetworkStatusReachableViaWiFi = 2,
+} RDNetworkStatus;
+
 extern NSString * const RDDidBindDeviceNotification; //已经连接至设备
 extern NSString * const RDDidDisconnectDeviceNotification; //已经断开连接
 extern NSString * const RDDidFoundHotelIdNotification; //发现了新的酒楼ID
@@ -24,6 +31,7 @@ extern NSString * const RDDidFoundBoxSenceNotification; //进入了机顶盒设�
 extern NSString * const RDDidFoundDLNASenceNotification; //进入了DLNA设备环境
 
 extern NSString * const RDQiutScreenNotification; //结束投屏
+extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投屏
 
 @interface GlobalData : NSObject 
 
@@ -42,8 +50,8 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //当前绑定的DLNA设备
 @property (nonatomic, strong) DeviceModel * DLNADevice;
 
-//当前是否处于wifi网络状态
-@property (nonatomic, assign) BOOL isWifiStatus;
+//当前网络状态
+@property (nonatomic, assign) NSInteger networkStatus;
 
 //存储小平台呼出二维码地址
 @property (nonatomic, copy) NSString * callQRCodeURL;
@@ -93,7 +101,20 @@ extern NSString * const RDQiutScreenNotification; //结束投屏
 //记录启动应用的通知携带的信息
 @property (nonatomic, strong) HSVodModel * launchModel;
 
+//记录APNS注册的推送token
 @property (nonatomic, strong) NSString * deviceToken;
+
+@property (nonatomic, assign) double latitude;
+
+@property (nonatomic, assign) double longitude;
+
+@property (nonatomic, assign) double viewLatitude;
+
+@property (nonatomic, assign) double viewLongitude;
+
+@property (nonatomic, assign) double VCLatitude;
+
+@property (nonatomic, assign) double VCLongitude;
 
 /**
  *  创建单例

@@ -24,13 +24,15 @@
 #import "HSVideoViewController.h"
 #import "DemandViewController.h"
 #import "ArticleReadViewController.h"
+#import "RDScreenLocationView.h"
+#import "RestaurantListViewController.h"
 
 NSString *const WMControllerDidAddToSuperViewNotification = @"WMControllerDidAddToSuperViewNotification";
 NSString *const WMControllerDidFullyDisplayedNotification = @"WMControllerDidFullyDisplayedNotification";
 
 static NSInteger const kWMUndefinedIndex = -1;
 static NSInteger const kWMControllerCountUndefined = -1;
-@interface WMPageController ()<RDHomeScreenButtonDelegate> {
+@interface WMPageController ()<RDHomeScreenButtonDelegate, RDScreenLocationViewDelegate> {
     CGFloat _viewHeight, _viewWidth, _viewX, _viewY, _targetX, _superviewHeight;
     BOOL    _hasInited, _shouldNotScroll, _isTabBarHidden;
     NSInteger _initializedIndex, _controllerConut, _markedSelectIndex;
@@ -58,6 +60,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 // 标题点击按钮
 @property (nonatomic, strong) UIButton *titleViewBtn;
+
+@property (nonatomic, strong) RDHomeScreenButton * homeButton;
+
+@property (nonatomic, strong) RDScreenLocationView * locationView;
 
 @end
 
@@ -916,18 +922,14 @@ static NSInteger const kWMControllerCountUndefined = -1;
         
         if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
             
-            if ([GlobalData shared].isWifiStatus) {
+            if ([GlobalData shared].networkStatus == RDNetworkStatusReachableViaWiFi) {
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
             
             [[HomeAnimationView animationView] scanQRCode];
             
         }else if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.homeButton popOptionsWithAnimation];
-            });
-            
+            [self screenButtonDidClicked];
         }
     }
     
@@ -964,10 +966,33 @@ static NSInteger const kWMControllerCountUndefined = -1;
 - (void)SingleTapQuitScreen{
     [[HomeAnimationView animationView] quitScreen];
 }
-- (void)RDHomeScreenButtonDidChooseType:(RDScreenType)type
+
+- (void)screenButtonDidClicked
 {
-    switch (type) {
-        case RDScreenTypePhoto:
+    [self.locationView showWithStatus:RDScreenLocation_Loading];
+}
+
+#pragma mark -- 首页按钮以及弹窗的代理回调
+- (void)RDHomeScreenButtonDidBeClicked
+{
+    if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+        [self.locationView showWithStatus:RDScreenLocation_Loading];
+        self.isShowScreenView = YES;
+        [self setNeedsStatusBarAppearanceUpdate];
+    }else if ([GlobalData shared].networkStatus == RDNetworkStatusNotReachable){
+        [MBProgressHUD showTextHUDwithTitle:@"当前网络不可用" delay:1.5f];
+    }else{
+        RestaurantListViewController *restVC = [[RestaurantListViewController alloc] initWithScreenAlert];
+        [self.navigationController pushViewController:restVC animated:YES];
+    }
+}
+
+- (void)RDScreenLocationViewDidSelectTabButtonWithIndex:(NSInteger)index
+{
+    self.isShowScreenView = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
+    switch (index) {
+        case 0:
         {
             if (self.canGetPhoto) {
                 AlbumListViewController * album = [[AlbumListViewController alloc] init];
@@ -980,7 +1005,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }
             break;
             
-        case RDScreenTypeVideo:
+        case 1:
         {
             if (self.canGetPhoto) {
                 VideoListViewController * video = [[VideoListViewController alloc] init];
@@ -993,7 +1018,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }
             break;
             
-        case RDScreenTypeSlider:
+        case 2:
         {
             if (self.canGetPhoto) {
                 SliderViewController * album = [[SliderViewController alloc] init];
@@ -1006,7 +1031,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }
             break;
             
-        case RDScreenTypeDocument:
+        case 3:
         {
             self.count++;
             DocumentListViewController * document = [[DocumentListViewController alloc] init];
@@ -1021,18 +1046,25 @@ static NSInteger const kWMControllerCountUndefined = -1;
         }
             break;
             
-        case RDScreenTypeNiceVideo:
-        {
-            if (self.isInHotel) {
-                [self setSelectIndex:0];
-                [SAVORXAPI postUMHandleWithContentId:@"home_bunch_planting" key:nil value:nil];
-            }
-        }
-            break;
-            
         default:
             break;
     }
+}
+
+//查看更多
+- (void)RDScreenLocationViewDidSelectMoreButton
+{
+    self.isShowScreenView = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
+    RestaurantListViewController *restVC = [[RestaurantListViewController alloc] init];
+    [self.navigationController pushViewController:restVC animated:YES];
+    [SAVORXAPI postUMHandleWithContentId:@"home_hotel_more" key:nil value:nil];
+}
+
+- (void)RDScreenLocationViewDidClose
+{
+    self.isShowScreenView = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)setupViews
@@ -1245,6 +1277,11 @@ static NSInteger const kWMControllerCountUndefined = -1;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    // 正在投屏返回首页
+    if ([HomeAnimationView animationView].isScreening) {
+        [SAVORXAPI postUMHandleWithContentId:@"home_toscreen_state" key:nil value:nil];
+    }
     
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     self.sideMenuController.leftViewSwipeGestureEnabled = YES;
@@ -1495,6 +1532,15 @@ static NSInteger const kWMControllerCountUndefined = -1;
     return _homeButton;
 }
 
+- (RDScreenLocationView *)locationView
+{
+    if (!_locationView) {
+        _locationView = [[RDScreenLocationView alloc] init];
+        _locationView.delegate = self;
+    }
+    return _locationView;
+}
+
 //收到节目的推送，跳转至相关的页面
 - (void)didReceiveRemoteNotification:(HSVodModel *)model
 {
@@ -1506,25 +1552,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         //如果是绑定状态
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         
-        [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-            if ([[result objectForKey:@"result"] integerValue] == 0) {
-                
-                DemandViewController *view = [[DemandViewController alloc] init];
-                view.categroyID = categoryID;
-                view.model = model;
-                [SAVORXAPI successRing];
-                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
-                [[HomeAnimationView animationView] startScreenWithViewController:view];
-                [self.navigationController pushViewController:view animated:YES];
-                [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-            }else{
-                [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-            }
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-        }];
+        [self demandVideoWithModel:model force:0 categoryID:categoryID];
         
     }else{
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
@@ -1550,6 +1578,44 @@ static NSInteger const kWMControllerCountUndefined = -1;
             
         }
     }
+}
+
+- (void)demandVideoWithModel:(HSVodModel *)model force:(NSInteger)force categoryID:(NSInteger)categoryID{
+    
+    [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 force:force  success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            
+            DemandViewController *view = [[DemandViewController alloc] init];
+            view.categroyID = categoryID;
+            view.model = model;
+            [SAVORXAPI successRing];
+            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+            [[HomeAnimationView animationView] startScreenWithViewController:view];
+            [self.navigationController pushViewController:view animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithModel:model force:1 categoryID:categoryID];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"}];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }
+        else{
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [MBProgressHUD showTextHUDwithTitle:DemandFailure];
+    }];
 }
 
 @end

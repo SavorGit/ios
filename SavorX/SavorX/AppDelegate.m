@@ -30,10 +30,15 @@
 #import "RecommendViewController.h"
 #import "CategoryViewController.h"
 #import "HSInstallationInforUpload.h"
+#import "HSFirstUseRequest.h"
+#import "RDLocationManager.h"
+#import <BaiduMapAPI_Base/BMKBaseComponent.h>
 
-@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
+@interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
 @property (nonatomic, assign) BOOL is3D_Touch;
+@property (nonatomic, copy) NSString * ssid;
+#define hasFirstOpenID @"hasFirstOpenID"
 
 @end
 
@@ -99,6 +104,20 @@
                 }];
             }];
         }];
+    }
+    
+    if ([BMKMapManager setCoordinateTypeUsedInBaiduMapSDK:BMK_COORDTYPE_BD09LL]) {
+        NSLog(@"经纬度类型设置成功");
+    }else{
+        NSLog(@"经纬度类型设置失败");
+    }
+    
+    BMKMapManager * manager = [[BMKMapManager alloc] init];
+    BOOL ret = [manager start:@"m7ZzBoKRq8XkUGWtpIr2fQ3RgvK85lau" generalDelegate:self];
+    if (ret) {
+        NSLog(@"地图初始化成功");
+    }else{
+        NSLog(@"地图初始化失败");
     }
 }
 
@@ -201,7 +220,42 @@
     sliderVC.leftViewWidth = width / 3 * 2;
     sliderVC.leftViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(66, 66);
     
+    [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
+    }];
+    [self performSelector:@selector(installFirstForRequest) withObject:nil afterDelay:10.f];
+    
     return sliderVC;
+}
+
+// 首次安装调用
+- (void)installFirstForRequest{
+    
+    if (![[[NSUserDefaults standardUserDefaults] objectForKey:hasFirstOpenID] boolValue]
+        ) {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:hasFirstOpenID];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        HSFirstUseRequest * request = [[HSFirstUseRequest alloc] initWithHotelId:[GlobalData shared].hotelId];
+        
+        [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            
+        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            
+            if ([[response objectForKey:@"code"] integerValue] == 20001) {
+                
+            }else{
+                [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasFirstOpenID];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            
+        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+            
+            [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasFirstOpenID];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+        }];
+    }
 }
 
 - (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
@@ -273,14 +327,21 @@
     
     [mgr setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         
-        if (status == AFNetworkReachabilityStatusReachableViaWiFi) {
-            [GlobalData shared].isWifiStatus = YES;
-            [[GCCDLNA defaultManager] startSearchPlatform];
-        }else{
-            [GlobalData shared].isWifiStatus = NO;
-            [[GlobalData shared] disconnect];
+        if (status == AFNetworkReachabilityStatusUnknown) {
+            [GlobalData shared].networkStatus = RDNetworkStatusUnknown;
+        }else if (status == AFNetworkReachabilityStatusNotReachable) {
+            [self screenShouldBeStop];
             [[GCCDLNA defaultManager] stopSearchDevice];
-            [[GCCDLNA defaultManager] callQRcodeFromPlatform];
+            [GlobalData shared].networkStatus = RDNetworkStatusNotReachable;
+        }else if (status == AFNetworkReachabilityStatusReachableViaWiFi) {
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
+            [[GCCDLNA defaultManager] startSearchPlatform];
+        }else if (status == AFNetworkReachabilityStatusReachableViaWWAN){
+            [self screenShouldBeStop];
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWWAN;
+            [[GCCDLNA defaultManager] stopSearchDevice];
+        }else{
+            [GlobalData shared].networkStatus = RDNetworkStatusUnknown;
         }
     }];
     
@@ -295,6 +356,12 @@
         //应用处于前台时的远程推送接受
         //必须加这句代码
         [UMessage didReceiveRemoteNotification:userInfo];
+        [SAVORXAPI postUMHandleWithContentId:@"receive_notification" key:nil value:nil];
+        if ([userInfo objectForKey:@"type"]) {
+            if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+                [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+            }
+        }
         
     }else{
         //应用处于前台时的本地推送接受
@@ -306,41 +373,53 @@
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler{
     NSDictionary * userInfo = response.notification.request.content.userInfo;
     
-    if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
-        
-    }else if ([[userInfo objectForKey:@"type"] integerValue] == 2){
-        
-        //如果type等于2，代表是一个进入详情的item推送
-        NSDictionary * dict = [userInfo objectForKey:@"params"];
-        
-        if (dict && [dict isKindOfClass:[NSDictionary class]]) {
-            //如果收到的推送是一个节目的推送则初始化该节目的一个model
-            HSVodModel * model = [[HSVodModel alloc] initWithDictionary:dict];
+     [SAVORXAPI postUMHandleWithContentId:@"click_notification" key:nil value:nil];
+    
+    if ([userInfo objectForKey:@"type"]) {
+        if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
             
-            if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
-                //如果根视图是LGSide，则可以正常进行跳转
-                LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
-                BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
-                if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
-                    [baseNa popToRootViewControllerAnimated:NO];
+            [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+            
+        }else if ([[userInfo objectForKey:@"type"] integerValue] == 2){
+            
+            //如果type等于2，代表是一个进入详情的item推送
+            NSDictionary * dict = [userInfo objectForKey:@"params"];
+            
+            if (dict && [dict isKindOfClass:[NSDictionary class]]) {
+                //如果收到的推送是一个节目的推送则初始化该节目的一个model
+                HSVodModel * model = [[HSVodModel alloc] initWithDictionary:dict];
+                
+                if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
+                    //如果根视图是LGSide，则可以正常进行跳转
+                    LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
+                    BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
+                    if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
+                        [baseNa popToRootViewControllerAnimated:NO];
+                    }
+                    if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
+                        WMPageController * page = (WMPageController *)baseNa.topViewController;
+                        [page didReceiveRemoteNotification:model];
+                    }
+                }else{
+                    //如果根视图不是LGSide，则进行存储，等待首页加载完成后进行处理
+                    [GlobalData shared].isLaunchedByNotification = YES;
+                    [GlobalData shared].launchModel = model;
                 }
-                if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
-                    WMPageController * page = (WMPageController *)baseNa.topViewController;
-                    [page didReceiveRemoteNotification:model];
-                }
-            }else{
-                //如果根视图不是LGSide，则进行存储，等待首页加载完成后进行处理
-                [GlobalData shared].isLaunchedByNotification = YES;
-                [GlobalData shared].launchModel = model;
             }
+            
         }
-        
     }
     
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         //应用处于后台时的远程推送接受
         //必须加这句代码
         [UMessage didReceiveRemoteNotification:userInfo];
+        [SAVORXAPI postUMHandleWithContentId:@"receive_notification" key:nil value:nil];
+        if ([userInfo objectForKey:@"type"]) {
+            if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+                [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+            }
+        }
         
     }else{
         //应用处于后台时的本地推送接受
@@ -541,6 +620,12 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [UMessage didReceiveRemoteNotification:userInfo];
+    [SAVORXAPI postUMHandleWithContentId:@"receive_notification" key:nil value:nil];
+    if ([userInfo objectForKey:@"type"]) {
+        if ([[userInfo objectForKey:@"type"] integerValue] == 1) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_start" key:nil value:nil];
+        }
+    }
 }
 
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
@@ -559,7 +644,7 @@
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
         }else if ([Helper isWifiStatus]){
-            [GlobalData shared].isWifiStatus = YES;
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
                 if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
                     [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
@@ -597,14 +682,14 @@
             if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
                 WMPageController * page = (WMPageController *)baseNa.topViewController;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [page.homeButton popOptionsWithAnimation];
+                    [page screenButtonDidClicked];
                 });
             }
             
         }
     }else{
         if ([Helper isWifiStatus]) {
-            [GlobalData shared].isWifiStatus = YES;
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
         }
         
         [GlobalData shared].is3DTouchEnable = YES;
@@ -643,9 +728,11 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     
-    [NSObject cancelPreviousPerformRequestsWithTarget:[GCCDLNA defaultManager] selector:@selector(startSearchDevice) object:nil];
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+        self.ssid = [Helper getWifiName];
+    }else{
+        self.ssid = @"";
+    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -665,13 +752,21 @@
         return;
     }
     
+    if (!isEmptyString(self.ssid) && [Helper getWifiName]) {
+        if ([self.ssid isEqualToString:[Helper getWifiName]]) {
+            return;
+        }
+    }
+    
     if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
         if ([GlobalData shared].isBindRD) {
             if (![HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].RDBoxDevice.BoxIP]) {
+                [self screenShouldBeStop];
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
             if (![[Helper getWifiName] isEqualToString:[GlobalData shared].RDBoxDevice.sid]) {
+                [self screenShouldBeStop];
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
@@ -681,7 +776,7 @@
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
         }else if ([Helper isWifiStatus]){
-            [GlobalData shared].isWifiStatus = YES;
+            [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
                 if ([HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].cacheModel.BoxIP]) {
                     [[GlobalData shared] bindToRDBoxDevice:[GlobalData shared].cacheModel];
@@ -713,11 +808,26 @@
     }
 }
 
+- (void)screenShouldBeStop
+{
+    if ([HomeAnimationView animationView].isScreening) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([GlobalData shared].networkStatus == RDNetworkStatusNotReachable) {
+                [MBProgressHUD showNetworkStatusTextHUDWithTitle:@"网络不可用，已经断开连接" delay:1.5f];
+            }else{
+                [MBProgressHUD showNetworkStatusTextHUDWithTitle:@"与电视断开连接，请重试" delay:1.5f];
+            }
+        });
+    }
+}
+
 //APP将要退出生命周期调用的函数
 - (void)applicationWillTerminate:(UIApplication *)application {
     //如果是绑定状态，尝试发送退出消息
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        [SAVORXAPI ScreenDemandShouldBackToTV:nil];
+        [SAVORXAPI ScreenDemandShouldBackToTV:nil success:nil failure:nil];
     }
 }
 

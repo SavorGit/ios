@@ -15,6 +15,8 @@
 #import "PhotoTool.h"
 #import "VideoGuidedTwoDimensionalCode.h"
 #import "HelpViewController.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
 
 #define DocumentListCell @"DocumentListCell"
 
@@ -78,7 +80,7 @@
 
 - (void)shouldPushHelp
 {
-    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.rerdian.com/Public/html/help/helpone.html"];
+    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"];
     help.title = @"文件投屏步骤";
     [self.navigationController  pushViewController:help  animated:NO];
 }
@@ -229,21 +231,7 @@
         if ([GlobalData shared].isBindRD) {
              [MBProgressHUD showCustomLoadingHUDInView:self.view];
             
-            [SAVORXAPI postVideoWithURL:STBURL mediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                if ([[result objectForKey:@"result"] integerValue] == 0) {
-                    
-                    UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-                    [HomeAnimationView animationView].currentImage = firstImage;
-                    [[HomeAnimationView animationView] startScreenWithViewController:video];
-                    [self.navigationController pushViewController:video animated:YES];
-                }else{
-                    [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-                }
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-            }];
+            [self demandVideoWithMediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0 video:video movieUrl:movieURL];
             
         }else if ([GlobalData shared].isBindDLNA) {
              [MBProgressHUD showCustomLoadingHUDInView:self.view];
@@ -286,6 +274,39 @@
     [self.navigationController pushViewController:doucment animated:YES];
 }
 
+- (void)demandVideoWithMediaPath:(NSString *)mediaPath force:(NSInteger)force video:(SXVideoPlayViewController *)video movieUrl:(NSURL *)movieURL{
+    
+    [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            
+            UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
+            [HomeAnimationView animationView].currentImage = firstImage;
+            [[HomeAnimationView animationView] startScreenWithViewController:video];
+            [self.navigationController pushViewController:video animated:YES];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"file"}];
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithMediaPath:mediaPath force:1 video:video movieUrl:movieURL];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"file"} ];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }
+        else{
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+    }];
+}
 //创建没有文件提示文案
 - (void)createNothingView
 {

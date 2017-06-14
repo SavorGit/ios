@@ -425,7 +425,7 @@
     [array insertObject:[array lastObject] atIndex:0];
     [array addObject:[array objectAtIndex:1]];
     slider.PHAssetSource = array;
-    if ([GlobalData shared].isWifiStatus) {
+    if ([GlobalData shared].networkStatus == RDNetworkStatusReachableViaWiFi) {
         if ([GlobalData shared].isBindRD) {
                 
             MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
@@ -436,7 +436,7 @@
                 
                 [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                     
-                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:slider.seriesId success:^{
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:slider.seriesId force:0 success:^{
                         [hud hideAnimated:NO];
                         
                         // 获取第一张幻灯片图片，回传
@@ -446,7 +446,7 @@
                         [self.navigationController pushViewController:slider animated:YES];
                         [SAVORXAPI successRing];
                         
-                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:slider.seriesId success:^{
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:slider.seriesId force:0 success:^{
                             
                         } failure:^{
                             

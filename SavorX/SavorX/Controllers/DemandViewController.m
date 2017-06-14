@@ -62,6 +62,8 @@
             
         }];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidPlayEnd) name:RDBoxQuitScreenNotification object:nil];
 }
 
 //初始化界面
@@ -227,23 +229,8 @@
 
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
           
-        self.isPlayEnd = YES;
-        self.playBtn.selected = NO;
-        [self updatePlayStatus];
-        self.screenButton.enabled = YES;
-        self.screenButton.hidden = NO;
+        [self videoDidPlayEnd];
         
-        self.quitScreenButton.hidden = YES;
-        self.maskingView.hidden = YES;
-        
-        [self.timer setFireDate:[NSDate distantFuture]];
-        [self.timer invalidate];
-        self.timer = nil;
-        
-        self.minimumLabel.text = @"00:00";
-        self.playSilder.value = 0;
-        
-        [self quitBack];
         [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_exit_screen" key:nil value:nil];
         if (fromHomeType == YES) {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
@@ -477,18 +464,7 @@
                 [self.playSilder setValue:posFloat];
                 [self updateTimeLabel:posFloat];
             }else if (code == -1 || code == 1){
-                self.minimumLabel.text = @"00:00";
-                self.playSilder.value = 0;
-                self.isPlayEnd = YES;
-                self.playBtn.selected = NO;
-                [self updatePlayStatus];
-                self.quitScreenButton.hidden = YES;
-                self.maskingView.hidden = YES;
-                self.screenButton.hidden = NO;
-                self.screenButton.enabled = YES;
-                [self.timer invalidate];
-                self.timer = nil;
-                [self quitBack];
+                [self videoDidPlayEnd];
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -497,17 +473,7 @@
     }else if ([GlobalData shared].isBindDLNA){
         [[GCCUPnPManager defaultManager] getPlayProgressSuccess:^(NSString *totalDuration, NSString *currentDuration, float progress) {
             if (progress >= 1 - 1 / self.playSilder.maximumValue) {
-                self.minimumLabel.text = @"00:00";
-                self.playSilder.value = 0;
-                self.isPlayEnd = YES;
-                self.playBtn.selected = NO;
-                [self updatePlayStatus];
-                self.quitScreenButton.hidden = YES;
-                self.maskingView.hidden = YES;
-                self.screenButton.hidden = NO;
-                self.screenButton.enabled = YES;
-                [self.timer invalidate];
-                self.timer = nil;
+                [self videoDidPlayEnd];
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
             }else{
                 CGFloat posFloat = [[GCCUPnPManager defaultManager] timeIntegerFromString:totalDuration] * progress;
@@ -693,7 +659,7 @@
     self.screenButton.enabled = NO;
     if ([GlobalData shared].isBindRD) {
         
-        [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 force:0  success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 [[HomeAnimationView animationView] startScreenWithViewController:self];
                 self.isPlayEnd = NO;
@@ -936,6 +902,8 @@
 
 - (void)shouldRelease
 {
+    self.webView.delegate = nil;
+    self.webView.scrollView.delegate = nil;
     if (self.timer) {
         [self.timer setFireDate:[NSDate distantFuture]];
         [self.timer invalidate];
@@ -943,9 +911,25 @@
     }
 }
 
+- (void)videoDidPlayEnd
+{
+    self.minimumLabel.text = @"00:00";
+    self.playSilder.value = 0;
+    self.isPlayEnd = YES;
+    self.playBtn.selected = NO;
+    [self updatePlayStatus];
+    self.quitScreenButton.hidden = YES;
+    self.maskingView.hidden = YES;
+    self.screenButton.hidden = NO;
+    self.screenButton.enabled = YES;
+    [self shouldRelease];
+    [self quitBack];
+}
+
 - (void)dealloc
 {
     NSLog(@"点播页面释放了");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {

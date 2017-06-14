@@ -12,6 +12,8 @@
 #import "PhotoTool.h"
 #import "GCCUPnPManager.h"
 #import "HomeAnimationView.h"
+#import "RDAlertView.h"
+#import "RDAlertAction.h"
 
 #define VideoCELL @"VideoCELL"
 
@@ -103,24 +105,9 @@
                 
                 NSString *asseturlStr = [NSString stringWithFormat:@"%@video?media-Redianer-TempCache.mp4", [HTTPServerManager getCurrentHTTPServerIP]];
                 if ([GlobalData shared].isBindRD) {
-                    [SAVORXAPI postVideoWithURL:STBURL mediaPath:asseturlStr position:@"0" success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-                        if ([[result objectForKey:@"result"] integerValue] == 0) {
-                            SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
-                            play.videoUrl = @"video?media-Redianer-TempCache.mp4";
-                            play.totalTime = asset.duration;
-                            [MBProgressHUD hideHUDForView:self.view animated:YES];
-                            [SAVORXAPI successRing];
-                            [[HomeAnimationView animationView] startScreenWithViewController:play];
-                            [self.navigationController pushViewController:play animated:YES];
-                            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];
-                        }else{
-                            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-                        }
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                        [MBProgressHUD hideHUDForView:self.view animated:YES];
-                        [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-                    }];
+                    
+                    [self demandVideoWithMediaPath:asseturlStr asset:asset force:0];
+                    
                 }else if ([GlobalData shared].isBindDLNA) {
                     [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -155,6 +142,43 @@
                 [MBProgressHUD showTextHUDwithTitle:@"视频导出失败"];
             });
         }
+    }];
+}
+
+- (void)demandVideoWithMediaPath:(NSString *)mediaPath  asset:(PHAsset *)asset force:(NSInteger)force{
+    
+    [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
+            play.videoUrl = @"video?media-Redianer-TempCache.mp4";
+            play.totalTime = asset.duration;
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [SAVORXAPI successRing];
+            [[HomeAnimationView animationView] startScreenWithViewController:play];
+            [self.navigationController pushViewController:play animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"video"}];
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithMediaPath:mediaPath asset:asset force:1];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"video"}];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }
+        else{
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
     }];
 }
 

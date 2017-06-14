@@ -8,30 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum : NSUInteger {
-    RDScreenTypePhoto, //相册
-    RDScreenTypeVideo, //精彩视频
-    RDScreenTypeSlider, //幻灯片
-    RDScreenTypeDocument, //我的文件
-    RDScreenTypeNiceVideo //精彩视频
-} RDScreenType; //用户手动选择的类型
-
 @protocol RDHomeScreenButtonDelegate <NSObject>
 
-- (void)RDHomeScreenButtonDidChooseType:(RDScreenType)type;
+- (void)RDHomeScreenButtonDidBeClicked;
 
 @end
 
 @interface RDHomeScreenButton : UIButton
 
 @property (nonatomic, assign) id<RDHomeScreenButtonDelegate> delegate;
-
-//弹出菜单
-- (void)popOptionsWithAnimation;
-
-//关闭菜单
-- (void)closeOptionsWithAnimation;
-
-- (void)closeWithMust;
 
 @end

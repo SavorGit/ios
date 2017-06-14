@@ -15,7 +15,7 @@
     if (self = [super init]) {
         self.methodName = [@"basedata/Firstuse/pushData?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setIntegerValue:6 forParamKey:@"hotelId"];
+        [self setIntegerValue:hotelId forParamKey:@"hotelId"];
     }
     return self;
 }

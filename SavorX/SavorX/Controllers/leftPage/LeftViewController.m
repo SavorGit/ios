@@ -16,6 +16,7 @@
 #import "LeftCell.h"
 #import "LeftTableHeaderView.h"
 #import "ShareRDViewController.h"
+#import "RestaurantListViewController.h"
 
 @interface LeftViewController ()<UINavigationControllerDelegate>{
     
@@ -53,8 +54,8 @@
 
 -(void)setupDatas{
 
-    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"清除缓存",@"当前版本"];
-    _imageArys = @[@"shoucang", @"yijianfankui", @"bangzhu", @"qingchu", @"banben"];
+    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"提供投屏的餐厅",@"清除缓存",@"当前版本"];
+    _imageArys = @[@"shoucang", @"yijianfankui", @"bangzhu",@"canting", @"qingchu", @"banben"];
 }
 
 #pragma mark -- UITableViewDataSource
@@ -68,7 +69,7 @@
     [cell bottomLineHidden:NO];
     NSString *content;
     if (indexPath.section == 0) {
-        if (indexPath.row == 2) {
+        if (indexPath.row == 3) {
             [cell bottomLineHidden:YES];
         }
     }else if(indexPath.section == 1){
@@ -80,8 +81,8 @@
             [cell bottomLineHidden:YES];
         }
     }
-    [cell fillCellTitle:[_itemArys objectAtIndex:indexPath.section * 3 + indexPath.row] content:content];
-    [cell.iconImageView setImage:[UIImage imageNamed:[_imageArys objectAtIndex:indexPath.section * 3 + indexPath.row]]];
+    [cell fillCellTitle:[_itemArys objectAtIndex:indexPath.section * 4 + indexPath.row] content:content];
+    [cell.iconImageView setImage:[UIImage imageNamed:[_imageArys objectAtIndex:indexPath.section * 4 + indexPath.row]]];
     
     return cell;
     
@@ -95,7 +96,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 3;
+        return 4;
     }
     return 2;
 }
@@ -118,9 +119,14 @@
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:advice  animated:NO];
         }else if (indexPath.row == 2){
             [self hideLeftViewAnimated:nil];
-            HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.rerdian.com/Public/html/help"];
+            HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help"];
             help.title = [_itemArys objectAtIndex:indexPath.row];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:help  animated:NO];
+        }else if (indexPath.row == 3){
+            [self hideLeftViewAnimated:nil];
+            RestaurantListViewController * restVC = [[RestaurantListViewController alloc] init];
+            [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:restVC  animated:NO];
+            [SAVORXAPI postUMHandleWithContentId:@"menu_hotel_map_list" key:nil value:nil];
         }
     }
     else if (indexPath.section == 1){

@@ -30,23 +30,24 @@
 #define TEST_DEV_TYPE 1 //测试环境切换宏，1代表线上环境，0代表测试环境
 
 #if TEST_DEV_TYPE
-
 #define AliyunBucketName @"redian-produce"
-#define HOSTURL @"http://mobile.rerdian.com/" //正式地址
+#define HOSTURL @"http://mobile.littlehotspot.com/" //正式地址
+#define AliynEndPoint @"http://oss.littlehotspot.com/"
+#define NSLog(...) {}
 
 #else
-
 #define AliyunBucketName @"redian-development"
-#define HOSTURL @"http://devp.testapi.rerdian.com/"  //测试地址
-
+#define HOSTURL @"http://devp.mobile.littlehotspot.com/"  //测试地址
+#define AliynEndPoint @"http://devp.oss.littlehotspot.com/"
+#define NSLog(...) NSLog(__VA_ARGS__)
 #endif
 
-#define kVersionCode 2017051701
+
+#define kVersionCode 2017061201
 
 //-------------------友盟-------------------------
 #define UmengAppkey @"57be6121e0f55a9171000905"
 
-#define AliynEndPoint @"https://oss-cn-beijing.aliyuncs.com/"
 #define AliyunAccessKeyID @"LTAI6QZ3c2qBvmjs"
 #define AliyunAccessKeySecret @"bvE6fELl7Dgiyb5z2rP4tuYWZrQGzM"
 
@@ -127,6 +128,6 @@
 #define keychainID @"HotTopicsKeychainID"
 #define RDAreaID @"RDAreaID"
 #define crashType @"crashType"
-#define RDDownLoadURL @"http://www.rerdian.com/d"
+#define RDDownLoadURL @"http://www.littlehotspot.com/d"
 
 #endif /* SavorXHeader_pch */

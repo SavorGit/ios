@@ -18,8 +18,8 @@ NSString * const RDDidFoundBoxSenceNotification = @"RDDidFoundBoxSenceNotificati
 NSString * const RDDidFoundDLNASenceNotification = @"RDDidFoundDLNASenceNotification";
 
 NSString * const RDQiutScreenNotification = @"RDQiutScreenNotification";
+NSString * const RDBoxQuitScreenNotification = @"RDBoxQuitScreenNotification";
 
-#define hasUseHotelID @"hasUseHotelID"
 #define hasAlertDemandHelp @"hasAlertDemandHelp"
 
 static GlobalData* single = nil;
@@ -52,6 +52,12 @@ static GlobalData* single = nil;
     self.hotelId = 0;
     self.projectId = @"projectId";
     self.deviceToken = @"";
+    self.latitude = 0.f;
+    self.longitude = 0.f;
+    self.viewLatitude = 0.f;
+    self.viewLongitude = 0.f;
+    self.VCLatitude = 0.f;
+    self.VCLongitude = 0.f;
     
     [self getAreaId];
 }
@@ -131,31 +137,6 @@ static GlobalData* single = nil;
             [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundHotelIdNotification object:nil];
         }
     }
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:hasUseHotelID] boolValue]
-        && hotelId != 0) {
-        
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:hasUseHotelID];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        HSFirstUseRequest * request = [[HSFirstUseRequest alloc] initWithHotelId:hotelId];
-        [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-            
-        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-            
-            if ([[response objectForKey:@"code"] integerValue] == 20001) {
-                
-            }else{
-                [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasUseHotelID];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-            
-        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-            
-            [[NSUserDefaults standardUserDefaults] setObject:@(NO) forKey:hasUseHotelID];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-        }];
-    }
 }
 
 - (void)setIsBindRD:(BOOL)isBindRD
@@ -186,9 +167,7 @@ static GlobalData* single = nil;
         _scene = scene;
         if (scene == RDSceneNothing) {
             [[NSNotificationCenter defaultCenter] postNotificationName:RDDidNotFoundSenceNotification object:nil];
-            if (_isBindRD || _isBindDLNA) {
-                [self disconnect];
-            }
+            [self disconnect];
             self.hotelId = 0;
             self.callQRCodeURL = @"";
         }else{
@@ -204,11 +183,11 @@ static GlobalData* single = nil;
     }
 }
 
-- (void)setIsWifiStatus:(BOOL)isWifiStatus
+- (void)setNetworkStatus:(NSInteger)networkStatus
 {
-    if (_isWifiStatus != isWifiStatus) {
-        _isWifiStatus = isWifiStatus;
-        if (!isWifiStatus) {
+    if (_networkStatus != networkStatus) {
+        _networkStatus = networkStatus;
+        if (_networkStatus != RDNetworkStatusReachableViaWiFi) {
             self.scene = RDSceneNothing;
             [MBProgressHUD removeTextHUD];
         }
