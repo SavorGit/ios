@@ -20,7 +20,6 @@
 #import "LGSideMenuController.h"
 #import "BaseNavigationController.h"
 #import "LeftViewController.h"
-#import "WMPageController.h"
 #import "HomeAnimationView.h"
 #import "VideoLauchMovieViewController.h"
 #import "HSLauchImageOrVideoRequest.h"
@@ -33,6 +32,8 @@
 #import "HSFirstUseRequest.h"
 #import "RDLocationManager.h"
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>
+
+#import "RDHomePageController.h"
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
@@ -207,7 +208,7 @@
 - (LGSideMenuController *)createRootViewController
 {
     LeftViewController *leftVc = [[LeftViewController alloc] init];
-    WMPageController *centerVC = [[WMPageController alloc] init];
+    RDHomePageController *centerVC = [[RDHomePageController alloc] init];
     centerVC.delegate = self;
     //2、初始化导航控制器
     BaseNavigationController *centerNav = [[BaseNavigationController alloc]initWithRootViewController:centerVC];
@@ -257,46 +258,6 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
             
         }];
-    }
-}
-
-- (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
-{
-    if ([viewController isKindOfClass:[HotTopicViewController class]]) {
-        
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
-        HotTopicViewController * vc = (HotTopicViewController *)viewController;
-        [vc showSelfAndCreateLog];
-        
-    }else if ([viewController isKindOfClass:[RecommendViewController class]]){
-        
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
-        RecommendViewController * vc = (RecommendViewController *)viewController;
-        [vc showSelfAndCreateLog];
-        
-    }else if ([viewController isKindOfClass:[CategoryViewController class]]){
-        
-        CategoryViewController * vc = (CategoryViewController *)viewController;
-        [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", vc.categoryID] volume:@"index"];
-        [vc showSelfAndCreateLog];
-    }
-}
-
-- (void)pageController:(WMPageController *)pageController didFirstEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
-{
-    if ([viewController isKindOfClass:[HotTopicViewController class]]) {
-        
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
-        
-    }else if ([viewController isKindOfClass:[RecommendViewController class]]){
-        
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
-        
-    }else if ([viewController isKindOfClass:[CategoryViewController class]]){
-        
-        CategoryViewController * vc = (CategoryViewController *)viewController;
-        [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", vc.categoryID] volume:@"index"];
-        
     }
 }
 
@@ -395,12 +356,12 @@
                     //如果根视图是LGSide，则可以正常进行跳转
                     LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
                     BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
-                    if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
+                    if (![baseNa.topViewController isKindOfClass:[RDHomePageController class]]) {
                         [baseNa popToRootViewControllerAnimated:NO];
                     }
-                    if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
-                        WMPageController * page = (WMPageController *)baseNa.topViewController;
-                        [page didReceiveRemoteNotification:model];
+                    if ([[baseNa topViewController] isKindOfClass:[RDHomePageController class]]) {
+                        RDHomePageController * page = (RDHomePageController *)baseNa.topViewController;
+//                        [page didReceiveRemoteNotification:model];
                     }
                 }else{
                     //如果根视图不是LGSide，则进行存储，等待首页加载完成后进行处理
@@ -678,13 +639,13 @@
             
             LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
             BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
-            if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
+            if (![baseNa.topViewController isKindOfClass:[RDHomePageController class]]) {
                 [baseNa popToRootViewControllerAnimated:NO];
             }
-            if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
-                WMPageController * page = (WMPageController *)baseNa.topViewController;
+            if ([[baseNa topViewController] isKindOfClass:[RDHomePageController class]]) {
+                RDHomePageController * page = (RDHomePageController *)baseNa.topViewController;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [page screenButtonDidClicked];
+//                    [page screenButtonDidClicked];
                 });
             }
             

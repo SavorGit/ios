@@ -31,11 +31,12 @@ typedef NS_ENUM(NSUInteger, WMMenuViewLayoutMode) {
 
 @protocol WMMenuViewDelegate <NSObject>
 @optional
+- (BOOL)menuView:(WMMenuView *)menu shouldSelesctedIndex:(NSInteger)index;
 - (void)menuView:(WMMenuView *)menu didSelesctedIndex:(NSInteger)index currentIndex:(NSInteger)currentIndex;
 - (CGFloat)menuView:(WMMenuView *)menu widthForItemAtIndex:(NSInteger)index;
 - (CGFloat)menuView:(WMMenuView *)menu itemMarginAtIndex:(NSInteger)index;
-- (CGFloat)menuView:(WMMenuView *)menu titleSizeForState:(WMMenuItemState)state;
-- (UIColor *)menuView:(WMMenuView *)menu titleColorForState:(WMMenuItemState)state;
+- (CGFloat)menuView:(WMMenuView *)menu titleSizeForState:(WMMenuItemState)state atIndex:(NSInteger)index;
+- (UIColor *)menuView:(WMMenuView *)menu titleColorForState:(WMMenuItemState)state atIndex:(NSInteger)index;
 - (void)menuView:(WMMenuView *)menu didLayoutItemFrame:(WMMenuItem *)menuItem atIndex:(NSInteger)index;
 @end
 
@@ -84,12 +85,6 @@ typedef NS_ENUM(NSUInteger, WMMenuViewLayoutMode) {
 @property (nonatomic, weak) UIView *leftView;
 @property (nonatomic, weak) UIView *rightView;
 @property (nonatomic, copy) NSString *fontName;
-
-@property (nonatomic, readonly) CGFloat selectedSize;
-@property (nonatomic, readonly) CGFloat normalSize;
-@property (nonatomic, readonly) UIColor *selectedColor;
-@property (nonatomic, readonly) UIColor *normalColor;
-
 @property (nonatomic, weak) UIScrollView *scrollView;
 /** 进度条的速度因数，默认为 15，越小越快， 大于 0 */
 @property (nonatomic, assign) CGFloat speedFactor;
@@ -98,6 +93,7 @@ typedef NS_ENUM(NSUInteger, WMMenuViewLayoutMode) {
 
 - (void)slideMenuAtProgress:(CGFloat)progress;
 - (void)selectItemAtIndex:(NSInteger)index;
+- (void)selectItemAtIndexWithNoDelegate:(NSInteger)index;
 - (void)resetFrames;
 - (void)reload;
 - (void)updateTitle:(NSString *)title atIndex:(NSInteger)index andWidth:(BOOL)update;

@@ -47,11 +47,6 @@
 		061E0FD41DFFD9A40072605F /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 061E0FCF1DFFD9A40072605F /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		061E0FE91DFFEBD10072605F /* RDBoxModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 061E0FE81DFFEBD10072605F /* RDBoxModel.m */; };
 		061FEFD71E2DAD64003CD111 /* CategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 061FEFD61E2DAD64003CD111 /* CategoryViewController.m */; };
-		061FEFE41E2DB061003CD111 /* WMMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 061FEFDB1E2DB061003CD111 /* WMMenuItem.m */; };
-		061FEFE51E2DB061003CD111 /* WMMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 061FEFDD1E2DB061003CD111 /* WMMenuView.m */; };
-		061FEFE61E2DB061003CD111 /* WMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 061FEFDF1E2DB061003CD111 /* WMProgressView.m */; };
-		061FEFE71E2DB061003CD111 /* WMScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 061FEFE11E2DB061003CD111 /* WMScrollView.m */; };
-		061FEFE81E2DB061003CD111 /* WMPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 061FEFE31E2DB061003CD111 /* WMPageController.m */; };
 		061FEFEB1E2DB337003CD111 /* HotTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 061FEFEA1E2DB337003CD111 /* HotTopicViewController.m */; };
 		061FEFEE1E2DB4AD003CD111 /* RecommendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 061FEFED1E2DB4AD003CD111 /* RecommendViewController.m */; };
 		0620412D1DC742100073C8A8 /* SliderListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0620412C1DC742100073C8A8 /* SliderListViewController.m */; };
@@ -141,6 +136,18 @@
 		065ECD801E8A8EB80062E29D /* index5_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD7F1E8A8EB80062E29D /* index5_1.jpg */; };
 		065ECD821E8A8EC10062E29D /* indexp6_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD811E8A8EC10062E29D /* indexp6_1.jpg */; };
 		066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */; };
+		0663D41B1F0B6AA500CD2FA2 /* RDHomePageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4181F0B6AA500CD2FA2 /* RDHomePageController.m */; };
+		0663D41C1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D41A1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m */; };
+		0663D4201F0B6AFA00CD2FA2 /* UIView+LayerCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D41F1F0B6AFA00CD2FA2 /* UIView+LayerCurve.m */; };
+		0663D4291F0B6B5900CD2FA2 /* RDTabScrollItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4241F0B6B5900CD2FA2 /* RDTabScrollItem.m */; };
+		0663D42A1F0B6B5900CD2FA2 /* RDTabScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4261F0B6B5900CD2FA2 /* RDTabScrollView.m */; };
+		0663D42B1F0B6B5900CD2FA2 /* RDTabScrollViewPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4281F0B6B5900CD2FA2 /* RDTabScrollViewPage.m */; };
+		0663D43A1F0B6CB000CD2FA2 /* menuBackImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0663D42E1F0B6CB000CD2FA2 /* menuBackImage.png */; };
+		0663D43B1F0B6CB000CD2FA2 /* WMMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4311F0B6CB000CD2FA2 /* WMMenuItem.m */; };
+		0663D43C1F0B6CB000CD2FA2 /* WMMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4331F0B6CB000CD2FA2 /* WMMenuView.m */; };
+		0663D43D1F0B6CB000CD2FA2 /* WMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4351F0B6CB000CD2FA2 /* WMProgressView.m */; };
+		0663D43E1F0B6CB000CD2FA2 /* WMScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4371F0B6CB000CD2FA2 /* WMScrollView.m */; };
+		0663D43F1F0B6CB000CD2FA2 /* WMPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4391F0B6CB000CD2FA2 /* WMPageController.m */; };
 		067CB3BF1D603B7200094BB8 /* DiscoverCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */; };
 		067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB7141D60B21C00094BB8 /* OpenFileTool.m */; };
 		06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */; };
@@ -438,16 +445,6 @@
 		061E0FE81DFFEBD10072605F /* RDBoxModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDBoxModel.m; sourceTree = "<group>"; };
 		061FEFD51E2DAD64003CD111 /* CategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryViewController.h; sourceTree = "<group>"; };
 		061FEFD61E2DAD64003CD111 /* CategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryViewController.m; sourceTree = "<group>"; };
-		061FEFDA1E2DB061003CD111 /* WMMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMMenuItem.h; sourceTree = "<group>"; };
-		061FEFDB1E2DB061003CD111 /* WMMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMMenuItem.m; sourceTree = "<group>"; };
-		061FEFDC1E2DB061003CD111 /* WMMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMMenuView.h; sourceTree = "<group>"; };
-		061FEFDD1E2DB061003CD111 /* WMMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMMenuView.m; sourceTree = "<group>"; };
-		061FEFDE1E2DB061003CD111 /* WMProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMProgressView.h; sourceTree = "<group>"; };
-		061FEFDF1E2DB061003CD111 /* WMProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMProgressView.m; sourceTree = "<group>"; };
-		061FEFE01E2DB061003CD111 /* WMScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMScrollView.h; sourceTree = "<group>"; };
-		061FEFE11E2DB061003CD111 /* WMScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMScrollView.m; sourceTree = "<group>"; };
-		061FEFE21E2DB061003CD111 /* WMPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMPageController.h; sourceTree = "<group>"; };
-		061FEFE31E2DB061003CD111 /* WMPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMPageController.m; sourceTree = "<group>"; };
 		061FEFE91E2DB337003CD111 /* HotTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotTopicViewController.h; sourceTree = "<group>"; };
 		061FEFEA1E2DB337003CD111 /* HotTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotTopicViewController.m; sourceTree = "<group>"; };
 		061FEFEC1E2DB4AD003CD111 /* RecommendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommendViewController.h; sourceTree = "<group>"; };
@@ -574,6 +571,29 @@
 		065ECD811E8A8EC10062E29D /* indexp6_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = indexp6_1.jpg; sourceTree = "<group>"; };
 		066379D61EA8963C00E91313 /* RDLogStatisticsAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDLogStatisticsAPI.h; sourceTree = "<group>"; };
 		066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDLogStatisticsAPI.m; sourceTree = "<group>"; };
+		0663D4171F0B6AA500CD2FA2 /* RDHomePageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHomePageController.h; sourceTree = "<group>"; };
+		0663D4181F0B6AA500CD2FA2 /* RDHomePageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHomePageController.m; sourceTree = "<group>"; };
+		0663D4191F0B6AA500CD2FA2 /* RDHomeScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHomeScreenViewController.h; sourceTree = "<group>"; };
+		0663D41A1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHomeScreenViewController.m; sourceTree = "<group>"; };
+		0663D41E1F0B6AFA00CD2FA2 /* UIView+LayerCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LayerCurve.h"; sourceTree = "<group>"; };
+		0663D41F1F0B6AFA00CD2FA2 /* UIView+LayerCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayerCurve.m"; sourceTree = "<group>"; };
+		0663D4231F0B6B5900CD2FA2 /* RDTabScrollItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDTabScrollItem.h; sourceTree = "<group>"; };
+		0663D4241F0B6B5900CD2FA2 /* RDTabScrollItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDTabScrollItem.m; sourceTree = "<group>"; };
+		0663D4251F0B6B5900CD2FA2 /* RDTabScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDTabScrollView.h; sourceTree = "<group>"; };
+		0663D4261F0B6B5900CD2FA2 /* RDTabScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDTabScrollView.m; sourceTree = "<group>"; };
+		0663D4271F0B6B5900CD2FA2 /* RDTabScrollViewPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDTabScrollViewPage.h; sourceTree = "<group>"; };
+		0663D4281F0B6B5900CD2FA2 /* RDTabScrollViewPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDTabScrollViewPage.m; sourceTree = "<group>"; };
+		0663D42E1F0B6CB000CD2FA2 /* menuBackImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menuBackImage.png; sourceTree = "<group>"; };
+		0663D4301F0B6CB000CD2FA2 /* WMMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMMenuItem.h; sourceTree = "<group>"; };
+		0663D4311F0B6CB000CD2FA2 /* WMMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMMenuItem.m; sourceTree = "<group>"; };
+		0663D4321F0B6CB000CD2FA2 /* WMMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMMenuView.h; sourceTree = "<group>"; };
+		0663D4331F0B6CB000CD2FA2 /* WMMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMMenuView.m; sourceTree = "<group>"; };
+		0663D4341F0B6CB000CD2FA2 /* WMProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMProgressView.h; sourceTree = "<group>"; };
+		0663D4351F0B6CB000CD2FA2 /* WMProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMProgressView.m; sourceTree = "<group>"; };
+		0663D4361F0B6CB000CD2FA2 /* WMScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMScrollView.h; sourceTree = "<group>"; };
+		0663D4371F0B6CB000CD2FA2 /* WMScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMScrollView.m; sourceTree = "<group>"; };
+		0663D4381F0B6CB000CD2FA2 /* WMPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMPageController.h; sourceTree = "<group>"; };
+		0663D4391F0B6CB000CD2FA2 /* WMPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMPageController.m; sourceTree = "<group>"; };
 		067CB3BD1D603B7200094BB8 /* DiscoverCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverCollectionViewCell.h; sourceTree = "<group>"; };
 		067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverCollectionViewCell.m; sourceTree = "<group>"; };
 		067CB7131D60B21C00094BB8 /* OpenFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenFileTool.h; sourceTree = "<group>"; };
@@ -1151,31 +1171,6 @@
 			path = HomePage;
 			sourceTree = "<group>";
 		};
-		061FEFD81E2DB061003CD111 /* WMPageController */ = {
-			isa = PBXGroup;
-			children = (
-				061FEFD91E2DB061003CD111 /* WMMenuView */,
-				061FEFE21E2DB061003CD111 /* WMPageController.h */,
-				061FEFE31E2DB061003CD111 /* WMPageController.m */,
-			);
-			path = WMPageController;
-			sourceTree = "<group>";
-		};
-		061FEFD91E2DB061003CD111 /* WMMenuView */ = {
-			isa = PBXGroup;
-			children = (
-				061FEFDA1E2DB061003CD111 /* WMMenuItem.h */,
-				061FEFDB1E2DB061003CD111 /* WMMenuItem.m */,
-				061FEFDC1E2DB061003CD111 /* WMMenuView.h */,
-				061FEFDD1E2DB061003CD111 /* WMMenuView.m */,
-				061FEFDE1E2DB061003CD111 /* WMProgressView.h */,
-				061FEFDF1E2DB061003CD111 /* WMProgressView.m */,
-				061FEFE01E2DB061003CD111 /* WMScrollView.h */,
-				061FEFE11E2DB061003CD111 /* WMScrollView.m */,
-			);
-			path = WMMenuView;
-			sourceTree = "<group>";
-		};
 		0620412A1DC741E80073C8A8 /* Slider */ = {
 			isa = PBXGroup;
 			children = (
@@ -1354,6 +1349,89 @@
 			path = ZFBrightnessView;
 			sourceTree = "<group>";
 		};
+		0663D4151F0B6A8E00CD2FA2 /* Controllers_3_0 */ = {
+			isa = PBXGroup;
+			children = (
+				0663D4161F0B6A8E00CD2FA2 /* HomePage */,
+			);
+			path = Controllers_3_0;
+			sourceTree = "<group>";
+		};
+		0663D4161F0B6A8E00CD2FA2 /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				0663D4171F0B6AA500CD2FA2 /* RDHomePageController.h */,
+				0663D4181F0B6AA500CD2FA2 /* RDHomePageController.m */,
+				0663D4191F0B6AA500CD2FA2 /* RDHomeScreenViewController.h */,
+				0663D41A1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m */,
+			);
+			path = HomePage;
+			sourceTree = "<group>";
+		};
+		0663D41D1F0B6AFA00CD2FA2 /* UIView+LayerCurve */ = {
+			isa = PBXGroup;
+			children = (
+				0663D41E1F0B6AFA00CD2FA2 /* UIView+LayerCurve.h */,
+				0663D41F1F0B6AFA00CD2FA2 /* UIView+LayerCurve.m */,
+			);
+			path = "UIView+LayerCurve";
+			sourceTree = "<group>";
+		};
+		0663D4211F0B6B4600CD2FA2 /* Views_3_0 */ = {
+			isa = PBXGroup;
+			children = (
+				0663D4221F0B6B5900CD2FA2 /* RDHomeTabScroll */,
+			);
+			path = Views_3_0;
+			sourceTree = "<group>";
+		};
+		0663D4221F0B6B5900CD2FA2 /* RDHomeTabScroll */ = {
+			isa = PBXGroup;
+			children = (
+				0663D4231F0B6B5900CD2FA2 /* RDTabScrollItem.h */,
+				0663D4241F0B6B5900CD2FA2 /* RDTabScrollItem.m */,
+				0663D4251F0B6B5900CD2FA2 /* RDTabScrollView.h */,
+				0663D4261F0B6B5900CD2FA2 /* RDTabScrollView.m */,
+				0663D4271F0B6B5900CD2FA2 /* RDTabScrollViewPage.h */,
+				0663D4281F0B6B5900CD2FA2 /* RDTabScrollViewPage.m */,
+			);
+			path = RDHomeTabScroll;
+			sourceTree = "<group>";
+		};
+		0663D42C1F0B6CB000CD2FA2 /* WMPageController */ = {
+			isa = PBXGroup;
+			children = (
+				0663D42D1F0B6CB000CD2FA2 /* source */,
+				0663D42F1F0B6CB000CD2FA2 /* WMMenuView */,
+				0663D4381F0B6CB000CD2FA2 /* WMPageController.h */,
+				0663D4391F0B6CB000CD2FA2 /* WMPageController.m */,
+			);
+			path = WMPageController;
+			sourceTree = "<group>";
+		};
+		0663D42D1F0B6CB000CD2FA2 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				0663D42E1F0B6CB000CD2FA2 /* menuBackImage.png */,
+			);
+			path = source;
+			sourceTree = "<group>";
+		};
+		0663D42F1F0B6CB000CD2FA2 /* WMMenuView */ = {
+			isa = PBXGroup;
+			children = (
+				0663D4301F0B6CB000CD2FA2 /* WMMenuItem.h */,
+				0663D4311F0B6CB000CD2FA2 /* WMMenuItem.m */,
+				0663D4321F0B6CB000CD2FA2 /* WMMenuView.h */,
+				0663D4331F0B6CB000CD2FA2 /* WMMenuView.m */,
+				0663D4341F0B6CB000CD2FA2 /* WMProgressView.h */,
+				0663D4351F0B6CB000CD2FA2 /* WMProgressView.m */,
+				0663D4361F0B6CB000CD2FA2 /* WMScrollView.h */,
+				0663D4371F0B6CB000CD2FA2 /* WMScrollView.m */,
+			);
+			path = WMMenuView;
+			sourceTree = "<group>";
+		};
 		067CB3BC1D603B4A00094BB8 /* Discover */ = {
 			isa = PBXGroup;
 			children = (
@@ -1375,6 +1453,7 @@
 		0684DF1D1D519095006756D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0663D4211F0B6B4600CD2FA2 /* Views_3_0 */,
 				965240D81ED532E30090E1C8 /* RestaurantListView */,
 				96BCE4201EC2C05300B1A3F7 /* GameEggsView */,
 				0689915A1E854EE900BC9EFE /* RDKeyBoard */,
@@ -1607,6 +1686,7 @@
 		06FA311B1D3E0CC6001F5B37 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0663D4151F0B6A8E00CD2FA2 /* Controllers_3_0 */,
 				965240DC1ED532F30090E1C8 /* RestaurantList */,
 				96BCE3BB1EC010F300B1A3F7 /* SmashingEggsGame */,
 				06B555471E8A6A210068BF70 /* DefalutLaunchViewController */,
@@ -1624,11 +1704,11 @@
 		06FA311F1D3E0EA0001F5B37 /* HelpLibs */ = {
 			isa = PBXGroup;
 			children = (
+				0663D42C1F0B6CB000CD2FA2 /* WMPageController */,
 				965240F61ED6BE8E0090E1C8 /* BaiduMap_IOSSDK_v3.3.1_Lib */,
 				060E41FD1E4CB03E009A94FC /* SDCycleScrollView */,
 				062E99CB1E49C2F30042C924 /* UIImage+WaterMark */,
 				0627E0B61E3231DA00DAED92 /* LGSideMenuController */,
-				061FEFD81E2DB061003CD111 /* WMPageController */,
 				061E0FC41DFFD9A40072605F /* GCCDLNA */,
 				06BD18D61E35AE3C0030F69F /* UMessage_Sdk_1.4.0 */,
 				06FB9D5E1DF97CF60053BE0A /* MBProgressHUD+Custom */,
@@ -1739,6 +1819,7 @@
 		06FA33B11D3E1FF2001F5B37 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				0663D41D1F0B6AFA00CD2FA2 /* UIView+LayerCurve */,
 				965240E61ED6B8640090E1C8 /* RDLocationTool */,
 				062CEFCF1EC2F9FC00EA6AE0 /* RDAwardTool */,
 				060650591E014CF100E43024 /* HSWebServerManager */,
@@ -2482,6 +2563,7 @@
 				962EFA751E84F7980074450A /* laba.png in Resources */,
 				062D4F931DEC02BA0093942A /* RDPause@2x.png in Resources */,
 				962EFA861E84F7980074450A /* voljia_g@3x.png in Resources */,
+				0663D43A1F0B6CB000CD2FA2 /* menuBackImage.png in Resources */,
 				06FA30F51D3E0C70001F5B37 /* Assets.xcassets in Resources */,
 				062CF02A1EC3498300EA6AE0 /* selectEggs.mp3 in Resources */,
 				960EDB361E83DB0300717406 /* ljtvsanweishu_bg.png in Resources */,
@@ -2588,13 +2670,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				061FEFE51E2DB061003CD111 /* WMMenuView.m in Sources */,
 				06FA30ED1D3E0C70001F5B37 /* AppDelegate.m in Sources */,
 				068A58C81D5E1FFF00CBD684 /* BasicTableViewCell.m in Sources */,
 				061FEFEB1E2DB337003CD111 /* HotTopicViewController.m in Sources */,
 				47F4A2721E4962F4001C93F0 /* AdviceViewController.m in Sources */,
 				47F997701DFFE3900009BDFB /* UINavigationBar+PS.m in Sources */,
 				069FE84A1E4D5F56000CBA5E /* HSHotelVodListRequest.m in Sources */,
+				0663D43D1F0B6CB000CD2FA2 /* WMProgressView.m in Sources */,
+				0663D41B1F0B6AA500CD2FA2 /* RDHomePageController.m in Sources */,
 				06FB9D711DF9890C0053BE0A /* HSCategoryModel.m in Sources */,
 				06EA38DD1D59E0C60081DDCC /* ShowPhotoCollectionViewCell.m in Sources */,
 				069076681E51F6C700CA1AC4 /* PhotoManyViewController.m in Sources */,
@@ -2630,6 +2713,7 @@
 				96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */,
 				066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */,
 				06FA33951D3E171D001F5B37 /* DDASLLogger.m in Sources */,
+				0663D43E1F0B6CB000CD2FA2 /* WMScrollView.m in Sources */,
 				063FA3371D839F1100D03548 /* BadView.m in Sources */,
 				061E0FE91DFFEBD10072605F /* RDBoxModel.m in Sources */,
 				060DB0A41D5AD1C8002A2DED /* HTTPServerManager.m in Sources */,
@@ -2656,6 +2740,7 @@
 				06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */,
 				063B1D531D7D63D30036C02B /* PhotoSliderViewController.m in Sources */,
 				062CF0281EC3449D00EA6AE0 /* RDHammer.m in Sources */,
+				0663D4291F0B6B5900CD2FA2 /* RDTabScrollItem.m in Sources */,
 				47FE2CBD1E1BB64E00D3D0B4 /* UIImage+SplitImageIntoTwoParts.m in Sources */,
 				965240DB1ED532E30090E1C8 /* RestaurantListTableViewCell.m in Sources */,
 				064F8B931E532838006280FD /* HSGetIpRequest.m in Sources */,
@@ -2677,16 +2762,15 @@
 				0688C4931E97760100D7D2A9 /* ShareRDViewController.m in Sources */,
 				06F5C9DF1E4D9F7200E05492 /* HSAdsModel.m in Sources */,
 				06B5554C1E8A6A210068BF70 /* DefalutLaunchPlayView.m in Sources */,
+				0663D41C1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m in Sources */,
 				478058351DF989850091C305 /* ConverUtil.m in Sources */,
 				47F9976D1DFFBC910009BDFB /* BaseCell.m in Sources */,
 				060DB0B41D5B26F9002A2DED /* UIColor+YYAdditions.m in Sources */,
 				062705961D588A12003EA6A0 /* PhotoTool.m in Sources */,
 				478058281DF985730091C305 /* HSVodListRequest.m in Sources */,
 				060031601E53600400E675F5 /* HSGetLastHotelVodList.m in Sources */,
-				061FEFE71E2DB061003CD111 /* WMScrollView.m in Sources */,
 				0633FB231D82D4480079EF21 /* UIImage+Custom.m in Sources */,
 				478058371DF989850091C305 /* Helper.m in Sources */,
-				061FEFE61E2DB061003CD111 /* WMProgressView.m in Sources */,
 				063AA2481DB8C305007F4C70 /* PhotoListCollectionViewCell.m in Sources */,
 				064F8B8D1E52FDBC006280FD /* HomeBaseViewController.m in Sources */,
 				061B4EBB1E4850B2000D5E07 /* PhotoHandleView.m in Sources */,
@@ -2705,12 +2789,14 @@
 				4772FF841DFA544B00758697 /* BaseViewController.m in Sources */,
 				060E420D1E4CB03E009A94FC /* TAAbstractDotView.m in Sources */,
 				06FB9D611DF97D0E0053BE0A /* MBProgressHUD+Custom.m in Sources */,
+				0663D42B1F0B6B5900CD2FA2 /* RDTabScrollViewPage.m in Sources */,
 				062CEFD51EC3053200EA6AE0 /* HSAwardUploadRequest.m in Sources */,
 				474C76351DFB9BED001129C9 /* NoDataView.m in Sources */,
 				476F44C51E2DBC1000F99090 /* LeftViewController.m in Sources */,
 				965240D71ED532CE0090E1C8 /* RestaurantListModel.m in Sources */,
 				0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */,
 				478058511DF99A5B0091C305 /* HSLatestTopicListRequest.m in Sources */,
+				0663D43F1F0B6CB000CD2FA2 /* WMPageController.m in Sources */,
 				4772FF901DFA9C5900758697 /* BaseView.m in Sources */,
 				0647EAD21E7129E900C39160 /* ZFVolumeView.m in Sources */,
 				06FA333F1D3E16A0001F5B37 /* GlobalData.m in Sources */,
@@ -2734,6 +2820,8 @@
 				476F44CA1E2DBEC500F99090 /* LeftCell.m in Sources */,
 				061B4EBE1E487EF5000D5E07 /* PhotoTextLabel.m in Sources */,
 				068F0FB31E8266CE0089068F /* HSVideoViewController.m in Sources */,
+				0663D42A1F0B6B5900CD2FA2 /* RDTabScrollView.m in Sources */,
+				0663D4201F0B6AFA00CD2FA2 /* UIView+LayerCurve.m in Sources */,
 				06FD5F221DC1D23A0043D898 /* ScreenCollectionViewCell.m in Sources */,
 				061FEFEE1E2DB4AD003CD111 /* RecommendViewController.m in Sources */,
 				061A700D1D61C68D00702016 /* DocumentListViewController.m in Sources */,
@@ -2744,9 +2832,9 @@
 				067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */,
 				06FFCCAB1E6E864900ADEA94 /* RDAlertAction.m in Sources */,
 				478058261DF985730091C305 /* HSCategoryListRequest.m in Sources */,
-				061FEFE81E2DB061003CD111 /* WMPageController.m in Sources */,
 				965240E51ED57F270090E1C8 /* HSHomeRestaurantList.m in Sources */,
 				06EA38D21D5980FC0081DDCC /* PhotoShowViewController.m in Sources */,
+				0663D43B1F0B6CB000CD2FA2 /* WMMenuItem.m in Sources */,
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
 				060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */,
 				06569D4E1DC888CE00F934B2 /* AddPhotoListViewController.m in Sources */,
@@ -2756,8 +2844,8 @@
 				47FE2CB91E1BB53200D3D0B4 /* SplashViewController.m in Sources */,
 				060E349A1E6662A900D38547 /* PhotoAllViewController.m in Sources */,
 				063DC13D1E6D5E1C00449A7B /* RDHomeScreenButton.m in Sources */,
+				0663D43C1F0B6CB000CD2FA2 /* WMMenuView.m in Sources */,
 				060E42121E4CB03E009A94FC /* SDCycleScrollView.m in Sources */,
-				061FEFE41E2DB061003CD111 /* WMMenuItem.m in Sources */,
 				06F1583B1D5C85960050BCA6 /* VideoCollectionViewCell.m in Sources */,
 				06F158311D5C7A030050BCA6 /* VideoListViewController.m in Sources */,
 				067CB3BF1D603B7200094BB8 /* DiscoverCollectionViewCell.m in Sources */,
@@ -2919,10 +3007,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b781ec87-faaf-4a81-bbe4-195375e66372";
-				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
+				PROVISIONING_PROFILE = "cb863683-cf37-477f-a082-f29ed365e4f4";
+				PROVISIONING_PROFILE_SPECIFIER = TestHotTopicesDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2960,10 +3048,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "898d6788-1d6f-434d-a4c1-4b837ac7e1c7";
-				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "cec12aa6-fb60-4168-afb6-f2eeb0dd3c96";
+				PROVISIONING_PROFILE_SPECIFIER = "TestHotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

@@ -229,7 +229,7 @@
     if (([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA)) {
         
         WMPageController * page = [[Helper getRootNavigationController].viewControllers firstObject];
-        [page disconnentClick];
+//        [page disconnentClick];
         return;
     }
     
@@ -454,7 +454,7 @@
         UINavigationController * na = [Helper getRootNavigationController];
         if ([na.topViewController isKindOfClass:[WMPageController class]]) {
             WMPageController * wm = (WMPageController *)na.topViewController;
-            [wm rightAction];
+//            [wm rightAction];
         }
     }else{
         [self scanQRCode];
