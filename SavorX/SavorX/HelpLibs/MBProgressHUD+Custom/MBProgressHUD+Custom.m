@@ -246,6 +246,10 @@
             make.height.mas_equalTo(rect.size.height + 20);
             make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
         }];
+        view.alpha = 0.f;
+        [UIView animateWithDuration:.2f animations:^{
+            view.alpha = 1.f;
+        }];
         
         [UIView animateWithDuration:0.5f delay:delay options:UIViewAnimationOptionCurveEaseInOut animations:^{
             view.alpha = 0.f;

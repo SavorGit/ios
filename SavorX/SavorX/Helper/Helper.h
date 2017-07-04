@@ -65,4 +65,6 @@
 
 + (void)interfaceOrientation:(UIInterfaceOrientation)orientation;
 
++ (NSString *)transformDate:(NSDate *)date;
+
 @end

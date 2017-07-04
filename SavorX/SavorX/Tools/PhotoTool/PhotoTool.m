@@ -201,7 +201,7 @@
                 if (error) {
                     [MBProgressHUD showTextHUDwithTitle:@"保存失败"];
                 }else{
-                    [MBProgressHUD showSuccessHUDInView:[UIApplication sharedApplication].keyWindow title:@"图片已保存"];
+                    [MBProgressHUD showTextHUDwithTitle:@"图片已保存" delay:1.5f];
                 }
             }
         });

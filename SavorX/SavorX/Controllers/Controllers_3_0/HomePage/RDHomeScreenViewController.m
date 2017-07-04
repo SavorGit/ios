@@ -8,6 +8,8 @@
 
 #import "RDHomeScreenViewController.h"
 #import "RDTabScrollView.h"
+#import "RDPhotoTool.h"
+#import "PhotoLibraryViewController.h"
 #import "Masonry.h"
 
 @interface RDHomeScreenViewController ()
@@ -75,7 +77,29 @@
 
 - (void)photoButtonDidBeCicked
 {
-    
+    [RDPhotoTool checkUserLibraryAuthorizationStatusWithSuccess:^{
+        
+        PhotoLibraryViewController * photo = [[PhotoLibraryViewController alloc] init];
+        [self.navigationController pushViewController:photo animated:YES];
+        
+    } failure:^(NSError *error) {
+        [self openSetting];
+    }];
+}
+
+//打开用户应用设置
+- (void)openSetting
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"该功能需要开启相册权限，是否前往进行设置" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"前往设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
+    [alert addAction:action1];
+    [alert addAction:action2];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)fileButtonDidBeCicked

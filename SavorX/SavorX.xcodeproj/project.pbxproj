@@ -148,6 +148,11 @@
 		0663D43D1F0B6CB000CD2FA2 /* WMProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4351F0B6CB000CD2FA2 /* WMProgressView.m */; };
 		0663D43E1F0B6CB000CD2FA2 /* WMScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4371F0B6CB000CD2FA2 /* WMScrollView.m */; };
 		0663D43F1F0B6CB000CD2FA2 /* WMPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4391F0B6CB000CD2FA2 /* WMPageController.m */; };
+		0663D44D1F0B804D00CD2FA2 /* PhotoLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D44C1F0B804D00CD2FA2 /* PhotoLibraryViewController.m */; };
+		0663D4511F0B815600CD2FA2 /* RDPhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4501F0B815600CD2FA2 /* RDPhotoCollectionViewCell.m */; };
+		0663D4541F0B816300CD2FA2 /* RDVideoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4531F0B816300CD2FA2 /* RDVideoCollectionViewCell.m */; };
+		0663D4581F0B875600CD2FA2 /* RDPhotoLibraryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4571F0B875600CD2FA2 /* RDPhotoLibraryModel.m */; };
+		0663D45B1F0B8A1500CD2FA2 /* RDPhotoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */; };
 		067CB3BF1D603B7200094BB8 /* DiscoverCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */; };
 		067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB7141D60B21C00094BB8 /* OpenFileTool.m */; };
 		06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */; };
@@ -594,6 +599,16 @@
 		0663D4371F0B6CB000CD2FA2 /* WMScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMScrollView.m; sourceTree = "<group>"; };
 		0663D4381F0B6CB000CD2FA2 /* WMPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMPageController.h; sourceTree = "<group>"; };
 		0663D4391F0B6CB000CD2FA2 /* WMPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMPageController.m; sourceTree = "<group>"; };
+		0663D44B1F0B804D00CD2FA2 /* PhotoLibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoLibraryViewController.h; sourceTree = "<group>"; };
+		0663D44C1F0B804D00CD2FA2 /* PhotoLibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryViewController.m; sourceTree = "<group>"; };
+		0663D44F1F0B815600CD2FA2 /* RDPhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPhotoCollectionViewCell.h; sourceTree = "<group>"; };
+		0663D4501F0B815600CD2FA2 /* RDPhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPhotoCollectionViewCell.m; sourceTree = "<group>"; };
+		0663D4521F0B816300CD2FA2 /* RDVideoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDVideoCollectionViewCell.h; sourceTree = "<group>"; };
+		0663D4531F0B816300CD2FA2 /* RDVideoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDVideoCollectionViewCell.m; sourceTree = "<group>"; };
+		0663D4561F0B875600CD2FA2 /* RDPhotoLibraryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPhotoLibraryModel.h; sourceTree = "<group>"; };
+		0663D4571F0B875600CD2FA2 /* RDPhotoLibraryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPhotoLibraryModel.m; sourceTree = "<group>"; };
+		0663D4591F0B8A1500CD2FA2 /* RDPhotoTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPhotoTool.h; sourceTree = "<group>"; };
+		0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPhotoTool.m; sourceTree = "<group>"; };
 		067CB3BD1D603B7200094BB8 /* DiscoverCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverCollectionViewCell.h; sourceTree = "<group>"; };
 		067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverCollectionViewCell.m; sourceTree = "<group>"; };
 		067CB7131D60B21C00094BB8 /* OpenFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenFileTool.h; sourceTree = "<group>"; };
@@ -1200,6 +1215,8 @@
 		062705931D588A03003EA6A0 /* PhotoTool */ = {
 			isa = PBXGroup;
 			children = (
+				0663D4591F0B8A1500CD2FA2 /* RDPhotoTool.h */,
+				0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */,
 				062705941D588A12003EA6A0 /* PhotoTool.h */,
 				062705951D588A12003EA6A0 /* PhotoTool.m */,
 				065BE59F1DBF472000D1A5BB /* PhotoLibraryModel.h */,
@@ -1353,6 +1370,7 @@
 			isa = PBXGroup;
 			children = (
 				0663D4161F0B6A8E00CD2FA2 /* HomePage */,
+				0663D44A1F0B803300CD2FA2 /* PhotoLibrary */,
 			);
 			path = Controllers_3_0;
 			sourceTree = "<group>";
@@ -1380,6 +1398,7 @@
 		0663D4211F0B6B4600CD2FA2 /* Views_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				0663D44E1F0B805F00CD2FA2 /* PhotoLibrary */,
 				0663D4221F0B6B5900CD2FA2 /* RDHomeTabScroll */,
 			);
 			path = Views_3_0;
@@ -1430,6 +1449,35 @@
 				0663D4371F0B6CB000CD2FA2 /* WMScrollView.m */,
 			);
 			path = WMMenuView;
+			sourceTree = "<group>";
+		};
+		0663D44A1F0B803300CD2FA2 /* PhotoLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				0663D44B1F0B804D00CD2FA2 /* PhotoLibraryViewController.h */,
+				0663D44C1F0B804D00CD2FA2 /* PhotoLibraryViewController.m */,
+			);
+			path = PhotoLibrary;
+			sourceTree = "<group>";
+		};
+		0663D44E1F0B805F00CD2FA2 /* PhotoLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				0663D44F1F0B815600CD2FA2 /* RDPhotoCollectionViewCell.h */,
+				0663D4501F0B815600CD2FA2 /* RDPhotoCollectionViewCell.m */,
+				0663D4521F0B816300CD2FA2 /* RDVideoCollectionViewCell.h */,
+				0663D4531F0B816300CD2FA2 /* RDVideoCollectionViewCell.m */,
+			);
+			path = PhotoLibrary;
+			sourceTree = "<group>";
+		};
+		0663D4551F0B873F00CD2FA2 /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				0663D4561F0B875600CD2FA2 /* RDPhotoLibraryModel.h */,
+				0663D4571F0B875600CD2FA2 /* RDPhotoLibraryModel.m */,
+			);
+			path = Photo;
 			sourceTree = "<group>";
 		};
 		067CB3BC1D603B4A00094BB8 /* Discover */ = {
@@ -1743,6 +1791,7 @@
 		06FA32E31D3E165A001F5B37 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0663D4551F0B873F00CD2FA2 /* Photo */,
 				965240D41ED532CE0090E1C8 /* RestaurantListModel */,
 				96BCE3C71EC19A7500B1A3F7 /* EggsGame */,
 				061E0FD51DFFEBB30072605F /* RDBox */,
@@ -2724,6 +2773,7 @@
 				06EA38CF1D5980F10081DDCC /* PhotoListViewController.m in Sources */,
 				064F0E2E1DD316C800D9EFD1 /* SliderShowViewController.m in Sources */,
 				47F997551DFF96260009BDFB /* SXDlnaView.m in Sources */,
+				0663D4541F0B816300CD2FA2 /* RDVideoCollectionViewCell.m in Sources */,
 				0627E0C01E3231DA00DAED92 /* LGSideMenuControllerGesturesHandler.m in Sources */,
 				06FB9D771DF989180053BE0A /* BaseModel.m in Sources */,
 				062D4F7A1DEC02BA0093942A /* GCCPlayerView.m in Sources */,
@@ -2754,12 +2804,14 @@
 				478058361DF989850091C305 /* DesUtil.m in Sources */,
 				47D6F6531E4ACD450030C8C4 /* voideoPlayFooterView.m in Sources */,
 				06FA30EA1D3E0C70001F5B37 /* main.m in Sources */,
+				0663D44D1F0B804D00CD2FA2 /* PhotoLibraryViewController.m in Sources */,
 				06FFCCAF1E6EBF6A00ADEA94 /* RDCheackSence.m in Sources */,
 				4780584E1DF9908D0091C305 /* HSSubmitFeedbackRequest.m in Sources */,
 				06FA33991D3E171D001F5B37 /* ContextFilterLogFormatter.m in Sources */,
 				965241041ED6BE9E0090E1C8 /* RDLocationManager.m in Sources */,
 				062E99CE1E49C2F30042C924 /* UIImage+WaterMark.m in Sources */,
 				0688C4931E97760100D7D2A9 /* ShareRDViewController.m in Sources */,
+				0663D45B1F0B8A1500CD2FA2 /* RDPhotoTool.m in Sources */,
 				06F5C9DF1E4D9F7200E05492 /* HSAdsModel.m in Sources */,
 				06B5554C1E8A6A210068BF70 /* DefalutLaunchPlayView.m in Sources */,
 				0663D41C1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m in Sources */,
@@ -2794,6 +2846,7 @@
 				474C76351DFB9BED001129C9 /* NoDataView.m in Sources */,
 				476F44C51E2DBC1000F99090 /* LeftViewController.m in Sources */,
 				965240D71ED532CE0090E1C8 /* RestaurantListModel.m in Sources */,
+				0663D4581F0B875600CD2FA2 /* RDPhotoLibraryModel.m in Sources */,
 				0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */,
 				478058511DF99A5B0091C305 /* HSLatestTopicListRequest.m in Sources */,
 				0663D43F1F0B6CB000CD2FA2 /* WMPageController.m in Sources */,
@@ -2836,6 +2889,7 @@
 				06EA38D21D5980FC0081DDCC /* PhotoShowViewController.m in Sources */,
 				0663D43B1F0B6CB000CD2FA2 /* WMMenuItem.m in Sources */,
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
+				0663D4511F0B815600CD2FA2 /* RDPhotoCollectionViewCell.m in Sources */,
 				060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */,
 				06569D4E1DC888CE00F934B2 /* AddPhotoListViewController.m in Sources */,
 				96BCE4291EC2F3DB00B1A3F7 /* RDPrizeView.m in Sources */,
