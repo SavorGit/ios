@@ -8,6 +8,7 @@
 
 #import "RDHomePageController.h"
 #import "RDHomeScreenViewController.h"
+#import "UIViewController+LGSideMenuController.h"
 
 @implementation RDHomePageController
 
@@ -206,6 +207,20 @@
 - (void)createCustomUI
 {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"插入" style:UIBarButtonItemStyleDone target:self action:@selector(insertViewController)];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    self.sideMenuController.leftViewSwipeGestureEnabled = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.sideMenuController.leftViewSwipeGestureEnabled = NO;
 }
 
 @end
