@@ -28,8 +28,9 @@
 @property (nonatomic, strong) UICollectionViewFlowLayout * flowLayout;
 @property (nonatomic, assign) NSInteger index;
 
-@property (nonatomic, strong) PhotoHandleView * rotateView; //旋转控制按钮
-@property (nonatomic, strong) PhotoHandleView * textView; //文字控制按钮
+//@property (nonatomic, strong) PhotoHandleView * rotateView; //旋转控制按钮
+@property (nonatomic, strong) UIButton * rotateView; //旋转控制按钮
+@property (nonatomic, strong) UIButton * textView; //文字控制按钮
 @property (nonatomic, strong) NSURLSessionDataTask * task;
 @property (nonatomic, assign) BOOL isScreen;
 
@@ -78,26 +79,26 @@
     [self.view addSubview:self.collectionView];
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[self dataSourceCount] * 50 + self.index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
     
-    self.rotateView = [[PhotoHandleView alloc] initWithImage:[UIImage imageNamed:@"xuanzhuan"] andTitile:@"旋转"];
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rotateImage)];
-    tap.numberOfTapsRequired = 1;
-    [self.rotateView addGestureRecognizer:tap];
+    self.rotateView = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.rotateView setTitle:@"旋转" forState:UIControlStateNormal];
+    [self.rotateView setBackgroundColor:[UIColor redColor]];
+    [self.rotateView addTarget:self action:@selector(rotateImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.rotateView];
     [self.rotateView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(66, 66));
-        make.left.mas_equalTo((kMainBoundsWidth - 132) / 3);
-        make.bottom.mas_equalTo(-10);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth / 2, 50));
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
     }];
     
-    self.textView = [[PhotoHandleView alloc] initWithImage:[UIImage imageNamed:@"wenzi"] andTitile:@"文字"];
-    UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTextOnImage)];
-    tap2.numberOfTapsRequired = 1;
-    [self.textView addGestureRecognizer:tap2];
+    self.textView = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.textView setTitle:@"文字" forState:UIControlStateNormal];
+    [self.textView setBackgroundColor:[UIColor greenColor]];
+    [self.textView addTarget:self action:@selector(addTextOnImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.textView];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(66, 66));
-        make.right.mas_equalTo(-(kMainBoundsWidth - 132) / 3);
-        make.bottom.mas_equalTo(-10);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth / 2, 50));
+        make.right.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
     }];
     
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
