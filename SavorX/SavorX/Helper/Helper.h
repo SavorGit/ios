@@ -67,4 +67,6 @@
 
 + (NSString *)transformDate:(NSDate *)date;
 
++ (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size;
+
 @end

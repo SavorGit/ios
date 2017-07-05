@@ -95,4 +95,9 @@
     self.timeLabel.text = [NSString stringWithFormat:@"%.2lld'%.2lld\"", minute, second];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDPhotoLibraryChooseChangeNotification object:nil];
+}
+
 @end
