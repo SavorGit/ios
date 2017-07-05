@@ -9,11 +9,13 @@
 #import "RDHomePageController.h"
 #import "RDHomeScreenViewController.h"
 #import "UIViewController+LGSideMenuController.h"
+#import "CreateWealthViewController.h"
 
 @implementation RDHomePageController
 
 - (instancetype)init
 {
+    
     NSArray * vcArray = @[[UIViewController class],[UIViewController class],[UIViewController class]];
     NSArray * titleArray = @[@"创富", @"生活", @"专题"];
     
@@ -21,6 +23,13 @@
         [self configPageController];
     }
     return self;
+}
+
+#pragma mark - Data source
+- (UIViewController *)pageController:(WMPageController *)pageController viewControllerAtIndex:(NSInteger)index
+{
+    CreateWealthViewController * creatWealth = [[CreateWealthViewController alloc] init];
+    return creatWealth;
 }
 
 - (void)insertViewController
