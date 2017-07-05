@@ -31,7 +31,6 @@
     [self.view setBackgroundColor:[UIColor lightGrayColor]];
     [self initInfo];
     [self setUpDatas];
-    // Do any additional setup after loading the view.
 }
 
 - (void)initInfo{
@@ -189,8 +188,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
-    [self.navigationController pushViewController:imtVC animated:YES];
+    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    if (model.type == 2) {
+        ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
+        [self.navigationController pushViewController:imtVC animated:YES];
+
+    }
 }
 
 - (void)didReceiveMemoryWarning {
