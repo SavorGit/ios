@@ -31,6 +31,6 @@ alpha:(a)]
 /** 全局白色  **/
 #define kWhiteBackGroundColor UIColorFromRGB(0xffffff)
 /** 全局主题颜色  **/
-#define kThemecolor UIColorFromRGB(0x922c3e)
+#define kThemeColor UIColorFromRGB(0x922c3e)
 
 #endif /* ColorMacro_h */

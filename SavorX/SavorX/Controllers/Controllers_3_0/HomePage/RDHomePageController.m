@@ -197,11 +197,11 @@
     self.titleSizeNormal = 14;
     self.titleSizeSelected = 17;
     self.titleColorNormal = [UIColor grayColor];
-    self.titleColorSelected = kThemecolor;
+    self.titleColorSelected = kThemeColor;
     
     self.menuItemWidth = [UIScreen mainScreen].bounds.size.width / 8;
     self.menuViewContentMargin = ([UIScreen mainScreen].bounds.size.width - (self.menuItemWidth + 10) * 3) / 2;
-    self.menuBGColor = kThemecolor;
+    self.menuBGColor = kThemeColor;
     self.menuHeight = 50;
     
     self.progressColor = [UIColor colorWithRed:143.f/255.f green:46.f/255.f blue:64.f/255.f alpha:1];

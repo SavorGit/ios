@@ -136,7 +136,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     
     self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     self.progressView.trackTintColor = [UIColor clearColor];
-    self.progressView.progressTintColor = kThemecolor;
+    self.progressView.progressTintColor = kThemeColor;
     self.progressView.userInteractionEnabled = NO;
     [self.progressView setProgress:0.f];
     [self.progressBG addSubview:self.progressView];

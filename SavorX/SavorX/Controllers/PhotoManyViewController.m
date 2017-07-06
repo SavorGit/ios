@@ -81,7 +81,7 @@
     
     self.rotateView = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.rotateView setTitle:@"旋转" forState:UIControlStateNormal];
-    [self.rotateView setBackgroundColor:[kThemecolor colorWithAlphaComponent:.9f]];
+    [self.rotateView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.9f]];
     [self.rotateView addTarget:self action:@selector(rotateImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.rotateView];
     [self.rotateView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -92,7 +92,7 @@
     
     self.textView = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.textView setTitle:@"文字" forState:UIControlStateNormal];
-    [self.textView setBackgroundColor:[kThemecolor colorWithAlphaComponent:.9f]];
+    [self.textView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.9f]];
     [self.textView addTarget:self action:@selector(addTextOnImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.textView];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
