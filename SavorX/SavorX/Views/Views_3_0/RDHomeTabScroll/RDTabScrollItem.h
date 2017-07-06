@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol RDTabScrollViewDelegate <NSObject>
+
+- (void)RDTabScrollViewPhotoButtonDidClicked;
+- (void)RDTabScrollViewTVButtonDidClicked;
+
+@end
+
 @interface RDTabScrollItem : UIView
 
 - (instancetype)initWithFrame:(CGRect)frame info:(NSString *)name index:(NSInteger)index;

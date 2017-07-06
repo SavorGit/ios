@@ -15,6 +15,7 @@
 - (void)videoShouldBeShare;
 - (void)videoShouldBeCollect:(UIButton *)button;
 - (void)videoShouldBeDemand;
+- (void)toolViewHiddenStatusDidChangeTo:(BOOL)isHidden;
 
 @end
 

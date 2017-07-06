@@ -19,7 +19,7 @@ alpha:(a)]
 #define kDefaultBackgroundColor     RGB(239, 239, 244)
 /** 导航栏背景颜色 */
 //#define kNavBackGround RGB(242, 242, 242)
-#define kNavBackGround UIColorFromRGB(0x202020)
+#define kNavBackGround UIColorFromRGB(0x922c3e)
 /** 标题黑色字样颜色 */
 #define kTitleBlackTextColor RGB(30,30,30)
 /** 内容灰色字样颜色 */
@@ -30,5 +30,7 @@ alpha:(a)]
 #define KBlueBackGroundColor RGB(21,126,251)
 /** 全局白色  **/
 #define kWhiteBackGroundColor UIColorFromRGB(0xffffff)
+/** 全局主题颜色  **/
+#define kThemecolor UIColorFromRGB(0x922c3e)
 
 #endif /* ColorMacro_h */

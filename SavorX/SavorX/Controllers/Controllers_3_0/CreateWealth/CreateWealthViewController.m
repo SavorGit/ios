@@ -14,7 +14,8 @@
 #import "Masonry.h"
 #import "CreateWealthModel.h"
 #import "ImageTextDetailViewController.h"
-
+#import "WebViewController.h"
+#import "HSVodModel.h"
 
 @interface CreateWealthViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -193,6 +194,15 @@
         ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
         [self.navigationController pushViewController:imtVC animated:YES];
 
+    }else if (model.type == 0){
+        HSVodModel * videoModel = [[HSVodModel alloc] init];
+        videoModel.contentURL = @"http://admin.rerdian.com/content/2904.html";
+        videoModel.videoURL = @"http://1252891964.vod2.myqcloud.com/9ee14a76vodtransgzp1252891964/bd2006b99031868222923999486/f0";
+        videoModel.title = @"自然绝色纯美享受《20个惊艳瞬间》";
+        videoModel.imageURL = @"http://redian-produce.oss-cn-beijing.aliyuncs.com/media/resource/k2GwWWtd4i.jpg";
+        videoModel.duration = 60;
+        WebViewController * web = [[WebViewController alloc] initWithModel:videoModel categoryID:-1];
+        [self.navigationController pushViewController:web animated:YES];
     }
 }
 

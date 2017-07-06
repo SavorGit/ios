@@ -22,6 +22,7 @@
 - (void)collectButtonDidClicked:(UIButton *)button;
 - (void)TVButtonDidClicked;
 - (void)playItemShouldChangeDefinitionTo:(NSInteger)tag;
+- (void)toolViewStatusHidden:(BOOL)isHidden;
 
 @end
 

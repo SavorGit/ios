@@ -30,7 +30,6 @@
     
     [self createWebView];
     [self setUpDatas];
-
 }
 
 - (void)createWebView
@@ -44,7 +43,7 @@
     self.webView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.webView];
     
-    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 0)];
+    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
     self.testView.backgroundColor = [UIColor lightGrayColor];
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];

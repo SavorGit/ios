@@ -766,6 +766,13 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [self setPlayItemWithURL:url];
 }
 
+- (void)toolViewStatusHidden:(BOOL)isHidden
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(toolViewHiddenStatusDidChangeTo:)]) {
+        [self.delegate toolViewHiddenStatusDidChangeTo:isHidden];
+    }
+}
+
 //app已经进入后台运行
 - (void)appDidEnterBackground
 {

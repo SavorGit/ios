@@ -368,7 +368,6 @@
     } else {
         [navigationController setNavigationBarHidden:NO animated:YES];
     }
-    
 }
 
 - (BOOL)prefersStatusBarHidden {

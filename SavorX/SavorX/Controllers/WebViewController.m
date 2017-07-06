@@ -24,6 +24,8 @@
 @property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
 @property (nonatomic, strong) MPVolumeView * volumeView;
 @property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
+@property (nonatomic, assign) BOOL toolViewIsHidden;
+
 @end
 
 @implementation WebViewController
@@ -37,10 +39,11 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-- (instancetype)initWithModel:(HSVodModel *)model
+- (instancetype)initWithModel:(HSVodModel *)model categoryID:(NSInteger)categoryID
 {
     if (self = [super init]) {
         self.model = model;
+        self.categoryID = categoryID;
     }
     return self;
 }
@@ -55,8 +58,6 @@
 //初始化界面
 - (void)createUI
 {
-    self.view.backgroundColor = [UIColor blackColor];
-    
     self.title = self.model.title;
     
     //初始化播放器
@@ -69,7 +70,7 @@
     self.playView.model = self.model;
     self.playView.categoryID = self.categoryID;
     [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
+        make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
         make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
@@ -158,9 +159,6 @@
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (orientation == UIInterfaceOrientationPortrait) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        [self.playView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(20);
-        }];
         [self.playView playOrientationPortrait];
         
         if (self.webView.isLoading) {
@@ -169,9 +167,6 @@
         [self.navigationController setNeedsStatusBarAppearanceUpdate];
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-        [self.playView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-        }];
         [self.playView playOrientationLandscape];
         [MBProgressHUD hideHUDForView:self.webView animated:NO];
         [self.navigationController setNeedsStatusBarAppearanceUpdate];
@@ -253,6 +248,17 @@
 
     }else{
         [MBProgressHUD showTextHUDwithTitle:@"当前视频不支持该操作"];
+    }
+}
+
+- (void)toolViewHiddenStatusDidChangeTo:(BOOL)isHidden
+{
+    self.toolViewIsHidden = isHidden;
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if (orientation == UIInterfaceOrientationLandscapeLeft ||
+        orientation == UIInterfaceOrientationLandscapeRight) {
+        [self.navigationController setNeedsStatusBarAppearanceUpdate];
     }
 }
 
@@ -347,6 +353,17 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [MBProgressHUD hideHUDForView:self.webView animated:NO];
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if (orientation == UIInterfaceOrientationPortrait) {
+        return YES;
+    }else{
+        return self.toolViewIsHidden;
+    }
 }
 
 #pragma mark 屏幕转屏相关

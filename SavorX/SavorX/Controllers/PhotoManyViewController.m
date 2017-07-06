@@ -81,7 +81,7 @@
     
     self.rotateView = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.rotateView setTitle:@"旋转" forState:UIControlStateNormal];
-    [self.rotateView setBackgroundColor:[UIColor redColor]];
+    [self.rotateView setBackgroundColor:[kThemecolor colorWithAlphaComponent:.9f]];
     [self.rotateView addTarget:self action:@selector(rotateImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.rotateView];
     [self.rotateView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -92,13 +92,23 @@
     
     self.textView = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.textView setTitle:@"文字" forState:UIControlStateNormal];
-    [self.textView setBackgroundColor:[UIColor greenColor]];
+    [self.textView setBackgroundColor:[kThemecolor colorWithAlphaComponent:.9f]];
     [self.textView addTarget:self action:@selector(addTextOnImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.textView];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth / 2, 50));
         make.right.mas_equalTo(0);
         make.bottom.mas_equalTo(0);
+    }];
+    
+    UIView * lineView = [[UIView alloc] init];
+    lineView.backgroundColor = [UIColor whiteColor];
+    [self.textView addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(10);
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(-10);
+        make.width.mas_equalTo(.5f);
     }];
     
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {

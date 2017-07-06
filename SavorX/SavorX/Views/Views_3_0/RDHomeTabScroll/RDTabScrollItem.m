@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UIImageView * detailLogo;
 @property (nonatomic, strong) UILabel * detailFrom;
 @property (nonatomic, strong) UILabel * detailDate;
+@property (nonatomic, strong) UILabel * timeLabel;
 
 @property (nonatomic, assign) NSInteger index;
 @property (nonatomic, strong) RDTabScrollViewPage * page;
@@ -58,7 +59,48 @@
     self.layer.cornerRadius = 5;
     self.layer.masksToBounds = YES;
     
-    self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.imageView.frame.origin.y + self.imageView.frame.size.height, self.frame.size.width, self.frame.size.height - self.imageView.frame.origin.y - self.imageView.frame.size.height)];
+    CGSize imageViewSize = self.imageView.frame.size;
+    
+    UIView * leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 70, 50)];
+    leftView.center = CGPointMake(imageViewSize.width / 2 - 60, imageViewSize.height / 2);
+    leftView.tag = 101;
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(buttonDidBeClicked:)];
+    tap.numberOfTapsRequired = YES;
+    [leftView addGestureRecognizer:tap];
+    [self addSubview:leftView];
+    UIButton * leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftButton.frame = CGRectMake(0, 0, 70, 30);
+    leftButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    leftButton.layer.borderWidth = .5f;
+    leftButton.layer.cornerRadius = 15.f;
+    leftButton.layer.masksToBounds = YES;
+    leftButton.center = CGPointMake(leftView.frame.size.width / 2, leftView.frame.size.height / 2);
+    leftButton.userInteractionEnabled = NO;
+    [leftView addSubview:leftButton];
+    
+    UIView * rightView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 70, 50)];
+    rightView.center = CGPointMake(imageViewSize.width / 2 + 60, imageViewSize.height / 2);
+    rightView.tag = 102;
+    UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(buttonDidBeClicked:)];
+    tap2.numberOfTapsRequired = YES;
+    [rightView addGestureRecognizer:tap2];
+    [self addSubview:rightView];
+    UIButton * rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    rightButton.frame = CGRectMake(0, 0, 70, 30);
+    rightButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    rightButton.layer.borderWidth = .5f;
+    rightButton.layer.cornerRadius = 15.f;
+    rightButton.layer.masksToBounds = YES;
+    rightButton.center = CGPointMake(rightView.frame.size.width / 2, rightView.frame.size.height / 2);
+    rightButton.userInteractionEnabled = NO;
+    [rightView addSubview:rightButton];
+    
+    self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageViewSize.width - 50, imageViewSize.height - 30, 50, 20)];
+    self.timeLabel.textColor = [UIColor whiteColor];
+    self.timeLabel.text = @"0\'00\"";
+    [self addSubview:self.timeLabel];
+    
+    self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, imageViewSize.height, self.frame.size.width, self.frame.size.height - imageViewSize.height)];
     [self addSubview:self.bottomView];
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width - 30, 16)];
@@ -97,6 +139,15 @@
     [self.page resetIndex:self.index];
 }
 
+- (void)buttonDidBeClicked:(UITapGestureRecognizer *)tap
+{
+    if (tap.view.tag == 101) {
+        
+    }else{
+        
+    }
+}
+
 - (void)configWithInfo:(NSString *)name index:(NSInteger)index
 {
     self.index = index;
@@ -111,6 +162,7 @@
     if (!_imageView) {
         CGRect frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.width * .587);
         _imageView = [[UIImageView alloc] initWithFrame:frame];
+        _imageView.backgroundColor = [UIColor blackColor];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         _imageView.clipsToBounds = YES;
         [self addSubview:_imageView];

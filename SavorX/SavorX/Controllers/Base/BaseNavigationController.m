@@ -24,14 +24,7 @@
 }
 
 - (BOOL)prefersStatusBarHidden {
-    
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if (orientation == UIInterfaceOrientationLandscapeLeft ||
-        orientation == UIInterfaceOrientationLandscapeRight) {
-        return YES;
-    }
-    
-    return NO;
+    return self.topViewController.prefersStatusBarHidden;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

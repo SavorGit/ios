@@ -16,7 +16,7 @@
 typedef void (^comeFromWebView)(NSDictionary *parDic);
 @interface WebViewController : BaseViewController
 
-- (instancetype)initWithModel:(HSVodModel *)model;
+- (instancetype)initWithModel:(HSVodModel *)model categoryID:(NSInteger)categoryID;
 
 @property (nonatomic, strong) HSVodModel * model;
 @property (nonatomic, strong) GCCPlayerView * playView; //播放器

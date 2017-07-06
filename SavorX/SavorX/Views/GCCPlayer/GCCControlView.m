@@ -11,7 +11,7 @@
 #import "Masonry.h"
 #import "UIImageView+WebCache.h"
 
-static const CGFloat ControlViewHiddenAnimationTime = 0.3f;
+static const CGFloat ControlViewHiddenAnimationTime = .3f;
 static const CGFloat ControlViewHiddenWaitTime = 4.f;
 
 typedef NS_ENUM(NSInteger, RDDefinition) {
@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 @property (nonatomic, strong) UISlider * slider; //拖动进度控制条
 @property (nonatomic, strong) UIButton * screenButton; //全屏切换按钮
 @property (nonatomic, strong) UIButton * backButton; //返回按钮
-@property (nonatomic, strong) UILabel * titleLabel; //标题显示label
+//@property (nonatomic, strong) UILabel * titleLabel; //标题显示label
 @property (nonatomic, strong) UILabel * timeLabel; //当前播放时间显示
 @property (nonatomic, strong) UILabel * totalTimeLabel;
 @property (nonatomic, strong) UIActivityIndicatorView * loadingView; //菊花状加载
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 @property (nonatomic, strong) UIButton * replayButton; //重播按钮
 @property (nonatomic, strong) UIButton * endShare; //结束时的分享按钮
 @property (nonatomic, strong) UIButton * endBackButton; //结束时的返回按钮
-@property (nonatomic, strong) UIButton * shotButton; //截图按钮
+//@property (nonatomic, strong) UIButton * shotButton; //截图按钮
 @property (nonatomic, strong) UIButton * collectButton; //收藏按钮
 @property (nonatomic, strong) UIButton * shareButton; //分享按钮
 @property (nonatomic, strong) UIButton * definitionButton; //清晰度按钮
@@ -53,6 +53,8 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 @property (nonatomic, assign) BOOL isFullScreen; //是否全屏
 @property (nonatomic, assign) BOOL isOnlyVideo;
 @property (nonatomic, strong) UIImageView * imageView;
+@property (nonatomic, strong) UIProgressView * progressBG;
+@property (nonatomic, strong) UIProgressView * progressView;
 
 @end
 
@@ -120,10 +122,24 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     
     self.bufferView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     self.bufferView.trackTintColor = [UIColor clearColor];
-    self.bufferView.progressTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4f];;
+    self.bufferView.progressTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4f];
     self.bufferView.userInteractionEnabled = NO;
     [self.bufferView setProgress:0.f];
     [self.slider addSubview:self.bufferView];
+    
+    self.progressBG = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+    self.progressBG.trackTintColor = [UIColor clearColor];
+    self.progressBG.progressTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4f];
+    self.progressBG.userInteractionEnabled = NO;
+    [self.progressBG setProgress:0.f];
+    [self addSubview:self.progressBG];
+    
+    self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+    self.progressView.trackTintColor = [UIColor clearColor];
+    self.progressView.progressTintColor = kThemecolor;
+    self.progressView.userInteractionEnabled = NO;
+    [self.progressView setProgress:0.f];
+    [self.progressBG addSubview:self.progressView];
     
     self.screenButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.screenButton setImage:[UIImage imageNamed:@"RDFullScreen"] forState:UIControlStateNormal];
@@ -131,21 +147,21 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     [self.screenButton addTarget:self action:@selector(screenButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.toolView addSubview:self.screenButton];
     
-    self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.backgroundColor = [UIColor clearColor];
-    self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.font = [UIFont systemFontOfSize:16];
-    self.titleLabel.text = @"这里显示视频的名称";
-    self.titleLabel.hidden = YES;
-    [self.toolView addSubview:self.titleLabel];
+//    self.titleLabel = [[UILabel alloc] init];
+//    self.titleLabel.backgroundColor = [UIColor clearColor];
+//    self.titleLabel.textColor = [UIColor whiteColor];
+//    self.titleLabel.font = [UIFont systemFontOfSize:16];
+//    self.titleLabel.text = @"这里显示视频的名称";
+//    self.titleLabel.hidden = YES;
+//    [self.toolView addSubview:self.titleLabel];
     
     self.loadingView = [[UIActivityIndicatorView alloc] init];
     self.loadingView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     [self addSubview:self.loadingView];
     
-    self.shotButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.shotButton setImage:[UIImage imageNamed:@"jieping"] forState:UIControlStateNormal];
-    [self.shotButton addTarget:self action:@selector(shotScreenVideo) forControlEvents:UIControlEventTouchUpInside];
+//    self.shotButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [self.shotButton setImage:[UIImage imageNamed:@"jieping"] forState:UIControlStateNormal];
+//    [self.shotButton addTarget:self action:@selector(shotScreenVideo) forControlEvents:UIControlEventTouchUpInside];
     
     self.TVButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.TVButton setImage:[UIImage imageNamed:@"tv"] forState:UIControlStateNormal];
@@ -305,12 +321,12 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         make.top.mas_equalTo(0);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
-    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(10);
-        make.left.mas_equalTo(50);
-        make.right.mas_equalTo(-10);
-        make.height.mas_equalTo(20);
-    }];
+//    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(10);
+//        make.left.mas_equalTo(50);
+//        make.right.mas_equalTo(-10);
+//        make.height.mas_equalTo(20);
+//    }];
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
         make.centerY.equalTo(self.bottomView);
@@ -346,6 +362,18 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     
+    [self.progressBG mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(2);
+    }];
+    
+    [self.progressView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    
+    self.progressBG.alpha = 0.f;
     self.playButton.alpha = 0.f;
     self.isShow = YES;
 //    [self waitToHiddenToolView];
@@ -414,7 +442,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     self.definitionButton.hidden = YES;
     self.screenButton.selected = NO;
     self.isFullScreen = NO;
-    self.titleLabel.hidden = YES;
+//    self.titleLabel.hidden = YES;
     self.backButton.alpha = 1;
     
     if (!self.selectView.isHidden) {
@@ -426,10 +454,10 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         make.top.mas_equalTo(0);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
-    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
-    }];
+//    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(10);
+//        make.right.mas_equalTo(-10);
+//    }];
     [self.totalTimeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-35);
     }];
@@ -453,7 +481,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     [self.playButton setImage:[UIImage imageNamed:@"sp_zanting"] forState:UIControlStateNormal];
     [self.playButton setImage:[UIImage imageNamed:@"sp_bofang"] forState:UIControlStateSelected];
     
-    [self.shotButton removeFromSuperview];
+//    [self.shotButton removeFromSuperview];
     [self.TVButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
         make.right.mas_equalTo(-100);
@@ -491,17 +519,17 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     self.definitionButton.selected = NO;
     self.screenButton.selected = YES;
     self.isFullScreen = YES;
-    self.titleLabel.hidden = NO;
+//    self.titleLabel.hidden = NO;
     
     [self.backButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
         make.top.mas_equalTo(10);
         make.size.mas_equalTo(CGSizeMake(50, 50));
     }];
-    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(25);
-        make.right.mas_equalTo(-220);
-    }];
+//    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(25);
+//        make.right.mas_equalTo(-220);
+//    }];
     [self.totalTimeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-100);
     }];
@@ -537,12 +565,12 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     [self.playButton setImage:[UIImage imageNamed:@"hp_zanting"] forState:UIControlStateNormal];
     [self.playButton setImage:[UIImage imageNamed:@"hp_bofang"] forState:UIControlStateSelected];
     
-    [self.toolView addSubview:self.shotButton];
-    [self.shotButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(7);
-        make.right.mas_equalTo(-110);
-        make.size.mas_equalTo(CGSizeMake(50, 50));
-    }];
+//    [self.toolView addSubview:self.shotButton];
+//    [self.shotButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(7);
+//        make.right.mas_equalTo(-110);
+//        make.size.mas_equalTo(CGSizeMake(50, 50));
+//    }];
 }
 
 - (void)setVideoIsCollect:(BOOL)isCollect
@@ -660,6 +688,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         return;
     }
     NSInteger currentTime = self.totalTime * self.slider.value;
+    self.progressView.progress = self.slider.value;
     // 当前时长进度progress
     NSInteger proMin           = currentTime / 60;//当前秒
     NSInteger proSec           = currentTime % 60;//当前分钟
@@ -675,6 +704,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     [self waitToHiddenToolView];
     self.isSlider = NO;
     NSInteger time = self.slider.value * self.totalTime;
+    self.progressView.progress = self.slider.value;
     if (self.delegate && [self.delegate respondsToSelector:@selector(sliderDidSlideToTime:)]) {
         [self.delegate sliderDidSlideToTime:time];
     }
@@ -721,6 +751,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     [self.playButton setSelected:NO];
     self.endView.hidden = NO;
     [self.slider setValue:0.f];
+    self.progressView.progress = self.slider.value;
     if (self.isFullScreen) {
         [self backButtonDidClicked:self.backButton];
     }
@@ -738,11 +769,12 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 - (void)setBufferValue:(CGFloat)value
 {
     [self.bufferView setProgress:value];
+    [self.progressBG setProgress:value];
 }
 
 - (void)setVideoTitle:(NSString *)title
 {
-    self.titleLabel.text = title;
+//    self.titleLabel.text = title;
 }
 
 - (void)setSliderValue:(CGFloat)value currentTime:(NSInteger)currentTime totalTime:(NSInteger)totalTime
@@ -754,6 +786,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         NSInteger proSec           = currentTime % 60;//当前分钟
         self.timeLabel.text = [NSString stringWithFormat:@"%02zd:%02zd", proMin, proSec];
         [self.slider setValue:value];
+        self.progressView.progress = self.slider.value;
     }
 }
 
@@ -862,7 +895,13 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         self.definitionButton.selected = NO;
         self.selectView.hidden = YES;
     }
-    [UIView animateWithDuration:ControlViewHiddenAnimationTime animations:^{
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(toolViewStatusHidden:)]) {
+        [self.delegate toolViewStatusHidden:NO];
+    }
+    
+    [UIView animateWithDuration:[UIApplication sharedApplication].statusBarOrientationAnimationDuration animations:^{
+        self.progressBG.alpha = 0.f;
         self.toolView.alpha = 1.0;
         if (!self.loadingView.isAnimating) {
             self.playButton.alpha = 1.0;
@@ -885,7 +924,13 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         return;
     }
     self.isAnimation = YES;
-    [UIView animateWithDuration:ControlViewHiddenAnimationTime animations:^{
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(toolViewStatusHidden:)]) {
+        [self.delegate toolViewStatusHidden:YES];
+    }
+    
+    [UIView animateWithDuration:[UIApplication sharedApplication].statusBarOrientationAnimationDuration animations:^{
+        self.progressBG.alpha = 1.f;
         self.toolView.alpha = 0;
         if (self.playButton.isSelected) {
             self.playButton.alpha = 0;
