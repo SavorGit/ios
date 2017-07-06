@@ -10,6 +10,7 @@
 #import "RDTabScrollView.h"
 #import "RDPhotoTool.h"
 #import "PhotoLibraryViewController.h"
+#import "DocumentListViewController.h"
 #import "Masonry.h"
 
 @interface RDHomeScreenViewController ()
@@ -104,7 +105,8 @@
 
 - (void)fileButtonDidBeCicked
 {
-    
+    DocumentListViewController * document = [[DocumentListViewController alloc] init];
+    [self.navigationController pushViewController:document animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -114,4 +114,6 @@
 
 + (void)removeTextHUD;
 
++ (MBProgressHUD *)showLoadingWithText:(NSString *)text inView:(UIView *)view;
+
 @end

@@ -39,11 +39,16 @@ NSString * const RDPhotoLibraryAllChooseNotification = @"RDPhotoLibraryAllChoose
         [self.selectButton setImage:[UIImage imageNamed:@"ImageSelectedSmallOff"] forState:UIControlStateNormal];
         [self.selectButton setImage:[UIImage imageNamed:@"ImageSelectedSmallOn"] forState:UIControlStateSelected];
         [self.selectButton addTarget:self action:@selector(selectButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
+        self.selectButton.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+        self.selectButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        [self.selectButton setImageEdgeInsets:UIEdgeInsetsMake(2, 0, 0, 2)];
+        [self.selectButton.imageView setContentMode:UIViewContentModeCenter];
         [self.contentView addSubview:self.selectButton];
         [self.selectButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+            make.bottom.mas_equalTo(0);
             make.right.mas_equalTo(0);
-            make.size.mas_equalTo(CGSizeMake(50, 50));
         }];
         
         self.layer.cornerRadius = 3.f;
@@ -77,10 +82,10 @@ NSString * const RDPhotoLibraryAllChooseNotification = @"RDPhotoLibraryAllChoose
 {
     
     [UIView animateWithDuration:.1f animations:^{
-        button.transform = CGAffineTransformMakeScale(0.8, 0.8);
+        button.imageView.transform = CGAffineTransformMakeScale(0.8, 0.8);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:.1f animations:^{
-            button.transform = CGAffineTransformMakeScale(1, 1);
+            button.imageView.transform = CGAffineTransformMakeScale(1, 1);
         }];
     }];
     

@@ -21,4 +21,8 @@ typedef void(^ResFailed)(NSError * error);
 //检查用户是否开启相机权限
 + (void)checkUserLibraryAuthorizationStatusWithSuccess:(void(^)())success failure:(ResFailed)failure;
 
++ (void)getImageFromPHAssetSourceWithAsset:(PHAsset *)asset success:(void (^)(UIImage * result))success;
+
++ (void)compressImageWithImage:(UIImage *)image finished:(void (^)(NSData *, NSData *))finished;
+
 @end
