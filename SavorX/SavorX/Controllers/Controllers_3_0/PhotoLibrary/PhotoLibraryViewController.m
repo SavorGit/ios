@@ -11,6 +11,7 @@
 #import "RDVideoCollectionViewCell.h"
 #import "PhotoManyViewController.h"
 #import "PhotoSliderViewController.h"
+#import "PhotoVideoScreenViewController.h"
 #import "RDPhotoTool.h"
 
 @interface PhotoLibraryViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource>
@@ -360,6 +361,20 @@
             PhotoManyViewController * vc = [[PhotoManyViewController alloc] initWithPHAssetSource:self.model.fetchResult andIndex:indexPath.row];
             [self.navigationController pushViewController:vc animated:YES];
         }
+    }else if (asset.mediaType == PHAssetMediaTypeVideo) {
+        
+        //配置导出参数
+        PHVideoRequestOptions *options = [PHVideoRequestOptions new];
+        options.networkAccessAllowed = YES;
+        options.deliveryMode = PHVideoRequestOptionsDeliveryModeHighQualityFormat;
+        
+        [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                AVURLAsset *urlAsset = (AVURLAsset *)asset;
+                PhotoVideoScreenViewController * video = [[PhotoVideoScreenViewController alloc] initWithVideoFileURL:urlAsset.URL.path];
+                [self.navigationController pushViewController:video animated:YES];
+            });
+        }];
     }
 }
 
