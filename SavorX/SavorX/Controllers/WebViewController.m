@@ -37,6 +37,14 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
+- (instancetype)initWithModel:(HSVodModel *)model
+{
+    if (self = [super init]) {
+        self.model = model;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
