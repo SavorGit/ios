@@ -167,7 +167,7 @@
             model.type = 2;
         }
         model.title = @"这是新闻的标题";
-        model.imageUrl = @"4.jpg";
+        model.imageUrl = @"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg";
         model.source = @"网易新闻";
         model.time = @"2017.06.19";
         model.sourceImage = @"sourceImage";

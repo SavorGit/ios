@@ -7,6 +7,7 @@
 //
 
 #import "CreatWealthDetialTableViewCell.h"
+#import "UIImageView+WebCache.h"
 
 @implementation CreatWealthDetialTableViewCell
 
@@ -89,10 +90,26 @@
 - (void)configModelData:(CreateWealthModel *)model{
     
     self.titleLabel.text = model.title;
-    self.bgImageView.image = [UIImage imageNamed:model.imageUrl];
     self.sourceLabel.text = model.source;
     self.timeLabel.text = model.time;
     self.sourceImage = [UIImage imageNamed:model.sourceImage];
+    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        
+        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        if ([manager diskImageExistsForURL:[NSURL URLWithString:model.imageUrl]]) {
+            NSLog(@"不加载动画");
+        }else {
+            
+            self.bgImageView.alpha = 0.0;
+            [UIView transitionWithView:self.bgImageView
+                              duration:1.0f
+                               options:UIViewAnimationOptionTransitionNone
+                            animations:^{
+                                [self.bgImageView setImage:image];
+                                self.bgImageView.alpha = 1.0;
+                            } completion:NULL];
+        }
+    }];
     
 }
 
