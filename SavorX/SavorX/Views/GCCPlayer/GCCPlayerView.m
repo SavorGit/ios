@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, strong) UISlider * volumeViewSlider; //记录系统音量视图
 @property (nonatomic, strong) ZFBrightnessView * brightnessView;
 //@property (nonatomic, strong) ZFVolumeView * volumeView;
-@property (nonatomic, assign) NSInteger sumTime; //当前用户横向操作的时长
+@property (nonatomic, assign) CGFloat sumTime; //当前用户横向操作的时长
 @property (nonatomic, strong) UILabel * sliderLabel; //用户快进快退提示
 @property (nonatomic, assign) BOOL canPlay; //是否可以播放
 @property (nonatomic, strong) AVPlayerItemVideoOutput * playerItemVideoOutput;
@@ -333,6 +333,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)panDirection:(UIPanGestureRecognizer *)pan
 {
+    static CGPoint center;
+    
     //根据在view上Pan的位置，确定是调音量还是亮度
     CGPoint locationPoint = [pan locationInView:self];
     
@@ -342,6 +344,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     switch (pan.state) {
         case UIGestureRecognizerStateBegan:
         {
+            center = pan.view.center;
             self.isPan = YES;
             // 使用绝对值来判断移动的方向
             CGFloat x = fabs(veloctyPoint.x);
@@ -408,12 +411,12 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //用户手指横向滑动的时候
 - (void)horizontalMoved:(CGFloat)value
 {
-    // 每次滑动需要叠加时间
-    self.sumTime += value / 200;
     
     // 需要限定sumTime的范围
     CMTime totalTime           = self.player.currentItem.duration;
     CGFloat totalMovieDuration = (CGFloat)totalTime.value/totalTime.timescale;
+    // 每次滑动需要叠加时间
+    self.sumTime += value / 300.f;
     if (self.sumTime > totalMovieDuration) {
         self.sumTime = totalMovieDuration;
     }
@@ -428,9 +431,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if (value < 0) {
         [self.controlView setSliderValue:(CGFloat)self.sumTime/(CGFloat)totalMovieDuration currentTime:self.sumTime totalTime:totalMovieDuration];
         [self showSliderLabelWithCurrentTime:self.sumTime totalTime:totalMovieDuration isForward:NO];
-    }
-    if (value == 0) {
-        return;
     }
 }
 
@@ -901,6 +901,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)shouldRelease
 {
     [self.player pause];
+    self.delegate = nil;
+    self.controlView.delegate = nil;
     // 移除time以及观察者
     if (self.timeObserve) {
         [self.player removeTimeObserver:self.timeObserve];
@@ -929,6 +931,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)dealloc
 {
+    [self.controlView cancleWaitToHiddenToolView];
     NSLog(@"播放器释放了");
 }
 

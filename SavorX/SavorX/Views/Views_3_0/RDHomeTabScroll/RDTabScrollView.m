@@ -43,7 +43,6 @@
 
 - (void)createTabScrollItem
 {
-    self.currentIndex = 0;
     
     CGFloat itemHeight = self.frame.size.height / 3 * 2;
     CGFloat itemWidth = self.frame.size.width - 40;
@@ -54,7 +53,7 @@
     self.currentItemCenter = CGPointMake(width / 2, height / 2 - 20);
     self.bottomItemCenter = CGPointMake(width / 2, height / 2 + 20);
     
-    self.topItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.imageNames objectAtIndex:1] index:2];
+    self.topItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.imageNames lastObject] index:self.imageNames.count];
     self.topItem.center = self.topItemCenter;
     [self addSubview:self.topItem];
     
@@ -62,7 +61,7 @@
     self.currentItem.center = self.currentItemCenter;
     [self addSubview:self.currentItem];
     
-    self.bottomItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.imageNames lastObject] index:self.imageNames.count];
+    self.bottomItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.imageNames objectAtIndex:1] index:2];
     self.bottomItem.center = self.bottomItemCenter;
     [self addSubview:self.bottomItem];
     
@@ -121,7 +120,7 @@
             [self sendSubviewToBack:self.bottomItem];
             [self sendSubviewToBack:self.tempScroolItem];
             
-            NSString * imageName1 = [self lastTempInfo];
+            NSString * imageName1 = [self nextTempInfo];
             [self.tempScroolItem configWithInfo:imageName1 index:[self.imageNames indexOfObject:imageName1]+1];
             
             self.topItem.transform = CGAffineTransformMakeScale(.8f, .8f);
@@ -136,13 +135,11 @@
             self.bottomItem.center = self.currentItemCenter;
             self.bottomItem.alpha = 1.f;
             
-            NSString * imageName2 = [self lastTempInfo];
-            [self.tempScroolItem configWithInfo:imageName2 index:[self.imageNames indexOfObject:imageName2]+1];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.9f, .9f);
             self.tempScroolItem.center = self.bottomItemCenter;
             self.tempScroolItem.alpha = .5f;
         } completion:^(BOOL finished) {
-            [self didScroolEndWithLast];
+            [self didScroolEndWithNext];
             [UIView animateWithDuration:.2f animations:^{
                 self.topItem.alpha = 1.f;
                 self.bottomItem.alpha = 1.f;
@@ -162,9 +159,6 @@
             [self sendSubviewToBack:self.bottomItem];
             [self sendSubviewToBack:self.tempScroolItem];
             
-            NSString * imageName1 = [self lastTempInfo];
-            [self.tempScroolItem configWithInfo:imageName1 index:[self.imageNames indexOfObject:imageName1]+1];
-            
             self.topItem.transform = CGAffineTransformMakeScale(1.f, 1.f);
             self.topItem.center = self.currentItemCenter;
             self.topItem.alpha = 1.f;
@@ -177,13 +171,13 @@
             self.bottomItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + 40);
             self.bottomItem.alpha = .2f;
             
-            NSString * imageName2 = [self nextTempInfo];
+            NSString * imageName2 = [self lastTempInfo];
             [self.tempScroolItem configWithInfo:imageName2 index:[self.imageNames indexOfObject:imageName2]+1];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.9f, .9f);
             self.tempScroolItem.center = self.topItemCenter;
             self.tempScroolItem.alpha = .5f;
         } completion:^(BOOL finished) {
-            [self didScroolEndWithNext];
+            [self didScroolEndWithLast];
             [UIView animateWithDuration:.2f animations:^{
                 self.topItem.alpha = 1.f;
                 self.bottomItem.alpha = 1.f;
@@ -268,7 +262,6 @@
         CGFloat scaleRate = (1 - 0.9) * rate;
         CGFloat alphaRate = (1 - 0.5) * rate;
         CGFloat centerYRate = 40 * rate;
-        CGFloat angelRate = M_PI / 8 * rate;
         
         self.currentItem.transform = CGAffineTransformMakeScale(1 - scaleRate, 1 - scaleRate);
         self.currentItem.alpha = 1 - .8 * rate;
@@ -286,7 +279,7 @@
             self.bottomItem.alpha = .5f - alphaRate;
             self.bottomItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + centerYRate);
             
-            NSString * imageName = [self nextTempInfo];
+            NSString * imageName = [self lastTempInfo];
             [self.tempScroolItem configWithInfo:imageName index:[self.imageNames indexOfObject:imageName]+1];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.8f + scaleRate, .8f + scaleRate);
             self.tempScroolItem.alpha = .2f + .8 * rate;
@@ -303,7 +296,7 @@
             self.topItem.alpha = .5f - alphaRate;
             self.topItem.center = CGPointMake(self.topItemCenter.x, self.topItemCenter.y - centerYRate);
             
-            NSString * imageName = [self lastTempInfo];
+            NSString * imageName = [self nextTempInfo];
             [self.tempScroolItem configWithInfo:imageName index:[self.imageNames indexOfObject:imageName]+1];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.8f + scaleRate, .8f + scaleRate);
             self.tempScroolItem.alpha = .2f + .8 * rate;
@@ -331,9 +324,9 @@
     CGFloat maxDistance = height / 4;
     if (tempRateY >= maxDistance) {
         if (rateY > 0) {
-            [self didScroolEndWithNext];
-        }else{
             [self didScroolEndWithLast];
+        }else{
+            [self didScroolEndWithNext];
         }
     }else{
         [UIView animateWithDuration:.2f animations:^{
@@ -361,35 +354,35 @@
     [self resetGestureRecognizeWith:self.currentItem];
 }
 
-- (void)didScroolEndWithNext
+- (void)didScroolEndWithLast
 {
-    NSString * imageName = [self nextTempInfo];
+    NSString * imageName = [self lastTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.imageNames indexOfObject:imageName]+1];
     [self.bottomItem removeFromSuperview];
     self.bottomItem = self.currentItem;
     self.currentItem = self.topItem;
     self.topItem = self.tempScroolItem;
     self.tempScroolItem = nil;
-    if (self.currentIndex < self.imageNames.count - 1) {
-        self.currentIndex++;
+    if (self.currentIndex > 0) {
+        self.currentIndex--;
     }else{
-        self.currentIndex = 0;
+        self.currentIndex = self.imageNames.count - 1;
     }
 }
 
-- (void)didScroolEndWithLast
+- (void)didScroolEndWithNext
 {
-    NSString * imageName = [self lastTempInfo];
+    NSString * imageName = [self nextTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.imageNames indexOfObject:imageName]+1];
     [self.topItem removeFromSuperview];
     self.topItem = self.currentItem;
     self.currentItem = self.bottomItem;
     self.bottomItem = self.tempScroolItem;
     self.tempScroolItem = nil;
-    if (self.currentIndex > 0) {
-        self.currentIndex--;
+    if (self.currentIndex < self.imageNames.count - 1) {
+        self.currentIndex++;
     }else{
-        self.currentIndex = self.imageNames.count - 1;
+        self.currentIndex = 0;
     }
 }
 

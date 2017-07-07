@@ -56,4 +56,7 @@
 
 - (void)changeControlViewShowStatus; //改变控制栏显示状态
 
+//取消延时等待控制栏隐藏
+- (void)cancleWaitToHiddenToolView;
+
 @end

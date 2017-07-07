@@ -366,7 +366,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         make.left.mas_equalTo(0);
         make.bottom.mas_equalTo(0);
         make.right.mas_equalTo(0);
-        make.height.mas_equalTo(2);
+        make.height.mas_equalTo(3);
     }];
     
     [self.progressView mas_makeConstraints:^(MASConstraintMaker *make) {

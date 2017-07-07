@@ -282,13 +282,20 @@
 //对音量的加减进行操作
 - (void)volumeDidHandleWith:(UIButton *)button
 {
+    button.userInteractionEnabled = NO;
+    NSInteger action;
     if (button.tag == 101) {
         //加声音
-        
+        action = 4;
     }else{
         //减声音
-        
+        action = 3;
     }
+    [SAVORXAPI volumeWithURL:STBURL action:action success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        button.userInteractionEnabled = YES;
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        button.userInteractionEnabled = YES;
+    }];
 }
 
 //静音按钮被点击了
@@ -342,8 +349,33 @@
 //播放按钮被点击了
 - (void)playButtonDidBeClicked
 {
-    self.isPlaying = !self.isPlaying;
-    [self autoPlayButtonStatus];
+    self.playButton.userInteractionEnabled = NO;
+    
+    if (self.isPlaying) {
+        [SAVORXAPI pauseVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            
+            if ([[result objectForKey:@"result"] integerValue] == 0) {
+                self.isPlaying = !self.isPlaying;
+                [self autoPlayButtonStatus];
+            }
+            self.playButton.userInteractionEnabled = YES;
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            self.playButton.userInteractionEnabled = YES;
+        }];
+    }else{
+        [SAVORXAPI resumeVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            
+            if ([[result objectForKey:@"result"] integerValue] == 0) {
+                self.isPlaying = !self.isPlaying;
+                [self autoPlayButtonStatus];
+            }
+            self.playButton.userInteractionEnabled = YES;
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            self.playButton.userInteractionEnabled = YES;
+        }];
+    }
 }
 
 //根据播放状态改变播放按钮
