@@ -12,6 +12,7 @@
 
 @property(nonatomic, assign) NSInteger type;
 @property(nonatomic, strong) NSString *title;
+@property(nonatomic, strong) NSString *subTitle;
 @property(nonatomic, strong) NSString *source;
 @property(nonatomic, strong) NSString *time;
 @property(nonatomic, strong) NSString *sourceImage;

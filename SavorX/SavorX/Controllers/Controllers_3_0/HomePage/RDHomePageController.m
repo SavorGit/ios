@@ -10,6 +10,7 @@
 #import "RDHomeScreenViewController.h"
 #import "UIViewController+LGSideMenuController.h"
 #import "CreateWealthViewController.h"
+#import "SpecialTopicViewController.h"
 
 @interface RDHomePageController ()
 
@@ -65,8 +66,13 @@
 #pragma mark - Data source
 - (UIViewController *)pageController:(WMPageController *)pageController viewControllerAtIndex:(NSInteger)index
 {
-    CreateWealthViewController * creatWealth = [[CreateWealthViewController alloc] init];
-    return creatWealth;
+    if (index == 2) {
+        SpecialTopicViewController * specialTopic = [[SpecialTopicViewController alloc] init];
+        return specialTopic;
+    }else{
+        CreateWealthViewController * creatWealth = [[CreateWealthViewController alloc] init];
+        return creatWealth;
+    }
 }
 
 - (void)insertViewController
