@@ -14,6 +14,7 @@
 #import "Masonry.h"
 #import "CreateWealthModel.h"
 #import "ImageTextDetailViewController.h"
+#import "ImageAtlasDetailViewController.h"
 #import "WebViewController.h"
 #import "HSVodModel.h"
 
@@ -190,7 +191,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
-    if (model.type == 2) {
+    if (model.type == 1) {
+        ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
+        [self.navigationController pushViewController:iatVC animated:YES];
+        
+    }else if (model.type == 2) {
         ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
         [self.navigationController pushViewController:imtVC animated:YES];
 
