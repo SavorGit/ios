@@ -30,8 +30,9 @@
 
 - (void)createUI
 {
-    self.tabScroll = [[RDTabScrollView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height / 5 * 3) imagesNameArray:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10"]];
-    self.tabScroll.backgroundColor = [UIColor grayColor];
+    CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 24 + 24 + 70 + 40 + 40;
+    
+    self.tabScroll = [[RDTabScrollView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height) imagesNameArray:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10"]];
     [self.view addSubview:self.tabScroll];
     [self.tabScroll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
@@ -51,27 +52,25 @@
     }];
     
     UIButton * photoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [photoBtn setTitle:@"相册上电视" forState:UIControlStateNormal];
-    [photoBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [photoBtn setBackgroundColor:[UIColor blueColor]];
+    [photoBtn setBackgroundImage:[UIImage imageNamed:@"xiangce"] forState:UIControlStateNormal];
+    [photoBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];;
     [photoBtn addTarget:self action:@selector(photoButtonDidBeCicked) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomView addSubview:photoBtn];
     CGFloat width = ([UIScreen mainScreen].bounds.size.width - 40) / 2;
     [photoBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(15);
-        make.size.mas_equalTo(CGSizeMake(width, 70));
+        make.size.mas_equalTo(CGSizeMake(width, width * 0.49));
         make.centerY.mas_equalTo(0);
     }];
     
     UIButton * fileBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [fileBtn setTitle:@"文件上电视" forState:UIControlStateNormal];
+    [fileBtn setBackgroundImage:[UIImage imageNamed:@"wenjian"] forState:UIControlStateNormal];
     [fileBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [fileBtn setBackgroundColor:[UIColor blueColor]];
     [fileBtn addTarget:self action:@selector(fileButtonDidBeCicked) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomView addSubview:fileBtn];
     [fileBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(photoBtn.mas_right).offset(10);
-        make.size.mas_equalTo(CGSizeMake(width, 70));
+        make.size.mas_equalTo(CGSizeMake(width, width * 0.49));
         make.centerY.mas_equalTo(0);
     }];
 }

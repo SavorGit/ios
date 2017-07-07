@@ -43,15 +43,16 @@
 
 - (void)createTabScrollItem
 {
+    self.backgroundColor = UIColorFromRGB(0xece6de);
     
-    CGFloat itemHeight = self.frame.size.height / 3 * 2;
     CGFloat itemWidth = self.frame.size.width - 40;
+    CGFloat itemHeight = itemWidth * 0.646 + 70;
     CGFloat width = self.frame.size.width;
     CGFloat height = self.frame.size.height;
     
-    self.topItemCenter = CGPointMake(width / 2, height / 2 - 60);
-    self.currentItemCenter = CGPointMake(width / 2, height / 2 - 20);
-    self.bottomItemCenter = CGPointMake(width / 2, height / 2 + 20);
+    self.topItemCenter = CGPointMake(width / 2, height / 2 - 50);
+    self.currentItemCenter = CGPointMake(width / 2, height / 2 - 10);
+    self.bottomItemCenter = CGPointMake(width / 2, height / 2 + 30);
     
     self.topItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.imageNames lastObject] index:self.imageNames.count];
     self.topItem.center = self.topItemCenter;

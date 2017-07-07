@@ -11,6 +11,12 @@
 #import "UIViewController+LGSideMenuController.h"
 #import "CreateWealthViewController.h"
 
+@interface RDHomePageController ()
+
+@property (nonatomic, copy) NSString * specialTitle;
+
+@end
+
 @implementation RDHomePageController
 
 - (instancetype)init
@@ -23,6 +29,37 @@
         [self configPageController];
     }
     return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+//    [self autoSpecialTitleWith:@"安邦事件"];
+}
+
+- (void)autoSpecialTitleWith:(NSString *)title
+{
+    self.specialTitle = title;
+    
+    if (self.titles) {
+        NSMutableArray * titleArray = [NSMutableArray arrayWithArray:self.titles];
+        [titleArray removeLastObject];
+        [titleArray addObject:title];
+        self.titles = [NSArray arrayWithArray:titleArray];
+        
+        CGFloat width = [self.specialTitle boundingRectWithSize:CGSizeMake(1000, 30) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading|NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17]} context:nil].size.width;
+        
+        [self updateTitle:title andWidth:width atIndex:self.titles.count - 1];
+        
+        if (self.progressViewWidths) {
+            NSMutableArray * array = [NSMutableArray arrayWithArray:self.progressViewWidths];
+            [array removeLastObject];
+            [array addObject:@(width)];
+            self.progressViewWidths = [NSArray arrayWithArray:array];
+        }
+        [self autoItemMargin];
+    }
 }
 
 #pragma mark - Data source
@@ -97,6 +134,8 @@
     [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"移除" style:UIBarButtonItemStyleDone target:self action:@selector(removeViewController)];
+    [self autoItemMargin];
+    [self.menuView updateBadgeViewAtIndex:self.titles.count - 1];
 }
 
 - (void)removeViewController
@@ -188,24 +227,27 @@
     
     [self resetCurrentViewController:[self.displayVC objectForKey:@(self.selectIndex)]];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"插入" style:UIBarButtonItemStyleDone target:self action:@selector(insertViewController)];
+    [self autoItemMargin];
+    [self.menuView updateBadgeViewAtIndex:self.titles.count - 1];
 }
 
 - (void)configPageController
 {    
-    self.preloadPolicy = WMPageControllerPreloadPolicyNeighbour;
+    self.preloadPolicy = WMPageControllerPreloadPolicyNear;
     self.menuViewStyle = WMMenuViewStyleLine;
     self.titleSizeNormal = 14;
     self.titleSizeSelected = 17;
     self.titleColorNormal = [UIColor grayColor];
     self.titleColorSelected = kThemeColor;
     
-    self.menuItemWidth = [UIScreen mainScreen].bounds.size.width / 8;
-    self.menuViewContentMargin = ([UIScreen mainScreen].bounds.size.width - (self.menuItemWidth + 10) * 3) / 2;
+    self.menuItemWidth = 50;
     self.menuBGColor = kThemeColor;
     self.menuHeight = 50;
+    self.itemMargin = 7;
+    [self autoItemMargin];
     
     self.progressColor = [UIColor colorWithRed:143.f/255.f green:46.f/255.f blue:64.f/255.f alpha:1];
-    self.progressWidth = 34;
+    self.progressWidth = 30;
     self.progressViewBottomSpace = 13;
     
     self.pageAnimatable = YES;
@@ -213,9 +255,46 @@
     [self createCustomUI];
 }
 
+- (void)autoItemMargin
+{
+    self.menuViewContentMargin = (kMainBoundsWidth - (self.menuItemWidth + self.itemMargin) * self.titles.count - self.itemMargin) / 2;
+    if (!isEmptyString(self.specialTitle)) {
+        CGSize size = [self.specialTitle boundingRectWithSize:CGSizeMake(1000, 30) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading|NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17]} context:nil].size;
+        CGFloat width = size.width;
+        self.menuViewContentMargin = (kMainBoundsWidth - (self.menuItemWidth + self.itemMargin) * self.titles.count - self.itemMargin - 20 - (width - self.menuItemWidth)) / 2;
+    }
+}
+
 - (void)createCustomUI
 {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"插入" style:UIBarButtonItemStyleDone target:self action:@selector(insertViewController)];
+}
+
+- (UIView *)menuView:(WMMenuView *)menu badgeViewAtIndex:(NSInteger)index
+{
+    if (index == self.titles.count - 1) {
+        CGFloat width = self.menuItemWidth;
+        if (!isEmptyString(self.specialTitle)) {
+            CGSize size = [self.specialTitle boundingRectWithSize:CGSizeMake(1000, 30) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading|NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17]} context:nil].size;
+            width = size.width;
+            UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(width - 10, 12, 24, 12)];
+            [view setImage:[UIImage imageNamed:@"zhuanti"]];
+            return view;
+        }
+    }
+    return nil;
+}
+
+- (CGFloat)menuView:(WMMenuView *)menu widthForItemAtIndex:(NSInteger)index
+{
+    if (index == self.titles.count - 1) {
+        if (!isEmptyString(self.specialTitle)) {
+            CGSize size = [self.specialTitle boundingRectWithSize:CGSizeMake(1000, 30) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading|NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17]} context:nil].size;
+            
+            return size.width;
+        }
+    }
+    return 40;
 }
 
 - (void)viewWillAppear:(BOOL)animated

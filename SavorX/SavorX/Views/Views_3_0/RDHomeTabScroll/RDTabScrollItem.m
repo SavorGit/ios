@@ -50,7 +50,7 @@
 
 - (void)createSubViews
 {
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = UIColorFromRGB(0xf6f2ed);
     self.layer.shadowColor = [UIColor blackColor].CGColor;
     self.layer.shadowOpacity = .3f;
     self.layer.shadowRadius = 6.f;
@@ -69,11 +69,8 @@
     [leftView addGestureRecognizer:tap];
     [self addSubview:leftView];
     UIButton * leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftButton.frame = CGRectMake(0, 0, 70, 30);
-    leftButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    leftButton.layer.borderWidth = .5f;
-    leftButton.layer.cornerRadius = 15.f;
-    leftButton.layer.masksToBounds = YES;
+    leftButton.frame = CGRectMake(0, 0, 80, 24);
+    [leftButton setBackgroundImage:[UIImage imageNamed:@"sjbf"] forState:UIControlStateNormal];
     leftButton.center = CGPointMake(leftView.frame.size.width / 2, leftView.frame.size.height / 2);
     leftButton.userInteractionEnabled = NO;
     [leftView addSubview:leftButton];
@@ -86,25 +83,30 @@
     [rightView addGestureRecognizer:tap2];
     [self addSubview:rightView];
     UIButton * rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightButton.frame = CGRectMake(0, 0, 70, 30);
-    rightButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    rightButton.layer.borderWidth = .5f;
-    rightButton.layer.cornerRadius = 15.f;
-    rightButton.layer.masksToBounds = YES;
+    rightButton.frame = CGRectMake(0, 0, 80, 24);
+    [rightButton setBackgroundImage:[UIImage imageNamed:@"dsbf"] forState:UIControlStateNormal];
     rightButton.center = CGPointMake(rightView.frame.size.width / 2, rightView.frame.size.height / 2);
     rightButton.userInteractionEnabled = NO;
     [rightView addSubview:rightButton];
     
-    self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageViewSize.width - 50, imageViewSize.height - 30, 50, 20)];
+    self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageViewSize.width - 55, imageViewSize.height - 5 - 18, 50, 18)];
     self.timeLabel.textColor = [UIColor whiteColor];
-    self.timeLabel.text = @"0\'00\"";
+    self.timeLabel.font = [UIFont systemFontOfSize:11];
+    self.timeLabel.textAlignment = NSTextAlignmentCenter;
+    self.timeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.55f];
+    self.timeLabel.text = @" 0\'00\"";
     [self addSubview:self.timeLabel];
+    self.timeLabel.layer.cornerRadius = 9;
+    self.timeLabel.layer.masksToBounds = YES;
+    self.timeLabel.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.timeLabel.layer.borderWidth = .5f;
     
     self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, imageViewSize.height, self.frame.size.width, self.frame.size.height - imageViewSize.height)];
     [self addSubview:self.bottomView];
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width - 30, 16)];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, self.frame.size.width - 30, 16)];
     self.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    self.titleLabel.textColor = UIColorFromRGB(0x434343);
     self.titleLabel.text = @"浙数文化与创新工场签署战略合作框架协议";
     [self.bottomView addSubview:self.titleLabel];
     
@@ -112,27 +114,27 @@
 //    self.detailLogo.backgroundColor = [UIColor redColor];
 //    [self.bottomView addSubview:self.detailLogo];
     
-    self.detailFrom = [[UILabel alloc] initWithFrame:CGRectMake(self.detailLogo.frame.origin.x + self.detailLogo.frame.size.width + 10, self.detailLogo.frame.origin.y, 80, 25)];
+    self.detailFrom = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 25)];
     self.detailFrom.font = [UIFont systemFontOfSize:12];
-    self.detailFrom.textColor = [UIColor grayColor];
+    self.detailFrom.textColor = UIColorFromRGB(0x898886);
     self.detailFrom.text = @"来自网易新闻";
     [self.bottomView addSubview:self.detailFrom];
     [self.detailFrom mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(10);
-        make.bottom.mas_equalTo(-10);
-        make.height.mas_equalTo(25);
+        make.left.mas_equalTo(12);
+        make.bottom.mas_equalTo(-15);
+        make.height.mas_equalTo(12);
         make.width.lessThanOrEqualTo(@(100));
     }];
     
     self.detailDate = [[UILabel alloc] initWithFrame:CGRectMake(self.detailFrom.frame.origin.x + self.detailFrom.frame.size.width + 20, self.detailFrom.frame.origin.y, 60, 25)];
     self.detailDate.font = [UIFont systemFontOfSize:10];
-    self.detailDate.textColor = [UIColor grayColor];
+    self.detailDate.textColor = UIColorFromRGB(0xb2afab);
     self.detailDate.text = @"2017.07.03";
     [self.bottomView addSubview:self.detailDate];
     [self.detailDate mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.detailFrom.mas_right).offset(10);
-        make.bottom.mas_equalTo(-10);
-        make.height.mas_equalTo(25);
+        make.bottom.mas_equalTo(-15);
+        make.height.mas_equalTo(12);
         make.width.lessThanOrEqualTo(@(100));
     }];
     
@@ -160,7 +162,7 @@
 - (UIImageView *)imageView
 {
     if (!_imageView) {
-        CGRect frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.width * .587);
+        CGRect frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.width * .646);
         _imageView = [[UIImageView alloc] initWithFrame:frame];
         _imageView.backgroundColor = [UIColor blackColor];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
