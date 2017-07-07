@@ -373,6 +373,9 @@
 		96D8C5BB1F0F213000251301 /* DDPhotoDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5B61F0F213000251301 /* DDPhotoDescView.m */; };
 		96D8C5BC1F0F213000251301 /* DDPhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5B81F0F213000251301 /* DDPhotoScrollView.m */; };
 		96D8C5BD1F0F213000251301 /* ImageAtlasScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5BA1F0F213000251301 /* ImageAtlasScrollView.m */; };
+		96D8C5C11F0F603500251301 /* SpecialTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C01F0F603500251301 /* SpecialTopicViewController.m */; };
+		96D8C5C51F0F66F200251301 /* SpecialTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C41F0F66F200251301 /* SpecialTopTableViewCell.m */; };
+		96D8C5C81F0F681900251301 /* HeadlinesSTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -976,6 +979,12 @@
 		96D8C5B81F0F213000251301 /* DDPhotoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDPhotoScrollView.m; sourceTree = "<group>"; };
 		96D8C5B91F0F213000251301 /* ImageAtlasScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAtlasScrollView.h; sourceTree = "<group>"; };
 		96D8C5BA1F0F213000251301 /* ImageAtlasScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAtlasScrollView.m; sourceTree = "<group>"; };
+		96D8C5BF1F0F603500251301 /* SpecialTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTopicViewController.h; sourceTree = "<group>"; };
+		96D8C5C01F0F603500251301 /* SpecialTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopicViewController.m; sourceTree = "<group>"; };
+		96D8C5C31F0F66F200251301 /* SpecialTopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTopTableViewCell.h; sourceTree = "<group>"; };
+		96D8C5C41F0F66F200251301 /* SpecialTopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopTableViewCell.m; sourceTree = "<group>"; };
+		96D8C5C61F0F681900251301 /* HeadlinesSTopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadlinesSTopTableViewCell.h; sourceTree = "<group>"; };
+		96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeadlinesSTopTableViewCell.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1414,6 +1423,7 @@
 		0663D4151F0B6A8E00CD2FA2 /* Controllers_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				96D8C5BE1F0F5F7600251301 /*  SpecialTopic */,
 				96A734BA1F0C87EA00906163 /* CreatWealthDetail */,
 				96A7348C1F0C7EE900906163 /* CreateWealth */,
 				0663D4161F0B6A8E00CD2FA2 /* HomePage */,
@@ -1445,6 +1455,7 @@
 		0663D4211F0B6B4600CD2FA2 /* Views_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				96D8C5C21F0F664600251301 /*  SpecialTopViews */,
 				96D8C5B41F0F213000251301 /* ImageAtlasView */,
 				96A734AA1F0C80B000906163 /* ShareBoard */,
 				96A734A11F0C7F3C00906163 /* CreateWealthDetaileViews */,
@@ -2513,6 +2524,26 @@
 			path = ImageAtlasView;
 			sourceTree = "<group>";
 		};
+		96D8C5BE1F0F5F7600251301 /*  SpecialTopic */ = {
+			isa = PBXGroup;
+			children = (
+				96D8C5BF1F0F603500251301 /* SpecialTopicViewController.h */,
+				96D8C5C01F0F603500251301 /* SpecialTopicViewController.m */,
+			);
+			path = " SpecialTopic";
+			sourceTree = "<group>";
+		};
+		96D8C5C21F0F664600251301 /*  SpecialTopViews */ = {
+			isa = PBXGroup;
+			children = (
+				96D8C5C31F0F66F200251301 /* SpecialTopTableViewCell.h */,
+				96D8C5C41F0F66F200251301 /* SpecialTopTableViewCell.m */,
+				96D8C5C61F0F681900251301 /* HeadlinesSTopTableViewCell.h */,
+				96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */,
+			);
+			path = " SpecialTopViews";
+			sourceTree = "<group>";
+		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2961,6 +2992,7 @@
 				06B5554C1E8A6A210068BF70 /* DefalutLaunchPlayView.m in Sources */,
 				0663D41C1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m in Sources */,
 				96D8C5BD1F0F213000251301 /* ImageAtlasScrollView.m in Sources */,
+				96D8C5C51F0F66F200251301 /* SpecialTopTableViewCell.m in Sources */,
 				478058351DF989850091C305 /* ConverUtil.m in Sources */,
 				47F9976D1DFFBC910009BDFB /* BaseCell.m in Sources */,
 				060DB0B41D5B26F9002A2DED /* UIColor+YYAdditions.m in Sources */,
@@ -3020,6 +3052,7 @@
 				0690766E1E520A7700CA1AC4 /* PhotoManyEditView.m in Sources */,
 				476F44CA1E2DBEC500F99090 /* LeftCell.m in Sources */,
 				061B4EBE1E487EF5000D5E07 /* PhotoTextLabel.m in Sources */,
+				96D8C5C81F0F681900251301 /* HeadlinesSTopTableViewCell.m in Sources */,
 				068F0FB31E8266CE0089068F /* HSVideoViewController.m in Sources */,
 				0663D42A1F0B6B5900CD2FA2 /* RDTabScrollView.m in Sources */,
 				0663D4201F0B6AFA00CD2FA2 /* UIView+LayerCurve.m in Sources */,
@@ -3048,6 +3081,7 @@
 				063AA2451DB8AA97007F4C70 /* AddLibraryViewController.m in Sources */,
 				47D6F63D1E4AB68C0030C8C4 /* SXVideoPlayViewController.m in Sources */,
 				96D8C5B31F0F20DA00251301 /* ImageAtlasDetailViewController.m in Sources */,
+				96D8C5C11F0F603500251301 /* SpecialTopicViewController.m in Sources */,
 				47FE2CB91E1BB53200D3D0B4 /* SplashViewController.m in Sources */,
 				060E349A1E6662A900D38547 /* PhotoAllViewController.m in Sources */,
 				063DC13D1E6D5E1C00449A7B /* RDHomeScreenButton.m in Sources */,
