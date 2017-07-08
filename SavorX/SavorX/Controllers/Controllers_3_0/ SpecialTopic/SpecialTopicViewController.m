@@ -11,8 +11,7 @@
 #import "HeadlinesSTopTableViewCell.h"
 #import "Masonry.h"
 #import "CreateWealthModel.h"
-#import "ImageTextDetailViewController.h"
-#import "ImageAtlasDetailViewController.h"
+#import "SpecialTopDetailViewController.h"
 
 @interface SpecialTopicViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -157,8 +156,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
-    [self.navigationController pushViewController:imtVC animated:YES];
+    SpecialTopDetailViewController *stVC = [[SpecialTopDetailViewController alloc] init];
+    [self.navigationController pushViewController:stVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

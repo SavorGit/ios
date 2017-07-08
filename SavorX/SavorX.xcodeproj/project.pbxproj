@@ -376,6 +376,7 @@
 		96D8C5C11F0F603500251301 /* SpecialTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C01F0F603500251301 /* SpecialTopicViewController.m */; };
 		96D8C5C51F0F66F200251301 /* SpecialTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C41F0F66F200251301 /* SpecialTopTableViewCell.m */; };
 		96D8C5C81F0F681900251301 /* HeadlinesSTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */; };
+		96D8C5CC1F0F75AC00251301 /* SpecialTopDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5CB1F0F75AC00251301 /* SpecialTopDetailViewController.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -985,6 +986,8 @@
 		96D8C5C41F0F66F200251301 /* SpecialTopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopTableViewCell.m; sourceTree = "<group>"; };
 		96D8C5C61F0F681900251301 /* HeadlinesSTopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadlinesSTopTableViewCell.h; sourceTree = "<group>"; };
 		96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeadlinesSTopTableViewCell.m; sourceTree = "<group>"; };
+		96D8C5CA1F0F75AC00251301 /* SpecialTopDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTopDetailViewController.h; sourceTree = "<group>"; };
+		96D8C5CB1F0F75AC00251301 /* SpecialTopDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopDetailViewController.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1423,6 +1426,7 @@
 		0663D4151F0B6A8E00CD2FA2 /* Controllers_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				96D8C5C91F0F757200251301 /*  SpecialTopDetail */,
 				96D8C5BE1F0F5F7600251301 /*  SpecialTopic */,
 				96A734BA1F0C87EA00906163 /* CreatWealthDetail */,
 				96A7348C1F0C7EE900906163 /* CreateWealth */,
@@ -2544,6 +2548,15 @@
 			path = " SpecialTopViews";
 			sourceTree = "<group>";
 		};
+		96D8C5C91F0F757200251301 /*  SpecialTopDetail */ = {
+			isa = PBXGroup;
+			children = (
+				96D8C5CA1F0F75AC00251301 /* SpecialTopDetailViewController.h */,
+				96D8C5CB1F0F75AC00251301 /* SpecialTopDetailViewController.m */,
+			);
+			path = " SpecialTopDetail";
+			sourceTree = "<group>";
+		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -3036,6 +3049,7 @@
 				061E0FD11DFFD9A40072605F /* DeviceModel.m in Sources */,
 				4772FF8C1DFA570D00758697 /* UIView+Additional.m in Sources */,
 				47D6F6441E4AB9D80030C8C4 /* VoideoPlayHeaderView.m in Sources */,
+				96D8C5CC1F0F75AC00251301 /* SpecialTopDetailViewController.m in Sources */,
 				0627E0B31E32111500DAED92 /* LeftTableHeaderView.m in Sources */,
 				06FA33961D3E171D001F5B37 /* DDFileLogger.m in Sources */,
 				0647BC351E506285002284BB /* HSFirstUseRequest.m in Sources */,

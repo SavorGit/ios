@@ -46,6 +46,9 @@
     for (int i = 0; i < 30; i ++) {
         CreateWealthModel *model = [[CreateWealthModel alloc] init];
         model.type = 0;
+        if (i == 0) {
+            model.type = 3;
+        }
         if (i == 2) {
             model.type = 1;
         }else if (i == 3 || i == 5 || i == 6){
@@ -73,13 +76,13 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.backgroundColor = UIColorFromRGB(0xece6de);
         _tableView.backgroundView = nil;
         _tableView.showsVerticalScrollIndicator = NO;
         [self.view addSubview:_tableView];
         
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(10);
+            make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
             make.bottom.mas_equalTo(0);
             make.right.mas_equalTo(0);
@@ -113,7 +116,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
-    if (indexPath.row == 0) {
+    if (model.type == 3) {
         
         static NSString *cellID = @"HeadlineTableCell";
         HeadlinesTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
@@ -182,9 +185,11 @@
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     if (model.type == 0 || model.type == 1) {
-        return 260;
+        return 285;
     }else if (model.type == 2){
-        return 150;
+        return 96;
+    }else if (model.type == 3){
+        return 343;
     }
     return 0;
 }

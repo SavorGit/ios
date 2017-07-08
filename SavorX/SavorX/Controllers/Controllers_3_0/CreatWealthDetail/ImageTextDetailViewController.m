@@ -16,13 +16,13 @@
 
 @property (nonatomic, strong) UIWebView * webView;
 @property (nonatomic, strong) UIView * testView;
-
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 
 @end
 
 @implementation ImageTextDetailViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -44,7 +44,7 @@
     [self.view addSubview:self.webView];
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
-    self.testView.backgroundColor = [UIColor lightGrayColor];
+    self.testView.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];
 }
@@ -87,22 +87,22 @@
     
     int startIndex = 0;
     
-//    if (hadInstalledWeixin) {
-//        [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
-//        [imageArr addObjectsFromArray:@[@"wechat",@"friend"]];
-//    } else {
-//        startIndex += 2;
-//    }
-//    
-//    if (hadInstalledQQ) {
-//        [titlearr addObjectsFromArray:@[@"QQ"]];
-//        [imageArr addObjectsFromArray:@[@"qq"]];
-//    } else {
-//        startIndex += 2;
-//    }
+    if (hadInstalledWeixin) {
+        [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
+        [imageArr addObjectsFromArray:@[@"wechat",@"friend"]];
+    } else {
+        startIndex += 2;
+    }
+    
+    if (hadInstalledQQ) {
+        [titlearr addObjectsFromArray:@[@"QQ"]];
+        [imageArr addObjectsFromArray:@[@"qq"]];
+    } else {
+        startIndex += 1;
+    }
     
     [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
-    [imageArr addObjectsFromArray:@[@"wechat",@"friend"]];
+    [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
     
     [titlearr addObjectsFromArray:@[@"QQ"]];
     [imageArr addObjectsFromArray:@[@"qq"]];
@@ -183,7 +183,7 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = [UIColor darkGrayColor];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.backgroundView = nil;
         _tableView.scrollEnabled = NO;
         [self.testView addSubview:_tableView];
