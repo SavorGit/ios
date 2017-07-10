@@ -24,7 +24,6 @@
 
 - (instancetype)init
 {
-    
     NSArray * vcArray = @[[UIViewController class],[UIViewController class],[UIViewController class]];
     NSArray * titleArray = @[@"创富", @"生活", @"专题"];
     
@@ -315,7 +314,7 @@
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.exclusiveTouch = YES;
-    [button setImage:[UIImage imageNamed:@"nav.png"] forState:UIControlStateNormal];
+    [button setImage:[UIImage imageNamed:@"menu"] forState:UIControlStateNormal];
     button.frame = CGRectMake(0, 0, 40, 40);
     [button setImageEdgeInsets:UIEdgeInsetsMake(0, -25, 0, 0)];
     [button addTarget:self action:@selector(openLeftDrawer:) forControlEvents:UIControlEventTouchUpInside];

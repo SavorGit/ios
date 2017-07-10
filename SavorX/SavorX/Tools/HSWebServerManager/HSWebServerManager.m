@@ -156,7 +156,7 @@
         
         NSString * filePath;
         
-        if ([name isEqualToString:@"media-Redianer-TempCache.mp4"]) {
+        if ([name isEqualToString:RDScreenVideoName]) {
             filePath = [HTTPServerDocument stringByAppendingPathComponent:name];
         }else if ([name hasSuffix:@".mp4"]) {
             filePath = [[VideoDocument stringByAppendingPathComponent:name] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];

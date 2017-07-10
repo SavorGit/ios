@@ -7,6 +7,9 @@
 //
 
 #import "PhotoVideoScreenViewController.h"
+#import "RDAlertView.h"
+#import "HSConnectViewController.h"
+#import "HomeAnimationView.h"
 
 @interface PhotoVideoScreenViewController ()
 
@@ -25,6 +28,10 @@
 @property (nonatomic, assign) BOOL isPlayEnd;
 @property (nonatomic, assign) BOOL isNoVolume;
 
+@property (nonatomic, strong) NSURLSessionDataTask * lastTask;
+@property (nonatomic, assign) CGFloat lastValue;
+@property (nonatomic, strong) UIView * alertView;
+
 @end
 
 @implementation PhotoVideoScreenViewController
@@ -40,6 +47,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self createUI];
 }
 
@@ -50,14 +58,14 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.backImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    [self.backImageView setImage:[UIImage imageNamed:@"videoheaderBg"]];
+    [self.backImageView setImage:[UIImage imageNamed:@"sptpdb_bg"]];
     [self.view addSubview:self.backImageView];
     self.backImageView.userInteractionEnabled = YES;
     [self.backImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
-        make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
+        make.height.equalTo(self.view.mas_width).multipliedBy(254.f/414.f);
     }];
     
     UIView * playSliderView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -191,14 +199,12 @@
     self.playButton.frame = CGRectMake(0, 0, playView.frame.size.width - 50, playView.frame.size.width - 50);
 //    [self.playButton setAdjustsImageWhenHighlighted:NO];
     [playView addSubview:self.playButton];
-    [self.playButton setBackgroundColor:kThemeColor];
     [self.playButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(0);
         make.size.mas_equalTo(self.playButton.frame.size);
     }];
-    [self autoPlayButtonStatus];
-    self.playButton.layer.cornerRadius = self.playButton.frame.size.width / 2;
-    self.playButton.layer.masksToBounds = YES;
+    [self.playButton setBackgroundImage:[UIImage imageNamed:@"control_bg"] forState:UIControlStateNormal];
+    [self.playButton setBackgroundImage:[UIImage imageNamed:@"controlanxia_bg"] forState:UIControlStateHighlighted];
     [self.playButton addTarget:self action:@selector(playButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
     
     self.scrennButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -206,15 +212,13 @@
     [self.scrennButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
     //    [self.playButton setAdjustsImageWhenHighlighted:NO];
     [self.toolView addSubview:self.scrennButton];
-    [self.scrennButton setBackgroundColor:kThemeColor];
     [self.scrennButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(playView.mas_centerY).offset(5);
         make.right.equalTo(playView.mas_left).offset(-10);
         make.size.mas_equalTo(self.scrennButton.frame.size);
     }];
-    [self autoScrennButtonStatus];
-    self.scrennButton.layer.cornerRadius = self.scrennButton.frame.size.width / 2;
-    self.scrennButton.layer.masksToBounds = YES;
+    [self.scrennButton setBackgroundImage:[UIImage imageNamed:@"control_bg"] forState:UIControlStateNormal];
+    [self.scrennButton setBackgroundImage:[UIImage imageNamed:@"controlanxia_bg"] forState:UIControlStateHighlighted];
     [self.scrennButton addTarget:self action:@selector(scrennButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
     
     self.volumeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -222,18 +226,18 @@
     [self.volumeButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
     //    [self.playButton setAdjustsImageWhenHighlighted:NO];
     [self.toolView addSubview:self.volumeButton];
-    [self.volumeButton setBackgroundColor:kThemeColor];
     [self.volumeButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(playView.mas_centerY).offset(5);
         make.left.equalTo(playView.mas_right).offset(10);
         make.size.mas_equalTo(self.volumeButton.frame.size);
     }];
     [self autoVolumeButtonStatus];
-    self.volumeButton.layer.cornerRadius = self.volumeButton.frame.size.width / 2;
-    self.volumeButton.layer.masksToBounds = YES;
+    [self.volumeButton setBackgroundImage:[UIImage imageNamed:@"control_bg"] forState:UIControlStateNormal];
+    [self.volumeButton setBackgroundImage:[UIImage imageNamed:@"controlanxia_bg"] forState:UIControlStateHighlighted];
     [self.volumeButton addTarget:self action:@selector(volumeButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
     
-    UIView * volumeTool = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.toolView.frame.size.width - 60, self.playButton.frame.size.height)];
+    CGFloat toolWidth = self.toolView.frame.size.width - 60;
+    UIView * volumeTool = [[UIView alloc] initWithFrame:CGRectMake(0, 0, toolWidth, toolWidth / 204 * 55)];
     volumeTool.backgroundColor = kThemeColor;
     [self.toolView addSubview:volumeTool];
     [volumeTool mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -255,28 +259,97 @@
     }];
     
     UIButton * addButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [addButton setTitle:@"音量+" forState:UIControlStateNormal];
+    [addButton setBackgroundImage:[UIImage imageNamed:@"yljia"] forState:UIControlStateNormal];
+    [addButton setBackgroundImage:[UIImage imageNamed:@"yljiaanxia"] forState:UIControlStateHighlighted];
     [volumeTool addSubview:addButton];
     [addButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(2);
-        make.left.mas_equalTo(2);
-        make.bottom.mas_equalTo(-2);
-        make.right.equalTo(volumeTool.mas_centerX).offset(-2);
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
+        make.right.equalTo(volumeTool.mas_centerX).offset(0);
     }];
     addButton.tag = 101;
     [addButton addTarget:self action:@selector(volumeDidHandleWith:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton * minusButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [minusButton setTitle:@"音量-" forState:UIControlStateNormal];
+    [minusButton setBackgroundImage:[UIImage imageNamed:@"yljian"] forState:UIControlStateNormal];
+    [minusButton setBackgroundImage:[UIImage imageNamed:@"yljiananxia"] forState:UIControlStateHighlighted];
     [volumeTool addSubview:minusButton];
     [minusButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(2);
-        make.left.equalTo(volumeTool.mas_centerX).offset(2);
-        make.bottom.mas_equalTo(-2);
-        make.right.mas_equalTo(-2);
+        make.top.mas_equalTo(0);
+        make.left.equalTo(volumeTool.mas_centerX).offset(0);
+        make.bottom.mas_equalTo(0);
+        make.right.mas_equalTo(0);
     }];
     minusButton.tag = 102;
     [minusButton addTarget:self action:@selector(volumeDidHandleWith:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([GlobalData shared].isBindRD) {
+        self.isPlaying = YES;
+        self.isPlayEnd = NO;
+    }else{
+        self.isPlaying = NO;
+        self.isPlayEnd = YES;
+        [self alertView];
+    }
+    [self autoScrennButtonStatus];
+    [self autoPlayButtonStatus];
+    
+    [self.playSilder addTarget:self action:@selector(sliderValueChange) forControlEvents:UIControlEventValueChanged];
+    [self.playSilder addTarget:self action:@selector(sliderStartTouch) forControlEvents:UIControlEventTouchDown];
+    [self.playSilder addTarget:self action:@selector(sliderEndTouch) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+    
+    [self addNotification];
+}
+
+- (void)sliderStartTouch
+{
+    if (self.lastTask) {
+        [self.lastTask cancel];
+    }
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateQuery) object:nil];
+    self.lastValue = self.playSilder.value;
+}
+
+- (void)sliderValueChange
+{
+    [self updateTimeLabel:self.playSilder.value];
+}
+
+- (void)sliderEndTouch
+{
+    if ([GlobalData shared].isBindRD) {
+        
+        if (self.isPlayEnd) {
+            [self resetVod];
+        }else{
+            NSString * value;
+            if (self.playSilder.value < 1) {
+                value = [NSString stringWithFormat:@"%0.0f",self.playSilder.value + 1.f];
+            }else{
+                value = [NSString stringWithFormat:@"%0.0f",self.playSilder.value];
+            }
+            [SAVORXAPI seekVideoWithURL:STBURL position:value success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+                
+                if ([[result objectForKey:@"result"] integerValue] == 0) {
+                    [self autoPlayButtonStatus];
+                }else{
+                    [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
+                    [self.playSilder setValue:self.lastValue animated:YES];
+                }
+                
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                
+                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+                [self.playSilder setValue:self.lastValue animated:YES];
+                
+            }];
+        }
+        
+    }else{
+        [self.playSilder setValue:0 animated:YES];
+    }
+    
 }
 
 //对音量的加减进行操作
@@ -323,17 +396,71 @@
 - (void)autoVolumeButtonStatus
 {
     if (self.isNoVolume) {
-        [self.volumeButton setImage:[UIImage imageNamed:@"De_labajingyin"] forState:UIControlStateNormal];
+        [self.volumeButton setImage:[UIImage imageNamed:@"sptplaba_jingyin"] forState:UIControlStateNormal];
     }else{
-        [self.volumeButton setImage:[UIImage imageNamed:@"De_laba"] forState:UIControlStateNormal];
+        [self.volumeButton setImage:[UIImage imageNamed:@"sptplaba_dianbo"] forState:UIControlStateNormal];
     }
 }
 
 //投屏按钮被点击了
 - (void)scrennButtonDidBeClicked
 {
-    self.isPlayEnd = !self.isPlayEnd;
-    [self autoScrennButtonStatus];
+    if (self.isPlayEnd) {
+        [self resetVod];
+    }else{
+        [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+            self.isPlayEnd = YES;
+            self.isPlaying = NO;
+            [self autoPlayButtonStatus];
+            [self autoScrennButtonStatus];
+        } failure:^{
+            [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+        }];
+    }
+}
+
+- (void)resetVod
+{
+    NSString *asseturlStr = [NSString stringWithFormat:@"%@video?%@", [HTTPServerManager getCurrentHTTPServerIP], RDScreenVideoName];
+    [self demandVideoWithMediaPath:asseturlStr force:0];
+}
+
+- (void)demandVideoWithMediaPath:(NSString *)mediaPath force:(NSInteger)force{
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+    
+    [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            
+            self.isPlaying = YES;
+            self.isPlayEnd = NO;
+            [self autoPlayButtonStatus];
+            [self autoScrennButtonStatus];
+            
+            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];
+            
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"video"}];
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithMediaPath:mediaPath force:1];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"video"}];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }
+        else{
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        [hud hideAnimated:NO];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [hud hideAnimated:NO];
+        [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+    }];
 }
 
 //根据投屏状态改变投屏按钮
@@ -341,6 +468,10 @@
 {
     if (self.isPlayEnd) {
         [self.scrennButton setTitle:@"投屏" forState:UIControlStateNormal];
+        
+        self.minimumLabel.text = @"00:00";
+        self.playSilder.value = 0;
+        
     }else{
         [self.scrennButton setTitle:@"退出" forState:UIControlStateNormal];
     }
@@ -351,7 +482,9 @@
 {
     self.playButton.userInteractionEnabled = NO;
     
-    if (self.isPlaying) {
+    if (self.isPlayEnd) {
+        [self resetVod];
+    }else if (self.isPlaying) {
         [SAVORXAPI pauseVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             
             if ([[result objectForKey:@"result"] integerValue] == 0) {
@@ -382,10 +515,66 @@
 - (void)autoPlayButtonStatus
 {
     if (self.isPlaying) {
-        [self.playButton setImage:[UIImage imageNamed:@"De_zanting"] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"sptpbofang"] forState:UIControlStateNormal];
+        
+        [self performSelector:@selector(updateQuery) withObject:nil afterDelay:1.0];
+        
     }else{
-        [self.playButton setImage:[UIImage imageNamed:@"De_bofang"] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"sptpzanting"] forState:UIControlStateNormal];
+        
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateQuery) object:nil];
     }
+}
+
+//更新进度
+- (void)updateQuery
+{
+    if (self.lastTask) {
+        [self.lastTask cancel];
+    }
+    
+    self.lastTask = [SAVORXAPI queryVideoWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        
+        NSInteger code = [[result objectForKey:@"result"] integerValue];
+        if (code == 0) {
+            CGFloat posFloat = [[result objectForKey:@"pos"] floatValue]/1000;
+            [self.playSilder setValue:posFloat];
+            [self updateTimeLabel:posFloat];
+        }else if (code == -1 || code == 1){
+            [self videoDidPlayEnd];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+        }
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+    }];
+    
+    [self performSelector:@selector(updateQuery) withObject:nil afterDelay:1.0];
+}
+
+//视频播放结束
+- (void)videoDidPlayEnd;
+{
+    self.isPlayEnd = YES;
+    self.isPlaying = NO;
+    
+    [self autoPlayButtonStatus];
+    [self autoScrennButtonStatus];
+}
+
+//根据进度条更新播放时间显示
+- (void)updateTimeLabel:(CGFloat)posFloat
+{
+    if (posFloat > self.playSilder.maximumValue) {
+        return;
+    }
+    
+    NSInteger pLayDurationInt = (NSInteger)posFloat; // some duration from the JSON
+    NSInteger playMinutesInt = pLayDurationInt / 60;
+    NSInteger playSecondsInt = pLayDurationInt % 60;
+    
+    NSString *playTimeStr = [NSString stringWithFormat:@"%02ld:%02ld", (long)playMinutesInt, (long)playSecondsInt];
+    [self.minimumLabel setText:playTimeStr];
 }
 
 - (void)collectAciton:(UIButton *)action
@@ -414,6 +603,89 @@
 {
     [super viewWillDisappear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+- (UIView *)alertView
+{
+    if (!_alertView) {
+        _alertView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 40)];
+        _alertView.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:_alertView];
+        [_alertView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.backImageView.mas_bottom);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.height.mas_equalTo(40);
+        }];
+        
+        UIImageView * imageView = [[UIImageView alloc] init];
+        [imageView setImage:[UIImage imageNamed:@"sptpwlj"]];
+        [_alertView addSubview:imageView];
+        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(10);
+            make.size.mas_equalTo(CGSizeMake(32, 22));
+            make.centerY.mas_equalTo(0);
+        }];
+        
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setTitle:@"连接电视" forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        button.layer.borderColor = [UIColor grayColor].CGColor;
+        button.layer.borderWidth = .5f;
+        button.layer.cornerRadius = 3;
+        button.layer.masksToBounds = YES;
+        button.titleLabel.font = [UIFont systemFontOfSize:14];
+        [_alertView addSubview:button];
+        [button addTarget:self action:@selector(connectToBox) forControlEvents:UIControlEventTouchUpInside];
+        [button mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(10);
+            make.bottom.mas_equalTo(-10);
+            make.right.mas_equalTo(-10);
+            make.width.mas_equalTo(60);
+        }];
+        
+        UILabel * label = [[UILabel alloc] init];
+        label.text = @"尚未连接电视,请点击进行连接";
+        label.textColor = kThemeColor;
+        label.font = [UIFont systemFontOfSize:14];
+        label.textAlignment = NSTextAlignmentLeft;
+        [_alertView addSubview:label];
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(imageView.mas_right).offset(10);
+            make.right.mas_equalTo(button.mas_left).offset(-10);
+            make.centerY.mas_equalTo(0);
+            make.height.mas_equalTo(16);
+        }];
+    }
+    return _alertView;
+}
+
+- (void)connectToBox
+{
+    [[HomeAnimationView animationView] scanQRCode];
+}
+
+- (void)voideoPlayDidConnect
+{
+    [self.alertView removeFromSuperview];
+    [self resetVod];
+}
+
+- (void)addNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(voideoPlayDidConnect) name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidPlayEnd) name:RDBoxQuitScreenNotification object:nil];
+}
+
+- (void)removeNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [self removeNotification];
 }
 
 - (void)didReceiveMemoryWarning {

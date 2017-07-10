@@ -10,6 +10,8 @@
 
 @interface RDTabScrollView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame imagesNameArray:(NSArray *)images;
+- (instancetype)initWithFrame:(CGRect)frame modelArray:(NSArray *)array;
+
+- (void)reloadWith:(NSArray *)array;
 
 @end

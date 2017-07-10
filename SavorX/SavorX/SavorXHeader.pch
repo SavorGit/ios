@@ -70,9 +70,9 @@
 #define RDLogPath [NSString stringWithFormat:@"%@/RDLog.log", HTTPServerDocument]
 #define RDLogCachePath [NSString stringWithFormat:@"%@/RDLogCache", HTTPServerDocument]
 
+#define RDScreenVideoName @"littlehotspot.mp4"
 
 #define NSURLCachePath [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingString:@"/NSURLCachePath"]
-#define ADIMAGEURL @"http://www.savorx.cn/download/mobile/mobilenew/savorx100cover.jpg" // 封面图片地址
 
 #define kMAXPhotoNum 50
 

@@ -25,4 +25,13 @@ typedef void(^ResFailed)(NSError * error);
 
 + (void)compressImageWithImage:(UIImage *)image finished:(void (^)(NSData *, NSData *))finished;
 
+/**
+ *  从PHAsset中导出对应视频对象
+ *
+ *  @param asset PHAsset资源对象
+ *  @param startHandler 开始导出视频的回调，session是导出类的相关信息
+ *  @param endHandler 导出视频的回调，path表示导出的路径，session是导出类的相关信息
+ */
++ (void)exportVideoToMP4WithAsset:(PHAsset *)asset startHandler:(void (^)(AVAssetExportSession * session))startHandler endHandler:(void (^)(NSString * filePath, NSString * url, AVAssetExportSession * session))endHandler;
+
 @end

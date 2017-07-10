@@ -41,7 +41,7 @@
     
     self.currentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     self.currentLabel.text = [NSString stringWithFormat:@"%ld", self.index];
-    self.currentLabel.textColor = [UIColor redColor];
+    self.currentLabel.textColor = kThemeColor;
     self.currentLabel.textAlignment = NSTextAlignmentRight;
     [self addSubview:self.currentLabel];
     
@@ -60,13 +60,15 @@
     
     CGPoint point1 = CGPointMake(self.frame.size.width / 2 + 5, 2);
     CGPoint point2 = CGPointMake(self.frame.size.width / 2 - 5, self.frame.size.height - 2);
-    [self layerSolidLinePoints:@[[NSValue valueWithCGPoint:point1], [NSValue valueWithCGPoint:point2]] Color:[UIColor redColor] Width:.5f];
+    [self layerSolidLinePoints:@[[NSValue valueWithCGPoint:point1], [NSValue valueWithCGPoint:point2]] Color:kThemeColor Width:.5f];
 }
 
-- (void)resetIndex:(NSInteger)index
+- (void)resetIndex:(NSInteger)index total:(NSInteger)total
 {
     self.index = index;
     self.currentLabel.text = [NSString stringWithFormat:@"%ld", self.index];
+    self.totoalNumber = total;
+    self.totalLabel.text = [NSString stringWithFormat:@"%ld", self.totoalNumber];
 }
 
 @end

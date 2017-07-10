@@ -6,8 +6,8 @@
 //  Copyright © 2017年 郭春城. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "BaseViewController.h"
 
-@interface RDHomeScreenViewController : UIViewController
+@interface RDHomeScreenViewController : BaseViewController
 
 @end

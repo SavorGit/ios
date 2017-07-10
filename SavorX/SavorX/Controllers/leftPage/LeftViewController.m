@@ -257,7 +257,7 @@
     
     NSFileManager* manager = [NSFileManager defaultManager];
     
-    NSString * mp4Str = [HTTPServerDocument stringByAppendingPathComponent:@"media-Redianer-TempCache.mp4"];
+    NSString * mp4Str = [HTTPServerDocument stringByAppendingPathComponent:RDScreenVideoName];
     //检测导出视频缓存地址
     if ([manager fileExistsAtPath:mp4Str]) {
         [manager removeItemAtPath:mp4Str error:nil];
@@ -307,7 +307,7 @@
     folderSize += [self fileSizeAtPath:HotVodCache];
     folderSize += [self fileSizeAtPath:HotelCache];
     
-    NSString * mp4Str = [HTTPServerDocument stringByAppendingPathComponent:@"media-Redianer-TempCache.mp4"];
+    NSString * mp4Str = [HTTPServerDocument stringByAppendingPathComponent:RDScreenVideoName];
     if ([manager fileExistsAtPath:mp4Str]) {
         folderSize += [self fileSizeAtPath:mp4Str];
     }

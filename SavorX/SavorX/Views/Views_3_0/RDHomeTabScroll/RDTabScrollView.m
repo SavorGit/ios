@@ -11,7 +11,7 @@
 
 @interface RDTabScrollView ()
 
-@property (nonatomic, strong) NSArray * imageNames;
+@property (nonatomic, strong) NSArray * dataSource;
 @property (nonatomic, assign) NSInteger currentIndex;
 
 @property (nonatomic, strong) RDTabScrollItem * topItem;
@@ -31,11 +31,11 @@
 
 @implementation RDTabScrollView
 
-- (instancetype)initWithFrame:(CGRect)frame imagesNameArray:(NSArray *)images
+- (instancetype)initWithFrame:(CGRect)frame modelArray:(NSArray *)array
 {
     if (self = [super initWithFrame:frame]) {
         
-        self.imageNames = images;
+        self.dataSource = array;
         [self createTabScrollItem];
     }
     return self;
@@ -46,23 +46,23 @@
     self.backgroundColor = UIColorFromRGB(0xece6de);
     
     CGFloat itemWidth = self.frame.size.width - 40;
-    CGFloat itemHeight = itemWidth * 0.646 + 70;
+    CGFloat itemHeight = itemWidth * 0.646 + 59;
     CGFloat width = self.frame.size.width;
     CGFloat height = self.frame.size.height;
     
-    self.topItemCenter = CGPointMake(width / 2, height / 2 - 50);
-    self.currentItemCenter = CGPointMake(width / 2, height / 2 - 10);
-    self.bottomItemCenter = CGPointMake(width / 2, height / 2 + 30);
+    self.topItemCenter = CGPointMake(width / 2, height / 2 - 40);
+    self.currentItemCenter = CGPointMake(width / 2, height / 2);
+    self.bottomItemCenter = CGPointMake(width / 2, height / 2 + 40);
     
-    self.topItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.imageNames lastObject] index:self.imageNames.count];
+    self.topItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource lastObject] index:self.dataSource.count total:self.dataSource.count];
     self.topItem.center = self.topItemCenter;
     [self addSubview:self.topItem];
     
-    self.currentItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.imageNames firstObject] index:1];
+    self.currentItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource firstObject] index:1 total:self.dataSource.count];
     self.currentItem.center = self.currentItemCenter;
     [self addSubview:self.currentItem];
     
-    self.bottomItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.imageNames objectAtIndex:1] index:2];
+    self.bottomItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource objectAtIndex:1] index:2 total:self.dataSource.count];
     self.bottomItem.center = self.bottomItemCenter;
     [self addSubview:self.bottomItem];
     
@@ -121,8 +121,8 @@
             [self sendSubviewToBack:self.bottomItem];
             [self sendSubviewToBack:self.tempScroolItem];
             
-            NSString * imageName1 = [self nextTempInfo];
-            [self.tempScroolItem configWithInfo:imageName1 index:[self.imageNames indexOfObject:imageName1]+1];
+            RDHotelItemModel * imageName1 = [self nextTempInfo];
+            [self.tempScroolItem configWithInfo:imageName1 index:[self.dataSource indexOfObject:imageName1]+1 total:self.dataSource.count];
             
             self.topItem.transform = CGAffineTransformMakeScale(.8f, .8f);
             self.topItem.center = CGPointMake(self.topItemCenter.x, self.topItemCenter.y - 40);
@@ -172,8 +172,8 @@
             self.bottomItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + 40);
             self.bottomItem.alpha = .2f;
             
-            NSString * imageName2 = [self lastTempInfo];
-            [self.tempScroolItem configWithInfo:imageName2 index:[self.imageNames indexOfObject:imageName2]+1];
+            RDHotelItemModel * imageName2 = [self lastTempInfo];
+            [self.tempScroolItem configWithInfo:imageName2 index:[self.dataSource indexOfObject:imageName2]+1 total:self.dataSource.count];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.9f, .9f);
             self.tempScroolItem.center = self.topItemCenter;
             self.tempScroolItem.alpha = .5f;
@@ -280,8 +280,8 @@
             self.bottomItem.alpha = .5f - alphaRate;
             self.bottomItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + centerYRate);
             
-            NSString * imageName = [self lastTempInfo];
-            [self.tempScroolItem configWithInfo:imageName index:[self.imageNames indexOfObject:imageName]+1];
+            RDHotelItemModel * imageName = [self lastTempInfo];
+            [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.8f + scaleRate, .8f + scaleRate);
             self.tempScroolItem.alpha = .2f + .8 * rate;
             self.tempScroolItem.center = CGPointMake(self.topItemCenter.x, self.topItemCenter.y - 30 + centerYRate);
@@ -297,8 +297,8 @@
             self.topItem.alpha = .5f - alphaRate;
             self.topItem.center = CGPointMake(self.topItemCenter.x, self.topItemCenter.y - centerYRate);
             
-            NSString * imageName = [self nextTempInfo];
-            [self.tempScroolItem configWithInfo:imageName index:[self.imageNames indexOfObject:imageName]+1];
+            RDHotelItemModel * imageName = [self nextTempInfo];
+            [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.8f + scaleRate, .8f + scaleRate);
             self.tempScroolItem.alpha = .2f + .8 * rate;
             self.tempScroolItem.center = CGPointMake(self.topItem.center.x, self.bottomItemCenter.y + 30 - centerYRate);
@@ -357,8 +357,8 @@
 
 - (void)didScroolEndWithLast
 {
-    NSString * imageName = [self lastTempInfo];
-    [self.tempScroolItem configWithInfo:imageName index:[self.imageNames indexOfObject:imageName]+1];
+    RDHotelItemModel * imageName = [self lastTempInfo];
+    [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.bottomItem removeFromSuperview];
     self.bottomItem = self.currentItem;
     self.currentItem = self.topItem;
@@ -367,48 +367,48 @@
     if (self.currentIndex > 0) {
         self.currentIndex--;
     }else{
-        self.currentIndex = self.imageNames.count - 1;
+        self.currentIndex = self.dataSource.count - 1;
     }
 }
 
 - (void)didScroolEndWithNext
 {
-    NSString * imageName = [self nextTempInfo];
-    [self.tempScroolItem configWithInfo:imageName index:[self.imageNames indexOfObject:imageName]+1];
+    RDHotelItemModel * imageName = [self nextTempInfo];
+    [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.topItem removeFromSuperview];
     self.topItem = self.currentItem;
     self.currentItem = self.bottomItem;
     self.bottomItem = self.tempScroolItem;
     self.tempScroolItem = nil;
-    if (self.currentIndex < self.imageNames.count - 1) {
+    if (self.currentIndex < self.dataSource.count - 1) {
         self.currentIndex++;
     }else{
         self.currentIndex = 0;
     }
 }
 
-- (NSString *)nextTempInfo
+- (RDHotelItemModel *)nextTempInfo
 {
-    if (self.currentIndex >= self.imageNames.count - 2) {
-        if (self.currentIndex == self.imageNames.count - 1) {
-            return [self.imageNames objectAtIndex:1];
+    if (self.currentIndex >= self.dataSource.count - 2) {
+        if (self.currentIndex == self.dataSource.count - 1) {
+            return [self.dataSource objectAtIndex:1];
         }else{
-            return [self.imageNames firstObject];
+            return [self.dataSource firstObject];
         }
     }
-    return [self.imageNames objectAtIndex:self.currentIndex + 2];
+    return [self.dataSource objectAtIndex:self.currentIndex + 2];
 }
 
-- (NSString *)lastTempInfo
+- (RDHotelItemModel *)lastTempInfo
 {
     if (self.currentIndex <= 1) {
         if (self.currentIndex == 0) {
-            return [self.imageNames objectAtIndex:self.imageNames.count - 2];
+            return [self.dataSource objectAtIndex:self.dataSource.count - 2];
         }else{
-            return [self.imageNames lastObject];
+            return [self.dataSource lastObject];
         }
     }
-    return [self.imageNames objectAtIndex:self.currentIndex - 2];
+    return [self.dataSource objectAtIndex:self.currentIndex - 2];
 }
 
 @end

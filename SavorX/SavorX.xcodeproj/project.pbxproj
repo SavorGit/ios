@@ -155,6 +155,8 @@
 		0663D4581F0B875600CD2FA2 /* RDPhotoLibraryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4571F0B875600CD2FA2 /* RDPhotoLibraryModel.m */; };
 		0663D45B1F0B8A1500CD2FA2 /* RDPhotoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */; };
 		067C30C71F131D81000A1150 /* HSGetSpecialRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 067C30C61F131D81000A1150 /* HSGetSpecialRequest.m */; };
+		067C30CB1F13528D000A1150 /* HSDemandListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 067C30CA1F13528D000A1150 /* HSDemandListRequest.m */; };
+		067C30CE1F135C48000A1150 /* RDHotelItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 067C30CD1F135C48000A1150 /* RDHotelItemModel.m */; };
 		067CB3BF1D603B7200094BB8 /* DiscoverCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */; };
 		067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB7141D60B21C00094BB8 /* OpenFileTool.m */; };
 		06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */; };
@@ -633,6 +635,10 @@
 		0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPhotoTool.m; sourceTree = "<group>"; };
 		067C30C51F131D81000A1150 /* HSGetSpecialRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HSGetSpecialRequest.h; path = ../HSGetSpecialRequest.h; sourceTree = "<group>"; };
 		067C30C61F131D81000A1150 /* HSGetSpecialRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HSGetSpecialRequest.m; path = ../HSGetSpecialRequest.m; sourceTree = "<group>"; };
+		067C30C91F13528D000A1150 /* HSDemandListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSDemandListRequest.h; sourceTree = "<group>"; };
+		067C30CA1F13528D000A1150 /* HSDemandListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSDemandListRequest.m; sourceTree = "<group>"; };
+		067C30CC1F135C48000A1150 /* RDHotelItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHotelItemModel.h; sourceTree = "<group>"; };
+		067C30CD1F135C48000A1150 /* RDHotelItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHotelItemModel.m; sourceTree = "<group>"; };
 		067CB3BD1D603B7200094BB8 /* DiscoverCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverCollectionViewCell.h; sourceTree = "<group>"; };
 		067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverCollectionViewCell.m; sourceTree = "<group>"; };
 		067CB7131D60B21C00094BB8 /* OpenFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenFileTool.h; sourceTree = "<group>"; };
@@ -1564,6 +1570,8 @@
 			children = (
 				067C30C51F131D81000A1150 /* HSGetSpecialRequest.h */,
 				067C30C61F131D81000A1150 /* HSGetSpecialRequest.m */,
+				067C30C91F13528D000A1150 /* HSDemandListRequest.h */,
+				067C30CA1F13528D000A1150 /* HSDemandListRequest.m */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2470,6 +2478,8 @@
 			children = (
 				96A734A71F0C7FAC00906163 /* CreateWealthModel.h */,
 				96A734A81F0C7FAC00906163 /* CreateWealthModel.m */,
+				067C30CC1F135C48000A1150 /* RDHotelItemModel.h */,
+				067C30CD1F135C48000A1150 /* RDHotelItemModel.m */,
 			);
 			path = CreateWealthModel;
 			sourceTree = "<group>";
@@ -2964,6 +2974,7 @@
 				06B5554D1E8A6A210068BF70 /* DefalutLaunchViewController.m in Sources */,
 				47F997691DFFA7750009BDFB /* SXDlnaViewController.m in Sources */,
 				0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */,
+				067C30CB1F13528D000A1150 /* HSDemandListRequest.m in Sources */,
 				062CEFD21EC2FAC400EA6AE0 /* RDAwardTool.m in Sources */,
 				060E42111E4CB03E009A94FC /* SDCollectionViewCell.m in Sources */,
 				96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */,
@@ -3089,6 +3100,7 @@
 				476F44CA1E2DBEC500F99090 /* LeftCell.m in Sources */,
 				061B4EBE1E487EF5000D5E07 /* PhotoTextLabel.m in Sources */,
 				96D8C5C81F0F681900251301 /* HeadlinesSTopTableViewCell.m in Sources */,
+				067C30CE1F135C48000A1150 /* RDHotelItemModel.m in Sources */,
 				068F0FB31E8266CE0089068F /* HSVideoViewController.m in Sources */,
 				0663D42A1F0B6B5900CD2FA2 /* RDTabScrollView.m in Sources */,
 				0663D4201F0B6AFA00CD2FA2 /* UIView+LayerCurve.m in Sources */,

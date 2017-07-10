@@ -244,7 +244,7 @@
         
         //视频转换导出地址
         NSString *documentsDirectory = HTTPServerDocument;
-        NSString* str = [documentsDirectory stringByAppendingPathComponent:@"media-Redianer-TempCache.mp4"];
+        NSString* str = [documentsDirectory stringByAppendingPathComponent:RDScreenVideoName];
         
         NSURL * outputURL = [NSURL fileURLWithPath:str];
         

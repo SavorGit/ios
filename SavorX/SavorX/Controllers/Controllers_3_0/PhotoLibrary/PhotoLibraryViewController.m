@@ -13,6 +13,8 @@
 #import "PhotoSliderViewController.h"
 #import "PhotoVideoScreenViewController.h"
 #import "RDPhotoTool.h"
+#import "RDAlertView.h"
+#import "HSWebServerManager.h"
 
 @interface PhotoLibraryViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource>
 
@@ -30,6 +32,9 @@
 @property (nonatomic, assign) BOOL isChooseLibrary; //是否是在选择相册
 
 @property (nonatomic, strong) UIButton * screenButton;
+
+@property (nonatomic, strong) NSTimer * timer; //视图转化更新进度定时器
+@property (nonatomic, strong) AVAssetExportSession * session; //当前导出视频的对象
 
 @end
 
@@ -325,13 +330,12 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PHAsset * asset = [self.model.fetchResult objectAtIndex:indexPath.row];
-    if (asset.mediaType == PHAssetMediaTypeImage) {
+    PHAsset * currentAsset = [self.model.fetchResult objectAtIndex:indexPath.row];
+    if (currentAsset.mediaType == PHAssetMediaTypeImage) {
         if ([GlobalData shared].isBindRD) {
             MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在加载"];
-            PHAsset * asset = [self.model.fetchResult objectAtIndex:indexPath.row];
-            NSString * name = asset.localIdentifier;
-            [RDPhotoTool getImageFromPHAssetSourceWithAsset:asset success:^(UIImage *result) {
+            NSString * name = currentAsset.localIdentifier;
+            [RDPhotoTool getImageFromPHAssetSourceWithAsset:currentAsset success:^(UIImage *result) {
                 
                 PhotoManyViewController * vc = [[PhotoManyViewController alloc] initWithPHAssetSource:self.model.fetchResult andIndex:indexPath.row];
                 
@@ -361,20 +365,55 @@
             PhotoManyViewController * vc = [[PhotoManyViewController alloc] initWithPHAssetSource:self.model.fetchResult andIndex:indexPath.row];
             [self.navigationController pushViewController:vc animated:YES];
         }
-    }else if (asset.mediaType == PHAssetMediaTypeVideo) {
+    }else if (currentAsset.mediaType == PHAssetMediaTypeVideo) {
         
-        //配置导出参数
-        PHVideoRequestOptions *options = [PHVideoRequestOptions new];
-        options.networkAccessAllowed = YES;
-        options.deliveryMode = PHVideoRequestOptionsDeliveryModeHighQualityFormat;
-        
-        [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+        [MBProgressHUD showProgressLoadingHUDInView:self.view];
+        [RDPhotoTool exportVideoToMP4WithAsset:currentAsset startHandler:^(AVAssetExportSession *session) {
+            
+            self.session = session;
             dispatch_async(dispatch_get_main_queue(), ^{
-                AVURLAsset *urlAsset = (AVURLAsset *)asset;
-                PhotoVideoScreenViewController * video = [[PhotoVideoScreenViewController alloc] initWithVideoFileURL:urlAsset.URL.path];
-                [self.navigationController pushViewController:video animated:YES];
+                self.timer = [NSTimer timerWithTimeInterval:0.1f target:self selector:@selector(changeProgress) userInfo:nil repeats:YES];
+                [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
+            });
+            
+        } endHandler:^(NSString * filePath, NSString *url, AVAssetExportSession *session) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                if (session.status == AVAssetExportSessionStatusCompleted) {
+                    
+                    //导出成功进行投屏MP4操作
+                    if ([GlobalData shared].isBindRD) {
+                        NSString *asseturlStr = [NSString stringWithFormat:@"%@video?%@", [HTTPServerManager getCurrentHTTPServerIP], RDScreenVideoName];
+                        [self demandVideoWithMediaPath:asseturlStr asset:currentAsset force:0 filePath:filePath];
+                    }else{
+                        PhotoVideoScreenViewController * play = [[PhotoVideoScreenViewController alloc] initWithVideoFileURL:filePath];
+                        
+                        [self.navigationController pushViewController:play animated:YES];
+                    }
+                }else if (session.status == AVAssetExportSessionStatusCancelled){
+                    
+                }else{
+                    //导出失败进行投屏asset操作
+                    [MBProgressHUD showTextHUDwithTitle:@"视频导出失败"];
+                }
             });
         }];
+    }
+}
+
+//改变进度
+- (void)changeProgress
+{
+    if (self.session) {
+        if (self.session.status == AVAssetExportSessionStatusExporting) {
+            [MBProgressHUD HUDForView:self.view].progress = self.session.progress;
+            [MBProgressHUD HUDForView:self.view].detailsLabel.text = [NSString stringWithFormat:@"%.1lf%%", self.session.progress * 100];
+        }else{
+            [self.timer setFireDate:[NSDate distantFuture]];
+            [self.timer invalidate];
+            self.timer = nil;
+        }
     }
 }
 
@@ -467,13 +506,50 @@
                 } failure:^{
                     [hud hideAnimated:NO];
                 }];
-                
             }];
-            
         }];
     }else{
         [self.navigationController pushViewController:third animated:YES];
     }
+}
+
+- (void)demandVideoWithMediaPath:(NSString *)mediaPath asset:(PHAsset *)asset force:(NSInteger)force filePath:(NSString *)filePath{
+    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+    
+    [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        if ([[result objectForKey:@"result"] integerValue] == 0) {
+            PhotoVideoScreenViewController * play = [[PhotoVideoScreenViewController alloc] initWithVideoFileURL:filePath];
+            [SAVORXAPI successRing];
+            [self.navigationController pushViewController:play animated:YES];
+            [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];
+        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
+            
+            NSString *infoStr = [result objectForKey:@"info"];
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"video"}];
+            } bold:NO];
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+                [self demandVideoWithMediaPath:mediaPath asset:asset force:1 filePath:filePath];
+                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"video"}];
+            } bold:NO];
+            [alertView addActions:@[action,actionOne]];
+            [alertView show];
+            
+        }
+        else{
+            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
+        }
+        [hud hideAnimated:NO];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [hud hideAnimated:NO];
+        [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+    }];
+}
+
+- (void)dealloc
+{
+    
 }
 
 - (void)didReceiveMemoryWarning {

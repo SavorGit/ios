@@ -12,11 +12,14 @@
 #import "PhotoLibraryViewController.h"
 #import "DocumentListViewController.h"
 #import "Masonry.h"
+#import "HSDemandListRequest.h"
+#import "RDHotelItemModel.h"
 
 @interface RDHomeScreenViewController ()
 
 @property (nonatomic, strong) RDTabScrollView * tabScroll;
 @property (nonatomic, strong) UIView * bottomView;
+@property (nonatomic, strong) NSMutableArray * dataSource;
 
 @end
 
@@ -25,27 +28,56 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self createUI];
+    self.dataSource = [NSMutableArray new];
+    [self setupViews];
+    [self setupDatas];
+}
+
+- (void)setupDatas
+{
+    HSDemandListRequest * request = [[HSDemandListRequest alloc] initWithHotelID:[GlobalData shared].hotelId];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSArray * listArray = [response objectForKey:@"result"];
+        if (listArray) {
+            
+            for (NSDictionary * dict in listArray) {
+                RDHotelItemModel * model = [[RDHotelItemModel alloc] initWithDictionary:dict];
+                [self.dataSource addObject:model];
+            }
+            
+        }
+        [self createUI];
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 - (void)createUI
 {
-    CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 24 + 24 + 70 + 40 + 40;
-    
-    self.tabScroll = [[RDTabScrollView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height) imagesNameArray:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10"]];
+    CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 20 + 59 + 40 + 40;
+    self.tabScroll = [[RDTabScrollView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height) modelArray:self.dataSource];
     [self.view addSubview:self.tabScroll];
     [self.tabScroll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
-        make.height.mas_equalTo(self.view.frame.size.height / 5 * 3);
+        make.height.mas_equalTo(height);
     }];
+}
+
+- (void)setupViews
+{
+    CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 20 + 59 + 40 + 40;
     
     self.bottomView = [[UIView alloc] init];
     self.bottomView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.bottomView];
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.tabScroll.mas_bottom).offset(0);
+        make.top.mas_equalTo(height);
         make.left.mas_equalTo(0);
         make.bottom.mas_equalTo(0);
         make.right.mas_equalTo(0);

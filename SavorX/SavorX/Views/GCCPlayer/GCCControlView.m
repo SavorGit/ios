@@ -86,7 +86,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     
     self.slider = [[UISlider alloc] init];
     [self.slider setThumbImage:[UIImage imageNamed:@"bigSlider"] forState:UIControlStateNormal];
-    self.slider.minimumTrackTintColor = FontColor;
+    self.slider.minimumTrackTintColor = kThemeColor;
     self.slider.maximumTrackTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2f];
     [self.slider setValue:0.f];
     // slider开始滑动事件

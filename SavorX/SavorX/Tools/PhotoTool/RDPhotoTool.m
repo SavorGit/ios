@@ -229,4 +229,127 @@
     });
 }
 
+/**
+ *  从PHAsset中导出对应视频对象
+ *
+ *  @param asset   PHAsset资源对象
+ *  @param handler 导出视频的回调，path表示导出的路径，session是导出类的相关信息
+ */
++ (void)exportVideoToMP4WithAsset:(PHAsset *)asset startHandler:(void (^)(AVAssetExportSession * session))startHandler endHandler:(void (^)(NSString * filePath, NSString * url, AVAssetExportSession * session))endHandler
+{
+    //配置导出参数
+    PHVideoRequestOptions *options = [PHVideoRequestOptions new];
+    options.networkAccessAllowed = YES;
+    options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+    
+    //通过PHAsset获取AVAsset对象
+    [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+        
+        NSURL * filePath;
+        
+        //配置导出相关的信息，包括类型，翻转角度等
+        AVURLAsset * urlAsset = (AVURLAsset *)asset;
+        if ([urlAsset respondsToSelector:@selector(URL)]) {
+            filePath = urlAsset.URL;
+        }else{
+            NSString * value = [info objectForKey:@"PHImageFileSandboxExtensionTokenKey"];
+            NSString * path = [value substringFromIndex:[value rangeOfString:@"/var"].location];
+            filePath = [NSURL fileURLWithPath:path];
+        }
+        NSInteger degrees = [self degressFromVideoFileWithURL:filePath];
+        NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+        AVAssetTrack *videoTrack = [tracks objectAtIndex:0];
+        CGAffineTransform translateToCenter;
+        CGAffineTransform mixedTransform;
+        AVMutableVideoComposition *waterMarkVideoComposition = [AVMutableVideoComposition videoComposition];
+        
+        //视频转换导出地址
+        NSString *documentsDirectory = HTTPServerDocument;
+        NSString* str = [documentsDirectory stringByAppendingPathComponent:RDScreenVideoName];
+        
+        NSURL * outputURL = [NSURL fileURLWithPath:str];
+        
+        //如果在目录下已经有视频文件了，就移除该文件后再执行导出操作，避免文件名冲突错误
+        if ([[NSFileManager defaultManager] fileExistsAtPath:str]) {
+            [[NSFileManager defaultManager] removeItemAtPath:str error:nil];
+        }
+        
+        if (degrees == 0) {
+            AVAssetExportSession *session = [[AVAssetExportSession alloc] initWithAsset:asset     presetName:AVAssetExportPresetMediumQuality];
+            session.outputURL = outputURL;
+            session.outputFileType = AVFileTypeMPEG4;
+            startHandler(session);
+            //导出视频
+            [session exportAsynchronouslyWithCompletionHandler:^(void)
+             {
+                 endHandler(urlAsset.URL.path, str, session);
+             }];
+        }else{
+            if(degrees == 90){
+                //顺时针旋转90°
+                translateToCenter = CGAffineTransformMakeTranslation(videoTrack.naturalSize.height, 0.0);
+                mixedTransform = CGAffineTransformRotate(translateToCenter,M_PI_2);
+                waterMarkVideoComposition.renderSize = CGSizeMake(videoTrack.naturalSize.height,videoTrack.naturalSize.width);
+            }else if(degrees == 180){
+                //顺时针旋转180°
+                translateToCenter = CGAffineTransformMakeTranslation(videoTrack.naturalSize.width, videoTrack.naturalSize.height);
+                mixedTransform = CGAffineTransformRotate(translateToCenter,M_PI);
+                waterMarkVideoComposition.renderSize = CGSizeMake(videoTrack.naturalSize.width,videoTrack.naturalSize.height);
+            }else {
+                //顺时针旋转270°
+                translateToCenter = CGAffineTransformMakeTranslation(0.0, videoTrack.naturalSize.width);
+                mixedTransform = CGAffineTransformRotate(translateToCenter,M_PI_2*3.0);
+                waterMarkVideoComposition.renderSize = CGSizeMake(videoTrack.naturalSize.height,videoTrack.naturalSize.width);
+            }
+            
+            
+            AVMutableVideoCompositionInstruction *roateInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+            roateInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, [asset duration]);
+            AVMutableVideoCompositionLayerInstruction *roateLayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
+            
+            [roateLayerInstruction setTransform:mixedTransform atTime:kCMTimeZero];
+            
+            roateInstruction.layerInstructions = @[roateLayerInstruction];
+            //将视频方向旋转加入到视频处理中
+            waterMarkVideoComposition.instructions = @[roateInstruction];
+            waterMarkVideoComposition.frameDuration = CMTimeMake(1, 30);
+            
+            AVAssetExportSession *session = [[AVAssetExportSession alloc] initWithAsset:asset     presetName:AVAssetExportPresetMediumQuality];
+            session.outputURL = outputURL;
+            session.videoComposition = waterMarkVideoComposition;
+            session.outputFileType = AVFileTypeMPEG4;
+            startHandler(session);
+            //导出视频
+            [session exportAsynchronouslyWithCompletionHandler:^(void)
+             {
+                 endHandler(urlAsset.URL.path, str, session);
+             }];
+        }
+        
+    }];
+}
+
+//获取当前视频的偏移角度
++ (NSUInteger)degressFromVideoFileWithURL:(NSURL *)url
+{
+    NSUInteger degress = 0;
+    AVAsset *asset = [AVAsset assetWithURL:url];
+    NSArray *tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+    if([tracks count] > 0) {
+        AVAssetTrack *videoTrack = [tracks objectAtIndex:0];
+        CGAffineTransform t = videoTrack.preferredTransform;
+        if(t.a == 0 && t.b == 1.0 && t.c == -1.0 && t.d == 0){
+            degress = 90;
+        }else if(t.a == 0 && t.b == -1.0 && t.c == 1.0 && t.d == 0){
+            degress =270;
+        }else if(t.a == 1.0 && t.b == 0 && t.c == 0 && t.d == 1.0){
+            degress = 0;
+        }else if(t.a == -1.0 && t.b == 0 && t.c == 0 && t.d == -1.0){
+            degress = 180;
+        }
+    }
+    return degress;
+}
+
+
 @end
