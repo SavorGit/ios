@@ -33,7 +33,7 @@
         self.rightImageWidth.constant = 0;
         self.rightLabelWidth.constant = 60;
     }
-    self.bottomLine.backgroundColor = UIColorFromRGB(0x393939);
+    self.bottomLine.backgroundColor = [UIColor colorWithRed:176/255.0 green:93/255.0 blue:106/255.0 alpha:1.0];
 }
 
 - (void)bottomLineHidden:(BOOL)hidden

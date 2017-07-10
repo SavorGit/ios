@@ -20,6 +20,7 @@
 #import "HomeAnimationView.h"
 #import "RDHammer.h"
 #import "ShareRDViewController.h"
+#import "WinResultViewController.h"
 
 @interface SmashEggsGameViewController ()<UITextViewDelegate,RDGoldenEggsDelegate,AVAudioPlayerDelegate>
 
@@ -157,6 +158,18 @@
         make.centerX.equalTo(self.view);
     }];
     
+    UIButton *winResultBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [winResultBtn setImage:[UIImage imageNamed:@"yaoqing_anniu"] forState:UIControlStateNormal];
+    [winResultBtn setBackgroundColor:[UIColor clearColor]];
+    [winResultBtn addTarget:self action:@selector(winResultPress) forControlEvents:UIControlEventTouchUpInside];
+    [bgScrollView addSubview:winResultBtn];
+    CGFloat distance = (kMainBoundsWidth - 167 *2)/3;
+    [winResultBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(167, 48));
+        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
+        make.left.mas_equalTo(distance);
+    }];
+    
     UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [shareBtn setImage:[UIImage imageNamed:@"yaoqing_anniu"] forState:UIControlStateNormal];
     [shareBtn setBackgroundColor:[UIColor clearColor]];
@@ -165,7 +178,7 @@
     [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(167, 48));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
-        make.centerX.equalTo(self.view);
+        make.right.mas_equalTo(self.view).offset(-distance);
     }];
     
     _textBgView = [[UIImageView alloc] init];
@@ -240,6 +253,13 @@
         make.bottom.mas_equalTo(-80);
         make.height.mas_equalTo(20);
     }];
+}
+
+- (void)winResultPress{
+    
+    WinResultViewController *wrVC = [[WinResultViewController alloc] init];
+    [self.navigationController pushViewController:wrVC animated:YES];
+    
 }
 
 - (void)creatEggMiddleView{

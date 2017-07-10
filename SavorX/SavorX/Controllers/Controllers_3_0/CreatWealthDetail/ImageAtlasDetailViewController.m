@@ -12,6 +12,12 @@
 #import "DDPhotoDescView.h"
 #import "UIView+Additional.h"
 #import "ImageAtlasScrollView.h"
+#import "HotPopShareView.h"
+#import <UMSocialCore/UMSocialCore.h>
+#import "UMCustomSocialManager.h"
+#import <UShareUI/UShareUI.h>
+#import "HSPicDetailRequest.h"
+#import "ImageAtlasDetailModel.h"
 
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate>
@@ -27,6 +33,7 @@
 @property (nonatomic, assign) BOOL isDisappear;
 @property (nonatomic, assign) NSInteger currentIndex;
 
+@property (nonatomic, strong)NSMutableArray *imageDatas;
 @property (nonatomic, strong)NSArray *imageArr;
 @property (nonatomic, strong)NSMutableArray *scrollObjecArr;
 @property (assign, nonatomic) NSUInteger currentImageIndex;
@@ -44,6 +51,29 @@
 - (void)viewDidLoad
 {
     [self initInfoConfig];
+    [self requestWithContentId:@"2650"];
+}
+
+- (void)requestWithContentId:(NSString *)contentId{
+
+    HSPicDetailRequest * request = [[HSPicDetailRequest alloc] initWithContentId:contentId];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSArray *resultArr = [response objectForKey:@"result"];
+        for (int i = 0; i < resultArr.count; i ++) {
+            ImageAtlasDetailModel *imageAtlModel = [[ImageAtlasDetailModel alloc] initWithDictionary:resultArr[i]];
+            [self.imageDatas addObject:imageAtlModel];
+        }
+        [self creatSubViews];
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
+}
+
+- (void)creatSubViews{
     
     [self.view addSubview:self.imageScrollView];
     [self.imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -51,16 +81,17 @@
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
     }];
+    [self.view addSubview:self.topView];
     [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
     
-    [self.view addSubview:self.topView];
 }
 
 - (void)initInfoConfig{
     self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.scrollObjecArr = [[NSMutableArray alloc] initWithCapacity:100];
-    self.imageArr = [NSArray arrayWithObjects:@"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg",@"https://dn-brknqdxv.qbox.me/d6e24a57b763c14b7731.jpg",@"https://dn-brknqdxv.qbox.me/5fb13268c2d1ef3bfe69.jpg",@"https://dn-brknqdxv.qbox.me/fea55faa880653633cc8.jpg",@"https://dn-brknqdxv.qbox.me/8401b45695d7fea371ca.jpg",@"https://dn-brknqdxv.qbox.me/59bda095dcb55dd91347.jpg",@"https://dn-brknqdxv.qbox.me/ec1379afc23d6afc3d90.jpg",@"https://dn-brknqdxv.qbox.me/51b10338ffdf7016a599.jpg",@"https://dn-brknqdxv.qbox.me/4b82c3574058ea94a2c8.jpg",@"https://dn-brknqdxv.qbox.me/a0287e02c7889227d5c7.jpg", nil];
+    self.imageDatas = [[NSMutableArray alloc] initWithCapacity:100];
+//    self.imageArr = [NSArray arrayWithObjects:@"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg",@"https://dn-brknqdxv.qbox.me/d6e24a57b763c14b7731.jpg",@"https://dn-brknqdxv.qbox.me/5fb13268c2d1ef3bfe69.jpg",@"https://dn-brknqdxv.qbox.me/fea55faa880653633cc8.jpg",@"https://dn-brknqdxv.qbox.me/8401b45695d7fea371ca.jpg",@"https://dn-brknqdxv.qbox.me/59bda095dcb55dd91347.jpg",@"https://dn-brknqdxv.qbox.me/ec1379afc23d6afc3d90.jpg",@"https://dn-brknqdxv.qbox.me/51b10338ffdf7016a599.jpg",@"https://dn-brknqdxv.qbox.me/4b82c3574058ea94a2c8.jpg",@"https://dn-brknqdxv.qbox.me/a0287e02c7889227d5c7.jpg", nil];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
@@ -69,7 +100,7 @@
 {
     if (_imageScrollView == nil) {
         _imageScrollView = [[ImageAtlasScrollView alloc] initWithFrame:CGRectZero];
-        _imageScrollView.contentSize = CGSizeMake(self.imageArr.count * kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
         _imageScrollView.showsHorizontalScrollIndicator = NO;
         // 切换的动画效果
         _imageScrollView.effect = JT3DScrollViewEffectNone;
@@ -77,9 +108,10 @@
         _imageScrollView.delegate = self;
         
         // 设置小ScrollView（装载imageView的scrollView）
-        for (int i = 0; i < self.imageArr.count; i++) {
+        for (int i = 0; i < self.imageDatas.count; i++) {
             
-            NSString *urlStr = self.imageArr[i];
+            ImageAtlasDetailModel *tmpModel = self.imageDatas[i];
+            NSString *urlStr = tmpModel.pic_url;
             _photoScrollView = [[DDPhotoScrollView alloc] initWithFrame:CGRectZero urlString:urlStr];
             [_imageScrollView addSubview:_photoScrollView];
             [_scrollObjecArr addObject:_photoScrollView];
@@ -149,7 +181,8 @@ static int temp = -1;
     if (_isDisappear == YES) {return;}
     // 先remove, 再加入
     [_photoDescView removeFromSuperview];
-    _photoDescView = [[DDPhotoDescView alloc] initWithDesc:@"这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容." index:newIndex totalCount:self.imageArr.count];
+    ImageAtlasDetailModel *tmpModel = self.imageDatas[newIndex];
+    _photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:newIndex totalCount:self.imageDatas.count];
     [self.view addSubview:_photoDescView];
     
     [_photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -206,9 +239,112 @@ static int temp = -1;
 
 #pragma mark -分享点击
 - (void)shareAction{
+    BOOL hadInstalledWeixin = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]];
+    BOOL hadInstalledQQ = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]];
     
+    NSMutableArray *titlearr = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *imageArr = [NSMutableArray arrayWithCapacity:5];
+    
+    int startIndex = 0;
+    
+    if (hadInstalledWeixin) {
+            [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
+            [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
+    } else {
+        startIndex += 2;
+    }
+    
+    if (hadInstalledQQ) {
+        [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
+        [imageArr addObjectsFromArray:@[@"qq",@"qq"]];
+    } else {
+        startIndex += 1;
+    }
+    
+    [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
+    [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
+    
+    [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
+    [imageArr addObjectsFromArray:@[@"qq",@"qq"]];
+    
+    [titlearr addObjectsFromArray:@[@"微博"]];
+    [imageArr addObjectsFromArray:@[@"weibo"]];
+    
+    [titlearr addObjectsFromArray:@[@"微信收藏"]];
+    [imageArr addObjectsFromArray:@[@"weibo"]];
+    
+    [titlearr addObjectsFromArray:@[@"复制链接"]];
+    [imageArr addObjectsFromArray:@[@"fuzhilianjie"]];
+    
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithShareHeadOprationWith:titlearr andImageArry:imageArr];
+    [self.view addSubview:shareView];
+    
+    [shareView setBtnClick:^(NSInteger btnTag) {
+        NSLog(@"\n点击第几个====%d\n当前选中的按钮title====%@",(int)btnTag,titlearr[btnTag]);
+        switch (btnTag + startIndex) {
+            case 0: {
+                // 微信
+                
+            }
+                break;
+            case 1: {
+                // 微信朋友圈
+                [self shareWithPlatform:UMSocialPlatformType_WechatTimeLine];
+            }
+                break;
+            case 2: {
+                // QQ
+                
+            }
+                break;
+            case 3: {
+                // QQ空间
+                
+            }
+                break;
+            case 4: {
+                // 微博
+                
+            }
+                break;
+            case 5: {
+                // 微信收藏
+                
+            }
+                break;
+            case 6: {
+                // 复制链接
+                
+            }
+                break;
+            default:
+                break;
+        }
+    }];
 }
 
+- (void)shareWithPlatform:(UMSocialPlatformType)platformType {
+    
+    NSString * url = @"http://china.huanqiu.com/article/2017-07/10955931.html?from=bdwz";
+    
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //创建网页分享类型
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", @"标题"] descr:@"这是描述" thumImage:nil];
+    [object setWebpageUrl:url];
+    messageObject.shareObject = object;
+    
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id result, NSError *error) {
+        
+        if (error) {
+            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+        }else{
+            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+        }
+        
+    }];
+    
+}
 #pragma mark -收藏点击
 - (void)collectAction{
     
@@ -239,7 +375,7 @@ static int temp = -1;
         }];
         self.imageScrollView.width = kMainBoundsWidth;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
-        _imageScrollView.contentSize = CGSizeMake(self.imageArr.count * kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
         
         _topView.backgroundColor = kThemeColor;
         [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -266,7 +402,7 @@ static int temp = -1;
         }];
         self.imageScrollView.width = kMainBoundsWidth;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
-        _imageScrollView.contentSize = CGSizeMake(self.imageArr.count * kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
         
         _topView.backgroundColor = [UIColor clearColor];
         [_topView mas_updateConstraints:^(MASConstraintMaker *make) {

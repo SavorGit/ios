@@ -41,13 +41,8 @@
 		self.textView.userInteractionEnabled = NO;
 		[self addSubview:self.textView];
 
-		// 标题View
-		UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, kMainBoundsWidth, 30)];
-		titleView.backgroundColor = [UIColor clearColor];
-		[self addSubview:titleView];
-		
-		// 标题View里的index
-		UILabel *indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 5, 30, 30)];
+		// 页码里的index
+		UILabel *indexLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 3, 30, textViewHeight)];
 		NSMutableAttributedString *aStrM = [[NSMutableAttributedString alloc]
 											initWithString:[NSString stringWithFormat:@"%zd", index + 1]
 											attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:18]}];
@@ -60,7 +55,7 @@
 		indexLabel.textAlignment = NSTextAlignmentCenter;
 		indexLabel.textColor = [UIColor whiteColor];
 		[indexLabel sizeToFit];
-		[titleView addSubview:indexLabel];
+		[self addSubview:indexLabel];
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	}
