@@ -11,6 +11,7 @@
 #import "UIViewController+LGSideMenuController.h"
 #import "CreateWealthViewController.h"
 #import "SpecialTopicViewController.h"
+#import "HSGetSpecialRequest.h"
 
 @interface RDHomePageController ()
 
@@ -36,7 +37,21 @@
 {
     [super viewDidLoad];
     
-//    [self autoSpecialTitleWith:@"安邦事件"];
+    [self checkSpecialTopic];
+}
+
+- (void)checkSpecialTopic
+{
+    HSGetSpecialRequest * request = [[HSGetSpecialRequest alloc] init];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self autoSpecialTitleWith:[[response objectForKey:@"result"] objectForKey:@"specialName"]];
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 - (void)autoSpecialTitleWith:(NSString *)title
