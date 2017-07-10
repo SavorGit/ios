@@ -73,7 +73,7 @@
     [_bgView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 10));
-        make.bottom.mas_equalTo(self).offset(- 8);
+        make.bottom.mas_equalTo(self).offset(- 14);
         make.left.mas_equalTo(5);
     }];
     

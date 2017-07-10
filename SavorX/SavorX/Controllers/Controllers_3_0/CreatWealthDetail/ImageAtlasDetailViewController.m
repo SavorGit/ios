@@ -18,6 +18,7 @@
 
 @property (nonatomic, assign) NSInteger currentPage;
 
+@property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) ImageAtlasScrollView *imageScrollView;
 @property (nonatomic, strong) DDPhotoDescView *photoDescView;
@@ -52,7 +53,7 @@
     }];
     [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
     
-    [self.view addSubview:self.backButton];
+    [self.view addSubview:self.topView];
 }
 
 - (void)initInfoConfig{
@@ -159,18 +160,61 @@ static int temp = -1;
 }
 
 #pragma mark - getter
-- (UIButton *)backButton
+- (UIView *)topView
 {
-    if (_backButton == nil) {
-        _backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 15, 40, 40)];
+    if (_topView == nil) {
+        
+        _topView = [[UIView alloc] initWithFrame:CGRectZero];
+        _topView.backgroundColor = kThemeColor;
+        [self.view addSubview:_topView];
+        [_topView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+        }];
+        
+        _backButton = [[UIButton alloc] initWithFrame:CGRectMake(5,20, 40, 44)];
         [_backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
         [_backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateSelected];
         [_backButton addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
+        [_topView addSubview:_backButton];
+        
+        UIButton *shareBtn = [[UIButton alloc] initWithFrame:CGRectZero];
+        [shareBtn setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
+        [shareBtn setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
+        [shareBtn addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
+        [_topView addSubview:shareBtn];
+        [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(40, 44));
+            make.top.mas_equalTo(20);
+            make.right.mas_equalTo(- 15);
+        }];
+        
+        UIButton *collectBtn = [[UIButton alloc] initWithFrame:CGRectZero];
+        [collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+        [collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateSelected];
+        [collectBtn addTarget:self action:@selector(collectAction) forControlEvents:UIControlEventTouchUpInside];
+        [_topView addSubview:collectBtn];
+        [collectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(40, 44));
+            make.top.mas_equalTo(20);
+            make.right.mas_equalTo(- 80);
+        }];
     }
-    return _backButton;
+    return _topView;
 }
 
-#pragma mark -
+#pragma mark -分享点击
+- (void)shareAction{
+    
+}
+
+#pragma mark -收藏点击
+- (void)collectAction{
+    
+}
+
+#pragma mark -backButtonClick
 - (void)backButtonClick
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -181,6 +225,7 @@ static int temp = -1;
     return UIStatusBarStyleLightContent;
 }
 
+#pragma mark -旋转屏幕调整布局
 // 旋转屏幕通知处理
 - (void)orieChanged
 {
@@ -195,6 +240,13 @@ static int temp = -1;
         self.imageScrollView.width = kMainBoundsWidth;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
         _imageScrollView.contentSize = CGSizeMake(self.imageArr.count * kMainBoundsWidth, kMainBoundsHeight);
+        
+        _topView.backgroundColor = kThemeColor;
+        [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+        }];
         
         for (int i = 0; i < self.scrollObjecArr.count; i++) {
             DDPhotoScrollView *phoScrollView = (DDPhotoScrollView *)self.scrollObjecArr[i];
@@ -215,6 +267,13 @@ static int temp = -1;
         self.imageScrollView.width = kMainBoundsWidth;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
         _imageScrollView.contentSize = CGSizeMake(self.imageArr.count * kMainBoundsWidth, kMainBoundsHeight);
+        
+        _topView.backgroundColor = [UIColor clearColor];
+        [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+        }];
 
         for (int i = 0; i < self.scrollObjecArr.count; i++) {
             DDPhotoScrollView *phoScrollView = (DDPhotoScrollView *)self.scrollObjecArr[i];
