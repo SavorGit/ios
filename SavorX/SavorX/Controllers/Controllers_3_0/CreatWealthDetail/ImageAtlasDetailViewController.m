@@ -12,6 +12,7 @@
 #import "DDPhotoDescView.h"
 #import "UIView+Additional.h"
 #import "ImageAtlasScrollView.h"
+#import "HotPopShareView.h"
 
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate>
@@ -206,8 +207,88 @@ static int temp = -1;
 
 #pragma mark -分享点击
 - (void)shareAction{
+    BOOL hadInstalledWeixin = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]];
+    BOOL hadInstalledQQ = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]];
     
-}
+    NSMutableArray *titlearr = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *imageArr = [NSMutableArray arrayWithCapacity:5];
+    
+    int startIndex = 0;
+    
+    if (hadInstalledWeixin) {
+        [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
+        [imageArr addObjectsFromArray:@[@"wechat",@"friend"]];
+    } else {
+        startIndex += 2;
+    }
+    
+    if (hadInstalledQQ) {
+        [titlearr addObjectsFromArray:@[@"QQ"]];
+        [imageArr addObjectsFromArray:@[@"qq"]];
+    } else {
+        startIndex += 1;
+    }
+    
+    [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
+    [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
+    
+    [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
+    [imageArr addObjectsFromArray:@[@"qq",@"qq"]];
+    
+    [titlearr addObjectsFromArray:@[@"微博"]];
+    [imageArr addObjectsFromArray:@[@"weibo"]];
+    
+    [titlearr addObjectsFromArray:@[@"微信收藏"]];
+    [imageArr addObjectsFromArray:@[@"weibo"]];
+    
+    [titlearr addObjectsFromArray:@[@"复制链接"]];
+    [imageArr addObjectsFromArray:@[@"fuzhilianjie"]];
+    
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithShareHeadOprationWith:titlearr andImageArry:imageArr];
+    [self.view addSubview:shareView];
+    
+    [shareView setBtnClick:^(NSInteger btnTag) {
+        NSLog(@"\n点击第几个====%d\n当前选中的按钮title====%@",(int)btnTag,titlearr[btnTag]);
+        switch (btnTag + startIndex) {
+            case 0: {
+                // 微信
+                
+            }
+                break;
+            case 1: {
+                // 微信朋友圈
+                
+            }
+                break;
+            case 2: {
+                // QQ
+                
+            }
+                break;
+            case 3: {
+                // QQ空间
+                
+            }
+                break;
+            case 4: {
+                // 微博
+                
+            }
+                break;
+            case 5: {
+                // 微信收藏
+                
+            }
+                break;
+            case 6: {
+                // 复制链接
+                
+            }
+                break;
+            default:
+                break;
+        }
+    }];}
 
 #pragma mark -收藏点击
 - (void)collectAction{

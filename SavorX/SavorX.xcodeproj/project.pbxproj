@@ -377,6 +377,7 @@
 		96D8C5C51F0F66F200251301 /* SpecialTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C41F0F66F200251301 /* SpecialTopTableViewCell.m */; };
 		96D8C5C81F0F681900251301 /* HeadlinesSTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */; };
 		96D8C5CC1F0F75AC00251301 /* SpecialTopDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5CB1F0F75AC00251301 /* SpecialTopDetailViewController.m */; };
+		96D8C5D21F13589300251301 /* HotPopShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5D11F13589300251301 /* HotPopShareView.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -988,6 +989,8 @@
 		96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeadlinesSTopTableViewCell.m; sourceTree = "<group>"; };
 		96D8C5CA1F0F75AC00251301 /* SpecialTopDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTopDetailViewController.h; sourceTree = "<group>"; };
 		96D8C5CB1F0F75AC00251301 /* SpecialTopDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopDetailViewController.m; sourceTree = "<group>"; };
+		96D8C5D01F13589300251301 /* HotPopShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotPopShareView.h; sourceTree = "<group>"; };
+		96D8C5D11F13589300251301 /* HotPopShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotPopShareView.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2456,6 +2459,8 @@
 		96A734AA1F0C80B000906163 /* ShareBoard */ = {
 			isa = PBXGroup;
 			children = (
+				96D8C5D01F13589300251301 /* HotPopShareView.h */,
+				96D8C5D11F13589300251301 /* HotPopShareView.m */,
 				96A734AB1F0C80B000906163 /* HotTopicShareView.h */,
 				96A734AC1F0C80B000906163 /* HotTopicShareView.m */,
 				96A734AD1F0C80B000906163 /* ImageWithLabel.h */,
@@ -3026,6 +3031,7 @@
 				0620412D1DC742100073C8A8 /* SliderListViewController.m in Sources */,
 				06153DCB1D52E15200BB127F /* ScreenDocumentViewController.m in Sources */,
 				06FB9D721DF9890C0053BE0A /* HSVodModel.m in Sources */,
+				96D8C5D21F13589300251301 /* HotPopShareView.m in Sources */,
 				061E0FD21DFFD9A40072605F /* GCCDLNA.m in Sources */,
 				06F9B2A81D6EEDBD00C7F0A4 /* GCCKeyChain.m in Sources */,
 				062705921D586EA2003EA6A0 /* WebViewController.m in Sources */,
