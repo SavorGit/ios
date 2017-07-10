@@ -17,6 +17,7 @@
 #import "UMCustomSocialManager.h"
 #import <UShareUI/UShareUI.h>
 #import "HSPicDetailRequest.h"
+#import "ImageAtlasDetailModel.h"
 
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate>
@@ -32,6 +33,7 @@
 @property (nonatomic, assign) BOOL isDisappear;
 @property (nonatomic, assign) NSInteger currentIndex;
 
+@property (nonatomic, strong)NSMutableArray *imageDatas;
 @property (nonatomic, strong)NSArray *imageArr;
 @property (nonatomic, strong)NSMutableArray *scrollObjecArr;
 @property (assign, nonatomic) NSUInteger currentImageIndex;
@@ -49,25 +51,20 @@
 - (void)viewDidLoad
 {
     [self initInfoConfig];
-    
-    [self.view addSubview:self.imageScrollView];
-    [self.imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight));
-        make.top.mas_equalTo(0);
-        make.left.mas_equalTo(0);
-    }];
-    [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
-    
-    [self.view addSubview:self.topView];
-    [self requestWithContentId:nil];
+    [self requestWithContentId:@"2650"];
 }
 
 - (void)requestWithContentId:(NSString *)contentId{
 
-    HSPicDetailRequest * request = [[HSPicDetailRequest alloc] initWithContentId:@""];
+    HSPicDetailRequest * request = [[HSPicDetailRequest alloc] initWithContentId:contentId];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        NSDictionary *resultDic = [response objectForKey:@"result"];
+        NSArray *resultArr = [response objectForKey:@"result"];
+        for (int i = 0; i < resultArr.count; i ++) {
+            ImageAtlasDetailModel *imageAtlModel = [[ImageAtlasDetailModel alloc] initWithDictionary:resultArr[i]];
+            [self.imageDatas addObject:imageAtlModel];
+        }
+        [self creatSubViews];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -76,11 +73,25 @@
     }];
 }
 
+- (void)creatSubViews{
+    
+    [self.view addSubview:self.imageScrollView];
+    [self.imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight));
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+    }];
+    [self.view addSubview:self.topView];
+    [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
+    
+}
+
 - (void)initInfoConfig{
     self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.scrollObjecArr = [[NSMutableArray alloc] initWithCapacity:100];
-    self.imageArr = [NSArray arrayWithObjects:@"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg",@"https://dn-brknqdxv.qbox.me/d6e24a57b763c14b7731.jpg",@"https://dn-brknqdxv.qbox.me/5fb13268c2d1ef3bfe69.jpg",@"https://dn-brknqdxv.qbox.me/fea55faa880653633cc8.jpg",@"https://dn-brknqdxv.qbox.me/8401b45695d7fea371ca.jpg",@"https://dn-brknqdxv.qbox.me/59bda095dcb55dd91347.jpg",@"https://dn-brknqdxv.qbox.me/ec1379afc23d6afc3d90.jpg",@"https://dn-brknqdxv.qbox.me/51b10338ffdf7016a599.jpg",@"https://dn-brknqdxv.qbox.me/4b82c3574058ea94a2c8.jpg",@"https://dn-brknqdxv.qbox.me/a0287e02c7889227d5c7.jpg", nil];
+    self.imageDatas = [[NSMutableArray alloc] initWithCapacity:100];
+//    self.imageArr = [NSArray arrayWithObjects:@"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg",@"https://dn-brknqdxv.qbox.me/d6e24a57b763c14b7731.jpg",@"https://dn-brknqdxv.qbox.me/5fb13268c2d1ef3bfe69.jpg",@"https://dn-brknqdxv.qbox.me/fea55faa880653633cc8.jpg",@"https://dn-brknqdxv.qbox.me/8401b45695d7fea371ca.jpg",@"https://dn-brknqdxv.qbox.me/59bda095dcb55dd91347.jpg",@"https://dn-brknqdxv.qbox.me/ec1379afc23d6afc3d90.jpg",@"https://dn-brknqdxv.qbox.me/51b10338ffdf7016a599.jpg",@"https://dn-brknqdxv.qbox.me/4b82c3574058ea94a2c8.jpg",@"https://dn-brknqdxv.qbox.me/a0287e02c7889227d5c7.jpg", nil];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
@@ -89,7 +100,7 @@
 {
     if (_imageScrollView == nil) {
         _imageScrollView = [[ImageAtlasScrollView alloc] initWithFrame:CGRectZero];
-        _imageScrollView.contentSize = CGSizeMake(self.imageArr.count * kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
         _imageScrollView.showsHorizontalScrollIndicator = NO;
         // 切换的动画效果
         _imageScrollView.effect = JT3DScrollViewEffectNone;
@@ -97,9 +108,10 @@
         _imageScrollView.delegate = self;
         
         // 设置小ScrollView（装载imageView的scrollView）
-        for (int i = 0; i < self.imageArr.count; i++) {
+        for (int i = 0; i < self.imageDatas.count; i++) {
             
-            NSString *urlStr = self.imageArr[i];
+            ImageAtlasDetailModel *tmpModel = self.imageDatas[i];
+            NSString *urlStr = tmpModel.pic_url;
             _photoScrollView = [[DDPhotoScrollView alloc] initWithFrame:CGRectZero urlString:urlStr];
             [_imageScrollView addSubview:_photoScrollView];
             [_scrollObjecArr addObject:_photoScrollView];
@@ -169,7 +181,8 @@ static int temp = -1;
     if (_isDisappear == YES) {return;}
     // 先remove, 再加入
     [_photoDescView removeFromSuperview];
-    _photoDescView = [[DDPhotoDescView alloc] initWithDesc:@"这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容,这是描述的内容." index:newIndex totalCount:self.imageArr.count];
+    ImageAtlasDetailModel *tmpModel = self.imageDatas[newIndex];
+    _photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:newIndex totalCount:self.imageDatas.count];
     [self.view addSubview:_photoDescView];
     
     [_photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -362,7 +375,7 @@ static int temp = -1;
         }];
         self.imageScrollView.width = kMainBoundsWidth;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
-        _imageScrollView.contentSize = CGSizeMake(self.imageArr.count * kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
         
         _topView.backgroundColor = kThemeColor;
         [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -389,7 +402,7 @@ static int temp = -1;
         }];
         self.imageScrollView.width = kMainBoundsWidth;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
-        _imageScrollView.contentSize = CGSizeMake(self.imageArr.count * kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
         
         _topView.backgroundColor = [UIColor clearColor];
         [_topView mas_updateConstraints:^(MASConstraintMaker *make) {

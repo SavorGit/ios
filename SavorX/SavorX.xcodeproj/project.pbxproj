@@ -381,6 +381,7 @@
 		96D8C5D51F136F0400251301 /* HSGetSpecialRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5D41F136F0400251301 /* HSGetSpecialRequest.m */; };
 		96D8C5D91F13704900251301 /* HSPicDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5D81F13704900251301 /* HSPicDetailRequest.m */; };
 		96D8C5DC1F1389F900251301 /* WinResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5DB1F1389F900251301 /* WinResultViewController.m */; };
+		96D8C5DF1F1390DF00251301 /* ImageAtlasDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5DE1F1390DF00251301 /* ImageAtlasDetailModel.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -1000,6 +1001,8 @@
 		96D8C5D81F13704900251301 /* HSPicDetailRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSPicDetailRequest.m; sourceTree = "<group>"; };
 		96D8C5DA1F1389F900251301 /* WinResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WinResultViewController.h; sourceTree = "<group>"; };
 		96D8C5DB1F1389F900251301 /* WinResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WinResultViewController.m; sourceTree = "<group>"; };
+		96D8C5DD1F1390DF00251301 /* ImageAtlasDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAtlasDetailModel.h; sourceTree = "<group>"; };
+		96D8C5DE1F1390DF00251301 /* ImageAtlasDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAtlasDetailModel.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2480,6 +2483,8 @@
 			children = (
 				96A734A71F0C7FAC00906163 /* CreateWealthModel.h */,
 				96A734A81F0C7FAC00906163 /* CreateWealthModel.m */,
+				96D8C5DD1F1390DF00251301 /* ImageAtlasDetailModel.h */,
+				96D8C5DE1F1390DF00251301 /* ImageAtlasDetailModel.m */,
 			);
 			path = CreateWealthModel;
 			sourceTree = "<group>";
@@ -3104,6 +3109,7 @@
 				47566F7A1DFE885F0047156E /* ScreenCollectionHeaderView.m in Sources */,
 				47C90F1F1E13AB3D0089AC7B /* SXEmptyCell.m in Sources */,
 				476F44BD1E2DB1B000F99090 /* BaseNavigationController.m in Sources */,
+				96D8C5DF1F1390DF00251301 /* ImageAtlasDetailModel.m in Sources */,
 				478058291DF985730091C305 /* NetworkConfiguration.m in Sources */,
 				061E0FD41DFFD9A40072605F /* GDataXMLNode.m in Sources */,
 				061E0FD01DFFD9A40072605F /* AVTransportModel.m in Sources */,
