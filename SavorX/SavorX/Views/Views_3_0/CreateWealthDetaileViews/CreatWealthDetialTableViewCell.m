@@ -21,7 +21,7 @@
 - (void)initWithSubView{
     
     _bgView = [[UIView alloc]init];
-    _bgView.backgroundColor = [UIColor whiteColor];
+    _bgView.backgroundColor = [UIColor colorWithRed:244/255.0 green:243/255.0 blue:238/255.0 alpha:1.0];
     [self.contentView addSubview:_bgView];
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake([UIScreen mainScreen].bounds.size.width - 30, 140));

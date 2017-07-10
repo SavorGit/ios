@@ -21,46 +21,55 @@
 - (void)initWithSubView{
     
     _bgView = [[UIView alloc]init];
-    _bgView.backgroundColor = [UIColor whiteColor];
+    _bgView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.contentView addSubview:_bgView];
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake([UIScreen mainScreen].bounds.size.width - 30, 140));
-        make.top.mas_equalTo(5);
-        make.left.mas_equalTo(15);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 96));
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
     }];
     
     _bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     _bgImageView.contentMode = UIViewContentModeScaleAspectFill;
     _bgImageView.layer.masksToBounds = YES;
-    _bgImageView.backgroundColor = [UIColor blueColor];
+    _bgImageView.backgroundColor = [UIColor clearColor];
     [_bgView addSubview:_bgImageView];
     [_bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake([UIScreen mainScreen].bounds.size.width/3 + 10, 140));
-        make.top.mas_equalTo(0);
-        make.right.mas_equalTo(0);
+        make.size.mas_equalTo(CGSizeMake(130, 84));
+        make.top.mas_equalTo(6);
+        make.right.mas_equalTo(-15);
     }];
     
     _titleLabel = [[UILabel alloc]init];
     _titleLabel.font = [UIFont boldSystemFontOfSize:16];
-    _titleLabel.textColor = [UIColor blackColor];
+    _titleLabel.textColor = UIColorFromRGB(0x434343);
     _titleLabel.textAlignment = NSTextAlignmentLeft;
-    _titleLabel.text = @"餐厅名";
+    _titleLabel.text = @"标题";
     [_bgView addSubview:_titleLabel];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake([UIScreen mainScreen].bounds.size.width/3 *2 - 10, 30));
-        make.top.mas_equalTo(0);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30 - 130 - 10, 20));
+        make.top.mas_equalTo(6);
         make.left.mas_equalTo(15);
     }];
     
     _timeLabel = [[UILabel alloc]init];
     _timeLabel.text = @"";
-    _timeLabel.font = [UIFont systemFontOfSize:14];
+    _timeLabel.font = [UIFont systemFontOfSize:10];
     _timeLabel.textColor = [UIColor blackColor];
     [_bgView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 20));
-        make.bottom.mas_equalTo(_bgImageView.mas_bottom).offset(-10);
+        make.bottom.mas_equalTo(_bgImageView.mas_bottom).offset(-15);
         make.left.mas_equalTo(15);
+    }];
+    
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];
+    lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
+    [_bgView addSubview:lineView];
+    [lineView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 1));
+        make.bottom.mas_equalTo(_bgView.bottom).offset(-1);
+        make.left.mas_equalTo(0);
     }];
     
 }

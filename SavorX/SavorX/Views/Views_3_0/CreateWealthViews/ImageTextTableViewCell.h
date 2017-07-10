@@ -18,8 +18,6 @@
 
 @property (nonatomic, strong) UIImageView * bgImageView;
 
-@property (nonatomic, strong) UIImageView *sourceImage;
-
 @property (nonatomic, strong) UILabel *sourceLabel;
 
 @property (nonatomic, strong) UILabel *timeLabel;

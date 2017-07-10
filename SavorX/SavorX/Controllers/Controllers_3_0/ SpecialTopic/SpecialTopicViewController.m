@@ -11,8 +11,7 @@
 #import "HeadlinesSTopTableViewCell.h"
 #import "Masonry.h"
 #import "CreateWealthModel.h"
-#import "ImageTextDetailViewController.h"
-#import "ImageAtlasDetailViewController.h"
+#import "SpecialTopDetailViewController.h"
 
 @interface SpecialTopicViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -26,7 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor lightGrayColor]];
+    [self.view setBackgroundColor:UIColorFromRGB(0xece6de)];
     [self initInfo];
     [self setUpDatas];
 }
@@ -73,7 +72,7 @@
         [self.view addSubview:_tableView];
         
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(10);
+            make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
             make.bottom.mas_equalTo(0);
             make.right.mas_equalTo(0);
@@ -148,17 +147,17 @@
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     if (model.type == 1) {
-        return 300;
+        return 361.5;
     }else if (model.type == 0){
-        return 150;
+        return 96;
     }
     return 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
-    [self.navigationController pushViewController:imtVC animated:YES];
+    SpecialTopDetailViewController *stVC = [[SpecialTopDetailViewController alloc] init];
+    [self.navigationController pushViewController:stVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
