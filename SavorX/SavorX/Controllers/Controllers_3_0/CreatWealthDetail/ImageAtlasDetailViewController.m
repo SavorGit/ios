@@ -16,6 +16,7 @@
 #import <UMSocialCore/UMSocialCore.h>
 #import "UMCustomSocialManager.h"
 #import <UShareUI/UShareUI.h>
+#import "HSPicDetailRequest.h"
 
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate>
@@ -58,6 +59,21 @@
     [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
     
     [self.view addSubview:self.topView];
+    [self requestWithContentId:nil];
+}
+
+- (void)requestWithContentId:(NSString *)contentId{
+
+    HSPicDetailRequest * request = [[HSPicDetailRequest alloc] initWithContentId:@""];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *resultDic = [response objectForKey:@"result"];
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 - (void)initInfoConfig{

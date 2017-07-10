@@ -154,7 +154,6 @@
 		0663D4541F0B816300CD2FA2 /* RDVideoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4531F0B816300CD2FA2 /* RDVideoCollectionViewCell.m */; };
 		0663D4581F0B875600CD2FA2 /* RDPhotoLibraryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4571F0B875600CD2FA2 /* RDPhotoLibraryModel.m */; };
 		0663D45B1F0B8A1500CD2FA2 /* RDPhotoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */; };
-		067C30C71F131D81000A1150 /* HSGetSpecialRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 067C30C61F131D81000A1150 /* HSGetSpecialRequest.m */; };
 		067CB3BF1D603B7200094BB8 /* DiscoverCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */; };
 		067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB7141D60B21C00094BB8 /* OpenFileTool.m */; };
 		06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */; };
@@ -379,6 +378,9 @@
 		96D8C5C81F0F681900251301 /* HeadlinesSTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */; };
 		96D8C5CC1F0F75AC00251301 /* SpecialTopDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5CB1F0F75AC00251301 /* SpecialTopDetailViewController.m */; };
 		96D8C5D21F13589300251301 /* HotPopShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5D11F13589300251301 /* HotPopShareView.m */; };
+		96D8C5D51F136F0400251301 /* HSGetSpecialRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5D41F136F0400251301 /* HSGetSpecialRequest.m */; };
+		96D8C5D91F13704900251301 /* HSPicDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5D81F13704900251301 /* HSPicDetailRequest.m */; };
+		96D8C5DC1F1389F900251301 /* WinResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5DB1F1389F900251301 /* WinResultViewController.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -632,8 +634,6 @@
 		0663D4571F0B875600CD2FA2 /* RDPhotoLibraryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPhotoLibraryModel.m; sourceTree = "<group>"; };
 		0663D4591F0B8A1500CD2FA2 /* RDPhotoTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPhotoTool.h; sourceTree = "<group>"; };
 		0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPhotoTool.m; sourceTree = "<group>"; };
-		067C30C51F131D81000A1150 /* HSGetSpecialRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HSGetSpecialRequest.h; path = ../HSGetSpecialRequest.h; sourceTree = "<group>"; };
-		067C30C61F131D81000A1150 /* HSGetSpecialRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HSGetSpecialRequest.m; path = ../HSGetSpecialRequest.m; sourceTree = "<group>"; };
 		067CB3BD1D603B7200094BB8 /* DiscoverCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverCollectionViewCell.h; sourceTree = "<group>"; };
 		067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverCollectionViewCell.m; sourceTree = "<group>"; };
 		067CB7131D60B21C00094BB8 /* OpenFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenFileTool.h; sourceTree = "<group>"; };
@@ -994,6 +994,12 @@
 		96D8C5CB1F0F75AC00251301 /* SpecialTopDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopDetailViewController.m; sourceTree = "<group>"; };
 		96D8C5D01F13589300251301 /* HotPopShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotPopShareView.h; sourceTree = "<group>"; };
 		96D8C5D11F13589300251301 /* HotPopShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotPopShareView.m; sourceTree = "<group>"; };
+		96D8C5D31F136F0400251301 /* HSGetSpecialRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSGetSpecialRequest.h; sourceTree = "<group>"; };
+		96D8C5D41F136F0400251301 /* HSGetSpecialRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSGetSpecialRequest.m; sourceTree = "<group>"; };
+		96D8C5D71F13704900251301 /* HSPicDetailRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSPicDetailRequest.h; sourceTree = "<group>"; };
+		96D8C5D81F13704900251301 /* HSPicDetailRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSPicDetailRequest.m; sourceTree = "<group>"; };
+		96D8C5DA1F1389F900251301 /* WinResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WinResultViewController.h; sourceTree = "<group>"; };
+		96D8C5DB1F1389F900251301 /* WinResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WinResultViewController.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1557,6 +1563,7 @@
 		067C30C41F131D43000A1150 /* Network_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				96D8C5D61F136FE000251301 /* CreateWealthNet */,
 				067C30C81F1351F3000A1150 /* Home */,
 			);
 			path = Network_3_0;
@@ -1565,8 +1572,8 @@
 		067C30C81F1351F3000A1150 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				067C30C51F131D81000A1150 /* HSGetSpecialRequest.h */,
-				067C30C61F131D81000A1150 /* HSGetSpecialRequest.m */,
+				96D8C5D31F136F0400251301 /* HSGetSpecialRequest.h */,
+				96D8C5D41F136F0400251301 /* HSGetSpecialRequest.m */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2506,6 +2513,8 @@
 			children = (
 				96BCE3BC1EC0128E00B1A3F7 /* SmashEggsGameViewController.h */,
 				96BCE3BD1EC0128E00B1A3F7 /* SmashEggsGameViewController.m */,
+				96D8C5DA1F1389F900251301 /* WinResultViewController.h */,
+				96D8C5DB1F1389F900251301 /* WinResultViewController.m */,
 			);
 			path = SmashingEggsGame;
 			sourceTree = "<group>";
@@ -2581,6 +2590,15 @@
 				96D8C5CB1F0F75AC00251301 /* SpecialTopDetailViewController.m */,
 			);
 			path = " SpecialTopDetail";
+			sourceTree = "<group>";
+		};
+		96D8C5D61F136FE000251301 /* CreateWealthNet */ = {
+			isa = PBXGroup;
+			children = (
+				96D8C5D71F13704900251301 /* HSPicDetailRequest.h */,
+				96D8C5D81F13704900251301 /* HSPicDetailRequest.m */,
+			);
+			path = CreateWealthNet;
 			sourceTree = "<group>";
 		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
@@ -3022,6 +3040,7 @@
 				06FFCCAF1E6EBF6A00ADEA94 /* RDCheackSence.m in Sources */,
 				4780584E1DF9908D0091C305 /* HSSubmitFeedbackRequest.m in Sources */,
 				06FA33991D3E171D001F5B37 /* ContextFilterLogFormatter.m in Sources */,
+				96D8C5D91F13704900251301 /* HSPicDetailRequest.m in Sources */,
 				965241041ED6BE9E0090E1C8 /* RDLocationManager.m in Sources */,
 				062E99CE1E49C2F30042C924 /* UIImage+WaterMark.m in Sources */,
 				0688C4931E97760100D7D2A9 /* ShareRDViewController.m in Sources */,
@@ -3035,7 +3054,6 @@
 				478058351DF989850091C305 /* ConverUtil.m in Sources */,
 				47F9976D1DFFBC910009BDFB /* BaseCell.m in Sources */,
 				060DB0B41D5B26F9002A2DED /* UIColor+YYAdditions.m in Sources */,
-				067C30C71F131D81000A1150 /* HSGetSpecialRequest.m in Sources */,
 				062705961D588A12003EA6A0 /* PhotoTool.m in Sources */,
 				478058281DF985730091C305 /* HSVodListRequest.m in Sources */,
 				060031601E53600400E675F5 /* HSGetLastHotelVodList.m in Sources */,
@@ -3107,12 +3125,14 @@
 				96A734921F0C7EE900906163 /* CreateWealthViewController.m in Sources */,
 				06FB9D741DF9890C0053BE0A /* JastorRuntimeHelper.m in Sources */,
 				067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */,
+				96D8C5D51F136F0400251301 /* HSGetSpecialRequest.m in Sources */,
 				06FFCCAB1E6E864900ADEA94 /* RDAlertAction.m in Sources */,
 				96A734AF1F0C80B000906163 /* HotTopicShareView.m in Sources */,
 				478058261DF985730091C305 /* HSCategoryListRequest.m in Sources */,
 				965240E51ED57F270090E1C8 /* HSHomeRestaurantList.m in Sources */,
 				06EA38D21D5980FC0081DDCC /* PhotoShowViewController.m in Sources */,
 				0663D43B1F0B6CB000CD2FA2 /* WMMenuItem.m in Sources */,
+				96D8C5DC1F1389F900251301 /* WinResultViewController.m in Sources */,
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
 				96D8C5BC1F0F213000251301 /* DDPhotoScrollView.m in Sources */,
 				0647961D1F0E306100DD8AA9 /* PhotoVideoScreenViewController.m in Sources */,

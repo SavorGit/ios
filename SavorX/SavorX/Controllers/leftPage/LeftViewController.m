@@ -17,6 +17,7 @@
 #import "LeftTableHeaderView.h"
 #import "ShareRDViewController.h"
 #import "RestaurantListViewController.h"
+#import "SmashEggsGameViewController.h"
 
 @interface LeftViewController ()<UINavigationControllerDelegate>{
     
@@ -37,9 +38,9 @@
     [super viewDidLoad];
     self.navigationController.delegate = self;
     [self setupDatas];
-    self.leftTableView.backgroundColor = UIColorFromRGB(0x202020);
+    self.leftTableView.backgroundColor = kThemeColor;
     CGFloat width = kMainBoundsHeight > kMainBoundsWidth ? kMainBoundsWidth : kMainBoundsHeight;
-    self.headerView = [[LeftTableHeaderView alloc] initWithFrame:CGRectMake(0, 0, width / 3 * 2, width / 3 * 2)];
+    self.headerView = [[LeftTableHeaderView alloc] initWithFrame:CGRectMake(0, 0, width / 3 * 2, width / 3 * 2 - 80)];
     self.leftTableView.tableHeaderView = self.headerView;
     [self.view addSubview:self.footView];
     [self.footView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -54,8 +55,8 @@
 
 -(void)setupDatas{
 
-    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"提供投屏的餐厅",@"清除缓存",@"当前版本"];
-    _imageArys = @[@"shoucang", @"yijianfankui", @"bangzhu",@"canting", @"qingchu", @"banben"];
+    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"优惠活动",@"提供投屏的餐厅",@"清除缓存",@"当前版本"];
+    _imageArys = @[@"shoucang", @"yijianfankui", @"bangzhu",@"bangzhu",@"canting", @"qingchu", @"banben"];
 }
 
 #pragma mark -- UITableViewDataSource
@@ -69,7 +70,7 @@
     [cell bottomLineHidden:NO];
     NSString *content;
     if (indexPath.section == 0) {
-        if (indexPath.row == 3) {
+        if (indexPath.row == 4) {
             [cell bottomLineHidden:YES];
         }
     }else if(indexPath.section == 1){
@@ -96,7 +97,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 4;
+        return 5;
     }
     return 2;
 }
@@ -124,6 +125,11 @@
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:help  animated:NO];
         }else if (indexPath.row == 3){
             [self hideLeftViewAnimated:nil];
+            SmashEggsGameViewController * segvVC = [[SmashEggsGameViewController alloc] init];
+            [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:segvVC  animated:NO];
+        }
+        else if (indexPath.row == 4){
+            [self hideLeftViewAnimated:nil];
             RestaurantListViewController * restVC = [[RestaurantListViewController alloc] init];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:restVC  animated:NO];
             [SAVORXAPI postUMHandleWithContentId:@"menu_hotel_map_list" key:nil value:nil];
@@ -144,7 +150,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 22.f;
+    return 82.f;
 }
 
 - (UIView *)footView
