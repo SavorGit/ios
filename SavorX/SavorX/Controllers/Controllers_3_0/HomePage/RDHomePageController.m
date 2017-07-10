@@ -16,6 +16,7 @@
 @interface RDHomePageController ()
 
 @property (nonatomic, copy) NSString * specialTitle;
+@property (nonatomic, assign) BOOL isInsertVC;
 
 @end
 
@@ -38,6 +39,7 @@
     [super viewDidLoad];
     
     [self checkSpecialTopic];
+    [self addNotificationCenter];
 }
 
 - (void)checkSpecialTopic
@@ -45,13 +47,26 @@
     HSGetSpecialRequest * request = [[HSGetSpecialRequest alloc] init];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        [self autoSpecialTitleWith:[[response objectForKey:@"result"] objectForKey:@"specialName"]];
+        NSString * title = [[response objectForKey:@"result"] objectForKey:@"specialName"];
+        if (!isEmptyString(title)) {
+            [self autoSpecialTitleWith:title];
+        }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
     }];
+}
+
+- (void)didFoundBox
+{
+    [self insertViewController];
+}
+
+- (void)disconnectBox
+{
+    [self removeViewController];
 }
 
 - (void)autoSpecialTitleWith:(NSString *)title
@@ -67,6 +82,7 @@
         CGFloat width = [self.specialTitle boundingRectWithSize:CGSizeMake(1000, 30) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading|NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17]} context:nil].size.width;
         
         [self updateTitle:title andWidth:width atIndex:self.titles.count - 1];
+        [self.menuView updateBadgeViewAtIndex:self.titles.count - 1];
         
         if (self.progressViewWidths) {
             NSMutableArray * array = [NSMutableArray arrayWithArray:self.progressViewWidths];
@@ -92,6 +108,12 @@
 
 - (void)insertViewController
 {
+    if (self.isInsertVC) {
+        return;
+    }
+    
+    self.isInsertVC = YES;
+    
     NSInteger index = self.selectIndex;
     
     //改变title数组
@@ -154,13 +176,17 @@
     [self wm_resetMenuViewWithNodelegateWithIndex:index + 1];
     [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"移除" style:UIBarButtonItemStyleDone target:self action:@selector(removeViewController)];
     [self autoItemMargin];
     [self.menuView updateBadgeViewAtIndex:self.titles.count - 1];
 }
 
 - (void)removeViewController
 {
+    if (!self.isInsertVC) {
+        return;
+    }
+    self.isInsertVC = NO;
+    
     int index = self.selectIndex;
     
     //改变缓存控制器数组
@@ -247,7 +273,6 @@
     }
     
     [self resetCurrentViewController:[self.displayVC objectForKey:@(self.selectIndex)]];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"插入" style:UIBarButtonItemStyleDone target:self action:@selector(insertViewController)];
     [self autoItemMargin];
     [self.menuView updateBadgeViewAtIndex:self.titles.count - 1];
 }
@@ -288,7 +313,20 @@
 
 - (void)createCustomUI
 {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"插入" style:UIBarButtonItemStyleDone target:self action:@selector(insertViewController)];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.exclusiveTouch = YES;
+    [button setImage:[UIImage imageNamed:@"nav.png"] forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 0, 40, 40);
+    [button setImageEdgeInsets:UIEdgeInsetsMake(0, -25, 0, 0)];
+    [button addTarget:self action:@selector(openLeftDrawer:) forControlEvents:UIControlEventTouchUpInside];
+    button.backgroundColor = [UIColor clearColor];
+    UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationItem.leftBarButtonItem = backItem;
+}
+
+- (void)openLeftDrawer:(id)sender
+{
+    [self showLeftViewAnimated:sender];
 }
 
 - (UIView *)menuView:(WMMenuView *)menu badgeViewAtIndex:(NSInteger)index
@@ -342,6 +380,23 @@
 {
     [super viewDidDisappear:animated];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
+- (void)addNotificationCenter
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFoundBox) name:RDDidFoundHotelIdNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectBox) name:RDDidNotFoundSenceNotification object:nil];
+}
+
+- (void)removeNotificationCenter
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundHotelIdNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidNotFoundSenceNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [self removeViewController];
 }
 
 @end

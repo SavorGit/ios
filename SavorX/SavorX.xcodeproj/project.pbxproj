@@ -631,8 +631,8 @@
 		0663D4571F0B875600CD2FA2 /* RDPhotoLibraryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPhotoLibraryModel.m; sourceTree = "<group>"; };
 		0663D4591F0B8A1500CD2FA2 /* RDPhotoTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPhotoTool.h; sourceTree = "<group>"; };
 		0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPhotoTool.m; sourceTree = "<group>"; };
-		067C30C51F131D81000A1150 /* HSGetSpecialRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSGetSpecialRequest.h; sourceTree = "<group>"; };
-		067C30C61F131D81000A1150 /* HSGetSpecialRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSGetSpecialRequest.m; sourceTree = "<group>"; };
+		067C30C51F131D81000A1150 /* HSGetSpecialRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HSGetSpecialRequest.h; path = ../HSGetSpecialRequest.h; sourceTree = "<group>"; };
+		067C30C61F131D81000A1150 /* HSGetSpecialRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HSGetSpecialRequest.m; path = ../HSGetSpecialRequest.m; sourceTree = "<group>"; };
 		067CB3BD1D603B7200094BB8 /* DiscoverCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverCollectionViewCell.h; sourceTree = "<group>"; };
 		067CB3BE1D603B7200094BB8 /* DiscoverCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverCollectionViewCell.m; sourceTree = "<group>"; };
 		067CB7131D60B21C00094BB8 /* OpenFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenFileTool.h; sourceTree = "<group>"; };
@@ -1554,10 +1554,18 @@
 		067C30C41F131D43000A1150 /* Network_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				067C30C81F1351F3000A1150 /* Home */,
+			);
+			path = Network_3_0;
+			sourceTree = "<group>";
+		};
+		067C30C81F1351F3000A1150 /* Home */ = {
+			isa = PBXGroup;
+			children = (
 				067C30C51F131D81000A1150 /* HSGetSpecialRequest.h */,
 				067C30C61F131D81000A1150 /* HSGetSpecialRequest.m */,
 			);
-			path = Network_3_0;
+			path = Home;
 			sourceTree = "<group>";
 		};
 		067CB3BC1D603B4A00094BB8 /* Discover */ = {
