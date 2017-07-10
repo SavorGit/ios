@@ -13,6 +13,9 @@
 #import "UIView+Additional.h"
 #import "ImageAtlasScrollView.h"
 #import "HotPopShareView.h"
+#import <UMSocialCore/UMSocialCore.h>
+#import "UMCustomSocialManager.h"
+#import <UShareUI/UShareUI.h>
 
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate>
@@ -216,15 +219,15 @@ static int temp = -1;
     int startIndex = 0;
     
     if (hadInstalledWeixin) {
-        [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
-        [imageArr addObjectsFromArray:@[@"wechat",@"friend"]];
+            [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
+            [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
     } else {
         startIndex += 2;
     }
     
     if (hadInstalledQQ) {
-        [titlearr addObjectsFromArray:@[@"QQ"]];
-        [imageArr addObjectsFromArray:@[@"qq"]];
+        [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
+        [imageArr addObjectsFromArray:@[@"qq",@"qq"]];
     } else {
         startIndex += 1;
     }
@@ -257,7 +260,7 @@ static int temp = -1;
                 break;
             case 1: {
                 // 微信朋友圈
-                
+                [self shareWithPlatform:UMSocialPlatformType_WechatTimeLine];
             }
                 break;
             case 2: {
@@ -288,8 +291,31 @@ static int temp = -1;
             default:
                 break;
         }
-    }];}
+    }];
+}
 
+- (void)shareWithPlatform:(UMSocialPlatformType)platformType {
+    
+    NSString * url = @"http://china.huanqiu.com/article/2017-07/10955931.html?from=bdwz";
+    
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //创建网页分享类型
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", @"标题"] descr:@"这是描述" thumImage:nil];
+    [object setWebpageUrl:url];
+    messageObject.shareObject = object;
+    
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id result, NSError *error) {
+        
+        if (error) {
+            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+        }else{
+            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+        }
+        
+    }];
+    
+}
 #pragma mark -收藏点击
 - (void)collectAction{
     
