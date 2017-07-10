@@ -98,11 +98,11 @@
     }];
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];
-    lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
+    lineView.backgroundColor = UIColorFromRGB(0xece6de);
     [_bgView addSubview:lineView];
     [lineView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 6));
-        make.bottom.mas_equalTo(_bgView.bottom).offset(-6);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 6));
+        make.top.mas_equalTo(_bgView.mas_bottom).offset(-6);
         make.left.mas_equalTo(0);
     }];
 }

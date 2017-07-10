@@ -189,7 +189,7 @@
     }else if (model.type == 2){
         return 96;
     }else if (model.type == 3){
-        return 343;
+        return 353;
     }
     return 0;
 }
