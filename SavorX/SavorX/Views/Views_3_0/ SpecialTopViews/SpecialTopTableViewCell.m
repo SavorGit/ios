@@ -77,11 +77,13 @@
 - (void)configModelData:(CreateWealthModel *)model{
     
     self.titleLabel.text = model.title;
-    self.timeLabel.text = model.time;
-    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    if (!isEmptyString(model.updateTime)) {
+        self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
+    }
+    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        if ([manager diskImageExistsForURL:[NSURL URLWithString:model.imageUrl]]) {
+        if ([manager diskImageExistsForURL:[NSURL URLWithString:model.imageURL]]) {
             NSLog(@"不加载动画");
         }else {
             

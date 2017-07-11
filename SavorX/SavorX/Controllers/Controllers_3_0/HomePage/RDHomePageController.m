@@ -37,7 +37,7 @@
 {
     [super viewDidLoad];
     
-    [self checkSpecialTopic];
+//    [self checkSpecialTopic];
     [self addNotificationCenter];
 }
 
@@ -96,13 +96,17 @@
 #pragma mark - Data source
 - (UIViewController *)pageController:(WMPageController *)pageController viewControllerAtIndex:(NSInteger)index
 {
-    if (index == 2) {
+    if (index == 0) {
+        CreateWealthViewController * creatWealth = [[CreateWealthViewController alloc] initWithCategoryID:1];
+        return creatWealth;
+    }else if (index == 1){
+        CreateWealthViewController * creatWealth = [[CreateWealthViewController alloc] initWithCategoryID:2];
+        return creatWealth;
+    }else if (index == 2){
         SpecialTopicViewController * specialTopic = [[SpecialTopicViewController alloc] init];
         return specialTopic;
-    }else{
-        CreateWealthViewController * creatWealth = [[CreateWealthViewController alloc] init];
-        return creatWealth;
     }
+    return nil;
 }
 
 - (void)insertViewController

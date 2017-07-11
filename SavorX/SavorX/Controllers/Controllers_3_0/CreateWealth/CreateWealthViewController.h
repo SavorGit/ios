@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HomeBaseViewController.h"
 
-@interface CreateWealthViewController : UIViewController
+@interface CreateWealthViewController : HomeBaseViewController
+
+- (instancetype)initWithCategoryID:(NSInteger)categoryID;
 
 @end

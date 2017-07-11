@@ -7,7 +7,7 @@
 //
 
 #import "BaseViewController.h"
-#import "HSVodModel.h"
+#import "CreateWealthModel.h"
 #import "GCCPlayerView.h"
 
 /**
@@ -16,9 +16,9 @@
 typedef void (^comeFromWebView)(NSDictionary *parDic);
 @interface WebViewController : BaseViewController
 
-- (instancetype)initWithModel:(HSVodModel *)model categoryID:(NSInteger)categoryID;
+- (instancetype)initWithModel:(CreateWealthModel *)model categoryID:(NSInteger)categoryID;
 
-@property (nonatomic, strong) HSVodModel * model;
+@property (nonatomic, strong) CreateWealthModel * model;
 @property (nonatomic, strong) GCCPlayerView * playView; //播放器
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 

@@ -9,13 +9,14 @@
 #import "RDLogStatisticsAPI.h"
 #import "SSZipArchive.h"
 #import <AliyunOSSiOS/OSSService.h>
+#import "CreateWealthModel.h"
 
 static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
 
 @implementation RDLogStatisticsAPI
 
 //热点条目（对应文章）的log日志
-+ (void)RDItemLogAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(HSVodModel *)model categoryID:(NSString *)categoryID
++ (void)RDItemLogAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(CreateWealthModel *)model categoryID:(NSString *)categoryID
 {
     const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
     dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
@@ -61,7 +62,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
 }
 
 //创建一条新的日志
-+ (void)RDCreateLogWithAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(HSVodModel *)model categoryID:(NSString *)categoryID needNewTime:(BOOL)needNewTime
++ (void)RDCreateLogWithAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(CreateWealthModel *)model categoryID:(NSString *)categoryID needNewTime:(BOOL)needNewTime
 {
     NSString * volume;
     switch (model.type) {

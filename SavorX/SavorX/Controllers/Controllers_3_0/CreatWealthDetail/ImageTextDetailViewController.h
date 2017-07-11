@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CreateWealthModel.h"
 
 @interface ImageTextDetailViewController : UIViewController
+
+@property(nonatomic ,strong) CreateWealthModel *imgTextModel;
 
 @end

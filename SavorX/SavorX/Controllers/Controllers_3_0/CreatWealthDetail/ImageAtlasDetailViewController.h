@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CreateWealthModel.h"
 
 @interface ImageAtlasDetailViewController : UIViewController
+
+@property(nonatomic ,strong) CreateWealthModel *imgAtlModel;
 
 @end

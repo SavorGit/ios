@@ -386,6 +386,7 @@
 		96D8C5D91F13704900251301 /* HSPicDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5D81F13704900251301 /* HSPicDetailRequest.m */; };
 		96D8C5DC1F1389F900251301 /* WinResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5DB1F1389F900251301 /* WinResultViewController.m */; };
 		96D8C5DF1F1390DF00251301 /* ImageAtlasDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5DE1F1390DF00251301 /* ImageAtlasDetailModel.m */; };
+		96D8C5E81F146AE200251301 /* HSCreateWealthRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -1015,6 +1016,8 @@
 		96D8C5DB1F1389F900251301 /* WinResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WinResultViewController.m; sourceTree = "<group>"; };
 		96D8C5DD1F1390DF00251301 /* ImageAtlasDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAtlasDetailModel.h; sourceTree = "<group>"; };
 		96D8C5DE1F1390DF00251301 /* ImageAtlasDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAtlasDetailModel.m; sourceTree = "<group>"; };
+		96D8C5E61F146AE200251301 /* HSCreateWealthRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSCreateWealthRequest.h; sourceTree = "<group>"; };
+		96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSCreateWealthRequest.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2622,6 +2625,8 @@
 			children = (
 				96D8C5D71F13704900251301 /* HSPicDetailRequest.h */,
 				96D8C5D81F13704900251301 /* HSPicDetailRequest.m */,
+				96D8C5E61F146AE200251301 /* HSCreateWealthRequest.h */,
+				96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */,
 			);
 			path = CreateWealthNet;
 			sourceTree = "<group>";
@@ -2972,6 +2977,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				06FA30ED1D3E0C70001F5B37 /* AppDelegate.m in Sources */,
+				96D8C5E81F146AE200251301 /* HSCreateWealthRequest.m in Sources */,
 				067C30E31F13AECE000A1150 /* HSDemandListRequest.m in Sources */,
 				068A58C81D5E1FFF00CBD684 /* BasicTableViewCell.m in Sources */,
 				061FEFEB1E2DB337003CD111 /* HotTopicViewController.m in Sources */,
