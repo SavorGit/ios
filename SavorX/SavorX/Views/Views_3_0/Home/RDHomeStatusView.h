@@ -18,7 +18,7 @@ typedef enum : NSUInteger {
 
 @interface RDHomeStatusView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame status:(RDHomeStatusType)status;
++ (instancetype)defaultView;
 
 - (void)startScreenWithViewController:(UIViewController *)viewController withStatus:(RDHomeStatusType)status;
 

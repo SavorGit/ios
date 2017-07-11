@@ -32,10 +32,24 @@
 
 @implementation RDHomeStatusView
 
++ (instancetype)defaultView
+{
+    static RDHomeStatusView *view;
+    
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        
+        view = [[RDHomeStatusView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 38) status:RDHomeStatus_Normal];
+        
+    });
+    
+    return view;
+}
+
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDQiutScreenNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidDisconnectDeviceNotification object:nil];
+    [self removeNotification];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame status:(RDHomeStatusType)status
@@ -49,6 +63,14 @@
 
 - (void)createSelf
 {
+    UIView * topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, .5)];
+    topLine.backgroundColor = UIColorFromRGB(0xdddbd8);
+    [self addSubview:topLine];
+    
+    UIView * bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - .5, self.frame.size.width, .5)];
+    bottomLine.backgroundColor = UIColorFromRGB(0xece6de);
+    [self addSubview:bottomLine];
+    
     self.statusButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.statusButton setTitleColor:UIColorFromRGB(0x54453e) forState:UIControlStateNormal];
     self.statusButton.layer.borderColor = UIColorFromRGB(0xc4cdb9).CGColor;
@@ -56,11 +78,12 @@
     self.statusButton.layer.cornerRadius = 3;
     self.statusButton.layer.masksToBounds = YES;
     self.statusButton.titleLabel.font = kPingFangLight(14);
+    [self.statusButton addTarget:self action:@selector(statusButtonDidClicked) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.statusButton];
     
     [self.statusButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(10);
-        make.bottom.mas_equalTo(-10);
+        make.top.mas_equalTo(7);
+        make.bottom.mas_equalTo(-7);
         make.right.mas_equalTo(-20);
         make.width.mas_equalTo(70);
     }];
@@ -72,15 +95,67 @@
     [self addSubview:self.statusLabel];
     
     [self.statusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(10);
+        make.top.mas_equalTo(9);
         make.left.mas_equalTo(10);
-        make.bottom.mas_equalTo(-10);
+        make.bottom.mas_equalTo(-9);
         make.right.equalTo(self.statusButton.mas_right).offset(-10);
     }];
     
     [self reloadStatus];
+    
+    [self addNotification];
+}
+
+- (void)addNotification
+{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopScreen) name:RDQiutScreenNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopScreen) name:RDDidDisconnectDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bindBox) name:RDDidBindDeviceNotification object:nil];
+}
+
+- (void)removeNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDQiutScreenNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidDisconnectDeviceNotification object:nil];
+}
+
+- (void)bindBox
+{
+    self.status = RDHomeStatus_Bind;
+    [self reloadStatus];
+}
+
+- (void)statusButtonDidClicked
+{
+    if (self.status == RDHomeStatus_Normal) {
+        [self scanQRCode];
+    }else if (self.status == RDHomeStatus_Bind) {
+        [self disconnentClick];
+    }else{
+        if (self.currentVC) {
+            [[Helper getRootNavigationController] pushViewController:self.currentVC animated:YES];
+        }
+    }
+}
+
+// 断开连接
+- (void)disconnentClick{
+    
+    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"是否与电视断开，\n断开后将无法投屏？"];
+    RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+        [SAVORXAPI postUMHandleWithContentId:@"home_break_connect" key:@"home_break_connect" value:@"cancel"];
+    } bold:NO];
+    RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
+        [SAVORXAPI postUMHandleWithContentId:@"home_break_connect" key:@"home_break_connect" value:@"break"];
+        [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
+            [[GlobalData shared] disconnect];
+        } failure:^{
+            
+        }];
+    } bold:YES];
+    NSArray *actionArr = [NSArray arrayWithObjects:actionOne,actionTwo, nil];
+    [rdAlert addActions:actionArr];
+    [rdAlert show];
 }
 
 - (void)reloadStatus
@@ -177,6 +252,8 @@
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     self.currentVC = nil;
     _isScreening = NO;
+    self.status = RDHomeStatus_Normal;
+    [self reloadStatus];
 }
 
 - (void)stopScreenWithEggGame

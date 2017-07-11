@@ -78,7 +78,7 @@
     
     self.wifiLabel = [[UILabel alloc] init];
     self.wifiLabel.textColor = UIColorFromRGB(0xece6de);
-    self.wifiLabel.font = kPingFangRegular(16);
+    self.wifiLabel.font = kPingFangLight(16);
     self.wifiLabel.textAlignment = NSTextAlignmentCenter;
     [bgView addSubview:self.wifiLabel];
     [self.wifiLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -135,9 +135,9 @@
     self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.textLabel.textAlignment = NSTextAlignmentCenter;
     if (kMainBoundsHeight == 568) {
-        self.textLabel.font = [UIFont systemFontOfSize:15];
+        self.textLabel.font = kPingFangLight(15);
     }else{
-        self.textLabel.font = [UIFont systemFontOfSize:16];
+        self.textLabel.font = kPingFangLight(16);
     }
     self.textLabel.text = @"请输入电视中的三位数连接电视";
     self.textLabel.textColor = UIColorFromRGB(0xece6de);
@@ -153,9 +153,9 @@
     self.failConectLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.failConectLabel.textAlignment = NSTextAlignmentRight;
     if (kMainBoundsHeight == 568) {
-        self.failConectLabel.font = [UIFont systemFontOfSize:15];
+        self.failConectLabel.font = kPingFangLight(15);
     }else{
-        self.failConectLabel.font = [UIFont systemFontOfSize:16];
+        self.failConectLabel.font = kPingFangLight(16);
     }
     self.failConectLabel.backgroundColor = [UIColor clearColor];
     self.failConectLabel.text = @"连接失败，";
@@ -179,9 +179,9 @@
     self.reConnectBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
     [self.reConnectBtn setTitleColor:UIColorFromRGB(0xff2a00) forState:UIControlStateNormal];
     if (kMainBoundsHeight == 568) {
-        self.reConnectBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+        self.reConnectBtn.titleLabel.font = kPingFangLight(15);
     }else{
-        self.reConnectBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+        self.reConnectBtn.titleLabel.font = kPingFangLight(16);
     }
     [self.reConnectBtn setTitle:@"重新连接？" forState:UIControlStateNormal];;
     [self.reConnectBtn addTarget:self action:@selector(reClick) forControlEvents:UIControlEventTouchUpInside];

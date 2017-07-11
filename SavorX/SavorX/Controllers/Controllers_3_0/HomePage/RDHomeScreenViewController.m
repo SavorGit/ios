@@ -14,12 +14,15 @@
 #import "Masonry.h"
 #import "HSDemandListRequest.h"
 #import "RDHotelItemModel.h"
+#import "RDHomeStatusView.h"
 
 @interface RDHomeScreenViewController ()
 
 @property (nonatomic, strong) RDTabScrollView * tabScroll;
 @property (nonatomic, strong) UIView * bottomView;
 @property (nonatomic, strong) NSMutableArray * dataSource;
+
+@property (nonatomic, strong) RDHomeStatusView * statusView;
 
 @end
 
@@ -71,10 +74,12 @@
 
 - (void)setupViews
 {
+    self.view.backgroundColor = UIColorFromRGB(0xece6de);
+    
     CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 20 + 59 + 40 + 40;
     
     self.bottomView = [[UIView alloc] init];
-    self.bottomView.backgroundColor = [UIColor whiteColor];
+    self.bottomView.backgroundColor = UIColorFromRGB(0xf1efeb);
     [self.view addSubview:self.bottomView];
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(height);
@@ -82,6 +87,8 @@
         make.bottom.mas_equalTo(0);
         make.right.mas_equalTo(0);
     }];
+    
+    [self.bottomView addSubview:[RDHomeStatusView defaultView]];
     
     UIButton * photoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [photoBtn setBackgroundImage:[UIImage imageNamed:@"xiangce"] forState:UIControlStateNormal];
@@ -138,6 +145,12 @@
 {
     DocumentListViewController * document = [[DocumentListViewController alloc] init];
     [self.navigationController pushViewController:document animated:YES];
+}
+
+- (void)removeFromParentViewController
+{
+    [super removeFromParentViewController];
+    [[RDHomeStatusView defaultView] removeFromSuperview];
 }
 
 - (void)didReceiveMemoryWarning {
