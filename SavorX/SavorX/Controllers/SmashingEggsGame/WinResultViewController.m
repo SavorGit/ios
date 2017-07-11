@@ -32,7 +32,7 @@
     
     self.winResultStr = [[NSString alloc] init];
 //    [self createWebView];
-    [self.view addSubview:self.topView];
+//    [self.view addSubview:self.topView];
     [self requestEggsResult];
 
 }
@@ -45,8 +45,9 @@
         
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary *resultDic = [dic objectForKey:@"result"];
-        self.winResultStr = resultDic[@"url"];
+        self.winResultStr = [NSString stringWithFormat:@"%@?deviceid=%@",resultDic[@"url"],[GlobalData shared].deviceID];
         [self createWebView];
+        [self.view addSubview:self.topView];
 
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -60,7 +61,7 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     self.webView = [[UIWebView alloc] init];
     self.webView.frame = CGRectMake(0, 0, width, kMainBoundsHeight);
-    NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://admin.littlehotspot.com/content/3505.html"]];
+    NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:self.winResultStr]];
     [self.webView loadRequest:request];
     self.webView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.webView];

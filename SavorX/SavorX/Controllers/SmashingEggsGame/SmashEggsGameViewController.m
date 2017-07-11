@@ -51,13 +51,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self requestEggsInfor];
-    
+
     [self initOtherParmars];
     [self creatSubViews];
     [self creatBgVoiceWithLoops:-1];
     [_player play];
+    
+    [self requestEggsInfor];
  
 }
 
@@ -74,24 +74,24 @@
 // 请求砸蛋次数
 - (void)requestEggsInfor{
     
-    HSSmashEggsRequest * request = [[HSSmashEggsRequest alloc] initWithHotelId:[NSString stringWithFormat:@"%ld",[GlobalData shared].hotelId]];
-    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
-        NSDictionary *resultDic = [response objectForKey:@"result"];
-        
-        if ([[resultDic objectForKey:@"lottery_num"] count] != 0) {
-            
-            _smashEggsModel = [[HSSmashEggsModel alloc] initWithDictionary:[resultDic objectForKey:@"award"]];
-            [RDAwardTool awardSaveAwardNumber:_smashEggsModel.lottery_num];
-            _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
-        }
-
-        
-    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
-    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
-    }];
+//    HSSmashEggsRequest * request = [[HSSmashEggsRequest alloc] initWithHotelId:[NSString stringWithFormat:@"%ld",[GlobalData shared].hotelId]];
+//    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+//        
+//        NSDictionary *resultDic = [response objectForKey:@"result"];
+//        
+//        if ([[resultDic objectForKey:@"lottery_num"] count] != 0) {
+//            
+//            _smashEggsModel = [[HSSmashEggsModel alloc] initWithDictionary:[resultDic objectForKey:@"award"]];
+//            [RDAwardTool awardSaveAwardNumber:_smashEggsModel.lottery_num];
+//            _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
+//        }
+//
+//        
+//    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+//        
+//    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+//        
+//    }];
 }
 
 - (void)creatBgVoiceWithLoops:(NSInteger)loop{
@@ -285,6 +285,9 @@
 }
 
 - (void)winResultPress{
+    
+    [self stop];
+    [self.eggsView stopShakeAnimation];
     
     WinResultViewController *wrVC = [[WinResultViewController alloc] init];
     [self.navigationController pushViewController:wrVC animated:YES];
