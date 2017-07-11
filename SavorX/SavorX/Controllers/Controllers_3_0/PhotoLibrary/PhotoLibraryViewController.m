@@ -330,6 +330,10 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.isChooseStatus) {
+        return;
+    }
+    
     PHAsset * currentAsset = [self.model.fetchResult objectAtIndex:indexPath.row];
     if (currentAsset.mediaType == PHAssetMediaTypeImage) {
         if ([GlobalData shared].isBindRD) {

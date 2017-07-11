@@ -39,9 +39,9 @@
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 3; j++) {
             UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [button setBackgroundColor:[UIColor whiteColor]];
-            button.titleLabel.font = [UIFont systemFontOfSize:28];
-            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//            [button setBackgroundColor:[UIColor whiteColor]];
+            button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Thin" size:29];
+            [button setTitleColor:UIColorFromRGB(0xece6de) forState:UIControlStateNormal];
             [button setBackgroundImage:[self createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateHighlighted];
             [button addTarget:self action:@selector(numberButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
             button.tag = 101 + i * 3 + j;
@@ -64,29 +64,29 @@
         }
     }
     
-    for (int i = 1; i < 4; i++) {
-        UIView * line = [[UIView alloc] initWithFrame:CGRectZero];
-        [self addSubview:line];
-        line.backgroundColor = [UIColor grayColor];
-        [line mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-            make.height.mas_equalTo(.5f);
-            make.top.mas_equalTo(height * (i / 4.f));
-        }];
-    }
-    
-    for (int i = 0; i < 2; i++) {
-        UIView * line = [[UIView alloc] initWithFrame:CGRectZero];
-        [self addSubview:line];
-        line.backgroundColor = [UIColor grayColor];
-        [line mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.bottom.mas_equalTo(0);
-            make.width.mas_equalTo(.5f);
-            make.left.mas_equalTo([UIScreen mainScreen].bounds.size.width * ((i + 1) / 3.f));
-        }];
-    }
+//    for (int i = 1; i < 4; i++) {
+//        UIView * line = [[UIView alloc] initWithFrame:CGRectZero];
+//        [self addSubview:line];
+//        line.backgroundColor = [UIColor grayColor];
+//        [line mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.mas_equalTo(0);
+//            make.right.mas_equalTo(0);
+//            make.height.mas_equalTo(.5f);
+//            make.top.mas_equalTo(height * (i / 4.f));
+//        }];
+//    }
+//    
+//    for (int i = 0; i < 2; i++) {
+//        UIView * line = [[UIView alloc] initWithFrame:CGRectZero];
+//        [self addSubview:line];
+//        line.backgroundColor = [UIColor grayColor];
+//        [line mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.mas_equalTo(0);
+//            make.bottom.mas_equalTo(0);
+//            make.width.mas_equalTo(.5f);
+//            make.left.mas_equalTo([UIScreen mainScreen].bounds.size.width * ((i + 1) / 3.f));
+//        }];
+//    }
 }
 
 - (void)numberButtonDidClicked:(UIButton *)button

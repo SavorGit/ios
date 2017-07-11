@@ -82,8 +82,8 @@
     [self.playSilder setThumbImage:[UIImage imageNamed:@"slider_thumb"] forState:UIControlStateNormal];
     self.playSilder.minimumValue = 0;
     self.playSilder.maximumValue = (NSInteger)asset.duration.value / asset.duration.timescale;;
-    [self.playSilder setMinimumTrackTintColor:kThemeColor];
-    [self.playSilder setMaximumTrackTintColor:[UIColor colorWithHexString:@"#a2a7aa"]];
+    [self.playSilder setMinimumTrackTintColor:UIColorFromRGB(0xcf3850)];
+    [self.playSilder setMaximumTrackTintColor:[UIColorFromRGB(0xffffff) colorWithAlphaComponent:.5f]];
     [playSliderView addSubview:self.playSilder];
     [self.playSilder mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(playSliderView);
@@ -355,6 +355,11 @@
 //对音量的加减进行操作
 - (void)volumeDidHandleWith:(UIButton *)button
 {
+    if (![GlobalData shared].isBindRD) {
+        [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+        return;
+    }
+    
     button.userInteractionEnabled = NO;
     NSInteger action;
     if (button.tag == 101) {
@@ -374,6 +379,9 @@
 //静音按钮被点击了
 - (void)volumeButtonDidBeClicked
 {
+    if (![GlobalData shared].isBindRD) {
+        [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+    }
     self.volumeButton.userInteractionEnabled = NO;
     NSInteger action = 1;
     if (self.isNoVolume) {
@@ -405,6 +413,9 @@
 //投屏按钮被点击了
 - (void)scrennButtonDidBeClicked
 {
+    if (![GlobalData shared].isBindRD) {
+        [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+    }
     if (self.isPlayEnd) {
         [self resetVod];
     }else{
@@ -480,6 +491,10 @@
 //播放按钮被点击了
 - (void)playButtonDidBeClicked
 {
+    if (![GlobalData shared].isBindRD) {
+        [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+    }
+    
     self.playButton.userInteractionEnabled = NO;
     
     if (self.isPlayEnd) {
@@ -609,7 +624,7 @@
 {
     if (!_alertView) {
         _alertView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 40)];
-        _alertView.backgroundColor = [UIColor whiteColor];
+        _alertView.backgroundColor = UIColorFromRGB(0xf6f2ed);
         [self.view addSubview:_alertView];
         [_alertView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.backImageView.mas_bottom);
@@ -629,8 +644,8 @@
         
         UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setTitle:@"连接电视" forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        button.layer.borderColor = [UIColor grayColor].CGColor;
+        [button setTitleColor:UIColorFromRGB(0x54453e) forState:UIControlStateNormal];
+        button.layer.borderColor = UIColorFromRGB(0xcdc4b9).CGColor;
         button.layer.borderWidth = .5f;
         button.layer.cornerRadius = 3;
         button.layer.masksToBounds = YES;
@@ -646,7 +661,7 @@
         
         UILabel * label = [[UILabel alloc] init];
         label.text = @"尚未连接电视,请点击进行连接";
-        label.textColor = kThemeColor;
+        label.textColor = UIColorFromRGB(0x922c3e);
         label.font = [UIFont systemFontOfSize:14];
         label.textAlignment = NSTextAlignmentLeft;
         [_alertView addSubview:label];
