@@ -18,4 +18,7 @@
 @property(nonatomic, strong) NSString *shareTitle;
 @property(nonatomic, strong) NSString *updateTime;
 
+//非接口返回
+@property(nonatomic, assign) NSInteger type;
+
 @end

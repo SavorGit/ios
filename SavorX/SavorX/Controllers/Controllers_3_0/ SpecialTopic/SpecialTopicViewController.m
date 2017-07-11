@@ -10,7 +10,7 @@
 #import "SpecialTopTableViewCell.h"
 #import "HeadlinesSTopTableViewCell.h"
 #import "Masonry.h"
-#import "CreateWealthModel.h"
+#import "MJRefresh.h"
 #import "SpecialTopDetailViewController.h"
 #import "SpecialTopRequest.h"
 #import "HSSpecialTopModel.h"
@@ -45,9 +45,13 @@
         
         //如果本地缓存的有数据，则先从本地读取缓存的数据
         NSArray * dataArr = [NSArray arrayWithContentsOfFile:self.cachePath];
-        for(NSDictionary *dict in dataArr){
+        for(int i = 0; i < dataArr.count; i ++){
             
-            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:dict];
+            HSSpecialTopModel *tmpModel = [[HSSpecialTopModel alloc] initWithDictionary:dataArr[i]];
+            tmpModel.type = 1;
+            if (i == 0) {
+                tmpModel.type = 0;
+            }
             [self.dataSource addObject:tmpModel];
             
         }
@@ -61,8 +65,12 @@
         NSArray *resultArr = [response objectForKey:@"result"];
         [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
         for (int i = 0; i < resultArr.count; i ++) {
-            HSSpecialTopModel *welthModel = [[HSSpecialTopModel alloc] initWithDictionary:resultArr[i]];
-            [self.dataSource addObject:welthModel];
+            HSSpecialTopModel *tmpModel = [[HSSpecialTopModel alloc] initWithDictionary:resultArr[i]];
+            tmpModel.type = 1;
+            if (i == 0) {
+                tmpModel.type = 0;
+            }
+            [self.dataSource addObject:tmpModel];
         }
         [self.tableView reloadData];
         
@@ -74,6 +82,80 @@
     }];
 }
 
+//下拉刷新页面数据
+- (void)refreshData
+{
+    SpecialTopRequest * request = [[SpecialTopRequest alloc] initWithSortNum:nil];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
+        
+        [self.dataSource removeAllObjects];
+        
+        for (int i = 0; i < resultArr.count; i ++) {
+            HSSpecialTopModel *tmpModel = [[HSSpecialTopModel alloc] initWithDictionary:resultArr[i]];
+            tmpModel.type = 1;
+            if (i == 0) {
+                tmpModel.type = 0;
+            }
+            [self.dataSource addObject:tmpModel];
+        }
+        
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer resetNoMoreData];
+        
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.tableView.mj_header endRefreshing];
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+        [self.tableView.mj_header endRefreshing];
+        
+    }];
+}
+
+//上拉获取更多数据
+- (void)getMoreData
+{
+    HSSpecialTopModel *welthModel = [self.dataSource lastObject];
+    SpecialTopRequest * request = [[SpecialTopRequest alloc] initWithSortNum:welthModel.sort_num];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        
+        if (resultArr.count == 0) {
+            //如果获取数据的数量为0，则状态为没有更多数据了
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            return;
+        }
+        
+        //如果获取的数据数量不为0，则将数据添加至数据源，刷新当前列表
+        for(NSDictionary *dict in resultArr){
+            HSSpecialTopModel *welthModel = [[HSSpecialTopModel alloc] initWithDictionary:dict];
+            [self.dataSource addObject:welthModel];
+        }
+        [self.tableView reloadData];
+        [self.tableView.mj_footer endRefreshing];
+        
+        if (self.dataSource.count == 0) {
+            [self showNoDataView];
+        }
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.tableView.mj_footer endRefreshing];
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+        [self.tableView.mj_footer endRefrenshWithNoNetWork];
+        
+    }];
+}
 
 //初始化请求第一页，下拉刷新
 //- (void)setUpDatas{
@@ -121,13 +203,11 @@
         
         //创建tableView动画加载头视图
         
-        //        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
-        //
-        //
-        //        MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
-        //            [self getMoreData];
-        //        }];
-        //        _tableView.mj_footer = footer;
+        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
+        MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
+            [self getMoreData];
+        }];
+        _tableView.mj_footer = footer;
     }
     
     return _tableView;
@@ -146,8 +226,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
-    if (model.type == 1) {
+    HSSpecialTopModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    if (model.type == 0) {
         
         static NSString *cellID = @"HeadlineTableCell";
         HeadlinesSTopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
@@ -163,7 +243,7 @@
         
         return cell;
         
-    }else if (model.type == 0){
+    }else if (model.type == 1){
         static NSString *cellID = @"SpecialTopCell";
         SpecialTopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
@@ -186,10 +266,10 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
-    if (model.type == 1) {
+    HSSpecialTopModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    if (model.type == 0) {
         return 361.5;
-    }else if (model.type == 0){
+    }else if (model.type == 1){
         return 96;
     }
     return 0;
@@ -197,7 +277,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    HSSpecialTopModel * model = [self.dataSource objectAtIndex:indexPath.row];
     SpecialTopDetailViewController *stVC = [[SpecialTopDetailViewController alloc] init];
+    stVC.specilDetailModel = model;
     [self.navigationController pushViewController:stVC animated:YES];
 }
 
