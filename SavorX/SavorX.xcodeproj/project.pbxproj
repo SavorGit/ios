@@ -387,6 +387,7 @@
 		96D8C5DC1F1389F900251301 /* WinResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5DB1F1389F900251301 /* WinResultViewController.m */; };
 		96D8C5DF1F1390DF00251301 /* ImageAtlasDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5DE1F1390DF00251301 /* ImageAtlasDetailModel.m */; };
 		96D8C5E81F146AE200251301 /* HSCreateWealthRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */; };
+		96D8C5EB1F14CAF200251301 /* HSRecordSmashEggsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5EA1F14CAF200251301 /* HSRecordSmashEggsRequest.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -1018,6 +1019,8 @@
 		96D8C5DE1F1390DF00251301 /* ImageAtlasDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAtlasDetailModel.m; sourceTree = "<group>"; };
 		96D8C5E61F146AE200251301 /* HSCreateWealthRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSCreateWealthRequest.h; sourceTree = "<group>"; };
 		96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSCreateWealthRequest.m; sourceTree = "<group>"; };
+		96D8C5E91F14CAF200251301 /* HSRecordSmashEggsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSRecordSmashEggsRequest.h; sourceTree = "<group>"; };
+		96D8C5EA1F14CAF200251301 /* HSRecordSmashEggsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSRecordSmashEggsRequest.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1440,6 +1443,8 @@
 				965240E41ED57F270090E1C8 /* HSHomeRestaurantList.m */,
 				067C30EA1F13AF8E000A1150 /* HSSmashEggsRequest.h */,
 				067C30EB1F13AF8E000A1150 /* HSSmashEggsRequest.m */,
+				96D8C5E91F14CAF200251301 /* HSRecordSmashEggsRequest.h */,
+				96D8C5EA1F14CAF200251301 /* HSRecordSmashEggsRequest.m */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -3154,6 +3159,7 @@
 				0663D4201F0B6AFA00CD2FA2 /* UIView+LayerCurve.m in Sources */,
 				06FD5F221DC1D23A0043D898 /* ScreenCollectionViewCell.m in Sources */,
 				061FEFEE1E2DB4AD003CD111 /* RecommendViewController.m in Sources */,
+				96D8C5EB1F14CAF200251301 /* HSRecordSmashEggsRequest.m in Sources */,
 				061A700D1D61C68D00702016 /* DocumentListViewController.m in Sources */,
 				065BE5A11DBF472000D1A5BB /* PhotoLibraryModel.m in Sources */,
 				062176431D62BB8F005FD402 /* GCCScreenImage.m in Sources */,

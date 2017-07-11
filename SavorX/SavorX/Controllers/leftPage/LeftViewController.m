@@ -82,8 +82,8 @@
             [cell bottomLineHidden:YES];
         }
     }
-    [cell fillCellTitle:[_itemArys objectAtIndex:indexPath.section * 4 + indexPath.row] content:content];
-    [cell.iconImageView setImage:[UIImage imageNamed:[_imageArys objectAtIndex:indexPath.section * 4 + indexPath.row]]];
+    [cell fillCellTitle:[_itemArys objectAtIndex:indexPath.section * 5 + indexPath.row] content:content];
+    [cell.iconImageView setImage:[UIImage imageNamed:[_imageArys objectAtIndex:indexPath.section * 5 + indexPath.row]]];
     
     return cell;
     

@@ -7,6 +7,7 @@
 //
 
 #import "WinResultViewController.h"
+#import "HSRecordSmashEggsRequest.h"
 
 @interface WinResultViewController ()
 
@@ -14,6 +15,7 @@
 
 @property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) NSString *winResultStr;
 
 @end
 
@@ -28,10 +30,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self createWebView];
+    self.winResultStr = [[NSString alloc] init];
+//    [self createWebView];
     [self.view addSubview:self.topView];
+    [self requestEggsResult];
+
+}
+
+// 请求砸蛋次数
+- (void)requestEggsResult{
     
-    // Do any additional setup after loading the view.
+    HSRecordSmashEggsRequest * request = [[HSRecordSmashEggsRequest alloc] init];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSDictionary *resultDic = [dic objectForKey:@"result"];
+        self.winResultStr = resultDic[@"url"];
+        [self createWebView];
+
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 - (void)createWebView
