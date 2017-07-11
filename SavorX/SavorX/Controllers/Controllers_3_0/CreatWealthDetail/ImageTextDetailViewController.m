@@ -44,7 +44,7 @@
     [self.view addSubview:self.webView];
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
-    self.testView.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
+    self.testView.backgroundColor = [UIColor clearColor];
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];
 }
@@ -71,6 +71,7 @@
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
     [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 10 + 8)];
+    self.testView.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
     
     [self addObserver];
     
@@ -155,24 +156,24 @@
 #pragma mark - 初始化下方推荐数据
 - (void)setUpDatas{
     
-    _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
-    
-    for (int i = 0; i < 3; i ++) {
-        CreateWealthModel *model = [[CreateWealthModel alloc] init];
-        model.type = 0;
-        if (i == 2) {
-            model.type = 1;
-        }else if (i == 3 || i == 5 || i == 6){
-            model.type = 2;
-        }
-        model.title = @"这是新闻的标题";
-        model.imageUrl = @"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg";
-        model.source = @"网易新闻";
-        model.time = @"2017.06.19";
-        model.sourceImage = @"sourceImage";
-        [_dataSource addObject:model];
-    }
-    [self.tableView reloadData];
+//    _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
+//    
+//    for (int i = 0; i < 3; i ++) {
+//        CreateWealthModel *model = [[CreateWealthModel alloc] init];
+//        model.type = 0;
+//        if (i == 2) {
+//            model.type = 1;
+//        }else if (i == 3 || i == 5 || i == 6){
+//            model.type = 2;
+//        }
+//        model.title = @"这是新闻的标题";
+//        model.imageUrl = @"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg";
+//        model.source = @"网易新闻";
+//        model.time = @"2017.06.19";
+//        model.sourceImage = @"sourceImage";
+//        [_dataSource addObject:model];
+//    }
+//    [self.tableView reloadData];
 }
 
 #pragma mark -- 懒加载

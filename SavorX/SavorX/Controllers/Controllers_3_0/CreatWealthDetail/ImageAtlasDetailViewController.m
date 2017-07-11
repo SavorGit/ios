@@ -51,7 +51,8 @@
 - (void)viewDidLoad
 {
     [self initInfoConfig];
-    [self requestWithContentId:@"2650"];
+    //2650
+    [self requestWithContentId:[NSString stringWithFormat:@"%ld",self.imgAtlModel.artid]];
 }
 
 - (void)requestWithContentId:(NSString *)contentId{

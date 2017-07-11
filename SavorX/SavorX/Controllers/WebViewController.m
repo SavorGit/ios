@@ -39,7 +39,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-- (instancetype)initWithModel:(HSVodModel *)model categoryID:(NSInteger)categoryID
+- (instancetype)initWithModel:(CreateWealthModel *)model categoryID:(NSInteger)categoryID
 {
     if (self = [super init]) {
         self.model = model;
@@ -190,14 +190,12 @@
                 *stop = YES;
             }
         }];
-        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:cancleCollectHandle];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
         [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
         [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [self.playView setIsCollect:NO];
     }else{
-        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:collectHandle];
         [favoritesArray addObject:[self.model toDictionary]];
         [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
         [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
@@ -237,8 +235,6 @@
         }
         
         if (([GlobalData shared].isBindRD)){
-            
-            [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:demandHandle];
             
             [self demandVideoWithforce:0];
             
@@ -307,7 +303,6 @@
     [super viewWillAppear:animated];
 //    [self.volumeView setHidden:NO];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-    [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:readHandle];
 }
 
 - (void)viewDidAppear:(BOOL)animated

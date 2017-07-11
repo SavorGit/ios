@@ -8,14 +8,38 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CreateWealthModel : NSObject
+@interface CreateWealthModel : BaseModel
 
+//@property(nonatomic, assign) NSInteger type;
+//@property(nonatomic, strong) NSString *title;
+//@property(nonatomic, strong) NSString *subTitle;
+//@property(nonatomic, strong) NSString *source;
+//@property(nonatomic, strong) NSString *time;
+//@property(nonatomic, strong) NSString *sourceImage;
+//@property(nonatomic, strong) NSString *imageUrl;
+
+
+@property(nonatomic, assign) NSInteger artid;
+@property(nonatomic, strong) NSString *sort_num;
 @property(nonatomic, assign) NSInteger type;
 @property(nonatomic, strong) NSString *title;
-@property(nonatomic, strong) NSString *subTitle;
-@property(nonatomic, strong) NSString *source;
-@property(nonatomic, strong) NSString *time;
-@property(nonatomic, strong) NSString *sourceImage;
-@property(nonatomic, strong) NSString *imageUrl;
+@property(nonatomic, strong) NSString *imageURL;
+@property(nonatomic, strong) NSString *contentURL;
+//@property(nonatomic, strong) NSString *acreateTime;
+@property(nonatomic, strong) NSString *sourceName;
+@property(nonatomic, strong) NSString *logo; 
+@property(nonatomic, strong) NSString *indexImageUrl;
+
+@property(nonatomic, assign) NSInteger canplay;
+@property(nonatomic, assign) NSInteger duration;
+@property(nonatomic, assign) NSString *mediaId;
+@property(nonatomic, strong) NSString *name;
+@property(nonatomic, strong) NSString *updateTime;
+@property(nonatomic, strong) NSString *videoURL;
+@property (nonatomic, assign) NSInteger canPlay;
+@property (nonatomic, assign) NSString *colTuJi;
+
+//非接口返回
+@property (nonatomic, assign) NSInteger cid;
 
 @end

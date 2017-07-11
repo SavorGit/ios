@@ -21,6 +21,9 @@
 #import "RDHammer.h"
 #import "ShareRDViewController.h"
 #import "WinResultViewController.h"
+#import "HSSmashEggsRequest.h"
+#import "HSSmashEggsModel.h"
+#import "GlobalData.h"
 
 @interface SmashEggsGameViewController ()<UITextViewDelegate,RDGoldenEggsDelegate,AVAudioPlayerDelegate>
 
@@ -40,6 +43,7 @@
 @property (nonatomic, strong) AVAudioPlayer *player;
 @property (nonatomic, strong) NSURL *videoUrl;
 @property (nonatomic, weak) RDHammer * hammer;
+@property (nonatomic, strong) HSSmashEggsModel *smashEggsModel;
 
 @end
 
@@ -47,6 +51,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self requestEggsInfor];
     
     [self initOtherParmars];
     [self creatSubViews];
@@ -63,6 +69,29 @@
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(haClosed) name:RDBoxQuitScreenNotification object:nil];
+}
+
+// 请求砸蛋次数
+- (void)requestEggsInfor{
+    
+    HSSmashEggsRequest * request = [[HSSmashEggsRequest alloc] initWithHotelId:[NSString stringWithFormat:@"%ld",[GlobalData shared].hotelId]];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *resultDic = [response objectForKey:@"result"];
+        
+        if ([[resultDic objectForKey:@"lottery_num"] count] != 0) {
+            
+            _smashEggsModel = [[HSSmashEggsModel alloc] initWithDictionary:[resultDic objectForKey:@"award"]];
+            [RDAwardTool awardSaveAwardNumber:_smashEggsModel.lottery_num];
+            _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
+        }
+
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 - (void)creatBgVoiceWithLoops:(NSInteger)loop{
@@ -281,7 +310,7 @@
 {
     [SAVORXAPI postUMHandleWithContentId:@"game_page_choose" key:nil value:nil];
     
-    if ([RDAwardTool awardCanAwardWithAPILottery_num:self.adModel.lottery_num] == NO) {
+    if ([RDAwardTool awardCanAwardWithAPILottery_num:_smashEggsModel.lottery_num] == NO) {
         RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"今天的抽奖机会用完了\n明天再来吧~"];
         RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
             
@@ -568,8 +597,8 @@
                     
                     //进行了一次抽奖
                     [RDAwardTool awardHasAwardWithResultModel:erModel];
-                    if (self.adModel.lottery_num > 0) {
-                        self.adModel.lottery_num = self.adModel.lottery_num - 1;
+                    if (_smashEggsModel.lottery_num > 0) {
+                        _smashEggsModel.lottery_num = _smashEggsModel.lottery_num - 1;
                     }
                     _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
                     [_maskingView removeAllSubviews];
