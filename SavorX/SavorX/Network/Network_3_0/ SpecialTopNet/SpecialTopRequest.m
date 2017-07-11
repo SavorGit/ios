@@ -13,7 +13,7 @@
 - (instancetype)initWithSortNum:(NSString *)sortNum;
 {
     if (self = [super init]) {
-        self.methodName = [@"APP3/Content/getLastCategoryList?" stringByAppendingString:[Helper getURLPublic]];
+        self.methodName = [@"APP3/Special/getSpecialList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setValue:sortNum forParamKey:@"sort_num"];
     }

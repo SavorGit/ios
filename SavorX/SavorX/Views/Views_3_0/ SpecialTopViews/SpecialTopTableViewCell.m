@@ -55,7 +55,7 @@
     _timeLabel = [[UILabel alloc]init];
     _timeLabel.text = @"";
     _timeLabel.font = [UIFont systemFontOfSize:10];
-    _timeLabel.textColor = [UIColor blackColor];
+    _timeLabel.textColor = UIColorFromRGB(0xb2afab);
     [_bgView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 20));
@@ -74,7 +74,7 @@
     
 }
 
-- (void)configModelData:(CreateWealthModel *)model{
+- (void)configModelData:(HSSpecialTopModel *)model{
     
     self.titleLabel.text = model.title;
     if (!isEmptyString(model.updateTime)) {

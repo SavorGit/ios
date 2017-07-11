@@ -87,10 +87,10 @@
     }];
 }
 
-- (void)configModelData:(CreateWealthModel *)model{
+- (void)configModelData:(HSSpecialTopModel *)model{
     
     self.titleLabel.text = model.title;
-    self.subTitleLabel.text = model.updateTime;
+    self.subTitleLabel.text = model.shareTitle;
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     }

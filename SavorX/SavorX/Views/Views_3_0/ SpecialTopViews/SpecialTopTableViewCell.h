@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CreateWealthModel.h"
+#import "HSSpecialTopModel.h"
 #import "Masonry.h"
 
 @interface SpecialTopTableViewCell : UITableViewCell
@@ -20,6 +20,6 @@
 
 @property (nonatomic, strong) UILabel *timeLabel;
 
-- (void)configModelData:(CreateWealthModel *)model;
+- (void)configModelData:(HSSpecialTopModel *)model;
 
 @end
