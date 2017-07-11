@@ -12,7 +12,6 @@
 #import "voideoPlayFooterView.h"
 #import "VoideoPlayStatusCell.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "UINavigationBar+PS.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
@@ -442,7 +441,7 @@
         }
         
         [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
-            [[HomeAnimationView animationView] startScreenWithViewController:self];
+//            [[HomeAnimationView animationView] startScreenWithViewController:self];
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             self.isPlayEnd = NO;
             [self createTimer];
@@ -466,7 +465,7 @@
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if ([[result objectForKey:@"result"] integerValue] == 0) {
-            [[HomeAnimationView animationView] startScreenWithViewController:self];
+//            [[HomeAnimationView animationView] startScreenWithViewController:self];
             self.isPlayEnd = NO;
             self.footerView.videoPlayButton.selected = NO;
             [self createTimer];
@@ -507,7 +506,7 @@
     [SAVORXAPI demandWithURL:STBURL name:self.model.name type:self.type position:0 force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if ([[result objectForKey:@"result"] integerValue] == 0) {
-            [[HomeAnimationView animationView] startScreenWithViewController:self];
+//            [[HomeAnimationView animationView] startScreenWithViewController:self];
             self.isPlayEnd = NO;
             self.footerView.videoPlayButton.selected = NO;
             [self createTimer];
@@ -661,7 +660,7 @@
 -(void)voideoPlayStatusCellConnectAction{
     
     if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-        [[HomeAnimationView animationView] scanQRCode];
+//        [[HomeAnimationView animationView] scanQRCode];
         return;
     }
     [self isEnableFooter];

@@ -12,10 +12,10 @@
 #import "PhotoTool.h"
 #import "UIImage+Custom.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
 
+#import "RDHomeStatusView.h"
 
 @interface ScreenDocumentViewController ()<UIScrollViewDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate>
 
@@ -156,7 +156,7 @@
 {
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_details_play" key:nil value:nil];
     if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-        [[HomeAnimationView animationView] scanQRCode];
+        [[RDHomeStatusView defaultView] scanQRCode];
         return;
     }
     
@@ -164,9 +164,7 @@
     
     [self screenButtonDidClickedWithSuccess:^{
         
-        UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
-        [HomeAnimationView animationView].currentImage = currentWebImage;
-        [[HomeAnimationView animationView] startScreenWithViewController:self];
+        [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_File];
         
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -366,16 +364,14 @@
             
                 // 获得点击图片，回传给缩略图
                 if (self.isScreen) {
-                    UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
-                    [HomeAnimationView animationView].currentImage = currentWebImage;
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_File];
                     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
                 }
                 
             } failure:^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                 
-                [[HomeAnimationView animationView] stopScreen];
+                [[RDHomeStatusView defaultView] stopScreen];
             }];
         });
     }

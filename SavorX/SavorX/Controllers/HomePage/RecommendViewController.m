@@ -15,7 +15,6 @@
 #import "WebViewController.h"
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "SDCycleScrollView.h"
 #import "HSAdsModel.h"
 #import "SXVideoPlayViewController.h"
@@ -387,11 +386,11 @@
         [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
         [[GCCUPnPManager defaultManager] setAVTransportURL:[model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
             
-            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+//            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
             
             SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
             play.model = model;
-            [[HomeAnimationView animationView] startScreenWithViewController:play];
+//            [[HomeAnimationView animationView] startScreenWithViewController:play];
             [self.parentNavigationController pushViewController:play animated:YES];
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         } failure:^{
@@ -404,7 +403,7 @@
         [self.shouldDemandDict setObject:@(1) forKey:@"type"];
         [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
         
-        [[HomeAnimationView animationView] scanQRCode];
+//        [[HomeAnimationView animationView] scanQRCode];
         [MBProgressHUD showTextHUDwithTitle:@"连接电视后即可点播视频" delay:1.f];
     }else{
         [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
@@ -435,13 +434,13 @@
     [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             
-            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+//            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
             
             DemandViewController *view = [[DemandViewController alloc] init];
             view.categroyID = -2;
             view.model = model;
             [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
+//            [[HomeAnimationView animationView] startScreenWithViewController:view];
             [self.parentNavigationController pushViewController:view animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
@@ -538,7 +537,7 @@
             [self.shouldDemandDict setObject:model forKey:@"model"];
             [self.shouldDemandDict setObject:@(3) forKey:@"type"];
             [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
-            [[HomeAnimationView animationView] scanQRCode];
+//            [[HomeAnimationView animationView] scanQRCode];
         }
         return;
     }
@@ -566,7 +565,7 @@
         [self.shouldDemandDict setObject:@(2) forKey:@"type"];
         [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
         
-        [[HomeAnimationView animationView] scanQRCode];
+//        [[HomeAnimationView animationView] scanQRCode];
     }else {
         [MBProgressHUD showTextHUDwithTitle:@"未连接电视，请稍后重试"];
     }
@@ -582,8 +581,8 @@
             view.categroyID = -2;
             view.model = vodModel;
             [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
+//            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+//            [[HomeAnimationView animationView] startScreenWithViewController:view];
             [self.parentNavigationController pushViewController:view animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
             [SAVORXAPI postUMHandleWithContentId:@"home_advertising_video" key:nil value:nil];
@@ -735,8 +734,8 @@
             [SAVORXAPI successRing];
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
-                [[HomeAnimationView animationView] startScreenWithViewController:view];
+//                [[HomeAnimationView animationView] SDSetImage:model.imageURL];
+//                [[HomeAnimationView animationView] startScreenWithViewController:view];
             });
             
             [self.parentNavigationController pushViewController:view animated:YES];

@@ -10,12 +10,13 @@
 #import "UMCustomSocialManager.h"
 #import "GCCUPnPManager.h"
 #import "UIImageView+WebCache.h"
-#import "HomeAnimationView.h"
 
 #import "WebViewController.h"
 #import "WMPageController.h"
 #import "HSVideoViewController.h"
 #import "RDLogStatisticsAPI.h"
+
+#import "RDHomeStatusView.h"
 
 #define BOTTOMHEIGHT 50.f
 
@@ -661,7 +662,7 @@
         
         [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 force:0  success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
-                [[HomeAnimationView animationView] startScreenWithViewController:self];
+                [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Demand];
                 self.isPlayEnd = NO;
                 self.playBtn.selected = YES;
                 [self updatePlayStatus];
@@ -684,7 +685,7 @@
         
     }else if ([GlobalData shared].isBindDLNA) {
         [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
-            [[HomeAnimationView animationView] startScreenWithViewController:self];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Demand];
             self.quitScreenButton.hidden = NO;
             self.maskingView.hidden = NO;
             self.screenButton.hidden = YES;

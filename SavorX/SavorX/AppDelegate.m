@@ -20,7 +20,6 @@
 #import "LGSideMenuController.h"
 #import "BaseNavigationController.h"
 #import "LeftViewController.h"
-#import "HomeAnimationView.h"
 #import "VideoLauchMovieViewController.h"
 #import "HSLauchImageOrVideoRequest.h"
 #import "DefalutLaunchViewController.h"
@@ -34,6 +33,7 @@
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>
 
 #import "RDHomePageController.h"
+#import "RDHomeStatusView.h"
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
@@ -628,12 +628,12 @@
         
         //检测当前绑定状态是否断开
         if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-            [[HomeAnimationView animationView] stopScreen];
+            [[RDHomeStatusView defaultView] stopScreen];
         }
         
         if ([shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
             
-            [[HomeAnimationView animationView] scanQRCode];
+            [[RDHomeStatusView defaultView] scanQRCode];
             
         }else if ([shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
             
@@ -766,14 +766,14 @@
         
         //检测当前绑定状态是否断开
         if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-            [[HomeAnimationView animationView] stopScreen];
+            [[RDHomeStatusView defaultView] stopScreen];
         }
     }
 }
 
 - (void)screenShouldBeStop
 {
-    if ([HomeAnimationView animationView].isScreening) {
+    if ([RDHomeStatusView defaultView].isScreening) {
         [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

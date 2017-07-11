@@ -15,7 +15,6 @@
 #import "WebViewController.h"
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "HSGetLastVodList.h"
 #import "SXVideoPlayViewController.h"
 #import "ArticleReadViewController.h"
@@ -290,11 +289,8 @@
         NSString * path = [model.videoURL stringByAppendingString:@".f20.mp4"];
         [[GCCUPnPManager defaultManager] setAVTransportURL:path Success:^{
             
-            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
-            
             SXVideoPlayViewController * play = [[SXVideoPlayViewController alloc] init];
             play.model = model;
-            [[HomeAnimationView animationView] startScreenWithViewController:play];
             [self.parentNavigationController pushViewController:play animated:YES];
             [hud hideAnimated:NO];
         } failure:^{
@@ -336,8 +332,6 @@
             view.categroyID = -1;
             view.model = model;
             [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
             [self.parentNavigationController pushViewController:view animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {

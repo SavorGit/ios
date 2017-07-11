@@ -11,7 +11,6 @@
 #import "SXVideoPlayViewController.h"
 #import "PhotoTool.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
 
@@ -75,7 +74,7 @@
 {
     // 获得点击图片，回传给缩略图
     VideoCollectionViewCell * tmpcell = (VideoCollectionViewCell *)[self.collectionView  cellForItemAtIndexPath:indexPath];
-    [HomeAnimationView animationView].currentImage = tmpcell.bgImage.image;
+//    [HomeAnimationView animationView].currentImage = tmpcell.bgImage.image;
     
     [self playVideoWithAsset:[self.results objectAtIndex:indexPath.row]];
 }
@@ -116,7 +115,7 @@
                         play.totalTime = asset.duration;
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         [SAVORXAPI successRing];
-                        [[HomeAnimationView animationView] startScreenWithViewController:play];
+//                        [[HomeAnimationView animationView] startScreenWithViewController:play];
                         [self.navigationController pushViewController:play animated:YES];
                         [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];
                     } failure:^{
@@ -154,7 +153,7 @@
             play.totalTime = asset.duration;
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] startScreenWithViewController:play];
+//            [[HomeAnimationView animationView] startScreenWithViewController:play];
             [self.navigationController pushViewController:play animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {

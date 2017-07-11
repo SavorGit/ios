@@ -11,7 +11,7 @@
 #import "OpenFileTool.h"
 #import "PhotoTool.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
+#import "RDHomeStatusView.h"
 
 #define SliderCell @"SliderCell"
 
@@ -357,7 +357,7 @@
 - (void)screenCurrentImage
 {
     if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-        [[HomeAnimationView animationView] scanQRCode];
+        [[RDHomeStatusView defaultView] scanQRCode];
         return;
     }
     
@@ -387,7 +387,7 @@
                     [self.timer invalidate];
                     self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
                     [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                     self.isScreen = YES;
                     self.statusLabel.text = @"正在播放图片";
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];

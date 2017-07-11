@@ -10,7 +10,7 @@
 #import "GCDWebServerDataResponse.h"
 #import "GCDWebServerFileResponse.h"
 #import "RDAlertView.h"
-#import "HomeAnimationView.h"
+#import "RDHomeStatusView.h"
 
 @implementation HSWebServerManager
 
@@ -45,7 +45,7 @@
     
     [webServer addHandlerForMethod:@"GET" path:@"/stopProjection" requestClass:[GCDWebServerRequest class] processBlock:^GCDWebServerResponse *(__kindof GCDWebServerRequest *request) {
         
-        if ([HomeAnimationView animationView].isScreening) {
+        if ([RDHomeStatusView defaultView].isScreening) {
             NSDictionary * params = request.query;
             
             if ([params objectForKey:@"type"]) {

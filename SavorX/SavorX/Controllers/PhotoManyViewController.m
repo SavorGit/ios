@@ -13,9 +13,9 @@
 #import "PhotoManyEditView.h"
 #import "GCCUPnPManager.h"
 #import "OpenFileTool.h"
-#import "HomeAnimationView.h"
 #import "PhotoTool.h"
 #import <Photos/Photos.h>
+#import "RDHomeStatusView.h"
 
 #import "GCCGetInfo.h"
 
@@ -133,7 +133,7 @@
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-        [[HomeAnimationView animationView] scanQRCode];
+        [[RDHomeStatusView defaultView] scanQRCode];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         return;
     }
@@ -150,8 +150,7 @@
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
                     [hud hideAnimated:NO];
-                    [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
@@ -173,8 +172,7 @@
             [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
                 [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
                     [hud hideAnimated:NO];
-                    [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
@@ -193,8 +191,7 @@
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                         
                         [hud hideAnimated:NO];
-                        [HomeAnimationView animationView].currentImage = result;
-                        [[HomeAnimationView animationView] startScreenWithViewController:self];
+                        [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
                         self.isScreen = YES;
@@ -216,8 +213,7 @@
                 [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
                     [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
                         [hud hideAnimated:NO];
-                        [HomeAnimationView animationView].currentImage = result;
-                        [[HomeAnimationView animationView] startScreenWithViewController:self];
+                        [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
                         self.isScreen = YES;
@@ -397,8 +393,6 @@
                 if ([GlobalData shared].isBindRD) {
                     [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
                         [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
-                            [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
-                            [[HomeAnimationView animationView] startScreenWithViewController:self];
                             [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
                                 
                             } failure:^{
@@ -411,8 +405,6 @@
                     }];
                 }else if ([GlobalData shared].isBindDLNA) {
                     [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
-                        [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
-                        [[HomeAnimationView animationView] startScreenWithViewController:self];
                         [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
                     }];
                 }
@@ -425,8 +417,6 @@
                         [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                             
                             [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
-                                [HomeAnimationView animationView].currentImage = result;
-                                [[HomeAnimationView animationView] startScreenWithViewController:self];
                                 [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
                                     
                                 } failure:^{

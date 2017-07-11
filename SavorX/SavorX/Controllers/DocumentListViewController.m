@@ -8,15 +8,15 @@
 
 #import "DocumentListViewController.h"
 #import "ScreenDocumentViewController.h"
-#import "SXVideoPlayViewController.h"
+#import "FileVideoViewController.h"
 #import "OpenFileTool.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "PhotoTool.h"
 #import "VideoGuidedTwoDimensionalCode.h"
 #import "HelpViewController.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
+#import "RDHomeStatusView.h"
 
 #define DocumentListCell @"DocumentListCell"
 
@@ -224,9 +224,7 @@
         
         NSString * videoUrl = [NSString stringWithFormat:@"video?%@", [filePath lastPathComponent]];
         NSString *asseturlStr = [NSString stringWithFormat:@"%@%@", [HTTPServerManager getCurrentHTTPServerIP], videoUrl];
-        SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
-        video.videoUrl = videoUrl;
-        video.totalTime = totalTime;
+        FileVideoViewController * video = [[FileVideoViewController alloc] initWithVideoFileURL:videoUrl totalTime:totalTime];
         video.title = [filePath lastPathComponent];
         if ([GlobalData shared].isBindRD) {
              [MBProgressHUD showCustomLoadingHUDInView:self.view];
@@ -236,9 +234,7 @@
         }else if ([GlobalData shared].isBindDLNA) {
              [MBProgressHUD showCustomLoadingHUDInView:self.view];
             [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{
-                UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-                [HomeAnimationView animationView].currentImage = firstImage;
-                [[HomeAnimationView animationView] startScreenWithViewController:video];
+                [[RDHomeStatusView defaultView] startScreenWithViewController:video withStatus:RDHomeStatus_File];
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 [self.navigationController pushViewController:video animated:YES];
             } failure:^{
@@ -274,14 +270,11 @@
     [self.navigationController pushViewController:doucment animated:YES];
 }
 
-- (void)demandVideoWithMediaPath:(NSString *)mediaPath force:(NSInteger)force video:(SXVideoPlayViewController *)video movieUrl:(NSURL *)movieURL{
+- (void)demandVideoWithMediaPath:(NSString *)mediaPath force:(NSInteger)force video:(FileVideoViewController *)video movieUrl:(NSURL *)movieURL{
     
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
-            
-            UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-            [HomeAnimationView animationView].currentImage = firstImage;
-            [[HomeAnimationView animationView] startScreenWithViewController:video];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:video withStatus:RDHomeStatus_Video];
             [self.navigationController pushViewController:video animated:YES];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             

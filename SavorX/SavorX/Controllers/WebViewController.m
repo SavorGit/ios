@@ -9,7 +9,6 @@
 #import "WebViewController.h"
 #import "UMCustomSocialManager.h"
 #import "HSConnectViewController.h"
-#import "HomeAnimationView.h"
 #import "SXVideoPlayViewController.h"
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
@@ -18,6 +17,7 @@
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
 #import "RestaurantListViewController.h"
+#import "RDHomeStatusView.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
 
@@ -136,7 +136,7 @@
             view.categroyID = self.categoryID;
             view.model = self.model;
             [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:view withStatus:RDHomeStatus_Demand];
             [self.navigationController pushViewController:view animated:YES];
             
             [hud hideAnimated:NO];
@@ -239,7 +239,7 @@
             [self demandVideoWithforce:0];
             
         }else{
-            [[HomeAnimationView animationView] scanQRCode];
+            [[RDHomeStatusView defaultView] scanQRCode];
         }
 
     }else{
@@ -269,8 +269,7 @@
             view.categroyID = self.categoryID;
             view.model = self.model;
             [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:view withStatus:RDHomeStatus_Demand];
             [self.navigationController pushViewController:view animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
