@@ -112,6 +112,7 @@
     
     self.titleLabel.text = model.title;
     self.sourceLabel.text = model.sourceName;
+    self.countLabel.text = [NSString stringWithFormat:@"%@图",model.colTuJi];
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     }

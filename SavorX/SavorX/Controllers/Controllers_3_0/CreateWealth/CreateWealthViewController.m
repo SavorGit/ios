@@ -56,18 +56,18 @@
 - (void)setUpDatas{
     
     [self.dataSource removeAllObjects];
-//    if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
-//        
-//        //如果本地缓存的有数据，则先从本地读取缓存的数据
-//        NSArray * dataArr = [NSArray arrayWithContentsOfFile:self.cachePath];
-//        for(NSDictionary *dict in dataArr){
-//            
-//            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:dict];
-//            [self.dataSource addObject:tmpModel];
-//            
-//        }
-//        [self.tableView reloadData];
-//    }
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
+        
+        //如果本地缓存的有数据，则先从本地读取缓存的数据
+        NSArray * dataArr = [NSArray arrayWithContentsOfFile:self.cachePath];
+        for(NSDictionary *dict in dataArr){
+            
+            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:dict];
+            [self.dataSource addObject:tmpModel];
+            
+        }
+        [self.tableView reloadData];
+    }
 
     HSCreateWealthRequest * request = [[HSCreateWealthRequest alloc] initWithCateId:self.categoryID withSortNum:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {

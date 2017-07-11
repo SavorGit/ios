@@ -37,6 +37,7 @@
 @property(nonatomic, strong) NSString *updateTime;
 @property(nonatomic, strong) NSString *videoURL;
 @property (nonatomic, assign) NSInteger canPlay;
+@property (nonatomic, assign) NSString *colTuJi;
 
 //非接口返回
 @property (nonatomic, assign) NSInteger cid;

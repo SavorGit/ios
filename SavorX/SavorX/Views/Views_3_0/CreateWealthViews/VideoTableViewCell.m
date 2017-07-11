@@ -125,6 +125,7 @@
     
     self.titleLabel.text = model.title;
     self.sourceLabel.text = model.sourceName;
+    self.countLabel.text = [NSString stringWithFormat:@"%ld",model.duration];
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     }
