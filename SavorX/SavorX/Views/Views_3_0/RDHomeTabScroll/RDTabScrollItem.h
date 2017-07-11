@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RDHotelItemModel.h"
+#import "CreateWealthModel.h"
 
 @protocol RDTabScrollViewDelegate <NSObject>
 
@@ -18,8 +18,8 @@
 
 @interface RDTabScrollItem : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame info:(RDHotelItemModel *)model index:(NSInteger)index total:(NSInteger)total;
+- (instancetype)initWithFrame:(CGRect)frame info:(CreateWealthModel *)model index:(NSInteger)index total:(NSInteger)total;
 
-- (void)configWithInfo:(RDHotelItemModel *)model index:(NSInteger)index total:(NSInteger)total;
+- (void)configWithInfo:(CreateWealthModel *)model index:(NSInteger)index total:(NSInteger)total;
 
 @end

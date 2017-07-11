@@ -121,7 +121,7 @@
             [self sendSubviewToBack:self.bottomItem];
             [self sendSubviewToBack:self.tempScroolItem];
             
-            RDHotelItemModel * imageName1 = [self nextTempInfo];
+            CreateWealthModel * imageName1 = [self nextTempInfo];
             [self.tempScroolItem configWithInfo:imageName1 index:[self.dataSource indexOfObject:imageName1]+1 total:self.dataSource.count];
             
             self.topItem.transform = CGAffineTransformMakeScale(.8f, .8f);
@@ -172,7 +172,7 @@
             self.bottomItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + 40);
             self.bottomItem.alpha = .2f;
             
-            RDHotelItemModel * imageName2 = [self lastTempInfo];
+            CreateWealthModel * imageName2 = [self lastTempInfo];
             [self.tempScroolItem configWithInfo:imageName2 index:[self.dataSource indexOfObject:imageName2]+1 total:self.dataSource.count];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.9f, .9f);
             self.tempScroolItem.center = self.topItemCenter;
@@ -280,7 +280,7 @@
             self.bottomItem.alpha = .5f - alphaRate;
             self.bottomItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + centerYRate);
             
-            RDHotelItemModel * imageName = [self lastTempInfo];
+            CreateWealthModel * imageName = [self lastTempInfo];
             [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.8f + scaleRate, .8f + scaleRate);
             self.tempScroolItem.alpha = .2f + .8 * rate;
@@ -297,7 +297,7 @@
             self.topItem.alpha = .5f - alphaRate;
             self.topItem.center = CGPointMake(self.topItemCenter.x, self.topItemCenter.y - centerYRate);
             
-            RDHotelItemModel * imageName = [self nextTempInfo];
+            CreateWealthModel * imageName = [self nextTempInfo];
             [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
             self.tempScroolItem.transform = CGAffineTransformMakeScale(.8f + scaleRate, .8f + scaleRate);
             self.tempScroolItem.alpha = .2f + .8 * rate;
@@ -357,7 +357,7 @@
 
 - (void)didScroolEndWithLast
 {
-    RDHotelItemModel * imageName = [self lastTempInfo];
+    CreateWealthModel * imageName = [self lastTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.bottomItem removeFromSuperview];
     self.bottomItem = self.currentItem;
@@ -373,7 +373,7 @@
 
 - (void)didScroolEndWithNext
 {
-    RDHotelItemModel * imageName = [self nextTempInfo];
+    CreateWealthModel * imageName = [self nextTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.topItem removeFromSuperview];
     self.topItem = self.currentItem;
@@ -387,7 +387,7 @@
     }
 }
 
-- (RDHotelItemModel *)nextTempInfo
+- (CreateWealthModel *)nextTempInfo
 {
     if (self.currentIndex >= self.dataSource.count - 2) {
         if (self.currentIndex == self.dataSource.count - 1) {
@@ -399,7 +399,7 @@
     return [self.dataSource objectAtIndex:self.currentIndex + 2];
 }
 
-- (RDHotelItemModel *)lastTempInfo
+- (CreateWealthModel *)lastTempInfo
 {
     if (self.currentIndex <= 1) {
         if (self.currentIndex == 0) {

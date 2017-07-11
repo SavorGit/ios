@@ -13,7 +13,7 @@
 #import "PhotoManyEditView.h"
 #import "GCCUPnPManager.h"
 #import "OpenFileTool.h"
-#import "PhotoTool.h"
+#import "RDPhotoTool.h"
 #import <Photos/Photos.h>
 #import "RDHomeStatusView.h"
 
@@ -145,7 +145,7 @@
     if (cell.hasEdit) {
         
         if ([GlobalData shared].isBindRD) {
-            [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
+            [RDPhotoTool compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
                 
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
@@ -186,7 +186,7 @@
     }else{
         [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
             if ([GlobalData shared].isBindRD) {
-                [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                     
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                         
@@ -306,7 +306,7 @@
     cell.thirdText = date;
     
     if (!([title isEqualToString:@"在这里添加文字"] && [detail isEqualToString:@"在这里添加文字"] && [date isEqualToString:@"在这里添加文字"])) {
-        [[PhotoTool sharedInstance] saveImageInSystemPhoto:image withAlert:NO];
+        [RDPhotoTool saveImageInSystemPhoto:image withAlert:NO];
     }
     
     if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
@@ -316,7 +316,7 @@
             NSString * name = asset.localIdentifier;
             
             if ([GlobalData shared].isBindRD) {
-                [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
+                [RDPhotoTool compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
                     
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                         
@@ -391,7 +391,7 @@
             
             if (cell.hasEdit) {
                 if ([GlobalData shared].isBindRD) {
-                    [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
+                    [RDPhotoTool compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
                         [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                             [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
                                 
@@ -414,7 +414,7 @@
                 [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
                     
                     if ([GlobalData shared].isBindRD) {
-                        [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                        [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                             
                             [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                                 [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{

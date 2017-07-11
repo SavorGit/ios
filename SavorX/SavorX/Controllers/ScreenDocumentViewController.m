@@ -9,7 +9,7 @@
 #import "ScreenDocumentViewController.h"
 #import "GCCScreenImage.h"
 #import "OpenFileTool.h"
-#import "PhotoTool.h"
+#import "RDPhotoTool.h"
 #import "UIImage+Custom.h"
 #import "GCCUPnPManager.h"
 #import "RDAlertView.h"
@@ -250,7 +250,7 @@
     UIImage * image = [screenImage ScalingToSize:size];
     NSString * keyStr = [NSString stringWithFormat:@"savorPhoto%@.png", [Helper getTimeStamp]];
         if ([GlobalData shared].isBindRD) {
-            [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
+            [RDPhotoTool compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
                 
                 [self.task cancel];
                 

@@ -14,7 +14,6 @@
 #import "RDAlertView.h"
 #import "HSConnectViewController.h"
 
-#import "SXVideoPlayViewController.h"
 #import "DemandViewController.h"
 #import "ScreenDocumentViewController.h"
 
@@ -92,13 +91,17 @@
     self.statusLabel.textColor = UIColorFromRGB(0x922c3e);
     self.statusLabel.font = kPingFangLight(14);
     self.statusLabel.textAlignment = NSTextAlignmentLeft;
+    self.statusLabel.userInteractionEnabled = YES;
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(statusLabelDidClicked)];
+    tap.numberOfTapsRequired = 1;
+    [self.statusLabel addGestureRecognizer:tap];
     [self addSubview:self.statusLabel];
     
     [self.statusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(9);
         make.left.mas_equalTo(10);
         make.bottom.mas_equalTo(-9);
-        make.right.equalTo(self.statusButton.mas_right).offset(-10);
+        make.right.equalTo(self.statusButton.mas_left).offset(-10);
     }];
     
     [self reloadStatus];
@@ -130,12 +133,15 @@
 {
     if (self.status == RDHomeStatus_Normal) {
         [self scanQRCode];
-    }else if (self.status == RDHomeStatus_Bind) {
+    }else {
         [self disconnentClick];
-    }else{
-        if (self.currentVC) {
-            [[Helper getRootNavigationController] pushViewController:self.currentVC animated:YES];
-        }
+    }
+}
+
+- (void)statusLabelDidClicked
+{
+    if (self.currentVC) {
+        [[Helper getRootNavigationController] pushViewController:self.currentVC animated:YES];
     }
 }
 
@@ -165,6 +171,7 @@
         case RDHomeStatus_Normal:
         {
             self.statusLabel.text = @"您已进入酒楼,快来体验用电视看手机";
+            self.statusLabel.userInteractionEnabled = NO;
             [self.statusButton setTitle:@"连接电视" forState:UIControlStateNormal];
         }
             
@@ -173,6 +180,7 @@
         case RDHomeStatus_Bind:
         {
             self.statusLabel.text = [NSString stringWithFormat:@"已连接--%@的电视", [Helper getWifiName]];
+            self.statusLabel.userInteractionEnabled = NO;
             [self.statusButton setTitle:@"断开连接" forState:UIControlStateNormal];
         }
             
@@ -181,6 +189,7 @@
         case RDHomeStatus_Photo:
         {
             self.statusLabel.text = @"正在投屏图片,点击进入>>";
+            self.statusLabel.userInteractionEnabled = YES;
             [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
         }
             
@@ -189,6 +198,7 @@
         case RDHomeStatus_Video:
         {
             self.statusLabel.text = @"正在投屏视频,点击进入>>";
+            self.statusLabel.userInteractionEnabled = YES;
             [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
         }
             
@@ -197,6 +207,7 @@
         case RDHomeStatus_File:
         {
             self.statusLabel.text = @"正在投屏文件,点击进入>>";
+            self.statusLabel.userInteractionEnabled = YES;
             [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
         }
             
@@ -205,6 +216,7 @@
         case RDHomeStatus_Demand:
         {
             self.statusLabel.text = @"正在点播视频,点击进入>>";
+            self.statusLabel.userInteractionEnabled = YES;
             [self.statusButton setTitle:@"退出点播" forState:UIControlStateNormal];
         }
             
@@ -228,9 +240,6 @@
     if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
         PhotoSliderViewController * vc = (PhotoSliderViewController *)self.currentVC;
         [vc shouldRelease];
-    }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
-        SXVideoPlayViewController * vc = (SXVideoPlayViewController *)self.currentVC;
-        [vc shouldRelease];
     }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
         DemandViewController * vc = (DemandViewController *)self.currentVC;
         [vc shouldRelease];
@@ -249,9 +258,6 @@
 {
     if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
         PhotoSliderViewController * vc = (PhotoSliderViewController *)self.currentVC;
-        [vc shouldRelease];
-    }else if ([self.currentVC isKindOfClass:[SXVideoPlayViewController class]]) {
-        SXVideoPlayViewController * vc = (SXVideoPlayViewController *)self.currentVC;
         [vc shouldRelease];
     }else if ([self.currentVC isKindOfClass:[DemandViewController class]]) {
         DemandViewController * vc = (DemandViewController *)self.currentVC;
@@ -489,6 +495,13 @@
         [alert addActions:@[action]];
         [alert show];
     }
+}
+
+- (void)removeFromSuperview
+{
+    [super removeFromSuperview];
+    self.status = RDHomeStatus_Normal;
+    [self reloadStatus];
 }
 
 @end

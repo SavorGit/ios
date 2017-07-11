@@ -34,4 +34,11 @@ typedef void(^ResFailed)(NSError * error);
  */
 + (void)exportVideoToMP4WithAsset:(PHAsset *)asset startHandler:(void (^)(AVAssetExportSession * session))startHandler endHandler:(void (^)(NSString * filePath, NSString * url, AVAssetExportSession * session))endHandler;
 
+/**
+ *  存储图片到系统相册
+ *
+ *  @param image 需要保存的图片
+ */
++ (void)saveImageInSystemPhoto:(UIImage *)image withAlert:(BOOL)alert;
+
 @end

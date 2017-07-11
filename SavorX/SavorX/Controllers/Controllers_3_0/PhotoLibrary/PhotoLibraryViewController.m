@@ -15,6 +15,7 @@
 #import "RDPhotoTool.h"
 #import "RDAlertView.h"
 #import "HSWebServerManager.h"
+#import "RDHomeStatusView.h"
 
 @interface PhotoLibraryViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource>
 
@@ -112,12 +113,10 @@
         make.right.mas_equalTo(0);
     }];
     
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        NSIndexPath * indexPath = [NSIndexPath indexPathForItem:self.model.fetchResult.count - 1 inSection:0];
-//        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
-//    });
-    
-//    [self.collectionView setContentOffset:CGPointMake(0, MAXFLOAT)];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSIndexPath * indexPath = [NSIndexPath indexPathForItem:self.model.fetchResult.count - 1 inSection:0];
+        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+    });
 }
 
 //相册标题被点击的时候
@@ -347,6 +346,9 @@
                     
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                         [hud hideAnimated:NO];
+                        
+                        [[RDHomeStatusView defaultView] startScreenWithViewController:vc withStatus:RDHomeStatus_Photo];
+                        
                         [self.navigationController pushViewController:vc animated:YES];
                         
                         [SAVORXAPI successRing];
@@ -523,6 +525,7 @@
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             PhotoVideoScreenViewController * play = [[PhotoVideoScreenViewController alloc] initWithVideoFileURL:filePath];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:play withStatus:RDHomeStatus_Photo];
             [SAVORXAPI successRing];
             [self.navigationController pushViewController:play animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];

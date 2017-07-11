@@ -13,11 +13,9 @@
 #import "PhotoManyViewController.h"
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
-#import "PhotoTool.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
 #import "LGSideMenuController.h"
-#import "RDScreenLocationView.h"
 #import "RDHomeStatusView.h"
 
 @implementation OpenFileTool
@@ -28,13 +26,6 @@
         LGSideMenuController * lgSide = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
         if (lgSide.isLeftViewShowing) {
             [lgSide hideLeftView:nil];
-        }
-        
-        for (UIView * view in [UIApplication sharedApplication].keyWindow.subviews) {
-            if ([view isKindOfClass:[RDScreenLocationView class]]) {
-                RDScreenLocationView * locationView = (RDScreenLocationView *)view;
-                [locationView hiddenWithAnimation];
-            }
         }
     }
     

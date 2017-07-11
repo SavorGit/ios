@@ -38,8 +38,10 @@
 @property(nonatomic, strong) NSString *videoURL;
 @property (nonatomic, assign) NSInteger canPlay;
 @property (nonatomic, assign) NSString *colTuJi;
+@property (nonatomic, assign) NSInteger createTime; //创建时间
 
 //非接口返回
 @property (nonatomic, assign) NSInteger cid;
+
 
 @end

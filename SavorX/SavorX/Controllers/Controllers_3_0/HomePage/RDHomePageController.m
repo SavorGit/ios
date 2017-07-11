@@ -12,6 +12,7 @@
 #import "CreateWealthViewController.h"
 #import "SpecialTopicViewController.h"
 #import "HSGetSpecialRequest.h"
+#import "RDHomeStatusView.h"
 
 @interface RDHomePageController ()
 
@@ -274,7 +275,7 @@
     if (index > 0) {
         self.selectIndex = index - 1;
     }
-    
+    [[RDHomeStatusView defaultView] removeFromSuperview];
     [self resetCurrentViewController:[self.displayVC objectForKey:@(self.selectIndex)]];
     [self autoItemMargin];
     [self.menuView updateBadgeViewAtIndex:self.titles.count - 1];

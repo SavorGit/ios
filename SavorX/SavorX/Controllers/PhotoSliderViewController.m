@@ -9,7 +9,7 @@
 #import "PhotoSliderViewController.h"
 #import "ShowPhotoCollectionViewCell.h"
 #import "OpenFileTool.h"
-#import "PhotoTool.h"
+#import "RDPhotoTool.h"
 #import "GCCUPnPManager.h"
 #import "RDHomeStatusView.h"
 
@@ -380,7 +380,7 @@
             [MBProgressHUD hideHUDForView:self.view animated:NO];
             MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
             
-            [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+            [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
                     self.playButton.selected = YES;
                     [self.timer setFireDate:[NSDate distantFuture]];
@@ -445,7 +445,7 @@
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 NSString * name = asset.localIdentifier;
                 if ([GlobalData shared].isBindRD) {
-                    [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                    [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                         [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
                             
                             [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
@@ -560,7 +560,7 @@
             NSString * name = asset.localIdentifier;
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 if ([GlobalData shared].isBindRD) {
-                    [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                    [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                         [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
                             
                             [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{

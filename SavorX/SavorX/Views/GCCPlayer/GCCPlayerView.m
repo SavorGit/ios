@@ -11,7 +11,7 @@
 #import "GCCControlView.h"
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "PhotoTool.h"
+#import "RDPhotoTool.h"
 #import "ZFBrightnessView.h"
 #import "ZFVolumeView.h"
 #import "RDLogStatisticsAPI.h"
@@ -671,7 +671,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
                                                  CVPixelBufferGetHeight(pixelBuffer))];
     
     UIImage * image = [UIImage imageWithCGImage:videoImage];
-    [[PhotoTool sharedInstance] saveImageInSystemPhoto:image withAlert:YES];
+    [RDPhotoTool saveImageInSystemPhoto:image withAlert:YES];
     CGImageRelease(videoImage);
 }
 

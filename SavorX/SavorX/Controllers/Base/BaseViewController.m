@@ -7,7 +7,6 @@
 //
 
 #import "BaseViewController.h"
-#import "UINavigationBar+PS.h"
 
 @interface BaseViewController ()<NoDataViewDelegate,NoNetWorkViewDelegate>{
     

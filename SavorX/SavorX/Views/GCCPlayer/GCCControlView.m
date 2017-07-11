@@ -11,7 +11,7 @@
 #import "Masonry.h"
 #import "UIImageView+WebCache.h"
 
-static const CGFloat ControlViewHiddenAnimationTime = .3f;
+//static const CGFloat ControlViewHiddenAnimationTime = .3f;
 static const CGFloat ControlViewHiddenWaitTime = 4.f;
 
 typedef NS_ENUM(NSInteger, RDDefinition) {

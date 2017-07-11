@@ -13,7 +13,7 @@
 #import "DocumentListViewController.h"
 #import "Masonry.h"
 #import "HSDemandListRequest.h"
-#import "RDHotelItemModel.h"
+#import "CreateWealthModel.h"
 #import "RDHomeStatusView.h"
 
 @interface RDHomeScreenViewController ()
@@ -45,7 +45,7 @@
         if (listArray) {
             
             for (NSDictionary * dict in listArray) {
-                RDHotelItemModel * model = [[RDHotelItemModel alloc] initWithDictionary:dict];
+                CreateWealthModel * model = [[CreateWealthModel alloc] initWithDictionary:dict];
                 [self.dataSource addObject:model];
             }
             
@@ -147,10 +147,9 @@
     [self.navigationController pushViewController:document animated:YES];
 }
 
-- (void)removeFromParentViewController
+- (void)dealloc
 {
-    [super removeFromParentViewController];
-    [[RDHomeStatusView defaultView] removeFromSuperview];
+    NSLog(@"首页投屏释放了");
 }
 
 - (void)didReceiveMemoryWarning {
