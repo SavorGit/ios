@@ -14,13 +14,6 @@
 		060DB0A41D5AD1C8002A2DED /* HTTPServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 060DB0A31D5AD1C8002A2DED /* HTTPServerManager.m */; };
 		060DB0B41D5B26F9002A2DED /* UIColor+YYAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 060DB0B31D5B26F9002A2DED /* UIColor+YYAdditions.m */; };
 		060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 060DB0BD1D5B28BB002A2DED /* DemandViewController.m */; };
-		060E420D1E4CB03E009A94FC /* TAAbstractDotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E42001E4CB03E009A94FC /* TAAbstractDotView.m */; };
-		060E420E1E4CB03E009A94FC /* TAAnimatedDotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E42021E4CB03E009A94FC /* TAAnimatedDotView.m */; };
-		060E420F1E4CB03E009A94FC /* TADotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E42041E4CB03E009A94FC /* TADotView.m */; };
-		060E42101E4CB03E009A94FC /* TAPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E42061E4CB03E009A94FC /* TAPageControl.m */; };
-		060E42111E4CB03E009A94FC /* SDCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E42081E4CB03E009A94FC /* SDCollectionViewCell.m */; };
-		060E42121E4CB03E009A94FC /* SDCycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E420A1E4CB03E009A94FC /* SDCycleScrollView.m */; };
-		060E42131E4CB03E009A94FC /* UIView+SDExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E420C1E4CB03E009A94FC /* UIView+SDExtension.m */; };
 		061377391D9A8322000B761D /* Default-568.png in Resources */ = {isa = PBXBuildFile; fileRef = 061377381D9A8322000B761D /* Default-568.png */; };
 		0614AA311D66A7150080D710 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0614AA301D66A7150080D710 /* SystemConfiguration.framework */; };
 		0614AA331D66A7320080D710 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0614AA321D66A7320080D710 /* libiconv.tbd */; };
@@ -371,20 +364,6 @@
 		060DB0B31D5B26F9002A2DED /* UIColor+YYAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YYAdditions.m"; sourceTree = "<group>"; };
 		060DB0BC1D5B28BB002A2DED /* DemandViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemandViewController.h; sourceTree = "<group>"; };
 		060DB0BD1D5B28BB002A2DED /* DemandViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemandViewController.m; sourceTree = "<group>"; };
-		060E41FF1E4CB03E009A94FC /* TAAbstractDotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAAbstractDotView.h; sourceTree = "<group>"; };
-		060E42001E4CB03E009A94FC /* TAAbstractDotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TAAbstractDotView.m; sourceTree = "<group>"; };
-		060E42011E4CB03E009A94FC /* TAAnimatedDotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAAnimatedDotView.h; sourceTree = "<group>"; };
-		060E42021E4CB03E009A94FC /* TAAnimatedDotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TAAnimatedDotView.m; sourceTree = "<group>"; };
-		060E42031E4CB03E009A94FC /* TADotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TADotView.h; sourceTree = "<group>"; };
-		060E42041E4CB03E009A94FC /* TADotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TADotView.m; sourceTree = "<group>"; };
-		060E42051E4CB03E009A94FC /* TAPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAPageControl.h; sourceTree = "<group>"; };
-		060E42061E4CB03E009A94FC /* TAPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TAPageControl.m; sourceTree = "<group>"; };
-		060E42071E4CB03E009A94FC /* SDCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCollectionViewCell.h; sourceTree = "<group>"; };
-		060E42081E4CB03E009A94FC /* SDCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCollectionViewCell.m; sourceTree = "<group>"; };
-		060E42091E4CB03E009A94FC /* SDCycleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCycleScrollView.h; sourceTree = "<group>"; };
-		060E420A1E4CB03E009A94FC /* SDCycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCycleScrollView.m; sourceTree = "<group>"; };
-		060E420B1E4CB03E009A94FC /* UIView+SDExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SDExtension.h"; sourceTree = "<group>"; };
-		060E420C1E4CB03E009A94FC /* UIView+SDExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SDExtension.m"; sourceTree = "<group>"; };
 		061377381D9A8322000B761D /* Default-568.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568.png"; sourceTree = "<group>"; };
 		0614AA301D66A7150080D710 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0614AA321D66A7320080D710 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
@@ -1001,35 +980,6 @@
 				06153DCA1D52E15200BB127F /* ScreenDocumentViewController.m */,
 			);
 			name = Document;
-			sourceTree = "<group>";
-		};
-		060E41FD1E4CB03E009A94FC /* SDCycleScrollView */ = {
-			isa = PBXGroup;
-			children = (
-				060E41FE1E4CB03E009A94FC /* PageControl */,
-				060E42071E4CB03E009A94FC /* SDCollectionViewCell.h */,
-				060E42081E4CB03E009A94FC /* SDCollectionViewCell.m */,
-				060E42091E4CB03E009A94FC /* SDCycleScrollView.h */,
-				060E420A1E4CB03E009A94FC /* SDCycleScrollView.m */,
-				060E420B1E4CB03E009A94FC /* UIView+SDExtension.h */,
-				060E420C1E4CB03E009A94FC /* UIView+SDExtension.m */,
-			);
-			path = SDCycleScrollView;
-			sourceTree = "<group>";
-		};
-		060E41FE1E4CB03E009A94FC /* PageControl */ = {
-			isa = PBXGroup;
-			children = (
-				060E41FF1E4CB03E009A94FC /* TAAbstractDotView.h */,
-				060E42001E4CB03E009A94FC /* TAAbstractDotView.m */,
-				060E42011E4CB03E009A94FC /* TAAnimatedDotView.h */,
-				060E42021E4CB03E009A94FC /* TAAnimatedDotView.m */,
-				060E42031E4CB03E009A94FC /* TADotView.h */,
-				060E42041E4CB03E009A94FC /* TADotView.m */,
-				060E42051E4CB03E009A94FC /* TAPageControl.h */,
-				060E42061E4CB03E009A94FC /* TAPageControl.m */,
-			);
-			path = PageControl;
 			sourceTree = "<group>";
 		};
 		0614AB881D6703260080D710 /* UMCustomSocialManager */ = {
@@ -1659,7 +1609,6 @@
 			children = (
 				0663D42C1F0B6CB000CD2FA2 /* WMPageController */,
 				965240F61ED6BE8E0090E1C8 /* BaiduMap_IOSSDK_v3.3.1_Lib */,
-				060E41FD1E4CB03E009A94FC /* SDCycleScrollView */,
 				062E99CB1E49C2F30042C924 /* UIImage+WaterMark */,
 				0627E0B61E3231DA00DAED92 /* LGSideMenuController */,
 				061E0FC41DFFD9A40072605F /* GCCDLNA */,
@@ -2732,7 +2681,6 @@
 				96A734BD1F0C87EA00906163 /* ImageTextDetailViewController.m in Sources */,
 				0664ADC81F1464C400A720A1 /* RDHomeStatusView.m in Sources */,
 				96A734A91F0C7FAC00906163 /* CreateWealthModel.m in Sources */,
-				060E420F1E4CB03E009A94FC /* TADotView.m in Sources */,
 				9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */,
 				96BCE3BE1EC0128E00B1A3F7 /* SmashEggsGameViewController.m in Sources */,
 				0690766B1E51FE8E00CA1AC4 /* PhotoManyCollectionViewCell.m in Sources */,
@@ -2740,12 +2688,10 @@
 				06FA33941D3E171D001F5B37 /* DDAbstractDatabaseLogger.m in Sources */,
 				96BCE3CA1EC19DE100B1A3F7 /* HSEggsResultModel.m in Sources */,
 				96A7349D1F0C7F2D00906163 /* HeadlinesTableViewCell.m in Sources */,
-				060E42131E4CB03E009A94FC /* UIView+SDExtension.m in Sources */,
 				06B5554D1E8A6A210068BF70 /* DefalutLaunchViewController.m in Sources */,
 				96D8C5F51F14D3B900251301 /* SpecialTopRequest.m in Sources */,
 				06BCC8D71F14D2FE0004ECCF /* FileVideoViewController.m in Sources */,
 				062CEFD21EC2FAC400EA6AE0 /* RDAwardTool.m in Sources */,
-				060E42111E4CB03E009A94FC /* SDCollectionViewCell.m in Sources */,
 				96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */,
 				066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */,
 				06FA33951D3E171D001F5B37 /* DDASLLogger.m in Sources */,
@@ -2753,7 +2699,6 @@
 				063FA3371D839F1100D03548 /* BadView.m in Sources */,
 				061E0FE91DFFEBD10072605F /* RDBoxModel.m in Sources */,
 				060DB0A41D5AD1C8002A2DED /* HTTPServerManager.m in Sources */,
-				060E420E1E4CB03E009A94FC /* TAAnimatedDotView.m in Sources */,
 				476F44C01E2DB39E00F99090 /* UIImage+Additional.m in Sources */,
 				062D4F791DEC02BA0093942A /* GCCControlView.m in Sources */,
 				96D8C5BB1F0F213000251301 /* DDPhotoDescView.m in Sources */,
@@ -2772,7 +2717,6 @@
 				0647BC381E5063DF002284BB /* HSversionUpgradeRequest.m in Sources */,
 				960EDB161E8361F700717406 /* HSLauchImageOrVideoRequest.m in Sources */,
 				06FA339A1D3E171D001F5B37 /* DispatchQueueLogFormatter.m in Sources */,
-				060E42101E4CB03E009A94FC /* TAPageControl.m in Sources */,
 				06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */,
 				063B1D531D7D63D30036C02B /* PhotoSliderViewController.m in Sources */,
 				062CF0281EC3449D00EA6AE0 /* RDHammer.m in Sources */,
@@ -2823,7 +2767,6 @@
 				062705921D586EA2003EA6A0 /* WebViewController.m in Sources */,
 				067C30EC1F13AF8E000A1150 /* HSSmashEggsRequest.m in Sources */,
 				4772FF841DFA544B00758697 /* BaseViewController.m in Sources */,
-				060E420D1E4CB03E009A94FC /* TAAbstractDotView.m in Sources */,
 				06FB9D611DF97D0E0053BE0A /* MBProgressHUD+Custom.m in Sources */,
 				0663D42B1F0B6B5900CD2FA2 /* RDTabScrollViewPage.m in Sources */,
 				062CEFD51EC3053200EA6AE0 /* HSAwardUploadRequest.m in Sources */,
@@ -2884,7 +2827,6 @@
 				47FE2CB91E1BB53200D3D0B4 /* SplashViewController.m in Sources */,
 				0663D43C1F0B6CB000CD2FA2 /* WMMenuView.m in Sources */,
 				96A7349E1F0C7F2D00906163 /* ImageAtlasTableViewCell.m in Sources */,
-				060E42121E4CB03E009A94FC /* SDCycleScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
