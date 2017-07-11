@@ -94,7 +94,7 @@
     
     self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageViewSize.width - 55, imageViewSize.height - 5 - 18, 50, 18)];
     self.timeLabel.textColor = [UIColor whiteColor];
-    self.timeLabel.font = [UIFont systemFontOfSize:11];
+    self.timeLabel.font = kPingFangLight(11);
     self.timeLabel.textAlignment = NSTextAlignmentCenter;
     self.timeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.55f];
     [self.baseView addSubview:self.timeLabel];
@@ -107,12 +107,12 @@
     [self.baseView addSubview:self.bottomView];
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width - 30, 16)];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    self.titleLabel.font = kPingFangMedium(16);
     self.titleLabel.textColor = UIColorFromRGB(0x434343);
     [self.bottomView addSubview:self.titleLabel];
     
     self.detailFrom = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 25)];
-    self.detailFrom.font = [UIFont systemFontOfSize:12];
+    self.detailFrom.font = kPingFangLight(12);
     self.detailFrom.textColor = UIColorFromRGB(0x898886);
     [self.bottomView addSubview:self.detailFrom];
     [self.detailFrom mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -123,7 +123,7 @@
     }];
     
     self.detailDate = [[UILabel alloc] initWithFrame:CGRectMake(self.detailFrom.frame.origin.x + self.detailFrom.frame.size.width + 20, self.detailFrom.frame.origin.y, 60, 25)];
-    self.detailDate.font = [UIFont systemFontOfSize:10];
+    self.detailDate.font = kPingFangLight(10);
     self.detailDate.textColor = UIColorFromRGB(0xb2afab);
     [self.bottomView addSubview:self.detailDate];
     [self.detailDate mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -45,7 +45,7 @@
 {
     self.backgroundColor = UIColorFromRGB(0xece6de);
     
-    CGFloat itemWidth = self.frame.size.width - 40;
+    CGFloat itemWidth = self.frame.size.width - 30;
     CGFloat itemHeight = itemWidth * 0.646 + 59;
     CGFloat width = self.frame.size.width;
     CGFloat height = self.frame.size.height;

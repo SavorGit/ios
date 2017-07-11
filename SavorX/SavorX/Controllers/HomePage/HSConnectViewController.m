@@ -19,6 +19,10 @@
 @property (nonatomic, strong) UILabel * textLabel;
 @property (nonatomic, strong) UILabel * failConectLabel;
 @property (nonatomic, strong) UIButton *reConnectBtn;
+
+@property (nonatomic, strong) UILabel * wifiLabel;
+@property (nonatomic, strong) UIView * topAlert;
+
 @property (nonatomic, strong) UIView *maskingView;
 @property (nonatomic, strong) UIImageView *animationImageView;
 
@@ -29,6 +33,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = UIColorFromRGB(0x922c3e);
     self.labelSource = [NSMutableArray new];
     self.numSring = [[NSString alloc] init];
     self.keyMuSring = [[NSMutableString alloc] initWithCapacity:100];
@@ -51,110 +56,61 @@
     UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectZero];
     bgView.backgroundColor = [UIColor clearColor];
     bgView.userInteractionEnabled = YES;
-    [bgView setImage:[UIImage imageNamed:@"ljtvsanweishu_bg"]];
+    [bgView setImage:[UIImage imageNamed:@"ljds_bg"]];
     bgView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:bgView];
-    float bgViewWidth = kMainBoundsWidth - 10;
     [bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        if (kMainBoundsHeight == 568) {
-            make.size.mas_equalTo(CGSizeMake(bgViewWidth , [Helper autoHeightWith:320]));
-        }else{
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:bgViewWidth] , [Helper autoHeightWith:370]));
-        }
-        make.top.mas_equalTo(5);
-        make.left.mas_equalTo(5);
-        make.right.mas_equalTo(-5);
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.equalTo(bgView.mas_width).multipliedBy(299.f/414.f);
     }];
     
-    self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.textLabel.textAlignment = NSTextAlignmentCenter;
-     if (kMainBoundsHeight == 568) {
-        self.textLabel.font = [UIFont systemFontOfSize:15];
-     }else{
-        self.textLabel.font = [UIFont systemFontOfSize:17];
-     }
-    self.textLabel.text = @"请输入电视中的三位数连接电视";
-    self.textLabel.textColor = UIColorFromRGB(0x333333);
-    self.textLabel.backgroundColor = [UIColor clearColor];
-    [bgView addSubview:self.textLabel];
-    [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 40] ,[Helper autoHeightWith:30] ));
-        if (kMainBoundsHeight == 568) {
-            make.bottom.mas_equalTo(bgView).offset(-18);
-        }else{
-            make.bottom.mas_equalTo(bgView).offset(-32);
-        }
-
-        make.centerX.mas_equalTo(bgView);
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(navBackButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [bgView addSubview:backButton];
+    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(20);
+        make.left.mas_equalTo(0);
+        make.height.width.mas_equalTo(50);
     }];
     
-    self.failConectLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.failConectLabel.textAlignment = NSTextAlignmentRight;
-    if (kMainBoundsHeight == 568) {
-        self.failConectLabel.font = [UIFont systemFontOfSize:15];
-    }else{
-        self.failConectLabel.font = [UIFont systemFontOfSize:17];
-    }
-    self.failConectLabel.backgroundColor = [UIColor clearColor];
-    self.failConectLabel.text = @"连接失败，";
-    self.failConectLabel.textColor = UIColorFromRGB(0x333333);
-    [bgView addSubview:self.failConectLabel];
-    self.failConectLabel.hidden = YES;
-    [self.failConectLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        if (kMainBoundsHeight == 568) {
-            make.centerX.mas_equalTo(-40);
-            make.bottom.mas_equalTo(bgView).offset(-18);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:90], [Helper autoHeightWith:30]));
-        }else{
-            make.centerX.mas_equalTo(-50);
-            make.bottom.mas_equalTo(bgView).offset(-32);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:30]));
-        }
+    self.wifiLabel = [[UILabel alloc] init];
+    self.wifiLabel.textColor = UIColorFromRGB(0xece6de);
+    self.wifiLabel.font = kPingFangLight(16);
+    self.wifiLabel.textAlignment = NSTextAlignmentCenter;
+    [bgView addSubview:self.wifiLabel];
+    [self.wifiLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo([Helper autoHeightWith:50]);
+        make.centerX.mas_equalTo(0);
+        make.height.mas_equalTo(20);
+        make.width.mas_lessThanOrEqualTo([Helper autoWidthWith:210]);
     }];
+    self.wifiLabel.text = [NSString stringWithFormat:@"当前wifi:%@", [Helper getWifiName]];
     
-    self.reConnectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.reConnectBtn.backgroundColor = [UIColor clearColor];
-    self.reConnectBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
-    [self.reConnectBtn setTitleColor:UIColorFromRGB(0xff2a00) forState:UIControlStateNormal];
-    if (kMainBoundsHeight == 568) {
-        self.reConnectBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-    }else{
-        self.reConnectBtn.titleLabel.font = [UIFont systemFontOfSize:17];
-    }
-    [self.reConnectBtn setTitle:@"重新连接？" forState:UIControlStateNormal];;
-    [self.reConnectBtn addTarget:self action:@selector(reClick) forControlEvents:UIControlEventTouchUpInside];
-    [bgView addSubview:self.reConnectBtn];
-    self.reConnectBtn.hidden = YES;
-    [self.reConnectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        if (kMainBoundsHeight == 568) {
-            make.centerX.mas_equalTo(40);
-            make.bottom.mas_equalTo(bgView).offset(-18);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:90], [Helper autoHeightWith:30]));
-        }else{
-            make.centerX.mas_equalTo(50);
-            make.bottom.mas_equalTo(bgView).offset(-32);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:30]));
-        }
+    UIView * bottomView = [[UIView alloc] initWithFrame:CGRectZero];
+    bottomView.backgroundColor = UIColorFromRGB(0x922c3e);
+    [self.view addSubview:bottomView];
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(bgView.mas_bottom);
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
+        make.trailing.mas_equalTo(0);
     }];
     
     for (NSInteger i = 0; i < 3; i++) {
         UILabel * label = [[UILabel alloc] initWithFrame:CGRectZero];
-        label.layer.cornerRadius = 0;
-        label.layer.borderColor = UIColorFromRGB(0xffd237).CGColor;
-        label.layer.borderWidth = 1.5f;
         label.textAlignment = NSTextAlignmentCenter;
         label.layer.masksToBounds = YES;
+        label.backgroundColor = UIColorFromRGB(0xece6de);
         label.textColor = UIColorFromRGB(0x333333);
         label.font = [UIFont boldSystemFontOfSize:30];
-        [bgView addSubview:label];
+        [bottomView addSubview:label];
         float distance = [Helper autoHeightWith:99];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            if (kMainBoundsHeight == 568) {
-                make.bottom.mas_equalTo (self.textLabel.mas_top).offset(-10);
-            }else{
-                make.bottom.mas_equalTo (self.textLabel.mas_top).offset(-18);
-            }
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:70],[Helper autoHeightWith:50]));
+            make.top.mas_equalTo([Helper autoHeightWith:15]);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:60],[Helper autoWidthWith:60]));
             if (i == 0) {
                 make.centerX.mas_equalTo(-distance);
             }else if (i == 1) {
@@ -165,6 +121,83 @@
         }];
         [self.labelSource addObject:label];
     }
+    
+    self.topAlert = [[UIView alloc] init];
+    self.topAlert.layer.borderColor = UIColorFromRGB(0xca8c3b).CGColor;
+    self.topAlert.layer.borderWidth = [Helper autoWidthWith:2.5];
+    [bottomView addSubview:self.topAlert];
+    [self.topAlert mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo([Helper autoHeightWith:15-2.5]);
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:65],[Helper autoWidthWith:65]));
+        make.centerX.mas_equalTo(-[Helper autoHeightWith:99]);
+    }];
+    
+    self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.textLabel.textAlignment = NSTextAlignmentCenter;
+    if (kMainBoundsHeight == 568) {
+        self.textLabel.font = kPingFangLight(15);
+    }else{
+        self.textLabel.font = kPingFangLight(16);
+    }
+    self.textLabel.text = @"请输入电视中的三位数连接电视";
+    self.textLabel.textColor = UIColorFromRGB(0xece6de);
+    self.textLabel.backgroundColor = [UIColor clearColor];
+    [bottomView addSubview:self.textLabel];
+    [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 40] ,[Helper autoHeightWith:30] ));
+        make.top.mas_equalTo([Helper autoHeightWith:95]);
+        
+        make.centerX.mas_equalTo(bgView);
+    }];
+    
+    self.failConectLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.failConectLabel.textAlignment = NSTextAlignmentRight;
+    if (kMainBoundsHeight == 568) {
+        self.failConectLabel.font = kPingFangLight(15);
+    }else{
+        self.failConectLabel.font = kPingFangLight(16);
+    }
+    self.failConectLabel.backgroundColor = [UIColor clearColor];
+    self.failConectLabel.text = @"连接失败，";
+    self.failConectLabel.textColor = UIColorFromRGB(0xece6de);
+    [bottomView addSubview:self.failConectLabel];
+    self.failConectLabel.hidden = YES;
+    [self.failConectLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (kMainBoundsHeight == 568) {
+            make.centerX.mas_equalTo(-40);
+            make.top.mas_equalTo([Helper autoHeightWith:95]);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:90], [Helper autoHeightWith:30]));
+        }else{
+            make.centerX.mas_equalTo(-50);
+            make.top.mas_equalTo([Helper autoHeightWith:95]);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:30]));
+        }
+    }];
+    
+    self.reConnectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.reConnectBtn.backgroundColor = [UIColor clearColor];
+    self.reConnectBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
+    [self.reConnectBtn setTitleColor:UIColorFromRGB(0xff2a00) forState:UIControlStateNormal];
+    if (kMainBoundsHeight == 568) {
+        self.reConnectBtn.titleLabel.font = kPingFangLight(15);
+    }else{
+        self.reConnectBtn.titleLabel.font = kPingFangLight(16);
+    }
+    [self.reConnectBtn setTitle:@"重新连接？" forState:UIControlStateNormal];;
+    [self.reConnectBtn addTarget:self action:@selector(reClick) forControlEvents:UIControlEventTouchUpInside];
+    [bottomView addSubview:self.reConnectBtn];
+    self.reConnectBtn.hidden = YES;
+    [self.reConnectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (kMainBoundsHeight == 568) {
+            make.centerX.mas_equalTo(40);
+            make.top.mas_equalTo([Helper autoHeightWith:95]);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:90], [Helper autoHeightWith:30]));
+        }else{
+            make.centerX.mas_equalTo(50);
+            make.top.mas_equalTo([Helper autoHeightWith:95]);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:30]));
+        }
+    }];
     
     RDKeyBoard *keyBoard;
     if (kMainBoundsHeight == 736) {
@@ -278,10 +311,45 @@
         self.numSring = number;
         [self getBoxInfo];
         [self creatMaskingLoadingView];
-    }
-    if (number.length > self.labelSource.count) {
+    }else if (number.length > self.labelSource.count) {
         [self.keyMuSring deleteCharactersInRange:NSMakeRange(3, number.length - 3)];
+    }else{
+        switch (number.length) {
+            case 0:
+            {
+                [self.topAlert mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.centerX.mas_equalTo(-[Helper autoHeightWith:99]);
+                }];
+            }
+                
+                break;
+                
+            case 1:
+            {
+                [self.topAlert mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.centerX.mas_equalTo(0);
+                }];
+            }
+                
+                break;
+                
+            case 2:
+            {
+                [self.topAlert mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.centerX.mas_equalTo([Helper autoHeightWith:99]);
+                }];
+            }
+                
+                break;
+                
+            default:
+                break;
+        }
+        [UIView animateWithDuration:.1f animations:^{
+            [self.view layoutIfNeeded];
+        }];
     }
+    
     for (NSUInteger i = 0; i < self.labelSource.count; i++) {
         if (i < number.length) {
             UILabel * label = [self.labelSource objectAtIndex:i];
@@ -589,6 +657,12 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

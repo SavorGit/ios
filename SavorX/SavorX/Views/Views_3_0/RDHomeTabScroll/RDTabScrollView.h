@@ -12,6 +12,6 @@
 
 - (instancetype)initWithFrame:(CGRect)frame modelArray:(NSArray *)array;
 
-- (void)reloadWith:(NSArray *)array;
+//- (void)reloadWith:(NSArray *)array;
 
 @end
