@@ -13,7 +13,8 @@ typedef enum : NSUInteger {
     RDHomeStatus_Bind,
     RDHomeStatus_Photo,
     RDHomeStatus_Video,
-    RDHomeStatus_File
+    RDHomeStatus_File,
+    RDHomeStatus_Demand
 } RDHomeStatusType;
 
 @interface RDHomeStatusView : UIView

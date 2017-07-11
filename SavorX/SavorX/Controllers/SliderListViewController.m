@@ -14,7 +14,6 @@
 #import "PhotoListCollectionViewCell.h"
 #import "AddPhotoListViewController.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 
 #define SliderListCollection @"SliderListCollection"
 
@@ -418,7 +417,7 @@
     
     if (asset) {
         [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CollectionViewCellSize contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-            [HomeAnimationView animationView].currentImage = result;
+            
         }];
     }
     
@@ -439,10 +438,7 @@
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:slider.seriesId force:0 success:^{
                         [hud hideAnimated:NO];
                         
-                        // 获取第一张幻灯片图片，回传
-                        [HomeAnimationView animationView].currentImage = result;
-
-                        [[HomeAnimationView animationView] startScreenWithViewController:slider];
+                        
                         [self.navigationController pushViewController:slider animated:YES];
                         [SAVORXAPI successRing];
                         
@@ -469,9 +465,7 @@
                 [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                     [self.navigationController pushViewController:slider animated:YES];
-                    // 获取第一张幻灯片图片，回传
-                    [HomeAnimationView animationView].currentImage = result;
-                    [[HomeAnimationView animationView] startScreenWithViewController:slider];
+                    
                     [SAVORXAPI successRing];
                 } failure:^{
                     [MBProgressHUD hideHUDForView:self.view animated:YES];

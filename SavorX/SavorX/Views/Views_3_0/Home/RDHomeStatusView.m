@@ -117,6 +117,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDQiutScreenNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidDisconnectDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
 }
 
 - (void)bindBox
@@ -197,6 +198,14 @@
         {
             self.statusLabel.text = @"正在投屏文件,点击进入>>";
             [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
+        }
+            
+            break;
+            
+        case RDHomeStatus_Demand:
+        {
+            self.statusLabel.text = @"正在点播视频,点击进入>>";
+            [self.statusButton setTitle:@"退出点播" forState:UIControlStateNormal];
         }
             
             break;

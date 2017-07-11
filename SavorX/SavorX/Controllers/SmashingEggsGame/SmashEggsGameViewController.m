@@ -17,13 +17,13 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreAudio/CoreAudioTypes.h>
 #import <AVFoundation/AVFoundation.h>
-#import "HomeAnimationView.h"
 #import "RDHammer.h"
 #import "ShareRDViewController.h"
 #import "WinResultViewController.h"
 #import "HSSmashEggsRequest.h"
 #import "HSSmashEggsModel.h"
 #import "GlobalData.h"
+#import "RDHomeStatusView.h"
 
 @interface SmashEggsGameViewController ()<UITextViewDelegate,RDGoldenEggsDelegate,AVAudioPlayerDelegate>
 
@@ -325,7 +325,7 @@
         [self requestForEggsNetWork];
     }else{
         [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
-        [[HomeAnimationView animationView] scanQRCode];
+        [[RDHomeStatusView defaultView] scanQRCode];
     }
     
 }
@@ -550,7 +550,7 @@
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 [self stop];
                 [self.eggsView stopShakeAnimation];
-                [[HomeAnimationView animationView] stopScreenWithEggGame];
+                [[RDHomeStatusView defaultView] stopScreenWithEggGame];
                 [self creatMaskingView];
                 [self performSelector:@selector(eggGameStopWithTimeOut) withObject:nil afterDelay:120];
             }else{
@@ -565,7 +565,7 @@
         }];
         
     }else{
-        [[HomeAnimationView animationView] scanQRCode];
+        [[RDHomeStatusView defaultView] scanQRCode];
     }
 }
 

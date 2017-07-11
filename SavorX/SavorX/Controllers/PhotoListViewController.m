@@ -13,7 +13,6 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "PhotoListCollectionViewCell.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "PhotoManyViewController.h"
 
 #define PhotoListCollection @"PhotoListCollection"
@@ -222,8 +221,6 @@
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                         [hud hideAnimated:NO];
                         [self.navigationController pushViewController:vc animated:YES];
-                        [HomeAnimationView animationView].currentImage = result;
-                        [[HomeAnimationView animationView] startScreenWithViewController:vc];
                         [SAVORXAPI successRing];
                         
                         [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_play" key:nil value:nil];
@@ -252,8 +249,7 @@
                 [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                     [hud hideAnimated:NO];
                     [self.navigationController pushViewController:vc animated:YES];
-                    [HomeAnimationView animationView].currentImage = result;
-                    [[HomeAnimationView animationView] startScreenWithViewController:vc];
+                    
                     [SAVORXAPI successRing];
                 } failure:^{
                     [hud hideAnimated:NO];
@@ -297,11 +293,7 @@
             [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                 
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
-                    
-                    // 获取第一张幻灯片图片，回传
-                    [HomeAnimationView animationView].currentImage = result;
-                    [hud hideAnimated:NO];
-                    [[HomeAnimationView animationView] startScreenWithViewController:third];
+                
                     [self.navigationController pushViewController:third animated:YES];
                     [SAVORXAPI successRing];
                     
@@ -324,9 +316,9 @@
             NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
             [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                 // 获取第一张幻灯片图片，回传
-                [HomeAnimationView animationView].currentImage = result;
+               
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [[HomeAnimationView animationView] startScreenWithViewController:third];
+                
                 [self.navigationController pushViewController:third animated:YES];
                 [SAVORXAPI successRing];
             } failure:^{

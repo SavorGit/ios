@@ -178,6 +178,7 @@
 		06B555131E8A587D0068BF70 /* documentVideoGuided.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 06B555121E8A587D0068BF70 /* documentVideoGuided.mp4 */; };
 		06B5554C1E8A6A210068BF70 /* DefalutLaunchPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B555491E8A6A210068BF70 /* DefalutLaunchPlayView.m */; };
 		06B5554D1E8A6A210068BF70 /* DefalutLaunchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B5554B1E8A6A210068BF70 /* DefalutLaunchViewController.m */; };
+		06BCC8D71F14D2FE0004ECCF /* FileVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BCC8D61F14D2FE0004ECCF /* FileVideoViewController.m */; };
 		06BD18D91E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06BD18D71E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a */; };
 		06E719221E810B6A008496F4 /* HSConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06E719211E810B6A008496F4 /* HSConnectViewController.m */; };
 		06EA38BC1D5971DA0081DDCC /* AlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06EA38BB1D5971DA0081DDCC /* AlbumListViewController.m */; };
@@ -222,8 +223,6 @@
 		06FFCCAC1E6E864900ADEA94 /* RDAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FFCCAA1E6E864900ADEA94 /* RDAlertView.m */; };
 		06FFCCAF1E6EBF6A00ADEA94 /* RDCheackSence.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FFCCAE1E6EBF6A00ADEA94 /* RDCheackSence.m */; };
 		26A8176745C4493D3EE874EA /* libPods-SavorX.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC211233FEE2DC8EC430CCC /* libPods-SavorX.a */; };
-		4733B7541E305C21006889A2 /* HomeAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4733B7531E305C21006889A2 /* HomeAnimationView.m */; };
-		4733B7561E305C49006889A2 /* HomeAnimationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4733B7551E305C49006889A2 /* HomeAnimationView.xib */; };
 		474C76351DFB9BED001129C9 /* NoDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 474C76301DFB9BED001129C9 /* NoDataView.m */; };
 		474C76361DFB9BED001129C9 /* NoDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 474C76311DFB9BED001129C9 /* NoDataView.xib */; };
 		474C76371DFB9BED001129C9 /* NoNetWorkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 474C76331DFB9BED001129C9 /* NoNetWorkView.m */; };
@@ -686,6 +685,8 @@
 		06B555491E8A6A210068BF70 /* DefalutLaunchPlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefalutLaunchPlayView.m; sourceTree = "<group>"; };
 		06B5554A1E8A6A210068BF70 /* DefalutLaunchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefalutLaunchViewController.h; sourceTree = "<group>"; };
 		06B5554B1E8A6A210068BF70 /* DefalutLaunchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DefalutLaunchViewController.m; sourceTree = "<group>"; };
+		06BCC8D51F14D2FE0004ECCF /* FileVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileVideoViewController.h; sourceTree = "<group>"; };
+		06BCC8D61F14D2FE0004ECCF /* FileVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileVideoViewController.m; sourceTree = "<group>"; };
 		06BD18D71E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUMessage_Sdk_1.4.0.a; sourceTree = "<group>"; };
 		06BD18D81E35AE3C0030F69F /* UMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMessage.h; sourceTree = "<group>"; };
 		06E719201E810B6A008496F4 /* HSConnectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSConnectViewController.h; sourceTree = "<group>"; };
@@ -775,9 +776,6 @@
 		06FFCCAD1E6EBF6A00ADEA94 /* RDCheackSence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCheackSence.h; sourceTree = "<group>"; };
 		06FFCCAE1E6EBF6A00ADEA94 /* RDCheackSence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDCheackSence.m; sourceTree = "<group>"; };
 		0BC211233FEE2DC8EC430CCC /* libPods-SavorX.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SavorX.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4733B7521E305C21006889A2 /* HomeAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeAnimationView.h; sourceTree = "<group>"; };
-		4733B7531E305C21006889A2 /* HomeAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAnimationView.m; sourceTree = "<group>"; };
-		4733B7551E305C49006889A2 /* HomeAnimationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeAnimationView.xib; sourceTree = "<group>"; };
 		474C762F1DFB9BED001129C9 /* NoDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoDataView.h; sourceTree = "<group>"; };
 		474C76301DFB9BED001129C9 /* NoDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDataView.m; sourceTree = "<group>"; };
 		474C76311DFB9BED001129C9 /* NoDataView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoDataView.xib; sourceTree = "<group>"; };
@@ -1560,6 +1558,8 @@
 				0663D44C1F0B804D00CD2FA2 /* PhotoLibraryViewController.m */,
 				0647961B1F0E306100DD8AA9 /* PhotoVideoScreenViewController.h */,
 				0647961C1F0E306100DD8AA9 /* PhotoVideoScreenViewController.m */,
+				06BCC8D51F14D2FE0004ECCF /* FileVideoViewController.h */,
+				06BCC8D61F14D2FE0004ECCF /* FileVideoViewController.m */,
 			);
 			path = PhotoLibrary;
 			sourceTree = "<group>";
@@ -2081,9 +2081,6 @@
 				06FFCCAE1E6EBF6A00ADEA94 /* RDCheackSence.m */,
 				063DC13B1E6D5E1C00449A7B /* RDHomeScreenButton.h */,
 				063DC13C1E6D5E1C00449A7B /* RDHomeScreenButton.m */,
-				4733B7521E305C21006889A2 /* HomeAnimationView.h */,
-				4733B7531E305C21006889A2 /* HomeAnimationView.m */,
-				4733B7551E305C49006889A2 /* HomeAnimationView.xib */,
 			);
 			path = HomePageView;
 			sourceTree = "<group>";
@@ -2829,7 +2826,6 @@
 				962EFA791E84F7980074450A /* laba_g@2x.png in Resources */,
 				062D4F8C1DEC02BA0093942A /* RDEndShare.png in Resources */,
 				062D4FA41DEC02BA0093942A /* topImageView.png in Resources */,
-				4733B7561E305C49006889A2 /* HomeAnimationView.xib in Resources */,
 				962EFA7E1E84F7980074450A /* labajingyin_g.png in Resources */,
 				962EFA8E1E84F7980074450A /* zanting@2x.png in Resources */,
 				065ECD701E8A73BA0062E29D /* index4_2.jpg in Resources */,
@@ -3033,6 +3029,7 @@
 				060E42131E4CB03E009A94FC /* UIView+SDExtension.m in Sources */,
 				06B5554D1E8A6A210068BF70 /* DefalutLaunchViewController.m in Sources */,
 				47F997691DFFA7750009BDFB /* SXDlnaViewController.m in Sources */,
+				06BCC8D71F14D2FE0004ECCF /* FileVideoViewController.m in Sources */,
 				0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */,
 				062CEFD21EC2FAC400EA6AE0 /* RDAwardTool.m in Sources */,
 				060E42111E4CB03E009A94FC /* SDCollectionViewCell.m in Sources */,
@@ -3112,7 +3109,6 @@
 				061B4EBB1E4850B2000D5E07 /* PhotoHandleView.m in Sources */,
 				06F07B7D1D768EE900AD7B7E /* HelpViewController.m in Sources */,
 				96A734A41F0C7F3C00906163 /* CreatWealthDetialTableViewCell.m in Sources */,
-				4733B7541E305C21006889A2 /* HomeAnimationView.m in Sources */,
 				96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */,
 				0627E0C21E3231DA00DAED92 /* UIViewController+LGSideMenuController.m in Sources */,
 				069076651E51904C00CA1AC4 /* ArticleReadViewController.m in Sources */,

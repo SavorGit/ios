@@ -9,7 +9,6 @@
 #import "PhotoAllViewController.h"
 #import "PhotoCollectionViewCell.h"
 #import "PhotoManyViewController.h"
-#import "HomeAnimationView.h"
 #import "GCCUPnPManager.h"
 #import "PhotoSliderViewController.h"
 #import "OpenFileTool.h"
@@ -122,7 +121,7 @@
             [SAVORXAPI postWithURL:STBURL parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *result) {
                 [hud hideAnimated:NO];
                 if ([[result objectForKey:@"result"] integerValue] == 0) {
-                    [[HomeAnimationView animationView] startScreenWithViewController:third];
+//                    [[HomeAnimationView animationView] startScreenWithViewController:third];
                     [self.navigationController pushViewController:third animated:YES];
                     [SAVORXAPI successRing];
                 }else{
@@ -139,7 +138,7 @@
             NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
             [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [[HomeAnimationView animationView] startScreenWithViewController:third];
+//                [[HomeAnimationView animationView] startScreenWithViewController:third];
                 [self.navigationController pushViewController:third animated:YES];
                 [SAVORXAPI successRing];
             } failure:^{
@@ -148,7 +147,7 @@
             }];
         }];
     }else{
-        [[HomeAnimationView animationView] scanQRCode];
+//        [[HomeAnimationView animationView] scanQRCode];
     }
 }
 
@@ -311,7 +310,7 @@
                         [hud hideAnimated:NO];
                         if ([[result objectForKey:@"result"] integerValue] == 0) {
                             [self.navigationController pushViewController:vc animated:YES];
-                            [[HomeAnimationView animationView] startScreenWithViewController:vc];
+//                            [[HomeAnimationView animationView] startScreenWithViewController:vc];
                             [SAVORXAPI successRing];
                         }else{
                             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
@@ -325,7 +324,7 @@
                     [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
                         [hud hideAnimated:NO];
                         [self.navigationController pushViewController:vc animated:YES];
-                        [[HomeAnimationView animationView] startScreenWithViewController:vc];
+//                        [[HomeAnimationView animationView] startScreenWithViewController:vc];
                         [SAVORXAPI successRing];
                     } failure:^{
                         [hud hideAnimated:NO];
@@ -414,7 +413,7 @@
                             play.totalTime = asset.duration;
                             [MBProgressHUD hideHUDForView:self.view animated:YES];
                             [SAVORXAPI successRing];
-                            [[HomeAnimationView animationView] startScreenWithViewController:play];
+//                            [[HomeAnimationView animationView] startScreenWithViewController:play];
                             [self.navigationController pushViewController:play animated:YES];
                         }else{
                             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
@@ -432,7 +431,7 @@
                         play.totalTime = asset.duration;
                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                         [SAVORXAPI successRing];
-                        [[HomeAnimationView animationView] startScreenWithViewController:play];
+//                        [[HomeAnimationView animationView] startScreenWithViewController:play];
                         [self.navigationController pushViewController:play animated:YES];
                     } failure:^{
                         [MBProgressHUD hideHUDForView:self.view animated:YES];

@@ -1,24 +1,24 @@
 //
-//  PhotoVideoScreenViewController.m
+//  FileVideoViewController.m
 //  SavorX
 //
-//  Created by 郭春城 on 2017/7/6.
+//  Created by 郭春城 on 2017/7/11.
 //  Copyright © 2017年 郭春城. All rights reserved.
 //
 
-#import "PhotoVideoScreenViewController.h"
+#import "FileVideoViewController.h"
 #import "RDAlertView.h"
 #import "HSConnectViewController.h"
 #import "RDHomeStatusView.h"
 
-@interface PhotoVideoScreenViewController ()
+@interface FileVideoViewController ()
 
 @property (nonatomic, strong) UIImageView * backImageView;
 @property (nonatomic, strong) UILabel *minimumLabel; //最小时间显示
 @property (nonatomic, strong) UISlider *playSilder; //进度条控制
 @property (nonatomic, strong) UILabel *maximumLabel; //最大时间显示
 @property (nonatomic, strong) UIButton * collectButton;
-@property (nonatomic, strong) NSURL * url;
+@property (nonatomic, copy) NSString * url;
 
 @property (nonatomic, strong) UIView * toolView;
 @property (nonatomic, strong) UIButton * playButton;
@@ -32,14 +32,17 @@
 @property (nonatomic, assign) CGFloat lastValue;
 @property (nonatomic, strong) UIView * alertView;
 
+@property (nonatomic, assign) NSInteger totalTime;
+
 @end
 
-@implementation PhotoVideoScreenViewController
+@implementation FileVideoViewController
 
-- (instancetype)initWithVideoFileURL:(NSString *)url
+- (instancetype)initWithVideoFileURL:(NSString *)url totalTime:(NSInteger)totalTime
 {
     if (self = [super init]) {
-        self.url = [NSURL fileURLWithPath:url];
+        self.url = url;
+        self.totalTime = totalTime;
     }
     return self;
 }
@@ -53,8 +56,6 @@
 
 - (void)createUI
 {
-    AVAsset * asset = [AVAsset assetWithURL:self.url];
-    
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.backImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
@@ -81,7 +82,7 @@
     self.playSilder = [[UISlider alloc] initWithFrame:CGRectZero];
     [self.playSilder setThumbImage:[UIImage imageNamed:@"slider_thumb"] forState:UIControlStateNormal];
     self.playSilder.minimumValue = 0;
-    self.playSilder.maximumValue = (NSInteger)asset.duration.value / asset.duration.timescale;;
+    self.playSilder.maximumValue = self.totalTime;
     [self.playSilder setMinimumTrackTintColor:UIColorFromRGB(0xcf3850)];
     [self.playSilder setMaximumTrackTintColor:[UIColorFromRGB(0xffffff) colorWithAlphaComponent:.5f]];
     [playSliderView addSubview:self.playSilder];
@@ -108,7 +109,7 @@
     self.maximumLabel = [[UILabel alloc] initWithFrame:CGRectMake(kScreen_Width - 45, 75, 45, 20)];
     self.maximumLabel.font = [UIFont systemFontOfSize:12.f];
     self.maximumLabel.textColor = [UIColor whiteColor];
-    NSInteger pLayDurationInt = (NSInteger)asset.duration.value / asset.duration.timescale;
+    NSInteger pLayDurationInt = self.totalTime;
     NSInteger playMinutesInt = pLayDurationInt / 60;
     NSInteger playSecondsInt = pLayDurationInt % 60;
     NSString *playTimeStr = [NSString stringWithFormat:@"%02ld:%02ld", (long)playMinutesInt, (long)playSecondsInt];
@@ -172,7 +173,7 @@
     }];
     
     self.toolView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth - 80, kMainBoundsWidth - 80)];
-//    self.toolView.backgroundColor = [UIColor blueColor];
+    //    self.toolView.backgroundColor = [UIColor blueColor];
     [bottomView addSubview:self.toolView];
     [self.toolView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(0);
@@ -197,7 +198,7 @@
     
     self.playButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.playButton.frame = CGRectMake(0, 0, playView.frame.size.width - 50, playView.frame.size.width - 50);
-//    [self.playButton setAdjustsImageWhenHighlighted:NO];
+    //    [self.playButton setAdjustsImageWhenHighlighted:NO];
     [playView addSubview:self.playButton];
     [self.playButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(0);
@@ -432,7 +433,7 @@
 
 - (void)resetVod
 {
-    NSString *asseturlStr = [NSString stringWithFormat:@"%@video?%@", [HTTPServerManager getCurrentHTTPServerIP], RDScreenVideoName];
+    NSString *asseturlStr = [NSString stringWithFormat:@"%@%@", [HTTPServerManager getCurrentHTTPServerIP], self.url];
     [self demandVideoWithMediaPath:asseturlStr force:0];
 }
 

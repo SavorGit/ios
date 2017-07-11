@@ -8,17 +8,17 @@
 
 #import "OpenFileTool.h"
 #import "ScreenDocumentViewController.h"
-#import "SXVideoPlayViewController.h"
+#import "FileVideoViewController.h"
 #import "PhotoSliderViewController.h"
 #import "PhotoManyViewController.h"
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "PhotoTool.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
 #import "LGSideMenuController.h"
 #import "RDScreenLocationView.h"
+#import "RDHomeStatusView.h"
 
 @implementation OpenFileTool
 
@@ -58,7 +58,7 @@
     MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow];
     
     UINavigationController * na = [Helper getRootNavigationController];
-    if ([na.topViewController isKindOfClass:[SXVideoPlayViewController class]] ||
+    if ([na.topViewController isKindOfClass:[FileVideoViewController class]] ||
         [na.topViewController isKindOfClass:[ScreenDocumentViewController class]] ||
         [na.topViewController isKindOfClass:[PhotoSliderViewController class]] ||
         [na.topViewController isKindOfClass:[PhotoManyViewController class]] ||
@@ -83,13 +83,9 @@
         [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{
             [hud hideAnimated:NO];
             
-            SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
-            video.videoUrl = videoUrl;
-            video.totalTime = totalTime;
+            FileVideoViewController * video = [[FileVideoViewController alloc] initWithVideoFileURL:videoUrl totalTime:totalTime];
             video.title = [filePath lastPathComponent];
-            UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-            [HomeAnimationView animationView].currentImage = firstImage;
-            [[HomeAnimationView animationView] startScreenWithViewController:video];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:video withStatus:RDHomeStatus_Video];
             [[Helper getRootNavigationController] pushViewController:video animated:YES];
 
         } failure:^{
@@ -102,13 +98,9 @@
     
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
-            SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
-            video.videoUrl = videoUrl;
-            video.totalTime = totalTime;
+            FileVideoViewController * video = [[FileVideoViewController alloc] initWithVideoFileURL:videoUrl totalTime:totalTime];
             video.title = [filePath lastPathComponent];
-            UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-            [HomeAnimationView animationView].currentImage = firstImage;
-            [[HomeAnimationView animationView] startScreenWithViewController:video];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:video withStatus:RDHomeStatus_Video];
             [[Helper getRootNavigationController] pushViewController:video animated:YES];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
@@ -141,14 +133,9 @@
         [base isKindOfClass:[PhotoSliderViewController class]] ||
         [base isKindOfClass:[PhotoManyViewController class]]) {
         [base.navigationController popViewControllerAnimated:NO];
-    }else if ([base isKindOfClass:[SXVideoPlayViewController class]]) {
-        SXVideoPlayViewController * vc = (SXVideoPlayViewController *)base;
-        if (vc.model) {
-            UIViewController * firstVC = [na.viewControllers firstObject];
-            [vc.navigationController popToViewController:firstVC animated:NO];
-        }else{
-            [vc.navigationController popViewControllerAnimated:NO];
-        }
+    }else if ([base isKindOfClass:[FileVideoViewController class]]) {
+        FileVideoViewController * vc = (FileVideoViewController *)base;
+        [vc.navigationController popViewControllerAnimated:NO];
     }else if ([base isKindOfClass:[DemandViewController class]]) {
         UIViewController * vc = [na.viewControllers firstObject];
         [base.navigationController popToViewController:vc animated:NO];

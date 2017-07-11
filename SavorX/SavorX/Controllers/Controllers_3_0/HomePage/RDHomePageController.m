@@ -37,7 +37,7 @@
 {
     [super viewDidLoad];
     
-//    [self checkSpecialTopic];
+    [self checkSpecialTopic];
     [self addNotificationCenter];
 }
 

@@ -10,7 +10,6 @@
 #import "HSConnectViewController.h"
 #import "DemandViewController.h"
 #import "SXVideoPlayViewController.h"
-#import "HomeAnimationView.h"
 #import "GCCUPnPManager.h"
 #import "UMCustomSocialManager.h"
 #import "RDLogStatisticsAPI.h"
@@ -191,7 +190,6 @@
             view.categroyID = self.categoryID;
             view.model = self.model;
             [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
             [self.navigationController pushViewController:view animated:YES];
             [hud hideAnimated:NO];
         } failure:^{
@@ -210,8 +208,6 @@
             view.categroyID = self.categoryID;
             view.model = self.model;
             [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
             [self.navigationController pushViewController:view animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
@@ -372,7 +368,6 @@
             [self demandVideoWithforce:0];
             
         }else{
-            [[HomeAnimationView animationView] scanQRCode];
         }
     }
     else{

@@ -12,10 +12,10 @@
 #import "GCCDLNA.h"
 #import "BaseNavigationController.h"
 #import "SXDlnaViewController.h"
-#import "HomeAnimationView.h"
 #import "LGSideMenuController.h"
 #import "WMPageController.h"
 #import "HSConnectViewController.h"
+#import "RDHomeStatusView.h"
 
 @interface RDCheackSence ()
 
@@ -63,7 +63,7 @@
     if (self.alertView.superview) {
         [self.alertView removeFromSuperview];
         if ([GlobalData shared].scene == RDSceneHaveRDBox) {
-            [[HomeAnimationView animationView] callQRcodeFromPlatform];
+            [[RDHomeStatusView defaultView] callQRcodeFromPlatform];
         }else{
             if ([GlobalData shared].scene == RDSceneHaveDLNA) {
                 SXDlnaViewController * SX = [[SXDlnaViewController alloc] init];

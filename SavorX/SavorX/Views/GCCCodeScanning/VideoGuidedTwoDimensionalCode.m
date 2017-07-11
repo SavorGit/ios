@@ -7,7 +7,6 @@
 //
 
 #import "VideoGuidedTwoDimensionalCode.h"
-#import "HomeAnimationView.h"
 
 @interface VideoGuidedTwoDimensionalCode ()
 

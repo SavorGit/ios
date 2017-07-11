@@ -10,7 +10,6 @@
 #import "GCCGetInfo.h"
 #import "GCCKeyChain.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 
 #import <AudioToolbox/AudioToolbox.h>
 
@@ -24,6 +23,8 @@
 #import "RDAlertView.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
+
+#import "RDHomeStatusView.h"
 
 
 #define version_code @"version_code"
@@ -714,7 +715,7 @@
         }else if ([type isEqualToString:@"doc"]){
             [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_link_tv" key:@"file_to_screen_link_tv" value:@"link"];
         }
-        [[HomeAnimationView animationView] scanQRCode];
+        [[RDHomeStatusView defaultView] scanQRCode];
     } bold:YES];
     [alert addActions:@[action1, action2]];
     [alert show];
