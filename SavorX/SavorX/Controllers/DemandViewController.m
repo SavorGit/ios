@@ -13,7 +13,6 @@
 
 #import "WebViewController.h"
 #import "WMPageController.h"
-#import "HSVideoViewController.h"
 #import "RDLogStatisticsAPI.h"
 
 #import "RDHomeStatusView.h"
@@ -891,9 +890,6 @@
         if ([secondVC isKindOfClass:[WebViewController class]]) {
             WebViewController * web = (WebViewController *)secondVC;
             [web.playView shouldRelease];
-        }else if([secondVC isKindOfClass:[HSVideoViewController class]]){
-            HSVideoViewController * hsVideo = (HSVideoViewController *)secondVC;
-            [hsVideo.playView shouldRelease];
         }
         
         [self.navigationController popToViewController:vc animated:YES];

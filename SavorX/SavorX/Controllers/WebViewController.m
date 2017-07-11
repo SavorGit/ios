@@ -9,7 +9,6 @@
 #import "WebViewController.h"
 #import "UMCustomSocialManager.h"
 #import "HSConnectViewController.h"
-#import "SXVideoPlayViewController.h"
 #import "DemandViewController.h"
 #import "GCCUPnPManager.h"
 #import <MediaPlayer/MediaPlayer.h>

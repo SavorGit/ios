@@ -35,7 +35,6 @@
 #import "ScreenDocumentViewController.h"
 #import "WebViewController.h"
 #import "VideoGuidedTwoDimensionalCode.h"
-#import "HSVideoViewController.h"
 #import "ImageAtlasDetailViewController.h"
 
 #pragma mark -
@@ -3084,7 +3083,7 @@ rightViewBackgroundImageInitialScale = _rightViewBackgroundImageInitialScale;
         }
         
         return UIInterfaceOrientationMaskAllButUpsideDown;
-    }else if ([[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[HSVideoViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[ImageAtlasDetailViewController class]]) {
+    }else if ([[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[ImageAtlasDetailViewController class]]) {
         return UIInterfaceOrientationMaskAllButUpsideDown;
     }
     return UIInterfaceOrientationMaskPortrait;

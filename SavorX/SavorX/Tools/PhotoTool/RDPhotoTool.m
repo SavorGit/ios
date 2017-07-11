@@ -352,4 +352,81 @@
 }
 
 
++ (void)saveImageInSystemPhoto:(UIImage *)image withAlert:(BOOL)alert
+{
+    //判断用户是否拥有相机权限
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    if (status == PHAuthorizationStatusNotDetermined) {
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+            if (status == PHAuthorizationStatusAuthorized) {
+                
+            }else{
+                return;
+            }
+        }];
+    } else if (status == PHAuthorizationStatusAuthorized) {
+        
+    } else{
+        return;
+    }
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        // 相册的标题
+        NSString *title = @"小热点";
+        
+        PHAssetCollection * myCollection;
+        
+        // 获得所有的自定义相册
+        PHFetchResult<PHAssetCollection *> *collections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+        for (PHAssetCollection *collection in collections) {
+            if ([collection.localizedTitle isEqualToString:title]) {
+                myCollection = collection;
+            }
+        }
+        
+        if (!myCollection) {
+            // 代码执行到这里，说明还没有自定义相册
+            __block NSString *createdCollectionId = nil;
+            
+            // 创建一个新的相册
+            [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
+                createdCollectionId = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:title].placeholderForCreatedAssetCollection.localIdentifier;
+            } error:nil];
+            myCollection = [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[createdCollectionId] options:nil].firstObject;
+        }
+        
+        __block NSString *createdAssetId = nil;
+        // 添加图片到【相机胶卷】
+        // 同步方法,直接创建图片,代码执行完,图片没创建完,所以使用占位ID (createdAssetId)
+        [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
+            createdAssetId = [PHAssetChangeRequest creationRequestForAssetFromImage:image].placeholderForCreatedAsset.localIdentifier;
+        } error:nil];
+        
+        // 在保存完毕后取出图片
+        PHFetchResult<PHAsset *> *createdAssets = [PHAsset fetchAssetsWithLocalIdentifiers:@[createdAssetId] options:nil];
+        
+        if (!createdAssets || !myCollection) {
+            return;
+        }
+        
+        // 将刚才添加到【相机胶卷】的图片，引用（添加）到【自定义相册】
+        NSError *error = nil;
+        [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
+            PHAssetCollectionChangeRequest *request = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:myCollection];
+            // 自定义相册封面默认保存第一张图,所以使用以下方法把最新保存照片设为封面
+            [request insertAssets:createdAssets atIndexes:[NSIndexSet indexSetWithIndex:myCollection.estimatedAssetCount]];
+        } error:&error];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (alert) {
+                if (error) {
+                    [MBProgressHUD showTextHUDwithTitle:@"保存失败"];
+                }else{
+                    [MBProgressHUD showTextHUDwithTitle:@"图片已保存" delay:1.5f];
+                }
+            }
+        });
+    });
+}
+
 @end

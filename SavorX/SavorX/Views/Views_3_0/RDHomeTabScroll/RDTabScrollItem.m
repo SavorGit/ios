@@ -24,7 +24,7 @@
 @property (nonatomic, assign) NSInteger index;
 @property (nonatomic, strong) RDTabScrollViewPage * page;
 
-@property (nonatomic, strong) RDHotelItemModel * model;
+@property (nonatomic, strong) CreateWealthModel * model;
 @property (nonatomic, strong) UIView * baseView;
 @property (nonatomic, assign) NSInteger total;
 
@@ -32,7 +32,7 @@
 
 @implementation RDTabScrollItem
 
-- (instancetype)initWithFrame:(CGRect)frame info:(RDHotelItemModel *)model index:(NSInteger)index total:(NSInteger)total
+- (instancetype)initWithFrame:(CGRect)frame info:(CreateWealthModel *)model index:(NSInteger)index total:(NSInteger)total
 {
     if (self = [super initWithFrame:frame]) {
         
@@ -146,7 +146,7 @@
     }
 }
 
-- (void)configWithInfo:(RDHotelItemModel *)model index:(NSInteger)index total:(NSInteger)total
+- (void)configWithInfo:(CreateWealthModel *)model index:(NSInteger)index total:(NSInteger)total
 {
     self.index = index;
     self.total = total;

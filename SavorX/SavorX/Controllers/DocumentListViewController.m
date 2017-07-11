@@ -11,7 +11,6 @@
 #import "FileVideoViewController.h"
 #import "OpenFileTool.h"
 #import "GCCUPnPManager.h"
-#import "PhotoTool.h"
 #import "VideoGuidedTwoDimensionalCode.h"
 #import "HelpViewController.h"
 #import "RDAlertView.h"
