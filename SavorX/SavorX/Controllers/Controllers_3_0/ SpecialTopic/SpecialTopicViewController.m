@@ -12,11 +12,14 @@
 #import "Masonry.h"
 #import "CreateWealthModel.h"
 #import "SpecialTopDetailViewController.h"
+#import "SpecialTopRequest.h"
+#import "HSSpecialTopModel.h"
 
 @interface SpecialTopicViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
+@property (nonatomic, copy) NSString * cachePath;
 
 @end
 
@@ -32,31 +35,69 @@
 
 - (void)initInfo{
     _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
+     self.cachePath = [NSString stringWithFormat:@"%@%@.plist", CategoryCache, @"SpecialTopic"];
 }
 
-//初始化请求第一页，下拉刷新
 - (void)setUpDatas{
     
-//    NSArray *imageArr = [NSArray arrayWithObjects:@"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg",@"https://dn-brknqdxv.qbox.me/d6e24a57b763c14b7731.jpg",@"https://dn-brknqdxv.qbox.me/5fb13268c2d1ef3bfe69.jpg",@"https://dn-brknqdxv.qbox.me/fea55faa880653633cc8.jpg",@"https://dn-brknqdxv.qbox.me/8401b45695d7fea371ca.jpg",@"https://dn-brknqdxv.qbox.me/59bda095dcb55dd91347.jpg",@"https://dn-brknqdxv.qbox.me/ec1379afc23d6afc3d90.jpg",@"https://dn-brknqdxv.qbox.me/51b10338ffdf7016a599.jpg",@"https://dn-brknqdxv.qbox.me/4b82c3574058ea94a2c8.jpg",@"https://dn-brknqdxv.qbox.me/a0287e02c7889227d5c7.jpg", nil];
-//    for (int i = 0; i < 30; i ++) {
-//        CreateWealthModel *model = [[CreateWealthModel alloc] init];
-//        model.type = 0;
-//        if (i == 0) {
-//            model.type = 1;
-//        }
-//        model.title = @"这是新闻的标题";
-//        model.subTitle = @"这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介。";
-//        model.imageUrl = @"http://devp.oss.littlehotspot.com/media/resource/WehQBiCyQk.jpg";
-//        if (i < 10) {
-//            model.imageUrl = imageArr[i];
-//        }
-//        model.source = @"网易新闻";
-//        model.time = @"2017.06.19";
-//        model.sourceImage = @"sourceImage";
-//        [_dataSource addObject:model];
-//    }
-//    [self.tableView reloadData];
+    [self.dataSource removeAllObjects];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
+        
+        //如果本地缓存的有数据，则先从本地读取缓存的数据
+        NSArray * dataArr = [NSArray arrayWithContentsOfFile:self.cachePath];
+        for(NSDictionary *dict in dataArr){
+            
+            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:dict];
+            [self.dataSource addObject:tmpModel];
+            
+        }
+        [self.tableView reloadData];
+    }
+    
+    SpecialTopRequest * request = [[SpecialTopRequest alloc] initWithSortNum:nil];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        NSArray *resultArr = [response objectForKey:@"result"];
+        [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
+        for (int i = 0; i < resultArr.count; i ++) {
+            HSSpecialTopModel *welthModel = [[HSSpecialTopModel alloc] initWithDictionary:resultArr[i]];
+            [self.dataSource addObject:welthModel];
+        }
+        [self.tableView reloadData];
+        
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
+
+
+//初始化请求第一页，下拉刷新
+//- (void)setUpDatas{
+//    
+////    NSArray *imageArr = [NSArray arrayWithObjects:@"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg",@"https://dn-brknqdxv.qbox.me/d6e24a57b763c14b7731.jpg",@"https://dn-brknqdxv.qbox.me/5fb13268c2d1ef3bfe69.jpg",@"https://dn-brknqdxv.qbox.me/fea55faa880653633cc8.jpg",@"https://dn-brknqdxv.qbox.me/8401b45695d7fea371ca.jpg",@"https://dn-brknqdxv.qbox.me/59bda095dcb55dd91347.jpg",@"https://dn-brknqdxv.qbox.me/ec1379afc23d6afc3d90.jpg",@"https://dn-brknqdxv.qbox.me/51b10338ffdf7016a599.jpg",@"https://dn-brknqdxv.qbox.me/4b82c3574058ea94a2c8.jpg",@"https://dn-brknqdxv.qbox.me/a0287e02c7889227d5c7.jpg", nil];
+////    for (int i = 0; i < 30; i ++) {
+////        CreateWealthModel *model = [[CreateWealthModel alloc] init];
+////        model.type = 0;
+////        if (i == 0) {
+////            model.type = 1;
+////        }
+////        model.title = @"这是新闻的标题";
+////        model.subTitle = @"这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介。";
+////        model.imageUrl = @"http://devp.oss.littlehotspot.com/media/resource/WehQBiCyQk.jpg";
+////        if (i < 10) {
+////            model.imageUrl = imageArr[i];
+////        }
+////        model.source = @"网易新闻";
+////        model.time = @"2017.06.19";
+////        model.sourceImage = @"sourceImage";
+////        [_dataSource addObject:model];
+////    }
+////    [self.tableView reloadData];
+//}
 
 #pragma mark -- 懒加载
 - (UITableView *)tableView

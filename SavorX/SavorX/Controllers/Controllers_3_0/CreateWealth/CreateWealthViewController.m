@@ -26,7 +26,6 @@
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, assign) NSInteger categoryID;
 @property (nonatomic, copy) NSString * cachePath;
-@property (nonatomic, assign) NSInteger sort_num;
 
 @end
 

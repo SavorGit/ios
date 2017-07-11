@@ -388,6 +388,8 @@
 		96D8C5DF1F1390DF00251301 /* ImageAtlasDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5DE1F1390DF00251301 /* ImageAtlasDetailModel.m */; };
 		96D8C5E81F146AE200251301 /* HSCreateWealthRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */; };
 		96D8C5EB1F14CAF200251301 /* HSRecordSmashEggsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5EA1F14CAF200251301 /* HSRecordSmashEggsRequest.m */; };
+		96D8C5F11F14D2EB00251301 /* HSSpecialTopModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F01F14D2EB00251301 /* HSSpecialTopModel.m */; };
+		96D8C5F51F14D3B900251301 /* SpecialTopRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F41F14D3B900251301 /* SpecialTopRequest.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -1021,6 +1023,10 @@
 		96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSCreateWealthRequest.m; sourceTree = "<group>"; };
 		96D8C5E91F14CAF200251301 /* HSRecordSmashEggsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSRecordSmashEggsRequest.h; sourceTree = "<group>"; };
 		96D8C5EA1F14CAF200251301 /* HSRecordSmashEggsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSRecordSmashEggsRequest.m; sourceTree = "<group>"; };
+		96D8C5EF1F14D2EB00251301 /* HSSpecialTopModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSSpecialTopModel.h; sourceTree = "<group>"; };
+		96D8C5F01F14D2EB00251301 /* HSSpecialTopModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSSpecialTopModel.m; sourceTree = "<group>"; };
+		96D8C5F31F14D3B900251301 /* SpecialTopRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTopRequest.h; sourceTree = "<group>"; };
+		96D8C5F41F14D3B900251301 /* SpecialTopRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopRequest.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1588,6 +1594,7 @@
 		067C30C41F131D43000A1150 /* Network_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				96D8C5F21F14D39500251301 /*  SpecialTopNet */,
 				96D8C5D61F136FE000251301 /* CreateWealthNet */,
 				067C30C81F1351F3000A1150 /* Home */,
 			);
@@ -2497,6 +2504,7 @@
 		96A734A51F0C7FAC00906163 /* Models_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				96D8C5EE1F14D2B700251301 /*  SpecialTopModel */,
 				96A734A61F0C7FAC00906163 /* CreateWealthModel */,
 			);
 			path = Models_3_0;
@@ -2634,6 +2642,24 @@
 				96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */,
 			);
 			path = CreateWealthNet;
+			sourceTree = "<group>";
+		};
+		96D8C5EE1F14D2B700251301 /*  SpecialTopModel */ = {
+			isa = PBXGroup;
+			children = (
+				96D8C5EF1F14D2EB00251301 /* HSSpecialTopModel.h */,
+				96D8C5F01F14D2EB00251301 /* HSSpecialTopModel.m */,
+			);
+			path = " SpecialTopModel";
+			sourceTree = "<group>";
+		};
+		96D8C5F21F14D39500251301 /*  SpecialTopNet */ = {
+			isa = PBXGroup;
+			children = (
+				96D8C5F31F14D3B900251301 /* SpecialTopRequest.h */,
+				96D8C5F41F14D3B900251301 /* SpecialTopRequest.m */,
+			);
+			path = " SpecialTopNet";
 			sourceTree = "<group>";
 		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
@@ -3024,6 +3050,7 @@
 				060E42131E4CB03E009A94FC /* UIView+SDExtension.m in Sources */,
 				06B5554D1E8A6A210068BF70 /* DefalutLaunchViewController.m in Sources */,
 				47F997691DFFA7750009BDFB /* SXDlnaViewController.m in Sources */,
+				96D8C5F51F14D3B900251301 /* SpecialTopRequest.m in Sources */,
 				0647EACB1E70E93500C39160 /* RDRightConnetItem.m in Sources */,
 				062CEFD21EC2FAC400EA6AE0 /* RDAwardTool.m in Sources */,
 				060E42111E4CB03E009A94FC /* SDCollectionViewCell.m in Sources */,
@@ -3043,6 +3070,7 @@
 				96D8C5BB1F0F213000251301 /* DDPhotoDescView.m in Sources */,
 				96A7349F1F0C7F2D00906163 /* ImageTextTableViewCell.m in Sources */,
 				47F997551DFF96260009BDFB /* SXDlnaView.m in Sources */,
+				96D8C5F11F14D2EB00251301 /* HSSpecialTopModel.m in Sources */,
 				0663D4541F0B816300CD2FA2 /* RDVideoCollectionViewCell.m in Sources */,
 				0627E0C01E3231DA00DAED92 /* LGSideMenuControllerGesturesHandler.m in Sources */,
 				06FB9D771DF989180053BE0A /* BaseModel.m in Sources */,
