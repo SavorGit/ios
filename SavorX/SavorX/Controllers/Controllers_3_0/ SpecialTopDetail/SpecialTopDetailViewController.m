@@ -41,7 +41,7 @@
     }
     NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
     [self.webView loadRequest:request];
-    self.webView.backgroundColor = [UIColor whiteColor];
+    self.webView.backgroundColor = [UIColor whiteColor];  
     [self.view addSubview:self.webView];
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
