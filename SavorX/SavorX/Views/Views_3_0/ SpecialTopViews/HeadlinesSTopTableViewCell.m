@@ -24,7 +24,7 @@
     _bgView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.contentView addSubview:_bgView];
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 351.5));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 357.5));
         make.top.mas_equalTo(10);
         make.left.mas_equalTo(10);
     }];
@@ -61,7 +61,7 @@
     _subTitleLabel.numberOfLines = 2;
     [_bgView addSubview:_subTitleLabel];
     [_subTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 36));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 42));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
         make.left.mas_equalTo(5);
     }];

@@ -234,7 +234,7 @@ static int temp = -1;
         [_collectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(40, 44));
             make.top.mas_equalTo(20);
-            make.right.mas_equalTo(- 80);
+            make.right.mas_equalTo(- 65);
         }];
         if (self.imgAtlModel.collected == 1) {
             _collectBtn.selected = YES;

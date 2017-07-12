@@ -268,7 +268,7 @@
 {
     HSSpecialTopModel * model = [self.dataSource objectAtIndex:indexPath.row];
     if (model.type == 0) {
-        return 361.5;
+        return 367.5;
     }else if (model.type == 1){
         return 96;
     }
