@@ -9,7 +9,7 @@
 #import "RDTabScrollView.h"
 #import "RDTabScrollItem.h"
 
-@interface RDTabScrollView ()
+@interface RDTabScrollView ()<RDTabScrollViewItemDelegate>
 
 @property (nonatomic, strong) NSArray * dataSource;
 @property (nonatomic, assign) NSInteger currentIndex;
@@ -57,14 +57,17 @@
     self.topItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource lastObject] index:self.dataSource.count total:self.dataSource.count];
     self.topItem.center = self.topItemCenter;
     [self addSubview:self.topItem];
+    self.topItem.delegate = self;
     
     self.currentItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource firstObject] index:1 total:self.dataSource.count];
     self.currentItem.center = self.currentItemCenter;
     [self addSubview:self.currentItem];
+    self.currentItem.delegate = self;
     
     self.bottomItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource objectAtIndex:1] index:2 total:self.dataSource.count];
     self.bottomItem.center = self.bottomItemCenter;
     [self addSubview:self.bottomItem];
+    self.bottomItem.delegate = self;
     
     self.topItem.transform = CGAffineTransformMakeScale(.9, .9);
     self.bottomItem.transform = CGAffineTransformMakeScale(.9, .9);
@@ -108,6 +111,7 @@
     if (!self.tempScroolItem) {
         self.tempScroolItem = [[RDTabScrollItem alloc] initWithFrame:self.currentItem.frame];
         self.tempScroolItem.center = self.currentItem.center;
+        self.tempScroolItem.delegate = self;
     }
     self.tempScroolItem.alpha = .2f;
     [self insertSubview:self.tempScroolItem atIndex:0];
@@ -208,6 +212,7 @@
             if (!self.tempScroolItem) {
                 self.tempScroolItem = [[RDTabScrollItem alloc] initWithFrame:self.currentItem.frame];
                 self.tempScroolItem.center = self.currentItem.center;
+                self.tempScroolItem.delegate = self;
             }
             [self insertSubview:self.tempScroolItem atIndex:0];
         }
@@ -409,6 +414,20 @@
         }
     }
     return [self.dataSource objectAtIndex:self.currentIndex - 2];
+}
+
+- (void)RDTabScrollViewItemPhotoButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(RDTabScrollViewPhotoButtonDidClickedWithModel:index:)]) {
+        [self.delegate RDTabScrollViewPhotoButtonDidClickedWithModel:model index:index];
+    }
+}
+
+- (void)RDTabScrollViewItemTVButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(RDTabScrollViewTVButtonDidClickedWithModel:index:)]) {
+        [self.delegate RDTabScrollViewTVButtonDidClickedWithModel:model index:index];
+    }
 }
 
 @end

@@ -230,16 +230,6 @@
             
             [self demandVideoWithMediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0 video:video movieUrl:movieURL];
             
-        }else if ([GlobalData shared].isBindDLNA) {
-             [MBProgressHUD showCustomLoadingHUDInView:self.view];
-            [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{
-                [[RDHomeStatusView defaultView] startScreenWithViewController:video withStatus:RDHomeStatus_File];
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [self.navigationController pushViewController:video animated:YES];
-            } failure:^{
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-            }];
         }else{
             [self.navigationController pushViewController:video animated:YES];
         }
@@ -263,7 +253,7 @@
     }
     doucment.title = [doucment.path lastPathComponent];
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD) {
         [SAVORXAPI successRing];
     }
     [self.navigationController pushViewController:doucment animated:YES];

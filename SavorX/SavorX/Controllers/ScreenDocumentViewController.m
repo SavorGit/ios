@@ -74,7 +74,7 @@
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
     self.webView.scrollView.delegate = self;
 
-    if ([GlobalData shared].isBindDLNA || [GlobalData shared].isBindRD) {
+    if ([GlobalData shared].isBindRD) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
         self.isScreen = YES;
     }else{
@@ -155,7 +155,7 @@
 - (void)screenDocment
 {
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_details_play" key:nil value:nil];
-    if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
+    if (![GlobalData shared].isBindRD) {
         [[RDHomeStatusView defaultView] scanQRCode];
         return;
     }
@@ -284,19 +284,6 @@
                         if (error.code != -999) {
                             [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
                         }
-                    }
-                }];
-            }];
-        }else if ([GlobalData shared].isBindDLNA) {
-            [OpenFileTool writeImageToSysImageCacheWithImage:image andName:keyStr handle:^(NSString *keyStr) {
-                NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
-                [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
-                    if (successBlock) {
-                        successBlock();
-                    }
-                } failure:^{
-                    if (failureBlock) {
-                        failureBlock();
                     }
                 }];
             }];

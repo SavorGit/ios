@@ -193,7 +193,7 @@
     
     [self.bottomView addSubview:self.timeLabel];
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
         self.isScreen = YES;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
@@ -356,7 +356,7 @@
 
 - (void)screenCurrentImage
 {
-    if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
+    if (![GlobalData shared].isBindRD) {
         [[RDHomeStatusView defaultView] scanQRCode];
         return;
     }
@@ -403,10 +403,6 @@
                     [hud hideAnimated:NO];
                 }];
             }];
-        }else if ([GlobalData shared].isBindDLNA) {
-            [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                [self screenDLNAImageWithKeyStr:keyStr];
-            }];
         }
     }];
 }
@@ -430,7 +426,7 @@
     
     self.indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
     if (self.isScreen) {
-        if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+        if ([GlobalData shared].isBindRD) {
             PHAsset * asset = [self.PHAssetSource objectAtIndex:self.currentIndex];
             CGFloat width = asset.pixelWidth;
             CGFloat height = asset.pixelHeight;
@@ -444,35 +440,29 @@
             }
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 NSString * name = asset.localIdentifier;
-                if ([GlobalData shared].isBindRD) {
-                    [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
-                        [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
-                            
-                            [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
-                                
-                            } failure:^{
-                                
-                            }];
+                [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
+                        
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
                             
                         } failure:^{
-                            self.playButton.selected = NO;
-                            [self.timer invalidate];
-                            self.timer = nil;
-                            self.isScreen = NO;
-                            if (self.task) {
-                                [self.task cancel];
-                            }
-                            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                            [MBProgressHUD showTextHUDwithTitle:@"幻灯片投屏失败" delay:1.5f];
-                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-                            self.statusLabel.text = @"幻灯片";
+                            
                         }];
+                        
+                    } failure:^{
+                        self.playButton.selected = NO;
+                        [self.timer invalidate];
+                        self.timer = nil;
+                        self.isScreen = NO;
+                        if (self.task) {
+                            [self.task cancel];
+                        }
+                        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                        [MBProgressHUD showTextHUDwithTitle:@"幻灯片投屏失败" delay:1.5f];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                        self.statusLabel.text = @"幻灯片";
                     }];
-                }else if ([GlobalData shared].isBindDLNA) {
-                    [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                        [self screenDLNAImageWithKeyStr:keyStr];
-                    }];
-                }
+                }];
             }];
         }
     }
@@ -545,7 +535,7 @@
         self.playButton.selected = YES;
     }
     if (self.isScreen) {
-        if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+        if ([GlobalData shared].isBindRD) {
             PHAsset * asset = [self.PHAssetSource objectAtIndex:itemIndex];
             CGFloat width = asset.pixelWidth;
             CGFloat height = asset.pixelHeight;
@@ -559,34 +549,28 @@
             }
             NSString * name = asset.localIdentifier;
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-                if ([GlobalData shared].isBindRD) {
-                    [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
-                        [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
-                            
-                            [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
-                                
-                            } failure:^{
-                                
-                            }];
+                [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
+                        
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
                             
                         } failure:^{
-                            self.playButton.selected = NO;
-                            [self.timer invalidate];
-                            self.timer = nil;
-                            self.isScreen = NO;
-                            if (self.task) {
-                                [self.task cancel];
-                            }
-                            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-                            self.statusLabel.text = @"幻灯片";
+                            
                         }];
+                        
+                    } failure:^{
+                        self.playButton.selected = NO;
+                        [self.timer invalidate];
+                        self.timer = nil;
+                        self.isScreen = NO;
+                        if (self.task) {
+                            [self.task cancel];
+                        }
+                        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                        self.statusLabel.text = @"幻灯片";
                     }];
-                }else if ([GlobalData shared].isBindDLNA) {
-                    [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                        [self screenDLNAImageWithKeyStr:keyStr];
-                    }];
-                }
+                }];
             }];
         }
     }

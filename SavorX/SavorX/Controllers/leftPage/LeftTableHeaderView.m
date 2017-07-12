@@ -41,7 +41,7 @@
     }];
     
     UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    [imageView setImage:[UIImage imageNamed:@"logo"]];
+    [imageView setImage:[UIImage imageNamed:@"cdh_logo"]];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.layer.cornerRadius = 10;
     imageView.layer.masksToBounds = YES;

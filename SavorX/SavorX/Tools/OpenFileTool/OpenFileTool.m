@@ -70,18 +70,6 @@
         
          [hud hideAnimated:NO];
         
-    }else if ([GlobalData shared].isBindDLNA) {
-        [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{
-            [hud hideAnimated:NO];
-            
-            FileVideoViewController * video = [[FileVideoViewController alloc] initWithVideoFileURL:videoUrl totalTime:totalTime];
-            video.title = [filePath lastPathComponent];
-            [[RDHomeStatusView defaultView] startScreenWithViewController:video withStatus:RDHomeStatus_Video];
-            [[Helper getRootNavigationController] pushViewController:video animated:YES];
-
-        } failure:^{
-            [hud hideAnimated:NO];
-        }];
     }
 }
 

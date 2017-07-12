@@ -7,8 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CreateWealthModel.h"
+
+@protocol RDTabScrollViewDelegate <NSObject>
+
+- (void)RDTabScrollViewPhotoButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index;
+- (void)RDTabScrollViewTVButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index;
+
+@end
 
 @interface RDTabScrollView : UIView
+
+@property (nonatomic, assign) id<RDTabScrollViewDelegate> delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame modelArray:(NSArray *)array;
 

@@ -9,14 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "CreateWealthModel.h"
 
-@protocol RDTabScrollViewDelegate <NSObject>
+@protocol RDTabScrollViewItemDelegate <NSObject>
 
-- (void)RDTabScrollViewPhotoButtonDidClicked;
-- (void)RDTabScrollViewTVButtonDidClicked;
+- (void)RDTabScrollViewItemPhotoButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index;
+- (void)RDTabScrollViewItemTVButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index;
 
 @end
 
 @interface RDTabScrollItem : UIView
+
+@property (nonatomic, assign) id<RDTabScrollViewItemDelegate> delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame info:(CreateWealthModel *)model index:(NSInteger)index total:(NSInteger)total;
 

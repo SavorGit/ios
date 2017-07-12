@@ -36,7 +36,6 @@
 @property (nonatomic, strong) UIButton * screenButton;
 @property (nonatomic, strong) UIButton * quitScreenButton;
 @property (nonatomic, strong) UIImageView * backImageView;
-@property (nonatomic, assign) NSInteger DLNAVolume;
 @property (nonatomic, strong) UIButton * collectButton;
 @property (nonatomic, strong) UIView *maskingView;
 @property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
@@ -55,15 +54,6 @@
 
 - (void)setupDatas
 {
-    if ([GlobalData shared].isBindDLNA) {
-        self.DLNAVolume = 50;
-        [[GCCUPnPManager defaultManager] getVolumeSuccess:^(NSInteger volume) {
-            self.DLNAVolume = volume;
-        } failure:^{
-            
-        }];
-    }
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidPlayEnd) name:RDBoxQuitScreenNotification object:nil];
 }
 
@@ -461,22 +451,6 @@
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
         }];
-    }else if ([GlobalData shared].isBindDLNA){
-        [[GCCUPnPManager defaultManager] getPlayProgressSuccess:^(NSString *totalDuration, NSString *currentDuration, float progress) {
-            if (progress >= 1 - 1 / self.playSilder.maximumValue) {
-                [self videoDidPlayEnd];
-                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-            }else{
-                CGFloat posFloat = [[GCCUPnPManager defaultManager] timeIntegerFromString:totalDuration] * progress;
-                [self.playSilder setValue:posFloat];
-                [self updateTimeLabel:posFloat];
-                self.playBtn.selected = YES;
-                [self updatePlayStatus];
-            }
-            
-        } failure:^{
-            
-        }];
     }
 }
 
@@ -540,17 +514,6 @@
                 self.isHandle = NO;
                 [self updatePlayStatus];
             }];
-        }else if ([GlobalData shared].isBindDLNA) {
-            [[GCCUPnPManager defaultManager] playSuccess:^{
-                self.isHandle = NO;
-            } failure:^{
-                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
-                self.playBtn.selected = !self.playBtn.selected;
-                [self changeTimerWithPlayStatus];
-                self.isHandle = NO;
-                [self updatePlayStatus];
-            }];
-            return;
         }
     }else{
         
@@ -573,17 +536,6 @@
                 [self changeTimerWithPlayStatus];
                 self.isHandle = NO;
             }];
-        }else if ([GlobalData shared].isBindDLNA) {
-            [[GCCUPnPManager defaultManager] pauseSuccess:^{
-                self.isHandle = NO;
-            } failure:^{
-                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
-                self.playBtn.selected = !self.playBtn.selected;
-                [self updatePlayStatus];
-                [self changeTimerWithPlayStatus];
-                self.isHandle = NO;
-            }];
-            return;
         }
     }
 }
@@ -633,12 +585,6 @@
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
             }];
-        }else if([GlobalData shared].isBindDLNA){
-            [[GCCUPnPManager defaultManager] seekProgressTo:(NSInteger)self.playSilder.value success:^{
-                [self.timer setFireDate:[NSDate distantPast]];
-            } failure:^{
-                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
-            }];
         }
     }
 }
@@ -673,26 +619,6 @@
             self.isHandle = NO;
         }];
         
-    }else if ([GlobalData shared].isBindDLNA) {
-        [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
-            [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Demand];
-            self.quitScreenButton.hidden = NO;
-            self.maskingView.hidden = NO;
-            self.screenButton.hidden = YES;
-            [hud hideAnimated:NO];
-            self.isPlayEnd = NO;
-            self.playBtn.selected = YES;
-            [self updatePlayStatus];
-            [self createTimer];
-            self.isHandle = NO;
-            self.screenButton.enabled = YES;
-        } failure:^{
-            self.screenButton.enabled = YES;
-            [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
-            self.isHandle = NO;
-
-        }];
     }
 }
 
@@ -782,51 +708,6 @@
             }
         }];
         
-    }else if ([GlobalData shared].isBindDLNA) {
-        NSInteger volume;
-        switch (action) {
-            case 1:
-                volume = 0;
-                break;
-                
-            case 2:
-                volume = self.DLNAVolume;
-                break;
-                
-            case 3:
-            {
-                if (self.DLNAVolume > 0) {
-                    self.DLNAVolume--;
-                }
-                volume = self.DLNAVolume;
-            }
-                break;
-                
-            case 4:
-            {
-                if (self.DLNAVolume < 100) {
-                    self.DLNAVolume++;
-                }
-                volume = self.DLNAVolume;
-            }
-                break;
-                
-            default:
-                
-                volume = 0;
-                
-                break;
-        }
-        [[GCCUPnPManager defaultManager] setVolume:volume Success:^{
-            button.selected = !button.isSelected;
-            if (button.tag == 101) {
-                button.enabled = YES;
-            }
-        } failure:^{
-            if (button.tag == 101) {
-                button.enabled = YES;
-            }
-        }];
     }else{
         if (button.tag == 101) {
             button.enabled = YES;
