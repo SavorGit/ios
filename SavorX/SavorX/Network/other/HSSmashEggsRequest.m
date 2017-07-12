@@ -10,12 +10,12 @@
 
 @implementation HSSmashEggsRequest
 
-- (instancetype)initWithHotelId:(NSString *)hotelId
+- (instancetype)initWithHotelId:(NSInteger )hotelId
 {
     if (self = [super init]) {
         self.methodName = [@"APP3/Activity/smashEgg?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setValue:hotelId forParamKey:@"hotelId"];
+        [self setValue:[NSString stringWithFormat:@"%ld",hotelId] forParamKey:@"hotelId"];
     }
     return self;
 }

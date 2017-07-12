@@ -10,6 +10,6 @@
 
 @interface HSSmashEggsRequest : BGNetworkRequest
 
-- (instancetype)initWithHotelId:(NSString *)hotelId;
+- (instancetype)initWithHotelId:(NSInteger )hotelId;
 
 @end

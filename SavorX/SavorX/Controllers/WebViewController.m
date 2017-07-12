@@ -104,7 +104,7 @@
     self.webView.scrollView.delegate = self;
     self.webView.delegate = self;
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
-    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?sourceid=1"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     self.webView.opaque = NO;
     [self.webView loadRequest:request];
     

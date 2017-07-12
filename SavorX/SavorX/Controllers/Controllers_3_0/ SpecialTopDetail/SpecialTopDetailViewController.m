@@ -35,7 +35,7 @@
     self.webView.frame = CGRectMake(0, 0, width, height);
     NSString *urlStr;
     if (!isEmptyString(self.specilDetailModel.contentURL)) {
-        urlStr = self.specilDetailModel.contentURL;
+        urlStr =  [NSString stringWithFormat:@"%@?sourceid=1",self.specilDetailModel.contentURL];
     }else{
         urlStr = @"";
     }
