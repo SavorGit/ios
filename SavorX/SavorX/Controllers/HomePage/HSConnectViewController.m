@@ -107,7 +107,7 @@
         label.textColor = UIColorFromRGB(0x333333);
         label.font = [UIFont boldSystemFontOfSize:30];
         [bottomView addSubview:label];
-        float distance = [Helper autoHeightWith:99];
+        float distance = [Helper autoWidthWith:110];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo([Helper autoHeightWith:15]);
             make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:60],[Helper autoWidthWith:60]));
@@ -129,7 +129,7 @@
     [self.topAlert mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo([Helper autoHeightWith:15-2.5]);
         make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:65],[Helper autoWidthWith:65]));
-        make.centerX.mas_equalTo(-[Helper autoHeightWith:99]);
+        make.centerX.mas_equalTo(-[Helper autoWidthWith:110]);
     }];
     
     self.textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -200,11 +200,7 @@
     }];
     
     RDKeyBoard *keyBoard;
-    if (kMainBoundsHeight == 736) {
-        keyBoard = [[RDKeyBoard alloc] initWithHeight:226.0 inView:self.view];
-    }else{
-        keyBoard = [[RDKeyBoard alloc] initWithHeight:216.0 inView:self.view];
-    }
+    keyBoard = [[RDKeyBoard alloc] initWithHeight:[Helper autoHeightWith:240] inView:self.view];
     keyBoard.delegate = self;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];
@@ -314,11 +310,12 @@
     }else if (number.length > self.labelSource.count) {
         [self.keyMuSring deleteCharactersInRange:NSMakeRange(3, number.length - 3)];
     }else{
+        float distance = [Helper autoWidthWith:110];
         switch (number.length) {
             case 0:
             {
                 [self.topAlert mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerX.mas_equalTo(-[Helper autoHeightWith:99]);
+                    make.centerX.mas_equalTo(-distance);
                 }];
             }
                 
@@ -336,7 +333,7 @@
             case 2:
             {
                 [self.topAlert mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerX.mas_equalTo([Helper autoHeightWith:99]);
+                    make.centerX.mas_equalTo(distance);
                 }];
             }
                 

@@ -104,7 +104,9 @@
     
     self.screenButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.screenButton addTarget:self action:@selector(screenButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
-    self.screenButton.backgroundColor = [UIColor redColor];
+    [self.screenButton setBackgroundImage:[UIImage imageNamed:@"toupingbg"] forState:UIControlStateNormal];
+    [self.screenButton setImage:[UIImage imageNamed:@"touping"] forState:UIControlStateNormal];
+    [self.screenButton setImageEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
     [self.view addSubview:self.screenButton];
     [self.screenButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(50);

@@ -31,8 +31,8 @@
 {
     self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.6f];
     
-    self.showView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 182)];
-    self.showView.backgroundColor = [UIColor whiteColor];
+    self.showView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
+    self.showView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     self.showView.center = CGPointMake((self.frame.origin.x + self.frame.size.width) / 2, (self.frame.origin.y + self.frame.size.height) / 2);
     [self addSubview:self.showView];
     self.showView.layer.cornerRadius = 8.f;
@@ -45,17 +45,13 @@
     titleLabel.font = [UIFont boldSystemFontOfSize:18];
     [self.showView addSubview:titleLabel];
     
-    UILabel * messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 40, self.showView.frame.size.width - 20, 92)];
+    UILabel * messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 40, self.showView.frame.size.width - 20, 110)];
     messageLabel.textColor = UIColorFromRGB(0x333333);
     messageLabel.textAlignment = NSTextAlignmentCenter;
     messageLabel.text = message;
     messageLabel.numberOfLines = 0;
     messageLabel.font = [UIFont systemFontOfSize:17];
     [self.showView addSubview:messageLabel];
-    
-    UIView * lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 132, self.showView.frame.size.width, .5f)];
-    lineView.backgroundColor = UIColorFromRGB(0xe8e8e8);
-    [self.showView addSubview:lineView];
 }
 
 - (void)show
@@ -71,33 +67,49 @@
     }];
     
     [self.showView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(300, 182));
+        make.size.mas_equalTo(CGSizeMake(300, 200));
         make.center.mas_equalTo(0);
     }];
 }
 
 - (void)addActions:(NSArray<RDAlertAction *> *)actions
 {
-    CGFloat width = self.showView.frame.size.width;
     if (actions.count == 1) {
         RDAlertAction * action = [actions firstObject];
-        [action setFrame:CGRectMake(0, 132, width, 50)];
         [action addTarget:self action:@selector(actionDidBeClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self.showView addSubview:action];
+        [action mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(160, 36));
+            make.bottom.mas_equalTo(-15);
+            make.centerX.mas_equalTo(0);
+        }];
+        action.layer.cornerRadius = 18;
+        action.layer.masksToBounds = YES;
     }else if (actions.count == 2) {
         RDAlertAction * leftAction = [actions firstObject];
-        [leftAction setFrame:CGRectMake(0, 132, width / 2, 50)];
         [leftAction addTarget:self action:@selector(actionDidBeClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self.showView addSubview:leftAction];
+        CGFloat width = (self.showView.frame.size.width - 40 - 15) / 2;
+        [leftAction mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(20);
+            make.bottom.mas_equalTo(-15);
+            make.height.mas_equalTo(36);
+            make.width.mas_equalTo(width);
+        }];
+        leftAction.layer.cornerRadius = 18;
+        leftAction.layer.masksToBounds = YES;
         
         RDAlertAction * rightAction = [actions lastObject];
-        [rightAction setFrame:CGRectMake(width / 2, 132, width / 2, 50)];
         [rightAction addTarget:self action:@selector(actionDidBeClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self.showView addSubview:rightAction];
-        
-        UIView * lineView = [[UIView alloc] initWithFrame:CGRectMake(width / 2, 137, .5f, 40)];
-        lineView.backgroundColor = UIColorFromRGB(0xe8e8e8);
-        [self.showView addSubview:lineView];
+        [rightAction mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.mas_equalTo(-20);
+            make.bottom.mas_equalTo(-15);
+            make.height.mas_equalTo(36);
+            make.width.mas_equalTo(width);
+        }];
+        rightAction.layer.cornerRadius = 18;
+        rightAction.layer.masksToBounds = YES;
     }
 }
 
