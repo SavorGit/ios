@@ -30,7 +30,7 @@
     }];
     
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    _titleLabel.font = kPingFangMedium(16);
     _titleLabel.textColor = UIColorFromRGB(0x434343);
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.text = @"标题";
@@ -54,9 +54,10 @@
     
     _countLabel = [[UILabel alloc]init];
     _countLabel.text = @"22图";
-    _countLabel.font = [UIFont systemFontOfSize:10];
-    _countLabel.textColor = [UIColor blackColor];
+    _countLabel.font = kPingFangLight(10);
+    _countLabel.textColor = [UIColor whiteColor];
     _countLabel.backgroundColor = [UIColor lightGrayColor];
+    _countLabel.textAlignment = NSTextAlignmentCenter;
     [_bgImageView addSubview:_countLabel];
     [_countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(25, 14));

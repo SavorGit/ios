@@ -31,7 +31,7 @@
     }];
     
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    _titleLabel.font = kPingFangMedium(16);
     _titleLabel.textColor = UIColorFromRGB(0x434343);
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.text = @"标题";
@@ -56,19 +56,22 @@
     _videoPauseImage = [[UIImageView alloc] initWithFrame:CGRectZero];
     _videoPauseImage.contentMode = UIViewContentModeScaleAspectFill;
     _videoPauseImage.layer.masksToBounds = YES;
-    _videoPauseImage.backgroundColor = [UIColor orangeColor];
+    _videoPauseImage.backgroundColor = [UIColor clearColor];
+    _videoPauseImage.image = [UIImage imageNamed:@"sp_zanting"];
     [_bgImageView addSubview:_videoPauseImage];
-    
     [_videoPauseImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(60, 60));
+        make.size.mas_equalTo(CGSizeMake(42, 42));
         make.center.mas_equalTo(_bgImageView.center);
     }];
     
     _countLabel = [[UILabel alloc]init];
     _countLabel.text = @"4\'23\"";
-    _countLabel.font = [UIFont systemFontOfSize:14];
-    _countLabel.textColor = [UIColor blackColor];
+    _countLabel.font = kPingFangLight(14);
+    _countLabel.textColor = [UIColor whiteColor];
     _countLabel.backgroundColor = [UIColor lightGrayColor];
+    _countLabel.textAlignment = NSTextAlignmentCenter;
+    _countLabel.layer.cornerRadius = 10;
+    _countLabel.layer.masksToBounds = YES;
     [_bgImageView addSubview:_countLabel];
     [_countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(50, 20));

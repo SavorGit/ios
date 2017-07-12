@@ -43,16 +43,17 @@
     _headLineImage = [[UIImageView alloc] initWithFrame:CGRectZero];
     _headLineImage.contentMode = UIViewContentModeScaleAspectFill;
     _headLineImage.layer.masksToBounds = YES;
-    _headLineImage.backgroundColor = [UIColor cyanColor];
+    _headLineImage.backgroundColor = [UIColor clearColor];
+    _headLineImage.image = [UIImage imageNamed:@"toutiao"];
     [_bgImageView addSubview:_headLineImage];
     [_headLineImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(50, 50));
+        make.size.mas_equalTo(CGSizeMake(58, 36));
         make.top.mas_equalTo(_bgImageView.mas_top);
         make.left.mas_equalTo(0);
     }];
     
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    _titleLabel.font = kPingFangMedium(16);
     _titleLabel.textColor = UIColorFromRGB(0x434343);
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.text = @"标题";
@@ -77,7 +78,7 @@
     
     _sourceLabel = [[UILabel alloc]init];
     _sourceLabel.text = @"";
-    _sourceLabel.font = [UIFont systemFontOfSize:11];
+    _sourceLabel.font = kPingFangLight(11);
     _sourceLabel.textColor = UIColorFromRGB(0x8a8886);
     [_bgView addSubview:_sourceLabel];
     [_sourceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -88,7 +89,7 @@
     
     _timeLabel = [[UILabel alloc]init];
     _timeLabel.text = @"";
-    _timeLabel.font = [UIFont systemFontOfSize:10];
+    _timeLabel.font = kPingFangLight(10);
     _timeLabel.textColor = UIColorFromRGB(0xb2afab);
     [_bgView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {

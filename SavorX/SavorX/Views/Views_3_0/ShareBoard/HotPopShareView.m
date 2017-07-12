@@ -86,7 +86,8 @@
         ImageWithLabel *item = [ImageWithLabel imageLabelWithFrame:frame Image:[UIImage imageNamed:self.shareBtnImageArray[i]] LabelText:self.shareBtnTitleArray[i]];
         item.labelOffsetY = 10;
         item.tag = 200 + i;
-        [item setLabelColor:UIColorFromRGB(0x434343)];
+        [item setLabelColor:UIColorFromRGB(0x595757)];
+        [item setLabelFont:kPingFangLight(12)];
         UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(itemClick:)];
         [item addGestureRecognizer:tapGes];
         [self.topSheetView addSubview:item];
@@ -149,7 +150,7 @@
             
         }
         _bgView.frame = CGRectMake(0, ScreenHeight, ScreenWidth, BGVIEWDISTANCE + BUTTON_HEIGHT + LINE_HEIGHT * index);
-        _bgView.backgroundColor = UIColorFromRGB(0xece6de);
+        _bgView.backgroundColor = UIColorFromRGB(0xf6f3f0);
     }
     return _bgView;
 }
@@ -173,8 +174,9 @@
         _cancelBtn.frame = CGRectMake(0, CGRectGetHeight(_bgView.frame) - BUTTON_HEIGHT, CGRectGetWidth(_bgView.frame), BUTTON_HEIGHT);
         //	取消按钮
         [_cancelBtn setTitle:@"取消分享" forState:UIControlStateNormal];
-        _cancelBtn.backgroundColor = [UIColor whiteColor];
-        [_cancelBtn setTitleColor:UIColorFromRGB(0x434343) forState:UIControlStateNormal];
+        _cancelBtn.backgroundColor = UIColorFromRGB(0xfefbf8);
+        [_cancelBtn setTitleColor:UIColorFromRGB(0x444444) forState:UIControlStateNormal];
+        [_cancelBtn.titleLabel setFont:kPingFangRegular(15)];
         //	点击按钮，取消，收起面板，移除视图
         [_cancelBtn addTarget:self action:@selector(tappedCancel) forControlEvents:UIControlEventTouchUpInside];
     }

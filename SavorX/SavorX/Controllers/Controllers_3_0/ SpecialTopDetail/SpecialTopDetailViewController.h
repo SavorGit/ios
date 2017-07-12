@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseViewController.h"
 #import "HSSpecialTopModel.h"
 
-@interface SpecialTopDetailViewController : UIViewController
+@interface SpecialTopDetailViewController : BaseViewController
 
 @property(nonatomic, strong) HSSpecialTopModel *specilDetailModel;
 

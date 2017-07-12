@@ -24,7 +24,7 @@
     _bgView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.contentView addSubview:_bgView];
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 351.5));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 357.5));
         make.top.mas_equalTo(10);
         make.left.mas_equalTo(10);
     }];
@@ -42,7 +42,7 @@
     }];
     
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.font = [UIFont boldSystemFontOfSize:17];
+    _titleLabel.font = kPingFangMedium(17);
     _titleLabel.textColor = UIColorFromRGB(0x434343);
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.text = @"标题";
@@ -55,20 +55,20 @@
         
     _subTitleLabel = [[UILabel alloc]init];
     _subTitleLabel.text = @"";
-    _subTitleLabel.font = [UIFont systemFontOfSize:15];
+    _subTitleLabel.font = kPingFangLight(15);
     _subTitleLabel.textColor = UIColorFromRGB(0x575759);
     _subTitleLabel.backgroundColor = [UIColor clearColor];
     _subTitleLabel.numberOfLines = 2;
     [_bgView addSubview:_subTitleLabel];
     [_subTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 36));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 42));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
         make.left.mas_equalTo(5);
     }];
     
     _timeLabel = [[UILabel alloc]init];
     _timeLabel.text = @"";
-    _timeLabel.font = [UIFont systemFontOfSize:10];
+    _timeLabel.font = kPingFangLight(10);
     _timeLabel.textColor = UIColorFromRGB(0xb2afab);
     [_bgView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
