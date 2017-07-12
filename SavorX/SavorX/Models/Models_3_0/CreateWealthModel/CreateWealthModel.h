@@ -10,22 +10,12 @@
 
 @interface CreateWealthModel : BaseModel
 
-//@property(nonatomic, assign) NSInteger type;
-//@property(nonatomic, strong) NSString *title;
-//@property(nonatomic, strong) NSString *subTitle;
-//@property(nonatomic, strong) NSString *source;
-//@property(nonatomic, strong) NSString *time;
-//@property(nonatomic, strong) NSString *sourceImage;
-//@property(nonatomic, strong) NSString *imageUrl;
-
-
 @property(nonatomic, assign) NSInteger artid;
 @property(nonatomic, strong) NSString *sort_num;
 @property(nonatomic, assign) NSInteger type;
 @property(nonatomic, strong) NSString *title;
 @property(nonatomic, strong) NSString *imageURL;
 @property(nonatomic, strong) NSString *contentURL;
-//@property(nonatomic, strong) NSString *acreateTime;
 @property(nonatomic, strong) NSString *sourceName;
 @property(nonatomic, strong) NSString *logo; 
 @property(nonatomic, strong) NSString *indexImageUrl;
@@ -43,6 +33,12 @@
 
 @property (nonatomic, copy) NSString * acreateTime;
 @property (nonatomic, copy) NSString * ucreateTime;
+
+
+@property (nonatomic, copy) NSString * category;//用于文章推荐
+@property (nonatomic, copy) NSString * indexImgUrl;//用于文章推荐
+@property (nonatomic, copy) NSString * order_tag;//用于文章推荐
+@property (nonatomic, copy) NSString * shareTitle;//用于文章推荐
 
 //非接口返回
 @property (nonatomic, assign) NSInteger cid;
