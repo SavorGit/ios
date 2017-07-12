@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CreateWealthModel.h"
 
 @protocol GCCPlayerViewDelegate <NSObject>
 
@@ -24,7 +25,7 @@
 - (instancetype)initWithURL:(NSString *)url;
 
 @property (nonatomic, assign) id<GCCPlayerViewDelegate> delegate;
-@property (nonatomic, strong) HSVodModel * model;
+@property (nonatomic, strong) CreateWealthModel * model;
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 
 
