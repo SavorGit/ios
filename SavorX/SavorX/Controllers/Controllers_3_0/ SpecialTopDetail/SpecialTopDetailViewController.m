@@ -9,11 +9,13 @@
 #import "SpecialTopDetailViewController.h"
 #import "Masonry.h"
 #import "HotTopicShareView.h"
+#import "HSIsOrCollectionRequest.h"
 
 @interface SpecialTopDetailViewController ()
 
-@property (nonatomic, strong) UIWebView * webView;
-@property (nonatomic, strong) UIView * testView;
+@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) UIView *testView;
+@property (nonatomic, strong) UIButton *collectButton;
 
 @end
 
@@ -29,13 +31,25 @@
 
 - (void)createWebView
 {
+    UIBarButtonItem * shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareAction)];
+    self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
+    self.collectButton.frame = CGRectMake(0, 0, 40, 35);
+    [self.collectButton addTarget:self action:@selector(collectAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem * collectItem = [[UIBarButtonItem alloc] initWithCustomView:self.collectButton];
+    self.navigationItem.rightBarButtonItems = @[shareItem, collectItem];
+    if (self.specilDetailModel.collected == 1) {
+        self.collectButton.selected = YES;
+    }
+    
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
     self.webView = [[UIWebView alloc] init];
     self.webView.frame = CGRectMake(0, 0, width, height);
     NSString *urlStr;
     if (!isEmptyString(self.specilDetailModel.contentURL)) {
-        urlStr = self.specilDetailModel.contentURL;
+        urlStr =  [NSString stringWithFormat:@"%@?sourceid=1",self.specilDetailModel.contentURL];
     }else{
         urlStr = @"";
     }
@@ -48,6 +62,43 @@
     self.testView.backgroundColor = [UIColor clearColor];
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];
+}
+
+#pragma mark ---分享按钮点击
+- (void)shareAction{
+    
+}
+
+#pragma mark ---收藏按钮点击
+- (void)collectAction{
+    
+    NSInteger isCollect;
+    if (self.collectButton.selected == YES) {
+        isCollect = 0;
+    }else{
+        isCollect = 1;
+    }
+    HSIsOrCollectionRequest * request = [[HSIsOrCollectionRequest alloc] initWithArticleId:self.specilDetailModel.artid withState:isCollect];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        if ([[dic objectForKey:@"code"] integerValue] == 10000) {
+            if (self.specilDetailModel.collected == 1) {
+                self.specilDetailModel.collected = 0;
+                [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+            }else{
+                self.specilDetailModel.collected = 1;
+                [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+            }
+            self.collectButton.selected = !self.collectButton.selected;
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
+    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
