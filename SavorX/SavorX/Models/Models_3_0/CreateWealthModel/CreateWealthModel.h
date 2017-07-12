@@ -39,6 +39,7 @@
 @property (nonatomic, assign) NSInteger canPlay;
 @property (nonatomic, assign) NSString *colTuJi;
 @property (nonatomic, assign) NSInteger createTime; //创建时间
+@property (nonatomic, assign) NSInteger collected;  //0代表未收藏，1代表收藏
 
 //非接口返回
 @property (nonatomic, assign) NSInteger cid;

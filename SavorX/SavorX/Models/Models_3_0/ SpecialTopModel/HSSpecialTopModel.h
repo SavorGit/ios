@@ -17,7 +17,7 @@
 @property(nonatomic, strong) NSString *contentURL;
 @property(nonatomic, strong) NSString *shareTitle;
 @property(nonatomic, strong) NSString *updateTime;
-
+@property(nonatomic, assign) NSInteger collected;
 //非接口返回
 @property(nonatomic, assign) NSInteger type;
 

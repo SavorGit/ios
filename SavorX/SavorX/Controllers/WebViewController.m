@@ -17,6 +17,7 @@
 #import "RDAlertAction.h"
 #import "RestaurantListViewController.h"
 #import "RDHomeStatusView.h"
+#import "HSIsOrCollectionRequest.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
 
@@ -78,17 +79,11 @@
         [self.playView hiddenTVButton];
     }
     
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
-        NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
-        __block BOOL iscollect = NO;
-        [theArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
-                iscollect = YES;
-                *stop = YES;
-                return;
-            }
-        }];
-        [self.playView setIsCollect:iscollect];
+    // 设置收藏按钮状态
+    if (self.model.collected == 1) {
+         [self.playView setIsCollect:YES];
+    }else{
+        [self.playView setIsCollect:NO];
     }
     
     //初始化webView
@@ -172,36 +167,36 @@
     }
 }
 
-//收藏按钮被点击
+#pragma mark ---收藏按钮点击
 - (void)videoShouldBeCollect:(UIButton *)button
 {
-    if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
-        [MBProgressHUD showTextHUDwithTitle:@"该内容暂不支持收藏" delay:1.5f];
-    }
-    NSMutableArray *favoritesArray = [NSMutableArray array];
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
-        favoritesArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
-    }
-    if (button.selected) {
-        [favoritesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
-                [favoritesArray removeObject:obj];
-                *stop = YES;
-            }
-        }];
-        [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
-        [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
-        [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self.playView setIsCollect:NO];
+    NSInteger isCollect;
+    if (button.selected == YES) {
+        isCollect = 0;
     }else{
-        [favoritesArray addObject:[self.model toDictionary]];
-        [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
-        [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
-        [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self.playView setIsCollect:YES];
+        isCollect = 1;
     }
+    HSIsOrCollectionRequest * request = [[HSIsOrCollectionRequest alloc] initWithArticleId:self.model.artid withState:isCollect];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        if ([[dic objectForKey:@"code"] integerValue] == 10000) {
+            if (self.model.collected == 1) {
+                self.model.collected = 0;
+                [self.playView setIsCollect:NO];
+                [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+            }else{
+                self.model.collected = 1;
+                [self.playView setIsCollect:YES];
+                [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+            }
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 //视频分享按钮被点击

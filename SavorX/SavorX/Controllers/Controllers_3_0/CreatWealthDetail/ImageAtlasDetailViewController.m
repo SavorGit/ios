@@ -18,6 +18,7 @@
 #import <UShareUI/UShareUI.h>
 #import "HSPicDetailRequest.h"
 #import "ImageAtlasDetailModel.h"
+#import "HSIsOrCollectionRequest.h"
 
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate>
@@ -29,6 +30,7 @@
 @property (nonatomic, strong) ImageAtlasScrollView *imageScrollView;
 @property (nonatomic, strong) DDPhotoDescView *photoDescView;
 @property (nonatomic, strong) DDPhotoScrollView *photoScrollView;
+@property (nonatomic, strong) UIButton *collectBtn;
 
 @property (nonatomic, assign) BOOL isDisappear;
 @property (nonatomic, assign) NSInteger currentIndex;
@@ -224,16 +226,19 @@ static int temp = -1;
             make.right.mas_equalTo(- 15);
         }];
         
-        UIButton *collectBtn = [[UIButton alloc] initWithFrame:CGRectZero];
-        [collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
-        [collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateSelected];
-        [collectBtn addTarget:self action:@selector(collectAction) forControlEvents:UIControlEventTouchUpInside];
-        [_topView addSubview:collectBtn];
-        [collectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        _collectBtn = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+        [_collectBtn setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
+        [_collectBtn addTarget:self action:@selector(collectAction) forControlEvents:UIControlEventTouchUpInside];
+        [_topView addSubview:_collectBtn];
+        [_collectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(40, 44));
             make.top.mas_equalTo(20);
             make.right.mas_equalTo(- 80);
         }];
+        if (self.imgAtlModel.collected == 1) {
+            _collectBtn.selected = YES;
+        }
     }
     return _topView;
 }
@@ -349,6 +354,32 @@ static int temp = -1;
 #pragma mark -收藏点击
 - (void)collectAction{
     
+    NSInteger isCollect;
+    if (self.collectBtn.selected == YES) {
+        isCollect = 0;
+    }else{
+        isCollect = 1;
+    }
+    HSIsOrCollectionRequest * request = [[HSIsOrCollectionRequest alloc] initWithArticleId:self.imgAtlModel.artid withState:isCollect];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        if ([[dic objectForKey:@"code"] integerValue] == 10000) {
+            if (self.imgAtlModel.collected == 1) {
+                self.imgAtlModel.collected = 0;
+                [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+            }else{
+                self.imgAtlModel.collected = 1;
+                [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+            }
+            self.collectBtn.selected = !self.collectBtn.selected;
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 #pragma mark -backButtonClick
