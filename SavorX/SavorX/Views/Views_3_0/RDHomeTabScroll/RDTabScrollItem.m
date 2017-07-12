@@ -64,31 +64,31 @@
     
     CGSize imageViewSize = self.imageView.frame.size;
     
-    UIView * leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 70, 50)];
-    leftView.center = CGPointMake(imageViewSize.width / 2 - 60, imageViewSize.height / 2);
+    UIView * leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 140, 120)];
+    leftView.center = CGPointMake(imageViewSize.width / 2 - 80, imageViewSize.height / 2 + 20);
     leftView.tag = 101;
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(buttonDidBeClicked:)];
     tap.numberOfTapsRequired = YES;
     [leftView addGestureRecognizer:tap];
     [self.baseView addSubview:leftView];
     UIButton * leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftButton.frame = CGRectMake(0, 0, 80, 24);
+    leftButton.frame = CGRectMake(0, 0, 90, 27);
     [leftButton setBackgroundImage:[UIImage imageNamed:@"sjbf"] forState:UIControlStateNormal];
-    leftButton.center = CGPointMake(leftView.frame.size.width / 2, leftView.frame.size.height / 2);
+    leftButton.center = CGPointMake(leftView.frame.size.width / 2 + 20, leftView.frame.size.height / 2 - 20);
     leftButton.userInteractionEnabled = NO;
     [leftView addSubview:leftButton];
     
-    UIView * rightView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 70, 50)];
-    rightView.center = CGPointMake(imageViewSize.width / 2 + 60, imageViewSize.height / 2);
+    UIView * rightView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 140, 120)];
+    rightView.center = CGPointMake(imageViewSize.width / 2 + 80, imageViewSize.height / 2 + 20);
     rightView.tag = 102;
     UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(buttonDidBeClicked:)];
     tap2.numberOfTapsRequired = YES;
     [rightView addGestureRecognizer:tap2];
     [self.baseView addSubview:rightView];
     UIButton * rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightButton.frame = CGRectMake(0, 0, 80, 24);
+    rightButton.frame = CGRectMake(0, 0, 90, 27);
     [rightButton setBackgroundImage:[UIImage imageNamed:@"dsbf"] forState:UIControlStateNormal];
-    rightButton.center = CGPointMake(rightView.frame.size.width / 2, rightView.frame.size.height / 2);
+    rightButton.center = CGPointMake(rightView.frame.size.width / 2 - 20, rightView.frame.size.height / 2 - 20);
     rightButton.userInteractionEnabled = NO;
     [rightView addSubview:rightButton];
     
@@ -96,7 +96,7 @@
     self.timeLabel.textColor = [UIColor whiteColor];
     self.timeLabel.font = kPingFangLight(11);
     self.timeLabel.textAlignment = NSTextAlignmentCenter;
-    self.timeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.55f];
+    self.timeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.3f];
     [self.baseView addSubview:self.timeLabel];
     self.timeLabel.layer.cornerRadius = 9;
     self.timeLabel.layer.masksToBounds = YES;
@@ -140,9 +140,13 @@
 - (void)buttonDidBeClicked:(UITapGestureRecognizer *)tap
 {
     if (tap.view.tag == 101) {
-        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(RDTabScrollViewItemPhotoButtonDidClickedWithModel:index:)]) {
+            [self.delegate RDTabScrollViewItemPhotoButtonDidClickedWithModel:self.model index:self.index];
+        }
     }else{
-        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(RDTabScrollViewItemTVButtonDidClickedWithModel:index:)]) {
+            [self.delegate RDTabScrollViewItemTVButtonDidClickedWithModel:self.model index:self.index];
+        }
     }
 }
 

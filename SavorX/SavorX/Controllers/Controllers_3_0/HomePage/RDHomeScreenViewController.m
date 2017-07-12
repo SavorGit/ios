@@ -16,7 +16,7 @@
 #import "CreateWealthModel.h"
 #import "RDHomeStatusView.h"
 
-@interface RDHomeScreenViewController ()
+@interface RDHomeScreenViewController ()<RDTabScrollViewDelegate>
 
 @property (nonatomic, strong) RDTabScrollView * tabScroll;
 @property (nonatomic, strong) UIView * bottomView;
@@ -63,6 +63,7 @@
 {
     CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 20 + 59 + 40 + 40;
     self.tabScroll = [[RDTabScrollView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height) modelArray:self.dataSource];
+    self.tabScroll.delegate = self;
     [self.view addSubview:self.tabScroll];
     [self.tabScroll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
@@ -112,6 +113,16 @@
         make.size.mas_equalTo(CGSizeMake(width, width * 0.49));
         make.centerY.mas_equalTo(0);
     }];
+}
+
+- (void)RDTabScrollViewPhotoButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
+{
+    NSLog(@"手机播放：%@", model.title);
+}
+
+- (void)RDTabScrollViewTVButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
+{
+    NSLog(@"电视播放：%@", model.title);
 }
 
 - (void)photoButtonDidBeCicked

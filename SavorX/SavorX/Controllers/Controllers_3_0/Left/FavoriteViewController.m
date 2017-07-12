@@ -27,14 +27,7 @@
     
     [self setupViews];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tableView.mj_header beginRefreshing];
-    });
-}
-
-- (void)createNoDataView
-{
-    
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)setupDatas
@@ -46,7 +39,7 @@
         
         if (array) {
             if (array.count == 0) {
-                [self createNoDataView];
+                [self showNoDataViewInView:self.view noDataType:kNoDataType_Favorite];
             }else{
                 [self.dataSource removeAllObjects];
                 for (NSDictionary * dict in array) {
