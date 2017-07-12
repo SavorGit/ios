@@ -191,7 +191,6 @@
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
             }
         }
-        
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {

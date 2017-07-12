@@ -41,7 +41,7 @@
     }];
     
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    _titleLabel.font = kPingFangMedium(16);
     _titleLabel.textColor = UIColorFromRGB(0x434343);
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.text = @"标题";
@@ -54,7 +54,7 @@
     
     _timeLabel = [[UILabel alloc]init];
     _timeLabel.text = @"";
-    _timeLabel.font = [UIFont systemFontOfSize:10];
+    _timeLabel.font = kPingFangLight(10);
     _timeLabel.textColor = UIColorFromRGB(0xb2afab);
     [_bgView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
