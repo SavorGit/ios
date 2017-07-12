@@ -56,11 +56,11 @@
     _videoPauseImage = [[UIImageView alloc] initWithFrame:CGRectZero];
     _videoPauseImage.contentMode = UIViewContentModeScaleAspectFill;
     _videoPauseImage.layer.masksToBounds = YES;
-    _videoPauseImage.backgroundColor = [UIColor orangeColor];
+    _videoPauseImage.backgroundColor = [UIColor clearColor];
+    _videoPauseImage.image = [UIImage imageNamed:@"sp_zanting"];
     [_bgImageView addSubview:_videoPauseImage];
-    
     [_videoPauseImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(60, 60));
+        make.size.mas_equalTo(CGSizeMake(42, 42));
         make.center.mas_equalTo(_bgImageView.center);
     }];
     

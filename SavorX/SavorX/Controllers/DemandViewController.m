@@ -16,6 +16,7 @@
 #import "RDLogStatisticsAPI.h"
 
 #import "RDHomeStatusView.h"
+#import "HSIsOrCollectionRequest.h"
 
 #define BOTTOMHEIGHT 50.f
 
@@ -150,6 +151,7 @@
     
     self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
     [self.collectButton setAdjustsImageWhenHighlighted:NO];
     [self.collectButton addTarget:self action:@selector(collectAciton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.collectButton];
@@ -289,45 +291,34 @@
     [self restartVod];
 }
 
-//收藏按钮被点击触发
+#pragma mark ---收藏按钮点击
 - (void)collectAciton:(UIButton *)button
 {
-    if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
-        [MBProgressHUD showTextHUDwithTitle:@"该内容暂不支持收藏" delay:1.5f];
-        return;
-    }
-    
-    NSMutableArray *favoritesArray = [NSMutableArray array];
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
-        favoritesArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
-    }
-    NSInteger contenId = self.model.cid;
-    if (button.selected) {
-        [favoritesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
-                [favoritesArray removeObject:obj];
-                *stop = YES;
-            }
-        }];
-        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:cancleCollectHandle];
-        [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
-        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share_cancel_collection" key:@"bunch planting_page_share_cancel_collection" value:@"success"];
-        [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [button setSelected:NO];
-        [button setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
-        [SAVORXAPI postUMHandleWithContentId:contenId withType:cancleCollectHandle];
+    NSInteger isCollect;
+    if (button.selected == YES) {
+        isCollect = 0;
     }else{
-        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:collectHandle];
-        [favoritesArray addObject:[self.model toDictionary]];
-        [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
-        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share_collection" key:@"bunch planting_page_share_collection" value:@"success"];
-        [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [button setSelected:YES];
-        [button setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateNormal];
-        [SAVORXAPI postUMHandleWithContentId:contenId withType:collectHandle];
+        isCollect = 1;
     }
+    HSIsOrCollectionRequest * request = [[HSIsOrCollectionRequest alloc] initWithArticleId:self.model.artid withState:isCollect];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        if ([[dic objectForKey:@"code"] integerValue] == 10000) {
+            if (self.model.collected == 1) {
+                self.model.collected = 0;
+                [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+            }else{
+                self.model.collected = 1;
+                [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+            }
+            button.selected = !button.selected;
+        }
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 //分享按钮被点击触发
@@ -737,22 +728,11 @@
 
 - (void)cheakIsFavorite
 {
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
-        NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
-        __block BOOL iscollect = NO;
-        [theArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
-                iscollect = YES;
-                *stop = YES;
-                return;
-            }
-        }];
-        [self.collectButton setSelected:iscollect];
-        if (iscollect) {
-            [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateNormal];
-        }else{
-            [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
-        }
+    // 设置收藏按钮状态
+    if (self.model.collected == 1) {
+        self.collectButton.selected = YES;
+    }else{
+        self.collectButton.selected = NO;
     }
 }
 

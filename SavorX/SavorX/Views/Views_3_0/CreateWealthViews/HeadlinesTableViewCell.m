@@ -43,10 +43,11 @@
     _headLineImage = [[UIImageView alloc] initWithFrame:CGRectZero];
     _headLineImage.contentMode = UIViewContentModeScaleAspectFill;
     _headLineImage.layer.masksToBounds = YES;
-    _headLineImage.backgroundColor = [UIColor cyanColor];
+    _headLineImage.backgroundColor = [UIColor clearColor];
+    _headLineImage.image = [UIImage imageNamed:@"toutiao"];
     [_bgImageView addSubview:_headLineImage];
     [_headLineImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(50, 50));
+        make.size.mas_equalTo(CGSizeMake(58, 36));
         make.top.mas_equalTo(_bgImageView.mas_top);
         make.left.mas_equalTo(0);
     }];
