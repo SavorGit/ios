@@ -16,11 +16,15 @@
         
         [self setTitle:title forState:UIControlStateNormal];
         self.block = handler;
-        [self setTitleColor:UIColorFromRGB(0xc9b067) forState:UIControlStateNormal];
         if (bold) {
-            self.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+            [self setBackgroundColor:UIColorFromRGB(0x922c3e)];
+            self.titleLabel.font = kPingFangLight(16);
+            [self setTitleColor:UIColorFromRGB(0xf6f2ed) forState:UIControlStateNormal];
         }else{
-            self.titleLabel.font = [UIFont systemFontOfSize:16];
+            self.layer.borderColor = UIColorFromRGB(0x922c3e).CGColor;
+            self.layer.borderWidth = 1;
+            self.titleLabel.font = kPingFangRegular(16);
+            [self setTitleColor:UIColorFromRGB(0x922c3e) forState:UIControlStateNormal];
         }
         
     }

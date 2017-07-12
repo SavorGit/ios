@@ -36,8 +36,8 @@ NSString * const RDPhotoLibraryAllChooseNotification = @"RDPhotoLibraryAllChoose
         
         
         self.selectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.selectButton setImage:[UIImage imageNamed:@"ImageSelectedSmallOff"] forState:UIControlStateNormal];
-        [self.selectButton setImage:[UIImage imageNamed:@"ImageSelectedSmallOn"] forState:UIControlStateSelected];
+        [self.selectButton setImage:[UIImage imageNamed:@"xuantu"] forState:UIControlStateNormal];
+        [self.selectButton setImage:[UIImage imageNamed:@"xuanzhong"] forState:UIControlStateSelected];
         [self.selectButton addTarget:self action:@selector(selectButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
         self.selectButton.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         self.selectButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
