@@ -111,6 +111,8 @@
 		065ECD821E8A8EC10062E29D /* indexp6_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD811E8A8EC10062E29D /* indexp6_1.jpg */; };
 		0661F6A81F15F51900E914DE /* RDFavoriteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0661F6A71F15F51900E914DE /* RDFavoriteTableViewCell.m */; };
 		0661F6AB1F1601AE00E914DE /* HSCollectoinListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0661F6AA1F1601AE00E914DE /* HSCollectoinListRequest.m */; };
+		0661F6AE1F162ECE00E914DE /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0661F6AD1F162ECE00E914DE /* LiveViewController.m */; };
+		0661F6B11F162F2400E914DE /* RealCreateWealthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0661F6B01F162F2400E914DE /* RealCreateWealthViewController.m */; };
 		066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */; };
 		0663D41B1F0B6AA500CD2FA2 /* RDHomePageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4181F0B6AA500CD2FA2 /* RDHomePageController.m */; };
 		0663D41C1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D41A1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m */; };
@@ -494,6 +496,10 @@
 		0661F6A71F15F51900E914DE /* RDFavoriteTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDFavoriteTableViewCell.m; sourceTree = "<group>"; };
 		0661F6A91F1601AE00E914DE /* HSCollectoinListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSCollectoinListRequest.h; sourceTree = "<group>"; };
 		0661F6AA1F1601AE00E914DE /* HSCollectoinListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSCollectoinListRequest.m; sourceTree = "<group>"; };
+		0661F6AC1F162ECE00E914DE /* LiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveViewController.h; sourceTree = "<group>"; };
+		0661F6AD1F162ECE00E914DE /* LiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiveViewController.m; sourceTree = "<group>"; };
+		0661F6AF1F162F2400E914DE /* RealCreateWealthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RealCreateWealthViewController.h; sourceTree = "<group>"; };
+		0661F6B01F162F2400E914DE /* RealCreateWealthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RealCreateWealthViewController.m; sourceTree = "<group>"; };
 		066379D61EA8963C00E91313 /* RDLogStatisticsAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDLogStatisticsAPI.h; sourceTree = "<group>"; };
 		066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDLogStatisticsAPI.m; sourceTree = "<group>"; };
 		0663D4171F0B6AA500CD2FA2 /* RDHomePageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHomePageController.h; sourceTree = "<group>"; };
@@ -2113,6 +2119,10 @@
 			children = (
 				96A7348D1F0C7EE900906163 /* CreateWealthViewController.h */,
 				96A7348E1F0C7EE900906163 /* CreateWealthViewController.m */,
+				0661F6AF1F162F2400E914DE /* RealCreateWealthViewController.h */,
+				0661F6B01F162F2400E914DE /* RealCreateWealthViewController.m */,
+				0661F6AC1F162ECE00E914DE /* LiveViewController.h */,
+				0661F6AD1F162ECE00E914DE /* LiveViewController.m */,
 			);
 			path = CreateWealth;
 			sourceTree = "<group>";
@@ -2708,6 +2718,7 @@
 				960EDB161E8361F700717406 /* HSLauchImageOrVideoRequest.m in Sources */,
 				06FA339A1D3E171D001F5B37 /* DispatchQueueLogFormatter.m in Sources */,
 				06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */,
+				0661F6AE1F162ECE00E914DE /* LiveViewController.m in Sources */,
 				063B1D531D7D63D30036C02B /* PhotoSliderViewController.m in Sources */,
 				062CF0281EC3449D00EA6AE0 /* RDHammer.m in Sources */,
 				0663D4291F0B6B5900CD2FA2 /* RDTabScrollItem.m in Sources */,
@@ -2805,6 +2816,7 @@
 				965240E51ED57F270090E1C8 /* HSHomeRestaurantList.m in Sources */,
 				0663D43B1F0B6CB000CD2FA2 /* WMMenuItem.m in Sources */,
 				96D8C5DC1F1389F900251301 /* WinResultViewController.m in Sources */,
+				0661F6B11F162F2400E914DE /* RealCreateWealthViewController.m in Sources */,
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
 				96D8C5BC1F0F213000251301 /* DDPhotoScrollView.m in Sources */,
 				0647961D1F0E306100DD8AA9 /* PhotoVideoScreenViewController.m in Sources */,

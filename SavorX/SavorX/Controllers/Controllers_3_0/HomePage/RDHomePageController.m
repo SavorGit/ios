@@ -9,10 +9,11 @@
 #import "RDHomePageController.h"
 #import "RDHomeScreenViewController.h"
 #import "UIViewController+LGSideMenuController.h"
-#import "CreateWealthViewController.h"
+#import "RealCreateWealthViewController.h"
 #import "SpecialTopicViewController.h"
 #import "HSGetSpecialRequest.h"
 #import "RDHomeStatusView.h"
+#import "LiveViewController.h"
 
 @interface RDHomePageController ()
 
@@ -25,7 +26,7 @@
 
 - (instancetype)init
 {
-    NSArray * vcArray = @[[UIViewController class],[UIViewController class],[UIViewController class]];
+    NSArray * vcArray = @[[RealCreateWealthViewController class],[LiveViewController class],[SpecialTopicViewController class]];
     NSArray * titleArray = @[@"创富", @"生活", @"专题"];
     
     if (self = [super initWithViewControllerClasses:vcArray andTheirTitles:titleArray]) {
@@ -92,22 +93,6 @@
         }
         [self autoItemMargin];
     }
-}
-
-#pragma mark - Data source
-- (UIViewController *)pageController:(WMPageController *)pageController viewControllerAtIndex:(NSInteger)index
-{
-    if (index == 0) {
-        CreateWealthViewController * creatWealth = [[CreateWealthViewController alloc] initWithCategoryID:1];
-        return creatWealth;
-    }else if (index == 1){
-        CreateWealthViewController * creatWealth = [[CreateWealthViewController alloc] initWithCategoryID:2];
-        return creatWealth;
-    }else if (index == 2){
-        SpecialTopicViewController * specialTopic = [[SpecialTopicViewController alloc] init];
-        return specialTopic;
-    }
-    return nil;
 }
 
 - (void)insertViewController
