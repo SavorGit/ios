@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		060031601E53600400E675F5 /* HSGetLastHotelVodList.m in Sources */ = {isa = PBXBuildFile; fileRef = 0600315F1E53600400E675F5 /* HSGetLastHotelVodList.m */; };
-		060031631E53618200E675F5 /* HSGetLastVodList.m in Sources */ = {isa = PBXBuildFile; fileRef = 060031621E53618200E675F5 /* HSGetLastVodList.m */; };
 		0606505C1E014CF100E43024 /* HSWebServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0606505B1E014CF100E43024 /* HSWebServerManager.m */; };
 		060C37361D6C42930058BBBE /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 060C37351D6C42930058BBBE /* GCDAsyncUdpSocket.m */; };
 		060DB0A41D5AD1C8002A2DED /* HTTPServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 060DB0A31D5AD1C8002A2DED /* HTTPServerManager.m */; };
@@ -111,6 +109,8 @@
 		065ECD7E1E8A8EAF0062E29D /* index4_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD7D1E8A8EAF0062E29D /* index4_1.jpg */; };
 		065ECD801E8A8EB80062E29D /* index5_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD7F1E8A8EB80062E29D /* index5_1.jpg */; };
 		065ECD821E8A8EC10062E29D /* indexp6_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD811E8A8EC10062E29D /* indexp6_1.jpg */; };
+		0661F6A81F15F51900E914DE /* RDFavoriteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0661F6A71F15F51900E914DE /* RDFavoriteTableViewCell.m */; };
+		0661F6AB1F1601AE00E914DE /* HSCollectoinListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0661F6AA1F1601AE00E914DE /* HSCollectoinListRequest.m */; };
 		066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */; };
 		0663D41B1F0B6AA500CD2FA2 /* RDHomePageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4181F0B6AA500CD2FA2 /* RDHomePageController.m */; };
 		0663D41C1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D41A1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m */; };
@@ -143,7 +143,6 @@
 		0690766E1E520A7700CA1AC4 /* PhotoManyEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0690766D1E520A7700CA1AC4 /* PhotoManyEditView.m */; };
 		069CDFDB1D991FAB00A0C1A6 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 069CDFDA1D991FAB00A0C1A6 /* UserNotifications.framework */; };
 		069D46C41DB5E91D00F85D72 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 069D46C31DB5E91D00F85D72 /* libxml2.tbd */; };
-		069FE84A1E4D5F56000CBA5E /* HSHotelVodListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 069FE8491E4D5F56000CBA5E /* HSHotelVodListRequest.m */; };
 		06AB944F1D880C8000A29D36 /* rotationImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06AB944E1D880C8000A29D36 /* rotationImageView.m */; };
 		06B555131E8A587D0068BF70 /* documentVideoGuided.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 06B555121E8A587D0068BF70 /* documentVideoGuided.mp4 */; };
 		06B5554C1E8A6A210068BF70 /* DefalutLaunchPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B555491E8A6A210068BF70 /* DefalutLaunchPlayView.m */; };
@@ -198,15 +197,11 @@
 		4772FF841DFA544B00758697 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772FF831DFA544B00758697 /* BaseViewController.m */; };
 		4772FF8C1DFA570D00758697 /* UIView+Additional.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772FF8B1DFA570D00758697 /* UIView+Additional.m */; };
 		4772FF901DFA9C5900758697 /* BaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772FF8F1DFA9C5900758697 /* BaseView.m */; };
-		478058261DF985730091C305 /* HSCategoryListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4780581E1DF985730091C305 /* HSCategoryListRequest.m */; };
-		478058271DF985730091C305 /* HSTopicListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 478058201DF985730091C305 /* HSTopicListRequest.m */; };
-		478058281DF985730091C305 /* HSVodListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 478058231DF985730091C305 /* HSVodListRequest.m */; };
 		478058291DF985730091C305 /* NetworkConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 478058251DF985730091C305 /* NetworkConfiguration.m */; };
 		478058351DF989850091C305 /* ConverUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4780582C1DF989850091C305 /* ConverUtil.m */; };
 		478058361DF989850091C305 /* DesUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4780582E1DF989850091C305 /* DesUtil.m */; };
 		478058371DF989850091C305 /* Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 478058301DF989850091C305 /* Helper.m */; };
 		4780584E1DF9908D0091C305 /* HSSubmitFeedbackRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4780584D1DF9908D0091C305 /* HSSubmitFeedbackRequest.m */; };
-		478058511DF99A5B0091C305 /* HSLatestTopicListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 478058501DF99A5B0091C305 /* HSLatestTopicListRequest.m */; };
 		47F4A2721E4962F4001C93F0 /* AdviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F4A2711E4962F4001C93F0 /* AdviceViewController.m */; };
 		47F4A27A1E496598001C93F0 /* FeedbackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F4A2791E496598001C93F0 /* FeedbackView.m */; };
 		47F4A27C1E4965AD001C93F0 /* FeedbackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47F4A27B1E4965AD001C93F0 /* FeedbackView.xib */; };
@@ -351,10 +346,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0600315E1E53600400E675F5 /* HSGetLastHotelVodList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSGetLastHotelVodList.h; sourceTree = "<group>"; };
-		0600315F1E53600400E675F5 /* HSGetLastHotelVodList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSGetLastHotelVodList.m; sourceTree = "<group>"; };
-		060031611E53618200E675F5 /* HSGetLastVodList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSGetLastVodList.h; sourceTree = "<group>"; };
-		060031621E53618200E675F5 /* HSGetLastVodList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSGetLastVodList.m; sourceTree = "<group>"; };
 		0606505A1E014CF100E43024 /* HSWebServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSWebServerManager.h; sourceTree = "<group>"; };
 		0606505B1E014CF100E43024 /* HSWebServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSWebServerManager.m; sourceTree = "<group>"; };
 		060C37341D6C42930058BBBE /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
@@ -498,6 +489,10 @@
 		065ECD7D1E8A8EAF0062E29D /* index4_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index4_1.jpg; sourceTree = "<group>"; };
 		065ECD7F1E8A8EB80062E29D /* index5_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index5_1.jpg; sourceTree = "<group>"; };
 		065ECD811E8A8EC10062E29D /* indexp6_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = indexp6_1.jpg; sourceTree = "<group>"; };
+		0661F6A61F15F51900E914DE /* RDFavoriteTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDFavoriteTableViewCell.h; sourceTree = "<group>"; };
+		0661F6A71F15F51900E914DE /* RDFavoriteTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDFavoriteTableViewCell.m; sourceTree = "<group>"; };
+		0661F6A91F1601AE00E914DE /* HSCollectoinListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSCollectoinListRequest.h; sourceTree = "<group>"; };
+		0661F6AA1F1601AE00E914DE /* HSCollectoinListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSCollectoinListRequest.m; sourceTree = "<group>"; };
 		066379D61EA8963C00E91313 /* RDLogStatisticsAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDLogStatisticsAPI.h; sourceTree = "<group>"; };
 		066379D71EA8963C00E91313 /* RDLogStatisticsAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDLogStatisticsAPI.m; sourceTree = "<group>"; };
 		0663D4171F0B6AA500CD2FA2 /* RDHomePageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHomePageController.h; sourceTree = "<group>"; };
@@ -559,8 +554,6 @@
 		069CDFD91D98C0DF00A0C1A6 /* SavorX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SavorX.entitlements; sourceTree = "<group>"; };
 		069CDFDA1D991FAB00A0C1A6 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		069D46C31DB5E91D00F85D72 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
-		069FE8481E4D5F56000CBA5E /* HSHotelVodListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSHotelVodListRequest.h; sourceTree = "<group>"; };
-		069FE8491E4D5F56000CBA5E /* HSHotelVodListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSHotelVodListRequest.m; sourceTree = "<group>"; };
 		06AB944D1D880C8000A29D36 /* rotationImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rotationImageView.h; path = ../rotationImageView.h; sourceTree = "<group>"; };
 		06AB944E1D880C8000A29D36 /* rotationImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = rotationImageView.m; path = ../rotationImageView.m; sourceTree = "<group>"; };
 		06B555121E8A587D0068BF70 /* documentVideoGuided.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = documentVideoGuided.mp4; sourceTree = "<group>"; };
@@ -666,12 +659,6 @@
 		4772FF8B1DFA570D00758697 /* UIView+Additional.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Additional.m"; sourceTree = "<group>"; };
 		4772FF8E1DFA9C5900758697 /* BaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseView.h; sourceTree = "<group>"; };
 		4772FF8F1DFA9C5900758697 /* BaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseView.m; sourceTree = "<group>"; };
-		4780581D1DF985730091C305 /* HSCategoryListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSCategoryListRequest.h; sourceTree = "<group>"; };
-		4780581E1DF985730091C305 /* HSCategoryListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSCategoryListRequest.m; sourceTree = "<group>"; };
-		4780581F1DF985730091C305 /* HSTopicListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSTopicListRequest.h; sourceTree = "<group>"; };
-		478058201DF985730091C305 /* HSTopicListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSTopicListRequest.m; sourceTree = "<group>"; };
-		478058221DF985730091C305 /* HSVodListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSVodListRequest.h; sourceTree = "<group>"; };
-		478058231DF985730091C305 /* HSVodListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSVodListRequest.m; sourceTree = "<group>"; };
 		478058241DF985730091C305 /* NetworkConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkConfiguration.h; sourceTree = "<group>"; };
 		478058251DF985730091C305 /* NetworkConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkConfiguration.m; sourceTree = "<group>"; };
 		4780582B1DF989850091C305 /* ConverUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverUtil.h; sourceTree = "<group>"; };
@@ -685,8 +672,6 @@
 		478058341DF989850091C305 /* SystemMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemMacro.h; sourceTree = "<group>"; };
 		4780584C1DF9908D0091C305 /* HSSubmitFeedbackRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSSubmitFeedbackRequest.h; sourceTree = "<group>"; };
 		4780584D1DF9908D0091C305 /* HSSubmitFeedbackRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSSubmitFeedbackRequest.m; sourceTree = "<group>"; };
-		4780584F1DF99A5B0091C305 /* HSLatestTopicListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSLatestTopicListRequest.h; sourceTree = "<group>"; };
-		478058501DF99A5B0091C305 /* HSLatestTopicListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSLatestTopicListRequest.m; sourceTree = "<group>"; };
 		47F4A2701E4962F4001C93F0 /* AdviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdviceViewController.h; sourceTree = "<group>"; };
 		47F4A2711E4962F4001C93F0 /* AdviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdviceViewController.m; sourceTree = "<group>"; };
 		47F4A2781E496598001C93F0 /* FeedbackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackView.h; sourceTree = "<group>"; };
@@ -1224,6 +1209,15 @@
 			path = ZFBrightnessView;
 			sourceTree = "<group>";
 		};
+		0661F6A51F15F50300E914DE /* Left */ = {
+			isa = PBXGroup;
+			children = (
+				0661F6A61F15F51900E914DE /* RDFavoriteTableViewCell.h */,
+				0661F6A71F15F51900E914DE /* RDFavoriteTableViewCell.m */,
+			);
+			path = Left;
+			sourceTree = "<group>";
+		};
 		0663D4151F0B6A8E00CD2FA2 /* Controllers_3_0 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1261,6 +1255,7 @@
 		0663D4211F0B6B4600CD2FA2 /* Views_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				0661F6A51F15F50300E914DE /* Left */,
 				0664ADC21F14649300A720A1 /* Home */,
 				96D8C5C21F0F664600251301 /*  SpecialTopViews */,
 				96D8C5B41F0F213000251301 /* ImageAtlasView */,
@@ -1907,40 +1902,10 @@
 				067C30C41F131D43000A1150 /* Network_3_0 */,
 				0647BC321E50624E002284BB /* other */,
 				4780584B1DF98FBD0091C305 /* Mine */,
-				4780581C1DF985730091C305 /* Discover */,
-				478058211DF985730091C305 /* Hot */,
 				478058241DF985730091C305 /* NetworkConfiguration.h */,
 				478058251DF985730091C305 /* NetworkConfiguration.m */,
 			);
 			path = Network;
-			sourceTree = "<group>";
-		};
-		4780581C1DF985730091C305 /* Discover */ = {
-			isa = PBXGroup;
-			children = (
-				4780581D1DF985730091C305 /* HSCategoryListRequest.h */,
-				4780581E1DF985730091C305 /* HSCategoryListRequest.m */,
-				4780581F1DF985730091C305 /* HSTopicListRequest.h */,
-				478058201DF985730091C305 /* HSTopicListRequest.m */,
-				4780584F1DF99A5B0091C305 /* HSLatestTopicListRequest.h */,
-				478058501DF99A5B0091C305 /* HSLatestTopicListRequest.m */,
-			);
-			path = Discover;
-			sourceTree = "<group>";
-		};
-		478058211DF985730091C305 /* Hot */ = {
-			isa = PBXGroup;
-			children = (
-				478058221DF985730091C305 /* HSVodListRequest.h */,
-				478058231DF985730091C305 /* HSVodListRequest.m */,
-				069FE8481E4D5F56000CBA5E /* HSHotelVodListRequest.h */,
-				069FE8491E4D5F56000CBA5E /* HSHotelVodListRequest.m */,
-				0600315E1E53600400E675F5 /* HSGetLastHotelVodList.h */,
-				0600315F1E53600400E675F5 /* HSGetLastHotelVodList.m */,
-				060031611E53618200E675F5 /* HSGetLastVodList.h */,
-				060031621E53618200E675F5 /* HSGetLastVodList.m */,
-			);
-			path = Hot;
 			sourceTree = "<group>";
 		};
 		4780582A1DF989850091C305 /* Helper */ = {
@@ -2336,6 +2301,8 @@
 			children = (
 				96D8C5F71F15BE2C00251301 /* HSIsOrCollectionRequest.h */,
 				96D8C5F81F15BE2C00251301 /* HSIsOrCollectionRequest.m */,
+				0661F6A91F1601AE00E914DE /* HSCollectoinListRequest.h */,
+				0661F6AA1F1601AE00E914DE /* HSCollectoinListRequest.m */,
 			);
 			path = CollectionNet;
 			sourceTree = "<group>";
@@ -2676,7 +2643,6 @@
 				96D8C5E81F146AE200251301 /* HSCreateWealthRequest.m in Sources */,
 				067C30E31F13AECE000A1150 /* HSDemandListRequest.m in Sources */,
 				47F4A2721E4962F4001C93F0 /* AdviceViewController.m in Sources */,
-				069FE84A1E4D5F56000CBA5E /* HSHotelVodListRequest.m in Sources */,
 				0663D43D1F0B6CB000CD2FA2 /* WMProgressView.m in Sources */,
 				0663D41B1F0B6AA500CD2FA2 /* RDHomePageController.m in Sources */,
 				06FB9D711DF9890C0053BE0A /* HSCategoryModel.m in Sources */,
@@ -2687,9 +2653,7 @@
 				965240DF1ED532F30090E1C8 /* RestaurantListViewController.m in Sources */,
 				0627E0C11E3231DA00DAED92 /* LGSideMenuView.m in Sources */,
 				0647EACF1E70F37E00C39160 /* ZFBrightnessView.m in Sources */,
-				060031631E53618200E675F5 /* HSGetLastVodList.m in Sources */,
 				06E719221E810B6A008496F4 /* HSConnectViewController.m in Sources */,
-				478058271DF985730091C305 /* HSTopicListRequest.m in Sources */,
 				061B4EC11E489C92000D5E07 /* PhotoEditTextView.m in Sources */,
 				96A734BD1F0C87EA00906163 /* ImageTextDetailViewController.m in Sources */,
 				0664ADC81F1464C400A720A1 /* RDHomeStatusView.m in Sources */,
@@ -2735,6 +2699,7 @@
 				062CF0281EC3449D00EA6AE0 /* RDHammer.m in Sources */,
 				0663D4291F0B6B5900CD2FA2 /* RDTabScrollItem.m in Sources */,
 				47FE2CBD1E1BB64E00D3D0B4 /* UIImage+SplitImageIntoTwoParts.m in Sources */,
+				0661F6AB1F1601AE00E914DE /* HSCollectoinListRequest.m in Sources */,
 				965240DB1ED532E30090E1C8 /* RestaurantListTableViewCell.m in Sources */,
 				064F8B931E532838006280FD /* HSGetIpRequest.m in Sources */,
 				0639C6F01D794603002A04C1 /* AnimationImageView.m in Sources */,
@@ -2762,11 +2727,10 @@
 				478058351DF989850091C305 /* ConverUtil.m in Sources */,
 				47F9976D1DFFBC910009BDFB /* BaseCell.m in Sources */,
 				060DB0B41D5B26F9002A2DED /* UIColor+YYAdditions.m in Sources */,
-				478058281DF985730091C305 /* HSVodListRequest.m in Sources */,
-				060031601E53600400E675F5 /* HSGetLastHotelVodList.m in Sources */,
 				0633FB231D82D4480079EF21 /* UIImage+Custom.m in Sources */,
 				478058371DF989850091C305 /* Helper.m in Sources */,
 				064F8B8D1E52FDBC006280FD /* HomeBaseViewController.m in Sources */,
+				0661F6A81F15F51900E914DE /* RDFavoriteTableViewCell.m in Sources */,
 				061B4EBB1E4850B2000D5E07 /* PhotoHandleView.m in Sources */,
 				06F07B7D1D768EE900AD7B7E /* HelpViewController.m in Sources */,
 				96A734A41F0C7F3C00906163 /* CreatWealthDetialTableViewCell.m in Sources */,
@@ -2788,7 +2752,6 @@
 				965240D71ED532CE0090E1C8 /* RestaurantListModel.m in Sources */,
 				0663D4581F0B875600CD2FA2 /* RDPhotoLibraryModel.m in Sources */,
 				0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */,
-				478058511DF99A5B0091C305 /* HSLatestTopicListRequest.m in Sources */,
 				0663D43F1F0B6CB000CD2FA2 /* WMPageController.m in Sources */,
 				4772FF901DFA9C5900758697 /* BaseView.m in Sources */,
 				96A734A01F0C7F2D00906163 /* VideoTableViewCell.m in Sources */,
@@ -2825,7 +2788,6 @@
 				96D8C5D51F136F0400251301 /* HSGetSpecialRequest.m in Sources */,
 				06FFCCAB1E6E864900ADEA94 /* RDAlertAction.m in Sources */,
 				96A734AF1F0C80B000906163 /* HotTopicShareView.m in Sources */,
-				478058261DF985730091C305 /* HSCategoryListRequest.m in Sources */,
 				965240E51ED57F270090E1C8 /* HSHomeRestaurantList.m in Sources */,
 				0663D43B1F0B6CB000CD2FA2 /* WMMenuItem.m in Sources */,
 				96D8C5DC1F1389F900251301 /* WinResultViewController.m in Sources */,
