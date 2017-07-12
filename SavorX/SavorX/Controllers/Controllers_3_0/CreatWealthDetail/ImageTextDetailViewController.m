@@ -9,9 +9,10 @@
 #import "ImageTextDetailViewController.h"
 #import "Masonry.h"
 #import "CreateWealthModel.h"
-#import "CreatWealthDetialTableViewCell.h"
+#import "ImageTextTableViewCell.h"
 #import "HotTopicShareView.h"
 #import "HSIsOrCollectionRequest.h"
+#import "HSImTeRecommendRequest.h"
 
 @interface ImageTextDetailViewController ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -29,6 +30,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
+    _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
     
     [self createWebView];
     [self setUpDatas];
@@ -114,7 +116,7 @@
     if (self.testView.superview) {
         [self.testView removeFromSuperview];
     }
-    CGFloat theight = (self.dataSource.count *150 + 50) + 8 + 130;
+    CGFloat theight = (self.dataSource.count *96 + 48) + 8 + 130;
     CGFloat height = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
@@ -207,6 +209,29 @@
 #pragma mark - 初始化下方推荐数据
 - (void)setUpDatas{
     
+    HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.imgTextModel.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        
+        for (int i = 0; i < resultArr.count; i ++) {
+            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            [self.dataSource addObject:welthModel];
+        }
+        [self footViewShouldBeReset];
+        [self.tableView reloadData];
+
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
+
+    
 //    _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
 //    
 //    for (int i = 0; i < 3; i ++) {
@@ -247,12 +272,12 @@
             make.right.mas_equalTo(0);
         }];
 
-        UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 50)];
+        UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
         headView.backgroundColor = [UIColor clearColor];
         UILabel *recommendLabel = [[UILabel alloc] init];
         recommendLabel.frame = CGRectMake(10, 10, 100, 30);
-        recommendLabel.textColor = [UIColor blackColor];
-        recommendLabel.font = [UIFont systemFontOfSize:16];
+        recommendLabel.textColor = UIColorFromRGB(0x922c3e);
+        recommendLabel.font = kPingFangRegular(15);
         recommendLabel.text = @"为您推荐";
         [headView addSubview:recommendLabel];
         _tableView.tableHeaderView = headView;
@@ -275,9 +300,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellID = @"imageTextTableCell";
-    CreatWealthDetialTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    ImageTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (cell == nil) {
-        cell = [[CreatWealthDetialTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell = [[ImageTextTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -293,7 +318,7 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 150.f;
+    return 96.f;
 }
 
 - (void)dealloc{

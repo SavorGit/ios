@@ -325,6 +325,7 @@
 		96D8C5F11F14D2EB00251301 /* HSSpecialTopModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F01F14D2EB00251301 /* HSSpecialTopModel.m */; };
 		96D8C5F51F14D3B900251301 /* SpecialTopRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F41F14D3B900251301 /* SpecialTopRequest.m */; };
 		96D8C5F91F15BE2C00251301 /* HSIsOrCollectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F81F15BE2C00251301 /* HSIsOrCollectionRequest.m */; };
+		96D8C5FD1F1613DC00251301 /* HSImTeRecommendRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5FC1F1613DC00251301 /* HSImTeRecommendRequest.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -845,6 +846,8 @@
 		96D8C5F41F14D3B900251301 /* SpecialTopRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopRequest.m; sourceTree = "<group>"; };
 		96D8C5F71F15BE2C00251301 /* HSIsOrCollectionRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSIsOrCollectionRequest.h; sourceTree = "<group>"; };
 		96D8C5F81F15BE2C00251301 /* HSIsOrCollectionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSIsOrCollectionRequest.m; sourceTree = "<group>"; };
+		96D8C5FB1F1613DC00251301 /* HSImTeRecommendRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSImTeRecommendRequest.h; sourceTree = "<group>"; };
+		96D8C5FC1F1613DC00251301 /* HSImTeRecommendRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSImTeRecommendRequest.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1360,6 +1363,7 @@
 		067C30C41F131D43000A1150 /* Network_3_0 */ = {
 			isa = PBXGroup;
 			children = (
+				96D8C5FA1F16130E00251301 /* RecommendNet */,
 				96D8C5F61F15BDE900251301 /* CollectionNet */,
 				96D8C5F21F14D39500251301 /*  SpecialTopNet */,
 				96D8C5D61F136FE000251301 /* CreateWealthNet */,
@@ -2307,6 +2311,15 @@
 			path = CollectionNet;
 			sourceTree = "<group>";
 		};
+		96D8C5FA1F16130E00251301 /* RecommendNet */ = {
+			isa = PBXGroup;
+			children = (
+				96D8C5FB1F1613DC00251301 /* HSImTeRecommendRequest.h */,
+				96D8C5FC1F1613DC00251301 /* HSImTeRecommendRequest.m */,
+			);
+			path = RecommendNet;
+			sourceTree = "<group>";
+		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2761,6 +2774,7 @@
 				4772FF8C1DFA570D00758697 /* UIView+Additional.m in Sources */,
 				96D8C5CC1F0F75AC00251301 /* SpecialTopDetailViewController.m in Sources */,
 				0627E0B31E32111500DAED92 /* LeftTableHeaderView.m in Sources */,
+				96D8C5FD1F1613DC00251301 /* HSImTeRecommendRequest.m in Sources */,
 				06FA33961D3E171D001F5B37 /* DDFileLogger.m in Sources */,
 				0647BC351E506285002284BB /* HSFirstUseRequest.m in Sources */,
 				0627E0BF1E3231DA00DAED92 /* LGSideMenuController.m in Sources */,
