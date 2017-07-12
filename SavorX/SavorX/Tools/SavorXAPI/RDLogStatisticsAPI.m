@@ -9,7 +9,6 @@
 #import "RDLogStatisticsAPI.h"
 #import "SSZipArchive.h"
 #import <AliyunOSSiOS/OSSService.h>
-#import "CreateWealthModel.h"
 
 static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
 
@@ -122,7 +121,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
 }
 
-+ (void)RDShareLogModel:(HSVodModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume
++ (void)RDShareLogModel:(CreateWealthModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume
 {
     const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
     dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
