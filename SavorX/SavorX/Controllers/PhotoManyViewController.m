@@ -111,7 +111,7 @@
         make.width.mas_equalTo(.5f);
     }];
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
         self.isScreen = YES;
     }else{
@@ -132,7 +132,7 @@
 - (void)screenCurrentImage
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
+    if (![GlobalData shared].isBindRD) {
         [[RDHomeStatusView defaultView] scanQRCode];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         return;
@@ -168,20 +168,6 @@
                     self.isScreen = NO;
                 }];
             }];
-        }else if ([GlobalData shared].isBindDLNA) {
-            [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
-                [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
-                    [hud hideAnimated:NO];
-                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
-                    self.navigationItem.rightBarButtonItem.enabled = YES;
-                    self.isScreen = YES;
-                } failure:^{
-                    [hud hideAnimated:NO];
-                    self.navigationItem.rightBarButtonItem.enabled = YES;
-                    self.isScreen = NO;
-                }];
-            }];
         }
     }else{
         [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
@@ -203,20 +189,6 @@
                         }];
                         
                         
-                    } failure:^{
-                        [hud hideAnimated:NO];
-                        self.navigationItem.rightBarButtonItem.enabled = YES;
-                        self.isScreen = NO;
-                    }];
-                }];
-            }else if ([GlobalData shared].isBindDLNA) {
-                [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                    [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
-                        [hud hideAnimated:NO];
-                        [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
-                        self.navigationItem.rightBarButtonItem.enabled = YES;
-                        self.isScreen = YES;
                     } failure:^{
                         [hud hideAnimated:NO];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -261,8 +233,6 @@
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
         }];
-    }else if ([GlobalData shared].isBindDLNA) {
-        [MBProgressHUD showTextHUDwithTitle:@"DLNA暂不支持旋转操作"];
     }else{
         [self currentCellImageShouldRotate];
     }
@@ -309,7 +279,7 @@
         [RDPhotoTool saveImageInSystemPhoto:image withAlert:NO];
     }
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD) {
         if (self.isScreen) {
             NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
             PHAsset * asset = [self.PHAssetSource objectAtIndex:index];
@@ -329,10 +299,6 @@
                     } failure:^{
                         
                     }];
-                }];
-            }else if ([GlobalData shared].isBindDLNA) {
-                [OpenFileTool writeImageToSysImageCacheWithImage:image andName:name handle:^(NSString *keyStr) {
-                    [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
                 }];
             }
         }
@@ -382,7 +348,7 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_switch" key:nil value:nil];
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD) {
         if (self.isScreen) {
             PhotoManyCollectionViewCell * cell = [self currentCell];
             NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
@@ -403,10 +369,6 @@
                             
                         }];
                     }];
-                }else if ([GlobalData shared].isBindDLNA) {
-                    [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
-                        [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
-                    }];
                 }
                 
             }else{
@@ -426,10 +388,6 @@
                             } failure:^{
                                 
                             }];
-                        }];
-                    }else if ([GlobalData shared].isBindDLNA) {
-                        [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                            [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
                         }];
                     }
                 }];

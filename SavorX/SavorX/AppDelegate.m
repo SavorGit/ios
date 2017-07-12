@@ -598,11 +598,6 @@
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
-        }else if ([GlobalData shared].isBindDLNA){
-            if (![HTTPServerManager checkHttpServerWithDLNAIP:[GlobalData shared].DLNADevice.headerURL]) {
-                [[GlobalData shared] disconnect];
-                [[GCCDLNA defaultManager] startSearchPlatform];
-            }
         }else if ([Helper isWifiStatus]){
             [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
@@ -624,7 +619,7 @@
         }
         
         //检测当前绑定状态是否断开
-        if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
+        if (![GlobalData shared].isBindRD) {
             [[RDHomeStatusView defaultView] stopScreen];
         }
         
@@ -730,11 +725,6 @@
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
-        }else if ([GlobalData shared].isBindDLNA){
-            if (![HTTPServerManager checkHttpServerWithDLNAIP:[GlobalData shared].DLNADevice.headerURL]) {
-                [[GlobalData shared] disconnect];
-                [[GCCDLNA defaultManager] startSearchPlatform];
-            }
         }else if ([Helper isWifiStatus]){
             [GlobalData shared].networkStatus = RDNetworkStatusReachableViaWiFi;
             if ([[GlobalData shared].cacheModel.sid isEqualToString:[Helper getWifiName]]) {
@@ -762,7 +752,7 @@
         }
         
         //检测当前绑定状态是否断开
-        if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
+        if (![GlobalData shared].isBindRD) {
             [[RDHomeStatusView defaultView] stopScreen];
         }
     }
@@ -786,7 +776,7 @@
 //APP将要退出生命周期调用的函数
 - (void)applicationWillTerminate:(UIApplication *)application {
     //如果是绑定状态，尝试发送退出消息
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD) {
         [SAVORXAPI ScreenDemandShouldBackToTV:nil success:nil failure:nil];
     }
 }

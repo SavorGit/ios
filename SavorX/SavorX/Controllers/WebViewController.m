@@ -121,23 +121,6 @@
 
         [self demandVideoWithforce:0];
         
-    }else if ([GlobalData shared].isBindDLNA){
-        //如果是绑定状态
-        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-        [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
-            
-            DemandViewController *view = [[DemandViewController alloc] init];
-            view.categroyID = self.categoryID;
-            view.model = self.model;
-            [SAVORXAPI successRing];
-            [[RDHomeStatusView defaultView] startScreenWithViewController:view withStatus:RDHomeStatus_Demand];
-            [self.navigationController pushViewController:view animated:YES];
-            
-            [hud hideAnimated:NO];
-        } failure:^{
-            [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-        }];
     }
 }
 

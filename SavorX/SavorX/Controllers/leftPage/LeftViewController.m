@@ -56,7 +56,7 @@
 -(void)setupDatas{
 
     _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"优惠活动",@"提供投屏的餐厅",@"清除缓存",@"当前版本"];
-    _imageArys = @[@"shoucang", @"yijianfankui", @"bangzhu",@"bangzhu",@"canting", @"qingchu", @"banben"];
+    _imageArys = @[@"cdh_shoucang", @"cdh_yijianfankui", @"cdh_bangzhu",@"cdh_yhhd",@"cdh_canting", @"cdh_qingchu", @"cdh_banben"];
 }
 
 #pragma mark -- UITableViewDataSource
@@ -183,7 +183,7 @@
         }];
         
         UIImageView * peopleImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-        [peopleImageView setImage:[UIImage imageNamed:@"py"]];
+        [peopleImageView setImage:[UIImage imageNamed:@"cdh_py"]];
         [_footView addSubview:peopleImageView];
         [peopleImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.mas_equalTo(0);
@@ -208,7 +208,7 @@
         }];
         
         UIImageView * rightMode = [[UIImageView alloc] initWithFrame:CGRectZero];
-        [rightMode setImage:[UIImage imageNamed:@"more"]];
+        [rightMode setImage:[UIImage imageNamed:@"cdh_more"]];
         [_footView addSubview:rightMode];
         [rightMode mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(-15);
