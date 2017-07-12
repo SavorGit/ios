@@ -100,7 +100,7 @@
     [self.baseView addSubview:self.timeLabel];
     self.timeLabel.layer.cornerRadius = 9;
     self.timeLabel.layer.masksToBounds = YES;
-    self.timeLabel.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.timeLabel.layer.borderColor = UIColorFromRGB(0x4f4d49).CGColor;
     self.timeLabel.layer.borderWidth = .5f;
     
     self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, imageViewSize.height, self.frame.size.width, self.frame.size.height - imageViewSize.height)];
