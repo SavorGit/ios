@@ -39,7 +39,23 @@
         self.index = index;
         self.model = model;
         self.total = total;
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageURL]];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            
+            SDWebImageManager *manager = [SDWebImageManager sharedManager];
+            if ([manager diskImageExistsForURL:[NSURL URLWithString:self.model.imageURL]]) {
+                NSLog(@"不加载动画");
+            }else {
+                
+                self.imageView.alpha = 0.0;
+                [UIView transitionWithView:self.imageView
+                                  duration:1.0f
+                                   options:UIViewAnimationOptionTransitionNone
+                                animations:^{
+                                    [self.imageView setImage:image];
+                                    self.imageView.alpha = 1.0;
+                                } completion:NULL];
+            }
+        }];
         [self createSubViews];
         
     }
@@ -163,7 +179,23 @@
 
 - (void)reloadInfo
 {
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageURL]];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        
+        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        if ([manager diskImageExistsForURL:[NSURL URLWithString:self.model.imageURL]]) {
+            NSLog(@"不加载动画");
+        }else {
+            
+            self.imageView.alpha = 0.0;
+            [UIView transitionWithView:self.imageView
+                              duration:1.0f
+                               options:UIViewAnimationOptionTransitionNone
+                            animations:^{
+                                [self.imageView setImage:image];
+                                self.imageView.alpha = 1.0;
+                            } completion:NULL];
+        }
+    }];
     self.titleLabel.text = self.model.title;
     self.detailFrom.text = self.model.sourceName;
     self.detailDate.text = self.model.updateTime;
