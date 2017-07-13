@@ -63,5 +63,8 @@
  */
 -(void)showNoNetWorkViewInView:(UIView *)view;
 
+#pragma mark - loading的显示方法
+- (void)showLoadingView;
+- (void)hiddenLoadingView;
 
 @end

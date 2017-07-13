@@ -53,6 +53,7 @@
                 }
                 [self.tableView reloadData];
                 [self.tableView.mj_header endRefreshing];
+                [self.tableView.mj_footer resetNoMoreData];
                 if (self.dataSource.count >= 20) {
                     self.tableView.mj_footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(getMoreData)];
                 }
