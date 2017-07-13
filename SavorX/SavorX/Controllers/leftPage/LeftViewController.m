@@ -164,7 +164,7 @@
         [_footView addGestureRecognizer:tap];
         
         UIView * lineView = [[UIView alloc] initWithFrame:CGRectZero];
-        lineView.backgroundColor = UIColorFromRGB(0x424242);
+        lineView.backgroundColor = UIColorFromRGB(0xb45a6a);
         [_footView addSubview:lineView];
         [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
@@ -212,8 +212,8 @@
         [_footView addSubview:rightMode];
         [rightMode mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(-15);
-            make.width.mas_equalTo(15);
-            make.height.mas_equalTo(15);
+            make.width.mas_equalTo(8);
+            make.height.mas_equalTo(14);
             make.centerY.mas_equalTo(0);
         }];
     }
