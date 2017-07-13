@@ -30,7 +30,7 @@
 
 @property (nonatomic, assign) id<GCCControlViewDelegate> delegate;
 @property (nonatomic, assign) BOOL isSlider; //进度条在被拖动
-@property (nonatomic, strong) UIButton * TVButton; //投屏按钮
+@property (nonatomic, strong) UIButton * shareButton; //分享按钮
 
 - (void)play; //播放
 - (void)pause; //暂停

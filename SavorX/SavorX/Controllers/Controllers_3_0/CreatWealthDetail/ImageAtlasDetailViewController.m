@@ -16,7 +16,7 @@
 #import "HSPicDetailRequest.h"
 #import "ImageAtlasDetailModel.h"
 #import "HSIsOrCollectionRequest.h"
-
+#import "HSGetCollectoinStateRequest.h"
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate>
 
@@ -238,6 +238,26 @@ static int temp = -1;
             make.top.mas_equalTo(20);
             make.right.mas_equalTo(- 65);
         }];
+        
+        _collectBtn.userInteractionEnabled = NO;
+        HSGetCollectoinStateRequest * stateRequest = [[HSGetCollectoinStateRequest alloc] initWithArticleID:self.imgAtlModel.artid];
+        [stateRequest sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            
+            _collectBtn.userInteractionEnabled = YES;
+            NSInteger collect = [[[response objectForKey:@"result"] objectForKey:@"state"] integerValue];
+            // 设置收藏按钮状态
+            if (collect == 1) {
+                _collectBtn.selected = YES;
+            }else{
+                _collectBtn.selected = NO;
+            }
+            
+        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            
+        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+            
+        }];
+        
         if (self.imgAtlModel.collected == 1) {
             _collectBtn.selected = YES;
         }

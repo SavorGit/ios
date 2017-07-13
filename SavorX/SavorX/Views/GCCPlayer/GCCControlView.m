@@ -41,7 +41,6 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 @property (nonatomic, strong) UIButton * endBackButton; //结束时的返回按钮
 //@property (nonatomic, strong) UIButton * shotButton; //截图按钮
 @property (nonatomic, strong) UIButton * collectButton; //收藏按钮
-@property (nonatomic, strong) UIButton * shareButton; //分享按钮
 @property (nonatomic, strong) UIButton * definitionButton; //清晰度按钮
 @property (nonatomic, strong) UIView * selectView; //选择清晰度视图
 @property (nonatomic, assign) RDDefinition definition; //当前清晰度
@@ -147,26 +146,9 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     [self.screenButton addTarget:self action:@selector(screenButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.toolView addSubview:self.screenButton];
     
-//    self.titleLabel = [[UILabel alloc] init];
-//    self.titleLabel.backgroundColor = [UIColor clearColor];
-//    self.titleLabel.textColor = [UIColor whiteColor];
-//    self.titleLabel.font = [UIFont systemFontOfSize:16];
-//    self.titleLabel.text = @"这里显示视频的名称";
-//    self.titleLabel.hidden = YES;
-//    [self.toolView addSubview:self.titleLabel];
-    
     self.loadingView = [[UIActivityIndicatorView alloc] init];
     self.loadingView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     [self addSubview:self.loadingView];
-    
-//    self.shotButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [self.shotButton setImage:[UIImage imageNamed:@"jieping"] forState:UIControlStateNormal];
-//    [self.shotButton addTarget:self action:@selector(shotScreenVideo) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.TVButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.TVButton setImage:[UIImage imageNamed:@"tv"] forState:UIControlStateNormal];
-    [self.TVButton addTarget:self action:@selector(TVButtonDidClicked) forControlEvents:UIControlEventTouchUpInside];
-    [self.toolView addSubview:self.TVButton];
     
     self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
@@ -318,7 +300,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     }];
     [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
-        make.top.mas_equalTo(0);
+        make.top.mas_equalTo(5);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
 //    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -347,18 +329,13 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         make.size.mas_equalTo(CGSizeMake(50, 30));
     }];
     [self.shareButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.right.mas_equalTo(0);
+        make.top.mas_equalTo(5);
+        make.right.mas_equalTo(-10);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     [self.collectButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.right.mas_equalTo(-50);
-        make.size.mas_equalTo(CGSizeMake(40, 40));
-    }];
-    [self.TVButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.right.mas_equalTo(-100);
+        make.top.mas_equalTo(5);
+        make.right.mas_equalTo(-55);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     
@@ -451,7 +428,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     
     [self.backButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
-        make.top.mas_equalTo(0);
+        make.top.mas_equalTo(5);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
 //    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -465,13 +442,13 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         make.right.mas_equalTo(-80);
     }];
     [self.shareButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.right.mas_equalTo(-5);
+        make.top.mas_equalTo(5);
+        make.right.mas_equalTo(-10);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     [self.collectButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.right.mas_equalTo(-50);
+        make.top.mas_equalTo(5);
+        make.right.mas_equalTo(-55);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -480,19 +457,11 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
     
     [self.playButton setImage:[UIImage imageNamed:@"sp_zanting"] forState:UIControlStateNormal];
     [self.playButton setImage:[UIImage imageNamed:@"sp_bofang"] forState:UIControlStateSelected];
-    
-//    [self.shotButton removeFromSuperview];
-    [self.TVButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.right.mas_equalTo(-100);
-        make.size.mas_equalTo(CGSizeMake(40, 40));
-    }];
 }
 
 - (void)playOrientationPortraitWithOnlyVideo
 {
     self.isOnlyVideo = YES;
-    self.TVButton.hidden = YES;
     self.shareButton.hidden = YES;
     self.collectButton.hidden = YES;
     self.backButton.hidden = YES;
@@ -526,10 +495,6 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         make.top.mas_equalTo(10);
         make.size.mas_equalTo(CGSizeMake(50, 50));
     }];
-//    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(25);
-//        make.right.mas_equalTo(-220);
-//    }];
     [self.totalTimeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-100);
     }];
@@ -553,24 +518,12 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
         make.right.mas_equalTo(-60);
         make.size.mas_equalTo(CGSizeMake(50, 50));
     }];
-    [self.TVButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(7);
-        make.right.mas_equalTo(-160);
-        make.size.mas_equalTo(CGSizeMake(50, 50));
-    }];
     [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(60);
     }];
     
     [self.playButton setImage:[UIImage imageNamed:@"hp_zanting"] forState:UIControlStateNormal];
     [self.playButton setImage:[UIImage imageNamed:@"hp_bofang"] forState:UIControlStateSelected];
-    
-//    [self.toolView addSubview:self.shotButton];
-//    [self.shotButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(7);
-//        make.right.mas_equalTo(-110);
-//        make.size.mas_equalTo(CGSizeMake(50, 50));
-//    }];
 }
 
 - (void)setVideoIsCollect:(BOOL)isCollect

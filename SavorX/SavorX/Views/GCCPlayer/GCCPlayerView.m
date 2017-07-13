@@ -48,7 +48,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, assign) BOOL isPan; //是否在进行pan手势
 @property (nonatomic, assign) BOOL isHorizontal; //用户手指是否是水平移动
 @property (nonatomic, assign) BOOL isVolume; //记录当前是否在调节时间
-@property (nonatomic, assign) BOOL canDemand;
 @property (nonatomic, strong) UIImageView * imageView;
 
 @end
@@ -59,7 +58,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 {
     if (self = [super init]) {
         self.status = GCCPlayerStatusInitial;
-        self.canDemand = YES;
         // app退到后台
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground) name:UIApplicationWillResignActiveNotification object:nil];
         // app进入前台
@@ -159,6 +157,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)setIsCollect:(BOOL)isCollect
 {
     [self.controlView setVideoIsCollect:isCollect];
+}
+
+- (void)setCollectEnable:(BOOL)enable
+{
+    [self.controlView.shareButton setUserInteractionEnabled:enable];
 }
 
 - (void)createTimer
@@ -579,9 +582,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 {
     self.isFullScreen = YES;
     [self.controlView playOrientationLandscapeWithOnlyVideo];
-    if (self.canDemand) {
-        self.controlView.TVButton.hidden = NO;
-    }
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:@"hasPlay"] boolValue];
     if (!temp) {
         [self createHasNotPlayView];
@@ -751,14 +751,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     }
 }
 
-- (void)TVButtonDidClicked
-{
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_to_screen" key:nil value:nil];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(videoShouldBeDemand)]) {
-        [self.delegate videoShouldBeDemand];
-    }
-}
-
 - (void)playItemShouldChangeDefinitionTo:(NSInteger)tag
 {
     NSString * url = [self.currentURL substringToIndex:self.currentURL.length - 7];
@@ -921,12 +913,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [self.brightnessView removeFromSuperview];
 //    [self.volumeView removeFromSuperview];
     NSLog(@"应该释放");
-}
-
-- (void)hiddenTVButton
-{
-    self.controlView.TVButton.hidden = YES;
-    self.canDemand = NO;
 }
 
 - (void)dealloc

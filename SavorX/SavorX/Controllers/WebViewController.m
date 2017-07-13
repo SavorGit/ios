@@ -19,6 +19,7 @@
 #import "RDHomeStatusView.h"
 #import "HSIsOrCollectionRequest.h"
 #import "HotPopShareView.h"
+#import "HSGetCollectoinStateRequest.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
 
@@ -76,16 +77,25 @@
         make.right.mas_equalTo(0);
         make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
     }];
-    if (!self.model.canPlay) {
-        [self.playView hiddenTVButton];
-    }
     
-    // 设置收藏按钮状态
-    if (self.model.collected == 1) {
-         [self.playView setIsCollect:YES];
-    }else{
-        [self.playView setIsCollect:NO];
-    }
+    [self.playView setCollectEnable:NO];
+    HSGetCollectoinStateRequest * stateRequest = [[HSGetCollectoinStateRequest alloc] initWithArticleID:self.model.artid];
+    [stateRequest sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.playView setCollectEnable:YES];
+        NSInteger collect = [[[response objectForKey:@"result"] objectForKey:@"state"] integerValue];
+        // 设置收藏按钮状态
+        if (collect == 1) {
+            [self.playView setIsCollect:YES];
+        }else{
+            [self.playView setIsCollect:NO];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
     
     //初始化webView
     self.webView = [[UIWebView alloc] init];

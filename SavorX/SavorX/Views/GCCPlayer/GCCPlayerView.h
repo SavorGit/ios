@@ -38,10 +38,11 @@
 - (void)playOrientationLandscapeWithOnlyVideo;
 - (void)playOrientationPortrait; //竖屏切换
 - (void)playOrientationPortraitWithOnlyVideo;
-- (void)hiddenTVButton;
 
 - (void)backgroundImage:(NSString *)url;
 
 - (void)shouldRelease;
+
+- (void)setCollectEnable:(BOOL)enable;
 
 @end
