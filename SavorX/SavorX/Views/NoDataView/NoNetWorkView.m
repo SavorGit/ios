@@ -47,13 +47,13 @@
         self.width = superView.width;
     }
     if (style==NoNetWorkViewStyle_No_NetWork) {
-        _flagImageView.image =[UIImage imageNamed:@"bad"];
-        _descLabel.text = @"网络不给力,点击屏幕重试";
+        _flagImageView.image =[UIImage imageNamed:@"kong_wlyc"];
+        _descLabel.text = @"网络异常, 点击重试";
         _touchScrrenLabel.text = @"";
     }else if(style==NoNetWorkViewStyle_Load_Fail){
-        _flagImageView.image = [UIImage imageNamed:@"bad"];
+        _flagImageView.image = [UIImage imageNamed:@"kong_wlyc"];
 
-        _descLabel.text = @"未获取到内容,请点击重试";
+        _descLabel.text = @"网络异常, 点击重试";
         _touchScrrenLabel.text = @"";
     }
     

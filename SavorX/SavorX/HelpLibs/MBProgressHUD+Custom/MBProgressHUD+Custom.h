@@ -96,15 +96,6 @@
 + (void)showNetworkStatusTextHUDWithTitle:(NSString *)title delay:(CGFloat)delay;
 
 /**
- *  显示一个长时间的纯文本的提示框
- *
- *  @param view  需要显示的界面
- *  @param title 显示的标题
- *
- */
-+ (void)showLongTimeTextHUDInView:(UIView *)view title:(NSString *)title;
-
-/**
  *  显示一个H5加载等待效果图
  *
  */
