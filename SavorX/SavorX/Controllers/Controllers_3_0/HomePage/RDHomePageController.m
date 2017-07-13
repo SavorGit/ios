@@ -39,8 +39,21 @@
 {
     [super viewDidLoad];
     
+    [self createNavigationTitleView];
     [self checkSpecialTopic];
     [self addNotificationCenter];
+}
+
+- (void)createNavigationTitleView
+{
+    UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 90, 25)];
+    [button setImage:[UIImage imageNamed:@"logo_biaoti"] forState:UIControlStateNormal];
+    [button setTitle:@"小热点" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    button.titleLabel.font = [UIFont systemFontOfSize:17];
+    [button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 7)];
+    [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 7, 0, 0)];
+    self.navigationItem.titleView = button;
 }
 
 - (void)checkSpecialTopic
@@ -100,6 +113,8 @@
     if (self.isInsertVC) {
         return;
     }
+    
+    [self setScrollEnable:NO];
     
     self.isInsertVC = YES;
     
@@ -167,6 +182,8 @@
     
     [self autoItemMargin];
     [self.menuView updateBadgeViewAtIndex:self.titles.count - 1];
+    
+    [self setScrollEnable:YES];
 }
 
 - (void)removeViewController
@@ -174,6 +191,9 @@
     if (!self.isInsertVC) {
         return;
     }
+    
+    [self setScrollEnable:NO];
+    
     self.isInsertVC = NO;
     
     int index = self.selectIndex;
@@ -264,6 +284,7 @@
     [self resetCurrentViewController:[self.displayVC objectForKey:@(self.selectIndex)]];
     [self autoItemMargin];
     [self.menuView updateBadgeViewAtIndex:self.titles.count - 1];
+    [self setScrollEnable:YES];
 }
 
 - (void)configPageController

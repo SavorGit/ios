@@ -46,7 +46,7 @@
         self.timeLabel.layer.masksToBounds = YES;
         
         self.maskView = [[UIView alloc] init];
-        self.maskView.backgroundColor = [UIColor blackColor];
+        self.maskView.backgroundColor = UIColorFromRGB(0x393536);
         [self.contentView addSubview:self.maskView];
         [self.maskView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(0);
@@ -73,7 +73,7 @@
 {
     if (choose) {
         [UIView animateWithDuration:.2f animations:^{
-            self.maskView.alpha = .5f;
+            self.maskView.alpha = .6f;
         }];
     }else{
         [UIView animateWithDuration:.2f animations:^{

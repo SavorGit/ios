@@ -181,36 +181,7 @@
             return;
         }
         
-        CGRect rect = [title boundingRectWithSize:CGSizeMake(kScreen_Width - 60, 200) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17]} context:nil];
-        
-        UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width + 30, rect.size.height + 20)];
-        view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.75f];
-        view.center = CGPointMake(kScreen_Width / 2, kScreen_Height / 2);
-        view.layer.cornerRadius = 5.f;
-        view.clipsToBounds = YES;
-        view.tag = 888;
-        
-        UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, rect.size.width + 10, rect.size.height + 10)];
-        label.numberOfLines = 0;
-        label.textColor = [UIColor whiteColor];
-        label.text = title;
-        label.backgroundColor = [UIColor clearColor];
-        label.center = CGPointMake(view.frame.size.width / 2, view.frame.size.height / 2);
-        label.textAlignment = NSTextAlignmentCenter;
-        label.font = [UIFont systemFontOfSize:17];
-        [view addSubview:label];
-        [[UIApplication sharedApplication].keyWindow addSubview:view];
-        [view mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(rect.size.width + 30);
-            make.height.mas_equalTo(rect.size.height + 20);
-            make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
-        }];
-        
-        [UIView animateWithDuration:0.5f delay:2.5f options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            view.alpha = 0.f;
-        } completion:^(BOOL finished) {
-            [view removeFromSuperview];
-        }];
+        [self showTextHUDwithTitle:title delay:1.5f];
     }
 }
 
@@ -236,6 +207,7 @@
         label.textColor = [UIColor whiteColor];
         label.text = title;
         label.backgroundColor = [UIColor clearColor];
+        label.userInteractionEnabled = YES;
         label.center = CGPointMake(view.frame.size.width / 2, view.frame.size.height / 2);
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:17];
@@ -305,18 +277,6 @@
     if (tempView) {
         [tempView removeFromSuperview];
     }
-}
-
-+ (void)showLongTimeTextHUDInView:(UIView *)view title:(NSString *)title
-{
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
-    hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
-    hud.bezelView.color = [UIColor whiteColor];
-    hud.mode = MBProgressHUDModeText;
-    hud.label.numberOfLines = 0;
-    hud.label.text = title;
-    hud.label.textColor = FontColor;
-    [hud hideAnimated:YES afterDelay:2.5f];
 }
 
 + (MBProgressHUD *)showWebLoadingHUDInView:(UIView *)view

@@ -53,7 +53,6 @@
 #define STBURL [NSString stringWithFormat:@"http://%@",[GlobalData shared].RDBoxDevice.BoxIP] //机顶盒地址
 #define HTTPServerDocument [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-#define UserLibraryPath [NSString stringWithFormat:@"%@/userLibrary.plist", HTTPServerDocument]
 #define FileCachePath [NSString stringWithFormat:@"%@/FileCache", HTTPServerDocument]
 #define ImageDocument [NSString stringWithFormat:@"%@/FileCache/ImageCache", HTTPServerDocument]
 #define VideoDocument [NSString stringWithFormat:@"%@/FileCache/VideoCache", HTTPServerDocument]
@@ -62,10 +61,7 @@
 #define EXCELDocument [NSString stringWithFormat:@"%@/FileCache/EXCELCache", HTTPServerDocument]
 #define PPTDocument [NSString stringWithFormat:@"%@/FileCache/PPTCache", HTTPServerDocument]
 #define SystemImage [NSString stringWithFormat:@"%@/FileCache/systemImage", HTTPServerDocument]
-#define CategoryListCache [NSString stringWithFormat:@"%@/FileCache/categoryListCache.plist", HTTPServerDocument]
 #define CategoryCache [NSString stringWithFormat:@"%@/FileCache/categoryCache", HTTPServerDocument]
-#define HotVodCache [NSString stringWithFormat:@"%@/FileCache/HotVodCache.plist", HTTPServerDocument]
-#define HotelCache [NSString stringWithFormat:@"%@/FileCache/HotelCache%ld.plist", HTTPServerDocument, [GlobalData shared].hotelId]
 
 #define RDLogPath [NSString stringWithFormat:@"%@/RDLog.log", HTTPServerDocument]
 #define RDLogCachePath [NSString stringWithFormat:@"%@/RDLogCache", HTTPServerDocument]
@@ -96,7 +92,7 @@
 #define FileManage [NSFileManager defaultManager]
 #define UserDefault [NSUserDefaults standardUserDefaults]
 
-#define VCBackgroundColor [UIColor colorWithHexString:@"#f5f5f5"]
+#define VCBackgroundColor [UIColor colorWithHexString:@"#ece6de"]
 #define FontColor [UIColor colorWithHexString:@"#d8b964"]
 #define PhotoToolTitleColor [UIColor colorWithHexString:@"#c49053"]
 

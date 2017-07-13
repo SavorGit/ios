@@ -9,6 +9,7 @@
 #import "FavoriteViewController.h"
 #import "RDFavoriteTableViewCell.h"
 #import "HSCollectoinListRequest.h"
+#import "HSIsOrCollectionRequest.h"
 #import "MJRefresh.h"
 
 @interface FavoriteViewController ()<UITableViewDelegate, UITableViewDataSource>
@@ -126,6 +127,50 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 96;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @" 删除 ";
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+        
+        HSIsOrCollectionRequest * request = [[HSIsOrCollectionRequest alloc] initWithArticleId:model.artid withState:0];
+        [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            
+            NSDictionary *dic = (NSDictionary *)response;
+            if ([[dic objectForKey:@"code"] integerValue] == 10000) {
+                model.collected = 0;
+                [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                
+                [self.dataSource removeObjectAtIndex:indexPath.row];
+                [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                if (self.dataSource.count == 0) {
+                    [self showNoDataViewInView:self.view noDataType:kNoDataType_Favorite];
+                }
+            }
+            
+        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            
+        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+            
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

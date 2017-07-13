@@ -43,7 +43,7 @@
 //            [button setBackgroundColor:[UIColor whiteColor]];
             button.titleLabel.font = kPingFangThin(29);
             [button setTitleColor:UIColorFromRGB(0xece6de) forState:UIControlStateNormal];
-            [button setBackgroundImage:[self createImageWithColor:UIColorFromRGB(0x832738)] forState:UIControlStateHighlighted];
+            [button setBackgroundImage:[UIImage imageNamed:@"anxiaxiaoguo"] forState:UIControlStateHighlighted];
             [button addTarget:self action:@selector(numberButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
             button.tag = 101 + i * 3 + j;
             
