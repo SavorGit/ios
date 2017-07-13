@@ -157,7 +157,6 @@
 		06E719221E810B6A008496F4 /* HSConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06E719211E810B6A008496F4 /* HSConnectViewController.m */; };
 		06EA38DD1D59E0C60081DDCC /* ShowPhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06EA38DC1D59E0C60081DDCC /* ShowPhotoCollectionViewCell.m */; };
 		06F07B7D1D768EE900AD7B7E /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F07B7C1D768EE900AD7B7E /* HelpViewController.m */; };
-		06F5C9DF1E4D9F7200E05492 /* HSAdsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F5C9DE1E4D9F7200E05492 /* HSAdsModel.m */; };
 		06F5C9E31E4DE73E00E05492 /* RDFullScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 06F5C9E01E4DE73E00E05492 /* RDFullScreen.png */; };
 		06F5C9E41E4DE73E00E05492 /* RDFullScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06F5C9E11E4DE73E00E05492 /* RDFullScreen@2x.png */; };
 		06F5C9E51E4DE73E00E05492 /* RDFullScreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06F5C9E21E4DE73E00E05492 /* RDFullScreen@3x.png */; };
@@ -180,7 +179,6 @@
 		06FA339A1D3E171D001F5B37 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FA337E1D3E171D001F5B37 /* DispatchQueueLogFormatter.m */; };
 		06FB9D611DF97D0E0053BE0A /* MBProgressHUD+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D601DF97D0E0053BE0A /* MBProgressHUD+Custom.m */; };
 		06FB9D711DF9890C0053BE0A /* HSCategoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D671DF9890C0053BE0A /* HSCategoryModel.m */; };
-		06FB9D721DF9890C0053BE0A /* HSVodModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D6A1DF9890C0053BE0A /* HSVodModel.m */; };
 		06FB9D731DF9890C0053BE0A /* Jastor.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D6E1DF9890C0053BE0A /* Jastor.m */; };
 		06FB9D741DF9890C0053BE0A /* JastorRuntimeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D701DF9890C0053BE0A /* JastorRuntimeHelper.m */; };
 		06FB9D771DF989180053BE0A /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D761DF989180053BE0A /* BaseModel.m */; };
@@ -585,8 +583,6 @@
 		06EA38DC1D59E0C60081DDCC /* ShowPhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowPhotoCollectionViewCell.m; sourceTree = "<group>"; };
 		06F07B7B1D768EE900AD7B7E /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
 		06F07B7C1D768EE900AD7B7E /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
-		06F5C9DD1E4D9F7200E05492 /* HSAdsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSAdsModel.h; sourceTree = "<group>"; };
-		06F5C9DE1E4D9F7200E05492 /* HSAdsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSAdsModel.m; sourceTree = "<group>"; };
 		06F5C9E01E4DE73E00E05492 /* RDFullScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RDFullScreen.png; sourceTree = "<group>"; };
 		06F5C9E11E4DE73E00E05492 /* RDFullScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RDFullScreen@2x.png"; sourceTree = "<group>"; };
 		06F5C9E21E4DE73E00E05492 /* RDFullScreen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RDFullScreen@3x.png"; sourceTree = "<group>"; };
@@ -633,8 +629,6 @@
 		06FB9D601DF97D0E0053BE0A /* MBProgressHUD+Custom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+Custom.m"; sourceTree = "<group>"; };
 		06FB9D661DF9890C0053BE0A /* HSCategoryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSCategoryModel.h; sourceTree = "<group>"; };
 		06FB9D671DF9890C0053BE0A /* HSCategoryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSCategoryModel.m; sourceTree = "<group>"; };
-		06FB9D691DF9890C0053BE0A /* HSVodModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSVodModel.h; sourceTree = "<group>"; };
-		06FB9D6A1DF9890C0053BE0A /* HSVodModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSVodModel.m; sourceTree = "<group>"; };
 		06FB9D6C1DF9890C0053BE0A /* Jastor-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Jastor-Prefix.pch"; sourceTree = "<group>"; };
 		06FB9D6D1DF9890C0053BE0A /* Jastor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Jastor.h; sourceTree = "<group>"; };
 		06FB9D6E1DF9890C0053BE0A /* Jastor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Jastor.m; sourceTree = "<group>"; };
@@ -1665,7 +1659,6 @@
 				96BCE3C71EC19A7500B1A3F7 /* EggsGame */,
 				061E0FD51DFFEBB30072605F /* RDBox */,
 				06FB9D651DF9890C0053BE0A /* Discover */,
-				06FB9D681DF9890C0053BE0A /* Hot */,
 				06FB9D6B1DF9890C0053BE0A /* Jastor */,
 				4780581A1DF985140091C305 /* Base */,
 				06FA333D1D3E16A0001F5B37 /* GlobalData.h */,
@@ -1769,17 +1762,6 @@
 				06FB9D671DF9890C0053BE0A /* HSCategoryModel.m */,
 			);
 			path = Discover;
-			sourceTree = "<group>";
-		};
-		06FB9D681DF9890C0053BE0A /* Hot */ = {
-			isa = PBXGroup;
-			children = (
-				06F5C9DD1E4D9F7200E05492 /* HSAdsModel.h */,
-				06F5C9DE1E4D9F7200E05492 /* HSAdsModel.m */,
-				06FB9D691DF9890C0053BE0A /* HSVodModel.h */,
-				06FB9D6A1DF9890C0053BE0A /* HSVodModel.m */,
-			);
-			path = Hot;
 			sourceTree = "<group>";
 		};
 		06FB9D6B1DF9890C0053BE0A /* Jastor */ = {
@@ -2739,7 +2721,6 @@
 				0688C4931E97760100D7D2A9 /* ShareRDViewController.m in Sources */,
 				0663D45B1F0B8A1500CD2FA2 /* RDPhotoTool.m in Sources */,
 				96A734B01F0C80B000906163 /* ImageWithLabel.m in Sources */,
-				06F5C9DF1E4D9F7200E05492 /* HSAdsModel.m in Sources */,
 				06B5554C1E8A6A210068BF70 /* DefalutLaunchPlayView.m in Sources */,
 				0663D41C1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m in Sources */,
 				96D8C5BD1F0F213000251301 /* ImageAtlasScrollView.m in Sources */,
@@ -2757,7 +2738,6 @@
 				96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */,
 				0627E0C21E3231DA00DAED92 /* UIViewController+LGSideMenuController.m in Sources */,
 				06153DCB1D52E15200BB127F /* ScreenDocumentViewController.m in Sources */,
-				06FB9D721DF9890C0053BE0A /* HSVodModel.m in Sources */,
 				96D8C5D21F13589300251301 /* HotPopShareView.m in Sources */,
 				061E0FD21DFFD9A40072605F /* GCCDLNA.m in Sources */,
 				06F9B2A81D6EEDBD00C7F0A4 /* GCCKeyChain.m in Sources */,

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
 #import "BGUploadRequest.h"
-#import "HSVodModel.h"
+#import "CreateWealthModel.h"
 
 typedef NS_ENUM(NSInteger, handleType) {
     collectHandle = 1, //收藏

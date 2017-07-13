@@ -17,7 +17,7 @@
 #import "ImageTextDetailViewController.h"
 #import "ImageAtlasDetailViewController.h"
 #import "WebViewController.h"
-#import "HSVodModel.h"
+#import "CreateWealthModel.h"
 #import "HSCreateWealthRequest.h"
 
 @interface CreateWealthViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -320,7 +320,7 @@
         [self.navigationController pushViewController:iatVC animated:YES];
         
     } else if (model.type == 3 || model.type == 4){
-//        HSVodModel * videoModel = [[HSVodModel alloc] init];
+//        CreateWealthModel * videoModel = [[CreateWealthModel alloc] init];
 //        videoModel.contentURL = @"http://admin.rerdian.com/content/2904.html";
 //        videoModel.videoURL = @"http://1252891964.vod2.myqcloud.com/9ee14a76vodtransgzp1252891964/bd2006b99031868222923999486/f0";
 //        videoModel.title = @"自然绝色纯美享受《20个惊艳瞬间》";

@@ -7,7 +7,11 @@
 //
 
 #import "WMPageController.h"
+#import "CreateWealthModel.h"
 
 @interface RDHomePageController : WMPageController
+
+//收到节目的推送，跳转至相关的页面
+- (void)didReceiveRemoteNotification:(CreateWealthModel *)model;
 
 @end
