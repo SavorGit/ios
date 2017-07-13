@@ -13,6 +13,7 @@
 #import "HotTopicShareView.h"
 #import "HSIsOrCollectionRequest.h"
 #import "HSImTeRecommendRequest.h"
+#import "HotPopShareView.h"
 
 @interface ImageTextDetailViewController ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -68,6 +69,8 @@
 #pragma mark ---分享按钮点击
 - (void)shareAction{
     
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgTextModel andVC:self];
+    [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 
 #pragma mark ---收藏按钮点击
@@ -134,68 +137,10 @@
 }
 
 - (void)shareBoardByDefined {
-    
-    BOOL hadInstalledWeixin = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]];
-    BOOL hadInstalledQQ = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]];
-    
-    NSMutableArray *titlearr = [NSMutableArray arrayWithCapacity:5];
-    NSMutableArray *imageArr = [NSMutableArray arrayWithCapacity:5];
-    
-    int startIndex = 0;
-    
-    if (hadInstalledWeixin) {
-        [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
-        [imageArr addObjectsFromArray:@[@"wechat",@"friend"]];
-    } else {
-        startIndex += 2;
-    }
-    
-    if (hadInstalledQQ) {
-        [titlearr addObjectsFromArray:@[@"QQ"]];
-        [imageArr addObjectsFromArray:@[@"qq"]];
-    } else {
-        startIndex += 1;
-    }
-    
-    [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
-    [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
-    
-    [titlearr addObjectsFromArray:@[@"QQ"]];
-    [imageArr addObjectsFromArray:@[@"qq"]];
-    
-    [titlearr addObjectsFromArray:@[@"微博"]];
-    [imageArr addObjectsFromArray:@[@"weibo"]];
-    
-    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithShareHeadOprationWith:titlearr andImageArry:imageArr andY:0];
+
+    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.imgTextModel andVC:self andY:0];
     [self.testView addSubview:shareView];
-    
-    [shareView setBtnClick:^(NSInteger btnTag) {
-        NSLog(@"\n点击第几个====%d\n当前选中的按钮title====%@",(int)btnTag,titlearr[btnTag]);
-        switch (btnTag + startIndex) {
-            case 0: {
-                // 微信
-                
-            }
-                break;
-            case 1: {
-                // 微信朋友圈
-                
-            }
-                break;
-            case 2: {
-                // QQ
-                
-            }
-                break;
-            case 3: {
-                // 微博
-                
-            }
-                break;
-            default:
-                break;
-        }
-    }];
+
 }
 
 - (void)addObserver

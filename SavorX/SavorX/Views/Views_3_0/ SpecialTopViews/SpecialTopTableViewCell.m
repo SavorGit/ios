@@ -74,7 +74,7 @@
     
 }
 
-- (void)configModelData:(HSSpecialTopModel *)model{
+- (void)configModelData:(CreateWealthModel *)model{
     
     self.titleLabel.text = model.title;
     if (!isEmptyString(model.updateTime)) {

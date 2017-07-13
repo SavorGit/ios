@@ -13,7 +13,7 @@
 #import "MJRefresh.h"
 #import "SpecialTopDetailViewController.h"
 #import "SpecialTopRequest.h"
-#import "HSSpecialTopModel.h"
+#import "CreateWealthModel.h"
 
 @interface SpecialTopicViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -47,7 +47,7 @@
         NSArray * dataArr = [NSArray arrayWithContentsOfFile:self.cachePath];
         for(int i = 0; i < dataArr.count; i ++){
             
-            HSSpecialTopModel *tmpModel = [[HSSpecialTopModel alloc] initWithDictionary:dataArr[i]];
+            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:dataArr[i]];
             tmpModel.type = 1;
             if (i == 0) {
                 tmpModel.type = 0;
@@ -65,7 +65,7 @@
         NSArray *resultArr = [response objectForKey:@"result"];
         [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
         for (int i = 0; i < resultArr.count; i ++) {
-            HSSpecialTopModel *tmpModel = [[HSSpecialTopModel alloc] initWithDictionary:resultArr[i]];
+            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
             tmpModel.type = 1;
             if (i == 0) {
                 tmpModel.type = 0;
@@ -95,7 +95,7 @@
         [self.dataSource removeAllObjects];
         
         for (int i = 0; i < resultArr.count; i ++) {
-            HSSpecialTopModel *tmpModel = [[HSSpecialTopModel alloc] initWithDictionary:resultArr[i]];
+            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
             tmpModel.type = 1;
             if (i == 0) {
                 tmpModel.type = 0;
@@ -122,7 +122,7 @@
 //上拉获取更多数据
 - (void)getMoreData
 {
-    HSSpecialTopModel *welthModel = [self.dataSource lastObject];
+    CreateWealthModel *welthModel = [self.dataSource lastObject];
     SpecialTopRequest * request = [[SpecialTopRequest alloc] initWithSortNum:welthModel.sort_num];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -137,7 +137,7 @@
         
         //如果获取的数据数量不为0，则将数据添加至数据源，刷新当前列表
         for(NSDictionary *dict in resultArr){
-            HSSpecialTopModel *welthModel = [[HSSpecialTopModel alloc] initWithDictionary:dict];
+            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:welthModel];
         }
         [self.tableView reloadData];
@@ -226,7 +226,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HSSpecialTopModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     if (model.type == 0) {
         
         static NSString *cellID = @"HeadlineTableCell";
@@ -277,7 +277,7 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HSSpecialTopModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     if (model.type == 0) {
         return 367.5;
     }else if (model.type == 1){
@@ -288,7 +288,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    HSSpecialTopModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     SpecialTopDetailViewController *stVC = [[SpecialTopDetailViewController alloc] init];
     stVC.specilDetailModel = model;
     [self.navigationController pushViewController:stVC animated:YES];

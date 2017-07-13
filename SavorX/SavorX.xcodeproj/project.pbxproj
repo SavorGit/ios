@@ -324,7 +324,6 @@
 		96D8C5DF1F1390DF00251301 /* ImageAtlasDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5DE1F1390DF00251301 /* ImageAtlasDetailModel.m */; };
 		96D8C5E81F146AE200251301 /* HSCreateWealthRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */; };
 		96D8C5EB1F14CAF200251301 /* HSRecordSmashEggsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5EA1F14CAF200251301 /* HSRecordSmashEggsRequest.m */; };
-		96D8C5F11F14D2EB00251301 /* HSSpecialTopModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F01F14D2EB00251301 /* HSSpecialTopModel.m */; };
 		96D8C5F51F14D3B900251301 /* SpecialTopRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F41F14D3B900251301 /* SpecialTopRequest.m */; };
 		96D8C5F91F15BE2C00251301 /* HSIsOrCollectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F81F15BE2C00251301 /* HSIsOrCollectionRequest.m */; };
 		96D8C5FD1F1613DC00251301 /* HSImTeRecommendRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5FC1F1613DC00251301 /* HSImTeRecommendRequest.m */; };
@@ -846,8 +845,6 @@
 		96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSCreateWealthRequest.m; sourceTree = "<group>"; };
 		96D8C5E91F14CAF200251301 /* HSRecordSmashEggsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSRecordSmashEggsRequest.h; sourceTree = "<group>"; };
 		96D8C5EA1F14CAF200251301 /* HSRecordSmashEggsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSRecordSmashEggsRequest.m; sourceTree = "<group>"; };
-		96D8C5EF1F14D2EB00251301 /* HSSpecialTopModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSSpecialTopModel.h; sourceTree = "<group>"; };
-		96D8C5F01F14D2EB00251301 /* HSSpecialTopModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSSpecialTopModel.m; sourceTree = "<group>"; };
 		96D8C5F31F14D3B900251301 /* SpecialTopRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTopRequest.h; sourceTree = "<group>"; };
 		96D8C5F41F14D3B900251301 /* SpecialTopRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopRequest.m; sourceTree = "<group>"; };
 		96D8C5F71F15BE2C00251301 /* HSIsOrCollectionRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSIsOrCollectionRequest.h; sourceTree = "<group>"; };
@@ -2154,7 +2151,6 @@
 		96A734A51F0C7FAC00906163 /* Models_3_0 */ = {
 			isa = PBXGroup;
 			children = (
-				96D8C5EE1F14D2B700251301 /*  SpecialTopModel */,
 				96A734A61F0C7FAC00906163 /* CreateWealthModel */,
 			);
 			path = Models_3_0;
@@ -2290,15 +2286,6 @@
 				96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */,
 			);
 			path = CreateWealthNet;
-			sourceTree = "<group>";
-		};
-		96D8C5EE1F14D2B700251301 /*  SpecialTopModel */ = {
-			isa = PBXGroup;
-			children = (
-				96D8C5EF1F14D2EB00251301 /* HSSpecialTopModel.h */,
-				96D8C5F01F14D2EB00251301 /* HSSpecialTopModel.m */,
-			);
-			path = " SpecialTopModel";
 			sourceTree = "<group>";
 		};
 		96D8C5F21F14D39500251301 /*  SpecialTopNet */ = {
@@ -2703,7 +2690,6 @@
 				062D4F791DEC02BA0093942A /* GCCControlView.m in Sources */,
 				96D8C5BB1F0F213000251301 /* DDPhotoDescView.m in Sources */,
 				96A7349F1F0C7F2D00906163 /* ImageTextTableViewCell.m in Sources */,
-				96D8C5F11F14D2EB00251301 /* HSSpecialTopModel.m in Sources */,
 				0663D4541F0B816300CD2FA2 /* RDVideoCollectionViewCell.m in Sources */,
 				0627E0C01E3231DA00DAED92 /* LGSideMenuControllerGesturesHandler.m in Sources */,
 				06FB9D771DF989180053BE0A /* BaseModel.m in Sources */,
