@@ -116,14 +116,16 @@
     if (self.testView.superview) {
         [self.testView removeFromSuperview];
     }
-    CGFloat theight = (self.dataSource.count *96 + 48) + 8 + 130;
+    //底部View总高度
+    CGFloat theight = (self.dataSource.count *96 + 48) + 130;
     CGFloat height = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
-    frame.origin.y = height + 10;
+    //底部View与顶部网页的间隔为40
+    frame.origin.y = height + 40;
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
-    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 10 + 8)];
+    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 40)];
     self.testView.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
     
     [self addObserver];
@@ -266,14 +268,12 @@
         [self.testView addSubview:_tableView];
         
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(138);
+            make.top.mas_equalTo(130);
             make.left.mas_equalTo(0);
-            make.bottom.mas_equalTo(0);
-            make.right.mas_equalTo(0);
         }];
 
         UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
-        headView.backgroundColor = [UIColor clearColor];
+        headView.backgroundColor = UIColorFromRGB(0xf6f2ed);
         UILabel *recommendLabel = [[UILabel alloc] init];
         recommendLabel.frame = CGRectMake(10, 10, 100, 30);
         recommendLabel.textColor = UIColorFromRGB(0x922c3e);
