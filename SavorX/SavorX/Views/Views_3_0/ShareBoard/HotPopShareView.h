@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CreateWealthModel.h"
 
 @interface HotPopShareView : UIView
 
 //	点击按钮block回调
-@property (nonatomic,copy) void(^btnClick)(NSInteger);
+//@property (nonatomic,copy) void(^btnClick)(NSInteger);
 
 //	头部提示文字
 @property (nonatomic,copy) NSString *proStr;
@@ -44,6 +45,6 @@
  *  @return ShareView
  */
 
-- (instancetype)initWithShareHeadOprationWith:(NSArray *)titleArray andImageArry:(NSArray *)imageArray;
+- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC;
 
 @end

@@ -18,6 +18,7 @@
 #import "RestaurantListViewController.h"
 #import "RDHomeStatusView.h"
 #import "HSIsOrCollectionRequest.h"
+#import "HotPopShareView.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
 
@@ -181,18 +182,18 @@
     }];
 }
 
-//视频分享按钮被点击
+#pragma mark ---视频分享按钮被点击
 - (void)videoShouldBeShare
 {
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model  andVC:self];
+    [self.view addSubview:shareView];
 }
 
-//分享按钮被点击
+#pragma mark ---分享按钮点击
 - (void)shareAction:(UIButton *)button
 {
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+//    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
+//    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
 }
 
 //视频的点播按钮被点击

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CreateWealthModel.h"
 
 @interface HotTopicShareView : UIView
 
@@ -22,6 +23,6 @@
  *  @return ShareView
  */
 
-- (instancetype)initWithShareHeadOprationWith:(NSArray *)titleArray andImageArry:(NSArray *)imageArray andY:(CGFloat)ory;
+- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC andY:(CGFloat)ory;
 
 @end

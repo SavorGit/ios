@@ -8,6 +8,8 @@
 
 #import "HotPopShareView.h"
 #import "ImageWithLabel.h"
+#import "UMCustomSocialManager.h"
+#import "GCCKeyChain.h"
 
 #define ScreenWidth			[[UIScreen mainScreen] bounds].size.width
 #define ScreenHeight		[[UIScreen mainScreen] bounds].size.height
@@ -35,30 +37,78 @@
 //	所有的分享按钮
 @property (nonatomic, copy) NSMutableArray *buttons;
 
+@property(nonatomic ,assign) NSInteger startIndex;
+
+@property(nonatomic ,strong) CreateWealthModel *model;
+
+@property(nonatomic ,strong) UIViewController *VC;
+
 @end
 
 @implementation HotPopShareView
 
-- (instancetype)initWithShareHeadOprationWith:(NSArray *)titleArray andImageArry:(NSArray *)imageArray {
+- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC {
     
     self = [super init];
     if (self) {
         
-        _shareBtnTitleArray = titleArray;
-        _shareBtnImageArray = imageArray;
-        
+        self.model = model;
+        self.VC = VC;
+        //初始化数据
+        [self creatDatas];
         self.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
-        //	背景，带灰度
+        //背景蒙版，带灰度
         self.backgroundColor = WINDOW_COLOR;
-        //	加载分享面板
+        //加载分享面板
         [self loadUIConfig];
     }
     return self;
 }
 
-/**
- 加载自定义视图，按钮的tag依次为（200 + i）
- */
+- (void)creatDatas{
+    
+    BOOL hadInstalledWeixin = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]];
+    BOOL hadInstalledQQ = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]];
+    
+    NSMutableArray *titlearr = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *imageArr = [NSMutableArray arrayWithCapacity:5];
+    
+    int startIndex = 0;
+    
+    if (hadInstalledWeixin) {
+        [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
+        [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
+    } else {
+        startIndex += 2;
+    }
+    
+    if (hadInstalledQQ) {
+        [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
+        [imageArr addObjectsFromArray:@[@"qq",@"fx_Zone"]];
+    } else {
+        startIndex += 2;
+    }
+    
+    //    [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
+    //    [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
+    //
+    //    [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
+    //    [imageArr addObjectsFromArray:@[@"qq",@"qq"]];
+    
+    [titlearr addObjectsFromArray:@[@"微博"]];
+    [imageArr addObjectsFromArray:@[@"weibo"]];
+    
+    [titlearr addObjectsFromArray:@[@"微信收藏"]];
+    [imageArr addObjectsFromArray:@[@"fx_wxsc"]];
+    
+    [titlearr addObjectsFromArray:@[@"复制链接"]];
+    [imageArr addObjectsFromArray:@[@"fuzhilianjie"]];
+    
+    _shareBtnTitleArray = titlearr;
+    _shareBtnImageArray = imageArr;
+}
+
+//加载自定义视图，按钮的tag依次为（200 + i）
 - (void)loadUIConfig {
     
     [self addSubview:self.bgView];
@@ -74,7 +124,7 @@
         make.left.mas_equalTo(0);
     }];
 
-    //	按钮
+    //按钮
     for (NSInteger i = 0; i < self.shareBtnTitleArray.count; i++) {
         
         CGFloat x = self.bgView.bounds.size.width / 4 * ( i % 4);
@@ -95,7 +145,7 @@
         
         item.backgroundColor = [UIColor clearColor];
     }
-    //	弹出
+    //弹出
     [UIView animateWithDuration:ANIMATE_DURATION animations:^{
         self.bgView.frame = CGRectMake(0, ScreenHeight - CGRectGetHeight(self.bgView.frame), ScreenWidth, CGRectGetHeight(self.bgView.frame));
     }];
@@ -103,9 +153,8 @@
 
 #pragma mark --- Selector
 
-/**
- 点击取消
- */
+
+#pragma mark ---取消
 - (void)tappedCancel {
     
     [UIView animateWithDuration:ANIMATE_DURATION animations:^{
@@ -118,20 +167,60 @@
     }];
 }
 
-/**
- 按钮点击
-  @param tapGes 手势
- */
+#pragma mark ---分享按钮点击
 - (void)itemClick:(UITapGestureRecognizer *)tapGes {
     
     [self tappedCancel];
-    if (self.btnClick) {
-        
-        self.btnClick(tapGes.view.tag - 200);
+    NSInteger btnTag = tapGes.view.tag - 200;
+    switch (btnTag + _startIndex) {
+        case 0: {
+            // 微信
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model];
+            
+        }
+            break;
+        case 1: {
+            // 微信朋友圈
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model];
+        }
+            break;
+        case 2: {
+            // QQ
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model];
+            
+        }
+            break;
+        case 3: {
+            // QQ空间
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Qzone andController:self.VC withModel:self.model];
+        }
+            break;
+        case 4: {
+            // 微博
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model];
+            
+        }
+            break;
+        case 5: {
+            // 微信收藏
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatFavorite andController:self.VC withModel:self.model];
+            
+        }
+            break;
+        case 6: {
+            // 复制链接
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = self.model.contentURL;
+            [MBProgressHUD showTextHUDwithTitle:@"复制成功" delay:1.5f];
+            
+        }
+            break;
+        default:
+            break;
     }
 }
 
-#pragma mark --- getter
+#pragma mark --- bgView
 - (UIView *)bgView {
     
     if (_bgView == nil) {

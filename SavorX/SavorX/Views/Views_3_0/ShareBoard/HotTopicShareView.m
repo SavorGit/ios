@@ -8,6 +8,8 @@
 
 #import "HotTopicShareView.h"
 #import "ImageWithLabel.h"
+#import "UMCustomSocialManager.h"
+
 
 #define ScreenWidth			[[UIScreen mainScreen] bounds].size.width
 #define SELF_Height		119
@@ -35,22 +37,29 @@
 //	所有的分享按钮
 @property (nonatomic, copy) NSMutableArray *buttons;
 
+@property(nonatomic ,assign) NSInteger startIndex;
+
+@property(nonatomic ,strong) CreateWealthModel *model;
+
+@property(nonatomic ,strong) UIViewController *VC;
+
 @end
 
 @implementation HotTopicShareView
 
-- (instancetype)initWithShareHeadOprationWith:(NSArray *)titleArray andImageArry:(NSArray *)imageArray andY:(CGFloat)ory {
+- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC andY:(CGFloat)ory{
     
     self = [super init];
     if (self) {
         
-        _shareBtnTitleArray = titleArray;
-        _shareBtnImageArray = imageArray;
-        _protext = @"分享到";
+        self.model = model;
+        self.VC = VC;
+        [self creatDatas];
         
+        _protext = @"分享到";
         self.frame = CGRectMake(0, ory, ScreenWidth, SELF_Height);
         //	背景，带灰度
-        self.backgroundColor = [UIColor cyanColor];
+        self.backgroundColor = UIColorFromRGB(0xf6f2ed);
         //	可点击
         self.userInteractionEnabled = YES;
         //	加载分享面板
@@ -59,6 +68,42 @@
     return self;
 }
 
+- (void)creatDatas{
+    
+    BOOL hadInstalledWeixin = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]];
+    BOOL hadInstalledQQ = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]];
+    
+    NSMutableArray *titlearr = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *imageArr = [NSMutableArray arrayWithCapacity:5];
+    
+    int startIndex = 0;
+    
+    if (hadInstalledWeixin) {
+        [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
+        [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
+    } else {
+        startIndex += 2;
+    }
+    
+    if (hadInstalledQQ) {
+        [titlearr addObjectsFromArray:@[@"QQ"]];
+        [imageArr addObjectsFromArray:@[@"qq"]];
+    } else {
+        startIndex += 1;
+    }
+    
+    //    [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
+    //    [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
+    //
+    //    [titlearr addObjectsFromArray:@[@"QQ"]];
+    //    [imageArr addObjectsFromArray:@[@"qq"]];
+    
+    [titlearr addObjectsFromArray:@[@"微博"]];
+    [imageArr addObjectsFromArray:@[@"weibo"]];
+    
+    _shareBtnTitleArray = titlearr;
+    _shareBtnImageArray = imageArr;
+}
 /**
  加载自定义视图，按钮的tag依次为（200 + i）
  */
@@ -89,17 +134,41 @@
     }
 }
 
-
-
 #pragma mark --------------------------- Selector
 /**
  按钮点击
 @param tapGes 手势
  */
 - (void)itemClick:(UITapGestureRecognizer *)tapGes {
-    if (self.btnClick) {
-        
-        self.btnClick(tapGes.view.tag - 200);
+    
+    NSInteger btnTag = tapGes.view.tag - 200;
+    switch (btnTag + _startIndex) {
+        case 0: {
+            // 微信
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model];
+            
+        }
+            break;
+        case 1: {
+            // 微信朋友圈
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model];
+            
+        }
+            break;
+        case 2: {
+            // QQ
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model];
+            
+        }
+            break;
+        case 3: {
+            // 微博
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model];
+            
+        }
+            break;
+        default:
+            break;
     }
 }
 
@@ -140,18 +209,19 @@
         
         _titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_bgView.frame), LABEL_HEIGHT)];
         UIView *leftLine = [[UIView alloc] initWithFrame:CGRectMake(0, 22, ([UIScreen mainScreen].bounds.size.width - 60)/2, 1)];
-        leftLine.backgroundColor = [UIColor redColor];
+        leftLine.backgroundColor = UIColorFromRGB(0xece6de);
         [_titleView addSubview:leftLine];
         
         _proLbl = [[UILabel alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 60)/2, 0, 60, LABEL_HEIGHT)];
         _proLbl.text = _protext;
-        _proLbl.textColor = [UIColor blackColor];
+        _proLbl.font = kPingFangRegular(15);
+        _proLbl.textColor = UIColorFromRGB(0x922c3e);
         _proLbl.backgroundColor = [UIColor clearColor];
         _proLbl.textAlignment = NSTextAlignmentCenter;
         [_titleView addSubview:_proLbl];
         
         UIView *rightLine = [[UIView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 60)/2 + 60, 22, ([UIScreen mainScreen].bounds.size.width - 60)/2, 1)];
-        rightLine.backgroundColor = [UIColor redColor];
+        rightLine.backgroundColor = UIColorFromRGB(0xece6de);
         [_titleView addSubview:rightLine];
     }
     return _titleView;

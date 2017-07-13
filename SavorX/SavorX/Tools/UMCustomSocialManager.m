@@ -14,7 +14,7 @@
 
 @interface UMCustomSocialManager ()
 
-@property (nonatomic, strong) HSVodModel * model;
+@property (nonatomic, strong) CreateWealthModel * model;
 @property (nonatomic, strong) UIViewController * controller;
 @property (nonatomic, strong) NSMutableArray * titles;
 @property (nonatomic, strong) NSMutableArray * images;
@@ -317,6 +317,37 @@
         }else{
             [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
             [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
+        }
+        
+    }];
+}
+
+/**
+ *  分享至平台3.0改版调用
+ */
+- (void)sharedToPlatform:(UMSocialPlatformType)platformType andController:(UIViewController *)VC withModel:(CreateWealthModel *)model;
+{
+    self.model = model;
+    NSString * url = [self.model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+    if (!image) {
+        image = [UIImage imageNamed:@"shareDefalut"];
+    }
+    
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //创建网页分享类型
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", self.model.title] descr:self.info thumImage:image];
+    [object setWebpageUrl:url];
+    messageObject.shareObject = object;
+    
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
+        
+        if (error) {
+            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+        }else{
+            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
         }
         
     }];

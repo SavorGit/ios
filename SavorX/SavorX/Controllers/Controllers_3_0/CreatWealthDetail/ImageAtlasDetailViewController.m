@@ -13,9 +13,6 @@
 #import "UIView+Additional.h"
 #import "ImageAtlasScrollView.h"
 #import "HotPopShareView.h"
-#import <UMSocialCore/UMSocialCore.h>
-#import "UMCustomSocialManager.h"
-#import <UShareUI/UShareUI.h>
 #import "HSPicDetailRequest.h"
 #import "ImageAtlasDetailModel.h"
 #import "HSIsOrCollectionRequest.h"
@@ -245,112 +242,11 @@ static int temp = -1;
 
 #pragma mark -分享点击
 - (void)shareAction{
-    BOOL hadInstalledWeixin = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]];
-    BOOL hadInstalledQQ = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]];
     
-    NSMutableArray *titlearr = [NSMutableArray arrayWithCapacity:5];
-    NSMutableArray *imageArr = [NSMutableArray arrayWithCapacity:5];
-    
-    int startIndex = 0;
-    
-    if (hadInstalledWeixin) {
-            [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
-            [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
-    } else {
-        startIndex += 2;
-    }
-    
-    if (hadInstalledQQ) {
-        [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
-        [imageArr addObjectsFromArray:@[@"qq",@"qq"]];
-    } else {
-        startIndex += 1;
-    }
-    
-    [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
-    [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
-    
-    [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
-    [imageArr addObjectsFromArray:@[@"qq",@"qq"]];
-    
-    [titlearr addObjectsFromArray:@[@"微博"]];
-    [imageArr addObjectsFromArray:@[@"weibo"]];
-    
-    [titlearr addObjectsFromArray:@[@"微信收藏"]];
-    [imageArr addObjectsFromArray:@[@"weibo"]];
-    
-    [titlearr addObjectsFromArray:@[@"复制链接"]];
-    [imageArr addObjectsFromArray:@[@"fuzhilianjie"]];
-    
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithShareHeadOprationWith:titlearr andImageArry:imageArr];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgAtlModel andVC:self];
     [self.view addSubview:shareView];
-    
-    [shareView setBtnClick:^(NSInteger btnTag) {
-        NSLog(@"\n点击第几个====%d\n当前选中的按钮title====%@",(int)btnTag,titlearr[btnTag]);
-        switch (btnTag + startIndex) {
-            case 0: {
-                // 微信
-                
-            }
-                break;
-            case 1: {
-                // 微信朋友圈
-                [self shareWithPlatform:UMSocialPlatformType_WechatTimeLine];
-            }
-                break;
-            case 2: {
-                // QQ
-                
-            }
-                break;
-            case 3: {
-                // QQ空间
-                
-            }
-                break;
-            case 4: {
-                // 微博
-                
-            }
-                break;
-            case 5: {
-                // 微信收藏
-                
-            }
-                break;
-            case 6: {
-                // 复制链接
-                
-            }
-                break;
-            default:
-                break;
-        }
-    }];
 }
 
-- (void)shareWithPlatform:(UMSocialPlatformType)platformType {
-    
-    NSString * url = @"http://china.huanqiu.com/article/2017-07/10955931.html?from=bdwz";
-    
-    //创建分享消息对象
-    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
-    //创建网页分享类型
-    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", @"标题"] descr:@"这是描述" thumImage:nil];
-    [object setWebpageUrl:url];
-    messageObject.shareObject = object;
-    
-    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id result, NSError *error) {
-        
-        if (error) {
-            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
-        }else{
-            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
-        }
-        
-    }];
-    
-}
 #pragma mark -收藏点击
 - (void)collectAction{
     

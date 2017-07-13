@@ -9,6 +9,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <UMSocialCore/UMSocialCore.h>
 #import "HSVodModel.h"
+#import "CreateWealthModel.h"
 
 @interface UMCustomSocialManager : NSObject
 
@@ -35,5 +36,10 @@
 - (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type categroyID:(NSInteger)categroyID;
 
 - (void)shareRDApplicationToPlatform:(UMSocialPlatformType)type currentViewController:(UIViewController *)VC title:(NSString *)text;
+
+/**
+ *  分享至平台3.0改版调用
+ */
+- (void)sharedToPlatform:(UMSocialPlatformType)platformType andController:(UIViewController *)VC withModel:(CreateWealthModel *)model;
 
 @end

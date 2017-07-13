@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HSSpecialTopModel.h"
+#import "CreateWealthModel.h"
 #import "Masonry.h"
 
 @interface HeadlinesSTopTableViewCell : UITableViewCell
@@ -22,6 +22,6 @@
 
 @property (nonatomic, strong) UILabel *timeLabel;
 
-- (void)configModelData:(HSSpecialTopModel *)model;
+- (void)configModelData:(CreateWealthModel *)model;
 
 @end

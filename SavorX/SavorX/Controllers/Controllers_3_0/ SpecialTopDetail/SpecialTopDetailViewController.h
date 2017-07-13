@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
-#import "HSSpecialTopModel.h"
+#import "CreateWealthModel.h"
 
 @interface SpecialTopDetailViewController : BaseViewController
 
-@property(nonatomic, strong) HSSpecialTopModel *specilDetailModel;
+@property(nonatomic, strong) CreateWealthModel *specilDetailModel;
 
 @end
