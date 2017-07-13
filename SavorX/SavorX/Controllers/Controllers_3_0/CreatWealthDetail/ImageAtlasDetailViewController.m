@@ -51,7 +51,7 @@
 {
     [self initInfoConfig];
     //2650
-    [self requestWithContentId:[NSString stringWithFormat:@"%ld",self.imgAtlModel.artid]];
+    [self requestWithContentId:self.imgAtlModel.artid];
 }
 
 - (void)requestWithContentId:(NSString *)contentId{

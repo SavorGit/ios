@@ -91,6 +91,8 @@
 		0632DAE21DF55E8E002FA9E3 /* shoushi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0632DAE01DF55E8E002FA9E3 /* shoushi@2x.png */; };
 		0633FB231D82D4480079EF21 /* UIImage+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = 0633FB221D82D4480079EF21 /* UIImage+Custom.m */; };
 		0639C6F01D794603002A04C1 /* AnimationImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0639C6EF1D794603002A04C1 /* AnimationImageView.m */; };
+		0639D19C1F1772AD00AC69AC /* RDLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0639D19B1F1772AD00AC69AC /* RDLoadingView.m */; };
+		0639D19F1F17775300AC69AC /* HSGetCollectoinStateRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0639D19E1F17775300AC69AC /* HSGetCollectoinStateRequest.m */; };
 		063B1D531D7D63D30036C02B /* PhotoSliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 063B1D521D7D63D30036C02B /* PhotoSliderViewController.m */; };
 		063FA3371D839F1100D03548 /* BadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 063FA3361D839F1100D03548 /* BadView.m */; };
 		0647961D1F0E306100DD8AA9 /* PhotoVideoScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647961C1F0E306100DD8AA9 /* PhotoVideoScreenViewController.m */; };
@@ -464,6 +466,10 @@
 		0633FB221D82D4480079EF21 /* UIImage+Custom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Custom.m"; path = "../UIImage+Custom.m"; sourceTree = "<group>"; };
 		0639C6EE1D794603002A04C1 /* AnimationImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnimationImageView.h; path = ../AnimationImageView.h; sourceTree = "<group>"; };
 		0639C6EF1D794603002A04C1 /* AnimationImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationImageView.m; path = ../AnimationImageView.m; sourceTree = "<group>"; };
+		0639D19A1F1772AD00AC69AC /* RDLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDLoadingView.h; sourceTree = "<group>"; };
+		0639D19B1F1772AD00AC69AC /* RDLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDLoadingView.m; sourceTree = "<group>"; };
+		0639D19D1F17775300AC69AC /* HSGetCollectoinStateRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSGetCollectoinStateRequest.h; sourceTree = "<group>"; };
+		0639D19E1F17775300AC69AC /* HSGetCollectoinStateRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSGetCollectoinStateRequest.m; sourceTree = "<group>"; };
 		063B1D511D7D63D30036C02B /* PhotoSliderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoSliderViewController.h; sourceTree = "<group>"; };
 		063B1D521D7D63D30036C02B /* PhotoSliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoSliderViewController.m; sourceTree = "<group>"; };
 		063FA3351D839F1100D03548 /* BadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BadView.h; sourceTree = "<group>"; };
@@ -1359,6 +1365,8 @@
 			children = (
 				0664ADC61F1464C400A720A1 /* RDHomeStatusView.h */,
 				0664ADC71F1464C400A720A1 /* RDHomeStatusView.m */,
+				0639D19A1F1772AD00AC69AC /* RDLoadingView.h */,
+				0639D19B1F1772AD00AC69AC /* RDLoadingView.m */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2304,6 +2312,8 @@
 				96D8C5F81F15BE2C00251301 /* HSIsOrCollectionRequest.m */,
 				0661F6A91F1601AE00E914DE /* HSCollectoinListRequest.h */,
 				0661F6AA1F1601AE00E914DE /* HSCollectoinListRequest.m */,
+				0639D19D1F17775300AC69AC /* HSGetCollectoinStateRequest.h */,
+				0639D19E1F17775300AC69AC /* HSGetCollectoinStateRequest.m */,
 			);
 			path = CollectionNet;
 			sourceTree = "<group>";
@@ -2769,6 +2779,7 @@
 				06FA333F1D3E16A0001F5B37 /* GlobalData.m in Sources */,
 				061E0FD11DFFD9A40072605F /* DeviceModel.m in Sources */,
 				4772FF8C1DFA570D00758697 /* UIView+Additional.m in Sources */,
+				0639D19C1F1772AD00AC69AC /* RDLoadingView.m in Sources */,
 				96D8C5CC1F0F75AC00251301 /* SpecialTopDetailViewController.m in Sources */,
 				0627E0B31E32111500DAED92 /* LeftTableHeaderView.m in Sources */,
 				96D8C5FD1F1613DC00251301 /* HSImTeRecommendRequest.m in Sources */,
@@ -2793,6 +2804,7 @@
 				061A700D1D61C68D00702016 /* DocumentListViewController.m in Sources */,
 				062176431D62BB8F005FD402 /* GCCScreenImage.m in Sources */,
 				0606505C1E014CF100E43024 /* HSWebServerManager.m in Sources */,
+				0639D19F1F17775300AC69AC /* HSGetCollectoinStateRequest.m in Sources */,
 				96A734921F0C7EE900906163 /* CreateWealthViewController.m in Sources */,
 				06FB9D741DF9890C0053BE0A /* JastorRuntimeHelper.m in Sources */,
 				067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */,

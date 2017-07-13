@@ -10,11 +10,11 @@
 
 @implementation HSIsOrCollectionRequest
 
-- (instancetype)initWithArticleId:(NSInteger )articleId withState:(NSInteger )state{
+- (instancetype)initWithArticleId:(NSString *)articleId withState:(NSInteger )state{
     if (self = [super init]) {
         self.methodName = [@"APP3/UserCollection/addMyCollection?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setValue:[NSString stringWithFormat:@"%ld",articleId] forParamKey:@"articleId"];
+        [self setValue:articleId forParamKey:@"articleId"];
         [self setValue:[NSString stringWithFormat:@"%ld",state] forParamKey:@"state"];
     }
     return self;

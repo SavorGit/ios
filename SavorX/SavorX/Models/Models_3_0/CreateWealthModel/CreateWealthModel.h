@@ -10,7 +10,7 @@
 
 @interface CreateWealthModel : BaseModel
 
-@property(nonatomic, assign) NSInteger artid;
+@property(nonatomic, assign) NSString * artid;
 @property(nonatomic, strong) NSString *sort_num;
 @property(nonatomic, assign) NSInteger type;
 @property(nonatomic, strong) NSString *title;

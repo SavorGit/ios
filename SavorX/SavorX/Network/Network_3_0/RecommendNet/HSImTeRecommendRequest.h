@@ -10,6 +10,6 @@
 
 @interface HSImTeRecommendRequest : BGNetworkRequest
 
-- (instancetype)initWithArticleId:(NSInteger )articleId;
+- (instancetype)initWithArticleId:(NSString *)articleId;
 
 @end

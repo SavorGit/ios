@@ -10,6 +10,6 @@
 
 @interface HSIsOrCollectionRequest : BGNetworkRequest
 
-- (instancetype)initWithArticleId:(NSInteger )articleId withState:(NSInteger )state;
+- (instancetype)initWithArticleId:(NSString *)articleId withState:(NSInteger )state;
 
 @end

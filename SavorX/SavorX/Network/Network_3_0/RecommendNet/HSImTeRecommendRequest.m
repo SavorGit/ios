@@ -10,11 +10,11 @@
 
 @implementation HSImTeRecommendRequest
 
-- (instancetype)initWithArticleId:(NSInteger )articleId{
+- (instancetype)initWithArticleId:(NSString *)articleId{
     if (self = [super init]) {
         self.methodName = [@"APP3/Recommend/getRecommendInfo?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setValue:[NSString stringWithFormat:@"%ld",articleId] forParamKey:@"articleId"];
+        [self setValue:articleId forParamKey:@"articleId"];
     }
     return self;
 }
