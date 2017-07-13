@@ -98,9 +98,12 @@
     [titlearr addObjectsFromArray:@[@"微博"]];
     [imageArr addObjectsFromArray:@[@"weibo"]];
     
-    [titlearr addObjectsFromArray:@[@"微信收藏"]];
-    [imageArr addObjectsFromArray:@[@"fx_wxsc"]];
-    
+    if (hadInstalledWeixin) {
+        [titlearr addObjectsFromArray:@[@"微信收藏"]];
+        [imageArr addObjectsFromArray:@[@"fx_wxsc"]];
+    } else {
+        startIndex += 1;
+    }
     [titlearr addObjectsFromArray:@[@"复制链接"]];
     [imageArr addObjectsFromArray:@[@"fuzhilianjie"]];
     

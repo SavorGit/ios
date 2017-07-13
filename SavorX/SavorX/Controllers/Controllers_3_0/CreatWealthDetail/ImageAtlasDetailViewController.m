@@ -50,6 +50,7 @@
 - (void)viewDidLoad
 {
     [self initInfoConfig];
+    [self.view addSubview:self.topView];
     //2650
     [self requestWithContentId:[NSString stringWithFormat:@"%ld",self.imgAtlModel.artid]];
 }
@@ -81,6 +82,10 @@
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
     }];
+    if (self.topView != nil) {
+        [self.topView removeFromSuperview];
+        self.topView = nil;
+    }
     [self.view addSubview:self.topView];
     [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
     
@@ -182,11 +187,11 @@ static int temp = -1;
     // 先remove, 再加入
     [_photoDescView removeFromSuperview];
     ImageAtlasDetailModel *tmpModel = self.imageDatas[newIndex];
+    
     _photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:newIndex totalCount:self.imageDatas.count];
     [self.view addSubview:_photoDescView];
-    
     [_photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 55,_photoDescView.height));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,_photoDescView.height));
         make.bottom.mas_equalTo(0);
         make.left.mas_equalTo(0);
     }];

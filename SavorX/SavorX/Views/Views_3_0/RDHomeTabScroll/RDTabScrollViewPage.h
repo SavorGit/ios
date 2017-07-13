@@ -17,6 +17,9 @@ typedef enum : NSUInteger {
 
 - (instancetype)initWithFrame:(CGRect)frame totalNumber:(NSInteger)total type:(RDTabScrollViewPageType)type index:(NSInteger)index;
 
+// 用于图集
+- (instancetype)initWithFrame:(CGRect)frame withTotalNumber:(NSInteger)total withType:(RDTabScrollViewPageType)type withIndex:(NSInteger)index;
+
 - (void)resetIndex:(NSInteger)index total:(NSInteger)total;
 
 @end
