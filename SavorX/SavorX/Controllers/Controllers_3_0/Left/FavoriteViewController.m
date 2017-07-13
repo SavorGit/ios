@@ -28,13 +28,17 @@
     
     [self setupViews];
     
-    [self.tableView.mj_header beginRefreshing];
+    [self showLoadingView];
+    
+    [self setupDatas];
 }
 
 - (void)setupDatas
 {
     HSCollectoinListRequest * request = [[HSCollectoinListRequest alloc] init];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self hiddenLoadingView];
         
         NSArray * array = [[response objectForKey:@"result"] objectForKey:@"list"];
         
@@ -49,6 +53,7 @@
                 }
                 [self.tableView reloadData];
                 [self.tableView.mj_header endRefreshing];
+                [self.tableView.mj_footer resetNoMoreData];
                 if (self.dataSource.count >= 20) {
                     self.tableView.mj_footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(getMoreData)];
                 }
@@ -56,8 +61,10 @@
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self hiddenLoadingView];
         [self.tableView.mj_header endRefreshing];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [self hiddenLoadingView];
         [self.tableView.mj_header endRefreshing];
     }];
 }
@@ -103,6 +110,7 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     [self.tableView registerClass:[RDFavoriteTableViewCell class] forCellReuseIdentifier:@"FavoriteCell"];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
     
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(setupDatas)];

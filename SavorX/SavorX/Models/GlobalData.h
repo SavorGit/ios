@@ -99,7 +99,7 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 @property (nonatomic, assign) BOOL isLaunchedByNotification;
 
 //记录启动应用的通知携带的信息
-@property (nonatomic, strong) HSVodModel * launchModel;
+@property (nonatomic, strong) CreateWealthModel * launchModel;
 
 //记录APNS注册的推送token
 @property (nonatomic, strong) NSString * deviceToken;

@@ -46,7 +46,7 @@
     return self;
 }
 
-- (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller
+- (void)showUMSocialSharedWithModel:(CreateWealthModel *)model andController:(UIViewController *)controller
 {
     self.model = model;
     [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
@@ -123,7 +123,7 @@
     }];
 }
 
-- (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type categroyID:(NSInteger)categroyID{
+- (void)showUMSocialSharedWithModel:(CreateWealthModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type categroyID:(NSInteger)categroyID{
     
     self.model = model;
     

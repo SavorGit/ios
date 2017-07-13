@@ -30,18 +30,7 @@
     
     [self.view setBackgroundColor:UIColorFromRGB(0xece6de)];
     [self initInfo];
-    [self.tableView.mj_header beginRefreshing];
-}
-
-- (void)initInfo{
-    _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
-     self.cachePath = [NSString stringWithFormat:@"%@%@.plist", CategoryCache, @"SpecialTopic"];
-}
-
-//下拉刷新页面数据
-- (void)refreshData
-{
-    [self.dataSource removeAllObjects];
+    
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
         
         //如果本地缓存的有数据，则先从本地读取缓存的数据
@@ -57,8 +46,21 @@
             
         }
         [self.tableView reloadData];
+        [self.tableView.mj_header beginRefreshing];
+    }else{
+        [self showLoadingView];
+        [self refreshData];
     }
-    
+}
+
+- (void)initInfo{
+    _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
+     self.cachePath = [NSString stringWithFormat:@"%@%@.plist", CategoryCache, @"SpecialTopic"];
+}
+
+//下拉刷新页面数据
+- (void)refreshData
+{
     SpecialTopRequest * request = [[SpecialTopRequest alloc] initWithSortNum:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -80,7 +82,7 @@
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
         [self hideNoNetWorkView];
-        
+        [self hiddenLoadingView];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         

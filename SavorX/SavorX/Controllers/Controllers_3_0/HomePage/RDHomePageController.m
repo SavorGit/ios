@@ -14,6 +14,10 @@
 #import "HSGetSpecialRequest.h"
 #import "RDHomeStatusView.h"
 #import "LiveViewController.h"
+#import "GCCDLNA.h"
+#import "WebViewController.h"
+#import "ImageTextDetailViewController.h"
+#import "ImageAtlasDetailViewController.h"
 
 @interface RDHomePageController ()
 
@@ -42,6 +46,56 @@
     [self createNavigationTitleView];
     [self checkSpecialTopic];
     [self addNotificationCenter];
+}
+
+- (void)handleLaunchWork
+{
+    if ([GlobalData shared].is3DTouchEnable) {
+        
+        if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
+            
+            if ([GlobalData shared].networkStatus == RDNetworkStatusReachableViaWiFi) {
+                [[GCCDLNA defaultManager] startSearchPlatform];
+            }
+            
+            [[RDHomeStatusView defaultView] scanQRCode];
+            
+        }else if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
+            [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+        }
+    }
+    
+    if ([GlobalData shared].isLaunchedByNotification) {
+        [self didReceiveRemoteNotification:[GlobalData shared].launchModel];
+    }
+}
+
+//收到节目的推送，跳转至相关的页面
+- (void)didReceiveRemoteNotification:(CreateWealthModel *)model
+{
+    NSInteger categoryID = -1;
+    [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
+    //如果不是绑定状态
+    if (model.type == 3 && model.type == 4) {
+        WebViewController * web = [[WebViewController alloc] init];
+        web.model = model;
+        web.categoryID = categoryID;
+        
+        [self.navigationController pushViewController:web animated:YES];
+        [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
+    }else if (model.type == 2) {
+        ImageAtlasDetailViewController * vc = [[ImageAtlasDetailViewController alloc] init];
+        vc.imgAtlModel = model;
+        [self.navigationController pushViewController:vc animated:YES];
+        [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
+    }else{
+        ImageTextDetailViewController * article = [[ImageTextDetailViewController alloc] init];
+        article.imgTextModel = model;
+        
+        [self.navigationController pushViewController:article animated:YES];
+        [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
+        
+    }
 }
 
 - (void)createNavigationTitleView

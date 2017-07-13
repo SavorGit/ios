@@ -347,7 +347,7 @@
             
             if (dict && [dict isKindOfClass:[NSDictionary class]]) {
                 //如果收到的推送是一个节目的推送则初始化该节目的一个model
-                HSVodModel * model = [[HSVodModel alloc] initWithDictionary:dict];
+                CreateWealthModel * model = [[CreateWealthModel alloc] initWithDictionary:dict];
                 
                 if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
                     //如果根视图是LGSide，则可以正常进行跳转
@@ -358,7 +358,7 @@
                     }
                     if ([[baseNa topViewController] isKindOfClass:[RDHomePageController class]]) {
                         RDHomePageController * page = (RDHomePageController *)baseNa.topViewController;
-//                        [page didReceiveRemoteNotification:model];
+                        [page didReceiveRemoteNotification:model];
                     }
                 }else{
                     //如果根视图不是LGSide，则进行存储，等待首页加载完成后进行处理
@@ -596,7 +596,7 @@
     
     if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
         if ([GlobalData shared].isBindRD) {
-            if (![HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].RDBoxDevice.BoxIP]) {
+            if (![[Helper getWifiName] isEqualToString:[GlobalData shared].RDBoxDevice.sid]) {
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
@@ -631,18 +631,22 @@
             
         }else if ([shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
             
-            LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
-            BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
-            if (![baseNa.topViewController isKindOfClass:[RDHomePageController class]]) {
-                [baseNa popToRootViewControllerAnimated:NO];
+            if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+                LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
+                BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
+                if (![baseNa.topViewController isKindOfClass:[RDHomePageController class]]) {
+                    [baseNa popToRootViewControllerAnimated:NO];
+                }
+                if ([[baseNa topViewController] isKindOfClass:[RDHomePageController class]]) {
+                    RDHomePageController * page = (RDHomePageController *)baseNa.topViewController;
+                    [page.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+                }
+                
+            }else{
+                
+                [[RDHomeStatusView defaultView] scanQRCode];
+                
             }
-            if ([[baseNa topViewController] isKindOfClass:[RDHomePageController class]]) {
-                RDHomePageController * page = (RDHomePageController *)baseNa.topViewController;
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                    [page screenButtonDidClicked];
-                });
-            }
-            
         }
     }else{
         if ([Helper isWifiStatus]) {

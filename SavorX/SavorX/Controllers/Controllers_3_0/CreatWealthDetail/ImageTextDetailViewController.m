@@ -14,6 +14,7 @@
 #import "HSIsOrCollectionRequest.h"
 #import "HSImTeRecommendRequest.h"
 #import "HotPopShareView.h"
+#import "HSGetCollectoinStateRequest.h"
 
 @interface ImageTextDetailViewController ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -47,9 +48,25 @@
     [self.collectButton addTarget:self action:@selector(collectAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem * collectItem = [[UIBarButtonItem alloc] initWithCustomView:self.collectButton];
     self.navigationItem.rightBarButtonItems = @[shareItem, collectItem];
-    if (self.imgTextModel.collected == 1) {
-        self.collectButton.selected = YES;
-    }
+    
+    self.collectButton.userInteractionEnabled = NO;
+    HSGetCollectoinStateRequest * stateRequest = [[HSGetCollectoinStateRequest alloc] initWithArticleID:self.imgTextModel.artid];
+    [stateRequest sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        self.collectButton.userInteractionEnabled = YES;
+        NSInteger collect = [[[response objectForKey:@"result"] objectForKey:@"state"] integerValue];
+        // 设置收藏按钮状态
+        if (collect == 1) {
+            self.collectButton.selected = YES;
+        }else{
+            self.collectButton.selected = NO;
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
     
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
