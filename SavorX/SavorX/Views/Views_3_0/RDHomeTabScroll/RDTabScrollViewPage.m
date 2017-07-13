@@ -34,6 +34,19 @@
     return self;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame withTotalNumber:(NSInteger)total withType:(RDTabScrollViewPageType)type withIndex:(NSInteger)index
+{
+    
+    if (self = [super initWithFrame:frame]) {
+        self.totoalNumber = total;
+        self.type = type;
+        self.index = index;
+        [self createPageLabel];
+        self.totalLabel.textColor = kThemeColor;
+    }
+    return self;
+}
+
 - (void)createPageLabel
 {
     CGFloat width = self.frame.size.width / 2;
@@ -54,8 +67,8 @@
         self.currentLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:13];
         self.totalLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:10];
     }else{
-        self.currentLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:10];
-        self.totalLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:13];
+        self.currentLabel.font = [UIFont fontWithName:@"STHeitiTC-Light" size:11];
+        self.totalLabel.font = [UIFont fontWithName:@"STHeitiTC-Light" size:15];
     }
     
     CGPoint point1 = CGPointMake(self.frame.size.width / 2 + 5, 2);

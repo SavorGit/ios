@@ -537,19 +537,21 @@
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
         
         NSString *urlString = dict[@"url"];
-        if (urlString && urlString.length > 0) {
-            NSString *statusString = dict[@"status"];
-            NSString *durationString = dict[@"duration"];
-            
-            // 如果拿到的lauchID和本地存储的id不一致，则存储图片或是视频
-            if (![[user objectForKey:@"url"]  isEqualToString:urlString]) {
-                [self saveImage:urlString withType:statusString success:^{
-                    [user setObject:urlString forKey:@"url"];
-                    [user setObject:statusString forKey:@"status"];
-                    [user setObject:durationString forKey:@"duration"];
-                    [user synchronize];
-                }];
-            }
+        if (!isEmptyString(urlString)) {
+            if (urlString && urlString.length > 0) {
+                NSString *statusString = dict[@"status"];
+                NSString *durationString = dict[@"duration"];
+                
+                // 如果拿到的lauchID和本地存储的id不一致，则存储图片或是视频
+                if (![[user objectForKey:@"url"]  isEqualToString:urlString]) {
+                    [self saveImage:urlString withType:statusString success:^{
+                        [user setObject:urlString forKey:@"url"];
+                        [user setObject:statusString forKey:@"status"];
+                        [user setObject:durationString forKey:@"duration"];
+                        [user synchronize];
+                    }];
+                }
+        }
         }else{
             [user removeObjectForKey:@"url"];
             [user removeObjectForKey:@"status"];

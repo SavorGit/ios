@@ -45,61 +45,35 @@
     
     [self.view setBackgroundColor:[UIColor lightGrayColor]];
     [self initInfo];
-    [self setUpDatas];
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)initInfo{
     _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
 }
 
-- (void)setUpDatas{
-    
+//下拉刷新页面数据
+- (void)refreshData
+{
     [self.dataSource removeAllObjects];
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
         
         //如果本地缓存的有数据，则先从本地读取缓存的数据
         NSArray * dataArr = [NSArray arrayWithContentsOfFile:self.cachePath];
         for(NSDictionary *dict in dataArr){
-            
             CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:dict];
             [self.dataSource addObject:tmpModel];
-            
         }
         [self.tableView reloadData];
     }
-
+    
     HSCreateWealthRequest * request = [[HSCreateWealthRequest alloc] initWithCateId:self.categoryID withSortNum:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.dataSource removeAllObjects];
-        NSArray *resultArr = [response objectForKey:@"result"];
-        [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
-        for (int i = 0; i < resultArr.count; i ++) {
-            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
-            [self.dataSource addObject:welthModel];
-        }
-        [self.tableView reloadData];
-        
-        
-    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
-    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
-    }];
-}
-
-//下拉刷新页面数据
-- (void)refreshData
-{
-    HSCreateWealthRequest * request = [[HSCreateWealthRequest alloc] initWithCateId:self.categoryID withSortNum:nil];
-    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
         NSDictionary *dic = (NSDictionary *)response;
         NSArray *resultArr = [dic objectForKey:@"result"];
         [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
-        
-        [self.dataSource removeAllObjects];
-        
         for (int i = 0; i < resultArr.count; i ++) {
             CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
             [self.dataSource addObject:welthModel];
@@ -108,15 +82,18 @@
         [self.tableView reloadData];
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
+        [self hideNoNetWorkView];
         
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.tableView.mj_header endRefreshing];
+        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         [self.tableView.mj_header endRefreshing];
+        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         
     }];
 }
@@ -159,6 +136,9 @@
     }];
 }
 
+-(void)retryToGetData{
+    [self refreshData];
+}
 //初始化请求第一页，下拉刷新
 //- (void)setUpDatas{
 //    
