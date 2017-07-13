@@ -32,7 +32,7 @@
     _bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     _bgImageView.contentMode = UIViewContentModeScaleAspectFill;
     _bgImageView.layer.masksToBounds = YES;
-    _bgImageView.backgroundColor = [UIColor blueColor];
+    _bgImageView.backgroundColor = [UIColor clearColor];
     [_bgView addSubview:_bgImageView];
     [_bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 255));
@@ -67,7 +67,7 @@
     _sourceImage = [[UIImageView alloc] initWithFrame:CGRectZero];
     _sourceImage.contentMode = UIViewContentModeScaleAspectFill;
     _sourceImage.layer.masksToBounds = YES;
-    _sourceImage.backgroundColor = [UIColor orangeColor];
+    _sourceImage.backgroundColor = [UIColor clearColor];
     [_bgView addSubview:_sourceImage];
     
     [_sourceImage mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -128,10 +128,13 @@
     
     self.titleLabel.text = model.title;
     self.sourceLabel.text = model.sourceName;
-    self.countLabel.text = [NSString stringWithFormat:@"%ld",model.duration];
-    if (!isEmptyString(model.updateTime)) {
-        self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
-    }
+    self.timeLabel.text =  model.updateTime;
+                            
+    long long minute = 0, second = 0;
+    second = model.duration;
+    minute = second / 60;
+    second = second % 60;
+    self.countLabel.text = [NSString stringWithFormat:@"%lld'%.2lld\"", minute, second];
     
     [self.sourceImage sd_setImageWithURL:[NSURL URLWithString:model.logo] placeholderImage:[UIImage imageNamed:@"zanwu"]];
     [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {

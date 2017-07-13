@@ -30,7 +30,7 @@
     
     [self.view setBackgroundColor:UIColorFromRGB(0xece6de)];
     [self initInfo];
-    [self setUpDatas];
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)initInfo{
@@ -38,8 +38,9 @@
      self.cachePath = [NSString stringWithFormat:@"%@%@.plist", CategoryCache, @"SpecialTopic"];
 }
 
-- (void)setUpDatas{
-    
+//下拉刷新页面数据
+- (void)refreshData
+{
     [self.dataSource removeAllObjects];
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
         
@@ -62,37 +63,9 @@
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.dataSource removeAllObjects];
-        NSArray *resultArr = [response objectForKey:@"result"];
-        [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
-        for (int i = 0; i < resultArr.count; i ++) {
-            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
-            tmpModel.type = 1;
-            if (i == 0) {
-                tmpModel.type = 0;
-            }
-            [self.dataSource addObject:tmpModel];
-        }
-        [self.tableView reloadData];
-        
-        
-    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
-    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
-    }];
-}
-
-//下拉刷新页面数据
-- (void)refreshData
-{
-    SpecialTopRequest * request = [[SpecialTopRequest alloc] initWithSortNum:nil];
-    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
         NSDictionary *dic = (NSDictionary *)response;
         NSArray *resultArr = [dic objectForKey:@"result"];
         [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
-        
-        [self.dataSource removeAllObjects];
         
         for (int i = 0; i < resultArr.count; i ++) {
             CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
@@ -106,15 +79,18 @@
         [self.tableView reloadData];
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
+        [self hideNoNetWorkView];
         
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.tableView.mj_header endRefreshing];
+        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         [self.tableView.mj_header endRefreshing];
+        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         
     }];
 }
@@ -155,6 +131,10 @@
         [self.tableView.mj_footer endRefrenshWithNoNetWork];
         
     }];
+}
+
+-(void)retryToGetData{
+    [self refreshData];
 }
 
 //初始化请求第一页，下拉刷新
