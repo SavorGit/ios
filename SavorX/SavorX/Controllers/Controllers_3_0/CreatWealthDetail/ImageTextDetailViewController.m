@@ -209,26 +209,6 @@
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
     }];
-
-    
-//    _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
-//    
-//    for (int i = 0; i < 3; i ++) {
-//        CreateWealthModel *model = [[CreateWealthModel alloc] init];
-//        model.type = 0;
-//        if (i == 2) {
-//            model.type = 1;
-//        }else if (i == 3 || i == 5 || i == 6){
-//            model.type = 2;
-//        }
-//        model.title = @"这是新闻的标题";
-//        model.imageUrl = @"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg";
-//        model.source = @"网易新闻";
-//        model.time = @"2017.06.19";
-//        model.sourceImage = @"sourceImage";
-//        [_dataSource addObject:model];
-//    }
-//    [self.tableView reloadData];
 }
 
 #pragma mark -- 懒加载
@@ -244,7 +224,9 @@
         _tableView.scrollEnabled = NO;
         [self.testView addSubview:_tableView];
         
+        CGFloat tabHeiht = self.dataSource.count *96 +48;
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, tabHeiht));
             make.top.mas_equalTo(100);
             make.left.mas_equalTo(0);
         }];

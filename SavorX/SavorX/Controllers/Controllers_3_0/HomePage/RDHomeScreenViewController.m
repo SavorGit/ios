@@ -19,6 +19,7 @@
 #import "WebViewController.h"
 #import "RDLogStatisticsAPI.h"
 #import "RDAlertView.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface RDHomeScreenViewController ()<RDTabScrollViewDelegate>
 
@@ -123,12 +124,14 @@
 
 - (void)RDTabScrollViewPhotoButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
 {
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:0];
     [self.navigationController pushViewController:web animated:YES];
 }
 
 - (void)RDTabScrollViewTVButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
 {
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     if ([GlobalData shared].isBindRD) {
         [self demandVideoWithModel:model force:0];
     }else{
@@ -138,7 +141,8 @@
 
 - (void)RDTabScrollViewDidScrollToIndex:(NSInteger)index
 {
-    
+    CreateWealthModel * model = [self.dataSource objectAtIndex:index];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)demandVideoWithModel:(CreateWealthModel *)model force:(NSInteger)force{
