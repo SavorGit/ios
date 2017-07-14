@@ -442,7 +442,7 @@
     //TableView的高度
     CGFloat tabHeight = 0;
     if (self.dataSource.count != 0) {
-        tabHeight = self.dataSource.count *96 + 48;
+        tabHeight = self.dataSource.count *285 + 48;
     }
     //底部View总高度
     CGFloat theight = tabHeight + 100;
@@ -507,7 +507,9 @@
         _tableView.scrollEnabled = NO;
         [self.testView addSubview:_tableView];
         
+        CGFloat tabHeiht = self.dataSource.count *285 +48;
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, tabHeiht));
             make.top.mas_equalTo(100);
             make.left.mas_equalTo(0);
         }];
@@ -558,7 +560,7 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 96.f;
+    return 285.f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
