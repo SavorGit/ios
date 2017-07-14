@@ -17,7 +17,7 @@
 #import "HSGetCollectoinStateRequest.h"
 #import "RDLogStatisticsAPI.h"
 
-@interface ImageTextDetailViewController ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface ImageTextDetailViewController ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UIWebViewDelegate>
 
 @property (nonatomic, strong) UIWebView * webView;
 @property (nonatomic, strong) UIView * testView;
@@ -80,16 +80,24 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
     self.webView = [[UIWebView alloc] init];
+    self.webView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);
     NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
     [self.webView loadRequest:request];
     self.webView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.webView];
     
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
     self.testView.backgroundColor = [UIColor clearColor];
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
 }
 
 #pragma mark ---分享按钮点击
