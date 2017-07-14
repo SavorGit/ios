@@ -19,14 +19,20 @@
 #import "RDHomeStatusView.h"
 #import "HSIsOrCollectionRequest.h"
 #import "HotPopShareView.h"
+#import "HotTopicShareView.h"
 #import "HSGetCollectoinStateRequest.h"
+#import "HSImTeRecommendRequest.h"
+#import "VideoTableViewCell.h"
 
-@interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
+@interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
 @property (nonatomic, strong) MPVolumeView * volumeView;
 @property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 @property (nonatomic, assign) BOOL toolViewIsHidden;
+@property (nonatomic, strong) UIView * testView;   //底部视图
+@property (nonatomic, strong) UITableView * tableView; //表格展示视图
+@property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 
 @end
 
@@ -39,6 +45,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [self removeObserver];
 }
 
 - (instancetype)initWithModel:(CreateWealthModel *)model categoryID:(NSInteger)categoryID
@@ -113,6 +121,11 @@
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?sourceid=1"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     self.webView.opaque = NO;
     [self.webView loadRequest:request];
+    
+    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 140)];
+    self.testView.backgroundColor = [UIColor clearColor];
+    [self.webView.scrollView addSubview:self.testView];
+    [self addObserver];
     
     [MBProgressHUD showWebLoadingHUDInView:self.webView];
     
@@ -400,14 +413,145 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)addObserver
+{
+    [self.webView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
 }
-*/
+
+- (void)removeObserver
+{
+    [self.webView.scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"contentSize"]) {
+        [self footViewShouldBeReset];
+    }
+}
+
+- (void)footViewShouldBeReset
+{
+    [self removeObserver];
+    
+    if (self.testView.superview) {
+        [self.testView removeFromSuperview];
+    }
+    //底部View总高度
+    CGFloat theight = (self.dataSource.count *96 + 48) + 130;
+    CGFloat height = self.webView.scrollView.contentSize.height;
+    CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
+    CGSize contentSize = self.webView.scrollView.contentSize;
+    //底部View与顶部网页的间隔为40
+    frame.origin.y = height + 40;
+    self.testView.frame = frame;
+    [self.webView.scrollView addSubview:self.testView];
+    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 40)];
+    self.testView.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
+    
+    [self addObserver];
+    
+    [self shareBoardByDefined];
+}
+
+- (void)shareBoardByDefined {
+    
+    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.model andVC:self andY:0];
+    [self.testView addSubview:shareView];
+    
+}
+
+#pragma mark - 初始化下方推荐数据
+- (void)setUpDatas{
+    
+    HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.model.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        
+        for (int i = 0; i < resultArr.count; i ++) {
+            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            [self.dataSource addObject:welthModel];
+        }
+        [self footViewShouldBeReset];
+        [self.tableView reloadData];
+        
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
+}
+
+#pragma mark -- 懒加载
+- (UITableView *)tableView
+{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.backgroundView = nil;
+        _tableView.scrollEnabled = NO;
+        [self.testView addSubview:_tableView];
+        
+        [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(130);
+            make.left.mas_equalTo(0);
+        }];
+        
+        UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
+        headView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        UILabel *recommendLabel = [[UILabel alloc] init];
+        recommendLabel.frame = CGRectMake(10, 10, 100, 30);
+        recommendLabel.textColor = UIColorFromRGB(0x922c3e);
+        recommendLabel.font = kPingFangRegular(15);
+        recommendLabel.text = @"为您推荐";
+        [headView addSubview:recommendLabel];
+        _tableView.tableHeaderView = headView;
+    }
+    
+    return _tableView;
+}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.dataSource.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellID = @"videoTableCell";
+    VideoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (cell == nil) {
+        cell = [[VideoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+    }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.backgroundColor = [UIColor clearColor];
+    cell.contentView.backgroundColor = [UIColor clearColor];
+    
+    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    [cell configModelData:model];
+    
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 96.f;
+}
 
 @end
