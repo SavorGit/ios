@@ -10,4 +10,6 @@
 
 @interface RealCreateWealthViewController : CreateWealthViewController
 
+- (void)showSelfAndCreateLog;
+
 @end

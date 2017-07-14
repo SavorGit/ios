@@ -31,6 +31,9 @@
 
 #import "RDHomePageController.h"
 #import "RDHomeStatusView.h"
+#import "SpecialTopicViewController.h"
+#import "LiveViewController.h"
+#import "RealCreateWealthViewController.h"
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
@@ -255,6 +258,28 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
             
         }];
+    }
+}
+
+- (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
+{
+    if ([viewController isKindOfClass:[RealCreateWealthViewController class]]) {
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"101" volume:@"index"];
+        RealCreateWealthViewController * vc = (RealCreateWealthViewController *)viewController;
+        [vc showSelfAndCreateLog];
+        
+    }else if ([viewController isKindOfClass:[LiveViewController class]]){
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"102" volume:@"index"];
+        LiveViewController * vc = (LiveViewController *)viewController;
+        [vc showSelfAndCreateLog];
+        
+    }else if ([viewController isKindOfClass:[SpecialTopicViewController class]]){
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"103" volume:@"index"];
+        SpecialTopicViewController * vc = (SpecialTopicViewController *)viewController;
+        [vc showSelfAndCreateLog];
     }
 }
 

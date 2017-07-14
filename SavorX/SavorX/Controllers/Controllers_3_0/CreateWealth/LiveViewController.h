@@ -10,4 +10,6 @@
 
 @interface LiveViewController : CreateWealthViewController
 
+- (void)showSelfAndCreateLog;
+
 @end

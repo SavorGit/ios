@@ -11,4 +11,6 @@
 
 @interface SpecialTopicViewController : HomeBaseViewController
 
+- (void)showSelfAndCreateLog;
+
 @end
