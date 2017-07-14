@@ -102,6 +102,7 @@
 		0647EAD21E7129E900C39160 /* ZFVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647EAD11E7129E900C39160 /* ZFVolumeView.m */; };
 		064F8B8D1E52FDBC006280FD /* HomeBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 064F8B8C1E52FDBC006280FD /* HomeBaseViewController.m */; };
 		064F8B931E532838006280FD /* HSGetIpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 064F8B921E532838006280FD /* HSGetIpRequest.m */; };
+		065C87E31F18B6EE007BCCF9 /* RDInteractionLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 065C87E21F18B6EE007BCCF9 /* RDInteractionLoadingView.m */; };
 		065ECD621E8A703F0062E29D /* DefaultLaunch.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD611E8A703F0062E29D /* DefaultLaunch.mp4 */; };
 		065ECD6F1E8A73BA0062E29D /* index_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD6B1E8A73BA0062E29D /* index_2.jpg */; };
 		065ECD701E8A73BA0062E29D /* index4_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD6C1E8A73BA0062E29D /* index4_2.jpg */; };
@@ -486,6 +487,8 @@
 		064F8B8C1E52FDBC006280FD /* HomeBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeBaseViewController.m; sourceTree = "<group>"; };
 		064F8B911E532838006280FD /* HSGetIpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSGetIpRequest.h; sourceTree = "<group>"; };
 		064F8B921E532838006280FD /* HSGetIpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSGetIpRequest.m; sourceTree = "<group>"; };
+		065C87E11F18B6EE007BCCF9 /* RDInteractionLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDInteractionLoadingView.h; sourceTree = "<group>"; };
+		065C87E21F18B6EE007BCCF9 /* RDInteractionLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDInteractionLoadingView.m; sourceTree = "<group>"; };
 		065ECD611E8A703F0062E29D /* DefaultLaunch.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultLaunch.mp4; sourceTree = "<group>"; };
 		065ECD6B1E8A73BA0062E29D /* index_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index_2.jpg; sourceTree = "<group>"; };
 		065ECD6C1E8A73BA0062E29D /* index4_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index4_2.jpg; sourceTree = "<group>"; };
@@ -1361,6 +1364,8 @@
 				0664ADC71F1464C400A720A1 /* RDHomeStatusView.m */,
 				0639D19A1F1772AD00AC69AC /* RDLoadingView.h */,
 				0639D19B1F1772AD00AC69AC /* RDLoadingView.m */,
+				065C87E11F18B6EE007BCCF9 /* RDInteractionLoadingView.h */,
+				065C87E21F18B6EE007BCCF9 /* RDInteractionLoadingView.m */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2704,6 +2709,7 @@
 				0661F6AB1F1601AE00E914DE /* HSCollectoinListRequest.m in Sources */,
 				965240DB1ED532E30090E1C8 /* RestaurantListTableViewCell.m in Sources */,
 				064F8B931E532838006280FD /* HSGetIpRequest.m in Sources */,
+				065C87E31F18B6EE007BCCF9 /* RDInteractionLoadingView.m in Sources */,
 				0639C6F01D794603002A04C1 /* AnimationImageView.m in Sources */,
 				965240E21ED559930090E1C8 /* HSRestaurantListRequest.m in Sources */,
 				474C76371DFB9BED001129C9 /* NoNetWorkView.m in Sources */,
