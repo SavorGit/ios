@@ -11,6 +11,7 @@
 
 @interface ImageAtlasDetailViewController : UIViewController
 
+@property (nonatomic, assign) NSInteger categoryID; //分类ID
 @property(nonatomic ,strong) CreateWealthModel *imgAtlModel;
 
 @end

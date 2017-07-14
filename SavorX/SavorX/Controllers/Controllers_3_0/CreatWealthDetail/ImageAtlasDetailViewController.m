@@ -17,6 +17,7 @@
 #import "ImageAtlasDetailModel.h"
 #import "HSIsOrCollectionRequest.h"
 #import "HSGetCollectoinStateRequest.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate>
 
@@ -28,6 +29,7 @@
 @property (nonatomic, strong) DDPhotoDescView *photoDescView;
 @property (nonatomic, strong) DDPhotoScrollView *photoScrollView;
 @property (nonatomic, strong) UIButton *collectBtn;
+@property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 
 @property (nonatomic, assign) BOOL isDisappear;
 @property (nonatomic, assign) NSInteger currentIndex;
@@ -92,13 +94,18 @@
 }
 
 - (void)initInfoConfig{
+    
     self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
     self.automaticallyAdjustsScrollViewInsets = NO;
+    _isComplete = NO;
     self.scrollObjecArr = [[NSMutableArray alloc] initWithCapacity:100];
     self.imageDatas = [[NSMutableArray alloc] initWithCapacity:100];
-//    self.imageArr = [NSArray arrayWithObjects:@"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg",@"https://dn-brknqdxv.qbox.me/d6e24a57b763c14b7731.jpg",@"https://dn-brknqdxv.qbox.me/5fb13268c2d1ef3bfe69.jpg",@"https://dn-brknqdxv.qbox.me/fea55faa880653633cc8.jpg",@"https://dn-brknqdxv.qbox.me/8401b45695d7fea371ca.jpg",@"https://dn-brknqdxv.qbox.me/59bda095dcb55dd91347.jpg",@"https://dn-brknqdxv.qbox.me/ec1379afc23d6afc3d90.jpg",@"https://dn-brknqdxv.qbox.me/51b10338ffdf7016a599.jpg",@"https://dn-brknqdxv.qbox.me/4b82c3574058ea94a2c8.jpg",@"https://dn-brknqdxv.qbox.me/a0287e02c7889227d5c7.jpg", nil];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    // app退到后台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+    // app进入前台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (ImageAtlasScrollView *)imageScrollView
@@ -195,6 +202,14 @@ static int temp = -1;
         make.bottom.mas_equalTo(0);
         make.left.mas_equalTo(0);
     }];
+    
+    //完整阅读图集，写日志
+    if (newIndex == self.imageDatas.count - 1) {
+        if (_isComplete == NO) {
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+            _isComplete = YES;
+    }
+    }
 }
 
 #pragma mark - getter
@@ -375,10 +390,34 @@ static int temp = -1;
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+//app进入后台运行
+- (void)appWillDidBackground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+//app进入前台运行
+- (void)appBecomeActivePlayground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
 - (void)dealloc
 {
     temp = -1;
     [self removeObserver:self forKeyPath:@"currentPage"];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -290,11 +290,13 @@
     if (model.type == 1) {
         ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
         imtVC.imgTextModel = model;
+        imtVC.categoryID = self.categoryID;
         [self.navigationController pushViewController:imtVC animated:YES];
         
     }else if (model.type == 2) {
         ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
         iatVC.imgAtlModel = model;
+        iatVC.categoryID = self.categoryID;
         [self.navigationController pushViewController:iatVC animated:YES];
         
     } else if (model.type == 3 || model.type == 4){
