@@ -17,6 +17,7 @@
 #import "RDHomeStatusView.h"
 #import "DemandViewController.h"
 #import "WebViewController.h"
+#import "RDLogStatisticsAPI.h"
 #import "RDAlertView.h"
 
 @interface RDHomeScreenViewController ()<RDTabScrollViewDelegate>
@@ -135,6 +136,11 @@
     }
 }
 
+- (void)RDTabScrollViewDidScrollToIndex:(NSInteger)index
+{
+    
+}
+
 - (void)demandVideoWithModel:(CreateWealthModel *)model force:(NSInteger)force{
     
     [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
@@ -201,11 +207,6 @@
 {
     DocumentListViewController * document = [[DocumentListViewController alloc] init];
     [self.navigationController pushViewController:document animated:YES];
-}
-
-- (void)dealloc
-{
-    NSLog(@"首页投屏释放了");
 }
 
 - (void)didReceiveMemoryWarning {

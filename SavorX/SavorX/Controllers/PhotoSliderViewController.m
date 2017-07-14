@@ -108,7 +108,7 @@
     }];
     
     UIView * downView = [[UIView alloc] initWithFrame:CGRectZero];
-    downView.backgroundColor = [UIColorFromRGB(0x202020) colorWithAlphaComponent:.94f];
+    downView.backgroundColor = [kThemeColor colorWithAlphaComponent:.94f];
     [self.bottomView addSubview:downView];
     [downView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(50);
@@ -172,7 +172,7 @@
     NSArray * array = @[self.thirdTimeButton, self.secondTimeButton, self.firstTimeButton];
     for (UIButton * button in array) {
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [button setBackgroundColor:[UIColorFromRGB(0x202020) colorWithAlphaComponent:.7f]];
+        [button setBackgroundColor:[kThemeColor colorWithAlphaComponent:.94f]];
         button.frame = CGRectMake(self.timeLabel.frame.origin.x - 30, 15, 32, 32);
         button.titleLabel.font = [UIFont systemFontOfSize:14];
         button.layer.borderColor = [UIColor whiteColor].CGColor;
