@@ -12,6 +12,7 @@
 
 @interface SpecialTopDetailViewController : BaseViewController
 
+@property (nonatomic, assign) NSInteger categoryID; //分类ID
 @property(nonatomic, strong) CreateWealthModel *specilDetailModel;
 
 @end

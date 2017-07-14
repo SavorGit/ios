@@ -67,7 +67,7 @@
 
 #pragma mark ---分享按钮点击
 - (void)shareAction{
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.specilDetailModel andVC:self];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.specilDetailModel andVC:self andCategoryID:self.categoryID];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 
@@ -133,7 +133,7 @@
 }
 
 - (void)shareBoardByDefined {
-    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.specilDetailModel andVC:self andY:0];
+    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.specilDetailModel andVC:self andCategoryID:self.categoryID andY:0];
     [self.testView addSubview:shareView];
 }
 

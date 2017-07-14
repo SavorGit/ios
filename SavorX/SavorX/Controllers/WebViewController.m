@@ -60,9 +60,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dataSource = [[NSMutableArray alloc] initWithCapacity:100];
     
     _isComplete = NO;
     [self createUI];
+    [self setUpDatas];
 }
 
 //初始化界面
@@ -208,7 +210,7 @@
 #pragma mark ---视频分享按钮被点击
 - (void)videoShouldBeShare
 {
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model  andVC:self];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model  andVC:self andCategoryID:self.categoryID];
     [self.view addSubview:shareView];
 }
 
@@ -461,7 +463,7 @@
 
 - (void)shareBoardByDefined {
     
-    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.model andVC:self andY:0];
+    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.model andVC:self andCategoryID:self.categoryID andY:0];
     [self.testView addSubview:shareView];
     
 }
