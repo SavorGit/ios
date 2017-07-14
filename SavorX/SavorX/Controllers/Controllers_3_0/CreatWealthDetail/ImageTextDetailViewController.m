@@ -72,7 +72,7 @@
     CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
     self.webView = [[UIWebView alloc] init];
     self.webView.frame = CGRectMake(0, 0, width, height);
-    NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?sourceid=1",self.imgTextModel.contentURL]]];
+    NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
     [self.webView loadRequest:request];
     self.webView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.webView];
