@@ -172,7 +172,7 @@
 {
     UIButton * titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [titleButton setTintColor:[UIColor whiteColor]];
-    [titleButton setImage:[UIImage imageNamed:@"RDDown"] forState:UIControlStateNormal];
+    [titleButton setImage:[UIImage imageNamed:@"xczk"] forState:UIControlStateNormal];
     titleButton.titleLabel.font = [UIFont systemFontOfSize:16];
     [titleButton addTarget:self action:@selector(titleButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
     titleButton.imageView.contentMode = UIViewContentModeCenter;
@@ -226,7 +226,7 @@
 - (void)closeChooseStatus
 {
     UIButton * button = (UIButton *)self.navigationItem.titleView;
-    [button setImage:[UIImage imageNamed:@"RDDown"] forState:UIControlStateNormal];
+    [button setImage:[UIImage imageNamed:@"xczk"] forState:UIControlStateNormal];
     button.userInteractionEnabled = YES;
     
     [self.screenButton mas_updateConstraints:^(MASConstraintMaker *make) {

@@ -80,10 +80,13 @@
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[self dataSourceCount] * 50 + self.index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
     
     self.rotateView = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.rotateView setImage:[UIImage imageNamed:@"xaunzhuan"] forState:UIControlStateNormal];
     [self.rotateView setTitle:@"旋转" forState:UIControlStateNormal];
-    [self.rotateView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.9f]];
+    [self.rotateView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.94f]];
     [self.rotateView addTarget:self action:@selector(rotateImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.rotateView];
+    [self.rotateView setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 5)];
+    [self.rotateView setTitleEdgeInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
     [self.rotateView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth / 2, 50));
         make.left.mas_equalTo(0);
@@ -91,10 +94,13 @@
     }];
     
     self.textView = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.textView setImage:[UIImage imageNamed:@"wenzi"] forState:UIControlStateNormal];
     [self.textView setTitle:@"文字" forState:UIControlStateNormal];
-    [self.textView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.9f]];
+    [self.textView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.94f]];
     [self.textView addTarget:self action:@selector(addTextOnImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.textView];
+    [self.textView setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 5)];
+    [self.textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth / 2, 50));
         make.right.mas_equalTo(0);
