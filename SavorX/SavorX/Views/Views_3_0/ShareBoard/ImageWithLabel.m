@@ -162,6 +162,7 @@
 //make.size.mas_equalTo(self.imageView.image.size).multipliedBy(self.imageScale);
 				
 			}];
+            NSLog(@"");
 		}
 			break;
 	}

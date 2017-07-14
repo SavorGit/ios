@@ -12,12 +12,12 @@
 
 
 #define ScreenWidth			[[UIScreen mainScreen] bounds].size.width
-#define SELF_Height		119
+#define SELF_Height		    100
 #define SHAREVIEW_BGCOLOR   [UIColor colorWithRed:1.00f green:1.00f blue:1.00f alpha:1]
 #define WINDOW_COLOR        [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4]
 #define LINE_HEIGHT         74
 #define BUTTON_HEIGHT       30
-#define LABEL_HEIGHT		45
+#define LABEL_HEIGHT		30
 
 @interface HotTopicShareView()
 
@@ -188,7 +188,7 @@
             
             index = _shareBtnTitleArray.count / 4 + 1;
         }
-        _bgView.frame = CGRectMake(0, 0, ScreenWidth, BUTTON_HEIGHT + (_protext.length == 0 ? 0 : 45) + LINE_HEIGHT * index);
+        _bgView.frame = CGRectMake(0, 0, ScreenWidth, BUTTON_HEIGHT + (_protext.length == 0 ? 0 : 30) + LINE_HEIGHT * index);
     }
     return _bgView;
 }
@@ -208,7 +208,7 @@
     if (_titleView == nil) {
         
         _titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_bgView.frame), LABEL_HEIGHT)];
-        UIView *leftLine = [[UIView alloc] initWithFrame:CGRectMake(0, 22, ([UIScreen mainScreen].bounds.size.width - 60)/2, 1)];
+        UIView *leftLine = [[UIView alloc] initWithFrame:CGRectMake(0, 14.5, ([UIScreen mainScreen].bounds.size.width - 60)/2, 1)];
         leftLine.backgroundColor = UIColorFromRGB(0xece6de);
         [_titleView addSubview:leftLine];
         
@@ -220,7 +220,7 @@
         _proLbl.textAlignment = NSTextAlignmentCenter;
         [_titleView addSubview:_proLbl];
         
-        UIView *rightLine = [[UIView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 60)/2 + 60, 22, ([UIScreen mainScreen].bounds.size.width - 60)/2, 1)];
+        UIView *rightLine = [[UIView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - 60)/2 + 60, 14.5, ([UIScreen mainScreen].bounds.size.width - 60)/2, 1)];
         rightLine.backgroundColor = UIColorFromRGB(0xece6de);
         [_titleView addSubview:rightLine];
     }

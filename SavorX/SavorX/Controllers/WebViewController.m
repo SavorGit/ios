@@ -122,7 +122,7 @@
     self.webView.opaque = NO;
     [self.webView loadRequest:request];
     
-    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 140)];
+    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 100)];
     self.testView.backgroundColor = [UIColor clearColor];
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];
@@ -437,8 +437,13 @@
     if (self.testView.superview) {
         [self.testView removeFromSuperview];
     }
+    //TableView的高度
+    CGFloat tabHeight = 0;
+    if (self.dataSource.count != 0) {
+        tabHeight = self.dataSource.count *96 + 48;
+    }
     //底部View总高度
-    CGFloat theight = (self.dataSource.count *96 + 48) + 130;
+    CGFloat theight = tabHeight + 100;
     CGFloat height = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
@@ -501,7 +506,7 @@
         [self.testView addSubview:_tableView];
         
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(130);
+            make.top.mas_equalTo(100);
             make.left.mas_equalTo(0);
         }];
         
@@ -552,6 +557,13 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 96.f;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
+    self.model = tmpModel;
+    [self.playView setPlayItemWithURL:self.model.videoURL];
+    
 }
 
 @end
