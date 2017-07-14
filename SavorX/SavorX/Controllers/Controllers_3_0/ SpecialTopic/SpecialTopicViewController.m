@@ -14,11 +14,13 @@
 #import "SpecialTopDetailViewController.h"
 #import "SpecialTopRequest.h"
 #import "CreateWealthModel.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface SpecialTopicViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
+@property (nonatomic, assign) NSInteger categoryID;
 @property (nonatomic, copy) NSString * cachePath;
 
 @end
@@ -54,6 +56,7 @@
 }
 
 - (void)initInfo{
+    self.categoryID = 103;
     _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
      self.cachePath = [NSString stringWithFormat:@"%@%@.plist", CategoryCache, @"SpecialTopic"];
 }
@@ -209,6 +212,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    if ([Helper getCurrentControllerInWMPage] == self) {
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    }
+    
     if (model.type == 0) {
         
         static NSString *cellID = @"HeadlineTableCell";
@@ -271,9 +278,21 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    
     SpecialTopDetailViewController *stVC = [[SpecialTopDetailViewController alloc] init];
     stVC.specilDetailModel = model;
     [self.navigationController pushViewController:stVC animated:YES];
+}
+
+- (void)showSelfAndCreateLog
+{
+    NSArray * cells = self.tableView.visibleCells;
+    for (UITableViewCell * cell in cells) {
+        NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+        CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.section];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

@@ -19,6 +19,7 @@
 #import "WebViewController.h"
 #import "CreateWealthModel.h"
 #import "HSCreateWealthRequest.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface CreateWealthViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -187,6 +188,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    if ([Helper getCurrentControllerInWMPage] == self) {
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    }
+    
     if (!isEmptyString(model.indexImageUrl)) {
         
         static NSString *cellID = @"HeadlineTableCell";
@@ -277,7 +282,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    
     //1 图文 2 图集 3 视频
     if (model.type == 1) {
         ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
@@ -290,15 +298,18 @@
         [self.navigationController pushViewController:iatVC animated:YES];
         
     } else if (model.type == 3 || model.type == 4){
-//        CreateWealthModel * videoModel = [[CreateWealthModel alloc] init];
-//        videoModel.contentURL = @"http://admin.rerdian.com/content/2904.html";
-//        videoModel.videoURL = @"http://1252891964.vod2.myqcloud.com/9ee14a76vodtransgzp1252891964/bd2006b99031868222923999486/f0";
-//        videoModel.title = @"自然绝色纯美享受《20个惊艳瞬间》";
-//        videoModel.imageURL = @"http://redian-produce.oss-cn-beijing.aliyuncs.com/media/resource/k2GwWWtd4i.jpg";
-//        videoModel.duration = 60;
-        
         WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:-1];
         [self.navigationController pushViewController:web animated:YES];
+    }
+}
+
+- (void)showSelfAndCreateLog
+{
+    NSArray * cells = self.tableView.visibleCells;
+    for (UITableViewCell * cell in cells) {
+        NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+        CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.section];
+        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     }
 }
 
