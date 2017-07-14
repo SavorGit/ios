@@ -142,34 +142,6 @@
 -(void)retryToGetData{
     [self refreshData];
 }
-//初始化请求第一页，下拉刷新
-//- (void)setUpDatas{
-//    
-////    NSArray *imageArr = [NSArray arrayWithObjects:@"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg",@"https://dn-brknqdxv.qbox.me/d6e24a57b763c14b7731.jpg",@"https://dn-brknqdxv.qbox.me/5fb13268c2d1ef3bfe69.jpg",@"https://dn-brknqdxv.qbox.me/fea55faa880653633cc8.jpg",@"https://dn-brknqdxv.qbox.me/8401b45695d7fea371ca.jpg",@"https://dn-brknqdxv.qbox.me/59bda095dcb55dd91347.jpg",@"https://dn-brknqdxv.qbox.me/ec1379afc23d6afc3d90.jpg",@"https://dn-brknqdxv.qbox.me/51b10338ffdf7016a599.jpg",@"https://dn-brknqdxv.qbox.me/4b82c3574058ea94a2c8.jpg",@"https://dn-brknqdxv.qbox.me/a0287e02c7889227d5c7.jpg", nil];
-////    for (int i = 0; i < 30; i ++) {
-////        CreateWealthModel *model = [[CreateWealthModel alloc] init];
-////        model.type = 0;
-////        if (i == 0) {
-////            model.type = 3;
-////        }
-////        if (i == 2) {
-////            model.type = 1;
-////        }else if (i == 3 || i == 5 || i == 6){
-////            model.type = 2;
-////            model.imageUrl = @"https://dn-brknqdxv.qbox.me/b75003ff698278f11d79.jpg";
-////        }
-////        model.title = @"这是新闻的标题";
-////         model.imageUrl = @"http://devp.oss.littlehotspot.com/media/resource/WehQBiCyQk.jpg";
-////        if (i < 10) {
-////             model.imageUrl = imageArr[i];
-////        }
-////        model.source = @"网易新闻";
-////        model.time = @"2017.06.19";
-////        model.sourceImage = @"sourceImage";
-////        [_dataSource addObject:model];
-////    }
-////    [self.tableView reloadData];
-//}
 
 #pragma mark -- 懒加载
 - (UITableView *)tableView
@@ -183,12 +155,10 @@
         _tableView.backgroundView = nil;
         _tableView.showsVerticalScrollIndicator = NO;
         [self.view addSubview:_tableView];
-        
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, kMainBoundsHeight));
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
-            make.bottom.mas_equalTo(0);
-            make.right.mas_equalTo(0);
         }];
         
         //创建tableView动画加载头视图

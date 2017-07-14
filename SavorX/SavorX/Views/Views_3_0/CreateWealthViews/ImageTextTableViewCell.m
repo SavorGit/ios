@@ -101,12 +101,12 @@
 
 - (void)configModelData:(CreateWealthModel *)model{
     
-    CGFloat titleHeight = [self getHeightByWidth:kMainBoundsWidth - _bgImageView.width - 30 title:model.title font:kPingFangMedium(16)];
+    CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 30) title:model.title font:kPingFangMedium(16)];
     NSLog(@"%@",model.title);
     NSLog(@"%f",titleHeight);
     if (titleHeight > 30) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - _bgImageView.width - 30, titleHeight));
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 30, titleHeight));
             make.top.mas_equalTo(6);
             make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
         }];
