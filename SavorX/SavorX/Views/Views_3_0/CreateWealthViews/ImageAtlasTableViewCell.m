@@ -56,7 +56,10 @@
     _countLabel.text = @"22图";
     _countLabel.font = kPingFangLight(10);
     _countLabel.textColor = [UIColor whiteColor];
-    _countLabel.backgroundColor = [UIColor lightGrayColor];
+    _countLabel.backgroundColor = [UIColor darkGrayColor];
+    _countLabel.alpha = 0.6;
+    _countLabel.layer.cornerRadius = 3;
+    _countLabel.layer.masksToBounds = YES;
     _countLabel.textAlignment = NSTextAlignmentCenter;
     [_bgImageView addSubview:_countLabel];
     [_countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
