@@ -16,7 +16,7 @@
 
 - (instancetype)init
 {
-    if (self = [super initWithCategoryID:1]) {
+    if (self = [super initWithCategoryID:101]) {
         
     }
     return self;
