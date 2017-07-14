@@ -19,12 +19,13 @@
 
 #define DocumentListCell @"DocumentListCell"
 
-@interface DocumentListViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface DocumentListViewController ()<UITableViewDelegate, UITableViewDataSource,UIWebViewDelegate>
 
 @property (nonatomic, strong) UITableView * tableView; //表格视图展示控件
 @property (nonatomic, strong) NSArray * dataSource; //数据源
-
 @property (nonatomic, strong) UIView *guidView; // 引导页视图
+@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) UIToolbar *toolbar;
 
 @end
 
@@ -44,6 +45,7 @@
     if (self.dataSource.count == 0) {
         
         [self creatGuidTouchView];
+        [self creatHelpWebView];
 
     }
     
@@ -57,24 +59,29 @@
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_list" key:nil value:nil];
 }
 
-- (void)creatHelpGuide{
-    
-    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_guide" key:nil value:nil];
-     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_help" key:nil value:nil];
-    
-    VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
-    [vgVC showScreenProjectionTitle:@"documentGuide" fromStyle:FromDocumentGuide block:^(NSInteger selectIndex) {
-        
-        if (self.dataSource.count == 0) {
-            if (self.guidView) {
-                [self.guidView removeFromSuperview];
-                [self.view addSubview:self.guidView];
-
-            }
-           
-        }
-
+- (void)creatHelpWebView
+{
+    self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+    self.webView.backgroundColor = [UIColor clearColor];
+    self.webView.opaque = NO;
+    self.webView.delegate = self;
+    [self.view addSubview:self.webView];
+    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
     }];
+//    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
+//    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+//    effectView .alpha = 0.95;
+//    effectView .frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
+//    [self.webView addSubview:effectView ];
+//
+    self.toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];
+    self.toolbar.alpha = 0.9;
+    self.toolbar.barStyle = UIBarStyleBlackTranslucent;
+    [self.webView addSubview:self.toolbar];
+    
+    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"]];
+    [self.webView loadRequest:request];
 }
 
 - (void)shouldPushHelp
@@ -91,47 +98,68 @@
     self.guidView.backgroundColor = [UIColor clearColor];
     self.guidView.userInteractionEnabled = YES;
     self.guidView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
-    [self.view addSubview:self.guidView];
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    self.guidView.bottom = keyWindow.top;
+    [keyWindow addSubview:self.guidView];
     
-    UILabel *topTextLabel = [[UILabel alloc] init ];
-    topTextLabel.text = @"文件列表为空，请先导入文件";
-    topTextLabel.textAlignment = NSTextAlignmentCenter;
-    topTextLabel.font = [UIFont systemFontOfSize:15];
-    topTextLabel.textColor = UIColorFromRGB(0x9a6f45);
-    topTextLabel.backgroundColor = UIColorFromRGB(0xffebc3);
-    topTextLabel.alpha = 0.95;
-    [self.guidView addSubview:topTextLabel];
-    [topTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.guidView).offset(0);
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 35));
-        make.centerX.equalTo(self.view);
-    }];
+    [self showViewWithAnimationDuration:.3f];
     
     UIImageView *bgVideoView = [[UIImageView alloc] init];
-    float bgVideoHeight = [Helper autoHeightWith:215];
-    float topbgVideoDistance = [Helper autoHeightWith:145];
-    bgVideoView.frame = CGRectMake(0, topbgVideoDistance, kMainBoundsWidth,bgVideoHeight);
-    bgVideoView.image = [UIImage imageNamed:@"DocGuided_new"];
-    bgVideoView.backgroundColor = [UIColor lightGrayColor];
+    float bgVideoHeight = [Helper autoHeightWith:265];
+    float bgVideoWidth = [Helper autoWidthWith:266];
+    bgVideoView.frame = CGRectZero;
+    bgVideoView.image = [UIImage imageNamed:@"wj_kong"];
+    bgVideoView.backgroundColor = [UIColor whiteColor];
     bgVideoView.userInteractionEnabled = YES;
     [self.guidView addSubview:bgVideoView];
+    [bgVideoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(bgVideoWidth,bgVideoHeight));
+        make.center.mas_equalTo(self.guidView);
+    }];
     
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(creatHelpGuide)];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];
+    lineView.backgroundColor = [UIColor whiteColor];
+    [self.guidView addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(2,200));
+        make.top.mas_equalTo(0);
+        make.centerX.equalTo(self.guidView);
+    }];
+    
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(guidPress)];
     tap.numberOfTapsRequired = 1;
     [bgVideoView addGestureRecognizer:tap];
     
-    UILabel *textLabel = [[UILabel alloc] init ];
-    textLabel.text = @"如何导入文件请查看视频";
-    textLabel.textAlignment = NSTextAlignmentCenter;
-    textLabel.font = [UIFont systemFontOfSize:16];
-    textLabel.textColor = UIColorFromRGB(0x333333);
-    textLabel.backgroundColor = [UIColor clearColor];
-    [self.guidView addSubview:textLabel];
-    float topTextLabelDistance = [Helper autoHeightWith:230];
-    [textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(bgVideoView).offset(topTextLabelDistance);
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,30));
-        make.centerX.equalTo(self.view);
+}
+
+- (void)guidPress{
+    
+    [self dismissViewWithAnimationDuration:.3f];
+    [self.toolbar removeFromSuperview];
+
+}
+
+#pragma mark - show view
+-(void)showViewWithAnimationDuration:(float)duration{
+    
+    [UIView animateWithDuration:duration animations:^{
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        self.guidView.bottom = keyWindow.bottom;
+    } completion:^(BOOL finished) {
+    }];
+}
+
+-(void)dismissViewWithAnimationDuration:(float)duration{
+    
+    [UIView animateWithDuration:duration animations:^{
+        
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        self.guidView.bottom = keyWindow.top;
+        
+    } completion:^(BOOL finished) {
+        
+        [self.guidView removeFromSuperview];
+        
     }];
 }
 
