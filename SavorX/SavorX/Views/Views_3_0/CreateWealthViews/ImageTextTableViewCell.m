@@ -88,8 +88,6 @@
 
 - (CGFloat)getHeightByWidth:(CGFloat)width title:(NSString *)title font:(UIFont *)font
 {
-    NSLog(@"---%@",title);
-    NSLog(@"---%f",width);
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 254, 0)];
     label.text = title;
     label.font = font;
@@ -102,8 +100,6 @@
 - (void)configModelData:(CreateWealthModel *)model{
     
     CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 30) title:model.title font:kPingFangMedium(16)];
-    NSLog(@"%@",model.title);
-    NSLog(@"%f",titleHeight);
     if (titleHeight > 30) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 30, titleHeight));
