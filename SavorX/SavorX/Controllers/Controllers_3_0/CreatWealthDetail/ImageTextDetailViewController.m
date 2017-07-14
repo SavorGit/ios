@@ -95,7 +95,7 @@
 #pragma mark ---分享按钮点击
 - (void)shareAction{
     
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgTextModel andVC:self];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgTextModel andVC:self  andCategoryID:self.categoryID];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 
@@ -145,8 +145,14 @@
     if (self.testView.superview) {
         [self.testView removeFromSuperview];
     }
+    //TableView的高度
+    CGFloat tabHeight = 0;
+    if (self.dataSource.count != 0) {
+        tabHeight = self.dataSource.count *96 + 48;
+    }
+    
     //底部View总高度
-    CGFloat theight = (self.dataSource.count *96 + 48) + 130;
+    CGFloat theight = tabHeight + 100;
     CGFloat height = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
@@ -164,7 +170,7 @@
 
 - (void)shareBoardByDefined {
 
-    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.imgTextModel andVC:self andY:0];
+    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.imgTextModel andVC:self andCategoryID:self.categoryID andY:0];
     [self.testView addSubview:shareView];
 
 }
@@ -239,7 +245,7 @@
         [self.testView addSubview:_tableView];
         
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(130);
+            make.top.mas_equalTo(100);
             make.left.mas_equalTo(0);
         }];
 

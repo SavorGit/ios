@@ -9,6 +9,7 @@
 #import "HotTopicShareView.h"
 #import "ImageWithLabel.h"
 #import "UMCustomSocialManager.h"
+#import "RDLogStatisticsAPI.h"
 
 
 #define ScreenWidth			[[UIScreen mainScreen] bounds].size.width
@@ -43,17 +44,20 @@
 
 @property(nonatomic ,strong) UIViewController *VC;
 
+@property (nonatomic, assign) NSInteger categoryID; //分类ID
+
 @end
 
 @implementation HotTopicShareView
 
-- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC andY:(CGFloat)ory{
+- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC andCategoryID:(NSInteger )categoryID andY:(CGFloat)ory{
     
     self = [super init];
     if (self) {
         
         self.model = model;
         self.VC = VC;
+        self.categoryID = categoryID;
         [self creatDatas];
         
         _protext = @"分享到";
@@ -141,28 +145,34 @@
  */
 - (void)itemClick:(UITapGestureRecognizer *)tapGes {
     
+    NSString *categroyIDStr = [NSString stringWithFormat:@"%ld",self.categoryID];
+    
     NSInteger btnTag = tapGes.view.tag - 200;
     switch (btnTag + _startIndex) {
         case 0: {
             // 微信
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model];
             
         }
             break;
         case 1: {
             // 微信朋友圈
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_friends"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model];
             
         }
             break;
         case 2: {
             // QQ
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq_zone"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model];
             
         }
             break;
         case 3: {
             // 微博
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"sina"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model];
             
         }

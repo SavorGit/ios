@@ -24,6 +24,7 @@
 @property (nonatomic, strong) RDTabScrollView * tabScroll;
 @property (nonatomic, strong) UIView * bottomView;
 @property (nonatomic, strong) NSMutableArray * dataSource;
+@property (nonatomic, assign) NSInteger categoryID;
 
 @property (nonatomic, strong) RDHomeStatusView * statusView;
 
@@ -34,6 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.categoryID = -2;
     self.dataSource = [NSMutableArray new];
     [self setupViews];
     [self setupDatas];

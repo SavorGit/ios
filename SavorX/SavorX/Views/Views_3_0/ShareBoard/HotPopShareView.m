@@ -10,6 +10,7 @@
 #import "ImageWithLabel.h"
 #import "UMCustomSocialManager.h"
 #import "GCCKeyChain.h"
+#import "RDLogStatisticsAPI.h"
 
 #define ScreenWidth			[[UIScreen mainScreen] bounds].size.width
 #define ScreenHeight		[[UIScreen mainScreen] bounds].size.height
@@ -43,17 +44,20 @@
 
 @property(nonatomic ,strong) UIViewController *VC;
 
+@property (nonatomic, assign) NSInteger categoryID; //分类ID
+
 @end
 
 @implementation HotPopShareView
 
-- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC {
+- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC andCategoryID:(NSInteger )categoryID{
     
     self = [super init];
     if (self) {
         
         self.model = model;
         self.VC = VC;
+        self.categoryID = categoryID;
         //初始化数据
         [self creatDatas];
         self.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
@@ -173,39 +177,47 @@
 #pragma mark ---分享按钮点击
 - (void)itemClick:(UITapGestureRecognizer *)tapGes {
     
+    NSString *categroyIDStr = [NSString stringWithFormat:@"%ld",self.categoryID];
+    
     [self tappedCancel];
     NSInteger btnTag = tapGes.view.tag - 200;
     switch (btnTag + _startIndex) {
         case 0: {
             // 微信
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model];
             
         }
             break;
         case 1: {
             // 微信朋友圈
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_friends"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model];
         }
             break;
         case 2: {
             // QQ
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model];
             
         }
             break;
         case 3: {
             // QQ空间
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq_zone"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Qzone andController:self.VC withModel:self.model];
         }
             break;
         case 4: {
             // 微博
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"sina"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model];
             
         }
             break;
         case 5: {
             // 微信收藏
+            [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_collection"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatFavorite andController:self.VC withModel:self.model];
             
         }

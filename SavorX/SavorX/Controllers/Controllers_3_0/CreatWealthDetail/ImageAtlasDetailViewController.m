@@ -283,7 +283,7 @@ static int temp = -1;
 #pragma mark -分享点击
 - (void)shareAction{
     
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgAtlModel andVC:self];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgAtlModel andVC:self andCategoryID:self.categoryID];
     [self.view addSubview:shareView];
 }
 
