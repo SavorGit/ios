@@ -16,6 +16,7 @@
 #import "RDPhotoTool.h"
 #import <Photos/Photos.h>
 #import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 #import "GCCGetInfo.h"
 
@@ -143,7 +144,7 @@
         self.navigationItem.rightBarButtonItem.enabled = YES;
         return;
     }
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
     PhotoManyCollectionViewCell * cell = [self currentCell];
     NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
     PHAsset * asset = [self.PHAssetSource objectAtIndex:index];
@@ -155,7 +156,7 @@
                 
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
-                    [hud hideAnimated:NO];
+                    [hud hidden];
                     [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -169,7 +170,7 @@
                     
                     
                 } failure:^{
-                    [hud hideAnimated:NO];
+                    [hud hidden];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = NO;
                 }];
@@ -182,7 +183,7 @@
                     
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                         
-                        [hud hideAnimated:NO];
+                        [hud hidden];
                         [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -196,7 +197,7 @@
                         
                         
                     } failure:^{
-                        [hud hideAnimated:NO];
+                        [hud hidden];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
                         self.isScreen = NO;
                     }];
@@ -261,14 +262,14 @@
 - (void)addTextOnImage
 {
     [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_add_text" key:nil value:nil];
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在加载"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
     
     PhotoManyCollectionViewCell * cell = [self currentCell];
     
     [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
         PhotoManyEditView * view = [[PhotoManyEditView alloc] initWithImage:result title:cell.firstText detail:cell.secondText date:cell.thirdText];
         view.delegate = self;
-        [hud hideAnimated:NO];
+        [hud hidden];
         [[UIApplication sharedApplication].keyWindow addSubview:view];
     }];
 }

@@ -17,6 +17,7 @@
 
 #import "RDHomeStatusView.h"
 #import "HSIsOrCollectionRequest.h"
+#import "RDInteractionLoadingView.h"
 
 #define BOTTOMHEIGHT 50.f
 
@@ -592,7 +593,7 @@
 //重置当前播放条目
 - (void)restartVod
 {
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
     self.screenButton.enabled = NO;
     if ([GlobalData shared].isBindRD) {
         
@@ -611,10 +612,10 @@
             }
             self.screenButton.enabled = YES;
             self.isHandle = NO;
-            [hud hideAnimated:NO];
+            [hud hidden];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             self.screenButton.enabled = YES;
-            [hud hideAnimated:NO];
+            [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
             self.isHandle = NO;
         }];

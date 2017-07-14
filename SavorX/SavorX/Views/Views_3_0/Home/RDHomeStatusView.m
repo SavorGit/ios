@@ -16,6 +16,7 @@
 
 #import "DemandViewController.h"
 #import "ScreenDocumentViewController.h"
+#import "RDInteractionLoadingView.h"
 
 @interface RDHomeStatusView ()
 
@@ -339,10 +340,10 @@
     __block BOOL hasSuccess = NO; //记录是否呼码成功过
     __block NSInteger hasFailure = 0; //记录失败次数
     
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow withTitle:@"正在呼出验证码"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:[UIApplication sharedApplication].keyWindow title:@"正在呼出验证码"];
     NSString *platformUrl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].callQRCodeURL];
     [SAVORXAPI getWithURL:platformUrl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        [hud hideAnimated:NO];
+        [hud hidden];
         NSInteger code = [result[@"code"] integerValue];
         if(code == 10000){
             if (hasSuccess) {
@@ -363,17 +364,17 @@
         }
         
         if (error.code == -1009 || error.code == -1001) {
-            [hud hideAnimated:NO];
+            [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
         }else{
-            [hud hideAnimated:NO];
+            [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
         }
     }];
     
     NSString *hosturl = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].secondCallCodeURL];
     [SAVORXAPI getWithURL:hosturl parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        [hud hideAnimated:NO];
+        [hud hidden];
         NSInteger code = [result[@"code"] integerValue];
         if(code == 10000){
             if (hasSuccess) {
@@ -396,17 +397,17 @@
         }
         
         if (error.code == -1009 || error.code == -1001) {
-            [hud hideAnimated:NO];
+            [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
         }else{
-            [hud hideAnimated:NO];
+            [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
         }
     }];
     
     NSString *boxPlatformURL = [NSString stringWithFormat:@"%@/command/execute/call-tdc", [GlobalData shared].thirdCallCodeURL];
     [SAVORXAPI getWithURL:boxPlatformURL parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        [hud hideAnimated:NO];
+        [hud hidden];
         NSInteger code = [result[@"code"] integerValue];
         if(code == 10000){
             if (hasSuccess) {
@@ -429,17 +430,17 @@
         }
         
         if (error.code == -1009 || error.code == -1001) {
-            [hud hideAnimated:NO];
+            [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
         }else{
-            [hud hideAnimated:NO];
+            [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
         }
     }];
     
     NSString *boxURL = [NSString stringWithFormat:@"%@/showCode?deviceId=%@", [GlobalData shared].boxCodeURL, [GlobalData shared].deviceID];
     [SAVORXAPI getWithURL:boxURL parameters:nil success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        [hud hideAnimated:NO];
+        [hud hidden];
         NSInteger code = [result[@"code"] integerValue];
         if(code == 10000){
             if (hasSuccess) {
@@ -462,10 +463,10 @@
         }
         
         if (error.code == -1009 || error.code == -1001) {
-            [hud hideAnimated:NO];
+            [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:@"验证码呼出超时"];
         }else{
-            [hud hideAnimated:NO];
+            [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:@"验证码呼出失败"];
         }
     }];

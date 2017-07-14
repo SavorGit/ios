@@ -17,6 +17,7 @@
 #import "RDAlertAction.h"
 #import "LGSideMenuController.h"
 #import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 @implementation OpenFileTool
 
@@ -46,7 +47,7 @@
 
 + (void)screenVideoFileWithPath:(NSString *)filePath
 {
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:[UIApplication sharedApplication].keyWindow title:@"正在投屏"];
     
     UINavigationController * na = [Helper getRootNavigationController];
     if ([na.topViewController isKindOfClass:[FileVideoViewController class]] ||
@@ -68,7 +69,7 @@
         
         [OpenFileTool demandVideoWithMediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0 videoUrl:videoUrl movieURL:movieURL totalTime:totalTime filePath:filePath];
         
-         [hud hideAnimated:NO];
+         [hud hidden];
         
     }
 }

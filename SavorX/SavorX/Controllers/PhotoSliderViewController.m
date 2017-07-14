@@ -12,6 +12,7 @@
 #import "RDPhotoTool.h"
 #import "GCCUPnPManager.h"
 #import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 #define SliderCell @"SliderCell"
 
@@ -378,7 +379,7 @@
         if ([GlobalData shared].isBindRD) {
             
             [MBProgressHUD hideHUDForView:self.view animated:NO];
-            MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+            RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
             
             [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
@@ -392,7 +393,7 @@
                     self.statusLabel.text = @"正在播放图片";
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     
-                    [hud hideAnimated:NO];
+                    [hud hidden];
                     [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
                         
                     } failure:^{
@@ -400,7 +401,7 @@
                     }];
                     
                 } failure:^{
-                    [hud hideAnimated:NO];
+                    [hud hidden];
                 }];
             }];
         }

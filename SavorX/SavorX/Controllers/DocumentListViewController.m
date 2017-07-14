@@ -16,6 +16,7 @@
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
 #import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 #define DocumentListCell @"DocumentListCell"
 
@@ -265,7 +266,8 @@
         FileVideoViewController * video = [[FileVideoViewController alloc] initWithVideoFileURL:videoUrl totalTime:totalTime];
         video.title = [filePath lastPathComponent];
         if ([GlobalData shared].isBindRD) {
-             [MBProgressHUD showCustomLoadingHUDInView:self.view];
+             RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
+            hud.tag = 1010;
             
             [self demandVideoWithMediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0 video:video movieUrl:movieURL];
             
@@ -322,9 +324,19 @@
         else{
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
         }
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        if ([self.view viewWithTag:1010]) {
+            RDInteractionLoadingView * view = (RDInteractionLoadingView *)[self.view viewWithTag:1010];
+            [view hidden];
+        }
+        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        if ([self.view viewWithTag:1010]) {
+            RDInteractionLoadingView * view = (RDInteractionLoadingView *)[self.view viewWithTag:1010];
+            [view hidden];
+        }
+        
         [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
     }];
 }

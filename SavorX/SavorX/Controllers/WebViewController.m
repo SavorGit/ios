@@ -23,6 +23,7 @@
 #import "HSGetCollectoinStateRequest.h"
 #import "HSImTeRecommendRequest.h"
 #import "VideoTableViewCell.h"
+#import "RDInteractionLoadingView.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -263,7 +264,7 @@
 - (void)demandVideoWithforce:(NSInteger)force{
     
     //如果是绑定状态
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
     [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             
@@ -291,9 +292,9 @@
         }else{
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
         }
-        [hud hideAnimated:NO];
+        [hud hidden];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [hud hideAnimated:NO];
+        [hud hidden];
         [MBProgressHUD showTextHUDwithTitle:DemandFailure];
     }];
 
