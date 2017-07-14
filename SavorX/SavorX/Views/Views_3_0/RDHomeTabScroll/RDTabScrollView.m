@@ -374,6 +374,9 @@
     }else{
         self.currentIndex = self.dataSource.count - 1;
     }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(RDTabScrollViewDidScrollToIndex:)]) {
+        [self.delegate RDTabScrollViewDidScrollToIndex:self.currentIndex];
+    }
 }
 
 - (void)didScroolEndWithNext
@@ -389,6 +392,9 @@
         self.currentIndex++;
     }else{
         self.currentIndex = 0;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(RDTabScrollViewDidScrollToIndex:)]) {
+        [self.delegate RDTabScrollViewDidScrollToIndex:self.currentIndex];
     }
 }
 

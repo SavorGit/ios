@@ -13,6 +13,7 @@
 
 - (void)RDTabScrollViewPhotoButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index;
 - (void)RDTabScrollViewTVButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index;
+- (void)RDTabScrollViewDidScrollToIndex:(NSInteger)index;
 
 @end
 
