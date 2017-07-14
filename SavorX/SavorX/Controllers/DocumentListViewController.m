@@ -25,6 +25,7 @@
 @property (nonatomic, strong) NSArray * dataSource; //数据源
 @property (nonatomic, strong) UIView *guidView; // 引导页视图
 @property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) UIToolbar *toolbar;
 
 @end
 
@@ -58,36 +59,26 @@
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_list" key:nil value:nil];
 }
 
-- (void)creatHelpGuide{
-    
-    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_guide" key:nil value:nil];
-     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_help" key:nil value:nil];
-    
-    VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
-    [vgVC showScreenProjectionTitle:@"documentGuide" fromStyle:FromDocumentGuide block:^(NSInteger selectIndex) {
-        
-        if (self.dataSource.count == 0) {
-            if (self.guidView) {
-                [self.guidView removeFromSuperview];
-                [self.view addSubview:self.guidView];
-
-            }
-           
-        }
-
-    }];
-}
-
 - (void)creatHelpWebView
 {
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    self.webView.backgroundColor = [UIColor whiteColor];
+    self.webView.backgroundColor = [UIColor clearColor];
     self.webView.opaque = NO;
     self.webView.delegate = self;
     [self.view addSubview:self.webView];
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];
+//    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
+//    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+//    effectView .alpha = 0.95;
+//    effectView .frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
+//    [self.webView addSubview:effectView ];
+//
+    self.toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];
+    self.toolbar.alpha = 0.9;
+    self.toolbar.barStyle = UIBarStyleBlackTranslucent;
+    [self.webView addSubview:self.toolbar];
     
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"]];
     [self.webView loadRequest:request];
@@ -104,7 +95,7 @@
     
     self.guidView = [[UIView alloc] init];
     self.guidView.tag = 1888;
-    self.guidView.backgroundColor = [UIColor blackColor];
+    self.guidView.backgroundColor = [UIColor clearColor];
     self.guidView.userInteractionEnabled = YES;
     self.guidView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
@@ -144,13 +135,14 @@
 - (void)guidPress{
     
     [self dismissViewWithAnimationDuration:.3f];
+    [self.toolbar removeFromSuperview];
+
 }
 
 #pragma mark - show view
 -(void)showViewWithAnimationDuration:(float)duration{
     
     [UIView animateWithDuration:duration animations:^{
-        self.guidView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.8];
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         self.guidView.bottom = keyWindow.bottom;
     } completion:^(BOOL finished) {
