@@ -201,9 +201,20 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
-    cell.textLabel.text = [[self.dataSource objectAtIndex:indexPath.row] lastPathComponent];
+    NSString * path = [self.dataSource objectAtIndex:indexPath.row];
+    cell.textLabel.text = [path lastPathComponent];
     cell.textLabel.font = [UIFont systemFontOfSize:FontSizeDefault];
     cell.textLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    
+    if ([path hasSuffix:@"pdf"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"wj_pdf"]];
+    }else if ([path hasSuffix:@"doc"] || [path hasSuffix:@"docx"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"wj_doc"]];
+    }else if ([path hasSuffix:@"xls"] || [path hasSuffix:@"xlsx"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"wj_xls"]];
+    }else if ([path hasSuffix:@"ppt"] || [path hasSuffix:@"pptx"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"wj_ppt"]];
+    }
     
     return cell;
 }

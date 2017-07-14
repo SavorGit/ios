@@ -42,7 +42,7 @@
 
 @property(nonatomic ,strong) CreateWealthModel *model;
 
-@property(nonatomic ,strong) UIViewController *VC;
+@property(nonatomic ,weak) UIViewController *VC;
 
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 

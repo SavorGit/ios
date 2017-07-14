@@ -8,6 +8,7 @@
 
 #import "MBProgressHUD.h"
 #import <Photos/Photos.h>
+#import "RDLoadingView.h"
 
 @interface MBProgressHUD (Custom)
 
@@ -99,7 +100,9 @@
  *  显示一个H5加载等待效果图
  *
  */
-+ (MBProgressHUD *)showWebLoadingHUDInView:(UIView *)view;
++ (RDLoadingView *)showWebLoadingHUDInView:(UIView *)view;
+
++ (void)hiddenWebLoadingInView:(UIView *)view;
 
 + (MBProgressHUD *)showBackDemandInView:(UIView *)view;
 

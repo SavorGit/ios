@@ -10,6 +10,7 @@
 #import "RDBoxModel.h"
 #import "RDKeyBoard.h"
 #import "HelpViewController.h"
+#import "RDInteractionLoadingView.h"
 
 @interface HSConnectViewController ()<RDKeyBoradDelegate>
 
@@ -23,8 +24,8 @@
 @property (nonatomic, strong) UILabel * wifiLabel;
 @property (nonatomic, strong) UIView * topAlert;
 
-@property (nonatomic, strong) UIView *maskingView;
-@property (nonatomic, strong) UIImageView *animationImageView;
+@property (nonatomic, strong) RDInteractionLoadingView *maskingView;
+//@property (nonatomic, strong) UIImageView *animationImageView;
 
 @end
 
@@ -39,8 +40,8 @@
     self.keyMuSring = [[NSMutableString alloc] initWithCapacity:100];
    [self setupViews];
     
-    //监听程序进入活跃状态
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+//    //监听程序进入活跃状态
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillActive) name:UIApplicationDidBecomeActiveNotification object:nil];
     
 }
 
@@ -223,71 +224,73 @@
 
 - (void)creatMaskingLoadingView{
     
-    self.maskingView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.maskingView.backgroundColor = [UIColor blackColor];
+    self.maskingView = [[RDInteractionLoadingView alloc] initWithView:[UIApplication sharedApplication].keyWindow title:@"连接中..."];
     
-    UIWindow *keyWindow = [[[UIApplication sharedApplication] windows] lastObject];
-    self.maskingView.frame = keyWindow.bounds;
-    self.maskingView.bottom = keyWindow.top;
-    [keyWindow addSubview:self.maskingView];
-    [self showViewWithAnimationDuration:0.0];
-    
-    UIImageView *smallWindowView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    [smallWindowView setImage:[UIImage imageNamed:@"lianjie_bg"]];
-    [self.maskingView addSubview:smallWindowView];
-    [smallWindowView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:190],[Helper autoHeightWith:160]));
-        make.centerX.mas_equalTo(self.maskingView);
-        make.centerY.mas_equalTo(self.maskingView);
-    }];
-    
-    self.animationImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    self.animationImageView.backgroundColor = [UIColor clearColor];
-    [smallWindowView addSubview:self.animationImageView];
-    [self.animationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:80],[Helper autoHeightWith:20]));
-        make.bottom.mas_equalTo(smallWindowView.mas_bottom).offset(- 20);
-        make.centerX.mas_equalTo(self.maskingView);
-    }];
-    
-    // 播放一组图片，设置一共有多少张图片生成的动画
-    NSMutableArray *imageArray = [NSMutableArray arrayWithCapacity:0];
-    for (int i = 1; i < 4; i++) {
-        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"connecting%d.png", i]];
-        [imageArray addObject:image];
-    }
-    self.animationImageView.animationImages = imageArray;
-    self.animationImageView.animationDuration = 0.5;
-    self.animationImageView.animationRepeatCount = 10000;
-    [self.animationImageView startAnimating];
-    
+//    self.maskingView = [[UIView alloc] initWithFrame:CGRectZero];
+//    self.maskingView.backgroundColor = [UIColor blackColor];
+//    
+//    UIWindow *keyWindow = [[[UIApplication sharedApplication] windows] lastObject];
+//    self.maskingView.frame = keyWindow.bounds;
+//    self.maskingView.bottom = keyWindow.top;
+//    [keyWindow addSubview:self.maskingView];
+//    [self showViewWithAnimationDuration:0.0];
+//    
+//    UIImageView *smallWindowView = [[UIImageView alloc] initWithFrame:CGRectZero];
+//    [smallWindowView setImage:[UIImage imageNamed:@"lianjie_bg"]];
+//    [self.maskingView addSubview:smallWindowView];
+//    [smallWindowView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:190],[Helper autoHeightWith:160]));
+//        make.centerX.mas_equalTo(self.maskingView);
+//        make.centerY.mas_equalTo(self.maskingView);
+//    }];
+//    
+//    self.animationImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+//    self.animationImageView.backgroundColor = [UIColor clearColor];
+//    [smallWindowView addSubview:self.animationImageView];
+//    [self.animationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:80],[Helper autoHeightWith:20]));
+//        make.bottom.mas_equalTo(smallWindowView.mas_bottom).offset(- 20);
+//        make.centerX.mas_equalTo(self.maskingView);
+//    }];
+//    
+//    // 播放一组图片，设置一共有多少张图片生成的动画
+//    NSMutableArray *imageArray = [NSMutableArray arrayWithCapacity:0];
+//    for (int i = 1; i < 4; i++) {
+//        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"connecting%d.png", i]];
+//        [imageArray addObject:image];
+//    }
+//    self.animationImageView.animationImages = imageArray;
+//    self.animationImageView.animationDuration = 0.5;
+//    self.animationImageView.animationRepeatCount = 10000;
+//    [self.animationImageView startAnimating];
+//    
 
 }
 
-//程序进入活跃状态
-- (void)applicationWillActive
-{
-    if (self.animationImageView) {
-        [self.animationImageView startAnimating];
-    }
-}
+////程序进入活跃状态
+//- (void)applicationWillActive
+//{
+//    if (self.animationImageView) {
+//        [self.animationImageView startAnimating];
+//    }
+//}
 
 - (void)hidenMaskingLoadingView{
     
-    [self.maskingView removeFromSuperview];
-    [self.animationImageView stopAnimating];
+    [self.maskingView hidden];
+//    [self.animationImageView stopAnimating];
     
 }
-#pragma mark - show view
--(void)showViewWithAnimationDuration:(float)duration{
-    
-    [UIView animateWithDuration:duration animations:^{
-        self.maskingView.backgroundColor = RGBA(0, 0, 0, 0.7);
-        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-        self.maskingView.bottom = keyWindow.bottom;
-    } completion:^(BOOL finished) {
-    }];
-}
+//#pragma mark - show view
+//-(void)showViewWithAnimationDuration:(float)duration{
+//    
+//    [UIView animateWithDuration:duration animations:^{
+//        self.maskingView.backgroundColor = RGBA(0, 0, 0, 0.7);
+//        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+//        self.maskingView.bottom = keyWindow.bottom;
+//    } completion:^(BOOL finished) {
+//    }];
+//}
 
 - (void)RDKeyBoradViewDidClickedWith:(NSString *)str isDelete:(BOOL)isDelete{
     
@@ -653,7 +656,7 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated

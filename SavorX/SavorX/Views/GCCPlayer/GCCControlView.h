@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, RDDefinition) {
+    RDDefinitionSD = 1,     //标清
+    RDDefinitionHD,     //高清
+    RDDefinitionHQD     //超清
+};
+
 @protocol GCCControlViewDelegate <NSObject>
 
 @optional
@@ -31,6 +37,7 @@
 @property (nonatomic, assign) id<GCCControlViewDelegate> delegate;
 @property (nonatomic, assign) BOOL isSlider; //进度条在被拖动
 @property (nonatomic, strong) UIButton * shareButton; //分享按钮
+@property (nonatomic, assign) RDDefinition definition; //当前清晰度
 
 - (void)play; //播放
 - (void)pause; //暂停

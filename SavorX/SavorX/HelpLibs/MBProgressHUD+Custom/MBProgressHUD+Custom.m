@@ -279,15 +279,29 @@
     }
 }
 
-+ (MBProgressHUD *)showWebLoadingHUDInView:(UIView *)view
++ (RDLoadingView *)showWebLoadingHUDInView:(UIView *)view
 {
-    [UIActivityIndicatorView appearanceWhenContainedIn:[MBProgressHUD class], nil].color = [UIColor blackColor];
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
-    hud.userInteractionEnabled = NO;
-    hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
-    hud.mode = MBProgressHUDModeIndeterminate;
-    hud.bezelView.color = [UIColor clearColor];
-    return hud;
+    RDLoadingView * loadingView = [[RDLoadingView alloc] init];
+    loadingView.tag = 1010;
+    
+    [view addSubview:loadingView];
+    [loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(104);
+        make.height.mas_equalTo(40);
+        make.centerX.mas_equalTo(0);
+        make.centerY.mas_equalTo(0);
+    }];
+    [loadingView showLoaingAnimation];
+    
+    return loadingView;
+}
+
++ (void)hiddenWebLoadingInView:(UIView *)view
+{
+    RDLoadingView * loadingView = (RDLoadingView *)[view viewWithTag:1010];
+    if (loadingView) {
+        [loadingView hiddenLoaingAnimation];
+    }
 }
 
 + (MBProgressHUD *)showBackDemandInView:(UIView *)view

@@ -725,7 +725,7 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    [MBProgressHUD hideHUDForView:self.webView animated:NO];
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;

@@ -116,11 +116,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     NSURL * playURL = [NSURL URLWithString:url];
     self.canPlay = NO;
     AVPlayerItem * playerItem = [AVPlayerItem playerItemWithURL:playURL];
-    self.playerItemVideoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:nil];
-    [playerItem addOutput:self.playerItemVideoOutput];
     if (self.player) {
-        CMTime time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
-        [self.player pause];
+        [playerItem removeOutput:self.playerItemVideoOutput];
+//        [self.player pause];
         [self.controlView loading];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
         [self.player.currentItem removeObserver:self forKeyPath:@"status"];
@@ -128,12 +126,14 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
         [self.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
         [self.player replaceCurrentItemWithPlayerItem:playerItem];
-        [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-            [self.player play];
+        [self.player seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+//            [self.player play];
         }];
     }else{
         self.player = [AVPlayer playerWithPlayerItem:playerItem];
     }
+    self.playerItemVideoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:nil];
+    [playerItem addOutput:self.playerItemVideoOutput];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     [playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
     [playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];

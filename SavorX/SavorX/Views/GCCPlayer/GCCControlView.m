@@ -14,12 +14,6 @@
 //static const CGFloat ControlViewHiddenAnimationTime = .3f;
 static const CGFloat ControlViewHiddenWaitTime = 4.f;
 
-typedef NS_ENUM(NSInteger, RDDefinition) {
-    RDDefinitionSD = 1,     //标清
-    RDDefinitionHD,     //高清
-    RDDefinitionHQD     //超清
-};
-
 @interface GCCControlView ()
 
 @property (nonatomic, strong) UIView * toolView; //控件容器
@@ -43,7 +37,6 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 @property (nonatomic, strong) UIButton * collectButton; //收藏按钮
 @property (nonatomic, strong) UIButton * definitionButton; //清晰度按钮
 @property (nonatomic, strong) UIView * selectView; //选择清晰度视图
-@property (nonatomic, assign) RDDefinition definition; //当前清晰度
 @property (nonatomic, strong) UIButton * firstButton; //第一个清晰度button
 @property (nonatomic, strong) UIButton * secondButton; //第二个清晰度button
 

@@ -348,7 +348,7 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    [MBProgressHUD hideHUDForView:self.webView animated:NO];
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
 }
 
 - (BOOL)prefersStatusBarHidden

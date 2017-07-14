@@ -29,7 +29,6 @@
     if (self.animationImageView.isAnimating) {
         [self.animationImageView stopAnimating];
     }
-    
     [self.animationImageView setImage:[UIImage imageNamed:@"jiazai4"]];
     self.animationImageView.animationImages = @[[UIImage imageNamed:@"jiazai1"],
                                                 [UIImage imageNamed:@"jiazai2"],
@@ -65,6 +64,7 @@
 - (void)createLoadingView
 {
     self.animationImageView = [[UIImageView alloc] init];
+    self.animationImageView.userInteractionEnabled = YES;
     [self addSubview:self.animationImageView];
     [self.animationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
@@ -74,6 +74,7 @@
     }];
     
     UIImageView * imageView = [[UIImageView alloc] init];
+    imageView.userInteractionEnabled = YES;
     [imageView setImage:[UIImage imageNamed:@"jiazai_slogan"]];
     [self addSubview:imageView];
     [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
