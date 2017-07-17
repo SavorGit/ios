@@ -466,10 +466,9 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     CGRect frame = CGRectMake(_viewX, menuY, _viewWidth, self.menuHeight);
     WMMenuView *menuView = [[WMMenuView alloc] initWithFrame:frame];
-    menuView.clipsToBounds = YES;
     menuView.backgroundColor = [UIColor clearColor];
     
-    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, -15, frame.size.width, frame.size.height + 15)];
+    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, -frame.size.width / 375.f * 120 + frame.size.height, frame.size.width, frame.size.width / 375.f * 120)];
     [imageView setImage:[UIImage imageNamed:@"fenlei_bg"]];
     [menuView addSubview:imageView];
     

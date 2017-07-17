@@ -10,6 +10,7 @@
 #import "RDFavoriteTableViewCell.h"
 #import "HSCollectoinListRequest.h"
 #import "HSIsOrCollectionRequest.h"
+#import "RD_MJRefreshHeader.h"
 #import "MJRefresh.h"
 
 @interface FavoriteViewController ()<UITableViewDelegate, UITableViewDataSource>
@@ -105,6 +106,7 @@
 - (void)setupViews
 {
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStylePlain];
+    self.tableView.backgroundColor = VCBackgroundColor;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorInset = UIEdgeInsetsZero;
@@ -113,7 +115,7 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
     
-    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(setupDatas)];
+    self.tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(setupDatas)];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

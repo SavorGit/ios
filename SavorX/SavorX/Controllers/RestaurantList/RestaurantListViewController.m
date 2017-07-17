@@ -13,6 +13,7 @@
 #import "HSRestaurantListRequest.h"
 #import "RDLocationManager.h"
 #import "RDAlertView.h"
+#import "RD_MJRefreshHeader.h"
 
 @interface RestaurantListViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -197,7 +198,7 @@
         
         //创建tableView动画加载头视图
         
-        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
+        _tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
         
         
         MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{

@@ -20,6 +20,7 @@
 #import "CreateWealthModel.h"
 #import "HSCreateWealthRequest.h"
 #import "RDLogStatisticsAPI.h"
+#import "RD_MJRefreshHeader.h"
 
 @interface CreateWealthViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -157,14 +158,15 @@
         _tableView.showsVerticalScrollIndicator = NO;
         [self.view addSubview:_tableView];
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, kMainBoundsHeight));
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
+            make.bottom.mas_equalTo(0);
+            make.right.mas_equalTo(0);
         }];
         
         //创建tableView动画加载头视图
         
-        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
+        _tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
         MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
            [self getMoreData];
         }];
