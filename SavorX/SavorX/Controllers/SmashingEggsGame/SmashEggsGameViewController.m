@@ -58,7 +58,7 @@
     [self creatBgVoiceWithLoops:-1];
     [_player play];
     
-//    [self requestEggsInfor];
+    [self requestEggsInfor];
  
 }
 
@@ -189,24 +189,24 @@
     }];
     
     UIButton *winResultBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [winResultBtn setImage:[UIImage imageNamed:@"yaoqing_anniu"] forState:UIControlStateNormal];
+    [winResultBtn setImage:[UIImage imageNamed:@"zd_zjjl"] forState:UIControlStateNormal];
     [winResultBtn setBackgroundColor:[UIColor clearColor]];
     [winResultBtn addTarget:self action:@selector(winResultPress) forControlEvents:UIControlEventTouchUpInside];
     [bgScrollView addSubview:winResultBtn];
-    CGFloat distance = (kMainBoundsWidth - 167 *2)/3;
+    CGFloat distance = (kMainBoundsWidth - 152 *2)/3;
     [winResultBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(167, 48));
+        make.size.mas_equalTo(CGSizeMake(152, 53));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
         make.left.mas_equalTo(distance);
     }];
     
     UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [shareBtn setImage:[UIImage imageNamed:@"yaoqing_anniu"] forState:UIControlStateNormal];
+    [shareBtn setImage:[UIImage imageNamed:@"zd_yqhy"] forState:UIControlStateNormal];
     [shareBtn setBackgroundColor:[UIColor clearColor]];
     [shareBtn addTarget:self action:@selector(sharePress:) forControlEvents:UIControlEventTouchUpInside];
     [bgScrollView addSubview:shareBtn];
     [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(167, 48));
+        make.size.mas_equalTo(CGSizeMake(152, 53));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
         make.right.mas_equalTo(self.view).offset(-distance);
     }];

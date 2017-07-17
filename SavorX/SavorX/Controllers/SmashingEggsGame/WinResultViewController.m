@@ -9,7 +9,7 @@
 #import "WinResultViewController.h"
 #import "HSRecordSmashEggsRequest.h"
 
-@interface WinResultViewController ()
+@interface WinResultViewController ()<UIWebViewDelegate>
 
 @property (nonatomic, strong) UIWebView * webView;
 
@@ -60,11 +60,14 @@
 {
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     self.webView = [[UIWebView alloc] init];
+    self.webView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, kMainBoundsHeight);
     NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:self.winResultStr]];
     [self.webView loadRequest:request];
     self.webView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.webView];
+    
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
     
 }
 
@@ -94,6 +97,20 @@
         [_topView addSubview:_backButton];
     }
     return _topView;
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    NSLog(@"error%@",error);
+    if ([error code] == NSURLErrorCancelled) {
+        return;
+    }
 }
 
 #pragma mark -backButtonClick
