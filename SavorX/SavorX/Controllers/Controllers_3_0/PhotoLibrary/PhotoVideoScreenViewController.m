@@ -10,6 +10,7 @@
 #import "RDAlertView.h"
 #import "HSConnectViewController.h"
 #import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 @interface PhotoVideoScreenViewController ()
 
@@ -437,7 +438,7 @@
 }
 
 - (void)demandVideoWithMediaPath:(NSString *)mediaPath force:(NSInteger)force{
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
     
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
@@ -467,9 +468,9 @@
         else{
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
         }
-        [hud hideAnimated:NO];
+        [hud hidden];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [hud hideAnimated:NO];
+        [hud hidden];
         [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
     }];
 }

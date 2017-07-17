@@ -20,6 +20,7 @@
 #import "RDLogStatisticsAPI.h"
 #import "RDAlertView.h"
 #import "RDLogStatisticsAPI.h"
+#import "RDInteractionLoadingView.h"
 
 @interface RDHomeScreenViewController ()<RDTabScrollViewDelegate>
 
@@ -147,7 +148,7 @@
 
 - (void)demandVideoWithModel:(CreateWealthModel *)model force:(NSInteger)force{
     
-    [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
     [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0  force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             
@@ -173,9 +174,9 @@
         }else{
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
         }
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [hud hidden];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [hud hidden];
         [MBProgressHUD showTextHUDwithTitle:DemandFailure];
     }];
 }

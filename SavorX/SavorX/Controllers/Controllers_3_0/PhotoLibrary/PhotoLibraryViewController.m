@@ -16,6 +16,7 @@
 #import "RDAlertView.h"
 #import "HSWebServerManager.h"
 #import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 @interface PhotoLibraryViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource>
 
@@ -338,7 +339,7 @@
     PHAsset * currentAsset = [self.model.fetchResult objectAtIndex:indexPath.row];
     if (currentAsset.mediaType == PHAssetMediaTypeImage) {
         if ([GlobalData shared].isBindRD) {
-            MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在加载"];
+            RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
             NSString * name = currentAsset.localIdentifier;
             [RDPhotoTool getImageFromPHAssetSourceWithAsset:currentAsset success:^(UIImage *result) {
                 
@@ -347,7 +348,7 @@
                 [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                     
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
-                        [hud hideAnimated:NO];
+                        [hud hidden];
                         
                         [[RDHomeStatusView defaultView] startScreenWithViewController:vc withStatus:RDHomeStatus_Photo];
                         
@@ -363,7 +364,7 @@
                         }];
                         
                     } failure:^{
-                        [hud hideAnimated:NO];
+                        [hud hidden];
                     }];
                     
                 }];
@@ -494,7 +495,7 @@
     
     third.PHAssetSource = array;
     if ([GlobalData shared].isBindRD) {
-        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在投屏"];
+        RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
         PHAsset * asset = [third.PHAssetSource objectAtIndex:1];
         NSString * name = asset.localIdentifier;
         
@@ -504,7 +505,7 @@
                 
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
-                    [hud hideAnimated:NO];
+                    [hud hidden];
                     [self.navigationController pushViewController:third animated:YES];
                     [SAVORXAPI successRing];
                     
@@ -515,7 +516,7 @@
                     }];
                     
                 } failure:^{
-                    [hud hideAnimated:NO];
+                    [hud hidden];
                 }];
             }];
         }];
@@ -525,7 +526,7 @@
 }
 
 - (void)demandVideoWithMediaPath:(NSString *)mediaPath asset:(PHAsset *)asset force:(NSInteger)force filePath:(NSString *)filePath{
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
     
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
@@ -552,9 +553,9 @@
         else{
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
         }
-        [hud hideAnimated:NO];
+        [hud hidden];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [hud hideAnimated:NO];
+        [hud hidden];
         [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
     }];
 }

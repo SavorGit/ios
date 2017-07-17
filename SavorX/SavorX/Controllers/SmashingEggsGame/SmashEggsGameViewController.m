@@ -24,6 +24,7 @@
 #import "HSSmashEggsModel.h"
 #import "GlobalData.h"
 #import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 @interface SmashEggsGameViewController ()<UITextViewDelegate,RDGoldenEggsDelegate,AVAudioPlayerDelegate>
 
@@ -547,7 +548,7 @@
     //如果是绑定状态
     if ([GlobalData shared].isBindRD) {
         
-        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+        RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在加载"];
         
         [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate force:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
@@ -559,9 +560,9 @@
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
-            [hud hideAnimated:NO];
+            [hud hidden];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            [hud hideAnimated:NO];
+            [hud hidden];
             if (error.code != 677) {
                 [MBProgressHUD showTextHUDwithTitle:@"请求失败，请重试"];
             }

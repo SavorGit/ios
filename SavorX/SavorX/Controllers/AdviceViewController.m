@@ -48,7 +48,7 @@
         return;
     }
     
-    [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在发送"];
+    [MBProgressHUD showLoadingWithText:@"正在发送" inView:self.view];
     
     HSSubmitFeedbackRequest *request = [[HSSubmitFeedbackRequest alloc] initWithSuggestion:adviceStr contactWay:contactStr];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
