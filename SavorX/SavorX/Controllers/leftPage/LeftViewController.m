@@ -124,9 +124,14 @@
             help.title = [_itemArys objectAtIndex:indexPath.row];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:help  animated:NO];
         }else if (indexPath.row == 3){
-            [self hideLeftViewAnimated:nil];
-            SmashEggsGameViewController * segvVC = [[SmashEggsGameViewController alloc] init];
-            [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:segvVC  animated:NO];
+            if ([GlobalData shared].hotelId != 0) {
+                [self hideLeftViewAnimated:nil];
+                SmashEggsGameViewController * segvVC = [[SmashEggsGameViewController alloc] init];
+                [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:segvVC  animated:NO];
+            }else{
+                [MBProgressHUD showTextHUDwithTitle:@"请在酒店环境下使用该功能"];
+            }
+
         }
         else if (indexPath.row == 4){
             [self hideLeftViewAnimated:nil];

@@ -58,7 +58,7 @@
     [self creatBgVoiceWithLoops:-1];
     [_player play];
     
-//    [self requestEggsInfor];
+    [self requestEggsInfor];
  
 }
 
