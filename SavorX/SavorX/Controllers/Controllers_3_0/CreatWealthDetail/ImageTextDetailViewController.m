@@ -100,6 +100,15 @@
     [MBProgressHUD hiddenWebLoadingInView:self.webView];
 }
 
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    NSLog(@"error%@",error);
+    if ([error code] == NSURLErrorCancelled) {
+        return;
+    }
+}
+
 #pragma mark ---分享按钮点击
 - (void)shareAction{
     

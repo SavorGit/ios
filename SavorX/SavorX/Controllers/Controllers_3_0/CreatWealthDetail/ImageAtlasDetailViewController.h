@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "CreateWealthModel.h"
+#import "BaseViewController.h"
 
-@interface ImageAtlasDetailViewController : UIViewController
+@interface ImageAtlasDetailViewController : BaseViewController
 
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 @property(nonatomic ,strong) CreateWealthModel *imgAtlModel;

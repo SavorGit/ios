@@ -48,6 +48,7 @@
     
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
     [self.webView loadRequest:request];
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {
@@ -62,9 +63,21 @@
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
+    
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    
     NSString *currentUrl = self.webView.request.URL.absoluteString;
     if (![currentUrl isEqualToString:@"http://h5.littlehotspot.com/Public/html/help/"]) {
        [SAVORXAPI postUMHandleWithContentId:@"menu_help_web" key:nil value:nil];
+    }
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    NSLog(@"error%@",error);
+    if ([error code] == NSURLErrorCancelled) {
+        return;
     }
 }
 
