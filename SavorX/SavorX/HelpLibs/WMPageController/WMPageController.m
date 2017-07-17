@@ -466,15 +466,12 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     CGRect frame = CGRectMake(_viewX, menuY, _viewWidth, self.menuHeight);
     WMMenuView *menuView = [[WMMenuView alloc] initWithFrame:frame];
+    menuView.clipsToBounds = YES;
     menuView.backgroundColor = [UIColor clearColor];
     
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.colors = @[(__bridge id)[UIColor colorWithRed:237.f/255.f green:230.f/255.f blue:222.f/255.f alpha:1].CGColor, (__bridge id)[UIColor colorWithRed:237.f/255.f green:230.f/255.f blue:222.f/255.f alpha:0.7f].CGColor, (__bridge id)[UIColor colorWithRed:237.f/255.f green:230.f/255.f blue:222.f/255.f alpha:0.5f].CGColor, (__bridge id)[UIColor colorWithRed:237.f/255.f green:230.f/255.f blue:222.f/255.f alpha:0.1f].CGColor];
-    gradientLayer.locations = @[@0.f, @0.5, @0.7, @1.0];
-    gradientLayer.startPoint = CGPointMake(0, 1.0);
-    gradientLayer.endPoint = CGPointMake(0, 0);
-    gradientLayer.frame = CGRectMake(0, 0, frame.size.width, self.menuHeight);
-    [menuView.layer addSublayer:gradientLayer];
+    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, -15, frame.size.width, frame.size.height + 15)];
+    [imageView setImage:[UIImage imageNamed:@"fenlei_bg"]];
+    [menuView addSubview:imageView];
     
     menuView.delegate = self;
     menuView.dataSource = self;
