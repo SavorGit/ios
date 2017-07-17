@@ -361,6 +361,7 @@
     self.progressViewBottomSpace = 13;
     
     self.pageAnimatable = YES;
+    self.menuViewLayoutMode = WMMenuViewLayoutModeCenter;
     
     [self createCustomUI];
 }
