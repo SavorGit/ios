@@ -12,7 +12,7 @@
 #import "HSIsOrCollectionRequest.h"
 #import "HotPopShareView.h"
 
-@interface SpecialTopDetailViewController ()
+@interface SpecialTopDetailViewController () <UIWebViewDelegate>
 
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) UIView *testView;
@@ -47,6 +47,7 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
     self.webView = [[UIWebView alloc] init];
+    self.webView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);
     NSString *urlStr;
     if (!isEmptyString(self.specilDetailModel.contentURL)) {
@@ -59,10 +60,26 @@
     self.webView.backgroundColor = [UIColor whiteColor];  
     [self.view addSubview:self.webView];
     
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
     self.testView.backgroundColor = [UIColor clearColor];
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    NSLog(@"error%@",error);
+    if ([error code] == NSURLErrorCancelled) {
+        return;
+    }
 }
 
 #pragma mark ---分享按钮点击

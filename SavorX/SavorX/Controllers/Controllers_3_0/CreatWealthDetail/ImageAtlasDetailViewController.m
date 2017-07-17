@@ -59,9 +59,11 @@
 
 - (void)requestWithContentId:(NSString *)contentId{
 
+    [self showLoadingView];
     HSPicDetailRequest * request = [[HSPicDetailRequest alloc] initWithContentId:contentId];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
+        [self hiddenLoadingView];
         NSArray *resultArr = [response objectForKey:@"result"];
         for (int i = 0; i < resultArr.count; i ++) {
             ImageAtlasDetailModel *imageAtlModel = [[ImageAtlasDetailModel alloc] initWithDictionary:resultArr[i]];
@@ -70,9 +72,9 @@
         [self creatSubViews];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
+        [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        [self hiddenLoadingView];
     }];
 }
 
