@@ -38,7 +38,7 @@
 - (void)customHelpView
 {
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    self.webView.backgroundColor = [UIColor whiteColor];
+    self.webView.backgroundColor = [UIColor clearColor];
     self.webView.opaque = NO;
     self.webView.delegate = self;
     [self.view addSubview:self.webView];

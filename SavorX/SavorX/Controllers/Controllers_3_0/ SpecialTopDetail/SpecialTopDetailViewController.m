@@ -47,20 +47,19 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
     self.webView = [[UIWebView alloc] init];
+    self.webView.backgroundColor = [UIColor clearColor];
     self.webView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);
-    NSString *urlStr;
+    
     if (!isEmptyString(self.specilDetailModel.contentURL)) {
-        urlStr =  [NSString stringWithFormat:@"%@?location=newRead",self.specilDetailModel.contentURL];
-    }else{
-        urlStr = @"";
+        NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead",self.specilDetailModel.contentURL];
+        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
+        [self.webView loadRequest:request];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }
-    NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
-    [self.webView loadRequest:request];
+    
     self.webView.backgroundColor = [UIColor whiteColor];  
     [self.view addSubview:self.webView];
-    
-    [MBProgressHUD showWebLoadingHUDInView:self.webView];
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
     self.testView.backgroundColor = [UIColor clearColor];

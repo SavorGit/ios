@@ -329,6 +329,7 @@
 {
     
     self.webView = [[UIWebView alloc] init];
+    self.webView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.webView];
     
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -345,8 +346,10 @@
     }
     
     if (self.model.type != 4) {
-        [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
-        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+        if (!isEmptyString(self.model.contentURL)) {
+            [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
+            [MBProgressHUD showWebLoadingHUDInView:self.webView];
+        }
     }else{
         self.webView.scrollView.userInteractionEnabled = NO;
         UILabel *contentTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,kScreen_Width - 20, 30)];

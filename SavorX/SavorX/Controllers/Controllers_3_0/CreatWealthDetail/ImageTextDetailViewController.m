@@ -82,12 +82,13 @@
     self.webView = [[UIWebView alloc] init];
     self.webView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);
-    NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
-    [self.webView loadRequest:request];
-    self.webView.backgroundColor = [UIColor whiteColor];
+    if (!isEmptyString(self.imgTextModel.contentURL)) {
+        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
+        [self.webView loadRequest:request];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    }
+    self.webView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.webView];
-    
-    [MBProgressHUD showWebLoadingHUDInView:self.webView];
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
     self.testView.backgroundColor = [UIColor clearColor];
