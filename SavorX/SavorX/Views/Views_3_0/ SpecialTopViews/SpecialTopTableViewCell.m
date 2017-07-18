@@ -45,6 +45,7 @@
     _titleLabel.textColor = UIColorFromRGB(0x434343);
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.text = @"标题";
+    self.titleLabel.numberOfLines = 2;
     [_bgView addSubview:_titleLabel];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30 - 130 - 10, 20));
@@ -74,9 +75,29 @@
     
 }
 
+- (CGFloat)getHeightByWidth:(CGFloat)width title:(NSString *)title font:(UIFont *)font
+{
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, 0)];
+    label.text = title;
+    label.font = font;
+    label.numberOfLines = 0;
+    [label sizeToFit];
+    CGFloat height = label.frame.size.height;
+    return height;
+}
+
 - (void)configModelData:(CreateWealthModel *)model{
     
+    CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 30) title:model.title font:kPingFangMedium(16)];
+    if (titleHeight > 30) {
+        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 30, 50));
+            make.top.mas_equalTo(6);
+            make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
+        }];
+    }
     self.titleLabel.text = model.title;
+    
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     }
