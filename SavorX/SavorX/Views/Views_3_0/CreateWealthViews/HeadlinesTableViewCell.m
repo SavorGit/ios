@@ -82,7 +82,8 @@
     _sourceLabel.textColor = UIColorFromRGB(0x8a8886);
     [_bgView addSubview:_sourceLabel];
     [_sourceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(60, 20));
+        make.height.mas_equalTo(20);
+        make.width.mas_lessThanOrEqualTo(100);
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(12);
         make.left.mas_equalTo(_sourceImage.mas_right).offset(6);
     }];
@@ -95,7 +96,7 @@
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 20));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(12);
-        make.left.mas_equalTo(_sourceLabel.mas_right);
+        make.left.mas_equalTo(_sourceLabel.mas_right).offset(10.5);
     }];
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];

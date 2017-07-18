@@ -62,7 +62,7 @@
         make.height.mas_equalTo(20);
         make.bottom.mas_equalTo(_bgImageView.mas_bottom).offset(-5);
         make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
-        make.size.mas_lessThanOrEqualTo(100);
+        make.width.mas_lessThanOrEqualTo(100);
     }];
     
     _timeLabel = [[UILabel alloc]init];
