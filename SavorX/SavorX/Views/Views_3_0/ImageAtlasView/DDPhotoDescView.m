@@ -37,7 +37,7 @@
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 55];
 
         self.frame = CGRectMake(0, 0, kMainBoundsWidth, textViewHeight);
-        self.backgroundColor = UIColorFromRGB(0xece6de);
+        self.backgroundColor = [UIColorFromRGB(0xece6de) colorWithAlphaComponent:.9f];
         
 		self.textView.frame = CGRectMake(60, 0, kMainBoundsWidth - 75, textViewHeight);
 		self.textView.userInteractionEnabled = NO;

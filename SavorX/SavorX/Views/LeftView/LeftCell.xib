@@ -26,11 +26,11 @@
                             <constraint firstAttribute="height" constant="0.5" id="k79-b7-eqb"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="more" translatesAutoresizingMaskIntoConstraints="NO" id="bf7-jT-wad">
-                        <rect key="frame" x="349" y="19" width="15" height="15"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cdh_more" translatesAutoresizingMaskIntoConstraints="NO" id="bf7-jT-wad">
+                        <rect key="frame" x="352" y="19" width="8" height="14"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="15" id="7I7-ss-GLt"/>
-                            <constraint firstAttribute="height" constant="15" id="sUB-AI-Lgt"/>
+                            <constraint firstAttribute="width" constant="8" id="7I7-ss-GLt"/>
+                            <constraint firstAttribute="height" constant="14" id="sUB-AI-Lgt"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b9G-31-2oJ">
@@ -63,7 +63,7 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstItem="wFu-9g-swF" firstAttribute="centerY" secondItem="l8c-UE-dN2" secondAttribute="centerY" id="7Vg-dC-jep"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="bf7-jT-wad" secondAttribute="trailing" constant="8" id="AiU-dN-HMu"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="bf7-jT-wad" secondAttribute="trailing" constant="12" id="AiU-dN-HMu"/>
                     <constraint firstItem="wFu-9g-swF" firstAttribute="leading" secondItem="l8c-UE-dN2" secondAttribute="leading" constant="20" id="ChQ-1u-oWI"/>
                     <constraint firstAttribute="bottom" secondItem="iMK-7t-gSL" secondAttribute="bottom" id="JJ7-S6-atO"/>
                     <constraint firstItem="LFb-Tb-B0m" firstAttribute="centerY" secondItem="l8c-UE-dN2" secondAttribute="centerY" id="Pkb-5x-tCe"/>
@@ -89,6 +89,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="more" width="15" height="15"/>
+        <image name="cdh_more" width="7" height="13"/>
     </resources>
 </document>

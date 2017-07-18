@@ -49,6 +49,7 @@
         make.bottom.mas_equalTo(0);
         make.right.mas_equalTo(0);
     }];
+    self.leftTableView.showsVerticalScrollIndicator = NO;
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -198,11 +199,11 @@
         
         UILabel * label = [[UILabel alloc] initWithFrame:CGRectZero];
         if (kMainBoundsWidth < 375) {
-            label.font = [UIFont systemFontOfSize:12.5];
+            label.font = kPingFangLight(12.5);
         }else{
-            label.font = [UIFont systemFontOfSize:16];
+            label.font = kPingFangLight(16);
         }
-        label.textColor = UIColorFromRGB(0xffffff);
+        label.textColor = UIColorFromRGB(0xece6de);
         label.text = @"向朋友推荐小热点";
         [_footView addSubview:label];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -216,7 +217,7 @@
         [rightMode setImage:[UIImage imageNamed:@"cdh_more"]];
         [_footView addSubview:rightMode];
         [rightMode mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-15);
+            make.right.mas_equalTo(-20);
             make.width.mas_equalTo(8);
             make.height.mas_equalTo(14);
             make.centerY.mas_equalTo(0);

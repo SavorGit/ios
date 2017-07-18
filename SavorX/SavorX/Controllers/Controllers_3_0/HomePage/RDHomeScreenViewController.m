@@ -28,6 +28,7 @@
 @property (nonatomic, strong) UIView * bottomView;
 @property (nonatomic, strong) NSMutableArray * dataSource;
 @property (nonatomic, assign) NSInteger categoryID;
+@property (nonatomic, strong) UIView * topView;
 
 @property (nonatomic, strong) RDHomeStatusView * statusView;
 
@@ -46,6 +47,8 @@
 
 - (void)setupDatas
 {
+    RDLoadingView * loadingView = [MBProgressHUD showWebLoadingHUDInView:self.topView];
+    
     HSDemandListRequest * request = [[HSDemandListRequest alloc] initWithHotelID:[GlobalData shared].hotelId];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -59,11 +62,11 @@
             
         }
         [self createUI];
-        
+        [loadingView hiddenLoaingAnimation];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
+        [loadingView hiddenLoaingAnimation];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        [loadingView hiddenLoaingAnimation];
     }];
 }
 
@@ -86,6 +89,15 @@
     self.view.backgroundColor = UIColorFromRGB(0xece6de);
     
     CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 20 + 59 + 40 + 40;
+    
+    self.topView = [[UIView alloc] init];
+    [self.view addSubview:self.topView];
+    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.height.mas_equalTo(height);
+        make.right.mas_equalTo(0);
+    }];
     
     self.bottomView = [[UIView alloc] init];
     self.bottomView.backgroundColor = UIColorFromRGB(0xf1efeb);
