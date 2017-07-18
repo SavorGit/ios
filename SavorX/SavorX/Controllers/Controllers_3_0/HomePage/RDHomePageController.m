@@ -108,6 +108,7 @@
     [button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 7)];
     [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 7, 0, 0)];
     self.navigationItem.titleView = button;
+    button.userInteractionEnabled = NO;
 }
 
 - (void)checkSpecialTopic

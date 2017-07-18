@@ -68,7 +68,7 @@
  *
  *  @return 一个MBProgressHUD对象
  */
-+ (MBProgressHUD *)showSuccessHUDInView:(UIView *)view title:(NSString *)title;
++ (void)showSuccessHUDInView:(UIView *)view title:(NSString *)title;
 
 /**
  *  显示一个纯文本的提示框

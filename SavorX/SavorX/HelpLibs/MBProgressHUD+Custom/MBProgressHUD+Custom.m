@@ -144,28 +144,28 @@
     return hud;
 }
 
-+ (MBProgressHUD *)showSuccessHUDInView:(UIView *)view title:(NSString *)title
++ (void)showSuccessHUDInView:(UIView *)view title:(NSString *)title
 {
-    UIView * tempView = [[UIApplication sharedApplication].keyWindow viewWithTag:888];
-    if (tempView) {
-        [tempView removeFromSuperview];
-    }
+//    UIView * tempView = [[UIApplication sharedApplication].keyWindow viewWithTag:888];
+//    if (tempView) {
+//        [tempView removeFromSuperview];
+//    }
+//    
+//    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+//    [imageView setImage:[UIImage imageNamed:@"pd"]];
+//    
+//    MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+//    hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+//    hud.bezelView.color = [UIColor whiteColor];
+//    hud.mode = MBProgressHUDModeCustomView;
+//    hud.customView = imageView;
+//    hud.minSize = CGSizeMake(120, 120);
+//    hud.label.textColor = FontColor;
+//    hud.label.text = title;
+//    
+//    [hud hideAnimated:YES afterDelay:.8f];
     
-    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-    [imageView setImage:[UIImage imageNamed:@"pd"]];
-    
-    MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
-    hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
-    hud.bezelView.color = [UIColor whiteColor];
-    hud.mode = MBProgressHUDModeCustomView;
-    hud.customView = imageView;
-    hud.minSize = CGSizeMake(120, 120);
-    hud.label.textColor = FontColor;
-    hud.label.text = title;
-    
-    [hud hideAnimated:YES afterDelay:.8f];
-    
-    return hud;
+    return [self showTextHUDwithTitle:title delay:1.5f];
 }
 
 + (void)showTextHUDwithTitle:(NSString *)title
