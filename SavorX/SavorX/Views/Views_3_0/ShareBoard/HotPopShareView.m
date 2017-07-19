@@ -61,8 +61,10 @@
         //初始化数据
         [self creatDatas];
         self.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+        UIColor *color = UIColorFromRGB(0X000000);
         //背景蒙版，带灰度
-        self.backgroundColor = WINDOW_COLOR;
+        self.backgroundColor = [color colorWithAlphaComponent:0.6];
+//        self.alpha = .6;
         //加载分享面板
         [self loadUIConfig];
     }
@@ -260,8 +262,7 @@
     if (_topSheetView == nil) {
         
         _topSheetView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_bgView.frame), CGRectGetHeight(_bgView.frame) - BUTTON_HEIGHT)];
-        _topSheetView.backgroundColor = [UIColor whiteColor];
-        _topSheetView.alpha = 0.8;
+        _topSheetView.backgroundColor = UIColorFromRGB(0xf6f3f0);
     }
     return _topSheetView;
 }
