@@ -76,10 +76,10 @@
         make.left.equalTo(_sourceLabel.mas_right).offset(10);
     }];
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];
-    lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
-    [_bgView addSubview:lineView];
-    [lineView mas_updateConstraints:^(MASConstraintMaker *make) {
+    _lineView = [[UIView alloc] initWithFrame:CGRectZero];
+    _lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
+    [_bgView addSubview:_lineView];
+    [_lineView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 1));
         make.bottom.mas_equalTo(_bgView.bottom).offset(-1);
         make.left.mas_equalTo(0);

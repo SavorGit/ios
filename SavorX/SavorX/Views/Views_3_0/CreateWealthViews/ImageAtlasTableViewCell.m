@@ -72,6 +72,8 @@
     _sourceImage.contentMode = UIViewContentModeScaleAspectFill;
     _sourceImage.layer.masksToBounds = YES;
     _sourceImage.backgroundColor = [UIColor orangeColor];
+    _sourceImage.layer.cornerRadius = 20/2;//裁成圆角
+    _sourceImage.layer.masksToBounds = YES;//隐藏裁剪掉的部分
     [_bgView addSubview:_sourceImage];
     [_sourceImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(20, 20));

@@ -28,6 +28,8 @@
 
 @property (nonatomic, strong) UILabel *timeLabel;
 
+@property (nonatomic, strong) UIView *lineView;
+
 - (void)configModelData:(CreateWealthModel *)model;
 
 @end

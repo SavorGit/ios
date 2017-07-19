@@ -40,7 +40,7 @@
     // app进入前台
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = VCBackgroundColor;
     _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
     
     [self createWebView];
@@ -96,10 +96,10 @@
     [self addObserver];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    [MBProgressHUD hiddenWebLoadingInView:self.webView];
-}
+//- (void)webViewDidFinishLoad:(UIWebView *)webView
+//{
+//    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+//}
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
@@ -151,6 +151,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
     if ([keyPath isEqualToString:@"contentSize"]) {
         [self footViewShouldBeReset];
     }
@@ -166,7 +167,7 @@
     //TableView的高度
     CGFloat tabHeight = 0;
     if (self.dataSource.count != 0) {
-        tabHeight = self.dataSource.count *96 + 48;
+        tabHeight = self.dataSource.count *96 + 48 + 8;
     }
     
     //底部View总高度
@@ -179,7 +180,7 @@
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
     [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 40)];
-    self.testView.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
+    self.testView.backgroundColor = UIColorFromRGB(0xece6de);
     
     [self addObserver];
     
@@ -218,9 +219,12 @@
             CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
             [self.dataSource addObject:welthModel];
         }
-        [self footViewShouldBeReset];
-        [self.tableView reloadData];
-
+        
+        // 当返回有推荐数据时调用
+        if (self.dataSource.count > 0) {
+            [self footViewShouldBeReset];
+            [self.tableView reloadData];
+        }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -245,7 +249,7 @@
         CGFloat tabHeiht = self.dataSource.count *96 +48;
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, tabHeiht));
-            make.top.mas_equalTo(100);
+            make.top.mas_equalTo(108);
             make.left.mas_equalTo(0);
         }];
 
@@ -285,9 +289,13 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor clearColor];
     cell.contentView.backgroundColor = [UIColor clearColor];
-    
+    //最后一条分割线隐藏
+    if (indexPath.row == self.dataSource.count - 1) {
+        cell.lineView.hidden = YES;
+    }
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [cell configModelData:model];
+    
     
     return cell;
 }
@@ -296,6 +304,18 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 96.f;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
+    self.imgTextModel = tmpModel;
+    [self setUpDatas];
+    if (!isEmptyString(tmpModel.contentURL)) {
+        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
+        [self.webView loadRequest:request];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
