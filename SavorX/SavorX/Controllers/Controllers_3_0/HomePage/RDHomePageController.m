@@ -168,6 +168,7 @@
     if (self.isInsertVC) {
         return;
     }
+    self.itemMargin = 7;
     
     [self setScrollEnable:NO];
     
@@ -177,7 +178,7 @@
     
     //改变title数组
     NSMutableArray * currentTitles = [NSMutableArray arrayWithArray:self.titles];
-    [currentTitles insertObject:@"插入" atIndex:0];
+    [currentTitles insertObject:@"投屏" atIndex:0];
     self.titles = [NSArray arrayWithArray:currentTitles];
     
     //改变控制器数组
@@ -246,6 +247,8 @@
     if (!self.isInsertVC) {
         return;
     }
+    
+    self.itemMargin = 15;
     
     [self setScrollEnable:NO];
     
@@ -354,7 +357,7 @@
     self.menuItemWidth = 50;
     self.menuBGColor = kThemeColor;
     self.menuHeight = 50;
-    self.itemMargin = 7;
+    self.itemMargin = 15;
     [self autoItemMargin];
     
     self.progressColor = [UIColor colorWithRed:143.f/255.f green:46.f/255.f blue:64.f/255.f alpha:1];

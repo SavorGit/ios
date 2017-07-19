@@ -327,7 +327,7 @@
     if (tempRateY < 0) {
         tempRateY *= -1;
     }
-    CGFloat maxDistance = height / 4;
+    CGFloat maxDistance = height / 8;
     if (tempRateY >= maxDistance) {
         if (rateY > 0) {
             [self didScroolEndWithLast];

@@ -86,6 +86,7 @@
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(buttonDidBeClicked:)];
     tap.numberOfTapsRequired = YES;
     [leftView addGestureRecognizer:tap];
+    leftView.exclusiveTouch = YES;
     [self.baseView addSubview:leftView];
     UIButton * leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     leftButton.frame = CGRectMake(0, 0, 90, 27);
@@ -100,6 +101,7 @@
     UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(buttonDidBeClicked:)];
     tap2.numberOfTapsRequired = YES;
     [rightView addGestureRecognizer:tap2];
+    rightView.exclusiveTouch = YES;
     [self.baseView addSubview:rightView];
     UIButton * rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
     rightButton.frame = CGRectMake(0, 0, 90, 27);

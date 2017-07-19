@@ -137,19 +137,19 @@
 
 - (void)RDTabScrollViewPhotoButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
 {
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:0];
     [self.navigationController pushViewController:web animated:YES];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)RDTabScrollViewTVButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
 {
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     if ([GlobalData shared].isBindRD) {
         [self demandVideoWithModel:model force:0];
     }else{
         [[RDHomeStatusView defaultView] scanQRCode];
     }
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)RDTabScrollViewDidScrollToIndex:(NSInteger)index
@@ -167,6 +167,7 @@
             DemandViewController *view = [[DemandViewController alloc] init];
             view.model = model;
             [SAVORXAPI successRing];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Demand];
             [self.navigationController pushViewController:view animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {

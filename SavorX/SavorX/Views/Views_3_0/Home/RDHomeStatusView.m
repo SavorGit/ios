@@ -113,7 +113,7 @@
 - (void)addNotification
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopScreen) name:RDQiutScreenNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopScreen) name:RDDidDisconnectDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeBind) name:RDDidDisconnectDeviceNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bindBox) name:RDDidBindDeviceNotification object:nil];
 }
 
@@ -134,8 +134,10 @@
 {
     if (self.status == RDHomeStatus_Normal) {
         [self scanQRCode];
-    }else {
+    }else if(self.status == RDHomeStatus_Bind){
         [self disconnentClick];
+    }else{
+        [self screenBack];
     }
 }
 
@@ -155,8 +157,23 @@
     } bold:NO];
     RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
         [SAVORXAPI postUMHandleWithContentId:@"home_break_connect" key:@"home_break_connect" value:@"break"];
+        [[GlobalData shared] disconnect];
+    } bold:YES];
+    NSArray *actionArr = [NSArray arrayWithObjects:actionOne,actionTwo, nil];
+    [rdAlert addActions:actionArr];
+    [rdAlert show];
+}
+
+// 断开连接
+- (void)screenBack{
+    
+    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"是否退出包间%@的投屏", [Helper getWifiName]]];
+    RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+        
+    } bold:NO];
+    RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"退出投屏" handler:^{
         [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-            [[GlobalData shared] disconnect];
+            
         } failure:^{
             
         }];
@@ -255,6 +272,13 @@
     _isScreening = YES;
 }
 
+- (void)closeBind
+{
+    [self stopScreen];
+    self.status = RDHomeStatus_Normal;
+    [self reloadStatus];
+}
+
 - (void)stopScreen
 {
     if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
@@ -268,7 +292,11 @@
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     self.currentVC = nil;
     _isScreening = NO;
-    self.status = RDHomeStatus_Normal;
+    if (self.superview) {
+        self.status = RDHomeStatus_Bind;
+    }else{
+        self.status = RDHomeStatus_Normal;
+    }
     [self reloadStatus];
 }
 
