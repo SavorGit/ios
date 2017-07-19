@@ -12,6 +12,9 @@
 #import "HSIsOrCollectionRequest.h"
 #import "RD_MJRefreshHeader.h"
 #import "MJRefresh.h"
+#import "ImageTextDetailViewController.h"
+#import "ImageAtlasDetailViewController.h"
+#import "WebViewController.h"
 
 @interface FavoriteViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -180,6 +183,30 @@
         } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
             
         }];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    
+    //1 图文 2 图集 3 视频
+    if (model.type == 1) {
+        ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
+        imtVC.imgTextModel = model;
+        imtVC.categoryID = model.categoryId;
+        [self.navigationController pushViewController:imtVC animated:YES];
+        
+    }else if (model.type == 2) {
+        ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
+        iatVC.imgAtlModel = model;
+        iatVC.categoryID = model.categoryId;
+        [self.navigationController pushViewController:iatVC animated:YES];
+        
+    } else if (model.type == 3 || model.type == 4){
+        WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:-1];
+        web.categoryID = model.categoryId;
+        [self.navigationController pushViewController:web animated:YES];
     }
 }
 
