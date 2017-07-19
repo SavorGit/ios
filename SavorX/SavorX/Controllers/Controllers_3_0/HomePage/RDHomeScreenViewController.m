@@ -166,6 +166,7 @@
             
             DemandViewController *view = [[DemandViewController alloc] init];
             view.model = model;
+            view.categroyID = self.categoryID;
             [SAVORXAPI successRing];
             [self.navigationController pushViewController:view animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];

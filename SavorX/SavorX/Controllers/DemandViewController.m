@@ -18,6 +18,7 @@
 #import "RDHomeStatusView.h"
 #import "HSIsOrCollectionRequest.h"
 #import "RDInteractionLoadingView.h"
+#import "HotPopShareView.h"
 
 #define BOTTOMHEIGHT 50.f
 
@@ -312,7 +313,7 @@
     }];
 }
 
-//分享按钮被点击触发
+#pragma mark ---分享按钮点击
 - (void)shareAction:(UIButton *)button
 {
     if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
@@ -320,8 +321,8 @@
         return;
     }
     
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:1 categroyID:self.categroyID];
-    [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share" key:nil value:nil];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model andVC:self  andCategoryID:self.categroyID];
+    [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 
 //创建浏览的webView
