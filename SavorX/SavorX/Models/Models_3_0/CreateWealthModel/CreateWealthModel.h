@@ -34,7 +34,7 @@
 @property (nonatomic, copy) NSString * acreateTime;
 @property (nonatomic, copy) NSString * ucreateTime;
 
-
+@property (nonatomic, assign) NSInteger categoryId;
 @property (nonatomic, copy) NSString * category;//用于文章推荐
 @property (nonatomic, copy) NSString * indexImgUrl;//用于文章推荐
 @property (nonatomic, copy) NSString * order_tag;//用于文章推荐

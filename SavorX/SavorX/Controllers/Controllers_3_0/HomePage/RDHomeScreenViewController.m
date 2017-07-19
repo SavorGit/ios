@@ -166,6 +166,7 @@
             
             DemandViewController *view = [[DemandViewController alloc] init];
             view.model = model;
+            view.categroyID = self.categoryID;
             [SAVORXAPI successRing];
             [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Demand];
             [self.navigationController pushViewController:view animated:YES];
