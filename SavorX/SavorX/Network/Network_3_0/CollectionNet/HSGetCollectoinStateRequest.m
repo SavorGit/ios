@@ -13,7 +13,7 @@
 - (instancetype)initWithArticleID:(NSString *)articleId
 {
     if (self = [super init]) {
-        self.methodName = [@"clientstart/clientstart/getInfo?" stringByAppendingString:[Helper getURLPublic]];
+        self.methodName = [@"APP3/UserCollection/getCollectoinState?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPGet;
         [self setValue:articleId forParamKey:@"articleId"];
     }

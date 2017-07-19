@@ -17,6 +17,7 @@
 #import "HSWebServerManager.h"
 #import "RDHomeStatusView.h"
 #import "RDInteractionLoadingView.h"
+#import "RDProgressView.h"
 
 @interface PhotoLibraryViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource>
 
@@ -37,6 +38,7 @@
 
 @property (nonatomic, strong) NSTimer * timer; //视图转化更新进度定时器
 @property (nonatomic, strong) AVAssetExportSession * session; //当前导出视频的对象
+@property (nonatomic, strong) RDProgressView * progressView;
 
 @end
 
@@ -51,13 +53,12 @@
 //加载手机内的相册列表
 - (void)loadPhotoLibrary
 {
-    MBProgressHUD * hud = [MBProgressHUD showLoadingWithText:@"正在加载" inView:self.view];
+    [MBProgressHUD showLoadingWithText:@"正在加载" inView:self.view];
     
     [RDPhotoTool loadPHAssetWithHander:^(NSArray *result, RDPhotoLibraryModel *cameraResult) {
         self.photoLibrarySource = result;
         self.model = cameraResult;
         [self createUI];
-        [hud hideAnimated:NO];
     }];
 }
 
@@ -82,6 +83,7 @@
     self.collectionView.delegate = self;
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.collectionView];
+    self.collectionView.hidden = YES;
     
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
@@ -116,9 +118,11 @@
         make.right.mas_equalTo(0);
     }];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSIndexPath * indexPath = [NSIndexPath indexPathForItem:self.model.fetchResult.count - 1 inSection:0];
-        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+        self.collectionView.hidden = NO;
     });
 }
 
@@ -248,7 +252,7 @@
 //全选按钮被点击了
 - (void)startAllChoose
 {
-    NSInteger maxNumber = self.model.fetchResult.count > kMAXPhotoNum ? kMAXPhotoNum : self.model.fetchResult.count;
+    NSInteger maxNumber = self.model.fetchResult.count;
     NSInteger i = 0;
     while (i < maxNumber) {
         i++;
@@ -256,11 +260,16 @@
             break;
         }
         PHAsset * asset = [self.model.fetchResult objectAtIndex:self.model.fetchResult.count - i];
+        if (asset.mediaType == PHAssetMediaTypeVideo) {
+            continue;
+        }
+        
         if ([self.selectArray containsObject:asset]) {
             continue;
         }else{
             [self.selectArray addObject:asset];
         }
+        
         if (self.selectArray.count >= 50) {
             break;
         }
@@ -338,12 +347,21 @@
     
     PHAsset * currentAsset = [self.model.fetchResult objectAtIndex:indexPath.row];
     if (currentAsset.mediaType == PHAssetMediaTypeImage) {
+        
+        PHFetchOptions * option = [[PHFetchOptions alloc] init];
+        option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
+
+        PHAssetCollection * collection = [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[self.model.localIdentifier] options:nil].firstObject;
+        PHFetchResult * fecthResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
+        NSInteger index = [fecthResult indexOfObject:currentAsset];
+        
+        
         if ([GlobalData shared].isBindRD) {
             RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
             NSString * name = currentAsset.localIdentifier;
             [RDPhotoTool getImageFromPHAssetSourceWithAsset:currentAsset success:^(UIImage *result) {
                 
-                PhotoManyViewController * vc = [[PhotoManyViewController alloc] initWithPHAssetSource:self.model.fetchResult andIndex:indexPath.row];
+                PhotoManyViewController * vc = [[PhotoManyViewController alloc] initWithPHAssetSource:fecthResult andIndex:index];
                 
                 [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                     
@@ -371,12 +389,12 @@
                 
             }];
         }else{
-            PhotoManyViewController * vc = [[PhotoManyViewController alloc] initWithPHAssetSource:self.model.fetchResult andIndex:indexPath.row];
+            PhotoManyViewController * vc = [[PhotoManyViewController alloc] initWithPHAssetSource:fecthResult andIndex:index];
             [self.navigationController pushViewController:vc animated:YES];
         }
     }else if (currentAsset.mediaType == PHAssetMediaTypeVideo) {
         
-        [MBProgressHUD showProgressLoadingHUDInView:self.view];
+        [self.progressView show];
         [RDPhotoTool exportVideoToMP4WithAsset:currentAsset startHandler:^(AVAssetExportSession *session) {
             
             self.session = session;
@@ -388,7 +406,7 @@
         } endHandler:^(NSString * filePath, NSString *url, AVAssetExportSession *session) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [self.progressView hidden];
                 if (session.status == AVAssetExportSessionStatusCompleted) {
                     
                     //导出成功进行投屏MP4操作
@@ -416,8 +434,7 @@
 {
     if (self.session) {
         if (self.session.status == AVAssetExportSessionStatusExporting) {
-            [MBProgressHUD HUDForView:self.view].progress = self.session.progress;
-            [MBProgressHUD HUDForView:self.view].detailsLabel.text = [NSString stringWithFormat:@"%.1lf%%", self.session.progress * 100];
+            [self.progressView setTitle:[NSString stringWithFormat:@"%.1lf%%", self.session.progress * 100]];
         }else{
             [self.timer setFireDate:[NSDate distantFuture]];
             [self.timer invalidate];
@@ -473,9 +490,13 @@
     button.imageView.transform = CGAffineTransformMakeRotation(M_PI);
     [self.collectionView reloadData];
     [self closeLibraryChoose];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    self.collectionView.hidden = YES;
+    MBProgressHUD * hud = [MBProgressHUD showLoadingWithText:@"正在加载" inView:self.view];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSIndexPath * indexPath = [NSIndexPath indexPathForItem:self.model.fetchResult.count - 1 inSection:0];
-        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+        self.collectionView.hidden = NO;
+        [hud hideAnimated:NO];
     });
 }
 
@@ -531,7 +552,7 @@
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             PhotoVideoScreenViewController * play = [[PhotoVideoScreenViewController alloc] initWithVideoFileURL:filePath];
-            [[RDHomeStatusView defaultView] startScreenWithViewController:play withStatus:RDHomeStatus_Photo];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:play withStatus:RDHomeStatus_Video];
             [SAVORXAPI successRing];
             [self.navigationController pushViewController:play animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_play" key:nil value:nil];
@@ -560,9 +581,12 @@
     }];
 }
 
-- (void)dealloc
+- (RDProgressView *)progressView
 {
-    
+    if (!_progressView) {
+        self.progressView = [[RDProgressView alloc] init];
+    }
+    return _progressView;
 }
 
 - (void)didReceiveMemoryWarning {

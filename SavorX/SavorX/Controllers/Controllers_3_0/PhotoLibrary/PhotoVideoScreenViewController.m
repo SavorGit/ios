@@ -18,7 +18,6 @@
 @property (nonatomic, strong) UILabel *minimumLabel; //最小时间显示
 @property (nonatomic, strong) UISlider *playSilder; //进度条控制
 @property (nonatomic, strong) UILabel *maximumLabel; //最大时间显示
-@property (nonatomic, strong) UIButton * collectButton;
 @property (nonatomic, strong) NSURL * url;
 
 @property (nonatomic, strong) UIView * toolView;
@@ -32,6 +31,9 @@
 @property (nonatomic, strong) NSURLSessionDataTask * lastTask;
 @property (nonatomic, assign) CGFloat lastValue;
 @property (nonatomic, strong) UIView * alertView;
+
+@property (nonatomic, strong) UIView * progressView;
+@property (nonatomic, strong) UILabel * percentageLab;
 
 @end
 
@@ -131,30 +133,6 @@
     [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(20);
         make.left.mas_equalTo(10);
-        make.size.mas_equalTo(CGSizeMake(40, 40));
-    }];
-    
-    self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
-    [self.collectButton setAdjustsImageWhenHighlighted:NO];
-    [self.collectButton addTarget:self action:@selector(collectAciton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.collectButton];
-    
-    
-    UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [shareButton setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
-    [shareButton setAdjustsImageWhenHighlighted:NO];
-    [shareButton addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:shareButton];
-    
-    [shareButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
-        make.right.mas_equalTo(-10);
-        make.size.mas_equalTo(CGSizeMake(40, 40));
-    }];
-    [self.collectButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
-        make.right.mas_equalTo(-60);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     
@@ -416,6 +394,7 @@
 {
     if (![GlobalData shared].isBindRD) {
         [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+        return;
     }
     if (self.isPlayEnd) {
         [self resetVod];
@@ -494,6 +473,7 @@
 {
     if (![GlobalData shared].isBindRD) {
         [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+        return;
     }
     
     self.playButton.userInteractionEnabled = NO;
@@ -591,16 +571,6 @@
     
     NSString *playTimeStr = [NSString stringWithFormat:@"%02ld:%02ld", (long)playMinutesInt, (long)playSecondsInt];
     [self.minimumLabel setText:playTimeStr];
-}
-
-- (void)collectAciton:(UIButton *)action
-{
-    
-}
-
-- (void)shareAction:(UIButton *)action
-{
-    
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender

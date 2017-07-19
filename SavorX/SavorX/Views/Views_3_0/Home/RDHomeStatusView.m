@@ -9,7 +9,6 @@
 #import "RDHomeStatusView.h"
 #import "RDCheackSence.h"
 #import "PhotoSliderViewController.h"
-#import "PhotoManyViewController.h"
 #import "GCCDLNA.h"
 #import "RDAlertView.h"
 #import "HSConnectViewController.h"
@@ -215,7 +214,7 @@
             
         case RDHomeStatus_Video:
         {
-            self.statusLabel.text = @"正在投屏视频,点击进入>>";
+            self.statusLabel.text = @"正在投屏本地视频,点击进入>>";
             self.statusLabel.userInteractionEnabled = YES;
             [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
         }

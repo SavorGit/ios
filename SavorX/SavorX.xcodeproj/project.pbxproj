@@ -141,6 +141,7 @@
 		067C30EC1F13AF8E000A1150 /* HSSmashEggsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 067C30EB1F13AF8E000A1150 /* HSSmashEggsRequest.m */; };
 		067CB7151D60B21C00094BB8 /* OpenFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 067CB7141D60B21C00094BB8 /* OpenFileTool.m */; };
 		06819FCD1DEEC109005FED25 /* UMCustomSocialManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */; };
+		0683925E1F1F42F600258542 /* RDProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0683925D1F1F42F600258542 /* RDProgressView.m */; };
 		0684DF231D5191F6006756D4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0684DF221D5191F6006756D4 /* WebKit.framework */; };
 		0688C4931E97760100D7D2A9 /* ShareRDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0688C4921E97760100D7D2A9 /* ShareRDViewController.m */; };
 		0689915D1E854EE900BC9EFE /* RDKeyBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 0689915C1E854EE900BC9EFE /* RDKeyBoard.m */; };
@@ -556,6 +557,8 @@
 		067CB7141D60B21C00094BB8 /* OpenFileTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenFileTool.m; sourceTree = "<group>"; };
 		06819FCB1DEEC109005FED25 /* UMCustomSocialManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMCustomSocialManager.h; sourceTree = "<group>"; };
 		06819FCC1DEEC109005FED25 /* UMCustomSocialManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMCustomSocialManager.m; sourceTree = "<group>"; };
+		0683925C1F1F42F600258542 /* RDProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDProgressView.h; sourceTree = "<group>"; };
+		0683925D1F1F42F600258542 /* RDProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDProgressView.m; sourceTree = "<group>"; };
 		0684DF221D5191F6006756D4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		0688C4911E97760100D7D2A9 /* ShareRDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareRDViewController.h; sourceTree = "<group>"; };
 		0688C4921E97760100D7D2A9 /* ShareRDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareRDViewController.m; sourceTree = "<group>"; };
@@ -1347,6 +1350,8 @@
 				0663D4501F0B815600CD2FA2 /* RDPhotoCollectionViewCell.m */,
 				0663D4521F0B816300CD2FA2 /* RDVideoCollectionViewCell.h */,
 				0663D4531F0B816300CD2FA2 /* RDVideoCollectionViewCell.m */,
+				0683925C1F1F42F600258542 /* RDProgressView.h */,
+				0683925D1F1F42F600258542 /* RDProgressView.m */,
 			);
 			path = PhotoLibrary;
 			sourceTree = "<group>";
@@ -2791,6 +2796,7 @@
 				061B4EBE1E487EF5000D5E07 /* PhotoTextLabel.m in Sources */,
 				96D8C5C81F0F681900251301 /* HeadlinesSTopTableViewCell.m in Sources */,
 				0663D42A1F0B6B5900CD2FA2 /* RDTabScrollView.m in Sources */,
+				0683925E1F1F42F600258542 /* RDProgressView.m in Sources */,
 				0663D4201F0B6AFA00CD2FA2 /* UIView+LayerCurve.m in Sources */,
 				96D8C5EB1F14CAF200251301 /* HSRecordSmashEggsRequest.m in Sources */,
 				061A700D1D61C68D00702016 /* DocumentListViewController.m in Sources */,

@@ -392,6 +392,7 @@
 {
     if (![GlobalData shared].isBindRD) {
         [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+        return;
     }
     if (self.isPlayEnd) {
         [self resetVod];
@@ -470,6 +471,7 @@
 {
     if (![GlobalData shared].isBindRD) {
         [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+        return;
     }
     
     self.playButton.userInteractionEnabled = NO;

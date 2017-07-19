@@ -24,7 +24,7 @@
 
 @interface PhotoManyViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, PhotoManyEditViewDelegate>
 
-@property (nonatomic, strong) id PHAssetSource;
+@property (nonatomic, strong) PHFetchResult * PHAssetSource;
 @property (nonatomic, strong) UICollectionView * collectionView;
 @property (nonatomic, strong) UICollectionViewFlowLayout * flowLayout;
 @property (nonatomic, assign) NSInteger index;
@@ -231,14 +231,18 @@
 {
     [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_rotating" key:nil value:nil];
     if ([GlobalData shared].isBindRD && self.isScreen) {
+        
+        self.rotateView.userInteractionEnabled = NO;
         [SAVORXAPI rotateWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0){
                 [self currentCellImageShouldRotate];
             }else{
                 [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
             }
+            self.rotateView.userInteractionEnabled = YES;
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+            self.rotateView.userInteractionEnabled = YES;
         }];
     }else{
         [self currentCellImageShouldRotate];
@@ -429,13 +433,8 @@
 
 - (NSInteger)dataSourceCount
 {
-    if ([self.PHAssetSource isKindOfClass:[PHFetchResult class]]) {
-        PHFetchResult * source = (PHFetchResult *)self.PHAssetSource;
-        return source.count;
-    }else{
-        NSArray * source = (NSArray *)self.PHAssetSource;
-        return source.count;
-    }
+    PHFetchResult * source = (PHFetchResult *)self.PHAssetSource;
+    return source.count;
 }
 
 - (NSInteger)pageControlIndexWithCurrentCellIndex:(NSInteger)index

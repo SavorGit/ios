@@ -32,6 +32,8 @@
 
 @property (nonatomic, strong) RDHomeStatusView * statusView;
 
+@property (nonatomic, strong) CreateWealthModel * demandModel;
+
 @end
 
 @implementation RDHomeScreenViewController
@@ -82,6 +84,8 @@
         make.right.mas_equalTo(0);
         make.height.mas_equalTo(height);
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkDemandModel) name:RDDidBindDeviceNotification object:nil];
 }
 
 - (void)setupViews
@@ -147,6 +151,7 @@
     if ([GlobalData shared].isBindRD) {
         [self demandVideoWithModel:model force:0];
     }else{
+        self.demandModel = model;
         [[RDHomeStatusView defaultView] scanQRCode];
     }
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
@@ -162,13 +167,14 @@
     
     RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
     [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0  force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+        self.demandModel = nil;
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             
             DemandViewController *view = [[DemandViewController alloc] init];
             view.model = model;
             view.categroyID = self.categoryID;
             [SAVORXAPI successRing];
-            [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Demand];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:view withStatus:RDHomeStatus_Demand];
             [self.navigationController pushViewController:view animated:YES];
             [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
@@ -190,6 +196,7 @@
         }
         [hud hidden];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        self.demandModel = nil;
         [hud hidden];
         [MBProgressHUD showTextHUDwithTitle:DemandFailure];
     }];
@@ -226,6 +233,24 @@
 {
     DocumentListViewController * document = [[DocumentListViewController alloc] init];
     [self.navigationController pushViewController:document animated:YES];
+}
+
+- (void)checkDemandModel
+{
+    if (self.demandModel) {
+        
+        if ([GlobalData shared].isBindRD) {
+            [self demandVideoWithModel:self.demandModel force:0];
+        }
+        
+    }else{
+        
+    }
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {

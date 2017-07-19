@@ -107,10 +107,12 @@
                 if (toBeString.length > 16) {
                     textField.text = [toBeString substringToIndex:16];
                     [MBProgressHUD showTextHUDwithTitle:@"最多输入16个字符"];
+                    self.textLabel.text = textField.text;
                 }
             }else if (toBeString.length > 20) {
                 textField.text = [toBeString substringToIndex:20];
                 [MBProgressHUD showTextHUDwithTitle:@"最多输入20个字符"];
+                self.textLabel.text = textField.text;
             }
         }
         // 有高亮选择的字符串，则暂不对文字进行统计和限制
@@ -123,6 +125,7 @@
         if (toBeString.length > 16) {
             textField.text = [toBeString substringToIndex:16];
             [MBProgressHUD showTextHUDwithTitle:@"最多输入16个字符"];
+            self.textLabel.text = textField.text;
         }
     }
 }

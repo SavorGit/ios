@@ -7,6 +7,7 @@
 //
 
 #import "RDAlertView.h"
+#import "IQKeyboardManager.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -39,7 +40,6 @@
     
     self.showView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
     self.showView.backgroundColor = UIColorFromRGB(0xf6f2ed);
-    self.showView.center = CGPointMake((self.frame.origin.x + self.frame.size.width) / 2, (self.frame.origin.y + self.frame.size.height) / 2);
     [self addSubview:self.showView];
     self.showView.layer.cornerRadius = 8.f;
     self.showView.layer.masksToBounds = YES;
@@ -74,7 +74,12 @@
     
     [self.showView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(300, 200));
-        make.center.mas_equalTo(0);
+        if ([IQKeyboardManager sharedManager].isKeyboardShowing) {
+            make.centerX.mas_equalTo(0);
+            make.centerY.mas_equalTo(-self.frame.size.width / 4);
+        }else{
+            make.center.mas_equalTo(0);
+        }
     }];
 }
 

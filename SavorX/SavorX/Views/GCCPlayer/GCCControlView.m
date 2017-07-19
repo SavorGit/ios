@@ -168,7 +168,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     self.definitionButton.hidden = YES;
     
     self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.backButton setImage:[UIImage imageNamed:@"RDBack"] forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.backButton];
     
@@ -197,7 +197,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     [self.endView addSubview:self.endShare];
     
     self.endBackButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.endBackButton setImage:[UIImage imageNamed:@"RDBack"] forState:UIControlStateNormal];
+    [self.endBackButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     [self.endBackButton addTarget:self action:@selector(backButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.endView addSubview:self.endBackButton];
     
