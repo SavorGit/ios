@@ -86,6 +86,13 @@
         startIndex += 2;
     }
     
+    if (hadInstalledWeixin) {
+        [titlearr addObjectsFromArray:@[@"微信收藏"]];
+        [imageArr addObjectsFromArray:@[@"fx_wxsc"]];
+    } else {
+        startIndex += 1;
+    }
+    
     if (hadInstalledQQ) {
         [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
         [imageArr addObjectsFromArray:@[@"qq",@"fx_Zone"]];
@@ -93,24 +100,13 @@
         startIndex += 2;
     }
     
-    //    [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
-    //    [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
-    //
-    //    [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
-    //    [imageArr addObjectsFromArray:@[@"qq",@"qq"]];
-    
     [titlearr addObjectsFromArray:@[@"微博"]];
     [imageArr addObjectsFromArray:@[@"weibo"]];
     
-    if (hadInstalledWeixin) {
-        [titlearr addObjectsFromArray:@[@"微信收藏"]];
-        [imageArr addObjectsFromArray:@[@"fx_wxsc"]];
-    } else {
-        startIndex += 1;
-    }
     [titlearr addObjectsFromArray:@[@"复制链接"]];
     [imageArr addObjectsFromArray:@[@"fuzhilianjie"]];
     
+    _startIndex = startIndex;
     _shareBtnTitleArray = titlearr;
     _shareBtnImageArray = imageArr;
 }
@@ -195,27 +191,27 @@
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model];
         }
             break;
-        case 2: {
+        case 3: {
             // QQ
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model];
             
         }
             break;
-        case 3: {
+        case 4: {
             // QQ空间
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq_zone"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Qzone andController:self.VC withModel:self.model];
         }
             break;
-        case 4: {
+        case 5: {
             // 微博
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"sina"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model];
             
         }
             break;
-        case 5: {
+        case 2: {
             // 微信收藏
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_collection"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatFavorite andController:self.VC withModel:self.model];

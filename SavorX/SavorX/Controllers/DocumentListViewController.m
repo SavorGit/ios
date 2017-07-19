@@ -87,9 +87,15 @@
 
 - (void)shouldPushHelp
 {
-    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"];
-    help.title = @"文件投屏步骤";
-    [self.navigationController  pushViewController:help  animated:NO];
+    if (self.dataSource.count == 0) {
+        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"]];
+        [self.webView loadRequest:request];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    }else{
+        HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"];
+        help.title = @"文件投屏步骤";
+        [self.navigationController  pushViewController:help  animated:NO];
+    }
 }
 
 - (void)creatGuidTouchView{
@@ -374,6 +380,19 @@
     }];
 }
 
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    NSLog(@"error%@",error);
+    if ([error code] == NSURLErrorCancelled) {
+        return;
+    }
+}
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];

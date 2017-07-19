@@ -45,11 +45,11 @@
     _headLineImage.layer.masksToBounds = YES;
     _headLineImage.backgroundColor = [UIColor clearColor];
     _headLineImage.image = [UIImage imageNamed:@"toutiao"];
-    [_bgImageView addSubview:_headLineImage];
+    [_bgView addSubview:_headLineImage];
     [_headLineImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(58, 36));
-        make.top.mas_equalTo(_bgImageView.mas_top);
-        make.left.mas_equalTo(0);
+        make.top.mas_equalTo(_bgView.mas_top).offset(3.2);
+        make.left.mas_equalTo(_bgView.mas_left).offset(2.5);
     }];
     
     _titleLabel = [[UILabel alloc]init];
@@ -68,8 +68,9 @@
     _sourceImage.contentMode = UIViewContentModeScaleAspectFill;
     _sourceImage.layer.masksToBounds = YES;
     _sourceImage.backgroundColor = [UIColor clearColor];
+    _sourceImage.layer.cornerRadius = 20/2;//裁成圆角
+    _sourceImage.layer.masksToBounds = YES;//隐藏裁剪掉的部分
     [_bgView addSubview:_sourceImage];
-    
     [_sourceImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(20, 20));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(12);

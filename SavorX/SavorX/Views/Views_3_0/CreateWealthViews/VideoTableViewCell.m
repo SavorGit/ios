@@ -83,7 +83,9 @@
     _sourceImage = [[UIImageView alloc] initWithFrame:CGRectZero];
     _sourceImage.contentMode = UIViewContentModeScaleAspectFill;
     _sourceImage.layer.masksToBounds = YES;
-    _sourceImage.backgroundColor = [UIColor orangeColor];
+    _sourceImage.backgroundColor = [UIColor clearColor];
+    _sourceImage.layer.cornerRadius = 20/2;//裁成圆角
+    _sourceImage.layer.masksToBounds = YES;//隐藏裁剪掉的部分
     [_bgView addSubview:_sourceImage];
     [_sourceImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(20, 20));
@@ -114,10 +116,10 @@
         make.left.mas_equalTo(_sourceLabel.mas_right).offset(10.5);
     }];
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];
-    lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
-    [_bgView addSubview:lineView];
-    [lineView mas_updateConstraints:^(MASConstraintMaker *make) {
+    _lineView = [[UIView alloc] initWithFrame:CGRectZero];
+    _lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
+    [_bgView addSubview:_lineView];
+    [_lineView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 1));
         make.bottom.mas_equalTo(_bgView.bottom).offset(-1);
         make.left.mas_equalTo(0);

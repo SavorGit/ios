@@ -96,15 +96,10 @@
         startIndex += 1;
     }
     
-    //    [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
-    //    [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
-    //
-    //    [titlearr addObjectsFromArray:@[@"QQ"]];
-    //    [imageArr addObjectsFromArray:@[@"qq"]];
-    
     [titlearr addObjectsFromArray:@[@"微博"]];
     [imageArr addObjectsFromArray:@[@"weibo"]];
     
+    _startIndex = startIndex;
     _shareBtnTitleArray = titlearr;
     _shareBtnImageArray = imageArr;
 }

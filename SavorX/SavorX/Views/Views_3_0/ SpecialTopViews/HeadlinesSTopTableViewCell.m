@@ -44,7 +44,7 @@
     _titleLabel = [[UILabel alloc]init];
     _titleLabel.font = kPingFangMedium(17);
     _titleLabel.textColor = UIColorFromRGB(0x434343);
-    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.text = @"标题";
     [_bgView addSubview:_titleLabel];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
