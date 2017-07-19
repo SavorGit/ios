@@ -727,9 +727,26 @@
     return YES;
 }
 
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+}
+
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [MBProgressHUD hiddenWebLoadingInView:self.webView];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [self showNoNetWorkViewInView:self.webView];
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;

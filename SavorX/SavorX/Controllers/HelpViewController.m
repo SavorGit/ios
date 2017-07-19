@@ -79,6 +79,14 @@
     if ([error code] == NSURLErrorCancelled) {
         return;
     }
+    [self showNoNetWorkViewInView:self.webView];
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.url]]];
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
 
 @end

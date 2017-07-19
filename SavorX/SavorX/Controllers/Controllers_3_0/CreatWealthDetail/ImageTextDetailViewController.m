@@ -108,6 +108,14 @@
     if ([error code] == NSURLErrorCancelled) {
         return;
     }
+    [self showNoNetWorkViewInView:self.webView];
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]]];
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
 
 #pragma mark ---分享按钮点击

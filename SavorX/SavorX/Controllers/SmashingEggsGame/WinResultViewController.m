@@ -112,6 +112,14 @@
     if ([error code] == NSURLErrorCancelled) {
         return;
     }
+    [self showNoNetWorkViewInView:self.webView];
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:self.winResultStr]]];
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
 
 #pragma mark -backButtonClick

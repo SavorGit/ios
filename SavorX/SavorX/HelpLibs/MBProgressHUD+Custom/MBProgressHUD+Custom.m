@@ -8,6 +8,7 @@
 
 #import "MBProgressHUD+Custom.h"
 #import "AnimationImageView.h"
+#import "NoNetWorkView.h"
 
 @implementation MBProgressHUD (Custom)
 
