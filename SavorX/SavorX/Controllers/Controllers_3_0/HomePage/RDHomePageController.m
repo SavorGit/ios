@@ -402,7 +402,7 @@
         if (!isEmptyString(self.specialTitle)) {
             CGSize size = [self.specialTitle boundingRectWithSize:CGSizeMake(1000, 30) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading|NSStringDrawingTruncatesLastVisibleLine attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17]} context:nil].size;
             width = size.width;
-            UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(width - 10, 12, 24, 12)];
+            UIImageView * view = [[UIImageView alloc] initWithFrame:CGRectMake(width - 10 - self.specialTitle.length * .5, 12, 24, 12)];
             [view setImage:[UIImage imageNamed:@"zhuanti"]];
             return view;
         }

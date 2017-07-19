@@ -110,7 +110,7 @@
     
     //初始化webView
     self.webView = [[UIWebView alloc] init];
-    self.webView.backgroundColor = [UIColor whiteColor];
+    self.webView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.webView];
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.playView.mas_bottom);
@@ -121,16 +121,17 @@
     self.webView.scrollView.delegate = self;
     self.webView.delegate = self;
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
-    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+    if (!isEmptyString(self.model.contentURL)) {
+        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        [self.webView loadRequest:request];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    }
     self.webView.opaque = NO;
-    [self.webView loadRequest:request];
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 100)];
     self.testView.backgroundColor = [UIColor clearColor];
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];
-    
-    [MBProgressHUD showWebLoadingHUDInView:self.webView];
     
     //添加页面相关的通知监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
