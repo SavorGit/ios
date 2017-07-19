@@ -44,7 +44,7 @@
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_information" key:nil value:nil];
     }
     if (adviceStr.length == 0) {
-        [SAVORXAPI showAlertWithString:@"请填写完整信息" withController:self];
+        [SAVORXAPI showAlertWithMessage:@"请填写完整信息"];
         return;
     }
     

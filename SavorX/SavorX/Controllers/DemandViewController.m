@@ -62,7 +62,6 @@
 //初始化界面
 - (void)createUI
 {
-    self.view.backgroundColor = [UIColor blackColor];
     self.title = self.model.title;
     
     self.backImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
@@ -70,7 +69,7 @@
     [self.view addSubview:self.backImageView];
     self.backImageView.userInteractionEnabled = YES;
     [self.backImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
+        make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
         make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
@@ -90,7 +89,7 @@
     [self.playSilder setThumbImage:[UIImage imageNamed:@"slider_thumb"] forState:UIControlStateNormal];
     self.playSilder.minimumValue = 0;
     self.playSilder.maximumValue = self.model.duration;
-    [self.playSilder setMinimumTrackTintColor:FontColor];
+    [self.playSilder setMinimumTrackTintColor:kThemeColor];
     [self.playSilder setMaximumTrackTintColor:[UIColor colorWithHexString:@"#a2a7aa"]];
     [playSliderView addSubview:self.playSilder];
     [self.playSilder mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -136,7 +135,7 @@
     [backButton addTarget:self action:@selector(navBackButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
     [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
+        make.top.mas_equalTo(5);
         make.left.mas_equalTo(10);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
@@ -156,12 +155,12 @@
     [self.view addSubview:shareButton];
     
     [shareButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
+        make.top.mas_equalTo(5);
         make.right.mas_equalTo(-10);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     [self.collectButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
+        make.top.mas_equalTo(5);
         make.right.mas_equalTo(-60);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
@@ -191,13 +190,11 @@
 
     }];
     
-    
     self.quitScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.quitScreenButton.backgroundColor = UIColorFromRGB(0xf1d897);
-    self.quitScreenButton.alpha = 0.8;
+    self.quitScreenButton.backgroundColor = kThemeColor;
     [self.quitScreenButton setTitle:@"退出投屏" forState:UIControlStateNormal];
-    [self.quitScreenButton.titleLabel setFont:[UIFont boldSystemFontOfSize:17]];
-    [self.quitScreenButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.quitScreenButton.titleLabel setFont:kPingFangRegular(16)];
+    [self.quitScreenButton setTitleColor:UIColorFromRGB(0xede6de) forState:UIControlStateNormal];
     self.quitScreenButton.layer.masksToBounds = YES;
     self.quitScreenButton.layer.cornerRadius = 5.0;
     self.quitScreenButton.layer.borderWidth = 1.0;
@@ -373,7 +370,7 @@
 - (void)createBottomView
 {
     self.playBackView = [[UIView alloc] initWithFrame:CGRectMake(0, kMainBoundsHeight - BOTTOMHEIGHT, kMainBoundsWidth, BOTTOMHEIGHT)];
-    self.playBackView.backgroundColor = [UIColor blackColor];
+    self.playBackView.backgroundColor = UIColorFromRGB(0x922c3e);
     [self.view addSubview:self.playBackView];
     
     self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -789,6 +786,11 @@
     self.screenButton.enabled = YES;
     [self shouldRelease];
     [self quitBack];
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
 }
 
 - (void)dealloc

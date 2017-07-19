@@ -117,8 +117,9 @@
         [self.imageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.mas_equalTo(-5);
             make.right.mas_equalTo(-5);
-            make.width.mas_equalTo(25);
             make.height.mas_equalTo(14);
+            make.width.mas_greaterThanOrEqualTo(25);
+            make.width.mas_lessThanOrEqualTo(50);
         }];
         self.imageLabel.text = [NSString stringWithFormat:@"%@图", model.colTuJi];
         
@@ -130,7 +131,8 @@
             make.bottom.mas_equalTo(-5);
             make.right.mas_equalTo(-5);
             make.height.mas_equalTo(16);
-            make.width.mas_equalTo(35);
+            make.width.mas_greaterThanOrEqualTo(35);
+            make.width.mas_lessThanOrEqualTo(100);
         }];
         
         long long minute = 0, second = 0;

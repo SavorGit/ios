@@ -151,6 +151,7 @@
                         }
                     }];
                     weakSelf.isDisappear = NO;
+                    [weakSelf setNeedsStatusBarAppearanceUpdate];
                 } else {
                     // 消失
                     [weakSelf.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -164,6 +165,7 @@
                         }
                     }];
                     weakSelf.isDisappear = YES;
+                    [weakSelf setNeedsStatusBarAppearanceUpdate];
                 }
             };
         }
@@ -411,6 +413,11 @@ static int temp = -1;
 //app进入前台运行
 - (void)appBecomeActivePlayground{
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return self.isDisappear;
 }
 
 - (void)dealloc

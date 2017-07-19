@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (nonatomic, assign) BOOL hasAdvice; //用户是否输入了意见
 @property (weak, nonatomic) IBOutlet UILabel *pLabel;
+@property (weak, nonatomic) IBOutlet UIButton *submitButton;
+@property (weak, nonatomic) IBOutlet UILabel *numLabel;
 
 @end
 
@@ -32,7 +34,9 @@
 {
     [super awakeFromNib];
     self.adviceTextView.delegate = self;
-    
+    [self.submitButton setBackgroundColor:kThemeColor];
+    [self.submitButton setTitleColor:UIColorFromRGB(0xede6de) forState:UIControlStateNormal];
+    self.numLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:12];
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -42,6 +46,11 @@
     }else{
         [self.pLabel setHidden:YES];
     }
+    if (textView.text.length > 200) {
+        textView.text = [textView.text substringToIndex:200];
+        [MBProgressHUD showTextHUDwithTitle:@"最多输入200个字符"];
+    }
+    self.numLabel.text = [NSString stringWithFormat:@"%ld/200", textView.text.length];
 }
 
 
