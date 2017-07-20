@@ -203,7 +203,7 @@ static int temp = -1;
     [self.view addSubview:_photoDescView];
     [_photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,_photoDescView.height));
-        make.bottom.mas_equalTo(- 20);
+        make.bottom.mas_equalTo(0);
         make.left.mas_equalTo(0);
     }];
     

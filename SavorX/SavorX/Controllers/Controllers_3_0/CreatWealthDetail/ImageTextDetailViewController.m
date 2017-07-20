@@ -187,8 +187,8 @@
     CGFloat height = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
-    //底部View与顶部网页的间隔为40
-    frame.origin.y = height + 40;
+    //底部View与顶部网页的间隔为0
+    frame.origin.y = height;
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
     [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 40)];
