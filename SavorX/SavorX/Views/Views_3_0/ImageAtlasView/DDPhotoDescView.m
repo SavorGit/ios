@@ -33,18 +33,20 @@
 		self.textView.backgroundColor = [UIColor clearColor];
 		self.textView.textColor = UIColorFromRGB(0x434343);
 		self.textView.font = kPingFangLight(16);
+        self.textView.textAlignment = NSTextAlignmentLeft;
         
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 55];
 
         self.frame = CGRectMake(0, 0, kMainBoundsWidth, textViewHeight);
         self.backgroundColor = [UIColorFromRGB(0xece6de) colorWithAlphaComponent:.9f];
         
-		self.textView.frame = CGRectMake(60, 0, kMainBoundsWidth - 75, textViewHeight);
+        _page = [[RDTabScrollViewPage alloc] initWithFrame:CGRectMake(5, 10, 40, 23) withTotalNumber:99 withType:RDTabScrollViewPageType_DOWNBIG withIndex:index + 1 ];
+        _page.backgroundColor = [UIColor clearColor];
+        [self addSubview:_page];
+        
+		self.textView.frame = CGRectMake(50, 0, kMainBoundsWidth - 65, textViewHeight);
 		self.textView.userInteractionEnabled = NO;
 		[self addSubview:self.textView];
-        
-        _page = [[RDTabScrollViewPage alloc] initWithFrame:CGRectMake(15, 10, 60, 23) withTotalNumber:totalCount withType:RDTabScrollViewPageType_DOWNBIG withIndex:index + 1 ];
-        [self addSubview:_page];
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	}
@@ -81,7 +83,7 @@
             make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-        self.textView.frame = CGRectMake(60, 0, kMainBoundsWidth - 75, textViewHeight);
+        self.textView.frame = CGRectMake(50, 0, kMainBoundsWidth - 65, textViewHeight);
         
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
@@ -90,7 +92,7 @@
             make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-        self.textView.frame = CGRectMake(60, 0, kMainBoundsWidth - 75, textViewHeight);
+        self.textView.frame = CGRectMake(50, 0, kMainBoundsWidth - 65, textViewHeight);
 
     }
 }
