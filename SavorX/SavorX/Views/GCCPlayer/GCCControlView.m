@@ -515,8 +515,8 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         make.height.mas_equalTo(60);
     }];
     
-    [self.playButton setImage:[UIImage imageNamed:@"hp_zanting"] forState:UIControlStateNormal];
-    [self.playButton setImage:[UIImage imageNamed:@"hp_bofang"] forState:UIControlStateSelected];
+    [self.playButton setImage:[UIImage imageNamed:@"sp_zanting"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageNamed:@"sp_bofang"] forState:UIControlStateSelected];
 }
 
 - (void)setVideoIsCollect:(BOOL)isCollect

@@ -92,8 +92,6 @@
     if (titleHeight > 30) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 30, 45));
-            make.top.mas_equalTo(6);
-            make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
         }];
     }
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:model.title];
