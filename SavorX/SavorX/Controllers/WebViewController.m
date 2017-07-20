@@ -171,6 +171,7 @@
         }
         [self.navigationController setNeedsStatusBarAppearanceUpdate];
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
+        [MBProgressHUD hiddenWebLoadingInView:self.webView];
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
         [self.playView playOrientationLandscape];
         [MBProgressHUD hideHUDForView:self.webView animated:NO];
@@ -353,6 +354,18 @@
     [MBProgressHUD hiddenWebLoadingInView:self.webView];
 }
 
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [self showNoNetWorkViewInView:self.webView];
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.model.contentURL]]]];
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+}
+
 - (BOOL)prefersStatusBarHidden
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -429,6 +442,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
     if ([keyPath isEqualToString:@"contentSize"]) {
         [self footViewShouldBeReset];
     }
