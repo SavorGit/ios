@@ -30,6 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = VCBackgroundColor;
     self.winResultStr = [[NSString alloc] init];
 //    [self createWebView];
 //    [self.view addSubview:self.topView];

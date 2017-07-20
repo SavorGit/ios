@@ -96,7 +96,12 @@
             make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
         }];
     }
-    self.titleLabel.text = model.title;
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:model.title];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:0];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [model.title length])];
+    self.titleLabel.attributedText = attributedString;
+    [self.titleLabel sizeToFit];
     
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];

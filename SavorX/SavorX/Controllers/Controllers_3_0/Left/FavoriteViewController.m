@@ -15,6 +15,7 @@
 #import "ImageTextDetailViewController.h"
 #import "ImageAtlasDetailViewController.h"
 #import "WebViewController.h"
+#import "SpecialTopDetailViewController.h"
 
 @interface FavoriteViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -193,23 +194,28 @@
     
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     
-    //1 图文 2 图集 3 视频
-    if (model.type == 1) {
-        ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
-        imtVC.imgTextModel = model;
-        imtVC.categoryID = model.categoryId;
-        [self.navigationController pushViewController:imtVC animated:YES];
-        
-    }else if (model.type == 2) {
-        ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
-        iatVC.imgAtlModel = model;
-        iatVC.categoryID = model.categoryId;
-        [self.navigationController pushViewController:iatVC animated:YES];
-        
-    } else if (model.type == 3 || model.type == 4){
-        WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:-1];
-        web.categoryID = model.categoryId;
-        [self.navigationController pushViewController:web animated:YES];
+    if (model.categoryId != 103) {
+        //1 图文 2 图集 3 视频
+        if (model.type == 1) {
+            ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
+            imtVC.imgTextModel = model;
+            imtVC.categoryID = model.categoryId;
+            [self.navigationController pushViewController:imtVC animated:YES];
+            
+        }else if (model.type == 2) {
+            ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
+            iatVC.imgAtlModel = model;
+            iatVC.categoryID = model.categoryId;
+            [self.navigationController pushViewController:iatVC animated:YES];
+            
+        } else if (model.type == 3 || model.type == 4){
+            WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:model.categoryId];
+            [self.navigationController pushViewController:web animated:YES];
+        }
+    }else{
+        SpecialTopDetailViewController * stVC = [[SpecialTopDetailViewController alloc] init];
+        stVC.categoryID = model.categoryId;
+        [self.navigationController pushViewController:stVC animated:YES];
     }
 }
 

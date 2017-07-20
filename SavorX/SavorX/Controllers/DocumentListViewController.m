@@ -45,12 +45,12 @@
     
     if (self.dataSource.count == 0) {
         
-        [self creatGuidTouchView];
-        [self creatHelpWebView];
+       [self creatGuidTouchView];
+       [self creatHelpWebView];
 
+    }else{
+       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];
     }
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];
     
     //监听程序进入活跃状态
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillActive) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -62,6 +62,7 @@
 
 - (void)creatHelpWebView
 {
+    
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
     self.webView.backgroundColor = [UIColor clearColor];
     self.webView.opaque = NO;
@@ -70,39 +71,36 @@
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];
-//    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
-//    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
-//    effectView .alpha = 0.95;
-//    effectView .frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
-//    [self.webView addSubview:effectView ];
-//
-    self.toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];
-    self.toolbar.alpha = 0.9;
-    self.toolbar.barStyle = UIBarStyleBlackTranslucent;
-    [self.webView addSubview:self.toolbar];
     
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"]];
     [self.webView loadRequest:request];
+    
+//    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+//    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+//    effectView .frame = CGRectMake(0, 0, 152, 36);
+//    [self.webView addSubview:effectView ];
+//    effectView.alpha = 1;
+//
+//    self.toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];
+//    self.toolbar.alpha = 1;
+//    self.toolbar.barStyle = UIBarStyleBlack;
+//    [self.webView addSubview:self.toolbar];
+
+
 }
 
 - (void)shouldPushHelp
 {
-    if (self.dataSource.count == 0) {
-        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"]];
-        [self.webView loadRequest:request];
-        [MBProgressHUD showWebLoadingHUDInView:self.webView];
-    }else{
-        HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"];
-        help.title = @"文件投屏步骤";
-        [self.navigationController  pushViewController:help  animated:NO];
-    }
+    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"];
+    help.title = @"文件投屏步骤";
+    [self.navigationController  pushViewController:help  animated:NO];
 }
 
 - (void)creatGuidTouchView{
     
     self.guidView = [[UIView alloc] init];
     self.guidView.tag = 1888;
-    self.guidView.backgroundColor = [UIColor clearColor];
+    self.guidView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
     self.guidView.userInteractionEnabled = YES;
     self.guidView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
@@ -128,8 +126,8 @@
     lineView.backgroundColor = [UIColor whiteColor];
     [self.guidView addSubview:lineView];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(2,200));
-        make.top.mas_equalTo(0);
+        make.size.mas_equalTo(CGSizeMake(1,kMainBoundsHeight/2));
+        make.bottom.mas_equalTo(bgVideoView.mas_top);
         make.centerX.equalTo(self.guidView);
     }];
     
