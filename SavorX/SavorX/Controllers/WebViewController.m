@@ -89,25 +89,6 @@
         make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
     }];
     
-    [self.playView setCollectEnable:NO];
-    HSGetCollectoinStateRequest * stateRequest = [[HSGetCollectoinStateRequest alloc] initWithArticleID:self.model.artid];
-    [stateRequest sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
-        [self.playView setCollectEnable:YES];
-        NSInteger collect = [[[response objectForKey:@"result"] objectForKey:@"state"] integerValue];
-        // 设置收藏按钮状态
-        if (collect == 1) {
-            [self.playView setIsCollect:YES];
-        }else{
-            [self.playView setIsCollect:NO];
-        }
-        
-    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
-    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
-    }];
-    
     //初始化webView
     self.webView = [[UIWebView alloc] init];
     self.webView.backgroundColor = [UIColor clearColor];
@@ -140,6 +121,18 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
     // app进入前台
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)reload
+{
+    [self.playView setPlayItemWithURL:[self.model.videoURL stringByAppendingString:@".f30.mp4"]];
+    [self.testView removeFromSuperview];
+    if (!isEmptyString(self.model.contentURL)) {
+        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        [self.webView loadRequest:request];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    }
+    [self setUpDatas];
 }
 
 //当手机连接到机顶盒
@@ -486,7 +479,7 @@
 
 #pragma mark - 初始化下方推荐数据
 - (void)setUpDatas{
-    
+    [self checkCollectStatus];
     HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.model.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -503,6 +496,29 @@
         if (self.dataSource.count > 0) {
             [self footViewShouldBeReset];
             [self.tableView reloadData];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
+}
+
+- (void)checkCollectStatus
+{
+    [self.playView setIsCollect:NO];
+    [self.playView setCollectEnable:NO];
+    HSGetCollectoinStateRequest * stateRequest = [[HSGetCollectoinStateRequest alloc] initWithArticleID:self.model.artid];
+    [stateRequest sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.playView setCollectEnable:YES];
+        NSInteger collect = [[[response objectForKey:@"result"] objectForKey:@"state"] integerValue];
+        // 设置收藏按钮状态
+        if (collect == 1) {
+            [self.playView setIsCollect:YES];
+        }else{
+            [self.playView setIsCollect:NO];
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -589,8 +605,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     self.model = tmpModel;
-    [self.playView setPlayItemWithURL:self.model.videoURL];
-    
+    [self reload];
 }
 
 @end

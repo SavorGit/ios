@@ -527,6 +527,7 @@
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
                     [hud hidden];
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:third withStatus:RDHomeStatus_Photo];
                     [self.navigationController pushViewController:third animated:YES];
                     [SAVORXAPI successRing];
                     

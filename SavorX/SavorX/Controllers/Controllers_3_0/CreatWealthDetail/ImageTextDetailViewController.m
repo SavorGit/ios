@@ -58,6 +58,28 @@
     UIBarButtonItem * collectItem = [[UIBarButtonItem alloc] initWithCustomView:self.collectButton];
     self.navigationItem.rightBarButtonItems = @[shareItem, collectItem];
     
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
+    self.webView = [[UIWebView alloc] init];
+    self.webView.delegate = self;
+    self.webView.frame = CGRectMake(0, 0, width, height);
+    if (!isEmptyString(self.imgTextModel.contentURL)) {
+        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
+        [self.webView loadRequest:request];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    }
+    self.webView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.webView];
+    
+    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
+    self.testView.backgroundColor = [UIColor clearColor];
+    [self.webView.scrollView addSubview:self.testView];
+    [self addObserver];
+}
+
+- (void)checkCollectStatus
+{
+    self.collectButton.selected = NO;
     self.collectButton.userInteractionEnabled = NO;
     HSGetCollectoinStateRequest * stateRequest = [[HSGetCollectoinStateRequest alloc] initWithArticleID:self.imgTextModel.artid];
     [stateRequest sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -76,24 +98,6 @@
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
     }];
-    
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
-    self.webView = [[UIWebView alloc] init];
-    self.webView.delegate = self;
-    self.webView.frame = CGRectMake(0, 0, width, height);
-    if (!isEmptyString(self.imgTextModel.contentURL)) {
-        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
-        [self.webView loadRequest:request];
-        [MBProgressHUD showWebLoadingHUDInView:self.webView];
-    }
-    self.webView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.webView];
-    
-    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
-    self.testView.backgroundColor = [UIColor clearColor];
-    [self.webView.scrollView addSubview:self.testView];
-    [self addObserver];
 }
 
 //- (void)webViewDidFinishLoad:(UIWebView *)webView
@@ -214,7 +218,7 @@
 
 #pragma mark - 初始化下方推荐数据
 - (void)setUpDatas{
-    
+    [self checkCollectStatus];
     HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.imgTextModel.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -318,6 +322,7 @@
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     self.imgTextModel = tmpModel;
+    [self.testView removeFromSuperview];
     [self setUpDatas];
     if (!isEmptyString(tmpModel.contentURL)) {
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
