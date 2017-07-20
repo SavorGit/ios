@@ -106,7 +106,7 @@
         label.textAlignment = NSTextAlignmentCenter;
         label.layer.masksToBounds = YES;
         label.backgroundColor = UIColorFromRGB(0xece6de);
-        label.textColor = UIColorFromRGB(0x333333);
+        label.textColor = kThemeColor;
         label.font = [UIFont boldSystemFontOfSize:30];
         [bottomView addSubview:label];
         float distance = [Helper autoWidthWith:110];

@@ -93,11 +93,16 @@
     self.webView = [[UIWebView alloc] init];
     self.webView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.webView];
+    
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.playView.mas_bottom);
         make.left.mas_equalTo(0);
         make.width.mas_equalTo(kMainBoundsWidth);
-        make.bottom.mas_equalTo(0);
+        if (self.model.type == 4) {
+            make.height.mas_equalTo(kMainBoundsWidth / 375 * 170);
+        }else{
+            make.bottom.mas_equalTo(0);
+        }
     }];
     self.webView.scrollView.delegate = self;
     self.webView.delegate = self;
@@ -127,6 +132,16 @@
 {
     [self.playView setPlayItemWithURL:[self.model.videoURL stringByAppendingString:@".f30.mp4"]];
     [self.testView removeFromSuperview];
+    [self.webView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.playView.mas_bottom);
+        make.left.mas_equalTo(0);
+        make.width.mas_equalTo(kMainBoundsWidth);
+        if (self.model.type == 4) {
+            make.height.mas_equalTo(kMainBoundsWidth / 375 * 170);
+        }else{
+            make.bottom.mas_equalTo(0);
+        }
+    }];
     if (!isEmptyString(self.model.contentURL)) {
         NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         [self.webView loadRequest:request];
