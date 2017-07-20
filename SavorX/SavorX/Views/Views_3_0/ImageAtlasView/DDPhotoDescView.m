@@ -12,6 +12,8 @@
 #import "RDTabScrollViewPage.h"
 
 #define DescViewDefaultHeight 130
+#define TextViewWidth         kMainBoundsWidth - 65
+#define DistanceToBottom      20
 
 @interface DDPhotoDescView()
 
@@ -27,26 +29,26 @@
 	self = [super init];
 	if (self) {
 
+        self.backgroundColor = [UIColorFromRGB(0xece6de) colorWithAlphaComponent:.9f];
+        
+        // 页码
+        _page = [[RDTabScrollViewPage alloc] initWithFrame:CGRectMake(5, 10, 40, 23) withTotalNumber:99 withType:RDTabScrollViewPageType_DOWNBIG withIndex:index + 1 ];
+        _page.backgroundColor = [UIColor clearColor];
+        [self addSubview:_page];
+        
 		// 描述文本
-		self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 0)];
+		self.textView = [[UITextView alloc] initWithFrame:CGRectZero];
 		self.textView.text = desc;
 		self.textView.backgroundColor = [UIColor clearColor];
 		self.textView.textColor = UIColorFromRGB(0x434343);
 		self.textView.font = kPingFangLight(16);
         self.textView.textAlignment = NSTextAlignmentLeft;
+        self.textView.userInteractionEnabled = NO;
+        [self addSubview:self.textView];
         
-        CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 55];
-
-        self.frame = CGRectMake(0, 0, kMainBoundsWidth, textViewHeight);
-        self.backgroundColor = [UIColorFromRGB(0xece6de) colorWithAlphaComponent:.9f];
-        
-        _page = [[RDTabScrollViewPage alloc] initWithFrame:CGRectMake(5, 10, 40, 23) withTotalNumber:99 withType:RDTabScrollViewPageType_DOWNBIG withIndex:index + 1 ];
-        _page.backgroundColor = [UIColor clearColor];
-        [self addSubview:_page];
-        
-		self.textView.frame = CGRectMake(50, 0, kMainBoundsWidth - 65, textViewHeight);
-		self.textView.userInteractionEnabled = NO;
-		[self addSubview:self.textView];
+        CGFloat textViewHeight = [self heightForString:self.textView andWidth:TextViewWidth];
+        self.frame = CGRectMake(0, 0, kMainBoundsWidth, textViewHeight + DistanceToBottom);
+		self.textView.frame = CGRectMake(50, 0, TextViewWidth, textViewHeight);
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	}
@@ -79,20 +81,20 @@
     if (orientation == UIInterfaceOrientationPortrait) {
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
         [self mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight));
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight + DistanceToBottom));
             make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-        self.textView.frame = CGRectMake(50, 0, kMainBoundsWidth - 65, textViewHeight);
+        self.textView.frame = CGRectMake(50, 0, TextViewWidth, textViewHeight);
         
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
         [self mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight));
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight + DistanceToBottom));
             make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-        self.textView.frame = CGRectMake(50, 0, kMainBoundsWidth - 65, textViewHeight);
+        self.textView.frame = CGRectMake(50, 0, TextViewWidth, textViewHeight);
 
     }
 }

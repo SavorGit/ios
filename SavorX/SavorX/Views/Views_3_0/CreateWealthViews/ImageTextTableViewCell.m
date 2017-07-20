@@ -114,7 +114,6 @@
     self.titleLabel.attributedText = attributedString;
     [self.titleLabel sizeToFit];
     
-//    self.titleLabel.text = model.title;
     self.sourceLabel.text = model.sourceName;
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];

@@ -455,11 +455,15 @@
     }
     //底部View总高度
     CGFloat theight = tabHeight + 100;
-    CGFloat height = self.webView.scrollView.contentSize.height;
+    //如果为纯视频去除分享部分
+    if (self.model.type == 4) {
+        theight = tabHeight;
+    }
+    CGFloat cSizeheight = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
-    //底部View与顶部网页的间隔为40
-    frame.origin.y = height + 40;
+    //底部View与顶部网页的间隔为0
+    frame.origin.y = cSizeheight;
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
     [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 40)];
@@ -467,7 +471,10 @@
     
     [self addObserver];
     
-    [self shareBoardByDefined];
+    //不是纯视频类型添加分享部分
+    if (self.model.type != 4) {
+        [self shareBoardByDefined];
+    }
 }
 
 - (void)shareBoardByDefined {
@@ -541,10 +548,15 @@
         _tableView.scrollEnabled = NO;
         [self.testView addSubview:_tableView];
         
+        CGFloat diatanceToTop = 108;
+        // 纯视频类型去除上边分享部分
+        if (self.model.type == 4) {
+            diatanceToTop = 8;
+        }
         CGFloat tabHeiht = self.dataSource.count *285 +48;
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, tabHeiht));
-            make.top.mas_equalTo(108);
+            make.top.mas_equalTo(diatanceToTop);
             make.left.mas_equalTo(0);
         }];
         
