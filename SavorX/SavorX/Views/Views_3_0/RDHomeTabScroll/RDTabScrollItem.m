@@ -201,6 +201,17 @@
     self.titleLabel.text = self.model.title;
     self.detailFrom.text = self.model.sourceName;
     self.detailDate.text = self.model.updateTime;
+    
+    if (!isEmptyString(self.detailFrom.text)) {
+        [self.detailDate mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.detailFrom.mas_right).offset(10);
+        }];
+    }else{
+        [self.detailDate mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.detailFrom.mas_right).offset(0);
+        }];
+    }
+    
     long long minute = 0, second = 0;
     second = self.model.duration;
     minute = second / 60;

@@ -8,7 +8,6 @@
 
 #import "PhotoEditTextView.h"
 #import "PhotoTextLabel.h"
-#import "IQKeyboardManager.h"
 
 @interface PhotoEditTextView ()<UITextFieldDelegate>
 
@@ -32,8 +31,6 @@
 
 - (void)customSelf
 {
-    [[IQKeyboardManager sharedManager] setEnable:NO];
-    
     self.effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
     [self addSubview:self.effectView];
     [self.effectView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -223,7 +220,6 @@
 
 - (void)dealloc
 {
-    [[IQKeyboardManager sharedManager] setEnable:YES];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
