@@ -20,6 +20,7 @@
 @property (nonatomic, strong) UILabel * textLabel;
 @property (nonatomic, strong) UILabel * failConectLabel;
 @property (nonatomic, strong) UIButton *reConnectBtn;
+@property (nonatomic, strong) UIView *lineView;
 
 @property (nonatomic, strong) UILabel * wifiLabel;
 @property (nonatomic, strong) UIView * topAlert;
@@ -178,7 +179,7 @@
     self.reConnectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.reConnectBtn.backgroundColor = [UIColor clearColor];
     self.reConnectBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
-    [self.reConnectBtn setTitleColor:UIColorFromRGB(0xff2a00) forState:UIControlStateNormal];
+    [self.reConnectBtn setTitleColor:UIColorFromRGB(0xece6de) forState:UIControlStateNormal];
     if (kMainBoundsHeight == 568) {
         self.reConnectBtn.titleLabel.font = kPingFangLight(15);
     }else{
@@ -199,6 +200,23 @@
             make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:30]));
         }
     }];
+    
+    self.lineView = [[UIView alloc] init];
+    self.lineView.backgroundColor = UIColorFromRGB(0xece6de);
+    [bottomView addSubview:self.lineView];
+    self.lineView.hidden = YES;
+    [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (kMainBoundsHeight == 568) {
+            make.centerX.mas_equalTo(38);
+            make.top.mas_equalTo(self.reConnectBtn.mas_bottom).offset(-7);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:55], 1));
+        }else{
+            make.centerX.mas_equalTo(46);
+            make.top.mas_equalTo(self.reConnectBtn.mas_bottom).offset(-7);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:64], 1));
+        }
+    }];
+
     
     RDKeyBoard *keyBoard;
     keyBoard = [[RDKeyBoard alloc] initWithHeight:[Helper autoHeightWith:240] inView:self.view];
@@ -361,6 +379,7 @@
         if (self.numSring.length == 3 && number.length == 2) {
             self.failConectLabel.hidden = YES;
             self.reConnectBtn.hidden = YES;
+            self.lineView.hidden = YES;
             self.textLabel.hidden = NO;
             self.numSring = @"";
             self.textLabel.text = @"请输入电视中的三位数连接电视";
@@ -398,6 +417,7 @@
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = YES;
         self.reConnectBtn.hidden = YES;
+        self.lineView.hidden = YES;
         self.textLabel.hidden = NO;
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
@@ -412,6 +432,7 @@
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
+        self.lineView.hidden = NO;
         self.textLabel.hidden = YES;
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
         
@@ -444,6 +465,7 @@
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = YES;
         self.reConnectBtn.hidden = YES;
+        self.lineView.hidden = YES;
         self.textLabel.hidden = NO;
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
@@ -458,6 +480,7 @@
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
+        self.lineView.hidden = NO;
         self.textLabel.hidden = YES;
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
         
@@ -490,6 +513,7 @@
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = YES;
         self.reConnectBtn.hidden = YES;
+        self.lineView.hidden = YES;
         self.textLabel.hidden = NO;
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
@@ -504,6 +528,7 @@
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
+        self.lineView.hidden = NO;
         self.textLabel.hidden = YES;
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
         
@@ -536,6 +561,7 @@
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = YES;
         self.reConnectBtn.hidden = YES;
+        self.lineView.hidden = YES;
         self.textLabel.hidden = NO;
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
@@ -550,6 +576,7 @@
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
+        self.lineView.hidden = NO;
         self.textLabel.hidden = YES;
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
         
@@ -649,6 +676,7 @@
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
+        self.lineView.hidden = NO;
         self.textLabel.hidden = YES;
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
     }

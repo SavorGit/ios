@@ -67,4 +67,7 @@
 - (void)showLoadingView;
 - (void)hiddenLoadingView;
 
+//页面顶部下弹状态栏显示
+- (void)showTopFreshLabelWithTitle:(NSString *)title;
+
 @end
