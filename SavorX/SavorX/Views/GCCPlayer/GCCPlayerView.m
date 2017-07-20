@@ -16,6 +16,7 @@
 #import "ZFVolumeView.h"
 #import "RDLogStatisticsAPI.h"
 #import "UIImageView+WebCache.h"
+#import "HSGetCollectoinStateRequest.h"
 
 typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     GCCPlayerStatusInitial, //初始状态
