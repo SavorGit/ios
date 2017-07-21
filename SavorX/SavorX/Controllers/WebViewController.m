@@ -50,15 +50,17 @@
 
 -(void)dealloc{
     
+    if (!self.isOnlyVideo) {
+        [self removeObserver];
+    }
+    
+//    [HSImTeRecommendRequest cancelRequest];
+    
     //移除页面相关通知监听
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    if (!self.isOnlyVideo) {
-        [self removeObserver];
-    }
 }
 
 - (instancetype)initWithModel:(CreateWealthModel *)model categoryID:(NSInteger)categoryID
@@ -178,6 +180,7 @@
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 100)];
     self.testView.backgroundColor = [UIColor clearColor];
+    self.testView.clipsToBounds = YES;
     [self.webView.scrollView addSubview:self.testView];
 }
 
@@ -548,14 +551,19 @@
     //TableView的高度
     CGFloat tabHeight = 0;
     if (self.dataSource.count != 0) {
-        tabHeight = self.dataSource.count *285 + 48 + 8;
+        tabHeight = self.dataSource.count *96 + 48;
     }
+    
+    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(tabHeight);
+    }];
+    
     //底部View总高度
     CGFloat theight = tabHeight + 100;
-    //如果为纯视频去除分享部分
-    if (self.model.type == 4) {
-        theight = tabHeight;
+    if (self.dataSource.count != 0) {
+        theight += 8;
     }
+    
     CGFloat cSizeheight = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
@@ -563,7 +571,7 @@
     frame.origin.y = cSizeheight;
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
-    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 40)];
+    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight)];
     self.testView.backgroundColor = UIColorFromRGB(0xece6de);
     
     [self addObserver];
@@ -576,7 +584,11 @@
 
 - (void)shareBoardByDefined {
     
+    if ([self.testView viewWithTag:2222]) {
+        [[self.testView viewWithTag:2222] removeFromSuperview];
+    }
     HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.model andVC:self andCategoryID:self.categoryID andY:0];
+    shareView.tag = 2222;
     [self.testView addSubview:shareView];
     
 }
@@ -606,9 +618,24 @@
             }
         }
         
+        if (self.isOnlyVideo) {
+            RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
+            [headerView needRecommand:self.dataSource.count != 0];
+        }
+        
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
+        if (self.isOnlyVideo) {
+            RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
+            [headerView needRecommand:self.dataSource.count != 0];
+        }
+        
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+        if (self.isOnlyVideo) {
+            RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
+            [headerView needRecommand:self.dataSource.count != 0];
+        }
         
     }];
 }
@@ -644,7 +671,7 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.backgroundColor = UIColorFromRGB(0xf6f2ed);
         _tableView.backgroundView = nil;
         _tableView.scrollEnabled = NO;
         [self.testView addSubview:_tableView];
@@ -654,9 +681,15 @@
         if (self.model.type == 4) {
             diatanceToTop = 8;
         }
-        CGFloat tabHeiht = self.dataSource.count *285 +48;
+        CGFloat tabHeiht;
+        if (self.dataSource.count == 0) {
+            tabHeiht = 0;
+        }else{
+            tabHeiht = self.dataSource.count *96 +48;
+        }
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, tabHeiht));
+            make.width.mas_equalTo(kMainBoundsWidth);
+            make.height.mas_equalTo(tabHeiht);
             make.top.mas_equalTo(diatanceToTop);
             make.left.mas_equalTo(0);
         }];

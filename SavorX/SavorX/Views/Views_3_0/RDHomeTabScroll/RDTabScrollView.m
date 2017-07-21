@@ -54,17 +54,28 @@
     self.currentItemCenter = CGPointMake(width / 2, height / 2);
     self.bottomItemCenter = CGPointMake(width / 2, height / 2 + 40);
     
-    self.topItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource lastObject] index:self.dataSource.count total:self.dataSource.count];
-    self.topItem.center = self.topItemCenter;
-    [self addSubview:self.topItem];
-    self.topItem.delegate = self;
+    if (self.dataSource.count == 0) {
+        return;
+    }else{
+        self.topItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource lastObject] index:self.dataSource.count total:self.dataSource.count];
+        self.topItem.center = self.topItemCenter;
+        [self addSubview:self.topItem];
+        self.topItem.delegate = self;
+        
+        self.currentItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource firstObject] index:1 total:self.dataSource.count];
+        self.currentItem.center = self.currentItemCenter;
+        [self addSubview:self.currentItem];
+        self.currentItem.delegate = self;
+        
+        if (self.dataSource.count == 1) {
+            self.bottomItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource firstObject] index:1 total:self.dataSource.count];
+        }else if (self.dataSource.count == 2){
+            self.bottomItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource lastObject] index:2 total:self.dataSource.count];
+        }else{
+            self.bottomItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource objectAtIndex:1] index:2 total:self.dataSource.count];
+        }
+    }
     
-    self.currentItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource firstObject] index:1 total:self.dataSource.count];
-    self.currentItem.center = self.currentItemCenter;
-    [self addSubview:self.currentItem];
-    self.currentItem.delegate = self;
-    
-    self.bottomItem = [[RDTabScrollItem alloc] initWithFrame:CGRectMake(0, 0, itemWidth, itemHeight) info:[self.dataSource objectAtIndex:1] index:2 total:self.dataSource.count];
     self.bottomItem.center = self.bottomItemCenter;
     [self addSubview:self.bottomItem];
     self.bottomItem.delegate = self;
@@ -400,6 +411,20 @@
 
 - (CreateWealthModel *)nextTempInfo
 {
+    
+    if (self.dataSource.count == 1) {
+        self.currentIndex = 0;
+        return [self.dataSource objectAtIndex:0];
+    }else if (self.dataSource.count == 2) {
+        if (self.currentIndex == 0) {
+            self.currentIndex = 0;
+            return [self.dataSource objectAtIndex:0];
+        }else{
+            self.currentIndex = 1;
+            return [self.dataSource objectAtIndex:1];
+        }
+    }
+    
     if (self.currentIndex >= self.dataSource.count - 2) {
         if (self.currentIndex == self.dataSource.count - 1) {
             return [self.dataSource objectAtIndex:1];
@@ -412,6 +437,19 @@
 
 - (CreateWealthModel *)lastTempInfo
 {
+    if (self.dataSource.count == 1) {
+        self.currentIndex = 0;
+        return [self.dataSource objectAtIndex:0];
+    }else if (self.dataSource.count == 2) {
+        if (self.currentIndex == 0) {
+            self.currentIndex = 0;
+            return [self.dataSource objectAtIndex:0];
+        }else{
+            self.currentIndex = 1;
+            return [self.dataSource objectAtIndex:1];
+        }
+    }
+    
     if (self.currentIndex <= 1) {
         if (self.currentIndex == 0) {
             return [self.dataSource objectAtIndex:self.dataSource.count - 2];

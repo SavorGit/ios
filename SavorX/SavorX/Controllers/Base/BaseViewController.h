@@ -67,6 +67,7 @@
  *  @param view 显示无网络视图的父视图
  */
 -(void)showNoNetWorkViewInView:(UIView *)view;
+- (void)showNoNetWorkViewInView:(UIView *)view centerY:(CGFloat)centerY style:(NoNetWorkViewStyle)style;
 
 #pragma mark - loading的显示方法
 - (void)showLoadingView;

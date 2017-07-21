@@ -35,6 +35,8 @@
 @property (nonatomic, strong) NSURLSessionDataTask * task;
 @property (nonatomic, assign) BOOL isScreen;
 
+@property (nonatomic, assign) BOOL editScreen;
+
 @end
 
 @implementation PhotoManyViewController
@@ -266,14 +268,13 @@
 - (void)addTextOnImage
 {
     [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_add_text" key:nil value:nil];
-    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
     
     PhotoManyCollectionViewCell * cell = [self currentCell];
     
+    self.editScreen = self.isScreen;
     [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
         PhotoManyEditView * view = [[PhotoManyEditView alloc] initWithImage:result title:cell.firstText detail:cell.secondText date:cell.thirdText];
         view.delegate = self;
-        [hud hidden];
         [[UIApplication sharedApplication].keyWindow addSubview:view];
     }];
 }
@@ -291,27 +292,30 @@
     }
     
     if ([GlobalData shared].isBindRD) {
-        if (self.isScreen) {
+        if (self.editScreen) {
             NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
             PHAsset * asset = [self.PHAssetSource objectAtIndex:index];
             NSString * name = asset.localIdentifier;
             
-            if ([GlobalData shared].isBindRD) {
-                [RDPhotoTool compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
+            [RDPhotoTool compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
+                
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
-                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
-                        
-                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
-                            
-                        } failure:^{
-                            
-                        }];
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                    self.navigationItem.rightBarButtonItem.enabled = YES;
+                    self.isScreen = YES;
+                    
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
                         
                     } failure:^{
                         
                     }];
+                    
+                } failure:^{
+                    
                 }];
-            }
+            }];
         }
     }
 }

@@ -77,18 +77,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
         }];
         
-//        [[UIApplication sharedApplication].keyWindow addSubview:self.volumeView];
-//        [self.volumeView mas_remakeConstraints:^(MASConstraintMaker *make) {
-//            make.width.height.mas_equalTo(155);
-//            make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
-//        }];
-        
         // 单击
         self.singleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(viewDidBeSingleClicked)];
         self.singleTap.numberOfTouchesRequired = 1; //手指数
         self.singleTap.numberOfTapsRequired    = 1;
         [self addGestureRecognizer:self.singleTap];
-        [self setPlayItemWithURL:[url stringByAppendingString:@".f30.mp4"]];
         [self configureVolume];
     }
     return self;
@@ -113,9 +106,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)setPlayItemWithURL:(NSString *)url
 {
-    if ([self.currentURL isEqualToString:url]) {
-        return;
-    }
     CMTime time;
     NSString * preCheck = [url substringToIndex:url.length - 8];
     if ([self.currentURL hasPrefix:preCheck]) {
@@ -139,7 +129,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self.player replaceCurrentItemWithPlayerItem:playerItem];
         
         [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-//            [self.player play];
+            
         }];
     }else{
         self.player = [AVPlayer playerWithPlayerItem:playerItem];

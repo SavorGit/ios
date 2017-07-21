@@ -17,6 +17,7 @@ typedef enum
 
 @property (weak,nonatomic) id<NoNetWorkViewDelegate> delegate;
 @property (nonatomic, copy) dispatch_block_t reloadDataBlock;
+@property (weak, nonatomic) IBOutlet UILabel *descLabel;
 
 -(void)showInView:(UIView*)superView style:(NoNetWorkViewStyle)style;
 -(void)hide;

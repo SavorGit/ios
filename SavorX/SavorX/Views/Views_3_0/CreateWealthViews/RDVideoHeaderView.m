@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIImageView * logoImageView;
 @property (nonatomic, strong) UILabel * fromLabel;
 @property (nonatomic, strong) UILabel * timeLabel;
+@property (nonatomic, strong) UILabel * recommandLabel;
 
 @end
 
@@ -74,12 +75,12 @@
         make.width.mas_lessThanOrEqualTo(100);
     }];
     
-    UILabel * label = [[UILabel alloc] init];
-    label.font = kPingFangRegular(15);
-    label.textColor = UIColorFromRGB(0x922c3e);
-    label.text = @"为您推荐";
-    [self addSubview:label];
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.recommandLabel = [[UILabel alloc] init];
+    self.recommandLabel.font = kPingFangRegular(15);
+    self.recommandLabel.textColor = UIColorFromRGB(0x922c3e);
+    self.recommandLabel.text = @"为您推荐";
+    [self addSubview:self.recommandLabel];
+    [self.recommandLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(15);
         make.bottom.mas_equalTo(-10);
         make.size.mas_equalTo(CGSizeMake(100, 15));
@@ -90,15 +91,24 @@
     [self addSubview:lineView];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
-        make.bottom.equalTo(label.mas_top).offset(-16);
+        make.bottom.equalTo(self.recommandLabel.mas_top).offset(-16);
         make.right.mas_equalTo(0);
         make.height.mas_equalTo(8);
     }];
 }
 
+- (void)needRecommand:(BOOL)recommand
+{
+    if (recommand) {
+        self.recommandLabel.hidden = NO;
+    }else{
+        self.recommandLabel.hidden = YES;
+    }
+}
+
 - (void)reloadWithModel:(CreateWealthModel *)model
 {
-    self.titleLabel.text = [model.title stringByAppendingString:@"测试两行测试两行"];
+    self.titleLabel.text = model.title;
     
     CGRect rect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 30, 150) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleLabel.font} context:nil];
     if (rect.size.height > 40) {
