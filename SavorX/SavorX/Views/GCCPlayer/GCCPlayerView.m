@@ -113,6 +113,16 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)setPlayItemWithURL:(NSString *)url
 {
+    if ([self.currentURL isEqualToString:url]) {
+        return;
+    }
+    CMTime time;
+    NSString * preCheck = [url substringToIndex:url.length - 8];
+    if ([self.currentURL hasPrefix:preCheck]) {
+        time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
+    }else{
+        time = kCMTimeZero;
+    }
     self.currentURL = url;
     NSURL * playURL = [NSURL URLWithString:url];
     self.canPlay = NO;
@@ -127,7 +137,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
         [self.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
         [self.player replaceCurrentItemWithPlayerItem:playerItem];
-        [self.player seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+        
+        [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
 //            [self.player play];
         }];
     }else{
