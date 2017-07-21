@@ -47,8 +47,9 @@
     _titleLabel.text = @"标题";
     self.titleLabel.numberOfLines = 2;
     [_bgView addSubview:_titleLabel];
+    CGFloat titleWidth = kMainBoundsWidth - 30 - 130 - 10;
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30 - 130 - 10, 20));
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:titleWidth], 20));
         make.top.mas_equalTo(6);
         make.left.mas_equalTo(15);
     }];
@@ -88,18 +89,23 @@
 
 - (void)configModelData:(CreateWealthModel *)model{
     
-    CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 30) title:model.title font:kPingFangMedium(16)];
+    CGFloat titleWidth = kMainBoundsWidth - 30 - 130 - 7;
+    if (kMainBoundsHeight == 568) {
+        titleWidth = kMainBoundsWidth - 30 - 130 - 8;
+    }
+    CGFloat titleHeight = [self getHeightByWidth:titleWidth title:model.title font:kPingFangMedium(16)];
     if (titleHeight > 30) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 30, 45));
+            make.size.mas_equalTo(CGSizeMake(titleWidth, 45));
         }];
     }
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:model.title];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:0];
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [model.title length])];
-    self.titleLabel.attributedText = attributedString;
-    [self.titleLabel sizeToFit];
+    self.titleLabel.text = model.title;
+//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:model.title];
+//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+//    [paragraphStyle setLineSpacing:0];
+//    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [model.title length])];
+//    self.titleLabel.attributedText = attributedString;
+//    [self.titleLabel sizeToFit];
     
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];

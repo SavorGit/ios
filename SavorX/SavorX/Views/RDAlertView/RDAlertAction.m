@@ -26,9 +26,18 @@
             self.titleLabel.font = kPingFangRegular(16);
             [self setTitleColor:UIColorFromRGB(0x922c3e) forState:UIControlStateNormal];
         }
+        if ([title isEqualToString:@"继续投屏"]) {
+            self.backgroundColor = UIColorFromRGB(0x922c3e);
+        }
         
     }
     return self;
+}
+
+- (void)setBgColor:(UIColor *)color{
+    
+    self.backgroundColor = color;
+    
 }
 
 - (instancetype)initVersionWithTitle:(NSString *)title handler:(void (^)())handler bold:(BOOL)bold

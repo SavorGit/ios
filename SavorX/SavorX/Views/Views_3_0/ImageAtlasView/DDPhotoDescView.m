@@ -13,7 +13,7 @@
 
 #define DescViewDefaultHeight 130
 #define TextViewWidth         kMainBoundsWidth - 65
-#define DistanceToBottom      20
+#define DistanceToBottom      10
 
 @interface DDPhotoDescView()
 
@@ -48,7 +48,7 @@
         
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:TextViewWidth];
         self.frame = CGRectMake(0, 0, kMainBoundsWidth, textViewHeight + DistanceToBottom);
-		self.textView.frame = CGRectMake(50, 0, TextViewWidth, textViewHeight);
+		self.textView.frame = CGRectMake(50, 10, TextViewWidth, textViewHeight);
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	}
@@ -85,7 +85,7 @@
             make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-        self.textView.frame = CGRectMake(50, 0, TextViewWidth, textViewHeight);
+        self.textView.frame = CGRectMake(50, 10, TextViewWidth, textViewHeight);
         
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
@@ -94,7 +94,7 @@
             make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-        self.textView.frame = CGRectMake(50, 0, TextViewWidth, textViewHeight);
+        self.textView.frame = CGRectMake(50, 10, TextViewWidth, textViewHeight);
 
     }
 }

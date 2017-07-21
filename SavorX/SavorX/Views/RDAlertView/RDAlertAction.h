@@ -16,4 +16,6 @@
 
 - (instancetype)initVersionWithTitle:(NSString *)title handler:(void (^)())handler bold:(BOOL)bold;
 
+- (void)setBgColor:(UIColor *)color;
+
 @end
