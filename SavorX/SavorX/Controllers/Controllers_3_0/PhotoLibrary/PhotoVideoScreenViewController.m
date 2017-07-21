@@ -422,6 +422,7 @@
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             
+            [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Video];
             self.isPlaying = YES;
             self.isPlayEnd = NO;
             [self autoPlayButtonStatus];
@@ -448,9 +449,11 @@
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
         }
         [hud hidden];
+        self.playButton.userInteractionEnabled = YES;
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [hud hidden];
         [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+        self.playButton.userInteractionEnabled = YES;
     }];
 }
 

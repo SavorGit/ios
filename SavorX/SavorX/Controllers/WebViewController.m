@@ -24,13 +24,22 @@
 #import "HSImTeRecommendRequest.h"
 #import "VideoTableViewCell.h"
 #import "RDInteractionLoadingView.h"
+#import "RDVideoHeaderView.h"
+#import "RDFavoriteTableViewCell.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
 @property (nonatomic, strong) MPVolumeView * volumeView;
 @property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 @property (nonatomic, assign) BOOL toolViewIsHidden;
+
+@property (nonatomic, assign) BOOL isOnlyVideo; //是否是纯视频
+
+//纯视频
+@property (nonatomic, strong) UITableView * baseTableView; //纯视频展示视图
+
+//非纯视频
+@property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
 @property (nonatomic, strong) UIView * testView;   //底部视图
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
@@ -47,7 +56,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     
-    [self removeObserver];
+    if (!self.isOnlyVideo) {
+        [self removeObserver];
+    }
 }
 
 - (instancetype)initWithModel:(CreateWealthModel *)model categoryID:(NSInteger)categoryID
@@ -64,6 +75,7 @@
     self.dataSource = [[NSMutableArray alloc] initWithCapacity:100];
     
     _isComplete = NO;
+    
     [self createUI];
     [self setUpDatas];
 }
@@ -89,30 +101,7 @@
         make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
     }];
     
-    //初始化webView
-    self.webView = [[UIWebView alloc] init];
-    self.webView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.webView];
-    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.playView.mas_bottom);
-        make.left.mas_equalTo(0);
-        make.width.mas_equalTo(kMainBoundsWidth);
-        make.bottom.mas_equalTo(0);
-    }];
-    self.webView.scrollView.delegate = self;
-    self.webView.delegate = self;
-    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
-    if (!isEmptyString(self.model.contentURL)) {
-        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-        [self.webView loadRequest:request];
-        [MBProgressHUD showWebLoadingHUDInView:self.webView];
-    }
-    self.webView.opaque = NO;
-    
-    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 100)];
-    self.testView.backgroundColor = [UIColor clearColor];
-    [self.webView.scrollView addSubview:self.testView];
-    [self addObserver];
+    [self refreshPageWithModel:self.model];
     
     //添加页面相关的通知监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -123,16 +112,124 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-- (void)reload
+- (void)refreshPageWithModel:(CreateWealthModel *)model
 {
+    self.model = model;
     [self.playView setPlayItemWithURL:[self.model.videoURL stringByAppendingString:@".f30.mp4"]];
-    [self.testView removeFromSuperview];
+    
+    if (model.type == 4) {
+        
+        self.isOnlyVideo = YES;
+        [self refreshWithOnlyVideo];
+        
+    }else{
+        
+        self.isOnlyVideo = NO;
+        [self refreshWithVideo];
+        
+    }
+    
+    [self setUpDatas];
+}
+
+#pragma mark - 非纯视频的页面布局
+- (void)refreshWithVideo
+{
+    if (self.baseTableView.superview) {
+        self.baseTableView.delegate = nil;
+        self.baseTableView.dataSource = nil;
+        [self.baseTableView removeFromSuperview];
+    }
+    
+    if (!self.webView) {
+        [self createWebViewWithVideo];
+    }
+    if (!self.webView.superview) {
+        [self.view addSubview:self.webView];
+        [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.playView.mas_bottom);
+            make.left.mas_equalTo(0);
+            make.width.mas_equalTo(kMainBoundsWidth);
+            make.bottom.mas_equalTo(0);
+        }];
+        self.tableView.delegate = self;
+        self.tableView.dataSource = self;
+        self.webView.scrollView.delegate = self;
+        self.webView.delegate = self;
+        self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
+        [self addObserver];
+    }
     if (!isEmptyString(self.model.contentURL)) {
         NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }
-    [self setUpDatas];
+    
+    [self.dataSource removeAllObjects];
+    [self.tableView reloadData];
+}
+
+- (void)createWebViewWithVideo
+{
+    //初始化webView
+    self.webView = [[UIWebView alloc] init];
+    self.webView.backgroundColor = [UIColor clearColor];
+    self.webView.opaque = NO;
+    
+    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 100)];
+    self.testView.backgroundColor = [UIColor clearColor];
+    [self.webView.scrollView addSubview:self.testView];
+}
+
+#pragma mark - 纯视频的页面布局
+//刷新当前的纯视频视图
+- (void)refreshWithOnlyVideo
+{
+    if (self.webView.superview) {
+        //移除非纯视频播放展示的webView
+        [self.webView removeFromSuperview];
+        [self.testView removeFromSuperview];
+        self.webView.delegate = nil;
+        self.webView.scrollView.delegate = nil;
+        self.tableView.delegate = nil;
+        self.tableView.dataSource = nil;
+        [self removeObserver];
+    }
+    
+    //添加纯视频播放页面的推荐列表
+    if (!self.baseTableView) {
+        [self createTableViewWithOnlyVideo];
+    }
+    if (!self.baseTableView.superview) {
+        [self.view addSubview:self.baseTableView];
+        [self.baseTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.playView.mas_bottom).offset(0);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.bottom.mas_equalTo(0);
+        }];
+        self.baseTableView.dataSource = self;
+        self.baseTableView.delegate = self;
+    }
+    
+    //添加用户右滑退出该页面的手势操作
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.baseTableView;
+    RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
+    [headerView reloadWithModel:self.model];
+    
+    [self.dataSource removeAllObjects];
+    [self.baseTableView reloadData];
+}
+
+- (void)createTableViewWithOnlyVideo
+{
+    self.baseTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStyleGrouped];
+    self.baseTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.baseTableView.clipsToBounds = YES;
+    self.baseTableView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    
+    RDVideoHeaderView * headerView = [[RDVideoHeaderView alloc] init];
+    self.baseTableView.tableHeaderView = headerView;
 }
 
 //当手机连接到机顶盒
@@ -501,8 +598,12 @@
         }
         // 当返回有推荐数据时调用
         if (self.dataSource.count > 0) {
-            [self footViewShouldBeReset];
-            [self.tableView reloadData];
+            if (self.isOnlyVideo) {
+                [self.baseTableView reloadData];
+            }else{
+                [self footViewShouldBeReset];
+                [self.tableView reloadData];
+            }
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -588,9 +689,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellID = @"videoTableCell";
-    VideoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    RDFavoriteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (cell == nil) {
-        cell = [[VideoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell = [[RDFavoriteTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -599,11 +700,11 @@
     
     //最后一条分割线隐藏
     if (indexPath.row == self.dataSource.count - 1) {
-        cell.lineView.hidden = YES;
+        
     }
     
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
-    [cell configModelData:model];
+    [cell configWithModel:model];
     
     return cell;
 }
@@ -611,13 +712,12 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 285.f;
+    return 96.f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
-    self.model = tmpModel;
-    [self reload];
+    [self refreshPageWithModel:tmpModel];
 }
 
 @end

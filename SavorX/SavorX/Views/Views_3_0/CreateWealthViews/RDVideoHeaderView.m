@@ -1,0 +1,157 @@
+//
+//  RDVideoHeaderView.m
+//  SavorX
+//
+//  Created by 郭春城 on 2017/7/21.
+//  Copyright © 2017年 郭春城. All rights reserved.
+//
+
+#import "RDVideoHeaderView.h"
+#import "UIImageView+WebCache.h"
+
+@interface RDVideoHeaderView ()
+
+@property (nonatomic, strong) UILabel * titleLabel;
+@property (nonatomic, strong) UIImageView * logoImageView;
+@property (nonatomic, strong) UILabel * fromLabel;
+@property (nonatomic, strong) UILabel * timeLabel;
+
+@end
+
+@implementation RDVideoHeaderView
+
+- (instancetype)init
+{
+    if (self = [super initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 140)]) {
+        [self createHeaderView];
+    }
+    return self;
+}
+
+- (void)createHeaderView
+{
+    self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel.font = kPingFangMedium(23);
+    self.titleLabel.textColor = UIColorFromRGB(0x434343);
+    self.titleLabel.numberOfLines = 2;
+    [self addSubview:self.titleLabel];
+    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(20);
+        make.left.mas_equalTo(15);
+        make.right.mas_equalTo(-15);
+        make.height.mas_equalTo(35);
+    }];
+    
+    self.logoImageView = [[UIImageView alloc] init];
+    self.logoImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self addSubview:self.logoImageView];
+    [self.logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.titleLabel.mas_bottom).offset(13);
+        make.left.mas_equalTo(15);
+        make.width.mas_equalTo(22.5);
+        make.height.mas_equalTo(22.5);
+    }];
+    
+    self.fromLabel = [[UILabel alloc] init];
+    self.fromLabel.font = kPingFangLight(11);
+    self.fromLabel.textColor = UIColorFromRGB(0x898886);
+    [self addSubview:self.fromLabel];
+    [self.fromLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.titleLabel.mas_bottom).offset(20);
+        make.left.equalTo(self.logoImageView.mas_right).offset(6);
+        make.height.mas_equalTo(12);
+        make.width.mas_lessThanOrEqualTo(100);
+    }];
+    
+    self.timeLabel = [[UILabel alloc] init];
+    self.timeLabel.font = kPingFangLight(10);
+    self.timeLabel.textColor = UIColorFromRGB(0xb2afab);
+    [self addSubview:self.timeLabel];
+    [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.titleLabel.mas_bottom).offset(20.5);
+        make.left.equalTo(self.fromLabel.mas_right).offset(10);
+        make.height.mas_equalTo(11);
+        make.width.mas_lessThanOrEqualTo(100);
+    }];
+    
+    UILabel * label = [[UILabel alloc] init];
+    label.font = kPingFangRegular(15);
+    label.textColor = UIColorFromRGB(0x922c3e);
+    label.text = @"为您推荐";
+    [self addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(15);
+        make.bottom.mas_equalTo(-10);
+        make.size.mas_equalTo(CGSizeMake(100, 15));
+    }];
+    
+    UIView * lineView = [[UIView alloc] init];
+    lineView.backgroundColor = UIColorFromRGB(0xece6de);
+    [self addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.bottom.equalTo(label.mas_top).offset(-16);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(8);
+    }];
+}
+
+- (void)reloadWithModel:(CreateWealthModel *)model
+{
+    self.titleLabel.text = [model.title stringByAppendingString:@"测试两行测试两行"];
+    
+    CGRect rect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 30, 150) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleLabel.font} context:nil];
+    if (rect.size.height > 40) {
+        CGRect frame = self.frame;
+        frame.size.height = 180;
+        self.frame = frame;
+        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(70);
+        }];
+    }else{
+        CGRect frame = self.frame;
+        frame.size.height = 140;
+        self.frame = frame;
+        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(35);
+        }];
+    }
+    
+    [self.logoImageView sd_setImageWithURL:[NSURL URLWithString:model.logo]];
+    if (isEmptyString(model.logo)) {
+        [self.fromLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(20);
+            make.left.equalTo(self.logoImageView.mas_left).offset(0);
+            make.height.mas_equalTo(12);
+            make.width.mas_lessThanOrEqualTo(100);
+        }];
+    }else{
+        [self.fromLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(20);
+            make.left.equalTo(self.logoImageView.mas_right).offset(6);
+            make.height.mas_equalTo(12);
+            make.width.mas_lessThanOrEqualTo(100);
+        }];
+    }
+    
+    self.fromLabel.text = model.sourceName;
+    if (isEmptyString(model.sourceName)) {
+        [self.timeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(20.5);
+            make.left.equalTo(self.fromLabel.mas_left).offset(0);
+            make.height.mas_equalTo(11);
+            make.width.mas_lessThanOrEqualTo(100);
+        }];
+    }else{
+        [self.timeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(20.5);
+            make.left.equalTo(self.fromLabel.mas_right).offset(10);
+            make.height.mas_equalTo(11);
+            make.width.mas_lessThanOrEqualTo(100);
+        }];
+    }
+    
+    self.timeLabel.text = model.updateTime;
+}
+
+@end
