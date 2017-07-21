@@ -51,6 +51,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, assign) BOOL isVolume; //记录当前是否在调节时间
 @property (nonatomic, strong) UIImageView * imageView;
 
+@property (nonatomic, assign) CMTime time;
+
 @end
 
 @implementation GCCPlayerView
@@ -89,6 +91,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)backgroundImage:(NSString *)url
 {
+    [self pause];
+    [self.controlView setSliderValue:0.f];
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     [self insertSubview:self.imageView belowSubview:self.controlView];
     [self.controlView backgroundImage:url];
@@ -96,7 +100,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         make.edges.mas_equalTo(0);
     }];
     
+    if ([self.imageView viewWithTag:6666]) {
+        [[self.imageView viewWithTag:6666] removeFromSuperview];
+    }
     UIView * view = [[UIView alloc] initWithFrame:CGRectZero];
+    view.tag = 6666;
     view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.3f];
     [self.imageView addSubview:view];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -106,12 +114,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)setPlayItemWithURL:(NSString *)url
 {
-    CMTime time;
     NSString * preCheck = [url substringToIndex:url.length - 8];
     if ([self.currentURL hasPrefix:preCheck]) {
-        time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
+        self.time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
     }else{
-        time = kCMTimeZero;
+        self.time = kCMTimeZero;
     }
     self.currentURL = url;
     NSURL * playURL = [NSURL URLWithString:url];
@@ -127,10 +134,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
         [self.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
         [self.player replaceCurrentItemWithPlayerItem:playerItem];
-        
-        [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-            
-        }];
     }else{
         self.player = [AVPlayer playerWithPlayerItem:playerItem];
     }
@@ -191,6 +194,10 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         if ([keyPath isEqualToString:@"status"]) {
             
             if (self.player.currentItem.status == AVPlayerItemStatusReadyToPlay) {
+                [self.player seekToTime:self.time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+                    
+                }];
+                
                 //最开始播放
                 self.canPlay = YES;
                 CGFloat totalTime = self.player.currentItem.duration.value / self.player.currentItem.duration.timescale;

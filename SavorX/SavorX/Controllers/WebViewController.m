@@ -75,13 +75,17 @@
 
 - (void)checkIsOnline
 {
+    [self showLoadingView];
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self readyToGo];
+        [self hiddenLoadingView];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self showNoDataViewInView:self.view noDataString:@"啊哦~页面跑丢了"];
+        [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        [self hiddenLoadingView];
     }];
 }
 
@@ -129,7 +133,9 @@
 - (void)refreshPageWithModel:(CreateWealthModel *)model
 {
     self.model = model;
+    [self.playView setVideoTitle:self.model.title];
     [self.playView setPlayItemWithURL:[self.model.videoURL stringByAppendingString:@".f30.mp4"]];
+    [self.playView backgroundImage:self.model.imageURL];
     
     if (model.type == 4) {
         
