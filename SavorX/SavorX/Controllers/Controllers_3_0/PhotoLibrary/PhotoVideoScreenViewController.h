@@ -6,9 +6,9 @@
 //  Copyright © 2017年 郭春城. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "BaseViewController.h"
 
-@interface PhotoVideoScreenViewController : UIViewController
+@interface PhotoVideoScreenViewController : BaseViewController
 
 - (instancetype)initWithVideoFileURL:(NSString *)url;
 

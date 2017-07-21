@@ -190,7 +190,7 @@
             
             self.imageView.alpha = 0.0;
             [UIView transitionWithView:self.imageView
-                              duration:1.0f
+                              duration:0.15f
                                options:UIViewAnimationOptionTransitionNone
                             animations:^{
                                 [self.imageView setImage:image];

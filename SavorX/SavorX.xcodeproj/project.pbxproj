@@ -137,6 +137,8 @@
 		0663D45B1F0B8A1500CD2FA2 /* RDPhotoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */; };
 		0664ADC81F1464C400A720A1 /* RDHomeStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0664ADC71F1464C400A720A1 /* RDHomeStatusView.m */; };
 		067BFF5B1F2194BE00D9CE74 /* RDVideoHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 067BFF5A1F2194BE00D9CE74 /* RDVideoHeaderView.m */; };
+		067BFF5E1F22160A00D9CE74 /* RDIsOnline.m in Sources */ = {isa = PBXBuildFile; fileRef = 067BFF5D1F22160A00D9CE74 /* RDIsOnline.m */; };
+		067BFF611F2216A400D9CE74 /* RDIsDemand.m in Sources */ = {isa = PBXBuildFile; fileRef = 067BFF601F2216A400D9CE74 /* RDIsDemand.m */; };
 		067C30E31F13AECE000A1150 /* HSDemandListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 067C30E21F13AECE000A1150 /* HSDemandListRequest.m */; };
 		067C30E91F13AF6A000A1150 /* HSSmashEggsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 067C30E81F13AF6A000A1150 /* HSSmashEggsModel.m */; };
 		067C30EC1F13AF8E000A1150 /* HSSmashEggsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 067C30EB1F13AF8E000A1150 /* HSSmashEggsRequest.m */; };
@@ -532,6 +534,10 @@
 		0664ADC71F1464C400A720A1 /* RDHomeStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHomeStatusView.m; sourceTree = "<group>"; };
 		067BFF591F2194BE00D9CE74 /* RDVideoHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDVideoHeaderView.h; sourceTree = "<group>"; };
 		067BFF5A1F2194BE00D9CE74 /* RDVideoHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDVideoHeaderView.m; sourceTree = "<group>"; };
+		067BFF5C1F22160A00D9CE74 /* RDIsOnline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDIsOnline.h; sourceTree = "<group>"; };
+		067BFF5D1F22160A00D9CE74 /* RDIsOnline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDIsOnline.m; sourceTree = "<group>"; };
+		067BFF5F1F2216A400D9CE74 /* RDIsDemand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDIsDemand.h; sourceTree = "<group>"; };
+		067BFF601F2216A400D9CE74 /* RDIsDemand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDIsDemand.m; sourceTree = "<group>"; };
 		067C30E11F13AECE000A1150 /* HSDemandListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSDemandListRequest.h; sourceTree = "<group>"; };
 		067C30E21F13AECE000A1150 /* HSDemandListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSDemandListRequest.m; sourceTree = "<group>"; };
 		067C30E71F13AF6A000A1150 /* HSSmashEggsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSSmashEggsModel.h; sourceTree = "<group>"; };
@@ -2232,6 +2238,10 @@
 				96D8C5D81F13704900251301 /* HSPicDetailRequest.m */,
 				96D8C5E61F146AE200251301 /* HSCreateWealthRequest.h */,
 				96D8C5E71F146AE200251301 /* HSCreateWealthRequest.m */,
+				067BFF5C1F22160A00D9CE74 /* RDIsOnline.h */,
+				067BFF5D1F22160A00D9CE74 /* RDIsOnline.m */,
+				067BFF5F1F2216A400D9CE74 /* RDIsDemand.h */,
+				067BFF601F2216A400D9CE74 /* RDIsDemand.m */,
 			);
 			path = CreateWealthNet;
 			sourceTree = "<group>";
@@ -2669,6 +2679,7 @@
 				96D8C5C51F0F66F200251301 /* SpecialTopTableViewCell.m in Sources */,
 				478058351DF989850091C305 /* ConverUtil.m in Sources */,
 				47F9976D1DFFBC910009BDFB /* BaseCell.m in Sources */,
+				067BFF5E1F22160A00D9CE74 /* RDIsOnline.m in Sources */,
 				060DB0B41D5B26F9002A2DED /* UIColor+YYAdditions.m in Sources */,
 				0633FB231D82D4480079EF21 /* UIImage+Custom.m in Sources */,
 				478058371DF989850091C305 /* Helper.m in Sources */,
@@ -2702,6 +2713,7 @@
 				061E0FD11DFFD9A40072605F /* DeviceModel.m in Sources */,
 				4772FF8C1DFA570D00758697 /* UIView+Additional.m in Sources */,
 				0639D19C1F1772AD00AC69AC /* RDLoadingView.m in Sources */,
+				067BFF611F2216A400D9CE74 /* RDIsDemand.m in Sources */,
 				96D8C5CC1F0F75AC00251301 /* SpecialTopDetailViewController.m in Sources */,
 				0627E0B31E32111500DAED92 /* LeftTableHeaderView.m in Sources */,
 				96D8C5FD1F1613DC00251301 /* HSImTeRecommendRequest.m in Sources */,

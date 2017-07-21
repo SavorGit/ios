@@ -39,6 +39,8 @@
 @property (nonatomic, strong)NSMutableArray *scrollObjecArr;
 @property (assign, nonatomic) NSUInteger currentImageIndex;
 
+@property (nonatomic, assign) BOOL isReady;
+
 @end
 
 @implementation ImageAtlasDetailViewController
@@ -51,8 +53,14 @@
 
 - (void)viewDidLoad
 {
-    [self initInfoConfig];
-    [self.view addSubview:self.topView];
+    self.isReady = NO;
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    _isComplete = NO;
+    self.scrollObjecArr = [[NSMutableArray alloc] initWithCapacity:100];
+    self.imageDatas = [[NSMutableArray alloc] initWithCapacity:100];
+    
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     //2650
     [self requestWithContentId:self.imgAtlModel.artid];
 }
@@ -64,21 +72,40 @@
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self hiddenLoadingView];
-        NSArray *resultArr = [response objectForKey:@"result"];
-        for (int i = 0; i < resultArr.count; i ++) {
-            ImageAtlasDetailModel *imageAtlModel = [[ImageAtlasDetailModel alloc] initWithDictionary:resultArr[i]];
-            [self.imageDatas addObject:imageAtlModel];
+        
+        if ([response objectForKey:@"result"]) {
+            NSArray *resultArr = [response objectForKey:@"result"];
+            if (resultArr && resultArr.count > 0) {
+                for (int i = 0; i < resultArr.count; i ++) {
+                    ImageAtlasDetailModel *imageAtlModel = [[ImageAtlasDetailModel alloc] initWithDictionary:resultArr[i]];
+                    [self.imageDatas addObject:imageAtlModel];
+                }
+                [self creatSubViews];
+            }else{
+                [self showNoDataViewInView:self.view noDataString:@"啊哦~页面跑丢了"];
+            }
+        }else{
+            [self showNoDataViewInView:self.view noDataString:@"啊哦~页面跑丢了"];
         }
-        [self creatSubViews];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self showNoDataViewInView:self.view noDataString:@"啊哦~页面跑丢了"];
         [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
         [self hiddenLoadingView];
     }];
 }
 
+- (void)retryToGetData
+{
+    [self requestWithContentId:self.imgAtlModel.artid];
+}
+
 - (void)creatSubViews{
+    
+    [self initInfoConfig];
+    [self.view addSubview:self.topView];
     
     [self.view addSubview:self.imageScrollView];
     [self.imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -93,15 +120,13 @@
     [self.view addSubview:self.topView];
     [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
     
+    self.isReady = YES;
+    
 }
 
 - (void)initInfoConfig{
     
     self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    _isComplete = NO;
-    self.scrollObjecArr = [[NSMutableArray alloc] initWithCapacity:100];
-    self.imageDatas = [[NSMutableArray alloc] initWithCapacity:100];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     // app退到后台
@@ -420,13 +445,24 @@ static int temp = -1;
     return self.isDisappear;
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    if (self.isReady) {
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }else{
+        return UIInterfaceOrientationMaskPortrait;
+    }
+}
+
 - (void)dealloc
 {
     temp = -1;
-    [self removeObserver:self forKeyPath:@"currentPage"];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    if (self.isReady) {
+        [self removeObserver:self forKeyPath:@"currentPage"];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
