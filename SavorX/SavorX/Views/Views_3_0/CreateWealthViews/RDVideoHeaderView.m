@@ -108,7 +108,7 @@
 
 - (void)reloadWithModel:(CreateWealthModel *)model
 {
-    self.titleLabel.text = [model.title stringByAppendingString:@"测试两行测试两行"];
+    self.titleLabel.text = model.title;
     
     CGRect rect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 30, 150) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleLabel.font} context:nil];
     if (rect.size.height > 40) {

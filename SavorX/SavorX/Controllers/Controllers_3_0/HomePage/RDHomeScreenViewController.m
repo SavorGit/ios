@@ -63,13 +63,24 @@
             }
             
         }
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkViewInView:self.topView centerY:-80 style:NoNetWorkViewStyle_Load_Fail];
+        }
         [self createUI];
         [loadingView hiddenLoaingAnimation];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [loadingView hiddenLoaingAnimation];
+        [self showNoNetWorkViewInView:self.topView centerY:-80 style:NoNetWorkViewStyle_No_NetWork];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [loadingView hiddenLoaingAnimation];
+        [self showNoNetWorkViewInView:self.topView centerY:-80 style:NoNetWorkViewStyle_Load_Fail];
     }];
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self setupDatas];
 }
 
 - (void)createUI
@@ -94,7 +105,7 @@
     
     CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 20 + 59 + 40 + 40;
     
-    self.topView = [[UIView alloc] init];
+    self.topView = [[UIView alloc] initWithFrame:CGRectMake(0, kNaviBarHeight + kStatusBarHeight, kMainBoundsWidth, height)];
     [self.view addSubview:self.topView];
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);

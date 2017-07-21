@@ -183,6 +183,15 @@
     [self showNoNetWorkViewInView:view frame:view.bounds];
 }
 
+- (void)showNoNetWorkViewInView:(UIView *)view centerY:(CGFloat)centerY style:(NoNetWorkViewStyle)style
+{
+    CGRect frame = view.bounds;
+    
+    frame.size.height -= centerY;
+    
+    [self showNoNetWorkViewInView:view frame:frame style:style];
+}
+
 - (void)showNoNetWorkViewInView:(UIView *)view frame:(CGRect)frame{
     NoNetWorkViewStyle style = NoNetWorkViewStyle_No_NetWork;
     AFNetworkReachabilityStatus networkStatus = [AFNetworkReachabilityManager sharedManager].networkReachabilityStatus;
