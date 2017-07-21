@@ -92,13 +92,17 @@
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.tableView.mj_header endRefreshing];
-        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        if (self.dataSource == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        }
         [self showTopFreshLabelWithTitle:@"数据加载超时"];
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         [self.tableView.mj_header endRefreshing];
-        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        if (self.dataSource == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        }
         [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
         
     }];

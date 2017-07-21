@@ -32,6 +32,7 @@
 
 @implementation DocumentListViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -58,6 +59,13 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    
+    if (self.dataSource.count != 0) {
+        if (self.webView) {
+            [self.webView removeFromSuperview];
+        }
+    }
+    
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_list" key:nil value:nil];
 }
 
@@ -75,19 +83,6 @@
     
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"]];
     [self.webView loadRequest:request];
-    
-//    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-//    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
-//    effectView .frame = CGRectMake(0, 0, 152, 36);
-//    [self.webView addSubview:effectView ];
-//    effectView.alpha = 1;
-//
-//    self.toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight)];
-//    self.toolbar.alpha = 1;
-//    self.toolbar.barStyle = UIBarStyleBlack;
-//    [self.webView addSubview:self.toolbar];
-
-
 }
 
 - (void)shouldPushHelp
@@ -192,6 +187,11 @@
         if (view2) {
             [view2 removeFromSuperview];
         }
+        if (self.dataSource.count != 0) {
+            if (self.webView) {
+                [self.webView removeFromSuperview];
+            }
+        }
         [self.tableView reloadData];
     }
 }
@@ -206,7 +206,7 @@
 - (void)createUI
 {
     [self createDataSource];
-    
+
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreen_Width, kScreen_Height - NavHeight) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -321,7 +321,7 @@
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 [self demandVideoWithMediaPath:mediaPath force:1 video:video movieUrl:movieURL];
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"file"} ];
-            } bold:NO];
+            } bold:YES];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
             

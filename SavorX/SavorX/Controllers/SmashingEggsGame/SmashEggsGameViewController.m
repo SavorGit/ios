@@ -45,6 +45,7 @@
 @property (nonatomic, strong) NSURL *videoUrl;
 @property (nonatomic, weak) RDHammer * hammer;
 @property (nonatomic, strong) HSSmashEggsModel *smashEggsModel;
+@property (nonatomic, assign) BOOL isConfigure;
 
 @end
 
@@ -58,6 +59,7 @@
     [self creatBgVoiceWithLoops:-1];
     [_player play];
     
+    _isConfigure = NO;
     [self requestEggsInfor];
  
 }
@@ -79,12 +81,18 @@
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary *resultDic = [response objectForKey:@"result"];
+        NSDictionary *awardDic = resultDic[@"award"];
         
-        if ([[resultDic objectForKey:@"lottery_num"] count] != 0) {
+        if ([awardDic objectForKey:@"lottery_num"] != 0) {
             
             _smashEggsModel = [[HSSmashEggsModel alloc] initWithDictionary:[resultDic objectForKey:@"award"]];
             [RDAwardTool awardSaveAwardNumber:_smashEggsModel.lottery_num];
             _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
+            _isConfigure = YES;
+        }
+        else  if ([resultDic objectForKey:@"award"] == nil){
+            
+            _isConfigure = NO;
         }
 
         
@@ -313,6 +321,19 @@
 - (void)RDGoldenEggs:(RDGoldenEggs *)eggsView didSelectEggWithIndex:(NSInteger)index
 {
     [SAVORXAPI postUMHandleWithContentId:@"game_page_choose" key:nil value:nil];
+    
+    // 先判断有没有配置信息
+    if (_isConfigure == NO) {
+        
+        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"该酒楼暂时没有抽奖活动~"];
+        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+            
+        } bold:YES];
+        [alertView addActions:@[action]];
+        [alertView show];
+        return;
+
+    }
     
     if ([RDAwardTool awardCanAwardWithAPILottery_num:_smashEggsModel.lottery_num] == NO) {
         RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"今天的抽奖机会用完了\n明天再来吧~"];
@@ -635,7 +656,9 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([[self.shouldDemandDict objectForKey:@"should"] boolValue]) {
-        [self requestForEggsNetWork];
+        if (([GlobalData shared].isBindRD)) {
+            [self requestForEggsNetWork];
+        }
         [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     }
 }
