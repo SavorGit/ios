@@ -75,14 +75,20 @@
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
     self.webView.scrollView.delegate = self;
 
-    if ([GlobalData shared].isBindRD) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
-        self.isScreen = YES;
-    }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
-        [SAVORXAPI showConnetToTVAlert:@"doc"];
-        self.isScreen = NO;
-    }
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.isScreen = NO;
+    
+//    if (![GlobalData shared].isBindRD) {
+//        [SAVORXAPI showConnetToTVAlert:@"doc"];
+//    }
+//    if ([GlobalData shared].isBindRD) {
+//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
+//        self.isScreen = YES;
+//    }else{
+//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+//        [SAVORXAPI showConnetToTVAlert:@"doc"];
+//        self.isScreen = NO;
+//    }
     
     self.lockButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.lockButton setBackgroundImage:[UIImage imageNamed:@"suoping"] forState:UIControlStateNormal];
@@ -124,8 +130,8 @@
 
 - (void)ApplicationDidBindToDevice
 {
-    self.isScreen = YES;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
+    self.isScreen = NO;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
 }
 
 - (void)stopScreenDocment:(BOOL)fromHomeType
@@ -258,6 +264,10 @@
                 self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
                     if (successBlock) {
                         successBlock();
+                        if (_isScreen == NO) {
+                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
+                            self.isScreen = YES;
+                        }
                     }
                     self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
                         
@@ -284,6 +294,9 @@
                     }else{
                         if (error.code != -999) {
                             [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+                        }else{
+                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+                            self.isScreen = NO;
                         }
                     }
                 }];
@@ -346,7 +359,7 @@
 {
     [super viewDidAppear:animated];
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    if (self.isScreen) {
+    if ([GlobalData shared].isBindRD) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self screenButtonDidClickedWithSuccess:^{
             
@@ -362,6 +375,8 @@
                 [[RDHomeStatusView defaultView] stopScreen];
             }];
         });
+    }else{
+        [SAVORXAPI showConnetToTVAlert:@"doc"];
     }
 }
 
