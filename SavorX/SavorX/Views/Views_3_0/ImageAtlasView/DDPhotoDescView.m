@@ -15,7 +15,7 @@
 #define TextViewWidth         kMainBoundsWidth - 65
 #define DistanceToBottom      20
 
-@interface DDPhotoDescView()
+@interface DDPhotoDescView()<UITextViewDelegate>
 
 @property (nonatomic, strong) UITextView *textView;
 @property (nonatomic, strong) RDTabScrollViewPage * page;
@@ -44,6 +44,8 @@
 		self.textView.font = kPingFangLight(16);
         self.textView.textAlignment = NSTextAlignmentLeft;
         self.textView.userInteractionEnabled = NO;
+        self.textView.editable = YES;
+        self.textView.delegate = self;
         [self addSubview:self.textView];
         
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:TextViewWidth];
@@ -97,6 +99,11 @@
         self.textView.frame = CGRectMake(50, 0, TextViewWidth, textViewHeight);
 
     }
+}
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    return NO;
 }
 
 @end
