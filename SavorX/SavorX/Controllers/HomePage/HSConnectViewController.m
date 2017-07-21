@@ -145,6 +145,7 @@
     self.textLabel.textColor = UIColorFromRGB(0xece6de);
     self.textLabel.backgroundColor = [UIColor clearColor];
     [bottomView addSubview:self.textLabel];
+    self.textLabel.hidden = NO;
     [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:kMainBoundsWidth - 40] ,[Helper autoHeightWith:30] ));
         make.top.mas_equalTo([Helper autoHeightWith:95]);
@@ -167,12 +168,12 @@
     [self.failConectLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         if (kMainBoundsHeight == 568) {
             make.centerX.mas_equalTo(-40);
-            make.top.mas_equalTo([Helper autoHeightWith:95]);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:90], [Helper autoHeightWith:30]));
+            make.top.mas_equalTo([Helper autoHeightWith:100]);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:90], [Helper autoHeightWith:20]));
         }else{
             make.centerX.mas_equalTo(-50);
-            make.top.mas_equalTo([Helper autoHeightWith:95]);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:30]));
+            make.top.mas_equalTo([Helper autoHeightWith:100]);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:20]));
         }
     }];
     
@@ -192,12 +193,12 @@
     [self.reConnectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         if (kMainBoundsHeight == 568) {
             make.centerX.mas_equalTo(40);
-            make.top.mas_equalTo([Helper autoHeightWith:95]);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:90], [Helper autoHeightWith:30]));
+            make.top.mas_equalTo([Helper autoHeightWith:100]);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:90], [Helper autoHeightWith:20]));
         }else{
-            make.centerX.mas_equalTo(50);
-            make.top.mas_equalTo([Helper autoHeightWith:95]);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:100], [Helper autoHeightWith:30]));
+            make.centerX.mas_equalTo(45);
+            make.top.mas_equalTo([Helper autoHeightWith:100]);
+            make.size.mas_equalTo(CGSizeMake(80, [Helper autoHeightWith:20]));
         }
     }];
     
@@ -207,13 +208,13 @@
     self.lineView.hidden = YES;
     [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         if (kMainBoundsHeight == 568) {
-            make.centerX.mas_equalTo(38);
-            make.top.mas_equalTo(self.reConnectBtn.mas_bottom).offset(-7);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:55], 1));
+            make.centerX.mas_equalTo(37);
+            make.top.mas_equalTo(self.reConnectBtn.mas_bottom).offset(0);
+            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:80], 1));
         }else{
-            make.centerX.mas_equalTo(46);
-            make.top.mas_equalTo(self.reConnectBtn.mas_bottom).offset(-7);
-            make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:64], 1));
+            make.centerX.mas_equalTo(42);
+            make.top.mas_equalTo(self.reConnectBtn.mas_bottom).offset(0);
+            make.size.mas_equalTo(CGSizeMake(72, 1));
         }
     }];
 

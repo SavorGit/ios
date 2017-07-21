@@ -29,6 +29,8 @@
 @property (nonatomic, strong) NSArray  *shareBtnTitleArray;
 //	所有图片
 @property (nonatomic, strong) NSArray  *shareBtnImageArray;
+//	所有类型
+@property (nonatomic, strong) NSArray  *shareTypeArray;
 //	整个底部分享面板
 @property (nonatomic, strong) UIView   *bgView;
 //	分享面板取消按钮上部的 View
@@ -37,8 +39,6 @@
 @property (nonatomic, strong) UIButton *cancelBtn;
 //	所有的分享按钮
 @property (nonatomic, copy) NSMutableArray *buttons;
-
-@property(nonatomic ,assign) NSInteger startIndex;
 
 @property(nonatomic ,strong) CreateWealthModel *model;
 
@@ -78,39 +78,37 @@
     
     NSMutableArray *titlearr = [NSMutableArray arrayWithCapacity:5];
     NSMutableArray *imageArr = [NSMutableArray arrayWithCapacity:5];
-    
-    int startIndex = 0;
+    NSMutableArray *typeArr = [NSMutableArray arrayWithCapacity:5];
     
     if (hadInstalledWeixin) {
         [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
         [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
-    } else {
-        startIndex += 2;
-    }
-    
-    if (hadInstalledWeixin) {
-        [titlearr addObjectsFromArray:@[@"微信收藏"]];
-        [imageArr addObjectsFromArray:@[@"fx_wxsc"]];
-    } else {
-        startIndex += 1;
+        [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_WechatSession],[NSNumber numberWithInteger:UMSocialPlatformType_WechatTimeLine]]];
     }
     
     if (hadInstalledQQ) {
         [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
         [imageArr addObjectsFromArray:@[@"qq",@"fx_Zone"]];
-    } else {
-        startIndex += 2;
+        [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_QQ],[NSNumber numberWithInteger:UMSocialPlatformType_Qzone]]];
     }
     
     [titlearr addObjectsFromArray:@[@"微博"]];
     [imageArr addObjectsFromArray:@[@"weibo"]];
+    [typeArr addObject:[NSNumber numberWithInteger:UMSocialPlatformType_Sina]];
+    
+    if (hadInstalledWeixin) {
+        [titlearr addObjectsFromArray:@[@"微信收藏"]];
+        [imageArr addObjectsFromArray:@[@"fx_wxsc"]];
+        [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_WechatFavorite]]];
+    }
     
     [titlearr addObjectsFromArray:@[@"复制链接"]];
     [imageArr addObjectsFromArray:@[@"fuzhilianjie"]];
-    
-    _startIndex = startIndex;
+    [typeArr addObject:[NSNumber numberWithInteger:UMSocialPlatformType_UnKnown]];
+
     _shareBtnTitleArray = titlearr;
     _shareBtnImageArray = imageArr;
+    _shareTypeArray = typeArr;
 }
 
 //加载自定义视图，按钮的tag依次为（200 + i）
@@ -140,7 +138,8 @@
         CGRect frame =  CGRectMake(x, y, w, h);
         ImageWithLabel *item = [ImageWithLabel imageLabelWithFrame:frame Image:[UIImage imageNamed:self.shareBtnImageArray[i]] LabelText:self.shareBtnTitleArray[i]];
         item.labelOffsetY = 10;
-        item.tag = 200 + i;
+        UMSocialPlatformType type = [[self.shareTypeArray objectAtIndex:i] integerValue];
+        item.tag = 200 + type;
         [item setLabelColor:UIColorFromRGB(0x595757)];
         [item setLabelFont:kPingFangLight(12)];
         UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(itemClick:)];
@@ -175,52 +174,52 @@
 #pragma mark ---分享按钮点击
 - (void)itemClick:(UITapGestureRecognizer *)tapGes {
     
-    NSString *categroyIDStr = [NSString stringWithFormat:@"%ld",self.categoryID];
-    
     [self tappedCancel];
-    NSInteger btnTag = tapGes.view.tag - 200;
-    switch (btnTag + _startIndex) {
-        case 0: {
+    NSString *categroyIDStr = [NSString stringWithFormat:@"%ld",self.categoryID];
+
+    UMSocialPlatformType type = tapGes.view.tag - 200;
+    switch (type) {
+        case UMSocialPlatformType_WechatSession: {
             // 微信
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model];
             
         }
             break;
-        case 1: {
+        case UMSocialPlatformType_WechatTimeLine: {
             // 微信朋友圈
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_friends"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model];
         }
             break;
-        case 3: {
+        case UMSocialPlatformType_QQ: {
             // QQ
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model];
             
         }
             break;
-        case 4: {
+        case UMSocialPlatformType_Qzone: {
             // QQ空间
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq_zone"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Qzone andController:self.VC withModel:self.model];
         }
             break;
-        case 5: {
+        case UMSocialPlatformType_Sina: {
             // 微博
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"sina"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model];
             
         }
             break;
-        case 2: {
+        case UMSocialPlatformType_WechatFavorite: {
             // 微信收藏
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_collection"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatFavorite andController:self.VC withModel:self.model];
             
         }
             break;
-        case 6: {
+        case UMSocialPlatformType_UnKnown: {
             // 复制链接
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = self.model.contentURL;

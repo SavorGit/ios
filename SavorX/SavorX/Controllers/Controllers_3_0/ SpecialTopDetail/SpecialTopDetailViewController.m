@@ -139,15 +139,15 @@
     if (self.testView.superview) {
         [self.testView removeFromSuperview];
     }
-    CGFloat theight =140;
+    CGFloat theight =100;
     CGFloat height = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
-    frame.origin.y = height + 10;
+    frame.origin.y = height;
     
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
-    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 10 )];
+    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight )];
     
     [self addObserver];
     
