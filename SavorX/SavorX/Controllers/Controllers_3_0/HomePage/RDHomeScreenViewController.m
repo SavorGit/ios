@@ -21,6 +21,7 @@
 #import "RDAlertView.h"
 #import "RDLogStatisticsAPI.h"
 #import "RDInteractionLoadingView.h"
+#import "RDIsDemand.h"
 
 @interface RDHomeScreenViewController ()<RDTabScrollViewDelegate>
 
@@ -160,7 +161,9 @@
 - (void)RDTabScrollViewTVButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
 {
     if ([GlobalData shared].isBindRD) {
-        [self demandVideoWithModel:model force:0];
+        
+        [self checkDemandWithModel:model];
+        
     }else{
         self.demandModel = model;
         [[RDHomeStatusView defaultView] scanQRCode];
@@ -172,6 +175,22 @@
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:index];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (void)checkDemandWithModel:(CreateWealthModel *)model
+{
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
+    RDIsDemand * request = [[RDIsDemand alloc] initWithArtID:model.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [hud hidden];
+        [self demandVideoWithModel:model force:0];
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [hud hidden];
+        [MBProgressHUD showTextHUDwithTitle:@"该视频暂不支持点播" delay:1.5f];
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [hud hidden];
+        [MBProgressHUD showTextHUDwithTitle:@"网络失去连接" delay:1.5f];
+    }];
 }
 
 - (void)demandVideoWithModel:(CreateWealthModel *)model force:(NSInteger)force{
@@ -251,7 +270,7 @@
     if (self.demandModel) {
         
         if ([GlobalData shared].isBindRD) {
-            [self demandVideoWithModel:self.demandModel force:0];
+            [self checkDemandWithModel:self.demandModel];
         }
         
     }else{

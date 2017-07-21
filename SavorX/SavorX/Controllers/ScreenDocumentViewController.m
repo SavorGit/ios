@@ -463,6 +463,30 @@
     return NO;
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    if (self.isLockScreen) {
+        switch (self.orientation) {
+            case UIInterfaceOrientationPortrait:
+                return UIInterfaceOrientationMaskPortrait;
+                break;
+                
+            case UIInterfaceOrientationLandscapeLeft:
+                return UIInterfaceOrientationMaskLandscapeLeft;
+                break;
+                
+            case UIInterfaceOrientationLandscapeRight:
+                return UIInterfaceOrientationMaskLandscapeRight;
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

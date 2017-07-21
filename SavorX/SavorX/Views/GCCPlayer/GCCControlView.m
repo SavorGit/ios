@@ -20,7 +20,6 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
 @property (nonatomic, strong) UIView * endView; //结束视图
 @property (nonatomic, strong) UIImageView * topImageView; //顶部阴影
 @property (nonatomic, strong) UIView * bottomView; //底部阴影
-@property (nonatomic, strong) UIButton * playButton; //播放按钮
 @property (nonatomic, strong) UIProgressView * bufferView; //缓存进度条
 @property (nonatomic, strong) UISlider * slider; //拖动进度控制条
 @property (nonatomic, strong) UIButton * screenButton; //全屏切换按钮
@@ -734,6 +733,14 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         [self.slider setValue:value];
         self.progressView.progress = self.slider.value;
     }
+}
+
+- (void)setSliderValue:(CGFloat)value
+{
+    [self.slider setValue:value];
+    self.bufferView.progress = 0;
+    self.progressView.progress = self.slider.value;
+    self.timeLabel.text = @"00:00";
 }
 
 - (void)loading

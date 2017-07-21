@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 @property (nonatomic, assign) BOOL isSlider; //进度条在被拖动
 @property (nonatomic, strong) UIButton * shareButton; //分享按钮
 @property (nonatomic, assign) RDDefinition definition; //当前清晰度
+@property (nonatomic, strong) UIButton * playButton; //播放按钮
 
 - (void)play; //播放
 - (void)pause; //暂停
@@ -57,6 +58,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 - (void)setVideoTitle:(NSString *)title; //设置视频标题
 - (void)setBufferValue:(CGFloat)value; //设置缓冲进度
 - (void)setSliderValue:(CGFloat)value currentTime:(NSInteger)currentTime totalTime:(NSInteger)totalTime; //设置当前播放进度
+- (void)setSliderValue:(CGFloat)value;
 - (void)setVideoIsCollect:(BOOL)isCollect; //设置是否收藏状态
 
 - (void)backgroundImage:(NSString *)url;

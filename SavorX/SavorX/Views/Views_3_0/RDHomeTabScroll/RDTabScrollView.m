@@ -27,6 +27,8 @@
 @property (nonatomic, strong) UISwipeGestureRecognizer * swipUp;
 @property (nonatomic, strong) UISwipeGestureRecognizer * swipDown;
 
+@property (nonatomic, assign) BOOL isAnimating;
+
 @end
 
 @implementation RDTabScrollView
@@ -87,13 +89,13 @@
     self.currentIndex = 0;
     
     self.pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tabScrollTabDidPan:)];
-    self.swipUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tabScrollTabDidSwip:)];
-    self.swipUp.direction = UISwipeGestureRecognizerDirectionUp;
-    self.swipDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tabScrollTabDidSwip:)];
-    self.swipDown.direction = UISwipeGestureRecognizerDirectionDown;
-    
-    [self.swipUp requireGestureRecognizerToFail:self.pan];
-    [self.swipDown requireGestureRecognizerToFail:self.pan];
+//    self.swipUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tabScrollTabDidSwip:)];
+//    self.swipUp.direction = UISwipeGestureRecognizerDirectionUp;
+//    self.swipDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tabScrollTabDidSwip:)];
+//    self.swipDown.direction = UISwipeGestureRecognizerDirectionDown;
+//    
+//    [self.swipUp requireGestureRecognizerToFail:self.pan];
+//    [self.swipDown requireGestureRecognizerToFail:self.pan];
     
     [self resetGestureRecognizeWith:self.currentItem];
 }
@@ -101,115 +103,115 @@
 - (void)resetGestureRecognizeWith:(RDTabScrollItem *)item
 {
     [item addGestureRecognizer:self.pan];
-    [item addGestureRecognizer:self.swipUp];
-    [item addGestureRecognizer:self.swipDown];
+//    [item addGestureRecognizer:self.swipUp];
+//    [item addGestureRecognizer:self.swipDown];
 }
 
 - (void)removeGestureRecognizeWith:(RDTabScrollItem *)item
 {
     [item removeGestureRecognizer:self.pan];
-    [item removeGestureRecognizer:self.swipUp];
-    [item removeGestureRecognizer:self.swipDown];
+//    [item removeGestureRecognizer:self.swipUp];
+//    [item removeGestureRecognizer:self.swipDown];
 }
 
-- (void)tabScrollTabDidSwip:(UISwipeGestureRecognizer *)swip
-{
-    CGFloat height = self.frame.size.height;
-    CGFloat maxDistance = height / 2;
-    
-    [self removeGestureRecognizeWith:self.currentItem];
-    
-    if (!self.tempScroolItem) {
-        self.tempScroolItem = [[RDTabScrollItem alloc] initWithFrame:self.currentItem.frame];
-        self.tempScroolItem.center = self.currentItem.center;
-        self.tempScroolItem.delegate = self;
-    }
-    self.tempScroolItem.alpha = .2f;
-    [self insertSubview:self.tempScroolItem atIndex:0];
-    
-    self.topItem.alpha = .5f;
-    self.bottomItem.alpha = .5f;
-    
-    if (swip.direction == UISwipeGestureRecognizerDirectionUp) {
-        
-        [UIView animateWithDuration:.2f animations:^{
-            [self sendSubviewToBack:self.bottomItem];
-            [self sendSubviewToBack:self.tempScroolItem];
-            
-            CreateWealthModel * imageName1 = [self nextTempInfo];
-            [self.tempScroolItem configWithInfo:imageName1 index:[self.dataSource indexOfObject:imageName1]+1 total:self.dataSource.count];
-            
-            self.topItem.transform = CGAffineTransformMakeScale(.8f, .8f);
-            self.topItem.center = CGPointMake(self.topItemCenter.x, self.topItemCenter.y - 40);
-            self.topItem.alpha = .2f;
-            
-            self.currentItem.transform = CGAffineTransformMakeScale(.9f, .9f);
-            self.currentItem.center = CGPointMake(self.currentItemCenter.x, self.currentItemCenter.y - maxDistance);
-            self.currentItem.alpha = .2f;
-            
-            self.bottomItem.transform = CGAffineTransformMakeScale(1.f, 1.f);
-            self.bottomItem.center = self.currentItemCenter;
-            self.bottomItem.alpha = 1.f;
-            
-            self.tempScroolItem.transform = CGAffineTransformMakeScale(.9f, .9f);
-            self.tempScroolItem.center = self.bottomItemCenter;
-            self.tempScroolItem.alpha = .5f;
-        } completion:^(BOOL finished) {
-            [self didScroolEndWithNext];
-            [UIView animateWithDuration:.2f animations:^{
-                self.topItem.alpha = 1.f;
-                self.bottomItem.alpha = 1.f;
-                self.currentItem.alpha = 1.f;
-                self.topItem.center = self.topItemCenter;
-                self.currentItem.center = self.currentItemCenter;
-                self.bottomItem.center = self.bottomItemCenter;
-                self.topItem.transform = CGAffineTransformMakeScale(.9f, .9f);
-                self.currentItem.transform = CGAffineTransformMakeScale(1.f, 1.f);
-                self.bottomItem.transform = CGAffineTransformMakeScale(.9f, .9f);
-            }];
-            [self bringSubviewToFront:self.currentItem];
-            [self resetGestureRecognizeWith:self.currentItem];
-        }];
-    }else{
-        [UIView animateWithDuration:.2f animations:^{
-            [self sendSubviewToBack:self.bottomItem];
-            [self sendSubviewToBack:self.tempScroolItem];
-            
-            self.topItem.transform = CGAffineTransformMakeScale(1.f, 1.f);
-            self.topItem.center = self.currentItemCenter;
-            self.topItem.alpha = 1.f;
-            
-            self.currentItem.transform = CGAffineTransformMakeScale(.9f, .9f);
-            self.currentItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + maxDistance);
-            self.currentItem.alpha = .2f;
-            
-            self.bottomItem.transform = CGAffineTransformMakeScale(.8f, .8f);
-            self.bottomItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + 40);
-            self.bottomItem.alpha = .2f;
-            
-            CreateWealthModel * imageName2 = [self lastTempInfo];
-            [self.tempScroolItem configWithInfo:imageName2 index:[self.dataSource indexOfObject:imageName2]+1 total:self.dataSource.count];
-            self.tempScroolItem.transform = CGAffineTransformMakeScale(.9f, .9f);
-            self.tempScroolItem.center = self.topItemCenter;
-            self.tempScroolItem.alpha = .5f;
-        } completion:^(BOOL finished) {
-            [self didScroolEndWithLast];
-            [UIView animateWithDuration:.2f animations:^{
-                self.topItem.alpha = 1.f;
-                self.bottomItem.alpha = 1.f;
-                self.currentItem.alpha = 1.f;
-                self.topItem.center = self.topItemCenter;
-                self.currentItem.center = self.currentItemCenter;
-                self.bottomItem.center = self.bottomItemCenter;
-                self.topItem.transform = CGAffineTransformMakeScale(.9f, .9f);
-                self.currentItem.transform = CGAffineTransformMakeScale(1.f, 1.f);
-                self.bottomItem.transform = CGAffineTransformMakeScale(.9f, .9f);
-            }];
-            [self bringSubviewToFront:self.currentItem];
-            [self resetGestureRecognizeWith:self.currentItem];
-        }];
-    }
-}
+//- (void)tabScrollTabDidSwip:(UISwipeGestureRecognizer *)swip
+//{
+//    CGFloat height = self.frame.size.height;
+//    CGFloat maxDistance = height / 2;
+//    
+//    [self removeGestureRecognizeWith:self.currentItem];
+//    
+//    if (!self.tempScroolItem) {
+//        self.tempScroolItem = [[RDTabScrollItem alloc] initWithFrame:self.currentItem.frame];
+//        self.tempScroolItem.center = self.currentItem.center;
+//        self.tempScroolItem.delegate = self;
+//    }
+//    self.tempScroolItem.alpha = .2f;
+//    [self insertSubview:self.tempScroolItem atIndex:0];
+//    
+//    self.topItem.alpha = .5f;
+//    self.bottomItem.alpha = .5f;
+//    
+//    if (swip.direction == UISwipeGestureRecognizerDirectionUp) {
+//        
+//        [UIView animateWithDuration:.2f animations:^{
+//            [self sendSubviewToBack:self.bottomItem];
+//            [self sendSubviewToBack:self.tempScroolItem];
+//            
+//            CreateWealthModel * imageName1 = [self nextTempInfo];
+//            [self.tempScroolItem configWithInfo:imageName1 index:[self.dataSource indexOfObject:imageName1]+1 total:self.dataSource.count];
+//            
+//            self.topItem.transform = CGAffineTransformMakeScale(.8f, .8f);
+//            self.topItem.center = CGPointMake(self.topItemCenter.x, self.topItemCenter.y - 40);
+//            self.topItem.alpha = .2f;
+//            
+//            self.currentItem.transform = CGAffineTransformMakeScale(.9f, .9f);
+//            self.currentItem.center = CGPointMake(self.currentItemCenter.x, self.currentItemCenter.y - maxDistance);
+//            self.currentItem.alpha = .2f;
+//            
+//            self.bottomItem.transform = CGAffineTransformMakeScale(1.f, 1.f);
+//            self.bottomItem.center = self.currentItemCenter;
+//            self.bottomItem.alpha = 1.f;
+//            
+//            self.tempScroolItem.transform = CGAffineTransformMakeScale(.9f, .9f);
+//            self.tempScroolItem.center = self.bottomItemCenter;
+//            self.tempScroolItem.alpha = .5f;
+//        } completion:^(BOOL finished) {
+//            [self didScroolEndWithNext];
+//            [UIView animateWithDuration:.2f animations:^{
+//                self.topItem.alpha = 1.f;
+//                self.bottomItem.alpha = 1.f;
+//                self.currentItem.alpha = 1.f;
+//                self.topItem.center = self.topItemCenter;
+//                self.currentItem.center = self.currentItemCenter;
+//                self.bottomItem.center = self.bottomItemCenter;
+//                self.topItem.transform = CGAffineTransformMakeScale(.9f, .9f);
+//                self.currentItem.transform = CGAffineTransformMakeScale(1.f, 1.f);
+//                self.bottomItem.transform = CGAffineTransformMakeScale(.9f, .9f);
+//            }];
+//            [self bringSubviewToFront:self.currentItem];
+//            [self resetGestureRecognizeWith:self.currentItem];
+//        }];
+//    }else{
+//        [UIView animateWithDuration:.2f animations:^{
+//            [self sendSubviewToBack:self.bottomItem];
+//            [self sendSubviewToBack:self.tempScroolItem];
+//            
+//            self.topItem.transform = CGAffineTransformMakeScale(1.f, 1.f);
+//            self.topItem.center = self.currentItemCenter;
+//            self.topItem.alpha = 1.f;
+//            
+//            self.currentItem.transform = CGAffineTransformMakeScale(.9f, .9f);
+//            self.currentItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + maxDistance);
+//            self.currentItem.alpha = .2f;
+//            
+//            self.bottomItem.transform = CGAffineTransformMakeScale(.8f, .8f);
+//            self.bottomItem.center = CGPointMake(self.bottomItemCenter.x, self.bottomItemCenter.y + 40);
+//            self.bottomItem.alpha = .2f;
+//            
+//            CreateWealthModel * imageName2 = [self lastTempInfo];
+//            [self.tempScroolItem configWithInfo:imageName2 index:[self.dataSource indexOfObject:imageName2]+1 total:self.dataSource.count];
+//            self.tempScroolItem.transform = CGAffineTransformMakeScale(.9f, .9f);
+//            self.tempScroolItem.center = self.topItemCenter;
+//            self.tempScroolItem.alpha = .5f;
+//        } completion:^(BOOL finished) {
+//            [self didScroolEndWithLast];
+//            [UIView animateWithDuration:.2f animations:^{
+//                self.topItem.alpha = 1.f;
+//                self.bottomItem.alpha = 1.f;
+//                self.currentItem.alpha = 1.f;
+//                self.topItem.center = self.topItemCenter;
+//                self.currentItem.center = self.currentItemCenter;
+//                self.bottomItem.center = self.bottomItemCenter;
+//                self.topItem.transform = CGAffineTransformMakeScale(.9f, .9f);
+//                self.currentItem.transform = CGAffineTransformMakeScale(1.f, 1.f);
+//                self.bottomItem.transform = CGAffineTransformMakeScale(.9f, .9f);
+//            }];
+//            [self bringSubviewToFront:self.currentItem];
+//            [self resetGestureRecognizeWith:self.currentItem];
+//        }];
+//    }
+//}
 
 - (void)tabScrollTabDidPan:(UIPanGestureRecognizer *)pan
 {
@@ -346,16 +348,13 @@
             [self didScroolEndWithNext];
         }
     }else{
-        [UIView animateWithDuration:.2f animations:^{
-            self.tempScroolItem.alpha = 0.f;
-        } completion:^(BOOL finished) {
-            [self.tempScroolItem removeFromSuperview];
-        }];
+        [self.tempScroolItem removeFromSuperview];
+        NSLog(@"移除了中转的item");
     }
     
     [self bringSubviewToFront:self.currentItem];
     
-    [UIView animateWithDuration:.2f animations:^{
+    [UIView animateWithDuration:.15f animations:^{
         self.topItem.alpha = 1.f;
         self.bottomItem.alpha = 1.f;
         self.currentItem.alpha = 1.f;
@@ -376,6 +375,7 @@
     CreateWealthModel * imageName = [self lastTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.bottomItem removeFromSuperview];
+    NSLog(@"移除了下方的item");
     self.bottomItem = self.currentItem;
     self.currentItem = self.topItem;
     self.topItem = self.tempScroolItem;
@@ -395,6 +395,7 @@
     CreateWealthModel * imageName = [self nextTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.topItem removeFromSuperview];
+    NSLog(@"移除了上方的item");
     self.topItem = self.currentItem;
     self.currentItem = self.bottomItem;
     self.bottomItem = self.tempScroolItem;
@@ -418,10 +419,10 @@
     }else if (self.dataSource.count == 2) {
         if (self.currentIndex == 0) {
             self.currentIndex = 0;
-            return [self.dataSource objectAtIndex:0];
+            return [self.dataSource objectAtIndex:1];
         }else{
             self.currentIndex = 1;
-            return [self.dataSource objectAtIndex:1];
+            return [self.dataSource objectAtIndex:0];
         }
     }
     
@@ -442,10 +443,10 @@
         return [self.dataSource objectAtIndex:0];
     }else if (self.dataSource.count == 2) {
         if (self.currentIndex == 0) {
-            self.currentIndex = 0;
+            self.currentIndex = 1;
             return [self.dataSource objectAtIndex:0];
         }else{
-            self.currentIndex = 1;
+            self.currentIndex = 0;
             return [self.dataSource objectAtIndex:1];
         }
     }

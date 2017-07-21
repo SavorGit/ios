@@ -8,14 +8,8 @@
 
 #import "WebViewController.h"
 #import "UMCustomSocialManager.h"
-#import "HSConnectViewController.h"
-#import "DemandViewController.h"
-#import "GCCUPnPManager.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "RDLogStatisticsAPI.h"
-#import "RDAlertView.h"
-#import "RDAlertAction.h"
-#import "RestaurantListViewController.h"
 #import "RDHomeStatusView.h"
 #import "HSIsOrCollectionRequest.h"
 #import "HotPopShareView.h"
@@ -26,6 +20,7 @@
 #import "RDInteractionLoadingView.h"
 #import "RDVideoHeaderView.h"
 #import "RDFavoriteTableViewCell.h"
+#import "RDIsOnline.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -74,6 +69,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self checkIsOnline];
+}
+
+- (void)checkIsOnline
+{
+    [self showLoadingView];
+    RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self readyToGo];
+        [self hiddenLoadingView];
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self showNoDataViewInView:self.view noDataString:@"啊哦~页面跑丢了"];
+        [self hiddenLoadingView];
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        [self hiddenLoadingView];
+    }];
+}
+
+- (void)readyToGo
+{
     self.dataSource = [[NSMutableArray alloc] initWithCapacity:100];
     
     _isComplete = NO;
@@ -107,7 +124,6 @@
     
     //添加页面相关的通知监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(phoneBindDevice) name:RDDidBindDeviceNotification object:nil];
     // app退到后台
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
     // app进入前台
@@ -117,7 +133,9 @@
 - (void)refreshPageWithModel:(CreateWealthModel *)model
 {
     self.model = model;
+    [self.playView setVideoTitle:self.model.title];
     [self.playView setPlayItemWithURL:[self.model.videoURL stringByAppendingString:@".f30.mp4"]];
+    [self.playView backgroundImage:self.model.imageURL];
     
     if (model.type == 4) {
         
@@ -235,16 +253,6 @@
     self.baseTableView.tableHeaderView = headerView;
 }
 
-//当手机连接到机顶盒
-- (void)phoneBindDevice
-{
-    if ([GlobalData shared].isBindRD && self.model.canPlay == 1) {
-
-        [self demandVideoWithforce:0];
-        
-    }
-}
-
 //返回按钮被点击
 - (void)backButtonDidBeClicked
 {
@@ -310,41 +318,6 @@
     [self.view addSubview:shareView];
 }
 
-#pragma mark ---分享按钮点击
-- (void)shareAction:(UIButton *)button
-{
-//    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
-//    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
-}
-
-//视频的点播按钮被点击
-- (void)videoShouldBeDemand
-{
-    if ([GlobalData shared].scene != RDSceneHaveRDBox) {
-        RestaurantListViewController *restVC = [[RestaurantListViewController alloc] initWithScreenAlert];
-        [self.navigationController pushViewController:restVC animated:YES];
-    }
-    
-    if (self.model.canPlay) {
-        
-        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-            [self interfaceOrientation:UIInterfaceOrientationPortrait];
-        }
-        
-        if (([GlobalData shared].isBindRD)){
-            
-            [self demandVideoWithforce:0];
-            
-        }else{
-            [[RDHomeStatusView defaultView] scanQRCode];
-        }
-
-    }else{
-        [MBProgressHUD showTextHUDwithTitle:@"当前视频不支持该操作"];
-    }
-}
-
 - (void)toolViewHiddenStatusDidChangeTo:(BOOL)isHidden
 {
     self.toolViewIsHidden = isHidden;
@@ -354,45 +327,6 @@
         orientation == UIInterfaceOrientationLandscapeRight) {
         [self.navigationController setNeedsStatusBarAppearanceUpdate];
     }
-}
-
-- (void)demandVideoWithforce:(NSInteger)force{
-    
-    //如果是绑定状态
-    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
-    [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        if ([[result objectForKey:@"result"] integerValue] == 0) {
-            
-            DemandViewController *view = [[DemandViewController alloc] init];
-            view.categroyID = self.categoryID;
-            view.model = self.model;
-            [SAVORXAPI successRing];
-            [[RDHomeStatusView defaultView] startScreenWithViewController:view withStatus:RDHomeStatus_Demand];
-            [self.navigationController pushViewController:view animated:YES];
-            [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
-            
-            NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
-            } bold:NO];
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
-                [self demandVideoWithforce:1];
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"}];
-            } bold:YES];
-            [alertView addActions:@[action,actionOne]];
-            [alertView show];
-            
-        }else{
-            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-        }
-        [hud hidden];
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [hud hidden];
-        [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-    }];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -421,14 +355,9 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    UIViewController * topVC = [Helper getRootNavigationController].topViewController;
-    if ([topVC isKindOfClass:[HSConnectViewController class]] || [topVC isKindOfClass:[WebViewController class]] || [topVC isKindOfClass:[DemandViewController class]] || [topVC isKindOfClass:[RestaurantListViewController class]]) {
-        
-    }else{
-        [self.playView shouldRelease];
-        self.webView.delegate = nil;
-        self.webView.scrollView.delegate = nil;
-    }
+    [self.playView shouldRelease];
+    self.webView.delegate = nil;
+    self.webView.scrollView.delegate = nil;
     
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
@@ -455,8 +384,12 @@
 - (void)retryToGetData
 {
     [self hideNoNetWorkView];
-    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.model.contentURL]]]];
-    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    if (self.playView) {
+        [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.model.contentURL]]]];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    }else{
+        [self checkIsOnline];
+    }
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -751,6 +684,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     [self refreshPageWithModel:tmpModel];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 @end
