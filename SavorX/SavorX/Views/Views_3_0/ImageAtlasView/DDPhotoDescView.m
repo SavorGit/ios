@@ -13,7 +13,7 @@
 
 #define DescViewDefaultHeight 130
 #define TextViewWidth         kMainBoundsWidth - 65
-#define DistanceToBottom      10
+#define DistanceToBottom      15
 
 @interface DDPhotoDescView()<UITextViewDelegate>
 
@@ -32,7 +32,7 @@
         self.backgroundColor = [UIColorFromRGB(0xece6de) colorWithAlphaComponent:.9f];
         
         // 页码
-        _page = [[RDTabScrollViewPage alloc] initWithFrame:CGRectMake(5, 10, 40, 23) withTotalNumber:99 withType:RDTabScrollViewPageType_DOWNBIG withIndex:index + 1 ];
+        _page = [[RDTabScrollViewPage alloc] initWithFrame:CGRectMake(5, 18, 40, 23) withTotalNumber:totalCount withType:RDTabScrollViewPageType_DOWNBIG withIndex:index + 1 ];
         _page.backgroundColor = [UIColor clearColor];
         [self addSubview:_page];
         
@@ -46,11 +46,12 @@
         self.textView.userInteractionEnabled = NO;
         self.textView.editable = YES;
         self.textView.delegate = self;
-        [self addSubview:self.textView];
+        [self addSubview:self.textView]; 
         
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:TextViewWidth];
         self.frame = CGRectMake(0, 0, kMainBoundsWidth, textViewHeight + DistanceToBottom);
-		self.textView.frame = CGRectMake(50, 10, TextViewWidth, textViewHeight);
+		self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
+        self.textView.backgroundColor = [UIColor clearColor];
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	}
@@ -87,7 +88,7 @@
             make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-        self.textView.frame = CGRectMake(50, 10, TextViewWidth, textViewHeight);
+        self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
         
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
@@ -96,7 +97,7 @@
             make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-        self.textView.frame = CGRectMake(50, 10, TextViewWidth, textViewHeight);
+        self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
 
     }
 }

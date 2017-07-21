@@ -60,11 +60,11 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     
-//    if (self.dataSource.count != 0) {
-//        if (self.webView) {
-//            [self.webView removeFromSuperview];
-//        }
-//    }
+    if (self.dataSource.count != 0) {
+        if (self.webView) {
+            [self.webView removeFromSuperview];
+        }
+    }
     
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_list" key:nil value:nil];
 }
@@ -206,13 +206,7 @@
 - (void)createUI
 {
     [self createDataSource];
-    
-    if (self.dataSource.count != 0) {
-        if (self.webView) {
-            [self.webView removeFromSuperview];
-        }
-    }
-    
+
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreen_Width, kScreen_Height - NavHeight) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -327,7 +321,7 @@
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 [self demandVideoWithMediaPath:mediaPath force:1 video:video movieUrl:movieURL];
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"file"} ];
-            } bold:NO];
+            } bold:YES];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
             

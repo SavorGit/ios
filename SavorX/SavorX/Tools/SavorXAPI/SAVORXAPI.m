@@ -198,7 +198,7 @@
                     
                 }];
                 
-            } bold:NO];
+            } bold:YES];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
             
@@ -288,7 +288,7 @@
                     
                 }];
                 
-            } bold:NO];
+            } bold:YES];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
             
@@ -336,7 +336,7 @@
             
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 [SAVORXAPI gameForEggsWithURL:urlStr hunger:hunger date:date force:1 success:success failure:failure];
-            } bold:NO];
+            } bold:YES];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
         }else{

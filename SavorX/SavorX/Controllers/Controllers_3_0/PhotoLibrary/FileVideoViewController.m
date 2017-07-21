@@ -438,7 +438,7 @@
             RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
                 [self demandVideoWithMediaPath:mediaPath force:1];
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"video"}];
-            } bold:NO];
+            } bold:YES];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
             
