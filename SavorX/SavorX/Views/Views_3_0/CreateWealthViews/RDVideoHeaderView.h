@@ -13,4 +13,6 @@
 
 - (void)reloadWithModel:(CreateWealthModel *)model;
 
+- (void)needRecommand:(BOOL)recommand;
+
 @end
