@@ -315,6 +315,7 @@
 		96D8C5F51F14D3B900251301 /* SpecialTopRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F41F14D3B900251301 /* SpecialTopRequest.m */; };
 		96D8C5F91F15BE2C00251301 /* HSIsOrCollectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5F81F15BE2C00251301 /* HSIsOrCollectionRequest.m */; };
 		96D8C5FD1F1613DC00251301 /* HSImTeRecommendRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5FC1F1613DC00251301 /* HSImTeRecommendRequest.m */; };
+		96D8C6011F22EA4800251301 /* RDFrequentlyUsed.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C6001F22EA4800251301 /* RDFrequentlyUsed.m */; };
 		96EFA1581EE5544D004B75E1 /* RDScreenLocationViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */; };
 /* End PBXBuildFile section */
 
@@ -833,6 +834,8 @@
 		96D8C5F81F15BE2C00251301 /* HSIsOrCollectionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSIsOrCollectionRequest.m; sourceTree = "<group>"; };
 		96D8C5FB1F1613DC00251301 /* HSImTeRecommendRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSImTeRecommendRequest.h; sourceTree = "<group>"; };
 		96D8C5FC1F1613DC00251301 /* HSImTeRecommendRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSImTeRecommendRequest.m; sourceTree = "<group>"; };
+		96D8C5FF1F22EA4800251301 /* RDFrequentlyUsed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDFrequentlyUsed.h; sourceTree = "<group>"; };
+		96D8C6001F22EA4800251301 /* RDFrequentlyUsed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDFrequentlyUsed.m; sourceTree = "<group>"; };
 		96EFA1561EE5544D004B75E1 /* RDScreenLocationViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDScreenLocationViewCell.h; sourceTree = "<group>"; };
 		96EFA1571EE5544D004B75E1 /* RDScreenLocationViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDScreenLocationViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1717,6 +1720,7 @@
 		06FA33B11D3E1FF2001F5B37 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				96D8C5FE1F22E99A00251301 /* Others */,
 				0663D41D1F0B6AFA00CD2FA2 /* UIView+LayerCurve */,
 				965240E61ED6B8640090E1C8 /* RDLocationTool */,
 				062CEFCF1EC2F9FC00EA6AE0 /* RDAwardTool */,
@@ -2277,6 +2281,15 @@
 			path = RecommendNet;
 			sourceTree = "<group>";
 		};
+		96D8C5FE1F22E99A00251301 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				96D8C5FF1F22EA4800251301 /* RDFrequentlyUsed.h */,
+				96D8C6001F22EA4800251301 /* RDFrequentlyUsed.m */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
 		B9FD2654E12241CB8AC2C59D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2722,6 +2735,7 @@
 				0627E0BF1E3231DA00DAED92 /* LGSideMenuController.m in Sources */,
 				47F4A27A1E496598001C93F0 /* FeedbackView.m in Sources */,
 				476F44BD1E2DB1B000F99090 /* BaseNavigationController.m in Sources */,
+				96D8C6011F22EA4800251301 /* RDFrequentlyUsed.m in Sources */,
 				96D8C5DF1F1390DF00251301 /* ImageAtlasDetailModel.m in Sources */,
 				478058291DF985730091C305 /* NetworkConfiguration.m in Sources */,
 				061E0FD41DFFD9A40072605F /* GDataXMLNode.m in Sources */,

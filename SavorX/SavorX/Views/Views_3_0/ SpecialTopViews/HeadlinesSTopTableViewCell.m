@@ -24,7 +24,8 @@
     _bgView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.contentView addSubview:_bgView];
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 357.5));
+        make.height.mas_equalTo(336.5);
+        make.width.mas_equalTo(kMainBoundsWidth - 20);
         make.top.mas_equalTo(10);
         make.left.mas_equalTo(10);
     }];
@@ -61,7 +62,7 @@
     _subTitleLabel.numberOfLines = 2;
     [_bgView addSubview:_subTitleLabel];
     [_subTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 42));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 21));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
         make.left.mas_equalTo(5);
     }];
@@ -87,13 +88,32 @@
     }];
 }
 
+- (CGFloat)getHeightByWidth:(CGFloat)width title:(NSString *)title font:(UIFont *)font
+{
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, 0)];
+    label.text = title;
+    label.font = font;
+    label.numberOfLines = 0;
+    [label sizeToFit];
+    CGFloat height = label.frame.size.height;
+    return height;
+}
+
 - (void)configModelData:(CreateWealthModel *)model{
     
-    self.titleLabel.text = model.title;
-    self.subTitleLabel.text = model.shareTitle;
-    if (!isEmptyString(model.updateTime)) {
-        self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
+    CGFloat subTitleHeight = [self getHeightByWidth:kMainBoundsWidth - 30 title:model.title font:kPingFangMedium(15)];
+    if (subTitleHeight > 21) {
+        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 42));
+        }];
+        [_bgView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(357.5);
+        }];
     }
+    self.subTitleLabel.text = model.shareTitle;
+    
+    self.titleLabel.text = model.title;
+    self.timeLabel.text = model.updateTime;
     [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
