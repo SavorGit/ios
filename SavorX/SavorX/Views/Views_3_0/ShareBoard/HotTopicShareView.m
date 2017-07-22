@@ -26,6 +26,8 @@
 @property (nonatomic, strong) NSArray  *shareBtnTitleArray;
 //	所有图片
 @property (nonatomic, strong) NSArray  *shareBtnImageArray;
+//	所有类型
+@property (nonatomic, strong) NSArray  *shareTypeArray;
 //	整个底部分享面板的 backgroundView
 @property (nonatomic, strong) UIView   *bgView;
 //	分享面板取消按钮上部的 View
@@ -37,8 +39,6 @@
 @property (nonatomic, copy)   NSString *protext;
 //	所有的分享按钮
 @property (nonatomic, copy) NSMutableArray *buttons;
-
-@property(nonatomic ,assign) NSInteger startIndex;
 
 @property(nonatomic ,strong) CreateWealthModel *model;
 
@@ -79,29 +79,27 @@
     
     NSMutableArray *titlearr = [NSMutableArray arrayWithCapacity:5];
     NSMutableArray *imageArr = [NSMutableArray arrayWithCapacity:5];
-    
-    int startIndex = 0;
+    NSMutableArray *typeArr = [NSMutableArray arrayWithCapacity:5];
     
     if (hadInstalledWeixin) {
         [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
         [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
-    } else {
-        startIndex += 2;
+        [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_WechatSession],[NSNumber numberWithInteger:UMSocialPlatformType_WechatTimeLine]]];
     }
     
     if (hadInstalledQQ) {
         [titlearr addObjectsFromArray:@[@"QQ"]];
         [imageArr addObjectsFromArray:@[@"qq"]];
-    } else {
-        startIndex += 1;
+        [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_QQ]]];
     }
     
     [titlearr addObjectsFromArray:@[@"微博"]];
     [imageArr addObjectsFromArray:@[@"weibo"]];
+    [typeArr addObject:[NSNumber numberWithInteger:UMSocialPlatformType_Sina]];
     
-    _startIndex = startIndex;
     _shareBtnTitleArray = titlearr;
     _shareBtnImageArray = imageArr;
+    _shareTypeArray = typeArr;
 }
 /**
  加载自定义视图，按钮的tag依次为（200 + i）
@@ -123,8 +121,8 @@
         CGRect frame =  CGRectMake(x, y, w, h);
         ImageWithLabel *item = [ImageWithLabel imageLabelWithFrame:frame Image:[UIImage imageNamed:self.shareBtnImageArray[i]] LabelText:@""];
         item.labelOffsetY = 0;
-        
-        item.tag = 200 + i;
+        UMSocialPlatformType type = [[self.shareTypeArray objectAtIndex:i] integerValue];
+        item.tag = 200 + type;
         UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(itemClick:)];
         [item addGestureRecognizer:tapGes];
         [self.topSheetView addSubview:item];
@@ -133,39 +131,34 @@
     }
 }
 
-#pragma mark --------------------------- Selector
-/**
- 按钮点击
-@param tapGes 手势
- */
+#pragma mark ---分享按钮点击
 - (void)itemClick:(UITapGestureRecognizer *)tapGes {
     
     NSString *categroyIDStr = [NSString stringWithFormat:@"%ld",self.categoryID];
-    
-    NSInteger btnTag = tapGes.view.tag - 200;
-    switch (btnTag + _startIndex) {
-        case 0: {
+    UMSocialPlatformType type = tapGes.view.tag - 200;
+    switch (type) {
+        case UMSocialPlatformType_WechatSession: {
             // 微信
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model];
             
         }
             break;
-        case 1: {
+        case UMSocialPlatformType_WechatTimeLine: {
             // 微信朋友圈
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_friends"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model];
             
         }
             break;
-        case 2: {
+        case UMSocialPlatformType_QQ: {
             // QQ
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq_zone"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model];
             
         }
             break;
-        case 3: {
+        case UMSocialPlatformType_Sina: {
             // 微博
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"sina"];
             [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model];
