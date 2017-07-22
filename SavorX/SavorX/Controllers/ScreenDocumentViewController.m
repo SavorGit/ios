@@ -69,7 +69,7 @@
         make.right.mas_equalTo(0);  
     }];
     
-//    //webView加载文档
+    //webView加载文档
     NSURL * url = [NSURL fileURLWithPath:self.path];
     self.webView.scalesPageToFit = YES;
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
@@ -77,18 +77,6 @@
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
     self.isScreen = NO;
-    
-//    if (![GlobalData shared].isBindRD) {
-//        [SAVORXAPI showConnetToTVAlert:@"doc"];
-//    }
-//    if ([GlobalData shared].isBindRD) {
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
-//        self.isScreen = YES;
-//    }else{
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
-//        [SAVORXAPI showConnetToTVAlert:@"doc"];
-//        self.isScreen = NO;
-//    }
     
     self.lockButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.lockButton setBackgroundImage:[UIImage imageNamed:@"suoping"] forState:UIControlStateNormal];
@@ -263,11 +251,11 @@
                 
                 self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
                     if (successBlock) {
-                        successBlock();
-                        if (_isScreen == NO) {
+                        if (self.isScreen == NO) {
                             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
                             self.isScreen = YES;
                         }
+                        successBlock();
                     }
                     self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
                         
