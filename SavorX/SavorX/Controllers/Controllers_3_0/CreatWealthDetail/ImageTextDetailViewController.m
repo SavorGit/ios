@@ -146,17 +146,27 @@
             if (isCollect == 0) {
                 self.imgTextModel.collected = 0;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
             }else{
                 self.imgTextModel.collected = 1;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
             }
             self.collectButton.selected = !self.collectButton.selected;
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     }];
     
 }
@@ -345,7 +355,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgTextModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:nil value:nil];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:@"details_page" value:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_begin_reading" key:@"details_begin_reading" value:[Helper getCurrentTimeWithFormat:@"YYYYMMddHHmmss"]];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -353,6 +364,7 @@
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgTextModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
+    [SAVORXAPI postUMHandleWithContentId:@"details_end_reading" key:@"details_end_reading" value:[Helper getCurrentTimeWithFormat:@"YYYYMMddHHmmss"]];
 }
 
 //app进入后台运行
