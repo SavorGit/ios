@@ -6,8 +6,8 @@
 //  Copyright © 2017年 郭春城. All rights reserved.
 //
 
-#import "BaseViewController.h"
+#import "HomeBaseViewController.h"
 
-@interface FavoriteViewController : BaseViewController
+@interface FavoriteViewController : HomeBaseViewController
 
 @end
