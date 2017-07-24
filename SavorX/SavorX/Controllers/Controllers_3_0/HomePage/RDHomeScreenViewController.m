@@ -48,6 +48,12 @@
     [self setupDatas];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"home_toscreen_state" key:nil value:nil];
+    
+}
+
 - (void)setupDatas
 {
     RDLoadingView * loadingView = [MBProgressHUD showWebLoadingHUDInView:self.topView];
@@ -153,6 +159,7 @@
 
 - (void)RDTabScrollViewPhotoButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_local_tv" key:nil value:nil];
     WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:0];
     [self.navigationController pushViewController:web animated:YES];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
@@ -160,6 +167,8 @@
 
 - (void)RDTabScrollViewTVButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
+    [SAVORXAPI postUMHandleWithContentId:@"home_advertising_video" key:nil value:nil];
     if ([GlobalData shared].isBindRD) {
         
         [self checkDemandWithModel:model];
@@ -234,6 +243,7 @@
 
 - (void)photoButtonDidBeCicked
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_album_toscreen" key:nil value:nil];
     [RDPhotoTool checkUserLibraryAuthorizationStatusWithSuccess:^{
         
         PhotoLibraryViewController * photo = [[PhotoLibraryViewController alloc] init];
@@ -261,6 +271,7 @@
 
 - (void)fileButtonDidBeCicked
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_file_toscreen" key:nil value:nil];
     DocumentListViewController * document = [[DocumentListViewController alloc] init];
     [self.navigationController pushViewController:document animated:YES];
 }

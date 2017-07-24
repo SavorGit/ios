@@ -372,6 +372,7 @@
 
 - (void)didScroolEndWithLast
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_demand_slide_down" key:nil value:nil];
     CreateWealthModel * imageName = [self lastTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.bottomItem removeFromSuperview];
@@ -392,6 +393,7 @@
 
 - (void)didScroolEndWithNext
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_demand_slide_up" key:nil value:nil];
     CreateWealthModel * imageName = [self nextTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.topItem removeFromSuperview];

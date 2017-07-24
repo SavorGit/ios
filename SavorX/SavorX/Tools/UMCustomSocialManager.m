@@ -345,8 +345,10 @@
     [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
         
         if (error) {
+//            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
             [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
         }else{
+//            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
             [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
         }
         

@@ -89,6 +89,7 @@
 
 #pragma mark ---分享按钮点击
 - (void)shareAction{
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
     HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.specilDetailModel andVC:self andCategoryID:self.categoryID];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
@@ -169,6 +170,12 @@
     [self.webView.scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:nil value:nil];
+}
+- (void)viewDidDisappear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
+}
 - (void)dealloc{
     
     [self removeObserver];

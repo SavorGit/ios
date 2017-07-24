@@ -71,6 +71,7 @@
 //下拉刷新页面数据
 - (void)refreshData
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_refresh" key:nil value:nil];
     HSCreateWealthRequest * request = [[HSCreateWealthRequest alloc] initWithCateId:self.categoryID withSortNum:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -117,6 +118,7 @@
 //上拉获取更多数据
 - (void)getMoreData
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_load" key:nil value:nil];
     CreateWealthModel *welthModel = [self.dataSource lastObject];
     HSCreateWealthRequest * request = [[HSCreateWealthRequest alloc] initWithCateId:self.categoryID withSortNum:welthModel.sort_num];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -298,21 +300,27 @@
     
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    if (!isEmptyString(model.indexImageUrl)){
+        [SAVORXAPI postUMHandleWithContentId:@"home_click_headlines" key:nil value:nil];
+    }
     
     //1 图文 2 图集 3 视频
     if (model.type == 1) {
+        [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
         ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
         imtVC.imgTextModel = model;
         imtVC.categoryID = self.categoryID;
         [self.navigationController pushViewController:imtVC animated:YES];
         
     }else if (model.type == 2) {
+        [SAVORXAPI postUMHandleWithContentId:@"home_click_pic" key:nil value:nil];
         ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
         iatVC.imgAtlModel = model;
         iatVC.categoryID = self.categoryID;
         [self.navigationController pushViewController:iatVC animated:YES];
         
     } else if (model.type == 3 || model.type == 4){
+        [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
         WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:-1];
         [self.navigationController pushViewController:web animated:YES];
     }

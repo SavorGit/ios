@@ -312,6 +312,7 @@ static int temp = -1;
 #pragma mark -分享点击
 - (void)shareAction{
     
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
     HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgAtlModel andVC:self andCategoryID:self.categoryID];
     [self.view addSubview:shareView];
 }
@@ -422,12 +423,14 @@ static int temp = -1;
 - (void)viewDidAppear:(BOOL)animated
 {
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:nil value:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
 }
 
 //app进入后台运行

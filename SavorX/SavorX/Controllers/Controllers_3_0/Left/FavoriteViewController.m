@@ -38,6 +38,10 @@
     [self setupDatas];
 }
 
+- (void)viewDidDisappear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"menu_collection_back" key:nil value:nil];
+}
+
 - (void)setupDatas
 {
     HSCollectoinListRequest * request = [[HSCollectoinListRequest alloc] init];
@@ -187,6 +191,7 @@
             
             NSDictionary *dic = (NSDictionary *)response;
             if ([[dic objectForKey:@"code"] integerValue] == 10000) {
+                [SAVORXAPI postUMHandleWithContentId:@"menu_cancel_collection" key:nil value:nil];
                 model.collected = 0;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
                 
@@ -207,6 +212,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    [SAVORXAPI postUMHandleWithContentId:@"menu_collection_details" key:nil value:nil];
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     
     if (model.categoryId != 103) {

@@ -125,6 +125,7 @@
             help.title = [_itemArys objectAtIndex:indexPath.row];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:help  animated:NO];
         }else if (indexPath.row == 3){
+            [SAVORXAPI postUMHandleWithContentId:@"menu_game" key:nil value:nil];
             if ([GlobalData shared].hotelId != 0) {
                 [self hideLeftViewAnimated:nil];
                 SmashEggsGameViewController * segvVC = [[SmashEggsGameViewController alloc] init];

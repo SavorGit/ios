@@ -66,6 +66,7 @@
 //下拉刷新页面数据
 - (void)refreshData
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_refresh" key:nil value:nil];
     SpecialTopRequest * request = [[SpecialTopRequest alloc] initWithSortNum:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -119,6 +120,8 @@
 //上拉获取更多数据
 - (void)getMoreData
 {
+    [SAVORXAPI postUMHandleWithContentId:@"home_load" key:nil value:nil];
+    
     CreateWealthModel *welthModel = [self.dataSource lastObject];
     SpecialTopRequest * request = [[SpecialTopRequest alloc] initWithSortNum:welthModel.sort_num];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -295,6 +298,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"home_click_subject" key:nil value:nil];
     
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];

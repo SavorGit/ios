@@ -314,6 +314,7 @@
 #pragma mark ---视频分享按钮被点击
 - (void)videoShouldBeShare
 {
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
     HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model  andVC:self andCategoryID:self.categoryID];
     [self.view addSubview:shareView];
 }

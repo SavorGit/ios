@@ -124,7 +124,7 @@
 
 #pragma mark ---分享按钮点击
 - (void)shareAction{
-    
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
     HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgTextModel andVC:self  andCategoryID:self.categoryID];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
@@ -345,12 +345,14 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgTextModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:nil value:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgTextModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
 }
 
 //app进入后台运行
