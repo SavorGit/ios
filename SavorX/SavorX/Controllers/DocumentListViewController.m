@@ -48,7 +48,6 @@
         
        [self creatGuidTouchView];
        [self creatHelpWebView];
-       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];
 
     }else{
        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];

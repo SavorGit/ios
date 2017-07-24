@@ -539,6 +539,7 @@
         
         for (int i = 0; i < resultArr.count; i ++) {
             CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            welthModel.acreateTime = welthModel.updateTime;
             [self.dataSource addObject:welthModel];
         }
         // 当返回有推荐数据时调用

@@ -191,7 +191,7 @@
     frame.origin.y = height;
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
-    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 40)];
+    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight)];
     self.testView.backgroundColor = UIColorFromRGB(0xece6de);
     
     [self addObserver];

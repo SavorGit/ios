@@ -121,7 +121,7 @@
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:advice  animated:NO];
         }else if (indexPath.row == 2){
             [self hideLeftViewAnimated:nil];
-            HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help"];
+            HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help3"];
             help.title = [_itemArys objectAtIndex:indexPath.row];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:help  animated:NO];
         }else if (indexPath.row == 3){

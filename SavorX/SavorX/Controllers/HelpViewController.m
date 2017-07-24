@@ -67,7 +67,7 @@
     [MBProgressHUD hiddenWebLoadingInView:self.webView];
     
     NSString *currentUrl = self.webView.request.URL.absoluteString;
-    if (![currentUrl isEqualToString:@"http://h5.littlehotspot.com/Public/html/help/"]) {
+    if (![currentUrl isEqualToString:@"http://h5.littlehotspot.com/Public/html/help3/"]) {
        [SAVORXAPI postUMHandleWithContentId:@"menu_help_web" key:nil value:nil];
     }
 }
