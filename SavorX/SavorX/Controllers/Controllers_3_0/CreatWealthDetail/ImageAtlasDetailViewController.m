@@ -82,14 +82,14 @@
                 }
                 [self creatSubViews];
             }else{
-                [self showNoDataViewInView:self.view noDataString:@"啊哦~页面跑丢了"];
+                [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
             }
         }else{
-            [self showNoDataViewInView:self.view noDataString:@"啊哦~页面跑丢了"];
+            [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        [self showNoDataViewInView:self.view noDataString:@"啊哦~页面跑丢了"];
+        [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
         [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
@@ -330,7 +330,7 @@ static int temp = -1;
         
         NSDictionary *dic = (NSDictionary *)response;
         if ([[dic objectForKey:@"code"] integerValue] == 10000) {
-            if (self.imgAtlModel.collected == 1) {
+            if (isCollect == 0) {
                 self.imgAtlModel.collected = 0;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
             }else{

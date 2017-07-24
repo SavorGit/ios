@@ -236,8 +236,8 @@
     }];
     
     UIButton * addButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [addButton setBackgroundImage:[UIImage imageNamed:@"yljia"] forState:UIControlStateNormal];
-    [addButton setBackgroundImage:[UIImage imageNamed:@"yljiaanxia"] forState:UIControlStateHighlighted];
+    [addButton setBackgroundImage:[UIImage imageNamed:@"yljian"] forState:UIControlStateNormal];
+    [addButton setBackgroundImage:[UIImage imageNamed:@"yljiananxia"] forState:UIControlStateHighlighted];
     [volumeTool addSubview:addButton];
     [addButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
@@ -249,8 +249,8 @@
     [addButton addTarget:self action:@selector(volumeDidHandleWith:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton * minusButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [minusButton setBackgroundImage:[UIImage imageNamed:@"yljian"] forState:UIControlStateNormal];
-    [minusButton setBackgroundImage:[UIImage imageNamed:@"yljiananxia"] forState:UIControlStateHighlighted];
+    [minusButton setBackgroundImage:[UIImage imageNamed:@"yljia"] forState:UIControlStateNormal];
+    [minusButton setBackgroundImage:[UIImage imageNamed:@"yljiaanxia"] forState:UIControlStateHighlighted];
     [volumeTool addSubview:minusButton];
     [minusButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
@@ -340,11 +340,11 @@
     button.userInteractionEnabled = NO;
     NSInteger action;
     if (button.tag == 101) {
-        //加声音
-        action = 4;
-    }else{
         //减声音
         action = 3;
+    }else{
+        //加声音
+        action = 4;
     }
     [SAVORXAPI volumeWithURL:STBURL action:action success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         button.userInteractionEnabled = YES;

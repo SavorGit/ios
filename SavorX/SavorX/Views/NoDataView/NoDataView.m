@@ -135,6 +135,10 @@
             dataLabel.text = @"没有推荐";
             loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
+        case kNoDataType_NotFound:
+            dataLabel.text = @"该内容找不到了~";
+            loaderrImageView.image = [UIImage imageNamed:@"kong_wenzhang.png"];
+            break;
         
     }
 }

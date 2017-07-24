@@ -342,11 +342,11 @@
     button.userInteractionEnabled = NO;
     NSInteger action;
     if (button.tag == 101) {
-        //加声音
-        action = 4;
-    }else{
         //减声音
         action = 3;
+    }else{
+        //加声音
+        action = 4;
     }
     [SAVORXAPI volumeWithURL:STBURL action:action success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         button.userInteractionEnabled = YES;
