@@ -22,6 +22,7 @@ typedef enum{
     KNoDataType_Me = 8,            //我的
     kNoDataType_FindSearch = 9,    //发现搜索
     kNoDataType_ReconmentFriend = 10,//推荐好友
+    kNoDataType_NotFound = 11
 }NODataType;
 
 @interface NoDataView : BaseView

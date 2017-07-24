@@ -38,6 +38,7 @@
 @property (nonatomic, strong) UIView * testView;   //底部视图
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
+@property (nonatomic, assign) BOOL isOnline;
 
 @end
 
@@ -70,18 +71,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self checkIsOnline];
+    [self showLoadingView];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self checkIsOnline];
+    });
 }
 
 - (void)checkIsOnline
 {
+    self.isOnline = NO;
     [self showLoadingView];
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        self.isOnline = YES;
         [self readyToGo];
         [self hiddenLoadingView];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        [self showNoDataViewInView:self.view noDataString:@"啊哦~页面跑丢了"];
+        [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
         [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
@@ -91,6 +97,9 @@
 
 - (void)readyToGo
 {
+    [self setNeedsStatusBarAppearanceUpdate];
+    [self.navigationController setNavigationBarHidden:self.isOnline animated:YES];
+    
     self.dataSource = [[NSMutableArray alloc] initWithCapacity:100];
     
     _isComplete = NO;
@@ -102,8 +111,6 @@
 //初始化界面
 - (void)createUI
 {
-    self.title = self.model.title;
-    
     //初始化播放器
     self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
     self.playView.backgroundColor = [UIColor blackColor];
@@ -294,7 +301,7 @@
         
         NSDictionary *dic = (NSDictionary *)response;
         if ([[dic objectForKey:@"code"] integerValue] == 10000) {
-            if (self.model.collected == 1) {
+            if (isCollect == 0) {
                 self.model.collected = 0;
                 [self.playView setIsCollect:NO];
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
@@ -333,8 +340,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self.volumeView setHidden:NO];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [self.navigationController setNavigationBarHidden:self.isOnline animated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -395,12 +401,16 @@
 
 - (BOOL)prefersStatusBarHidden
 {
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    if (orientation == UIInterfaceOrientationPortrait) {
-        return YES;
+    if (self.isOnline) {
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        
+        if (orientation == UIInterfaceOrientationPortrait) {
+            return YES;
+        }else{
+            return self.toolViewIsHidden;
+        }
     }else{
-        return self.toolViewIsHidden;
+        return NO;
     }
 }
 
@@ -685,7 +695,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
-    [self refreshPageWithModel:tmpModel];
+    self.isOnline = NO;
+    [self showLoadingView];
+    RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        self.isOnline = YES;
+        [self refreshPageWithModel:tmpModel];
+        [self hiddenLoadingView];
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self setNeedsStatusBarAppearanceUpdate];
+        [self.navigationController setNavigationBarHidden:self.isOnline animated:YES];
+        [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        [self hiddenLoadingView];
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [self setNeedsStatusBarAppearanceUpdate];
+        [self.navigationController setNavigationBarHidden:self.isOnline animated:YES];
+        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        [self hiddenLoadingView];
+    }];
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations

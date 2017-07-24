@@ -143,7 +143,7 @@
         
         NSDictionary *dic = (NSDictionary *)response;
         if ([[dic objectForKey:@"code"] integerValue] == 10000) {
-            if (self.imgTextModel.collected == 1) {
+            if (isCollect == 0) {
                 self.imgTextModel.collected = 0;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
             }else{

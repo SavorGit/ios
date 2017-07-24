@@ -343,12 +343,12 @@
     NSInteger action;
     if (button.tag == 101) {
         [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_vol_down" key:nil value:nil];
-        //加声音
-        action = 4;
-    }else{
-        [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_vol_up" key:nil value:nil];
         //减声音
         action = 3;
+    }else{
+        [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_vol_up" key:nil value:nil];
+        //加声音
+        action = 4;
     }
     [SAVORXAPI volumeWithURL:STBURL action:action success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         button.userInteractionEnabled = YES;

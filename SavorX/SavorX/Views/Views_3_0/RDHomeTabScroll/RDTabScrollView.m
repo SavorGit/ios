@@ -349,7 +349,6 @@
         }
     }else{
         [self.tempScroolItem removeFromSuperview];
-        NSLog(@"移除了中转的item");
     }
     
     [self bringSubviewToFront:self.currentItem];
@@ -376,7 +375,6 @@
     CreateWealthModel * imageName = [self lastTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.bottomItem removeFromSuperview];
-    NSLog(@"移除了下方的item");
     self.bottomItem = self.currentItem;
     self.currentItem = self.topItem;
     self.topItem = self.tempScroolItem;
@@ -397,7 +395,6 @@
     CreateWealthModel * imageName = [self nextTempInfo];
     [self.tempScroolItem configWithInfo:imageName index:[self.dataSource indexOfObject:imageName]+1 total:self.dataSource.count];
     [self.topItem removeFromSuperview];
-    NSLog(@"移除了上方的item");
     self.topItem = self.currentItem;
     self.currentItem = self.bottomItem;
     self.bottomItem = self.tempScroolItem;
