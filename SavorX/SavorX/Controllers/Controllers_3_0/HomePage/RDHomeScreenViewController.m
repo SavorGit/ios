@@ -179,18 +179,19 @@
 
 - (void)checkDemandWithModel:(CreateWealthModel *)model
 {
-    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
-    RDIsDemand * request = [[RDIsDemand alloc] initWithArtID:model.artid];
-    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        [hud hidden];
-        [self demandVideoWithModel:model force:0];
-    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        [hud hidden];
-        [MBProgressHUD showTextHUDwithTitle:@"该视频暂不支持点播" delay:1.5f];
-    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        [hud hidden];
-        [MBProgressHUD showTextHUDwithTitle:@"网络失去连接" delay:1.5f];
-    }];
+    [self demandVideoWithModel:model force:0];
+//    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
+//    RDIsDemand * request = [[RDIsDemand alloc] initWithArtID:model.artid];
+//    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+//        [hud hidden];
+//        [self demandVideoWithModel:model force:0];
+//    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+//        [hud hidden];
+//        [MBProgressHUD showTextHUDwithTitle:@"该视频暂不支持点播" delay:1.5f];
+//    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+//        [hud hidden];
+//        [MBProgressHUD showTextHUDwithTitle:@"网络失去连接" delay:1.5f];
+//    }];
 }
 
 - (void)demandVideoWithModel:(CreateWealthModel *)model force:(NSInteger)force{
