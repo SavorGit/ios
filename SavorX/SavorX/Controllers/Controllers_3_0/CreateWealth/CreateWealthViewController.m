@@ -93,11 +93,11 @@
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        [self showTopFreshLabelWithTitle:@"更新失败"];
         [self.tableView.mj_header endRefreshing];
         if (self.dataSource.count == 0) {
              [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         }
+        [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
 
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
