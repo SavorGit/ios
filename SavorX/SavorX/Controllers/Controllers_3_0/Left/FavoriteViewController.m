@@ -62,15 +62,30 @@
                 if (self.dataSource.count >= 20) {
                     self.tableView.mj_footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(getMoreData)];
                 }
+                [self showTopFreshLabelWithTitle:@"更新成功"];
             }
         }
+        
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
         [self.tableView.mj_header endRefreshing];
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        }
+        [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self hiddenLoadingView];
         [self.tableView.mj_header endRefreshing];
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        }
+        if (error.code == -1001) {
+            [self showTopFreshLabelWithTitle:@"数据加载超时"];
+        }else{
+            [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+        }
+
     }];
 }
 

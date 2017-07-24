@@ -105,7 +105,7 @@
         if (self.dataSource.count == 0) {
             [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         }
-        if (error.code == -999) {
+        if (error.code == -1001) {
             [self showTopFreshLabelWithTitle:@"数据加载超时"];
         }else{
             [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
