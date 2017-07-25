@@ -45,12 +45,13 @@
     HSRecordSmashEggsRequest * request = [[HSRecordSmashEggsRequest alloc] init];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
+        [self hiddenLoadingView];
+        
         NSDictionary *dic = (NSDictionary *)response;
         NSDictionary *resultDic = [dic objectForKey:@"result"];
         self.winResultStr = [NSString stringWithFormat:@"%@?deviceid=%@",resultDic[@"url"],[GlobalData shared].deviceID];
         [self createWebView];
         [self.view addSubview:self.topView];
-        [self hiddenLoadingView];
 
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
