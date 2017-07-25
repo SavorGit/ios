@@ -74,7 +74,7 @@
     [_bgView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 10));
-        make.bottom.mas_equalTo(self).offset(- 14);
+        make.bottom.mas_equalTo(self).offset(- 16);
         make.left.mas_equalTo(5);
     }];
     
@@ -101,19 +101,23 @@
 
 - (void)configModelData:(CreateWealthModel *)model{
     
-    CGFloat subTitleHeight = [self getHeightByWidth:kMainBoundsWidth - 30 title:model.title font:kPingFangMedium(15)];
+    CGFloat subTitleHeight = [self getHeightByWidth:kMainBoundsWidth - 30 title:model.shareTitle font:kPingFangMedium(15)];
     if (subTitleHeight > 21) {
-        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self.subTitleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 42));
         }];
         [_bgView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(357.5);
         }];
     }
-    self.subTitleLabel.text = model.shareTitle;
     
     self.titleLabel.text = model.title;
+    self.subTitleLabel.text = model.shareTitle;
+    
     self.timeLabel.text = model.updateTime;
+    if (!isEmptyString(model.updateTime)) {
+        self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
+    }
     [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];

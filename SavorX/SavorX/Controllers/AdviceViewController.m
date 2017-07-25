@@ -10,6 +10,7 @@
 #import "UIColor+YYAdditions.h"
 #import "FeedbackView.h"
 #import "HSSubmitFeedbackRequest.h"
+#import "RDAlertView.h"
 
 @interface AdviceViewController ()<FeedbackViewDelegate>
 
@@ -62,7 +63,7 @@
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [SAVORXAPI showAlertWithString:@"发送失败" withController:self];
+        [SAVORXAPI showAlertWithMessage:@"我知道了"];
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     }];
     
