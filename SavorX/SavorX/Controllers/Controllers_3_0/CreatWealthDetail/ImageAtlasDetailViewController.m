@@ -131,6 +131,9 @@
     
     self.isReady = YES;
     
+    if (_photoDescView != nil) {
+        [_photoDescView removeFromSuperview];
+    }
     ImageAtlasDetailModel *tmpModel = self.imageDatas[0];
     _photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:0 totalCount:self.imageDatas.count];
     [self.view addSubview:_photoDescView];
