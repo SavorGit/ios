@@ -183,7 +183,7 @@ static GlobalData* single = nil;
     }
 }
 
-- (void)setNetworkStatus:(NSInteger)networkStatus
+- (void)setNetworkStatus:(RDNetworkStatus )networkStatus
 {
     if (_networkStatus != networkStatus) {
         _networkStatus = networkStatus;

@@ -17,6 +17,8 @@
 #import "HSGetCollectoinStateRequest.h"
 #import "RDLogStatisticsAPI.h"
 
+#define  igTextHeight (130 *802.f/1242.f + 12)
+
 @interface ImageTextDetailViewController ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UIWebViewDelegate>
 
 @property (nonatomic, strong) UIWebView * webView;
@@ -194,7 +196,7 @@
     //TableView的高度
     CGFloat tabHeight = 0;
     if (self.dataSource.count != 0) {
-        tabHeight = self.dataSource.count *96 + 48 + 8;
+        tabHeight = self.dataSource.count * + 48 + 8;
     }
     
     //底部View总高度
@@ -316,8 +318,7 @@
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.backgroundColor = [UIColor clearColor];
-    cell.contentView.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
     //最后一条分割线隐藏
     if (indexPath.row == self.dataSource.count - 1) {
         cell.lineView.hidden = YES;
@@ -332,7 +333,8 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 96.f;
+    CGFloat tmpHeight = 130 *802.f/1242.f;
+    return tmpHeight + 12;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

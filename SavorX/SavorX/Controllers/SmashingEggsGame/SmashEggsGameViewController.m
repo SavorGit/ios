@@ -322,10 +322,28 @@
 {
     [SAVORXAPI postUMHandleWithContentId:@"game_page_choose" key:nil value:nil];
     
+    // 先判断网络环境
+    if ([GlobalData shared].networkStatus != RDNetworkStatusReachableViaWiFi) {
+        [SAVORXAPI showAlertWithMessage:@"请连接包间wifi后进行操作"];
+        return;
+        
+    }else if (![GlobalData shared].isBindRD){
+        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"请连接电视，即可参加活动"];
+        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            
+        } bold:NO];
+        RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"连接电视" handler:^{
+            [[RDHomeStatusView defaultView] scanQRCode];
+        } bold:NO];
+        [alertView addActions:@[action,actionOne]];
+        [alertView show];
+        return;
+    }
+    
     // 先判断有没有配置信息
     if (_isConfigure == NO) {
         
-        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"该酒楼暂时没有抽奖活动~"];
+        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"当前包间的活动未开始"];
         RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
             
         } bold:YES];

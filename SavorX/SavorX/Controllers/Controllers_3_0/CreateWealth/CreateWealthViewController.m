@@ -285,7 +285,8 @@
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     if (!isEmptyString(model.indexImageUrl)){
-        return 353;
+        CGFloat imgHeight= (kMainBoundsWidth - 30) *(844.f/1142.f);
+        return imgHeight + 98;
     }else if (model.type == 2 || model.type == 3 || model.type == 4) {
         CGFloat imgHeight= (kMainBoundsWidth - 30) *802.f/1242.f;
         return imgHeight + 95;

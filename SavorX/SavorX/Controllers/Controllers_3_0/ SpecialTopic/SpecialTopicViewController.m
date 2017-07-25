@@ -260,7 +260,8 @@
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        cell.backgroundColor = [UIColor clearColor];
+        cell.contentView.backgroundColor = [UIColor clearColor];
         
         [cell configModelData:model];
         
@@ -287,13 +288,12 @@
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     if (model.type == 0) {
-        return 346.5;
         if ([RDFrequentlyUsed getHeightByWidth:kMainBoundsWidth - 30 title:model.shareTitle font:[UIFont systemFontOfSize:15]] > 21) {
             return 367.5;
         }
+        return 346.5;
     }else if (model.type == 1){
-        CGFloat igTextHeight= 130 *802.f/1242.f;
-        return igTextHeight + 12;
+        return 96;
     }
     return 0;
 }

@@ -51,7 +51,7 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 @property (nonatomic, strong) DeviceModel * DLNADevice;
 
 //当前网络状态
-@property (nonatomic, assign) NSInteger networkStatus;
+@property (nonatomic, assign) RDNetworkStatus networkStatus;
 
 //存储小平台呼出二维码地址
 @property (nonatomic, copy) NSString * callQRCodeURL;
