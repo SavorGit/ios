@@ -131,6 +131,15 @@
     
     self.isReady = YES;
     
+    ImageAtlasDetailModel *tmpModel = self.imageDatas[0];
+    _photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:0 totalCount:self.imageDatas.count];
+    [self.view addSubview:_photoDescView];
+    [_photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,_photoDescView.height));
+        make.bottom.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+    }];
+    
 }
 
 - (void)initInfoConfig{
