@@ -236,6 +236,7 @@
     }else{
         SpecialTopDetailViewController * stVC = [[SpecialTopDetailViewController alloc] init];
         stVC.categoryID = model.categoryId;
+        stVC.specilDetailModel = model;
         [self.navigationController pushViewController:stVC animated:YES];
     }
 }
