@@ -23,8 +23,10 @@
     _bgView = [[UIView alloc] init];
     _bgView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.contentView addSubview:_bgView];
+    CGFloat bgHeight =(kMainBoundsWidth - 30) *844.f/1142.f + 88;
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 20, 343));
+        make.width.mas_equalTo(kMainBoundsWidth - 20);
+        make.height.mas_equalTo(bgHeight);//343
         make.top.mas_equalTo(10);
         make.left.mas_equalTo(10);
     }];
@@ -35,7 +37,8 @@
     _bgImageView.backgroundColor = [UIColor clearColor];
     [_bgView addSubview:_bgImageView];
     [_bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 255));
+        make.width.mas_equalTo(kMainBoundsWidth - 30);
+        make.height.equalTo(_bgImageView.mas_width).multipliedBy(844.f/1142.f);//255
         make.top.mas_equalTo(5);
         make.left.mas_equalTo(5);
     }];
