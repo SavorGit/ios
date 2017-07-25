@@ -155,6 +155,7 @@
 }
 
 -(void)retryToGetData{
+    [self hideNoNetWorkView];
     [self refreshData];
 }
 

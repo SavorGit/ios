@@ -702,6 +702,17 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     }
 }
 
+- (void)didPlayFailed
+{
+    [self.slider setValue:0.f];
+    [self.playButton setSelected:NO];
+    if (self.isFullScreen) {
+        [self backButtonDidClicked:self.backButton];
+    }
+    [self stopLoading];
+    self.playButton.alpha = 1.f;
+}
+
 - (void)setVideoTotalTime:(NSInteger)time
 {
     self.totalTime = time;

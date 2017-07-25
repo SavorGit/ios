@@ -846,7 +846,12 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             break;
             
         case GCCPlayerStatusFaild:
-            [self.controlView pause];
+        {
+            [self.controlView didPlayFailed];
+            [MBProgressHUD showTextHUDwithTitle:@"由于网络问题，播放失败" delay:1.5f];
+            [self insertSubview:self.imageView belowSubview:self.controlView];
+        }
+            
             break;
             
         default:

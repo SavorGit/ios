@@ -23,7 +23,7 @@
 
 @property (nonatomic, assign) NSInteger currentPage;
 
-@property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UIImageView *topView;
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) ImageAtlasScrollView *imageScrollView;
 @property (nonatomic, strong) DDPhotoDescView *photoDescView;
@@ -88,22 +88,27 @@
                 [self creatSubViews];
             }else{
                 [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+                [self.view bringSubviewToFront:self.topView];
             }
         }else{
             [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+            [self.view bringSubviewToFront:self.topView];
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        [self.view bringSubviewToFront:self.topView];
         [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+        [self.view bringSubviewToFront:self.topView];
         [self hiddenLoadingView];
     }];
 }
 
 - (void)retryToGetData
 {
+    [self hideNoNetWorkView];
     [self requestWithContentId:self.imgAtlModel.artid];
 }
 
@@ -260,7 +265,9 @@ static int temp = -1;
 {
     if (_topView == nil) {
         
-        _topView = [[UIView alloc] initWithFrame:CGRectZero];
+        _topView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _topView.userInteractionEnabled = YES;
+        _topView.contentMode = UIViewContentModeScaleToFill;
         _topView.backgroundColor = kThemeColor;
         [self.view addSubview:_topView];
         [_topView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -402,6 +409,7 @@ static int temp = -1;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
         _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
         
+        [_topView setImage:[UIImage new]];
         _topView.backgroundColor = kThemeColor;
         [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
@@ -432,9 +440,10 @@ static int temp = -1;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
         _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
         
-        _topView.backgroundColor = [UIColor clearColor];
+        [_topView setImage:[UIImage imageNamed:@"quanpingmc"]];
+        [_topView setBackgroundColor:[UIColor clearColor]];
         [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 85));
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
