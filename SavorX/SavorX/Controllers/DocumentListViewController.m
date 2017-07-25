@@ -27,6 +27,7 @@
 @property (nonatomic, strong) UIView *guidView; // 引导页视图
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) UIToolbar *toolbar;
+@property (nonatomic, strong) NSString *urlString;
 
 @end
 
@@ -40,6 +41,7 @@
     self.title = @"我的文件";
     NSArray * array = [OpenFileTool getALLDocumentFileList];
     self.dataSource = [NSMutableArray arrayWithArray:array];
+    self.urlString = @"http://h5.littlehotspot.com/Public/html/help3/wenjian_ios.html";
     
     [self createUI];
     
@@ -80,13 +82,13 @@
         make.edges.mas_equalTo(0);
     }];
     
-    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"]];
+    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]];
     [self.webView loadRequest:request];
 }
 
 - (void)shouldPushHelp
 {
-    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"];
+    HelpViewController * help = [[HelpViewController alloc] initWithURL:self.urlString];
     help.title = @"文件投屏步骤";
     [self.navigationController  pushViewController:help  animated:NO];
 }
