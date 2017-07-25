@@ -49,11 +49,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewDidLoad
 {
+    self.view.backgroundColor = VCBackgroundColor;
+    
     self.isReady = NO;
     self.isPortrait = YES;
     
@@ -65,6 +67,7 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     //2650
     [self requestWithContentId:self.imgAtlModel.artid];
+    [self.view addSubview:self.topView];
 }
 
 - (void)requestWithContentId:(NSString *)contentId{
@@ -107,7 +110,6 @@
 - (void)creatSubViews{
     
     [self initInfoConfig];
-    [self.view addSubview:self.topView];
     
     [self.view addSubview:self.imageScrollView];
     [self.imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -127,8 +129,6 @@
 }
 
 - (void)initInfoConfig{
-    
-    self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     // app退到后台

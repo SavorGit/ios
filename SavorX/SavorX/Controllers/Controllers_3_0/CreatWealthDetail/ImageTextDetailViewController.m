@@ -69,6 +69,7 @@
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }
     self.webView.backgroundColor = [UIColor clearColor];
+    [self.webView setOpaque:NO];
     [self.view addSubview:self.webView];
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];

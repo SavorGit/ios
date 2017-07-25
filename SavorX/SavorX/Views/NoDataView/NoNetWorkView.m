@@ -26,6 +26,8 @@
 {
     [super awakeFromNib];
     self.backgroundColor = VCBackgroundColor;
+    _descLabel.textColor = UIColorFromRGB(0x595757);
+    _descLabel.font = kPingFangLight(15);
 }
 - (IBAction)reloadBtnClicked:(id)sender
 {
