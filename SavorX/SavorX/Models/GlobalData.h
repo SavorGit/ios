@@ -116,6 +116,9 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 
 @property (nonatomic, assign) double VCLongitude;
 
+//记录是否有收藏和非收藏操作
+@property (nonatomic, assign) BOOL isCollectAction;
+
 /**
  *  创建单例
  *

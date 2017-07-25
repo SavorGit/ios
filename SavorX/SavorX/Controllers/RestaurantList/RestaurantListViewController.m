@@ -58,21 +58,7 @@
 
 // 读取缓存的数据
 - (void)readCacheData{
-    
-    BOOL isCache = [[NSFileManager defaultManager] fileExistsAtPath:self.cachePath];
-    
-    if (isCache) {
-        
-        //如果本地缓存的有数据，则先从本地读取缓存的数据
-        NSArray * listArray = [NSArray arrayWithContentsOfFile:self.cachePath];
-        for(NSDictionary *dict in listArray){
-            
-            RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
-            [self.dataSource addObject:model];
-        }
-        [self.tableView reloadData];
-        
-    }
+    [self showLoadingView];
     [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
         if ([GlobalData shared].VCLatitude == 0.f) {
             
@@ -82,7 +68,7 @@
             self.latitudeStr = [NSString stringWithFormat:@"%lf", latitude];
             self.longitudeStr = [NSString stringWithFormat:@"%lf", longitude];
             
-            [self setUpDatas];
+            [self setupDatas];
             
         }else if ([[RDLocationManager manager] checkLocationDataIsNeedUpdateWithLastPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake([GlobalData shared].VCLatitude, [GlobalData shared].VCLongitude)) currentPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latitude, longitude))]){
             
@@ -92,13 +78,11 @@
             self.latitudeStr = [NSString stringWithFormat:@"%lf", latitude];
             self.longitudeStr = [NSString stringWithFormat:@"%lf", longitude];
             
-            [self setUpDatas];
+            [self setupDatas];
             
         }else{
             
-            if (!isCache) {
-                [self setUpDatas];
-            }
+            [self setupDatas];
             
         }
     }];
@@ -106,8 +90,9 @@
 }
 
 //初始化请求第一页，下拉刷新
-- (void)setUpDatas{
+- (void)setupDatas{
 
+    [self showLoadingView];
     HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:self.longitudeStr lat:self.latitudeStr pageNum:_page];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -125,18 +110,28 @@
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
         [self.tableView reloadData];
-        
+        [self hiddenLoadingView];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.tableView.mj_header endRefreshing];
+        [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+        [self hiddenLoadingView];
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
         [self.tableView.mj_header endRefreshing];
+        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        [self hiddenLoadingView];
         
     }];
     
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self setupDatas];
 }
 
 - (void)upMoreDatas{
@@ -300,7 +295,7 @@
     [SAVORXAPI postUMHandleWithContentId:@"hotel_map_list_refresh" key:nil value:nil];
     
     _page = 1;
-    [self setUpDatas];
+    [self setupDatas];
 }
 
 - (void)getMoreData{

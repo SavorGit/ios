@@ -779,6 +779,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //app已经进入后台运行
 - (void)appDidEnterBackground
 {
+    self.time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
     self.lastStutas = self.status;
     [self pause];
 }

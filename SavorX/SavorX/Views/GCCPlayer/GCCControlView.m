@@ -750,6 +750,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
 {
     [self.slider setValue:value];
     self.bufferView.progress = 0;
+    self.progressBG.progress = 0;
     self.progressView.progress = self.slider.value;
     self.timeLabel.text = @"00:00";
 }

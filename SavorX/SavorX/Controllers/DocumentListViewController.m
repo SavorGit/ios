@@ -249,6 +249,8 @@
         [cell.imageView setImage:[UIImage imageNamed:@"wj_xls"]];
     }else if ([path hasSuffix:@"ppt"] || [path hasSuffix:@"pptx"]) {
         [cell.imageView setImage:[UIImage imageNamed:@"wj_ppt"]];
+    }else if ([path hasSuffix:@"mp4"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"mp4"]];
     }
     
     return cell;

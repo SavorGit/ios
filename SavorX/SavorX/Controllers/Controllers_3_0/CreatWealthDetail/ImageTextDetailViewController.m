@@ -156,18 +156,22 @@
             self.collectButton.selected = !self.collectButton.selected;
         }
         
+        [GlobalData shared].isCollectAction = YES;
+        
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         if (isCollect == 0) {
             [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
         }else{
             [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
         }
+        [MBProgressHUD showTextHUDwithTitle:@"收藏失败" delay:1.f];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         if (isCollect == 0) {
             [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
         }else{
             [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
         }
+        [MBProgressHUD showTextHUDwithTitle:@"收藏失败" delay:1.f];
     }];
     
 }
