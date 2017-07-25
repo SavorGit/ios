@@ -98,7 +98,7 @@
 - (void)readyToGo
 {
     [self setNeedsStatusBarAppearanceUpdate];
-    [self.navigationController setNavigationBarHidden:self.isOnline animated:YES];
+    [self.navigationController setNavigationBarHidden:self.isOnline animated:NO];
     
     self.dataSource = [[NSMutableArray alloc] initWithCapacity:100];
     
@@ -717,12 +717,12 @@
         [self hiddenLoadingView];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self setNeedsStatusBarAppearanceUpdate];
-        [self.navigationController setNavigationBarHidden:self.isOnline animated:YES];
+        [self.navigationController setNavigationBarHidden:self.isOnline animated:NO];
         [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
         [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self setNeedsStatusBarAppearanceUpdate];
-        [self.navigationController setNavigationBarHidden:self.isOnline animated:YES];
+        [self.navigationController setNavigationBarHidden:self.isOnline animated:NO];
         [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         [self hiddenLoadingView];
     }];
@@ -730,7 +730,10 @@
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskAllButUpsideDown;
+    if (self.isOnline) {
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end
