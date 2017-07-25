@@ -140,28 +140,28 @@
         case UMSocialPlatformType_WechatSession: {
             // 微信
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model];
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model andUmKeyString:@"shortcut_share_weixin"];
             
         }
             break;
         case UMSocialPlatformType_WechatTimeLine: {
             // 微信朋友圈
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_friends"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model];
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model andUmKeyString:@"shortcut_share_weixin_friends"];
             
         }
             break;
         case UMSocialPlatformType_QQ: {
             // QQ
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq_zone"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model];
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model andUmKeyString:@"shortcut_share_qq"];
             
         }
             break;
         case UMSocialPlatformType_Sina: {
             // 微博
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"sina"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model];
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model andUmKeyString:@"shortcut_share_sina"];
             
         }
             break;

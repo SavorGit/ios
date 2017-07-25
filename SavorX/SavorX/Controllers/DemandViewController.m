@@ -330,7 +330,7 @@
         return;
     }
     
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model andVC:self  andCategoryID:self.categroyID];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model andVC:self  andCategoryID:self.categroyID andSourceId:1];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 

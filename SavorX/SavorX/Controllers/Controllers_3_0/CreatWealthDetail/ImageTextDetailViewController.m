@@ -125,7 +125,7 @@
 #pragma mark ---分享按钮点击
 - (void)shareAction{
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgTextModel andVC:self  andCategoryID:self.categoryID];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgTextModel andVC:self  andCategoryID:self.categoryID andSourceId:0];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 
@@ -329,6 +329,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     self.imgTextModel = tmpModel;

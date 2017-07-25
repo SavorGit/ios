@@ -325,7 +325,7 @@
 /**
  *  分享至平台3.0改版调用
  */
-- (void)sharedToPlatform:(UMSocialPlatformType)platformType andController:(UIViewController *)VC withModel:(CreateWealthModel *)model;
+- (void)sharedToPlatform:(UMSocialPlatformType)platformType andController:(UIViewController *)VC withModel:(CreateWealthModel *)model andUmKeyString:(NSString *)keyString;
 {
     self.model = model;
     NSString * url = [self.model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -345,10 +345,10 @@
     [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
         
         if (error) {
-//            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
+            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
             [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
         }else{
-//            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
+            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
             [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
         }
         

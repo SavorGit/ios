@@ -332,7 +332,7 @@
 - (void)videoShouldBeShare
 {
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model  andVC:self andCategoryID:self.categoryID];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model  andVC:self andCategoryID:self.categoryID andSourceId:0];
     [self.view addSubview:shareView];
 }
 
@@ -704,6 +704,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
+    
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     self.isOnline = NO;
     [self showLoadingView];

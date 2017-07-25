@@ -90,7 +90,7 @@
 #pragma mark ---分享按钮点击
 - (void)shareAction{
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.specilDetailModel andVC:self andCategoryID:self.categoryID];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.specilDetailModel andVC:self andCategoryID:self.categoryID andSourceId:0];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 

@@ -327,7 +327,7 @@ static int temp = -1;
 - (void)shareAction{
     
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgAtlModel andVC:self andCategoryID:self.categoryID];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgAtlModel andVC:self andCategoryID:self.categoryID andSourceId:0];
     [self.view addSubview:shareView];
 }
 

@@ -46,11 +46,14 @@
 
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 
+@property (nonatomic, assign) NSInteger sourceId; //来源ID(0代表详情，1代表点播详情)
+
+
 @end
 
 @implementation HotPopShareView
 
-- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC andCategoryID:(NSInteger )categoryID{
+- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC andCategoryID:(NSInteger )categoryID andSourceId:(NSInteger)sourceId{
     
     self = [super init];
     if (self) {
@@ -58,6 +61,7 @@
         self.model = model;
         self.VC = VC;
         self.categoryID = categoryID;
+        self.sourceId = sourceId;
         //初始化数据
         [self creatDatas];
         self.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);
@@ -161,6 +165,12 @@
 #pragma mark ---取消
 - (void)tappedCancel {
     
+    if (self.sourceId == 0) {
+        [SAVORXAPI postUMHandleWithContentId:@"details_page_share_cancel_collection" key:nil value:nil];
+    }else if (self.sourceId == 1){
+        [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share_cancel" key:nil value:nil];
+    }
+    
     [UIView animateWithDuration:ANIMATE_DURATION animations:^{
         [self.bgView setFrame:CGRectMake(0, ScreenHeight, ScreenWidth, 0)];
         self.alpha = 0;
@@ -182,40 +192,82 @@
         case UMSocialPlatformType_WechatSession: {
             // 微信
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model];
+            
+            NSString *umKeyString;
+            if (self.sourceId == 0) {
+                umKeyString = @"details_page_share_weixin";
+            }else if (self.sourceId == 1){
+                umKeyString = @"bunch planting_page_share_weixin";
+            }
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatSession andController:self.VC withModel:self.model andUmKeyString:umKeyString];
             
         }
             break;
         case UMSocialPlatformType_WechatTimeLine: {
             // 微信朋友圈
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_friends"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model];
+            
+            NSString *umKeyString;
+            if (self.sourceId == 0) {
+                umKeyString = @"details_page_share_weixin_friends";
+            }else if (self.sourceId == 1){
+                umKeyString = @"bunch planting_page_share_weixin_friends ";
+            }
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatTimeLine andController:self.VC withModel:self.model andUmKeyString:umKeyString];
         }
             break;
         case UMSocialPlatformType_QQ: {
             // QQ
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model];
+            
+            NSString *umKeyString;
+            if (self.sourceId == 0) {
+                umKeyString = @"details_page_share_qq";
+            }else if (self.sourceId == 1){
+                umKeyString = @"bunch planting_page_share_qq";
+            }
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_QQ andController:self.VC withModel:self.model andUmKeyString:umKeyString];
             
         }
             break;
         case UMSocialPlatformType_Qzone: {
             // QQ空间
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"qq_zone"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Qzone andController:self.VC withModel:self.model];
+            
+            NSString *umKeyString;
+            if (self.sourceId == 0) {
+                umKeyString = @"details_page_share_qq_zone";
+            }else if (self.sourceId == 1){
+                umKeyString = @"bunch planting_page_share_qq_zone";
+            }
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Qzone andController:self.VC withModel:self.model andUmKeyString:umKeyString];
         }
             break;
         case UMSocialPlatformType_Sina: {
             // 微博
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"sina"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model];
+            
+            NSString *umKeyString;
+            if (self.sourceId == 0) {
+                umKeyString = @"details_page_share_sina";
+            }else if (self.sourceId == 1){
+                umKeyString = @"bunch planting_page_share_sina";
+            }
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_Sina andController:self.VC withModel:self.model andUmKeyString:umKeyString];
             
         }
             break;
         case UMSocialPlatformType_WechatFavorite: {
             // 微信收藏
             [RDLogStatisticsAPI RDShareLogModel:self.model categoryID:categroyIDStr volume:@"weixin_collection"];
-            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatFavorite andController:self.VC withModel:self.model];
+            
+            NSString *umKeyString;
+            if (self.sourceId == 0) {
+                umKeyString = @"details_page_share_weixin_collection";
+            }else if (self.sourceId == 1){
+                umKeyString = @"bunch planting_page_share_weixin_collection";
+            }
+            [[UMCustomSocialManager defaultManager] sharedToPlatform:UMSocialPlatformType_WechatFavorite andController:self.VC withModel:self.model andUmKeyString:umKeyString];
             
         }
             break;
