@@ -12,7 +12,7 @@
 
 @interface ImageTextTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) UIView *bgView;
+//@property (nonatomic, strong) UIView *bgView;
 
 @property (nonatomic, strong) UILabel *titleLabel;
 
