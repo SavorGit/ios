@@ -278,11 +278,13 @@
 
         UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
         headView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        
         UILabel *recommendLabel = [[UILabel alloc] init];
-        recommendLabel.frame = CGRectMake(10, 10, 100, 30);
+        recommendLabel.frame = CGRectMake(15, 10, 100, 30);
         recommendLabel.textColor = UIColorFromRGB(0x922c3e);
         recommendLabel.font = kPingFangRegular(15);
         recommendLabel.text = @"为您推荐";
+        recommendLabel.textAlignment = NSTextAlignmentLeft;
         [headView addSubview:recommendLabel];
         _tableView.tableHeaderView = headView;
     }
