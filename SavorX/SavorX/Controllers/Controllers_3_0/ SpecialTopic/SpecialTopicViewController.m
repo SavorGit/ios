@@ -260,8 +260,7 @@
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = [UIColor clearColor];
-        cell.contentView.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
         [cell configModelData:model];
         
@@ -293,7 +292,8 @@
             return 367.5;
         }
     }else if (model.type == 1){
-        return 96;
+        CGFloat igTextHeight= 130 *802.f/1242.f;
+        return igTextHeight + 12;
     }
     return 0;
 }

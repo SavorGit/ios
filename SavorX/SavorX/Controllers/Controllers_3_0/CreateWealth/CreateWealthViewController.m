@@ -232,8 +232,7 @@
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = [UIColor clearColor];
-        cell.contentView.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
         [cell configModelData:model];
         
@@ -247,8 +246,7 @@
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = [UIColor clearColor];
-        cell.contentView.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
         [cell configModelData:model];
         
@@ -261,8 +259,7 @@
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = [UIColor clearColor];
-        cell.contentView.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
         [cell configModelData:model];
         
@@ -290,9 +287,11 @@
     if (!isEmptyString(model.indexImageUrl)){
         return 353;
     }else if (model.type == 2 || model.type == 3 || model.type == 4) {
-        return 285;
+        CGFloat imgHeight= (kMainBoundsWidth - 30) *802.f/1242.f;
+        return imgHeight + 95;
     }else if (model.type == 1){
-        return 96;
+        CGFloat igTextHeight= 130 *802.f/1242.f;
+        return igTextHeight + 12;
     }
     return 0;
 }
