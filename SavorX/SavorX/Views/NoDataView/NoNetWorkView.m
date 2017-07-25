@@ -52,7 +52,7 @@
     }else if(style==NoNetWorkViewStyle_Load_Fail){
         _flagImageView.image = [UIImage imageNamed:@"kong_wlyc"];
 
-        _descLabel.text = @"没有找到内容, 点击重试";
+        _descLabel.text = @"网络异常, 点击重试";
         _touchScrrenLabel.text = @"";
     }
     

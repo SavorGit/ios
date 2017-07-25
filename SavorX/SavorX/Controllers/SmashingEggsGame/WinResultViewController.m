@@ -41,6 +41,7 @@
 // 请求砸蛋次数
 - (void)requestEggsResult{
     
+    [self showLoadingView];
     HSRecordSmashEggsRequest * request = [[HSRecordSmashEggsRequest alloc] init];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -49,11 +50,12 @@
         self.winResultStr = [NSString stringWithFormat:@"%@?deviceid=%@",resultDic[@"url"],[GlobalData shared].deviceID];
         [self createWebView];
         [self.view addSubview:self.topView];
+        [self hiddenLoadingView];
 
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
+        [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        [self hiddenLoadingView];
     }];
 }
 

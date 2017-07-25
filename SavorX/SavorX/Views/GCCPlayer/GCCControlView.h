@@ -68,4 +68,6 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 //取消延时等待控制栏隐藏
 - (void)cancleWaitToHiddenToolView;
 
+- (void)didPlayFailed;
+
 @end
