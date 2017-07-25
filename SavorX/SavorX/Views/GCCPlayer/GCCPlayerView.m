@@ -115,6 +115,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)setPlayItemWithURL:(NSString *)url
 {
     NSString * preCheck = [url substringToIndex:url.length - 8];
+    NSLog(@"视频地址：%@", url);
     if ([self.currentURL hasPrefix:preCheck]) {
         self.time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
     }else{
@@ -135,17 +136,18 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
         [self.player replaceCurrentItemWithPlayerItem:playerItem];
     }else{
+        [self.controlView loading];
         self.player = [AVPlayer playerWithPlayerItem:playerItem];
     }
-    self.playerItemVideoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:nil];
-    [playerItem addOutput:self.playerItemVideoOutput];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     [playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
     [playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
     // 缓冲区空了，需要等待数据
     [playerItem addObserver:self forKeyPath:@"playbackBufferEmpty" options:NSKeyValueObservingOptionNew context:nil];
     // 缓冲区有足够数据可以播放了
     [playerItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
+    self.playerItemVideoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:nil];
+    [playerItem addOutput:self.playerItemVideoOutput];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     // 移除time观察者
     if (self.timeObserve) {
         [self.player removeTimeObserver:self.timeObserve];
