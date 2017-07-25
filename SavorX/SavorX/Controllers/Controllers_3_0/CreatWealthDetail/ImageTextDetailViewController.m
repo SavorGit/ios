@@ -69,6 +69,7 @@
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }
     self.webView.backgroundColor = [UIColor clearColor];
+    [self.webView setOpaque:NO];
     [self.view addSubview:self.webView];
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
@@ -124,8 +125,8 @@
 
 #pragma mark ---分享按钮点击
 - (void)shareAction{
-    
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgTextModel andVC:self  andCategoryID:self.categoryID];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgTextModel andVC:self  andCategoryID:self.categoryID andSourceId:0];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 
@@ -146,17 +147,27 @@
             if (isCollect == 0) {
                 self.imgTextModel.collected = 0;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
             }else{
                 self.imgTextModel.collected = 1;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
             }
             self.collectButton.selected = !self.collectButton.selected;
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     }];
     
 }
@@ -320,6 +331,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
+    
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     self.imgTextModel = tmpModel;
     [self.testView removeFromSuperview];
@@ -345,12 +358,16 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgTextModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:@"details_page" value:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_begin_reading" key:@"details_begin_reading" value:[Helper getCurrentTimeWithFormat:@"YYYYMMddHHmmss"]];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgTextModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
+    [SAVORXAPI postUMHandleWithContentId:@"details_end_reading" key:@"details_end_reading" value:[Helper getCurrentTimeWithFormat:@"YYYYMMddHHmmss"]];
 }
 
 //app进入后台运行

@@ -32,6 +32,8 @@
     dataButton.hidden = YES;
     bottomImageView.hidden = YES;
     self.backgroundColor = VCBackgroundColor;
+    dataLabel.textColor = UIColorFromRGB(0x595757);
+    dataLabel.font = kPingFangLight(15);
 }
 
 -(void)showNoDataView:(UIView*)superView noDataType:(NODataType)type

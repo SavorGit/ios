@@ -305,23 +305,34 @@
                 self.model.collected = 0;
                 [self.playView setIsCollect:NO];
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
             }else{
                 self.model.collected = 1;
                 [self.playView setIsCollect:YES];
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
             }
         }
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     }];
 }
 
 #pragma mark ---视频分享按钮被点击
 - (void)videoShouldBeShare
 {
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model  andVC:self andCategoryID:self.categoryID];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model  andVC:self andCategoryID:self.categoryID andSourceId:0];
     [self.view addSubview:shareView];
 }
 
@@ -693,6 +704,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
+    
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     self.isOnline = NO;
     [self showLoadingView];

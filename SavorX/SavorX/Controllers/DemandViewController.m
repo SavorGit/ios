@@ -299,16 +299,26 @@
             if (self.model.collected == 1) {
                 self.model.collected = 0;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
             }else{
                 self.model.collected = 1;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
             }
             button.selected = !button.selected;
         }
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     }];
 }
 
@@ -320,7 +330,7 @@
         return;
     }
     
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model andVC:self  andCategoryID:self.categroyID];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model andVC:self  andCategoryID:self.categroyID andSourceId:1];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 

@@ -45,6 +45,6 @@
  *  @return ShareView
  */
 
-- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC  andCategoryID:(NSInteger )categoryID;
+- (instancetype)initWithModel:(CreateWealthModel *)model andVC:(UIViewController *)VC  andCategoryID:(NSInteger )categoryID andSourceId:(NSInteger)sourceId;
 
 @end

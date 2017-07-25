@@ -89,7 +89,8 @@
 
 #pragma mark ---分享按钮点击
 - (void)shareAction{
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.specilDetailModel andVC:self andCategoryID:self.categoryID];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.specilDetailModel andVC:self andCategoryID:self.categoryID andSourceId:0];
     [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 
@@ -110,17 +111,27 @@
             if (self.specilDetailModel.collected == 1) {
                 self.specilDetailModel.collected = 0;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
             }else{
                 self.specilDetailModel.collected = 1;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
             }
             self.collectButton.selected = !self.collectButton.selected;
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     }];
     
 }
@@ -169,6 +180,12 @@
     [self.webView.scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:@"details_page" value:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+- (void)viewDidDisappear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
+}
 - (void)dealloc{
     
     [self removeObserver];

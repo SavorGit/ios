@@ -50,6 +50,15 @@
     [self loadPhotoLibrary];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_enter" key:nil value:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_back" key:nil value:nil];
+}
+
 //加载手机内的相册列表
 - (void)loadPhotoLibrary
 {
@@ -133,6 +142,7 @@
         [self closeLibraryChoose];
     }else{
         [self startLibraryChoose];
+        [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_open" key:nil value:nil];
     }
 }
 
@@ -158,6 +168,7 @@
 //结束选择相册
 - (void)closeLibraryChoose
 {
+    [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_choose" key:nil value:nil];
     UIButton * button = (UIButton *)self.navigationItem.titleView;
     button.userInteractionEnabled = NO;
     
@@ -201,6 +212,7 @@
 - (void)rightButtonItemDidClicked
 {
     if (self.isChooseStatus) {
+        [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_screen" key:nil value:nil];
         [self closeChooseStatus];
     }else{
         [self startChooseStatus];
@@ -252,6 +264,7 @@
 //全选按钮被点击了
 - (void)startAllChoose
 {
+    [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_chooseall" key:nil value:nil];
     NSInteger maxNumber = self.model.fetchResult.count;
     NSInteger i = 0;
     while (i < maxNumber) {
@@ -347,7 +360,7 @@
     
     PHAsset * currentAsset = [self.model.fetchResult objectAtIndex:indexPath.row];
     if (currentAsset.mediaType == PHAssetMediaTypeImage) {
-        
+        [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_click_item" key:nil value:nil];
         PHFetchOptions * option = [[PHFetchOptions alloc] init];
         option.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
 
@@ -394,6 +407,7 @@
         }
     }else if (currentAsset.mediaType == PHAssetMediaTypeVideo) {
         
+        [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_video" key:nil value:nil];
         [self.progressView show];
         [RDPhotoTool exportVideoToMP4WithAsset:currentAsset startHandler:^(AVAssetExportSession *session) {
             

@@ -342,9 +342,11 @@
     button.userInteractionEnabled = NO;
     NSInteger action;
     if (button.tag == 101) {
+        [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_vol_down" key:nil value:nil];
         //减声音
         action = 3;
     }else{
+        [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_vol_up" key:nil value:nil];
         //加声音
         action = 4;
     }
@@ -399,6 +401,7 @@
     if (self.isPlayEnd) {
         [self resetVod];
     }else{
+        [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_exit_screen" key:nil value:nil];
         [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
             self.isPlayEnd = YES;
             self.isPlaying = NO;
@@ -519,6 +522,7 @@
         [self performSelector:@selector(updateQuery) withObject:nil afterDelay:1.0];
         
     }else{
+        [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_pause" key:nil value:nil];
         [self.playButton setImage:[UIImage imageNamed:@"sptpzanting"] forState:UIControlStateNormal];
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateQuery) object:nil];
@@ -564,6 +568,7 @@
 //根据进度条更新播放时间显示
 - (void)updateTimeLabel:(CGFloat)posFloat
 {
+    [SAVORXAPI postUMHandleWithContentId:@"video_to_screen_drag_progress" key:nil value:nil];
     if (posFloat > self.playSilder.maximumValue) {
         return;
     }
@@ -579,7 +584,7 @@
 - (void)navBackButtonClicked:(UIButton *)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
-    [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_back" key:nil value:nil];
+    [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_video_back" key:nil value:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated

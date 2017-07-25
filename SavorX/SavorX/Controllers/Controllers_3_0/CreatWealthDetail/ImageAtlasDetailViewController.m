@@ -40,6 +40,7 @@
 @property (assign, nonatomic) NSUInteger currentImageIndex;
 
 @property (nonatomic, assign) BOOL isReady;
+@property (nonatomic, assign) BOOL isPortrait;
 
 @end
 
@@ -48,12 +49,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewDidLoad
 {
+    self.view.backgroundColor = VCBackgroundColor;
+    
     self.isReady = NO;
+    self.isPortrait = YES;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     _isComplete = NO;
@@ -63,6 +67,7 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     //2650
     [self requestWithContentId:self.imgAtlModel.artid];
+    [self.view addSubview:self.topView];
 }
 
 - (void)requestWithContentId:(NSString *)contentId{
@@ -110,7 +115,6 @@
 - (void)creatSubViews{
     
     [self initInfoConfig];
-    [self.view addSubview:self.topView];
     
     [self.view addSubview:self.imageScrollView];
     [self.imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -130,8 +134,6 @@
 }
 
 - (void)initInfoConfig{
-    
-    self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     // app退到后台
@@ -170,6 +172,12 @@
             _photoScrollView.singleTapBlock = ^{
                 // 如果已经消失，就出现
                 if (weakSelf.isDisappear == YES) {
+                    // 如果是竖屏状态
+                    if (self.isPortrait == YES) {
+                        [SAVORXAPI postUMHandleWithContentId:@"page_pic_vertical_show" key:nil value:nil];
+                    }else{
+                        [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_show" key:nil value:nil];
+                    }
                     [weakSelf.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
                             [UIView animateWithDuration:0.5 animations:^{
@@ -183,6 +191,12 @@
                     weakSelf.isDisappear = NO;
                     [weakSelf setNeedsStatusBarAppearanceUpdate];
                 } else {
+                    // 如果是竖屏状态
+                    if (self.isPortrait == YES) {
+                        [SAVORXAPI postUMHandleWithContentId:@"page_pic_vertical_hide" key:nil value:nil];
+                    }else{
+                        [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_hide" key:nil value:nil];
+                    }
                     // 消失
                     [weakSelf.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
@@ -319,7 +333,8 @@ static int temp = -1;
 #pragma mark -分享点击
 - (void)shareAction{
     
-    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgAtlModel andVC:self andCategoryID:self.categoryID];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.imgAtlModel andVC:self andCategoryID:self.categoryID andSourceId:0];
     [self.view addSubview:shareView];
 }
 
@@ -340,17 +355,27 @@ static int temp = -1;
             if (isCollect == 0) {
                 self.imgAtlModel.collected = 0;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
             }else{
                 self.imgAtlModel.collected = 1;
                 [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
             }
             self.collectBtn.selected = !self.collectBtn.selected;
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
     }];
 }
 
@@ -372,6 +397,9 @@ static int temp = -1;
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (orientation == UIInterfaceOrientationPortrait) {
     
+        _isPortrait = YES;
+        [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_rotate" key:nil value:nil];
+        
         [self.imageScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight));
             make.top.mas_equalTo(0);
@@ -400,6 +428,9 @@ static int temp = -1;
 
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
 
+        _isPortrait = NO;
+        [SAVORXAPI postUMHandleWithContentId:@"page_pic_vertical_rotate" key:nil value:nil];
+        
         [self.imageScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight));
             make.top.mas_equalTo(0);
@@ -431,12 +462,14 @@ static int temp = -1;
 - (void)viewDidAppear:(BOOL)animated
 {
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:@"details_page" value:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
 }
 
 //app进入后台运行

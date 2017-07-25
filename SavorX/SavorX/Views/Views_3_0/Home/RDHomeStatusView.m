@@ -172,7 +172,7 @@
     } bold:NO];
     RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"退出投屏" handler:^{
         [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-            
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:nil value:nil];
         } failure:^{
             
         }];
@@ -187,6 +187,7 @@
     switch (self.status) {
         case RDHomeStatus_Normal:
         {
+            [SAVORXAPI postUMHandleWithContentId:@"home_disconnect" key:nil value:nil];
             self.statusLabel.text = @"您已进入酒楼,快来体验用电视看手机";
             self.statusLabel.userInteractionEnabled = NO;
             [self.statusButton setTitle:@"连接电视" forState:UIControlStateNormal];
@@ -196,6 +197,7 @@
             
         case RDHomeStatus_Bind:
         {
+            [SAVORXAPI postUMHandleWithContentId:@"home_connect_tv" key:nil value:nil];
             self.statusLabel.text = [NSString stringWithFormat:@"已连接--%@的电视", [Helper getWifiName]];
             self.statusLabel.userInteractionEnabled = NO;
             [self.statusButton setTitle:@"断开连接" forState:UIControlStateNormal];
@@ -205,6 +207,7 @@
             
         case RDHomeStatus_Photo:
         {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
             self.statusLabel.text = @"正在投屏图片,点击进入>>";
             self.statusLabel.userInteractionEnabled = YES;
             [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
@@ -214,6 +217,7 @@
             
         case RDHomeStatus_Video:
         {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
             self.statusLabel.text = @"正在投屏本地视频,点击进入>>";
             self.statusLabel.userInteractionEnabled = YES;
             [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
@@ -223,6 +227,7 @@
             
         case RDHomeStatus_File:
         {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
             self.statusLabel.text = @"正在投屏文件,点击进入>>";
             self.statusLabel.userInteractionEnabled = YES;
             [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
@@ -232,6 +237,7 @@
             
         case RDHomeStatus_Demand:
         {
+            [SAVORXAPI postUMHandleWithContentId:@"home_quick_video" key:nil value:nil];
             self.statusLabel.text = @"正在点播视频,点击进入>>";
             self.statusLabel.userInteractionEnabled = YES;
             [self.statusButton setTitle:@"退出点播" forState:UIControlStateNormal];

@@ -40,6 +40,6 @@
 /**
  *  分享至平台3.0改版调用
  */
-- (void)sharedToPlatform:(UMSocialPlatformType)platformType andController:(UIViewController *)VC withModel:(CreateWealthModel *)model;
+- (void)sharedToPlatform:(UMSocialPlatformType)platformType andController:(UIViewController *)VC withModel:(CreateWealthModel *)model andUmKeyString:(NSString *)keyString;
 
 @end
