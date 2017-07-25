@@ -130,7 +130,7 @@
     
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(guidPress)];
     tap.numberOfTapsRequired = 1;
-    [bgVideoView addGestureRecognizer:tap];
+    [self.guidView addGestureRecognizer:tap];
     
 }
 

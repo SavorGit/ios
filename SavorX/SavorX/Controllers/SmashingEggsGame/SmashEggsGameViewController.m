@@ -322,6 +322,11 @@
 {
     [SAVORXAPI postUMHandleWithContentId:@"game_page_choose" key:nil value:nil];
     
+    // 先判断网络环境
+    if (![GlobalData shared].networkStatus) {
+        [[RDHomeStatusView defaultView] scanQRCode];
+    }
+    
     // 先判断有没有配置信息
     if (_isConfigure == NO) {
         
