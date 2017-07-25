@@ -443,7 +443,7 @@ static int temp = -1;
         [_topView setImage:[UIImage imageNamed:@"quanpingmc"]];
         [_topView setBackgroundColor:[UIColor clearColor]];
         [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 85));
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
