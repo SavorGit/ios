@@ -19,6 +19,8 @@
 @property (nonatomic, strong) UIView *testView;
 @property (nonatomic, strong) UIButton *collectButton;
 
+@property (nonatomic, assign) BOOL isReady;
+
 @end
 
 @implementation SpecialTopDetailViewController
@@ -31,13 +33,15 @@
 
 - (void)checkIsOnLine
 {
+    self.isReady = NO;
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.specilDetailModel.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        self.isReady = YES;
         [self createWebView];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
+        [self showNoNetWorkViewInView:self.view];
     }];
 }
 
@@ -56,7 +60,7 @@
     }
     
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
+    CGFloat height = self.view.bounds.size.height;
     self.webView = [[UIWebView alloc] init];
     self.webView.backgroundColor = [UIColor clearColor];
     self.webView.delegate = self;
@@ -94,10 +98,14 @@
 - (void)retryToGetData
 {
     [self hideNoNetWorkView];
-    NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead",self.specilDetailModel.contentURL];
-    NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
-    [self.webView loadRequest:request];
-    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    if (self.isReady) {
+        NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead",self.specilDetailModel.contentURL];
+        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
+        [self.webView loadRequest:request];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    }else{
+        [self checkIsOnLine];
+    }
 }
 
 #pragma mark ---分享按钮点击

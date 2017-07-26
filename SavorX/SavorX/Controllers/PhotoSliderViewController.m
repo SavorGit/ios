@@ -489,7 +489,11 @@
         size = CGSizeMake((kScreen_Height - NavHeight) * scale, kScreen_Height - NavHeight);
     }
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-        [cell.photoImage setImage:result];
+        if (nil == result) {
+            [MBProgressHUD showTextHUDwithTitle:@"照片已被删除" delay:1.5f];
+        }else{
+            [cell.photoImage setImage:result];
+        }
     }];
     cell.photoImage.transform = CGAffineTransformMakeRotation(0);
     cell.isLandSpace = NO;

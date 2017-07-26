@@ -139,11 +139,11 @@
         _noDataView.delegate = self;
     }
     [_noDataView showNoDataView:superView noDataType:type];
-    if (type == kNoDataType_NotFound) {
-        if (self.navigationController) {
-            self.navigationController.navigationItem.rightBarButtonItems = nil;
-        }
-    }
+//    if (type == kNoDataType_NotFound) {
+//        if (self.navigationController) {
+//            self.navigationController.navigationItem.rightBarButtonItems = nil;
+//        }
+//    }
     
 }
 
