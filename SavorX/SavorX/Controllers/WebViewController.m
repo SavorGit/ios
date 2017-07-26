@@ -72,6 +72,7 @@
     [super viewDidLoad];
     
     [self showLoadingView];
+    [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self checkIsOnline];
     });
@@ -694,7 +695,9 @@
     
     //最后一条分割线隐藏
     if (indexPath.row == self.dataSource.count - 1) {
-        
+        [cell setLineViewHidden:YES];
+    }else{
+        [cell setLineViewHidden:NO];
     }
     
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];

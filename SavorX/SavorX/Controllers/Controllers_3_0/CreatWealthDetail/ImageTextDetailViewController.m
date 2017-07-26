@@ -103,10 +103,10 @@
     }];
 }
 
-//- (void)webViewDidFinishLoad:(UIWebView *)webView
-//{
-//    [MBProgressHUD hiddenWebLoadingInView:self.webView];
-//}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+}
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
@@ -188,6 +188,8 @@
 
 - (void)footViewShouldBeReset
 {
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    
     [self removeObserver];
     
     if (self.testView.superview) {

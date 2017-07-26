@@ -11,6 +11,7 @@
 #import "HotTopicShareView.h"
 #import "HSIsOrCollectionRequest.h"
 #import "HotPopShareView.h"
+#import "RDIsOnline.h"
 
 @interface SpecialTopDetailViewController () <UIWebViewDelegate>
 
@@ -25,7 +26,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self createWebView];
+    [self checkIsOnLine];
+}
+
+- (void)checkIsOnLine
+{
+    RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.specilDetailModel.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self createWebView];
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 - (void)createWebView

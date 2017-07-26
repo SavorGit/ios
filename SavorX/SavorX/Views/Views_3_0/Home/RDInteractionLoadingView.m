@@ -25,13 +25,13 @@
         [self createLoading];
         
         [superView addSubview:self];
+        self.superview.userInteractionEnabled = NO;
         [self mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(0);
         }];
         
         [self createAnimation];
         self.titleLabel.text = title;
-        self.userInteractionEnabled = NO;
     }
     return self;
 }
@@ -39,6 +39,7 @@
 - (void)hidden
 {
     self.isAnimation = NO;
+    self.superview.userInteractionEnabled = YES;
     [self removeFromSuperview];
 }
 

@@ -63,7 +63,7 @@
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [SAVORXAPI showAlertWithMessage:@"我知道了"];
+        [SAVORXAPI showAlertWithMessage:@"无法连接到网络, 请检查网络设置"];
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     }];
     

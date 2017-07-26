@@ -88,15 +88,18 @@
                 [self creatSubViews];
             }else{
                 [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+                [self hiddenToolView];
                 [self.view bringSubviewToFront:self.topView];
             }
         }else{
             [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+            [self hiddenToolView];
             [self.view bringSubviewToFront:self.topView];
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        [self hiddenToolView];
         [self.view bringSubviewToFront:self.topView];
         [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
@@ -104,6 +107,12 @@
         [self.view bringSubviewToFront:self.topView];
         [self hiddenLoadingView];
     }];
+}
+
+- (void)hiddenToolView
+{
+    [[self.topView viewWithTag:101] removeFromSuperview];
+    [[self.topView viewWithTag:102] removeFromSuperview];
 }
 
 - (void)retryToGetData
@@ -290,6 +299,7 @@ static int temp = -1;
         
         _backButton = [[UIButton alloc] initWithFrame:CGRectMake(5,20, 40, 44)];
         [_backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+        _backButton.tag = 101;
         [_backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateSelected];
         [_backButton addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_backButton];
@@ -297,6 +307,7 @@ static int temp = -1;
         UIButton *shareBtn = [[UIButton alloc] initWithFrame:CGRectZero];
         [shareBtn setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
         [shareBtn setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
+        shareBtn.tag = 102;
         [shareBtn addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:shareBtn];
         [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
