@@ -45,6 +45,31 @@
     [self createUI];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    if ([GlobalData shared].isBindRD) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self screenButtonDidClickedWithSuccess:^{
+                
+                // 获得点击图片，回传给缩略图
+                if (self.isScreen) {
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_File];
+                    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
+                }
+                
+            } failure:^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                
+                [[RDHomeStatusView defaultView] stopScreen];
+            }];
+        });
+    }else{
+        [SAVORXAPI showConnetToTVAlert:@"doc"];
+    }
+}
+
 - (void)createUI
 {
     self.orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -283,8 +308,7 @@
                         if (error.code != -999) {
                             [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
                         }else{
-                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
-                            self.isScreen = NO;
+                            //已取消
                         }
                     }
                 }];
@@ -341,31 +365,6 @@
     [super viewWillDisappear:animated];
     [self.navigationController setHidesBarsOnTap:NO];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    if ([GlobalData shared].isBindRD) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self screenButtonDidClickedWithSuccess:^{
-            
-                // 获得点击图片，回传给缩略图
-                if (self.isScreen) {
-                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_File];
-                    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
-                }
-                
-            } failure:^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                
-                [[RDHomeStatusView defaultView] stopScreen];
-            }];
-        });
-    }else{
-        [SAVORXAPI showConnetToTVAlert:@"doc"];
-    }
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
