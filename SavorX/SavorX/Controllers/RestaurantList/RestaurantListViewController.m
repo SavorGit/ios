@@ -111,18 +111,35 @@
         [self.tableView.mj_footer resetNoMoreData];
         [self.tableView reloadData];
         [self hiddenLoadingView];
+        
+        [self showTopFreshLabelWithTitle:@"更新成功"];
+        
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        [self.tableView.mj_header endRefreshing];
-        [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
         [self hiddenLoadingView];
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+        }
+        if (_tableView) {
+            [self.tableView.mj_header endRefreshing];
+            [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+        }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
-        [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
-        [self.tableView.mj_header endRefreshing];
-        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         [self hiddenLoadingView];
+        
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        }
+        if (_tableView) {
+            [self.tableView.mj_header endRefreshing];
+            if (error.code == -1001) {
+                [self showTopFreshLabelWithTitle:@"数据加载超时"];
+            }else{
+                [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+            }
+        }
         
     }];
     

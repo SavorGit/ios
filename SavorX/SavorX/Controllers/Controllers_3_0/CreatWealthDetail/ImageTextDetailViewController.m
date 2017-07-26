@@ -198,7 +198,7 @@
     //TableView的高度
     CGFloat tabHeight = 0;
     if (self.dataSource.count != 0) {
-        tabHeight = self.dataSource.count * + 48 + 8;
+        tabHeight = self.dataSource.count *(130 *802.f/1242.f + 12) + 48 + 8;
     }
     
     //底部View总高度
@@ -277,7 +277,7 @@
         _tableView.scrollEnabled = NO;
         [self.testView addSubview:_tableView];
         
-        CGFloat tabHeiht = self.dataSource.count *96 +48;
+        CGFloat tabHeiht = self.dataSource.count *(130 *802.f/1242.f + 12) +48;
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, tabHeiht));
             make.top.mas_equalTo(108);
