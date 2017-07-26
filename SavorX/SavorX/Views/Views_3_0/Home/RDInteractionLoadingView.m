@@ -31,6 +31,7 @@
         
         [self createAnimation];
         self.titleLabel.text = title;
+        self.userInteractionEnabled = NO;
     }
     return self;
 }

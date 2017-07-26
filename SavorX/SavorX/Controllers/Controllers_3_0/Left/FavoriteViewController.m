@@ -29,6 +29,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [GlobalData shared].isCollectAction = NO;
+    
     self.dataSource = [NSMutableArray new];
     
     [self setupViews];
@@ -36,6 +38,16 @@
     [self showLoadingView];
     
     [self setupDatas];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if ([GlobalData shared].isCollectAction) {
+        [self.tableView.mj_header beginRefreshing];
+    }
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
