@@ -467,6 +467,7 @@
         size = CGSizeMake(1080 * scale, 1080);
     }
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        
         PhotoManyCollectionViewCell * cell = [self currentCell];
         switch (cell.Orientation) {
             case 90:

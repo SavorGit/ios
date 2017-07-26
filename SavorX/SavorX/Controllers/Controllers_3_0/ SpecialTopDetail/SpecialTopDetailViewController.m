@@ -34,13 +34,17 @@
 - (void)checkIsOnLine
 {
     self.isReady = NO;
+    [self showLoadingView];
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.specilDetailModel.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         self.isReady = YES;
+        [self hiddenLoadingView];
         [self createWebView];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self hiddenLoadingView];
         [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [self hiddenLoadingView];
         [self showNoNetWorkViewInView:self.view];
     }];
 }
@@ -67,7 +71,7 @@
     self.webView.frame = CGRectMake(0, 0, width, height);
     
     if (!isEmptyString(self.specilDetailModel.contentURL)) {
-        NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead",self.specilDetailModel.contentURL];
+        NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead&app=inner",self.specilDetailModel.contentURL];
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
@@ -99,7 +103,7 @@
 {
     [self hideNoNetWorkView];
     if (self.isReady) {
-        NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead",self.specilDetailModel.contentURL];
+        NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead&app=inner",self.specilDetailModel.contentURL];
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];

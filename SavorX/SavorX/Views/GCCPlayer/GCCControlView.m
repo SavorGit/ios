@@ -355,6 +355,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
 {
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     [self.endView insertSubview:self.imageView belowSubview:self.replayButton];
+    self.endView.hidden = YES;
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];

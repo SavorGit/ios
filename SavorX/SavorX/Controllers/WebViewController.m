@@ -39,6 +39,7 @@
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, assign) BOOL isOnline;
+@property (nonatomic, assign) BOOL hasDidLoad;
 
 @end
 
@@ -105,36 +106,41 @@
     _isComplete = NO;
     
     [self createUI];
-    [self setUpDatas];
 }
 
 //初始化界面
 - (void)createUI
 {
-    //初始化播放器
-    self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
-    self.playView.backgroundColor = [UIColor blackColor];
-    self.playView.delegate = self;
-    [self.playView backgroundImage:self.model.imageURL];
-    [self.playView setVideoTitle:self.model.title];
-    [self.view addSubview:self.playView];
-    self.playView.model = self.model;
-    self.playView.categoryID = self.categoryID;
-    [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
-        make.left.mas_equalTo(0);
-        make.right.mas_equalTo(0);
-        make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
-    }];
+    if (!self.hasDidLoad) {
+        //初始化播放器
+        self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
+        self.playView.backgroundColor = [UIColor blackColor];
+        self.playView.delegate = self;
+        [self.playView backgroundImage:self.model.imageURL];
+        [self.playView setVideoTitle:self.model.title];
+        [self.view addSubview:self.playView];
+        self.playView.model = self.model;
+        self.playView.categoryID = self.categoryID;
+        [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
+        }];
+    }
     
     [self refreshPageWithModel:self.model];
     
-    //添加页面相关的通知监听
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-    // app退到后台
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
-    // app进入前台
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    if (!self.hasDidLoad) {
+        //添加页面相关的通知监听
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+        // app退到后台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+        // app进入前台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    }
+    
+    self.hasDidLoad = YES;
 }
 
 - (void)refreshPageWithModel:(CreateWealthModel *)model
@@ -186,8 +192,9 @@
         self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
         [self addObserver];
     }
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     if (!isEmptyString(self.model.contentURL)) {
-        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead&app=inner"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }
@@ -406,12 +413,7 @@
 - (void)retryToGetData
 {
     [self hideNoNetWorkView];
-    if (self.playView) {
-        [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.model.contentURL]]]];
-        [MBProgressHUD showWebLoadingHUDInView:self.webView];
-    }else{
-        [self checkIsOnline];
-    }
+    [self checkIsOnline];
 }
 
 - (BOOL)prefersStatusBarHidden

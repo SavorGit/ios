@@ -46,6 +46,7 @@
     [self createNavigationTitleView];
     [self checkSpecialTopic];
     [self addNotificationCenter];
+    [self handleLaunchWork];
 }
 
 - (void)handleLaunchWork

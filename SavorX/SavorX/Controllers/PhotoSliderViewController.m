@@ -355,6 +355,14 @@
     }];
 }
 
+- (void)sliderStopWithLocation
+{
+    self.playButton.selected = NO;
+    [self.timer invalidate];
+    self.timer = nil;
+    self.statusLabel.text = @"幻灯片";
+}
+
 - (void)screenCurrentImage
 {
     if (![GlobalData shared].isBindRD) {
@@ -375,6 +383,11 @@
     }
     NSString * name = asset.localIdentifier;
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        
+        if (nil == result) {
+            [MBProgressHUD showTextHUDwithTitle:@"照片已被删除" delay:1.f];
+            return;
+        }
         
         if ([GlobalData shared].isBindRD) {
             
@@ -417,7 +430,11 @@
     if (self.currentIndex == self.PHAssetSource.count - 1) {
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0] atScrollPosition:UICollectionViewScrollPositionRight animated:NO];
         self.currentIndex = 1;
-        [self stopScreenImage:nil];
+        if (self.isScreen) {
+            [self stopScreenImage:nil];
+        }else{
+            [self sliderStopWithLocation];
+        }
         [MBProgressHUD showTextHUDwithTitle:@"幻灯片播放已经结束"];
         self.playButton.selected = NO;
     }else if (self.currentIndex == 0){
@@ -440,6 +457,12 @@
                 size = CGSizeMake(1080 * scale, 1080);
             }
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                
+                if (nil == result) {
+                    [MBProgressHUD showTextHUDwithTitle:@"照片已被删除" delay:1.5f];
+                    return;
+                }
+                
                 NSString * name = asset.localIdentifier;
                 [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
@@ -490,7 +513,7 @@
     }
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         if (nil == result) {
-            [MBProgressHUD showTextHUDwithTitle:@"照片已被删除" delay:1.5f];
+            [cell.photoImage setImage:[UIImage new]];
         }else{
             [cell.photoImage setImage:result];
         }
@@ -554,6 +577,10 @@
             }
             NSString * name = asset.localIdentifier;
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                if (nil == result) {
+                    [MBProgressHUD showTextHUDwithTitle:@"照片已被删除" delay:1.5f];
+                    return;
+                }
                 [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
                         

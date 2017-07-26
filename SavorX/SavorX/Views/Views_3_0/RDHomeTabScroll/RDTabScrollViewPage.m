@@ -71,8 +71,8 @@
         self.totalLabel.font = [UIFont fontWithName:@"STHeitiTC-Light" size:15];
     }
     
-    CGPoint point1 = CGPointMake(self.frame.size.width / 2 + 5, 2);
-    CGPoint point2 = CGPointMake(self.frame.size.width / 2 - 5, self.frame.size.height - 2);
+    CGPoint point1 = CGPointMake(self.frame.size.width / 2 + 5, 0);
+    CGPoint point2 = CGPointMake(self.frame.size.width / 2 - 5, self.frame.size.height);
     [self layerSolidLinePoints:@[[NSValue valueWithCGPoint:point1], [NSValue valueWithCGPoint:point2]] Color:kThemeColor Width:.5f];
 }
 

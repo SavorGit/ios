@@ -361,7 +361,7 @@
     
     if (self.model.type != 4) {
         if (!isEmptyString(self.model.contentURL)) {
-            [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
+            [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead&app=inner"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
             [MBProgressHUD showWebLoadingHUDInView:self.webView];
         }
     }else{
@@ -759,7 +759,7 @@
 - (void)retryToGetData
 {
     [self hideNoNetWorkView];
-    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
+    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead&app=inner"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
     [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
 

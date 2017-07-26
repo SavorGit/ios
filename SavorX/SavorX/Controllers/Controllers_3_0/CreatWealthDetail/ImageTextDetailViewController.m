@@ -45,14 +45,18 @@
 - (void)checkIsOnLine
 {
     self.isReady = NO;
+    [self showLoadingView];
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.imgTextModel.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         self.isReady = YES;
+        [self hiddenLoadingView];
         [self setupViews];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self showNoNetWorkViewInView:self.view];
+        [self hiddenLoadingView];
     }];
 }
 
@@ -89,7 +93,7 @@
     self.webView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);
     if (!isEmptyString(self.imgTextModel.contentURL)) {
-        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
+        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }
@@ -145,7 +149,7 @@
 {
     [self hideNoNetWorkView];
     if (self.isReady) {
-        [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]]];
+        [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]]];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }else{
         [self checkIsOnLine];
@@ -374,8 +378,9 @@
     self.imgTextModel = tmpModel;
     [self.testView removeFromSuperview];
     [self setUpDatas];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     if (!isEmptyString(tmpModel.contentURL)) {
-        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]];
+        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }
