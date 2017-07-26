@@ -85,24 +85,36 @@
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
-        [self.tableView.mj_header endRefreshing];
         if (self.dataSource.count == 0) {
-            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
         }
-        [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+        if (_tableView) {
+            [self.tableView.mj_header endRefreshing];
+            [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+        }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self hiddenLoadingView];
-        [self.tableView.mj_header endRefreshing];
         if (self.dataSource.count == 0) {
             [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         }
-        if (error.code == -1001) {
-            [self showTopFreshLabelWithTitle:@"数据加载超时"];
-        }else{
-            [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+        if (_tableView) {
+            [self.tableView.mj_header endRefreshing];
+            if (error.code == -1001) {
+                [self showTopFreshLabelWithTitle:@"数据加载超时"];
+            }else{
+                [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+            }
         }
 
     }];
+}
+
+-(void)retryToGetData{
+    [self hideNoNetWorkView];
+    if (self.dataSource.count == 0)  {
+        [self showLoadingView];
+    }
+    [self setupDatas];
 }
 
 - (void)getMoreData
@@ -138,22 +150,26 @@
     }];
 }
 
-- (void)setupViews
+#pragma mark -- 懒加载
+- (UITableView *)tableView
 {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStylePlain];
-    self.tableView.backgroundColor = VCBackgroundColor;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorInset = UIEdgeInsetsZero;
-    [self.tableView setLayoutMargins:UIEdgeInsetsZero];
-    [self.tableView registerClass:[RDFavoriteTableViewCell class] forCellReuseIdentifier:@"FavoriteCell"];
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.view addSubview:self.tableView];
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(0);
-    }];
-    
-    self.tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(setupDatas)];
+    if (!_tableView){
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStylePlain];
+        _tableView.backgroundColor = VCBackgroundColor;
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.separatorInset = UIEdgeInsetsZero;
+        [_tableView setLayoutMargins:UIEdgeInsetsZero];
+        [_tableView registerClass:[RDFavoriteTableViewCell class] forCellReuseIdentifier:@"FavoriteCell"];
+        _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        [self.view addSubview:_tableView];
+        [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(0);
+        }];
+        
+        self.tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(setupDatas)];
+    }
+    return _tableView;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

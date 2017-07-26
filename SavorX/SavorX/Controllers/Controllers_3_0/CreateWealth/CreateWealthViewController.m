@@ -87,31 +87,36 @@
         [self.tableView reloadData];
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
-        [self hideNoNetWorkView];
         [self hiddenLoadingView];
         
         [self showTopFreshLabelWithTitle:@"更新成功"];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        [self.tableView.mj_header endRefreshing];
+        [self hiddenLoadingView];
         if (self.dataSource.count == 0) {
-             [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+             [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
         }
-        [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+        if (_tableView) {
+            [self.tableView.mj_header endRefreshing];
+            [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+        }
 
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
-        [self.tableView.mj_header endRefreshing];
+        [self hiddenLoadingView];
         if (self.dataSource.count == 0) {
             [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         }
-        if (error.code == -1001) {
-            [self showTopFreshLabelWithTitle:@"数据加载超时"];
-        }else{
-            [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+        if (_tableView) {
+            
+            [self.tableView.mj_header endRefreshing];
+            if (error.code == -1001) {
+                [self showTopFreshLabelWithTitle:@"数据加载超时"];
+            }else{
+                [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+            }
         }
-        
     }];
 }
 
@@ -156,6 +161,9 @@
 
 -(void)retryToGetData{
     [self hideNoNetWorkView];
+    if (self.dataSource.count == 0)  {
+        [self showLoadingView];
+    }
     [self refreshData];
 }
 
@@ -329,12 +337,15 @@
 
 - (void)showSelfAndCreateLog
 {
-    NSArray * cells = self.tableView.visibleCells;
-    for (UITableViewCell * cell in cells) {
-        NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
-        CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.section];
-        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    if (_tableView) {
+        NSArray * cells = self.tableView.visibleCells;
+        for (UITableViewCell * cell in cells) {
+            NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+            CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.section];
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+        }
     }
+
 }
 
 - (void)didReceiveMemoryWarning {

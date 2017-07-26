@@ -87,31 +87,35 @@
         [self.tableView reloadData];
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
-        [self hideNoNetWorkView];
         [self hiddenLoadingView];
         [self showTopFreshLabelWithTitle:@"更新成功"];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self hiddenLoadingView];
-        [self.tableView.mj_header endRefreshing];
         if (self.dataSource.count == 0) {
-            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
         }
-        [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+        if (_tableView) {
+            [self.tableView.mj_header endRefreshing];
+            [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+        }
         
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         [self hiddenLoadingView];
-        [self.tableView.mj_header endRefreshing];
         if (self.dataSource.count == 0) {
             [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         }
-        if (error.code == -1001) {
-            [self showTopFreshLabelWithTitle:@"数据加载超时"];
-        }else{
-            [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+        if (_tableView) {
+            
+            [self.tableView.mj_header endRefreshing];
+            if (error.code == -1001) {
+                [self showTopFreshLabelWithTitle:@"数据加载超时"];
+            }else{
+                [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+            }
         }
         
     }];
@@ -159,32 +163,11 @@
 
 -(void)retryToGetData{
     [self hideNoNetWorkView];
+    if (self.dataSource.count == 0)  {
+        [self showLoadingView];
+    }
     [self refreshData];
 }
-
-//初始化请求第一页，下拉刷新
-//- (void)setUpDatas{
-//    
-////    NSArray *imageArr = [NSArray arrayWithObjects:@"https://dn-brknqdxv.qbox.me/a70592e5162cb7df8391.jpg",@"https://dn-brknqdxv.qbox.me/d6e24a57b763c14b7731.jpg",@"https://dn-brknqdxv.qbox.me/5fb13268c2d1ef3bfe69.jpg",@"https://dn-brknqdxv.qbox.me/fea55faa880653633cc8.jpg",@"https://dn-brknqdxv.qbox.me/8401b45695d7fea371ca.jpg",@"https://dn-brknqdxv.qbox.me/59bda095dcb55dd91347.jpg",@"https://dn-brknqdxv.qbox.me/ec1379afc23d6afc3d90.jpg",@"https://dn-brknqdxv.qbox.me/51b10338ffdf7016a599.jpg",@"https://dn-brknqdxv.qbox.me/4b82c3574058ea94a2c8.jpg",@"https://dn-brknqdxv.qbox.me/a0287e02c7889227d5c7.jpg", nil];
-////    for (int i = 0; i < 30; i ++) {
-////        CreateWealthModel *model = [[CreateWealthModel alloc] init];
-////        model.type = 0;
-////        if (i == 0) {
-////            model.type = 1;
-////        }
-////        model.title = @"这是新闻的标题";
-////        model.subTitle = @"这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介，这是新闻的副标题，这是新闻的简介。";
-////        model.imageUrl = @"http://devp.oss.littlehotspot.com/media/resource/WehQBiCyQk.jpg";
-////        if (i < 10) {
-////            model.imageUrl = imageArr[i];
-////        }
-////        model.source = @"网易新闻";
-////        model.time = @"2017.06.19";
-////        model.sourceImage = @"sourceImage";
-////        [_dataSource addObject:model];
-////    }
-////    [self.tableView reloadData];
-//}
 
 #pragma mark -- 懒加载
 - (UITableView *)tableView
@@ -312,12 +295,15 @@
 
 - (void)showSelfAndCreateLog
 {
-    NSArray * cells = self.tableView.visibleCells;
-    for (UITableViewCell * cell in cells) {
-        NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
-        CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.section];
-        [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    if (_tableView) {
+        NSArray * cells = self.tableView.visibleCells;
+        for (UITableViewCell * cell in cells) {
+            NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+            CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.section];
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+        }
     }
+    
 }
 
 - (void)didReceiveMemoryWarning {
