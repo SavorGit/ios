@@ -21,7 +21,6 @@
 
 @property (nonatomic, strong) UILabel * statusLabel;
 @property (nonatomic, strong) UIButton * statusButton;
-@property (nonatomic, assign) RDHomeStatusType status;
 
 @property (nonatomic, strong) UIViewController * currentVC;
 

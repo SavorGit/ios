@@ -334,7 +334,7 @@
         } bold:NO];
         RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"连接电视" handler:^{
             [[RDHomeStatusView defaultView] scanQRCode];
-        } bold:NO];
+        } bold:YES];
         [alertView addActions:@[action,actionOne]];
         [alertView show];
         return;
