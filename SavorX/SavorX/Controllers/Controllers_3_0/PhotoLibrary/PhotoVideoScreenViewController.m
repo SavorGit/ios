@@ -545,7 +545,9 @@
             [self updateTimeLabel:posFloat];
         }else if (code == -1 || code == 1){
             [self videoDidPlayEnd];
-            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            if ([RDHomeStatusView defaultView].status == RDHomeStatus_Video) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+            }
         }
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {

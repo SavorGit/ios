@@ -12,6 +12,7 @@
 #import "PhotoSliderViewController.h"
 #import "PhotoManyViewController.h"
 #import "DemandViewController.h"
+#import "PhotoLibraryViewController.h"
 #import "GCCUPnPManager.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
@@ -108,23 +109,12 @@
 + (void)screenDocmentWithPath:(NSString *)filePath
 {
     UINavigationController * na = [Helper getRootNavigationController];
-    BaseViewController * base = (BaseViewController *)na.topViewController;
-    if ([base isKindOfClass:[ScreenDocumentViewController class]] ||
-        [base isKindOfClass:[PhotoSliderViewController class]] ||
-        [base isKindOfClass:[PhotoManyViewController class]]) {
-        [base.navigationController popViewControllerAnimated:NO];
-    }else if ([base isKindOfClass:[FileVideoViewController class]]) {
-        FileVideoViewController * vc = (FileVideoViewController *)base;
-        [vc.navigationController popViewControllerAnimated:NO];
-    }else if ([base isKindOfClass:[DemandViewController class]]) {
-        UIViewController * vc = [na.viewControllers firstObject];
-        [base.navigationController popToViewController:vc animated:NO];
-    }
+    [na popToRootViewControllerAnimated:NO];
     
     ScreenDocumentViewController * viewController = [[ScreenDocumentViewController alloc] init];
     viewController.title = [filePath lastPathComponent];
     viewController.path = filePath;
-    [base.navigationController pushViewController:viewController animated:YES];
+    [na pushViewController:viewController animated:YES];
 }
 
 + (NSString *)copyDocmentFileWithPath:(NSString *)path andType:(FileType)type

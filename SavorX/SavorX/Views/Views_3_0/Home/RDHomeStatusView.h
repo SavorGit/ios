@@ -19,6 +19,8 @@ typedef enum : NSUInteger {
 
 @interface RDHomeStatusView : UIView
 
+@property (nonatomic, assign) RDHomeStatusType status;
+
 + (instancetype)defaultView;
 
 - (void)startScreenWithViewController:(UIViewController *)viewController withStatus:(RDHomeStatusType)status;
