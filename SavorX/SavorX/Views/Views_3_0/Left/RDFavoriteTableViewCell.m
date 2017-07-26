@@ -17,6 +17,8 @@
 @property (nonatomic, strong) UILabel * dateLabel;
 @property (nonatomic, strong) UILabel * imageLabel;
 
+@property (nonatomic, strong) UIView *lineView;
+
 @end
 
 @implementation RDFavoriteTableViewCell
@@ -80,6 +82,16 @@
     self.imageLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.5f];
     self.imageLabel.textColor = [UIColor whiteColor];
     self.imageLabel.textAlignment = NSTextAlignmentCenter;
+    
+    self.lineView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
+    [self addSubview:self.lineView];
+    [self.lineView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 1));
+        make.bottom.mas_equalTo(self.bottom).offset(-1);
+        make.left.mas_equalTo(0);
+    }];
+    self.lineView.hidden = YES;
 }
 
 - (void)configWithModel:(CreateWealthModel *)model
@@ -145,6 +157,11 @@
         self.imageLabel.layer.masksToBounds = YES;
         
     }
+}
+
+- (void)setLineViewHidden:(BOOL)hidden
+{
+    self.lineView.hidden = hidden;
 }
 
 - (void)awakeFromNib {

@@ -16,6 +16,7 @@
 #import "HotPopShareView.h"
 #import "HSGetCollectoinStateRequest.h"
 #import "RDLogStatisticsAPI.h"
+#import "RDIsOnline.h"
 
 #define  igTextHeight (130 *802.f/1242.f + 12)
 
@@ -28,6 +29,8 @@
 @property (nonatomic, strong) UIButton *collectButton;
 @property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 
+@property (nonatomic, assign) BOOL isReady;
+
 @end
 
 @implementation ImageTextDetailViewController
@@ -35,6 +38,26 @@
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    [self checkIsOnLine];
+}
+
+- (void)checkIsOnLine
+{
+    self.isReady = NO;
+    RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.imgTextModel.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        self.isReady = YES;
+        [self setupViews];
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [self showNoNetWorkViewInView:self.view];
+    }];
+}
+
+- (void)setupViews
+{
     _isComplete = NO;
     
     // app退到后台
@@ -61,7 +84,7 @@
     self.navigationItem.rightBarButtonItems = @[shareItem, collectItem];
     
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = self.view.bounds.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
+    CGFloat height = self.view.bounds.size.height;
     self.webView = [[UIWebView alloc] init];
     self.webView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);
@@ -103,10 +126,10 @@
     }];
 }
 
-//- (void)webViewDidFinishLoad:(UIWebView *)webView
-//{
-//    [MBProgressHUD hiddenWebLoadingInView:self.webView];
-//}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+}
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
@@ -121,8 +144,12 @@
 - (void)retryToGetData
 {
     [self hideNoNetWorkView];
-    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]]];
-    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    if (self.isReady) {
+        [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead",self.imgTextModel.contentURL]]]];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    }else{
+        [self checkIsOnLine];
+    }
 }
 
 #pragma mark ---分享按钮点击
@@ -188,6 +215,8 @@
 
 - (void)footViewShouldBeReset
 {
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    
     [self removeObserver];
     
     if (self.testView.superview) {

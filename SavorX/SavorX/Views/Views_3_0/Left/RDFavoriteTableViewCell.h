@@ -13,4 +13,6 @@
 
 - (void)configWithModel:(CreateWealthModel *)model;
 
+- (void)setLineViewHidden:(BOOL)hidden;
+
 @end

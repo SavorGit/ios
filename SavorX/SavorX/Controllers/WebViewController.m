@@ -694,7 +694,9 @@
     
     //最后一条分割线隐藏
     if (indexPath.row == self.dataSource.count - 1) {
-        
+        [cell setLineViewHidden:YES];
+    }else{
+        [cell setLineViewHidden:NO];
     }
     
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];

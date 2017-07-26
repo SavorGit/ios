@@ -56,7 +56,6 @@
 {
     self.view.backgroundColor = VCBackgroundColor;
     
-    self.isReady = NO;
     self.isPortrait = YES;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -65,13 +64,15 @@
     self.imageDatas = [[NSMutableArray alloc] initWithCapacity:100];
     
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+    
+    [self.view addSubview:self.topView];
     //2650
     [self requestWithContentId:self.imgAtlModel.artid];
-    [self.view addSubview:self.topView];
 }
 
 - (void)requestWithContentId:(NSString *)contentId{
 
+    self.isReady = NO;
     [self showLoadingView];
     HSPicDetailRequest * request = [[HSPicDetailRequest alloc] initWithContentId:contentId];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -88,15 +89,18 @@
                 [self creatSubViews];
             }else{
                 [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+                [self hiddenToolView];
                 [self.view bringSubviewToFront:self.topView];
             }
         }else{
             [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+            [self hiddenToolView];
             [self.view bringSubviewToFront:self.topView];
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        [self hiddenToolView];
         [self.view bringSubviewToFront:self.topView];
         [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
@@ -104,6 +108,26 @@
         [self.view bringSubviewToFront:self.topView];
         [self hiddenLoadingView];
     }];
+}
+
+- (void)hiddenToolView
+{
+    if ([self.topView viewWithTag:101]) {
+        [[self.topView viewWithTag:101] setHidden:YES];
+    }
+    if ([self.topView viewWithTag:102]){
+        [[self.topView viewWithTag:102] setHidden:YES];
+    }
+}
+
+- (void)showToolView
+{
+    if ([self.topView viewWithTag:101]) {
+        [[self.topView viewWithTag:101] setHidden:NO];
+    }
+    if ([self.topView viewWithTag:102]){
+        [[self.topView viewWithTag:102] setHidden:NO];
+    }
 }
 
 - (void)retryToGetData
@@ -126,6 +150,7 @@
         [self.topView removeFromSuperview];
         self.topView = nil;
     }
+    [self showToolView];
     [self.view addSubview:self.topView];
     [self addObserver:self forKeyPath:@"currentPage" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew|NSKeyValueObservingOptionInitial context:nil];
     
@@ -297,6 +322,7 @@ static int temp = -1;
         UIButton *shareBtn = [[UIButton alloc] initWithFrame:CGRectZero];
         [shareBtn setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
         [shareBtn setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
+        shareBtn.tag = 101;
         [shareBtn addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:shareBtn];
         [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -309,6 +335,7 @@ static int temp = -1;
         [_collectBtn setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
         [_collectBtn setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
         [_collectBtn addTarget:self action:@selector(collectAction) forControlEvents:UIControlEventTouchUpInside];
+        _collectBtn.tag = 102;
         [_topView addSubview:_collectBtn];
         [_collectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(40, 44));

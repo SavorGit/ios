@@ -366,7 +366,16 @@
 
         PHAssetCollection * collection = [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[self.model.localIdentifier] options:nil].firstObject;
         PHFetchResult * fecthResult = [PHAsset fetchAssetsInAssetCollection:collection options:option];
-        NSInteger index = [fecthResult indexOfObject:currentAsset];
+        NSInteger index = 0;
+        if ([fecthResult containsObject:currentAsset]) {
+            index = [fecthResult indexOfObject:currentAsset];
+        }else{
+            PHAsset * checkAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[currentAsset.localIdentifier] options:nil].firstObject;
+            if (!checkAsset) {
+                [MBProgressHUD showTextHUDwithTitle:@"照片已删除" delay:1.f];
+                return;
+            }
+        }
         
         
         if ([GlobalData shared].isBindRD) {
@@ -409,6 +418,13 @@
         
         [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_video" key:nil value:nil];
         [self.progressView show];
+        
+        PHAsset * checkAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[currentAsset.localIdentifier] options:nil].firstObject;
+        if (!checkAsset) {
+            [MBProgressHUD showTextHUDwithTitle:@"视频已删除" delay:1.f];
+            return;
+        }
+        
         [RDPhotoTool exportVideoToMP4WithAsset:currentAsset startHandler:^(AVAssetExportSession *session) {
             
             self.session = session;
