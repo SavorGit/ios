@@ -795,7 +795,14 @@
     if ([GlobalData shared].isBindRD && [RDHomeStatusView defaultView].isScreening) {
         [SAVORXAPI queryStatusWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             
-            if ([[result objectForKey:@"deviceId"] isEqualToString:[GlobalData shared].deviceID]) {
+            BOOL isNeedAlert = YES;
+            if ([[result objectForKey:@"status"] integerValue] == 1) {
+                if ([[result objectForKey:@"deviceId"] isEqualToString:[GlobalData shared].deviceID]) {
+                    isNeedAlert = NO;
+                }
+            }
+            
+            if (isNeedAlert) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
                 [SAVORXAPI cancelAllURLTask];

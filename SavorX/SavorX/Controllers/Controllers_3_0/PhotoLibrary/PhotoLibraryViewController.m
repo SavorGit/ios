@@ -144,6 +144,7 @@
         [self closeLibraryChoose];
     }else{
         [self startLibraryChoose];
+        self.navigationItem.rightBarButtonItem = nil;
         [SAVORXAPI postUMHandleWithContentId:@"album_toscreen_open" key:nil value:nil];
     }
 }
@@ -183,6 +184,7 @@
         button.imageView.transform = CGAffineTransformMakeRotation(0);
     } completion:^(BOOL finished) {
         button.userInteractionEnabled = YES;
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"选择" style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
     }];
 }
 

@@ -47,11 +47,6 @@
     [self checkSpecialTopic];
     [self addNotificationCenter];
     [self handleLaunchWork];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        CreateWealthModel * model = [[CreateWealthModel alloc] initWithDictionary:@{@"artid":@"3450",@"category":@"创富",@"title":@"今日小热点：5G基站 “复兴号”动车 医疗并购",@"duration":@"37",@"name":@"NksjHmTncz.mp4",@"type":@(4),@"imageURL":@"http://oss.littlehotspot.com/media/resource/xWCMManWtB.jpg",@"contentURL":@"http://admin.littlehotspot.com/content/3450.html",@"videoURL":@"http://1252891964.vod2.myqcloud.com/9ee14a76vodtransgzp1252891964/883354a89031868222991231629/f0"}];
-        [self didReceiveRemoteNotification:model];
-    });
 }
 
 - (void)handleLaunchWork

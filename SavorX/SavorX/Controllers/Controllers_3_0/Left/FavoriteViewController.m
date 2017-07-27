@@ -66,7 +66,7 @@
         
         NSDictionary * dict = [response objectForKey:@"result"];
         
-        if (nil == dict) {
+        if (nil == dict || ![dict isKindOfClass:[NSDictionary class]] || dict.count == 0) {
             [self showNoDataViewInView:self.view noDataType:kNoDataType_Favorite];
             return;
         }
@@ -141,7 +141,7 @@
         
         NSDictionary * dict = [response objectForKey:@"result"];
         
-        if (nil == dict) {
+        if (nil == dict || ![dict isKindOfClass:[NSDictionary class]] || dict.count == 0) {
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             return;
         }
@@ -160,7 +160,6 @@
                 [self.dataSource addObject:model];
             }
             [self.tableView reloadData];
-            [self.tableView.mj_footer endRefreshing];
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
