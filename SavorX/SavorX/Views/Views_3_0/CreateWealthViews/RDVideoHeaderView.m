@@ -45,9 +45,11 @@
     
     self.logoImageView = [[UIImageView alloc] init];
     self.logoImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.logoImageView.layer.cornerRadius = 22.5/2;//裁成圆角
+    self.logoImageView.layer.masksToBounds = YES;//隐藏裁剪掉的部分
     [self addSubview:self.logoImageView];
     [self.logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.titleLabel.mas_bottom).offset(13);
+        make.top.equalTo(self.titleLabel.mas_bottom).offset(12);
         make.left.mas_equalTo(15);
         make.width.mas_equalTo(22.5);
         make.height.mas_equalTo(22.5);
