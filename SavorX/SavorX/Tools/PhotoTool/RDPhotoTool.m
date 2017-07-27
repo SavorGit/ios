@@ -282,7 +282,7 @@
             //导出视频
             [session exportAsynchronouslyWithCompletionHandler:^(void)
              {
-                 endHandler(urlAsset.URL.path, str, session);
+                 endHandler(filePath.path, str, session);
              }];
         }else{
             if(degrees == 90){
@@ -322,7 +322,7 @@
             //导出视频
             [session exportAsynchronouslyWithCompletionHandler:^(void)
              {
-                 endHandler(urlAsset.URL.path, str, session);
+                 endHandler(filePath.path, str, session);
              }];
         }
         
