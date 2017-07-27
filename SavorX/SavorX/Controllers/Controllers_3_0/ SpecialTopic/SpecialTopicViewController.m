@@ -70,11 +70,24 @@
     SpecialTopRequest * request = [[SpecialTopRequest alloc] initWithSortNum:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        [self.dataSource removeAllObjects];
-        NSDictionary *dic = (NSDictionary *)response;
-        NSArray *resultArr = [dic objectForKey:@"result"];
-        [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
+        [self hiddenLoadingView];
+        [self.tableView.mj_header endRefreshing];
         
+        NSDictionary *dic = (NSDictionary *)response;
+        
+        NSDictionary * dataDict = [dic objectForKey:@"result"];
+        if (nil == dataDict) {
+            [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+            if (self.dataSource.count == 0) {
+                [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+            }
+            return;
+        }
+        
+        NSArray *resultArr = [dataDict objectForKey:@"list"];
+        
+        [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
+        [self.dataSource removeAllObjects];
         for (int i = 0; i < resultArr.count; i ++) {
             CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
             tmpModel.type = 1;
@@ -85,9 +98,13 @@
         }
         
         [self.tableView reloadData];
-        [self.tableView.mj_header endRefreshing];
-        [self.tableView.mj_footer resetNoMoreData];
-        [self hiddenLoadingView];
+        
+        if ([[dataDict objectForKey:@"nextpage"] integerValue] == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        }else{
+            [self.tableView.mj_footer resetNoMoreData];
+        }
+        
         [self showTopFreshLabelWithTitle:@"更新成功"];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -131,12 +148,20 @@
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary *dic = (NSDictionary *)response;
-        NSArray *resultArr = [dic objectForKey:@"result"];
         
-        if (resultArr.count == 0) {
-            //如果获取数据的数量为0，则状态为没有更多数据了
+        NSDictionary * dataDict = [dic objectForKey:@"result"];
+        
+        if (nil == dataDict) {
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             return;
+        }
+        
+        NSArray *resultArr = [dataDict objectForKey:@"list"];
+        
+        if ([[dataDict objectForKey:@"nextpage"] integerValue] == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        }else{
+            [self.tableView.mj_footer endRefreshing];
         }
         
         //如果获取的数据数量不为0，则将数据添加至数据源，刷新当前列表
@@ -146,7 +171,6 @@
             [self.dataSource addObject:welthModel];
         }
         [self.tableView reloadData];
-        [self.tableView.mj_footer endRefreshing];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         

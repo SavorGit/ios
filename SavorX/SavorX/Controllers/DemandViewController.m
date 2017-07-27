@@ -643,7 +643,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:demandHandle];
+    [SAVORXAPI postUMHandleWithContentId:self.model.artid withType:demandHandle];
     [self cheakIsFavorite];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     

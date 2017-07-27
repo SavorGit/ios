@@ -62,8 +62,16 @@
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self hiddenLoadingView];
+        [self.tableView.mj_header endRefreshing];
         
-        NSArray * array = [[response objectForKey:@"result"] objectForKey:@"list"];
+        NSDictionary * dict = [response objectForKey:@"result"];
+        
+        if (nil == dict) {
+            [self showNoDataViewInView:self.view noDataType:kNoDataType_Favorite];
+            return;
+        }
+        
+        NSArray * array = [dict objectForKey:@"list"];
         
         if (array) {
             if (array.count == 0) {
@@ -75,8 +83,14 @@
                     [self.dataSource addObject:model];
                 }
                 [self.tableView reloadData];
-                [self.tableView.mj_header endRefreshing];
-                [self.tableView.mj_footer resetNoMoreData];
+                
+                if ([[dict objectForKey:@"nextpage"] integerValue] == 0) {
+                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
+                }else{
+                    [self.tableView.mj_footer resetNoMoreData];
+                }
+
+                
                 [self showTopFreshLabelWithTitle:@"更新成功"];
             }
         }
@@ -125,21 +139,28 @@
     HSCollectoinListRequest * request = [[HSCollectoinListRequest alloc] initWithCreateTime:model.ucreateTime];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        NSArray * array = [[response objectForKey:@"result"] objectForKey:@"list"];
+        NSDictionary * dict = [response objectForKey:@"result"];
+        
+        if (nil == dict) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            return;
+        }
+        
+        NSArray * array = [dict objectForKey:@"list"];
+        
+        if ([[dict objectForKey:@"nextpage"] integerValue] == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        }else{
+            [self.tableView.mj_footer endRefreshing];
+        }
         
         if (array) {
-            if (array.count == 0) {
-                [self.tableView.mj_footer endRefreshingWithNoMoreData];
-            }else{
-                for (NSDictionary * dict in array) {
-                    CreateWealthModel * model = [[CreateWealthModel alloc] initWithDictionary:dict];
-                    [self.dataSource addObject:model];
-                }
-                [self.tableView reloadData];
-                [self.tableView.mj_footer endRefreshing];
+            for (NSDictionary * dict in array) {
+                CreateWealthModel * model = [[CreateWealthModel alloc] initWithDictionary:dict];
+                [self.dataSource addObject:model];
             }
-        }else{
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            [self.tableView reloadData];
+            [self.tableView.mj_footer endRefreshing];
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {

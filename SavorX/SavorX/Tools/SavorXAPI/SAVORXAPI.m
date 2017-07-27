@@ -407,6 +407,16 @@
     return task;
 }
 
++ (NSURLSessionDataTask *)queryStatusWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
+{
+    urlStr = [urlStr stringByAppendingString:@"/queryStatus"];
+    
+    NSDictionary * parameters = @{@"deviceId" : [GlobalData shared].deviceID};
+    
+    NSURLSessionDataTask * task = [self getWithURL:urlStr parameters:parameters success:success failure:failure];
+    return task;
+}
+
 //视频投屏
 + (NSURLSessionDataTask *)postVideoWithURL:(NSString *)urlStr mediaPath:(NSString *)mediaPath position:(NSString *)position force:(NSInteger)force success:(void (^)(NSURLSessionDataTask *, NSDictionary *))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
@@ -632,9 +642,9 @@
     }
 }
 
-+ (void)postUMHandleWithContentId:(NSInteger)contentId withType:(handleType)type
++ (void)postUMHandleWithContentId:(NSString *)contentId withType:(handleType)type
 {
-    NSDictionary * parameters = @{@"contentID" : [NSString stringWithFormat:@"%ld", (long)contentId]};
+    NSDictionary * parameters = @{@"contentID" : contentId};
     switch (type) {
         case 1:
             [MobClick event:@"collect" attributes:parameters];

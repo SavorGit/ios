@@ -184,7 +184,6 @@
 		06FA33991D3E171D001F5B37 /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FA337C1D3E171D001F5B37 /* ContextFilterLogFormatter.m */; };
 		06FA339A1D3E171D001F5B37 /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FA337E1D3E171D001F5B37 /* DispatchQueueLogFormatter.m */; };
 		06FB9D611DF97D0E0053BE0A /* MBProgressHUD+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D601DF97D0E0053BE0A /* MBProgressHUD+Custom.m */; };
-		06FB9D711DF9890C0053BE0A /* HSCategoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D671DF9890C0053BE0A /* HSCategoryModel.m */; };
 		06FB9D731DF9890C0053BE0A /* Jastor.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D6E1DF9890C0053BE0A /* Jastor.m */; };
 		06FB9D741DF9890C0053BE0A /* JastorRuntimeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D701DF9890C0053BE0A /* JastorRuntimeHelper.m */; };
 		06FB9D771DF989180053BE0A /* BaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FB9D761DF989180053BE0A /* BaseModel.m */; };
@@ -628,8 +627,6 @@
 		06FA33B01D3E1FA3001F5B37 /* SavorXHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SavorXHeader.pch; sourceTree = "<group>"; };
 		06FB9D5F1DF97D0E0053BE0A /* MBProgressHUD+Custom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+Custom.h"; sourceTree = "<group>"; };
 		06FB9D601DF97D0E0053BE0A /* MBProgressHUD+Custom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+Custom.m"; sourceTree = "<group>"; };
-		06FB9D661DF9890C0053BE0A /* HSCategoryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSCategoryModel.h; sourceTree = "<group>"; };
-		06FB9D671DF9890C0053BE0A /* HSCategoryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSCategoryModel.m; sourceTree = "<group>"; };
 		06FB9D6C1DF9890C0053BE0A /* Jastor-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Jastor-Prefix.pch"; sourceTree = "<group>"; };
 		06FB9D6D1DF9890C0053BE0A /* Jastor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Jastor.h; sourceTree = "<group>"; };
 		06FB9D6E1DF9890C0053BE0A /* Jastor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Jastor.m; sourceTree = "<group>"; };
@@ -1648,7 +1645,6 @@
 				965240D41ED532CE0090E1C8 /* RestaurantListModel */,
 				96BCE3C71EC19A7500B1A3F7 /* EggsGame */,
 				061E0FD51DFFEBB30072605F /* RDBox */,
-				06FB9D651DF9890C0053BE0A /* Discover */,
 				06FB9D6B1DF9890C0053BE0A /* Jastor */,
 				4780581A1DF985140091C305 /* Base */,
 				06FA333D1D3E16A0001F5B37 /* GlobalData.h */,
@@ -1744,15 +1740,6 @@
 				06FB9D601DF97D0E0053BE0A /* MBProgressHUD+Custom.m */,
 			);
 			path = "MBProgressHUD+Custom";
-			sourceTree = "<group>";
-		};
-		06FB9D651DF9890C0053BE0A /* Discover */ = {
-			isa = PBXGroup;
-			children = (
-				06FB9D661DF9890C0053BE0A /* HSCategoryModel.h */,
-				06FB9D671DF9890C0053BE0A /* HSCategoryModel.m */,
-			);
-			path = Discover;
 			sourceTree = "<group>";
 		};
 		06FB9D6B1DF9890C0053BE0A /* Jastor */ = {
@@ -2610,7 +2597,6 @@
 				47F4A2721E4962F4001C93F0 /* AdviceViewController.m in Sources */,
 				0663D43D1F0B6CB000CD2FA2 /* WMProgressView.m in Sources */,
 				0663D41B1F0B6AA500CD2FA2 /* RDHomePageController.m in Sources */,
-				06FB9D711DF9890C0053BE0A /* HSCategoryModel.m in Sources */,
 				06EA38DD1D59E0C60081DDCC /* ShowPhotoCollectionViewCell.m in Sources */,
 				067C30E91F13AF6A000A1150 /* HSSmashEggsModel.m in Sources */,
 				069076681E51F6C700CA1AC4 /* PhotoManyViewController.m in Sources */,
@@ -2937,7 +2923,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ce54e93d-ac84-4050-a314-adf9a5becc5f";
+				PROVISIONING_PROFILE = "a771c5c4-80b2-48f8-9eda-d9bde0498693";
 				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2978,7 +2964,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "57f8a8a4-173d-4689-b82b-68400bd62d88";
+				PROVISIONING_PROFILE = "cf6a010e-fe38-4900-8ca8-fe774d05c9f8";
 				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -34,6 +34,7 @@
 #import "SpecialTopicViewController.h"
 #import "LiveViewController.h"
 #import "RealCreateWealthViewController.h"
+#import "RDAlertView.h"
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
@@ -373,6 +374,9 @@
             if (dict && [dict isKindOfClass:[NSDictionary class]]) {
                 //如果收到的推送是一个节目的推送则初始化该节目的一个model
                 CreateWealthModel * model = [[CreateWealthModel alloc] initWithDictionary:dict];
+                if (isEmptyString(model.artid)) {
+                    model.artid = [dict objectForKey:@"id"];
+                }
                 
                 if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
                     //如果根视图是LGSide，则可以正常进行跳转
@@ -786,6 +790,27 @@
         if (![GlobalData shared].isBindRD) {
             [[RDHomeStatusView defaultView] stopScreen];
         }
+    }
+    
+    if ([GlobalData shared].isBindRD && [RDHomeStatusView defaultView].isScreening) {
+        [SAVORXAPI queryStatusWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            
+            if ([[result objectForKey:@"deviceId"] isEqualToString:[GlobalData shared].deviceID]) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
+                [SAVORXAPI cancelAllURLTask];
+                
+                RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:@"您的投屏已经退出了"];
+                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
+                    
+                } bold:YES];
+                [view addActions:@[action]];
+                [view show];
+            }
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+        }];
     }
 }
 
