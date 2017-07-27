@@ -142,14 +142,12 @@
         //如果获取的数据数量不为0，则将数据添加至数据源，刷新当前列表
         for(NSDictionary *dict in resultArr){
             CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:dict];
+            welthModel.type = 1;
             [self.dataSource addObject:welthModel];
         }
         [self.tableView reloadData];
         [self.tableView.mj_footer endRefreshing];
         
-        if (self.dataSource.count == 0) {
-            [self showNoDataView];
-        }
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.tableView.mj_footer endRefreshing];
