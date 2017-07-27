@@ -77,9 +77,10 @@
         
         NSDictionary * dataDict = [dic objectForKey:@"result"];
         if (nil == dataDict) {
-            [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
             if (self.dataSource.count == 0) {
                 [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+            }else{
+                [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
             }
             return;
         }
