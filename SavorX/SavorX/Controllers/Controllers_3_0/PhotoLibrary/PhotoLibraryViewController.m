@@ -47,6 +47,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self loadPhotoLibrary];
 }
 
@@ -113,6 +114,7 @@
         make.top.mas_equalTo(-self.view.frame.size.height);
         make.right.mas_equalTo(0);
     }];
+    self.tableView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     
     self.screenButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.screenButton addTarget:self action:@selector(screenButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -487,6 +489,8 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [cell.imageView setContentMode:UIViewContentModeScaleToFill];
+        cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        cell.contentView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     }
     
     RDPhotoLibraryModel * model = [self.photoLibrarySource objectAtIndex:indexPath.row];

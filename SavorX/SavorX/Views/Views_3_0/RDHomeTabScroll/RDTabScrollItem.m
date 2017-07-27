@@ -73,9 +73,9 @@
 
 - (void)createSubViews
 {
-    self.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.layer.shadowOpacity = .3f;
-    self.layer.shadowRadius = 4;
+    self.layer.shadowColor = UIColorFromRGB(0x8f8577).CGColor;
+    self.layer.shadowOpacity = .2f;
+    self.layer.shadowRadius = 5;
     self.layer.shadowOffset = CGSizeMake(0, 0);
     
     CGSize imageViewSize = self.imageView.frame.size;

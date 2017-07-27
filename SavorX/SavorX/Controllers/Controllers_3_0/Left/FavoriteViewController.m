@@ -38,6 +38,8 @@
     [self showLoadingView];
     
     [self setupDatas];
+    
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -75,9 +77,6 @@
                 [self.tableView reloadData];
                 [self.tableView.mj_header endRefreshing];
                 [self.tableView.mj_footer resetNoMoreData];
-                if (self.dataSource.count >= 20) {
-                    self.tableView.mj_footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(getMoreData)];
-                }
                 [self showTopFreshLabelWithTitle:@"更新成功"];
             }
         }
@@ -167,7 +166,8 @@
             make.edges.mas_equalTo(0);
         }];
         
-        self.tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(setupDatas)];
+        _tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(setupDatas)];
+        _tableView.mj_footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(getMoreData)];
     }
     return _tableView;
 }
