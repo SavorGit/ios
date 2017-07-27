@@ -76,7 +76,7 @@
         NSDictionary *dic = (NSDictionary *)response;
         
         NSDictionary * dataDict = [dic objectForKey:@"result"];
-        if (nil == dataDict) {
+        if (nil == dataDict || ![dataDict isKindOfClass:[NSDictionary class]] || dataDict.count == 0) {
             if (self.dataSource.count == 0) {
                 [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
             }else{
@@ -152,7 +152,7 @@
         
         NSDictionary * dataDict = [dic objectForKey:@"result"];
         
-        if (nil == dataDict) {
+        if (nil == dataDict || ![dataDict isKindOfClass:[NSDictionary class]] || dataDict.count == 0) {
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
             return;
         }
