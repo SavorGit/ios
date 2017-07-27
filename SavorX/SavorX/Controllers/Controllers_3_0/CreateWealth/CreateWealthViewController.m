@@ -145,9 +145,6 @@
         [self.tableView reloadData];
         [self.tableView.mj_footer endRefreshing];
         
-        if (self.dataSource.count == 0) {
-            [self showNoDataView];
-        }
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.tableView.mj_footer endRefreshing];
