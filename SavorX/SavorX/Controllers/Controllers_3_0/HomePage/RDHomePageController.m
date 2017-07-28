@@ -74,7 +74,7 @@
 //收到节目的推送，跳转至相关的页面
 - (void)didReceiveRemoteNotification:(CreateWealthModel *)model
 {
-    NSInteger categoryID = -1;
+    NSInteger categoryID = model.categoryId;
     [SAVORXAPI postUMHandleWithContentId:model.artid withType:readHandle];
     //如果不是绑定状态
     if (model.type == 3 || model.type == 4) {

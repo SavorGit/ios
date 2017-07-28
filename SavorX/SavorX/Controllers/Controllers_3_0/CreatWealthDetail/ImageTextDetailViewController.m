@@ -383,7 +383,6 @@
     self.imgTextModel = tmpModel;
     [self.testView removeFromSuperview];
     [self setUpDatas];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     if (!isEmptyString(tmpModel.contentURL)) {
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]];
         [self.webView loadRequest:request];
@@ -415,15 +414,6 @@
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgTextModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
     [SAVORXAPI postUMHandleWithContentId:@"details_end_reading" key:@"details_end_reading" value:[Helper getCurrentTimeWithFormat:@"YYYYMMddHHmmss"]];
-}
-
-- (void)navBackButtonClicked:(UIButton *)sender
-{
-    if (self.webView.canGoBack) {
-        [self.webView goBack];
-    }else{
-        [self.navigationController popViewControllerAnimated:YES];
-    }
 }
 
 //app进入后台运行

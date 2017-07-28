@@ -30,6 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.categoryID = 103;
     [self checkIsOnLine];
 }
 
