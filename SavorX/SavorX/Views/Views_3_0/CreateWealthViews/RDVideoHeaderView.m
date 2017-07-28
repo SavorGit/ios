@@ -164,6 +164,8 @@
     }
     
     self.timeLabel.text = model.updateTime;
+    
+    [self needRecommand:NO];
 }
 
 @end

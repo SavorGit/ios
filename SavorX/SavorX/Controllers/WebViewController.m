@@ -40,6 +40,7 @@
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, assign) BOOL isOnline;
 @property (nonatomic, assign) BOOL hasDidLoad;
+@property (nonatomic, assign) BOOL hasWebObserver;
 
 @end
 
@@ -47,7 +48,7 @@
 
 -(void)dealloc{
     
-    if (!self.isOnlyVideo) {
+    if (self.hasWebObserver) {
         [self removeObserver];
     }
     
@@ -129,7 +130,7 @@
         }];
     }
     
-    [self refreshPageWithModel:self.model];
+    [self refreshPage];
     
     if (!self.hasDidLoad) {
         //添加页面相关的通知监听
@@ -143,14 +144,13 @@
     self.hasDidLoad = YES;
 }
 
-- (void)refreshPageWithModel:(CreateWealthModel *)model
+- (void)refreshPage
 {
-    self.model = model;
     [self.playView setVideoTitle:self.model.title];
     [self.playView setPlayItemWithURL:[self.model.videoURL stringByAppendingString:@".f30.mp4"]];
     [self.playView backgroundImage:self.model.imageURL];
     
-    if (model.type == 4) {
+    if (self.model.type == 4) {
         
         self.isOnlyVideo = YES;
         [self refreshWithOnlyVideo];
@@ -384,12 +384,21 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [self.playView shouldRelease];
-    self.webView.delegate = nil;
-    self.webView.scrollView.delegate = nil;
-    
+    [self shouldRelease];
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (void)shouldRelease
+{
+    [RDIsOnline cancelRequest];
+    if (self.playView) {
+        [self.playView shouldRelease];
+    }
+    if (self.webView) {
+        self.webView.delegate = nil;
+        self.webView.scrollView.delegate = nil;
+    }
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -486,11 +495,13 @@
 
 - (void)addObserver
 {
+    self.hasWebObserver = YES;
     [self.webView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)removeObserver
 {
+    self.hasWebObserver = NO;
     [self.webView.scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
 }
 
@@ -718,12 +729,13 @@
     [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
+    self.model = tmpModel;
     self.isOnline = NO;
     [self showLoadingView];
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         self.isOnline = YES;
-        [self refreshPageWithModel:tmpModel];
+        [self refreshPage];
         [self hiddenLoadingView];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self setNeedsStatusBarAppearanceUpdate];

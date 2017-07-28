@@ -510,6 +510,7 @@ static int temp = -1;
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [HSPicDetailRequest cancelRequest];
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];

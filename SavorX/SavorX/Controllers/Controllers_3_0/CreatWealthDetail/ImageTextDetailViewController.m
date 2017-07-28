@@ -407,6 +407,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [RDIsOnline cancelRequest];
     [super viewDidDisappear:animated];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgTextModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
