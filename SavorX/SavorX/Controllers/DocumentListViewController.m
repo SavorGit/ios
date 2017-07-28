@@ -74,7 +74,7 @@
 {
     
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    self.webView.backgroundColor = [UIColor clearColor];
+    self.webView.backgroundColor = VCBackgroundColor;
     self.webView.opaque = NO;
     self.webView.delegate = self;
     [self.view addSubview:self.webView];
@@ -209,6 +209,9 @@
     [self createDataSource];
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreen_Width, kScreen_Height - NavHeight) style:UITableViewStylePlain];
+    self.tableView.backgroundColor = VCBackgroundColor;
+    self.tableView.separatorInset = UIEdgeInsetsZero;
+    self.tableView.layoutMargins = UIEdgeInsetsZero;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -223,7 +226,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100.f;
+    return 68.f;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -233,13 +236,14 @@
     if (nil == cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:DocumentListCell];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
     NSString * path = [self.dataSource objectAtIndex:indexPath.row];
     cell.textLabel.text = [path lastPathComponent];
     cell.textLabel.font = [UIFont systemFontOfSize:FontSizeDefault];
     cell.textLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
     
     if ([path hasSuffix:@"pdf"]) {
         [cell.imageView setImage:[UIImage imageNamed:@"wj_pdf"]];
@@ -252,6 +256,15 @@
     }else if ([path hasSuffix:@"mp4"]) {
         [cell.imageView setImage:[UIImage imageNamed:@"mp4"]];
     }
+    
+    UIImageView *rightImg = [[UIImageView alloc] init];
+    [rightImg setImage:[UIImage imageNamed:@"xiangce_more"]];
+    [cell addSubview:rightImg];
+    [rightImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(8, 14));
+        make.top.mas_equalTo(27);
+        make.right.mas_equalTo(- 15);
+    }];
     
     return cell;
 }

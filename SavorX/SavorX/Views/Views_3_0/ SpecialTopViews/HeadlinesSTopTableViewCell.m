@@ -51,7 +51,7 @@
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 20));
         make.top.mas_equalTo(_bgImageView.mas_bottom).offset(15);
-        make.left.mas_equalTo(5);
+        make.left.mas_equalTo(10);
     }];
         
     _subTitleLabel = [[UILabel alloc]init];
@@ -64,7 +64,7 @@
     [_subTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 21));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
-        make.left.mas_equalTo(5);
+        make.left.mas_equalTo(10);
     }];
     
     _timeLabel = [[UILabel alloc]init];
@@ -75,7 +75,7 @@
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 10));
         make.bottom.mas_equalTo(self).offset(- 16);
-        make.left.mas_equalTo(5);
+        make.left.mas_equalTo(10);
     }];
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];

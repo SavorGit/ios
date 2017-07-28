@@ -40,7 +40,7 @@
     self.titleLabel.numberOfLines = 2;
     [self addSubview:_titleLabel];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - _bgImageView.width - 30, 30));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - _bgImageView.width - 38, 30));
         make.top.mas_equalTo(6);
         make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
     }];
@@ -91,10 +91,10 @@
 
 - (void)configModelData:(CreateWealthModel *)model{
     
-    CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 30) title:model.title font:kPingFangMedium(16)];
+    CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 38) title:model.title font:kPingFangMedium(16)];
     if (titleHeight > 30) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 30, titleHeight));
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 38, titleHeight));
             make.top.mas_equalTo(6);
             make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
         }];
