@@ -68,7 +68,9 @@
         UIColor *color = UIColorFromRGB(0X000000);
         //背景蒙版，带灰度
         self.backgroundColor = [color colorWithAlphaComponent:0.6];
-//        self.alpha = .6;
+        //	点击背景，收起底部分享面板，移除本视图
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedCancel)];
+        [self addGestureRecognizer:tapGesture];
         //加载分享面板
         [self loadUIConfig];
     }

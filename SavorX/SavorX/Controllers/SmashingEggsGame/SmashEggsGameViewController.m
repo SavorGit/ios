@@ -328,7 +328,7 @@
         return;
         
     }else if (![GlobalData shared].isBindRD){
-        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"请连接电视，即可参加活动"];
+        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"提示" message:@"请连接电视，即可参加活动"];
         RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
             
         } bold:NO];
@@ -343,23 +343,27 @@
     // 先判断有没有配置信息
     if (_isConfigure == NO) {
         
-        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"当前包间的活动未开始"];
-        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
-            
-        } bold:YES];
-        [alertView addActions:@[action]];
-        [alertView show];
+        [SAVORXAPI showAlertWithMessage:@"当前包间的活动未开始"];
+//        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"当前包间的活动未开始"];
+//        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+//            
+//        } bold:YES];
+//        [alertView addActions:@[action]];
+//        [alertView show];
         return;
 
     }
     
     if ([RDAwardTool awardCanAwardWithAPILottery_num:_smashEggsModel.lottery_num] == NO) {
-        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"今天的抽奖机会用完了\n明天再来吧~"];
-        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
-            
-        } bold:NO];
-        [alertView addActions:@[action]];
-        [alertView show];
+        
+        [SAVORXAPI showAlertWithMessage:@"今天的抽奖机会用完了\n明天再来吧~"];
+        
+//        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"今天的抽奖机会用完了\n明天再来吧~"];
+//        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+//            
+//        } bold:NO];
+//        [alertView addActions:@[action]];
+//        [alertView show];
         return;
     }
 
