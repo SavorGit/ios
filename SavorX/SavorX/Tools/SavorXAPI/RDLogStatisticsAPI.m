@@ -117,8 +117,12 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
         time = [Helper getTimeStampMS];
     }
     
-    NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,ios,%lf,%lf,,%@,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:time], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]],[RDLogStatisticsAPI getActionStringWithAction:action],[RDLogStatisticsAPI getTypeStringWithType:type],[RDLogStatisticsAPI checkIsNullOrEmpty:model.artid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],[RDLogStatisticsAPI checkIsNullOrEmpty:model.mediaId], [GlobalData shared].longitude, [GlobalData shared].latitude, [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].areaId],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
-    [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
+    const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
+    dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
+    dispatch_async(RDLogQueue, ^{
+        NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,ios,%lf,%lf,,%@,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:time], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]],[RDLogStatisticsAPI getActionStringWithAction:action],[RDLogStatisticsAPI getTypeStringWithType:type],[RDLogStatisticsAPI checkIsNullOrEmpty:model.artid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],[RDLogStatisticsAPI checkIsNullOrEmpty:model.mediaId], [GlobalData shared].longitude, [GlobalData shared].latitude, [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].areaId],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
+        [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
+    });
 }
 
 + (void)RDShareLogModel:(CreateWealthModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume

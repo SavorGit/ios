@@ -45,7 +45,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor lightGrayColor]];
+    [self.view setBackgroundColor:VCBackgroundColor];
     [self initInfo];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {

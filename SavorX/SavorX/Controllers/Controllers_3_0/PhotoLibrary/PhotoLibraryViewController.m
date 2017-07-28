@@ -581,6 +581,7 @@
     }else{
         [self.navigationController pushViewController:third animated:YES];
     }
+    [self closeChooseStatus];
 }
 
 - (void)demandVideoWithMediaPath:(NSString *)mediaPath asset:(PHAsset *)asset force:(NSInteger)force filePath:(NSString *)filePath{
