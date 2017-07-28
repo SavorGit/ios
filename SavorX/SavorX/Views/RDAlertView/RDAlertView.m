@@ -30,13 +30,14 @@
 
 - (void)createAlertWithTitle:(NSString *)title message:(NSString *)message
 {
-    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
-    effectView.frame = CGRectMake(0, 0, self.frame.size.width * 0.5, self.frame.size.height);
-    [self addSubview:effectView];
-    [effectView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(0);
-    }];
+//    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+//    UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+//    effectView.frame = CGRectMake(0, 0, self.frame.size.width * 0.5, self.frame.size.height);
+//    [self addSubview:effectView];
+//    [effectView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.mas_equalTo(0);
+//    }];
+    self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7f];
     
     self.showView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
     self.showView.backgroundColor = UIColorFromRGB(0xf6f2ed);

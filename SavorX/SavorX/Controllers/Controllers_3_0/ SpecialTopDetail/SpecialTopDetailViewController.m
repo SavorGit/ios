@@ -12,14 +12,16 @@
 #import "HSIsOrCollectionRequest.h"
 #import "HotPopShareView.h"
 #import "RDIsOnline.h"
+#import "RDLogStatisticsAPI.h"
 
-@interface SpecialTopDetailViewController () <UIWebViewDelegate>
+@interface SpecialTopDetailViewController () <UIWebViewDelegate,UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) UIView *testView;
 @property (nonatomic, strong) UIButton *collectButton;
 
 @property (nonatomic, assign) BOOL isReady;
+@property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 
 @end
 
@@ -51,6 +53,13 @@
 
 - (void)createWebView
 {
+    _isComplete = NO;
+    
+    // app退到后台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+    // app进入前台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     UIBarButtonItem * shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareAction)];
     self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
@@ -68,6 +77,7 @@
     self.webView = [[UIWebView alloc] init];
     self.webView.backgroundColor = [UIColor clearColor];
     self.webView.delegate = self;
+    self.webView.scrollView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);
     
     if (!isEmptyString(self.specilDetailModel.contentURL)) {
@@ -210,15 +220,44 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.specilDetailModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     [SAVORXAPI postUMHandleWithContentId:@"details_page" key:@"details_page" value:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
+
 - (void)viewDidDisappear:(BOOL)animated{
     [RDIsOnline cancelRequest];
+    [super viewDidDisappear:animated];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.specilDetailModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
 }
+
+//app进入后台运行
+- (void)appWillDidBackground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.specilDetailModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+//app进入前台运行
+- (void)appBecomeActivePlayground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.specilDetailModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
+{
+    if (self.webView.scrollView.contentSize.height - self.webView.scrollView.contentOffset.y - self.webView.frame.size.height <= 100) {
+        if (_isComplete == NO) {
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.specilDetailModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+            _isComplete = YES;
+        }
+    }
+}
+
 - (void)dealloc{
     
     [self removeObserver];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     
 }
 
