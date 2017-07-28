@@ -38,7 +38,7 @@
     
     dispatch_once(&onceToken, ^{
         
-        view = [[RDHomeStatusView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 38) status:RDHomeStatus_Normal];
+        view = [[RDHomeStatusView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 48) status:RDHomeStatus_Normal];
         
     });
     
@@ -80,9 +80,9 @@
     [self addSubview:self.statusButton];
     
     [self.statusButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(7);
-        make.bottom.mas_equalTo(-7);
-        make.right.mas_equalTo(-20);
+        make.top.mas_equalTo(12);
+        make.bottom.mas_equalTo(-12);
+        make.right.mas_equalTo(-15);
         make.width.mas_equalTo(70);
     }];
     
@@ -97,9 +97,9 @@
     [self addSubview:self.statusLabel];
     
     [self.statusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(9);
-        make.left.mas_equalTo(10);
-        make.bottom.mas_equalTo(-9);
+        make.top.mas_equalTo(13);
+        make.left.mas_equalTo(15);
+        make.bottom.mas_equalTo(-13);
         make.right.equalTo(self.statusButton.mas_left).offset(-10);
     }];
     
