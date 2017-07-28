@@ -64,6 +64,8 @@
 - (void)loadPhotoLibrary
 {
     [MBProgressHUD showLoadingWithText:@"正在加载" inView:self.view];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"选择" style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     
     [RDPhotoTool loadPHAssetWithHander:^(NSArray *result, RDPhotoLibraryModel *cameraResult) {
         self.photoLibrarySource = result;
@@ -75,10 +77,7 @@
 - (void)createUI
 {
     [self autoTitleButtonWith:self.model.title];
-    
     self.selectArray = [NSMutableArray new];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"选择" style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
     
     UICollectionViewFlowLayout * flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.itemSize = CollectionViewCellSize;
@@ -134,6 +133,7 @@
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
         [MBProgressHUD hideHUDForView:self.view animated:NO];
         self.collectionView.hidden = NO;
+        self.navigationItem.rightBarButtonItem.enabled = YES;
     });
 }
 
@@ -191,9 +191,10 @@
 - (void)autoTitleButtonWith:(NSString *)title
 {
     UIButton * titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [titleButton setTintColor:[UIColor whiteColor]];
+    [titleButton setTintColor:UIColorFromRGB(0xece6de)];
     [titleButton setImage:[UIImage imageNamed:@"xczk"] forState:UIControlStateNormal];
     titleButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    [titleButton setTitleColor:UIColorFromRGB(0xece6de) forState:UIControlStateNormal];
     [titleButton addTarget:self action:@selector(titleButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
     titleButton.imageView.contentMode = UIViewContentModeCenter;
     
@@ -203,7 +204,7 @@
     if (size.width > maxWidth) {
         size.width = maxWidth;
     }
-    titleButton.frame = CGRectMake(0, 0, size.width + 30, size.height);
+    titleButton.frame = CGRectMake(0, (kMainBoundsWidth - size.width - 30) / 2, size.width + 30, size.height);
     
     [titleButton setImageEdgeInsets:UIEdgeInsetsMake(0, size.width + 15, 0, 0)];
     [titleButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10 + 10)];

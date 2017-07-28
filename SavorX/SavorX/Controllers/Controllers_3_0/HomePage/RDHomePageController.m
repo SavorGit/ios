@@ -104,7 +104,7 @@
     UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 90, 25)];
     [button setImage:[UIImage imageNamed:@"logo_biaoti"] forState:UIControlStateNormal];
     [button setTitle:@"小热点" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitleColor:UIColorFromRGB(0xece6de) forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:17];
     [button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 7)];
     [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 7, 0, 0)];
