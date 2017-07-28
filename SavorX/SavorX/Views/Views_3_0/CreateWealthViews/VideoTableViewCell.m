@@ -70,10 +70,9 @@
     _countLabel.text = @"4\'23\"";
     _countLabel.font = kPingFangLight(14);
     _countLabel.textColor = [UIColor whiteColor];
-    _countLabel.backgroundColor = [UIColor darkGrayColor];
-    _countLabel.alpha = 0.6;
+    _countLabel.backgroundColor = [UIColorFromRGB(0x222222) colorWithAlphaComponent:.5f];
     _countLabel.textAlignment = NSTextAlignmentCenter;
-    _countLabel.layer.cornerRadius = 11;
+    _countLabel.layer.cornerRadius = 10;
     _countLabel.layer.masksToBounds = YES;
     [_bgImageView addSubview:_countLabel];
     [_countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
