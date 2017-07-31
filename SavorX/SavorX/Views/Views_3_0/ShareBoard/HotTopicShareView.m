@@ -13,7 +13,7 @@
 
 
 #define ScreenWidth			[[UIScreen mainScreen] bounds].size.width
-#define SELF_Height		    100
+#define SELF_Height		    123
 #define SHAREVIEW_BGCOLOR   [UIColor colorWithRed:1.00f green:1.00f blue:1.00f alpha:1]
 #define WINDOW_COLOR        [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4]
 #define LINE_HEIGHT         74
@@ -68,6 +68,10 @@
         self.userInteractionEnabled = YES;
         //	加载分享面板
         [self loadUIConfig];
+        
+        UIView * lineView = [[UIView alloc] initWithFrame:CGRectMake(0, SELF_Height-8, ScreenWidth, 8)];
+        lineView.backgroundColor = UIColorFromRGB(0xece6de);
+        [self addSubview:lineView];
     }
     return self;
 }

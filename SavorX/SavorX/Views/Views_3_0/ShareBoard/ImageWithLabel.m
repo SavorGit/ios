@@ -108,7 +108,7 @@
 				
 				make.top.equalTo(self.label.mas_bottom);
 				make.centerX.equalTo(self.mas_centerX);
-				make.size.mas_equalTo(self.imageView.image.size);
+				make.size.mas_equalTo(40);
 			}];
 
 		}
@@ -125,7 +125,7 @@
 				
 				make.left.equalTo(self.mas_centerX);
 				make.centerY.equalTo(self.mas_centerY);
-				make.size.mas_equalTo(self.imageView.image.size);
+				make.size.mas_equalTo(40);
 			}];
 		}
 			break;
@@ -141,7 +141,7 @@
 				
 				make.right.equalTo(self.mas_centerX);
 				make.centerY.equalTo(self.mas_centerY);
-				make.size.mas_equalTo(self.imageView.image.size);
+				make.size.mas_equalTo(40);
 			}];
 		}
 			break;
@@ -157,9 +157,9 @@
 				
 				make.bottom.equalTo(self.label.mas_top);
 				make.centerX.equalTo(self.mas_centerX);
-				make.width.offset(self.imageView.image.size.width * self.imageScale);
-				make.height.offset(self.imageView.image.size.height * self.imageScale);
-//make.size.mas_equalTo(self.imageView.image.size).multipliedBy(self.imageScale);
+//				make.width.offset(self.imageView.image.size.width * self.imageScale);
+//				make.height.offset(self.imageView.image.size.height * self.imageScale);
+                make.size.mas_equalTo(40);
 				
 			}];
             NSLog(@"");

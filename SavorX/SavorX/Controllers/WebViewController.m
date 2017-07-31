@@ -211,7 +211,7 @@
     self.webView.opaque = NO;
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 100)];
-    self.testView.backgroundColor = [UIColor clearColor];
+    self.testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     self.testView.clipsToBounds = YES;
     [self.webView.scrollView addSubview:self.testView];
 }
@@ -384,8 +384,11 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [self shouldRelease];
     [super viewDidDisappear:animated];
+    if (self.navigationController.topViewController == self) {
+        return;
+    }
+    [self shouldRelease];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
@@ -531,7 +534,7 @@
     }];
     
     //底部View总高度
-    CGFloat theight = tabHeight + 100;
+    CGFloat theight = tabHeight + 115 + 30;
     if (self.dataSource.count != 0) {
         theight += 8;
     }
@@ -544,7 +547,6 @@
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
     [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight)];
-    self.testView.backgroundColor = UIColorFromRGB(0xece6de);
     
     [self addObserver];
     
@@ -556,11 +558,11 @@
 
 - (void)shareBoardByDefined {
     
-    if ([self.testView viewWithTag:2222]) {
-        [[self.testView viewWithTag:2222] removeFromSuperview];
+    if ([self.testView viewWithTag:1000]) {
+        [[self.testView viewWithTag:1000] removeFromSuperview];
     }
-    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.model andVC:self andCategoryID:self.categoryID andY:0];
-    shareView.tag = 2222;
+    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.model andVC:self andCategoryID:self.categoryID andY:30];
+    shareView.tag = 1000;
     [self.testView addSubview:shareView];
     
 }

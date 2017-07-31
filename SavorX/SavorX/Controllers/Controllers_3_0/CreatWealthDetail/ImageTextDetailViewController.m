@@ -102,7 +102,7 @@
     [self.view addSubview:self.webView];
     
     self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
-    self.testView.backgroundColor = [UIColor clearColor];
+    self.testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];
 }
@@ -238,7 +238,10 @@
     }
     
     //底部View总高度
-    CGFloat theight = tabHeight + 100;
+    CGFloat theight = tabHeight + 115 + 30;
+    if (self.dataSource.count != 0) {
+        theight += 8;
+    }
     CGFloat height = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
@@ -247,7 +250,6 @@
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
     [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight)];
-    self.testView.backgroundColor = UIColorFromRGB(0xece6de);
     
     [self addObserver];
     
@@ -256,7 +258,11 @@
 
 - (void)shareBoardByDefined {
 
-    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.imgTextModel andVC:self andCategoryID:self.categoryID andY:0];
+    if ([self.testView viewWithTag:1000]) {
+        [[self.testView viewWithTag:1000] removeFromSuperview];
+    }
+    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.imgTextModel andVC:self andCategoryID:self.categoryID andY:30];
+    shareView.tag = 1000;
     [self.testView addSubview:shareView];
 
 }
@@ -316,7 +322,7 @@
         CGFloat tabHeiht = self.dataSource.count *(130 *802.f/1242.f + 12) +48;
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, tabHeiht));
-            make.top.mas_equalTo(108);
+            make.top.mas_equalTo(123+30);
             make.left.mas_equalTo(0);
         }];
 

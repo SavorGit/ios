@@ -742,6 +742,8 @@
         return;
     }
     
+    [self checkScreenStatus];
+    
     if (!isEmptyString(self.ssid) && [Helper getWifiName]) {
         if ([self.ssid isEqualToString:[Helper getWifiName]]) {
             return;
@@ -791,7 +793,10 @@
             [[RDHomeStatusView defaultView] stopScreen];
         }
     }
-    
+}
+
+- (void)checkScreenStatus
+{
     if ([GlobalData shared].isBindRD && [RDHomeStatusView defaultView].isScreening) {
         [SAVORXAPI queryStatusWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             

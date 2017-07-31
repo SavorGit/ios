@@ -63,7 +63,8 @@
 #define SystemImage [NSString stringWithFormat:@"%@/FileCache/systemImage", HTTPServerDocument]
 #define CategoryCache [NSString stringWithFormat:@"%@/FileCache/categoryCache", HTTPServerDocument]
 
-#define RDLogPath [NSString stringWithFormat:@"%@/RDLog.log", HTTPServerDocument]
+#define RDLogPath @"/Users/guochuncheng/Desktop/RDLog.log"
+//#define RDLogPath [NSString stringWithFormat:@"%@/RDLog.log", HTTPServerDocument]
 #define RDLogCachePath [NSString stringWithFormat:@"%@/RDLogCache", HTTPServerDocument]
 
 #define RDScreenVideoName @"littlehotspot.mp4"
