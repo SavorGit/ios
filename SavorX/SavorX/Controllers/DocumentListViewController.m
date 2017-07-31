@@ -240,7 +240,7 @@
     }
     
     NSString * path = [self.dataSource objectAtIndex:indexPath.row];
-    cell.textLabel.text = [path lastPathComponent];
+    cell.textLabel.text = [[path lastPathComponent] stringByAppendingString:@"  "];
     cell.textLabel.font = [UIFont systemFontOfSize:FontSizeDefault];
     cell.textLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
