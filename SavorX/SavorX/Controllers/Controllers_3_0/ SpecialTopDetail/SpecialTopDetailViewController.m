@@ -191,12 +191,13 @@
 
 - (void)footViewShouldBeReset
 {
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
     [self removeObserver];
     
     if (self.testView.superview) {
         [self.testView removeFromSuperview];
     }
-    CGFloat theight =100;
+    CGFloat theight =115 + 30;
     CGFloat height = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
     CGSize contentSize = self.webView.scrollView.contentSize;
@@ -204,6 +205,7 @@
     
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
+    self.testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight )];
     
     [self addObserver];
@@ -212,7 +214,11 @@
 }
 
 - (void)shareBoardByDefined {
-    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.specilDetailModel andVC:self andCategoryID:self.categoryID andY:0];
+    if ([self.testView viewWithTag:1000]) {
+        [[self.testView viewWithTag:1000] removeFromSuperview];
+    }
+    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.specilDetailModel andVC:self andCategoryID:self.categoryID andY:30];
+    shareView.tag = 1000;
     [self.testView addSubview:shareView];
 }
 

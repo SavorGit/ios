@@ -64,8 +64,8 @@
     [self addSubview:self.totalLabel];
     
     if (self.type == RDTabScrollViewPageType_UPBIG) {
-        self.currentLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:13];
-        self.totalLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:10];
+        self.currentLabel.font = [UIFont fontWithName:@"STHeitiTC-Light" size:13];
+        self.totalLabel.font = [UIFont fontWithName:@"STHeitiTC-Light" size:9];
     }else{
         self.currentLabel.font = [UIFont fontWithName:@"STHeitiTC-Light" size:11];
         self.totalLabel.font = [UIFont fontWithName:@"STHeitiTC-Light" size:15];

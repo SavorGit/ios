@@ -124,7 +124,7 @@
     self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, imageViewSize.height, self.frame.size.width, self.frame.size.height - imageViewSize.height)];
     [self.baseView addSubview:self.bottomView];
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width - 30, 16)];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, self.frame.size.width - 30, 16)];
     self.titleLabel.font = kPingFangMedium(16);
     self.titleLabel.textColor = UIColorFromRGB(0x434343);
     [self.bottomView addSubview:self.titleLabel];
@@ -134,8 +134,8 @@
     self.detailFrom.textColor = UIColorFromRGB(0x898886);
     [self.bottomView addSubview:self.detailFrom];
     [self.detailFrom mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(12);
-        make.bottom.mas_equalTo(-12);
+        make.left.mas_equalTo(10);
+        make.bottom.mas_equalTo(-15);
         make.height.mas_equalTo(12);
         make.width.lessThanOrEqualTo(@(100));
     }];
@@ -146,7 +146,7 @@
     [self.bottomView addSubview:self.detailDate];
     [self.detailDate mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.detailFrom.mas_right).offset(10);
-        make.bottom.mas_equalTo(-12);
+        make.bottom.mas_equalTo(-15);
         make.height.mas_equalTo(12);
         make.width.lessThanOrEqualTo(@(100));
     }];

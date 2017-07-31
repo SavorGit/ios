@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 {
     [self pause];
     [self.controlView setSliderValue:0.f];
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"zanwu"]];
     [self insertSubview:self.imageView belowSubview:self.controlView];
     [self.controlView backgroundImage:url];
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -559,7 +559,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if ([self viewWithTag:888]) {
         UIView * view = [self viewWithTag:888];
         [view removeFromSuperview];
-        [self play];
+//        [self play];
     }
 }
 
@@ -570,7 +570,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if ([self viewWithTag:888]) {
         UIView * view = [self viewWithTag:888];
         [view removeFromSuperview];
-        [self play];
+//        [self play];
     }
 }
 
@@ -630,7 +630,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [view removeFromSuperview];
     [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"hasPlay"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [self play];
+//    [self play];
 }
 
 #pragma mark -- GCCControlViewDelegate
