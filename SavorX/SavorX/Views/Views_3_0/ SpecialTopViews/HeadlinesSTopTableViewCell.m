@@ -56,7 +56,7 @@
         
     _subTitleLabel = [[UILabel alloc]init];
     _subTitleLabel.text = @"";
-    _subTitleLabel.font = kPingFangLight(15);
+    _subTitleLabel.font = kPingFangLight(14);
     _subTitleLabel.textColor = UIColorFromRGB(0x575759);
     _subTitleLabel.backgroundColor = [UIColor clearColor];
     _subTitleLabel.numberOfLines = 2;
