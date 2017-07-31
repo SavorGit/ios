@@ -108,7 +108,7 @@
     
     _timeLabel = [[UILabel alloc]init];
     _timeLabel.text = @"";
-    _timeLabel.font = [UIFont systemFontOfSize:10];
+    _timeLabel.font = kPingFangLight(10);
     _timeLabel.textColor = UIColorFromRGB(0xb2afab);
     [self addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {

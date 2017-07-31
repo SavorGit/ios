@@ -24,7 +24,7 @@
     _bgView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.contentView addSubview:_bgView];
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(336.5);
+        make.height.mas_equalTo(335.5);
         make.width.mas_equalTo(kMainBoundsWidth - 20);
         make.top.mas_equalTo(10);
         make.left.mas_equalTo(10);
@@ -62,7 +62,7 @@
     _subTitleLabel.numberOfLines = 2;
     [_bgView addSubview:_subTitleLabel];
     [_subTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 21));
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 20));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
         make.left.mas_equalTo(10);
     }];
@@ -101,13 +101,13 @@
 
 - (void)configModelData:(CreateWealthModel *)model{
     
-    CGFloat subTitleHeight = [self getHeightByWidth:kMainBoundsWidth - 30 title:model.shareTitle font:kPingFangMedium(15)];
-    if (subTitleHeight > 21) {
+    CGFloat subTitleHeight = [self getHeightByWidth:kMainBoundsWidth - 30 title:model.shareTitle font:kPingFangMedium(14)];
+    if (subTitleHeight > 20) {
         [self.subTitleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 42));
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 40));
         }];
         [_bgView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(357.5);
+            make.height.mas_equalTo(355.5);
         }];
     }
     
