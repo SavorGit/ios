@@ -294,9 +294,9 @@
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     if (model.type == 0) {
         if ([RDFrequentlyUsed getHeightByWidth:kMainBoundsWidth - 30 title:model.shareTitle font:[UIFont systemFontOfSize:14]] > 20) {
-            return 367.5;
+            return 365.5;
         }
-        return 346.5;
+        return 345.5;
     }else if (model.type == 1){
         CGFloat igTextHeight= 130 *802.f/1242.f;
         return igTextHeight + 12;

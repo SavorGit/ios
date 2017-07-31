@@ -24,7 +24,7 @@
     _bgView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.contentView addSubview:_bgView];
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(336.5);
+        make.height.mas_equalTo(335.5);
         make.width.mas_equalTo(kMainBoundsWidth - 20);
         make.top.mas_equalTo(10);
         make.left.mas_equalTo(10);
@@ -107,7 +107,7 @@
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 40));
         }];
         [_bgView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(357.5);
+            make.height.mas_equalTo(355.5);
         }];
     }
     
