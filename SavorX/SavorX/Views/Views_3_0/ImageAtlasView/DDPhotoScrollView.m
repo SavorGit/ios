@@ -26,7 +26,7 @@
 		_imageView.userInteractionEnabled = YES;
 		[_imageView sd_setImageWithURL:[NSURL URLWithString:urlString]
 				 placeholderImage:[UIImage imageNamed:@"zanwu"]
-						  options:SDWebImageProgressiveDownload];
+						  options:SDWebImageContinueInBackground];
 		[self addSubview:_imageView];
         [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight));
