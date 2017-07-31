@@ -25,7 +25,7 @@
 		_imageView.contentMode = UIViewContentModeScaleAspectFit;
 		_imageView.userInteractionEnabled = YES;
 		[_imageView sd_setImageWithURL:[NSURL URLWithString:urlString]
-				 placeholderImage:nil
+				 placeholderImage:[UIImage imageNamed:@"zanwu"]
 						  options:SDWebImageProgressiveDownload];
 		[self addSubview:_imageView];
         [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
