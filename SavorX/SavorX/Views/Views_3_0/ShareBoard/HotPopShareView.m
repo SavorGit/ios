@@ -276,7 +276,7 @@
         case UMSocialPlatformType_UnKnown: {
             // 复制链接
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-            pasteboard.string = self.model.contentURL;
+            pasteboard.string = [self.model.contentURL stringByAppendingString:@"?app=inner"];
             [MBProgressHUD showTextHUDwithTitle:@"复制成功" delay:1.5f];
             
         }
