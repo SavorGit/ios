@@ -293,7 +293,7 @@
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     if (model.type == 0) {
-        if ([RDFrequentlyUsed getHeightByWidth:kMainBoundsWidth - 30 title:model.shareTitle font:[UIFont systemFontOfSize:15]] > 21) {
+        if ([RDFrequentlyUsed getHeightByWidth:kMainBoundsWidth - 30 title:model.shareTitle font:[UIFont systemFontOfSize:14]] > 20) {
             return 367.5;
         }
         return 346.5;

@@ -70,7 +70,7 @@
 
 #define NSURLCachePath [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingString:@"/NSURLCachePath"]
 
-#define kMAXPhotoNum 50
+#define kMAXPhotoNum 50 
 
 //-------------------图片大小-------------------------
 #define ImageSize 500*1024
