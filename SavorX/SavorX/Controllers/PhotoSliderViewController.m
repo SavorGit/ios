@@ -26,7 +26,6 @@
 @property (nonatomic, strong) NSTimer * timer; //幻灯片播放的定时器
 @property (nonatomic, assign) BOOL isScreen; //是否是在线状态
 
-@property (nonatomic, strong) UILabel * indexLabel;
 @property (nonatomic, strong) UILabel * timeLabel;
 @property (nonatomic, strong) UIButton * playButton;
 @property (nonatomic, strong) UILabel * statusLabel;
@@ -49,6 +48,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.currentIndex = 1;
     
     self.title = @"我的照片";
     
@@ -94,7 +95,7 @@
     self.isScreen = NO;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
     self.seriesId = [Helper getTimeStamp];
-    self.statusLabel.text = @"幻灯片";
+    self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
 }
 
 - (void)setupBottomView
@@ -119,25 +120,14 @@
     }];
     
     self.statusLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.statusLabel.font = [UIFont systemFontOfSize:16];
+    self.statusLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:16];
     self.statusLabel.textColor = [UIColor whiteColor];
-    self.statusLabel.text = @"正在播放图片";
+    self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  1/%ld", self.PHAssetSource.count - 2];
     [downView addSubview:self.statusLabel];
     [self.statusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(15);
         make.left.mas_equalTo(20);
-        make.size.mas_equalTo(CGSizeMake(100, 20));
-    }];
-    
-    self.indexLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.indexLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:16];
-    self.indexLabel.textColor = [UIColor whiteColor];
-    self.indexLabel.text = [NSString stringWithFormat:@"1/%ld", self.PHAssetSource.count - 2];
-    [downView addSubview:self.indexLabel];
-    [self.indexLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(15);
-        make.left.equalTo(self.statusLabel.mas_right).offset(10);
-        make.size.mas_equalTo(CGSizeMake(50, 20));
+        make.size.mas_equalTo(CGSizeMake(150, 20));
     }];
     
     self.playButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -203,7 +193,7 @@
         [SAVORXAPI showConnetToTVAlert:@"sliderPhoto"];
         self.isScreen = NO;
         self.playButton.selected = NO;
-        self.statusLabel.text = @"幻灯片";
+        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  1/%ld", self.PHAssetSource.count - 2];
     }
 }
 
@@ -318,12 +308,12 @@
         //播放
         self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-        self.statusLabel.text = @"正在播放图片";
+        self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
     }else{
         //暂停
         [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_pause" key:nil value:nil];
         [self.timer invalidate];
-        self.statusLabel.text = @"已暂停";
+        self.statusLabel.text = [NSString stringWithFormat:@"已暂停  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
     }
 }
 
@@ -341,7 +331,7 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         self.seriesId = [Helper getTimeStamp];
         self.navigationItem.rightBarButtonItem.enabled = YES;
-        self.statusLabel.text = @"幻灯片";
+        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
         [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_exit" key:nil value:nil];
         if (fromHomeType == YES) {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
@@ -360,7 +350,7 @@
     self.playButton.selected = NO;
     [self.timer invalidate];
     self.timer = nil;
-    self.statusLabel.text = @"幻灯片";
+    [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
 }
 
 - (void)screenCurrentImage
@@ -403,7 +393,7 @@
                     [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
                     [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                     self.isScreen = YES;
-                    self.statusLabel.text = @"正在播放图片";
+                    self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     
                     [hud hidden];
@@ -442,7 +432,8 @@
         self.currentIndex = self.PHAssetSource.count - 2;
     }
     
-    self.indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    
     if (self.isScreen) {
         if ([GlobalData shared].isBindRD) {
             PHAsset * asset = [self.PHAssetSource objectAtIndex:self.currentIndex];
@@ -484,7 +475,7 @@
                         [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                         [MBProgressHUD showTextHUDwithTitle:@"幻灯片投屏失败" delay:1.5f];
                         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-                        self.statusLabel.text = @"幻灯片";
+                        [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
                     }];
                 }];
             }];
@@ -537,7 +528,13 @@
     }
     
     self.currentIndex = itemIndex;
-    self.indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    if ([self.statusLabel.text hasPrefix:@"幻灯片"]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    }else if ([self.statusLabel.text hasPrefix:@"已暂停"]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"已暂停  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    }else{
+        self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    }
 }
 
 //视图结束滑动
@@ -552,14 +549,20 @@
         itemIndex = self.PHAssetSource.count - 2;
     }
     self.currentIndex = itemIndex;
-    self.indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    if ([self.statusLabel.text hasPrefix:@"幻灯片"]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    }else if ([self.statusLabel.text hasPrefix:@"已暂停"]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"已暂停  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    }else{
+        self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    }
     
     if (self.PHAssetSource > 0 && self.playButton.isSelected) {
         [self.timer setFireDate:[NSDate distantFuture]];
         [self.timer invalidate];
         self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-        self.statusLabel.text = @"正在播放图片";
+        self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
         self.playButton.selected = YES;
     }
     if (self.isScreen) {
@@ -600,7 +603,7 @@
                         }
                         [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-                        self.statusLabel.text = @"幻灯片";
+                        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
                     }];
                 }];
             }];
