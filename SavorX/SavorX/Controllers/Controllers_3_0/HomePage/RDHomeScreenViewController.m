@@ -160,7 +160,7 @@
 - (void)RDTabScrollViewPhotoButtonDidClickedWithModel:(CreateWealthModel *)model index:(NSInteger)index
 {
     [SAVORXAPI postUMHandleWithContentId:@"home_local_tv" key:nil value:nil];
-    WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:0];
+    WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:-2];
     [self.navigationController pushViewController:web animated:YES];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }

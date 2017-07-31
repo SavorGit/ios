@@ -23,7 +23,7 @@
 
 - (instancetype)init
 {
-    if (self = [super initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 140)]) {
+    if (self = [super initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 135)]) {
         [self createHeaderView];
     }
     return self;
@@ -32,15 +32,15 @@
 - (void)createHeaderView
 {
     self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.font = kPingFangMedium(23);
+    self.titleLabel.font = kPingFangMedium(20);
     self.titleLabel.textColor = UIColorFromRGB(0x434343);
     self.titleLabel.numberOfLines = 2;
     [self addSubview:self.titleLabel];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
+        make.top.mas_equalTo(15);
         make.left.mas_equalTo(15);
         make.right.mas_equalTo(-15);
-        make.height.mas_equalTo(35);
+        make.height.mas_equalTo(30);
     }];
     
     self.logoImageView = [[UIImageView alloc] init];
@@ -60,7 +60,7 @@
     self.fromLabel.textColor = UIColorFromRGB(0x898886);
     [self addSubview:self.fromLabel];
     [self.fromLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.titleLabel.mas_bottom).offset(20);
+        make.top.equalTo(self.titleLabel.mas_bottom).offset(18);
         make.left.equalTo(self.logoImageView.mas_right).offset(6);
         make.height.mas_equalTo(12);
         make.width.mas_lessThanOrEqualTo(100);
@@ -71,7 +71,7 @@
     self.timeLabel.textColor = UIColorFromRGB(0xb2afab);
     [self addSubview:self.timeLabel];
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.titleLabel.mas_bottom).offset(20.5);
+        make.top.equalTo(self.titleLabel.mas_bottom).offset(18.5);
         make.left.equalTo(self.fromLabel.mas_right).offset(10);
         make.height.mas_equalTo(11);
         make.width.mas_lessThanOrEqualTo(100);
@@ -115,31 +115,31 @@
     CGRect rect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(kMainBoundsWidth - 30, 150) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:self.titleLabel.font} context:nil];
     if (rect.size.height > 40) {
         CGRect frame = self.frame;
-        frame.size.height = 180;
+        frame.size.height = 170;
         self.frame = frame;
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(70);
+            make.height.mas_equalTo(60);
         }];
     }else{
         CGRect frame = self.frame;
-        frame.size.height = 140;
+        frame.size.height = 135;
         self.frame = frame;
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(35);
+            make.height.mas_equalTo(30);
         }];
     }
     
     [self.logoImageView sd_setImageWithURL:[NSURL URLWithString:model.logo]];
     if (isEmptyString(model.logo)) {
         [self.fromLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.titleLabel.mas_bottom).offset(20);
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(18);
             make.left.equalTo(self.logoImageView.mas_left).offset(0);
             make.height.mas_equalTo(12);
             make.width.mas_lessThanOrEqualTo(100);
         }];
     }else{
         [self.fromLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.titleLabel.mas_bottom).offset(20);
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(18);
             make.left.equalTo(self.logoImageView.mas_right).offset(6);
             make.height.mas_equalTo(12);
             make.width.mas_lessThanOrEqualTo(100);
@@ -149,14 +149,14 @@
     self.fromLabel.text = model.sourceName;
     if (isEmptyString(model.sourceName)) {
         [self.timeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.titleLabel.mas_bottom).offset(20.5);
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(18.5);
             make.left.equalTo(self.fromLabel.mas_left).offset(0);
             make.height.mas_equalTo(11);
             make.width.mas_lessThanOrEqualTo(100);
         }];
     }else{
         [self.timeLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.titleLabel.mas_bottom).offset(20.5);
+            make.top.equalTo(self.titleLabel.mas_bottom).offset(18.5);
             make.left.equalTo(self.fromLabel.mas_right).offset(10);
             make.height.mas_equalTo(11);
             make.width.mas_lessThanOrEqualTo(100);

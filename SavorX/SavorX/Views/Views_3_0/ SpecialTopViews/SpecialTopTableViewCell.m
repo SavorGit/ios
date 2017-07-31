@@ -28,7 +28,7 @@
     [_bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(130);
         make.height.equalTo(_bgImageView.mas_width).multipliedBy(802.f/1242.f);//84
-        make.top.mas_equalTo(6);
+        make.top.mas_equalTo(4.5);
         make.right.mas_equalTo(-15);
     }];
     

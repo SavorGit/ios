@@ -96,9 +96,8 @@
     if (!isEmptyString(self.imgTextModel.contentURL)) {
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]];
         [self.webView loadRequest:request];
-        [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }
-    self.webView.backgroundColor = [UIColor clearColor];
+    self.webView.backgroundColor = VCBackgroundColor;
     [self.webView setOpaque:NO];
     [self.view addSubview:self.webView];
     
@@ -146,12 +145,17 @@
     [self showNoNetWorkViewInView:self.webView];
 }
 
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    return YES;
+}
+
 - (void)retryToGetData
 {
     [self hideNoNetWorkView];
     if (self.isReady) {
         [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]]];
-        [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }else{
         [self checkIsOnLine];
     }
@@ -379,11 +383,9 @@
     self.imgTextModel = tmpModel;
     [self.testView removeFromSuperview];
     [self setUpDatas];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     if (!isEmptyString(tmpModel.contentURL)) {
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]];
         [self.webView loadRequest:request];
-        [MBProgressHUD showWebLoadingHUDInView:self.webView];
     }
 }
 

@@ -30,6 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.categoryID = 103;
     [self checkIsOnLine];
 }
 
@@ -78,13 +79,13 @@
     self.webView.backgroundColor = [UIColor clearColor];
     self.webView.delegate = self;
     self.webView.scrollView.delegate = self;
+    self.webView.opaque = NO;
     self.webView.frame = CGRectMake(0, 0, width, height);
     
     if (!isEmptyString(self.specilDetailModel.contentURL)) {
         NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead&app=inner",self.specilDetailModel.contentURL];
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         [self.webView loadRequest:request];
-        [MBProgressHUD showWebLoadingHUDInView:self.webView];
     } 
     [self.view addSubview:self.webView];
     
@@ -107,6 +108,12 @@
         return;
     }
     [self showNoNetWorkViewInView:self.webView];
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    return YES;
 }
 
 - (void)retryToGetData
@@ -249,6 +256,15 @@
             [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.specilDetailModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
             _isComplete = YES;
         }
+    }
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender
+{
+    if (self.webView.canGoBack) {
+        [self.webView goBack];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

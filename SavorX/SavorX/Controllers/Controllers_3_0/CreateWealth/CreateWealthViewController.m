@@ -352,7 +352,7 @@
         
     } else if (model.type == 3 || model.type == 4){
         [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
-        WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:-1];
+        WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:self.categoryID];
         [self.navigationController pushViewController:web animated:YES];
     }
 }

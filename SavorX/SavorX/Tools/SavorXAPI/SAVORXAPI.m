@@ -34,13 +34,13 @@
 + (void)configApplication
 {
     [[UINavigationBar appearance] setBarTintColor:[UIColor blackColor]];//背景
-    [[UINavigationBar appearance] setTintColor:UIColorFromRGB(0xffffff)];//item颜色
+    [[UINavigationBar appearance] setTintColor:UIColorFromRGB(0xece6de)];//item颜色
     
     //item字体大小
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(0xffffff), NSFontAttributeName : [UIFont systemFontOfSize:16]} forState:UIControlStateNormal];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(0xece6de), NSFontAttributeName : [UIFont systemFontOfSize:15]} forState:UIControlStateNormal];
     
     //设置标题颜色和字体
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(0xffffff), NSFontAttributeName : [UIFont boldSystemFontOfSize:17]}];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(0xece6de), NSFontAttributeName : [UIFont boldSystemFontOfSize:16]}];
     
     //设置图片缓存策略
     [[SDImageCache sharedImageCache] setShouldDecompressImages:NO];
