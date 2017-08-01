@@ -100,6 +100,7 @@
         }
         
         [self.tableView reloadData];
+
         
         if ([[dataDict objectForKey:@"nextpage"] integerValue] == 0) {
             [self.tableView.mj_footer endRefreshingWithNoMoreData];

@@ -9,6 +9,12 @@
 #import "ImageAtlasTableViewCell.h"
 #import "UIImageView+WebCache.h"
 
+@interface ImageAtlasTableViewCell ()
+
+@property (nonatomic, copy) NSString * imageURL;
+
+@end
+
 @implementation ImageAtlasTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -125,6 +131,12 @@
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     }
+    
+    if ([self.imageURL isEqualToString:model.imageURL]) {
+        return;
+    }
+    self.imageURL = model.imageURL;
+    
     [self.sourceImage sd_setImageWithURL:[NSURL URLWithString:model.logo] placeholderImage:[UIImage imageNamed:@"zanwu"]];
     [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         

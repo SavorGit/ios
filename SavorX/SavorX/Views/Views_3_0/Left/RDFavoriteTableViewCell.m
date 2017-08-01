@@ -159,6 +159,11 @@
     }
 }
 
+- (void)reloadWithUcreateTime:(NSString *)ucreateTime
+{
+    self.dateLabel.text = [Helper transformDate:[NSDate dateWithTimeIntervalSince1970:[ucreateTime doubleValue]]];
+}
+
 - (void)setLineViewHidden:(BOOL)hidden
 {
     self.lineView.hidden = hidden;

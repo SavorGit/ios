@@ -9,6 +9,12 @@
 #import "HeadlinesTableViewCell.h"
 #import "UIImageView+WebCache.h"
 
+@interface HeadlinesTableViewCell ()
+
+@property (nonatomic, copy) NSString * imageURL;
+
+@end
+
 @implementation HeadlinesTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -121,8 +127,12 @@
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     }
     
-    [self.sourceImage sd_setImageWithURL:[NSURL URLWithString:model.logo] placeholderImage:[UIImage imageNamed:@"zanwu"]];
+    if ([self.imageURL isEqualToString:model.indexImageUrl]) {
+        return;
+    }
+    self.imageURL = model.indexImageUrl;
     
+    [self.sourceImage sd_setImageWithURL:[NSURL URLWithString:model.logo] placeholderImage:[UIImage imageNamed:@"zanwu"]];
     [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.indexImageUrl] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
