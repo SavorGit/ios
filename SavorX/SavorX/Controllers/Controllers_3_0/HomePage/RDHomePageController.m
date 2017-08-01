@@ -169,7 +169,7 @@
     if (self.isInsertVC) {
         return;
     }
-    self.itemMargin = 7;
+    self.itemMargin = 12;
     
     [self setScrollEnable:NO];
     
@@ -249,7 +249,7 @@
         return;
     }
     
-    self.itemMargin = 15;
+    self.itemMargin = 20;
     
     [self setScrollEnable:NO];
     
