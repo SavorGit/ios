@@ -94,17 +94,18 @@
     CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 38) title:model.title font:kPingFangMedium(16)];
     if (titleHeight > 30) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 38, titleHeight));
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 38, 60));
             make.top.mas_equalTo(6);
             make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
         }];
     }
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:model.title];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:0];
-    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [model.title length])];
-    self.titleLabel.attributedText = attributedString;
-    [self.titleLabel sizeToFit];
+    self.titleLabel.text = model.title;
+//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:model.title];
+//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+//    [paragraphStyle setLineSpacing:0];
+//    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [model.title length])];
+//    self.titleLabel.attributedText = attributedString;
+//    [self.titleLabel sizeToFit];
     
     self.sourceLabel.text = model.sourceName;
     if (!isEmptyString(model.updateTime)) {
