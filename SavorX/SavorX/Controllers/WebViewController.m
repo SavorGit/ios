@@ -651,7 +651,7 @@
         _tableView.scrollEnabled = NO;
         [self.testView addSubview:_tableView];
         
-        CGFloat diatanceToTop = 108;
+        CGFloat diatanceToTop = 115+30+8;
         // 纯视频类型去除上边分享部分
         if (self.model.type == 4) {
             diatanceToTop = 8;

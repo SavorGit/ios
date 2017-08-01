@@ -68,6 +68,7 @@
             self.latitudeStr = [NSString stringWithFormat:@"%lf", latitude];
             self.longitudeStr = [NSString stringWithFormat:@"%lf", longitude];
             
+            [self showLoadingView];
             [self setupDatas];
             
         }else if ([[RDLocationManager manager] checkLocationDataIsNeedUpdateWithLastPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake([GlobalData shared].VCLatitude, [GlobalData shared].VCLongitude)) currentPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latitude, longitude))]){
@@ -78,10 +79,12 @@
             self.latitudeStr = [NSString stringWithFormat:@"%lf", latitude];
             self.longitudeStr = [NSString stringWithFormat:@"%lf", longitude];
             
+            [self showLoadingView];
             [self setupDatas];
             
         }else{
             
+            [self showLoadingView];
             [self setupDatas];
             
         }
@@ -92,7 +95,6 @@
 //初始化请求第一页，下拉刷新
 - (void)setupDatas{
 
-    [self showLoadingView];
     HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:self.longitudeStr lat:self.latitudeStr pageNum:_page];
     
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {

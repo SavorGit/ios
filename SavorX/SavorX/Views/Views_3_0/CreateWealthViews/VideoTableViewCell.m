@@ -10,6 +10,12 @@
 #import "Masonry.h"
 #import "UIImageView+WebCache.h"
 
+@interface VideoTableViewCell ()
+
+@property (nonatomic, copy) NSString * imageURL;
+
+@end
+
 @implementation VideoTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -140,6 +146,11 @@
     minute = second / 60;
     second = second % 60;
     self.countLabel.text = [NSString stringWithFormat:@"%lld'%.2lld\"", minute, second];
+    
+    if ([self.imageURL isEqualToString:model.imageURL]) {
+        return;
+    }
+    self.imageURL = model.imageURL;
     
     [self.sourceImage sd_setImageWithURL:[NSURL URLWithString:model.logo] placeholderImage:[UIImage imageNamed:@"zanwu"]];
     [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {

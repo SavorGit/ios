@@ -9,6 +9,12 @@
 #import "ImageTextTableViewCell.h"
 #import "UIImageView+WebCache.h"
 
+@interface ImageTextTableViewCell ()
+
+@property (nonatomic, copy) NSString * imageURL;
+
+@end
+
 @implementation ImageTextTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -110,6 +116,12 @@
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     }
+    
+    if ([self.imageURL isEqualToString:model.imageURL]) {
+        return;
+    }
+    self.imageURL = model.imageURL;
+    
     [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
