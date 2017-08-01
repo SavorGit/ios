@@ -46,7 +46,8 @@
     self.titleLabel.numberOfLines = 2;
     [self addSubview:_titleLabel];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - _bgImageView.width - 38, 30));
+        make.width.mas_equalTo(kMainBoundsWidth - 130 - 38);
+        make.height.mas_equalTo(25);
         make.top.mas_equalTo(6);
         make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
     }];
@@ -100,12 +101,15 @@
     CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 38) title:model.title font:kPingFangMedium(16)];
     if (titleHeight > 30) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 130 - 38, 60));
-            make.top.mas_equalTo(6);
-            make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
+            make.height.mas_equalTo(50);
+        }];
+    }else{
+        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(25);
         }];
     }
     self.titleLabel.text = model.title;
+    
 //    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:model.title];
 //    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
 //    [paragraphStyle setLineSpacing:0];
