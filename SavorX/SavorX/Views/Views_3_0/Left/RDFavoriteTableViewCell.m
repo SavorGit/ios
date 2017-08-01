@@ -100,6 +100,15 @@
         [self.imageLabel removeFromSuperview];
     }
     
+    if (!isEmptyString(model.sourceName)) {
+        [self.dateLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.fromLabel.mas_right).offset(10);
+        }];
+    }else{
+        [self.dateLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.fromLabel.mas_right).offset(0);
+        }];
+    }
     self.titleLabel.text = model.title;
     self.fromLabel.text = model.sourceName;
     self.dateLabel.text = model.acreateTime;
@@ -159,10 +168,10 @@
     }
 }
 
-- (void)reloadWithUcreateTime:(NSString *)ucreateTime
-{
-    self.dateLabel.text = [Helper transformDate:[NSDate dateWithTimeIntervalSince1970:[ucreateTime doubleValue]]];
-}
+//- (void)reloadWithUcreateTime:(NSString *)ucreateTime
+//{
+//    self.dateLabel.text = [Helper transformDate:[NSDate dateWithTimeIntervalSince1970:[ucreateTime doubleValue]]];
+//}
 
 - (void)setLineViewHidden:(BOOL)hidden
 {

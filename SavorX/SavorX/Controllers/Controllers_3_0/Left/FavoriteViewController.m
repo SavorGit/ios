@@ -199,7 +199,6 @@
     
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [cell configWithModel:model];
-    [cell reloadWithUcreateTime:model.ucreateTime];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
     

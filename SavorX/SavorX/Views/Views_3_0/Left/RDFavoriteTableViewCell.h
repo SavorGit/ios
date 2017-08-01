@@ -13,7 +13,7 @@
 
 - (void)configWithModel:(CreateWealthModel *)model;
 
-- (void)reloadWithUcreateTime:(NSString *)ucreateTime;
+//- (void)reloadWithUcreateTime:(NSString *)ucreateTime;
 
 - (void)setLineViewHidden:(BOOL)hidden;
 
