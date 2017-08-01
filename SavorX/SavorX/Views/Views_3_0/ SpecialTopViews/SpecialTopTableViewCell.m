@@ -47,7 +47,7 @@
     [self addSubview:_titleLabel];
     CGFloat titleWidth = kMainBoundsWidth - 30 - 130 - 10;
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:titleWidth], 20));
+        make.size.mas_equalTo(CGSizeMake([Helper autoWidthWith:titleWidth], 25));
         make.top.mas_equalTo(6);
         make.left.mas_equalTo(15);
     }];
@@ -94,7 +94,11 @@
     CGFloat titleHeight = [self getHeightByWidth:titleWidth title:model.title font:kPingFangMedium(16)];
     if (titleHeight > 30) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(titleWidth, 45));
+            make.size.mas_equalTo(CGSizeMake(titleWidth, 50));
+        }];
+    }else{
+        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(titleWidth, 25));
         }];
     }
     self.titleLabel.text = model.title;
