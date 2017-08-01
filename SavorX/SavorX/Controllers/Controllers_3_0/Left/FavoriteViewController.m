@@ -199,6 +199,7 @@
     
     [cell configWithModel:[self.dataSource objectAtIndex:indexPath.row]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
     
     return cell;
 }
