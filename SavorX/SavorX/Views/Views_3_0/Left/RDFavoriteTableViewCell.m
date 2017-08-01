@@ -102,7 +102,7 @@
     
     self.titleLabel.text = model.title;
     self.fromLabel.text = model.sourceName;
-    self.dateLabel.text = model.acreateTime;
+    self.dateLabel.text = model.ucreateTime;
     [self.leftImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
