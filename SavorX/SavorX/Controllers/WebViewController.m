@@ -361,7 +361,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:NSStringFromClass([self class])];
     [self.navigationController setNavigationBarHidden:self.isOnline animated:animated];
 }
 
@@ -377,9 +377,6 @@
     [super viewWillDisappear:animated];
     
     [self.playView pause];
-    if ([UIApplication sharedApplication].statusBarHidden) {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -740,13 +737,13 @@
         [self refreshPage];
         [self hiddenLoadingView];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        [self setNeedsStatusBarAppearanceUpdate];
         [self.navigationController setNavigationBarHidden:self.isOnline animated:NO];
+        [self setNeedsStatusBarAppearanceUpdate];
         [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
         [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        [self setNeedsStatusBarAppearanceUpdate];
         [self.navigationController setNavigationBarHidden:self.isOnline animated:NO];
+        [self setNeedsStatusBarAppearanceUpdate];
         [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         [self hiddenLoadingView];
     }];
