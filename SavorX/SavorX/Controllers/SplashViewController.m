@@ -71,7 +71,7 @@
     _pageView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_pageView];
     [_pageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(75,3));
+        make.size.mas_equalTo(CGSizeMake(65,3));
         make.bottom.mas_equalTo(- 20);
         make.centerX.mas_equalTo(0);
     }];
@@ -83,9 +83,9 @@
             pageLabel.frame = CGRectMake(i *15, 0, 15, 3);
             pageLabel.backgroundColor = UIColorFromRGB(0x902d3f);
         }else if (i == 1){
-            pageLabel.frame = CGRectMake(15 + i *15, 0, 15, 3);
+            pageLabel.frame = CGRectMake(10 + i *15, 0, 15, 3);
         }else if (i == 2){
-            pageLabel.frame = CGRectMake(34 + i *15, 0, 15, 3);
+            pageLabel.frame = CGRectMake(20 + i *15, 0, 15, 3);
         }
         pageLabel.layer.cornerRadius = 1.5;
         pageLabel.layer.masksToBounds = YES;
@@ -116,7 +116,7 @@
                 [imageView addSubview:sureBtn];
                 
                 [sureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.size.mas_equalTo(CGSizeMake(85,28));
+                    make.size.mas_equalTo(CGSizeMake(88,30));
                     make.bottom.mas_equalTo(-40);
                     make.centerX.mas_equalTo(0);
                 }];
