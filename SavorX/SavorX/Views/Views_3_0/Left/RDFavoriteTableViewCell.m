@@ -102,7 +102,7 @@
     
     self.titleLabel.text = model.title;
     self.fromLabel.text = model.sourceName;
-    self.dateLabel.text = model.ucreateTime;
+    self.dateLabel.text = model.acreateTime;
     [self.leftImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
@@ -157,6 +157,11 @@
         self.imageLabel.layer.masksToBounds = YES;
         
     }
+}
+
+- (void)reloadWithUcreateTime:(NSString *)ucreateTime
+{
+    self.dateLabel.text = [Helper transformDate:[NSDate dateWithTimeIntervalSince1970:[ucreateTime doubleValue]]];
 }
 
 - (void)setLineViewHidden:(BOOL)hidden

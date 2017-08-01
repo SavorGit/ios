@@ -197,7 +197,9 @@
     static NSString * cellID = @"FavoriteCell";
     RDFavoriteTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellID forIndexPath:indexPath];
     
-    [cell configWithModel:[self.dataSource objectAtIndex:indexPath.row]];
+    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    [cell configWithModel:model];
+    [cell reloadWithUcreateTime:model.ucreateTime];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
     
