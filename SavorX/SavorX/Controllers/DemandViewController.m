@@ -19,6 +19,7 @@
 #import "HSIsOrCollectionRequest.h"
 #import "RDInteractionLoadingView.h"
 #import "HotPopShareView.h"
+#import "RDVideoHeaderView.h"
 
 #define BOTTOMHEIGHT 50.f
 
@@ -343,7 +344,8 @@
 {
     
     self.webView = [[UIWebView alloc] init];
-    self.webView.backgroundColor = [UIColor clearColor];
+    self.webView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    self.webView.opaque = NO;
     [self.view addSubview:self.webView];
     
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -366,17 +368,27 @@
         }
     }else{
         self.webView.scrollView.userInteractionEnabled = NO;
-        UILabel *contentTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,kScreen_Width - 20, 30)];
-        contentTitleLab.font = [UIFont systemFontOfSize:16.f];
-        contentTitleLab.textColor = [UIColor blackColor];
-        contentTitleLab.text = self.title;
-        self.maximumLabel.textAlignment = NSTextAlignmentLeft;
-        [self.view addSubview:contentTitleLab];
-        [contentTitleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.backImageView).offset(30);
-            make.left.mas_equalTo(15);
-            make.width.mas_equalTo(kScreen_Width - 15);
+        
+        RDVideoHeaderView * view = [[RDVideoHeaderView alloc] init];
+        [view reloadWithModel:self.model];
+        [self.view addSubview:view];
+        [view mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.backImageView.mas_bottom);
+            make.left.mas_equalTo(0);
+            make.size.mas_equalTo(view.frame.size);
         }];
+        
+//        UILabel *contentTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,kScreen_Width - 20, 30)];
+//        contentTitleLab.font = [UIFont systemFontOfSize:16.f];
+//        contentTitleLab.textColor = [UIColor blackColor];
+//        contentTitleLab.text = self.title;
+//        self.maximumLabel.textAlignment = NSTextAlignmentLeft;
+//        [self.view addSubview:contentTitleLab];
+//        [contentTitleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.bottom.equalTo(self.backImageView).offset(30);
+//            make.left.mas_equalTo(15);
+//            make.width.mas_equalTo(kScreen_Width - 15);
+//        }];
     }
 }
 
