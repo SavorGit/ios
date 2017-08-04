@@ -189,23 +189,11 @@
 - (void)checkDemandWithModel:(CreateWealthModel *)model
 {
     [self demandVideoWithModel:model force:0];
-//    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
-//    RDIsDemand * request = [[RDIsDemand alloc] initWithArtID:model.artid];
-//    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-//        [hud hidden];
-//        [self demandVideoWithModel:model force:0];
-//    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-//        [hud hidden];
-//        [MBProgressHUD showTextHUDwithTitle:@"该视频暂不支持点播" delay:1.5f];
-//    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-//        [hud hidden];
-//        [MBProgressHUD showTextHUDwithTitle:@"网络失去连接" delay:1.5f];
-//    }];
 }
 
 - (void)demandVideoWithModel:(CreateWealthModel *)model force:(NSInteger)force{
     
-    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Demanding")];
     [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0  force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         self.demandModel = nil;
         if ([[result objectForKey:@"result"] integerValue] == 0) {
@@ -220,11 +208,11 @@
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_AlertWithScreen") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_ScreenContinuePre"), infoStr, RDLocalizedString(@"RDString_ScreenContinueSuf")]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"} ];
             } bold:NO];
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ContinueScreen") handler:^{
                 [self demandVideoWithModel:model force:1];
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"} ];
             } bold:YES];
@@ -258,11 +246,11 @@
 //打开用户应用设置
 - (void)openSetting
 {
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"该功能需要开启相册权限，是否前往进行设置" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_PhotoLibrarySetting") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action1 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Cancle") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
     }];
-    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"前往设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction * action2 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_GoToSetting") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }];
     [alert addAction:action1];

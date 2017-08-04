@@ -184,11 +184,11 @@
         if ([[dic objectForKey:@"code"] integerValue] == 10000) {
             if (isCollect == 0) {
                 self.imgTextModel.collected = 0;
-                [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_SuccessWithCancle")];
                 [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
             }else{
                 self.imgTextModel.collected = 1;
-                [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+                [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_SuccessWithCollect")];
                 [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
             }
             self.collectButton.selected = !self.collectButton.selected;
@@ -202,14 +202,14 @@
         }else{
             [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
         }
-        [MBProgressHUD showTextHUDwithTitle:@"收藏失败" delay:1.f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithCollect") delay:1.f];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         if (isCollect == 0) {
             [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
         }else{
             [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
         }
-        [MBProgressHUD showTextHUDwithTitle:@"收藏失败" delay:1.f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithCollect") delay:1.f];
     }];
     
 }
@@ -333,7 +333,7 @@
         recommendLabel.frame = CGRectMake(15, 10, 100, 30);
         recommendLabel.textColor = UIColorFromRGB(0x922c3e);
         recommendLabel.font = kPingFangRegular(15);
-        recommendLabel.text = @"为您推荐";
+        recommendLabel.text = RDLocalizedString(@"RDString_RecommendForYou");
         recommendLabel.textAlignment = NSTextAlignmentLeft;
         [headView addSubview:recommendLabel];
         _tableView.tableHeaderView = headView;

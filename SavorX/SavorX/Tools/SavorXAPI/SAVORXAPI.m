@@ -172,15 +172,15 @@
                 return;
             }
             NSString *infoStr = [response objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_AlertWithScreen") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_ScreenContinuePre"), infoStr, RDLocalizedString(@"RDString_ScreenContinueSuf")]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"pic"}];
                 if (failure) {
                     failure();
                 }
             } bold:NO];
             // 如果返回状态为4，且用户选择继续投屏，则把本方法重新调用一遍，force传1
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ContinueScreen") handler:^{
                 
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"pic"}];
                 
@@ -205,8 +205,8 @@
         }else{
             if (failure) {
                 
-                RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:[response objectForKey:@"info"]];
-                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+                RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:[response objectForKey:@"info"]];
+                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
                     
                 } bold:YES];
                 [alert addActions:@[action]];
@@ -260,8 +260,8 @@
         }else if ([[response objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [response objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_AlertWithScreen") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_ScreenContinuePre"), infoStr, RDLocalizedString(@"RDString_ScreenContinueSuf")]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                 
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"file"}];
                 
@@ -271,7 +271,7 @@
                 }
             } bold:NO];
             // 如果返回状态为4，且用户选择继续投屏，则把本方法重新调用一遍，force传1
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ContinueScreen") handler:^{
                 
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"file"}];
                 
@@ -326,15 +326,15 @@
                 return;
             }
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_AlertWithScreen") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_ScreenContinuePre"), infoStr, RDLocalizedString(@"RDString_ScreenContinueSuf")]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                 NSError * error = [NSError errorWithDomain:@"com.eggCancle" code:677 userInfo:nil];
                 if (failure) {
                     failure(task, error);
                 }
             } bold:NO];
             
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ContinueScreen") handler:^{
                 [SAVORXAPI gameForEggsWithURL:urlStr hunger:hunger date:date force:1 success:success failure:failure];
             } bold:YES];
             [alertView addActions:@[action,actionOne]];
@@ -495,8 +495,8 @@
 
 + (void)showAlertWithString:(NSString *)str withController:(UIViewController *)VC
 {
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:str preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction * action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:nil];
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:RDLocalizedString(@"RDString_Alert") message:str preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * action = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Sure") style:UIAlertActionStyleDestructive handler:nil];
     [alert addAction:action];
     [VC presentViewController:alert animated:YES completion:nil];
 }
@@ -692,8 +692,8 @@
 
 + (void)showAlertWithMessage:(NSString *)message
 {
-    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:message];
-    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:message];
+    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
         
     } bold:YES];
     [alert addActions:@[action]];
@@ -702,8 +702,8 @@
 
 + (void)showConnetToTVAlert:(NSString *)type
 {
-    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"请点击\"连接电视\", 即可投屏"];
-    RDAlertAction * action1 = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_ConnectScreenAlert")];
+    RDAlertAction * action1 = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
         if ([type isEqualToString:@"photo"]) {
             [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"cancel"];
         }if ([type isEqualToString:@"sliderPhoto"]) {
@@ -715,7 +715,7 @@
         }
 
     } bold:NO];
-    RDAlertAction * action2 = [[RDAlertAction alloc] initWithTitle:@"连接电视" handler:^{
+    RDAlertAction * action2 = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ConnetToTV") handler:^{
         if ([type isEqualToString:@"photo"]) {
             [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_link_tv" key:@"picture_to_screen_link_tv" value:@"link"];
         }if ([type isEqualToString:@"sliderPhoto"]) {
@@ -840,7 +840,7 @@
                     lineView.backgroundColor = UIColorFromRGB(0xb6a482);
                     [imageView addSubview:lineView];
                     
-                    RDAlertAction * leftButton = [[RDAlertAction alloc] initVersionWithTitle:@"取消" handler:^{
+                    RDAlertAction * leftButton = [[RDAlertAction alloc] initVersionWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                         [view removeFromSuperview];
                         [SAVORXAPI postUMHandleWithContentId:@"home_update" key:@"home_update" value:@"cancel"];
                     } bold:NO];

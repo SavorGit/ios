@@ -149,11 +149,11 @@
 // 断开连接
 - (void)disconnentClick{
     
-    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"是否与电视断开，\n断开后将无法投屏？"];
-    RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_DisconnectAlertDetail")];
+    RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
         [SAVORXAPI postUMHandleWithContentId:@"home_break_connect" key:@"home_break_connect" value:@"cancel"];
     } bold:NO];
-    RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
+    RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Disconnect") handler:^{
         [SAVORXAPI postUMHandleWithContentId:@"home_break_connect" key:@"home_break_connect" value:@"break"];
         [[GlobalData shared] disconnect];
     } bold:YES];
@@ -165,11 +165,11 @@
 // 断开连接
 - (void)screenBack{
     
-    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"是否退出包间%@的投屏", [Helper getWifiName]]];
-    RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_DidBackScreenAlertPre"), RDLocalizedString(@"RDString_DidBackScreenAlertSuf"), [Helper getWifiName]]];
+    RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
         
     } bold:NO];
-    RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"退出投屏" handler:^{
+    RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") handler:^{
         [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:nil value:nil];
         } failure:^{
@@ -187,9 +187,9 @@
         case RDHomeStatus_Normal:
         {
             [SAVORXAPI postUMHandleWithContentId:@"home_disconnect" key:nil value:nil];
-            self.statusLabel.text = @"您已进入酒楼,快来体验用电视看手机";
+            self.statusLabel.text = RDLocalizedString(@"RDString_StatusFindhotel");
             self.statusLabel.userInteractionEnabled = NO;
-            [self.statusButton setTitle:@"连接电视" forState:UIControlStateNormal];
+            [self.statusButton setTitle:RDLocalizedString(@"RDString_ConnetToTV") forState:UIControlStateNormal];
         }
             
             break;
@@ -197,9 +197,9 @@
         case RDHomeStatus_Bind:
         {
             [SAVORXAPI postUMHandleWithContentId:@"home_connect_tv" key:nil value:nil];
-            self.statusLabel.text = [NSString stringWithFormat:@"已连接--%@的电视", [Helper getWifiName]];
+            self.statusLabel.text = [NSString stringWithFormat:@"%@--%@%@", RDLocalizedString(@"RDString_StatusHasConnectPre"), RDLocalizedString(@"RDString_StatusHasConnectSuf"), [Helper getWifiName]];
             self.statusLabel.userInteractionEnabled = NO;
-            [self.statusButton setTitle:@"断开连接" forState:UIControlStateNormal];
+            [self.statusButton setTitle:RDLocalizedString(@"RDString_Disconnect") forState:UIControlStateNormal];
         }
             
             break;
@@ -207,9 +207,9 @@
         case RDHomeStatus_Photo:
         {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
-            self.statusLabel.text = @"正在投屏图片,点击进入>>";
+            self.statusLabel.text = [RDLocalizedString(@"RDString_StatusScreenPhoto") stringByAppendingString:@">>"];
             self.statusLabel.userInteractionEnabled = YES;
-            [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
+            [self.statusButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
         }
             
             break;
@@ -217,9 +217,9 @@
         case RDHomeStatus_Video:
         {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
-            self.statusLabel.text = @"正在投屏本地视频,点击进入>>";
+            self.statusLabel.text = [RDLocalizedString(@"RDString_StatusScreenVideo") stringByAppendingString:@">>"];
             self.statusLabel.userInteractionEnabled = YES;
-            [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
+            [self.statusButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
         }
             
             break;
@@ -227,9 +227,9 @@
         case RDHomeStatus_File:
         {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
-            self.statusLabel.text = @"正在投屏文件,点击进入>>";
+            self.statusLabel.text = [RDLocalizedString(@"RDString_StatusScreenFile") stringByAppendingString:@">>"];
             self.statusLabel.userInteractionEnabled = YES;
-            [self.statusButton setTitle:@"退出投屏" forState:UIControlStateNormal];
+            [self.statusButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
         }
             
             break;
@@ -237,9 +237,9 @@
         case RDHomeStatus_Demand:
         {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_video" key:nil value:nil];
-            self.statusLabel.text = @"正在点播视频,点击进入>>";
+            self.statusLabel.text = [RDLocalizedString(@"RDString_StatusDemandVideo") stringByAppendingString:@">>" ];
             self.statusLabel.userInteractionEnabled = YES;
-            [self.statusButton setTitle:@"退出点播" forState:UIControlStateNormal];
+            [self.statusButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
         }
             
             break;
@@ -341,8 +341,8 @@
     if ([GlobalData shared].scene == RDSceneHaveRDBox) {
         [self callQRcodeFromPlatform];
     }else{
-        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"未发现可连接的电视\n请连接与电视相同的wifi"];
-        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_NotFoundTV")];
+        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
             
         } bold:YES];
         [alert addActions:@[action]];
@@ -509,11 +509,11 @@
 {
     if (SYSTEM_VERSION_LESS_THAN(@"10")) {
         //iOS10之前可以直接跳转系统WIFI设置
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"请将手机连接至电视所在WiFi" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:RDLocalizedString(@"RDString_Alert") message:@"请将手机连接至电视所在WiFi" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * action1 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Cancle") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
         }];
-        UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction * action2 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Sure") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=WIFI"]];
         }];
         [alert addAction:action1];
@@ -521,8 +521,8 @@
         [[Helper getRootNavigationController] presentViewController:alert animated:YES completion:nil];
     }else{
         //iOS10之后暂不支持直接跳转系统WIFI
-        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"请前往手机设置，打开无线局域网，连接至与电视同一wifi下"];
-        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:@"请前往手机设置，打开无线局域网，连接至与电视同一wifi下"];
+        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
             
         } bold:YES];
         [alert addActions:@[action]];

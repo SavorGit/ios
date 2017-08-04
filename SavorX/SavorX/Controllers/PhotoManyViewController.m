@@ -45,7 +45,7 @@
 {
     if (self = [super init]) {
         self.PHAssetSource = source;
-        self.title = @"我的照片";
+        self.title = RDLocalizedString(@"RDString_MyPhoto");
         self.index = index;
     }
     return self;
@@ -84,7 +84,7 @@
     
     self.rotateView = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.rotateView setImage:[UIImage imageNamed:@"xaunzhuan"] forState:UIControlStateNormal];
-    [self.rotateView setTitle:@"旋转" forState:UIControlStateNormal];
+    [self.rotateView setTitle:RDLocalizedString(@"RDString_Rotate") forState:UIControlStateNormal];
     [self.rotateView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.94f]];
     [self.rotateView addTarget:self action:@selector(rotateImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.rotateView];
@@ -98,7 +98,7 @@
     
     self.textView = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.textView setImage:[UIImage imageNamed:@"wenzi"] forState:UIControlStateNormal];
-    [self.textView setTitle:@"文字" forState:UIControlStateNormal];
+    [self.textView setTitle:RDLocalizedString(@"RDString_Text") forState:UIControlStateNormal];
     [self.textView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.94f]];
     [self.textView addTarget:self action:@selector(addTextOnImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.textView];
@@ -121,10 +121,10 @@
     }];
     
     if ([GlobalData shared].isBindRD) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
         self.isScreen = YES;
     }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         [SAVORXAPI showConnetToTVAlert:@"photo"];
         self.isScreen = NO;
     }
@@ -134,7 +134,7 @@
 
 - (void)screenBeQiutWithBox
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
     self.isScreen = NO;
 }
 
@@ -146,7 +146,7 @@
         self.navigationItem.rightBarButtonItem.enabled = YES;
         return;
     }
-    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
     PhotoManyCollectionViewCell * cell = [self currentCell];
     NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
     PHAsset * asset = [self.PHAssetSource objectAtIndex:index];
@@ -160,7 +160,7 @@
                     
                     [hud hidden];
                     [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
                     
@@ -187,7 +187,7 @@
                         
                         [hud hidden];
                         [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
                         self.isScreen = YES;
                         
@@ -213,7 +213,7 @@
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = NO;
         [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_exit_screen" key:nil value:nil];
@@ -287,7 +287,8 @@
     cell.secondText = detail;
     cell.thirdText = date;
     
-    if (!([title isEqualToString:@"在这里添加文字"] && [detail isEqualToString:@"在这里添加文字"] && [date isEqualToString:@"在这里添加文字"])) {
+    NSString * defaultStr = RDLocalizedString(@"RDString_AddTextHere");
+    if (!([title isEqualToString:defaultStr] && [detail isEqualToString:defaultStr] && [date isEqualToString:defaultStr])) {
         [RDPhotoTool saveImageInSystemPhoto:image withAlert:NO];
     }
     
@@ -302,7 +303,7 @@
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
                     [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
                     

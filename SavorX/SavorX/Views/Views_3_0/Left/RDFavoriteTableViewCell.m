@@ -142,7 +142,7 @@
             make.width.mas_greaterThanOrEqualTo(25);
             make.width.mas_lessThanOrEqualTo(50);
         }];
-        self.imageLabel.text = [NSString stringWithFormat:@"%@图", model.colTuJi];
+        self.imageLabel.text = [NSString stringWithFormat:@"%@%@", model.colTuJi, RDLocalizedString(@"RDString_Image")];
         
     }else if (model.type == 3 || model.type == 4) {
         

@@ -652,11 +652,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self shotVideoToPhotoWithCurrentTime:self.player.currentTime];
     } else{
         //打开用户应用设置
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"前往开启相册权限" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_PhotoLibrarySetting") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * action1 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Cancle") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
         }];
-        UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction * action2 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Sure") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }];
         [alert addAction:action1];
@@ -850,7 +850,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         case GCCPlayerStatusFaild:
         {
             [self.controlView didPlayFailed];
-            [MBProgressHUD showTextHUDwithTitle:@"由于网络问题，播放失败" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithPlayer") delay:1.5f];
             [self insertSubview:self.imageView belowSubview:self.controlView];
         }
             

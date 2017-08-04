@@ -317,7 +317,7 @@
                 
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 
-                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithHandel")];
                 [self.playSilder setValue:self.lastValue animated:YES];
                 
             }];
@@ -333,7 +333,7 @@
 - (void)volumeDidHandleWith:(UIButton *)button
 {
     if (![GlobalData shared].isBindRD) {
-        [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PleaseConnetToTV") delay:1.f];
         return;
     }
     
@@ -357,7 +357,7 @@
 - (void)volumeButtonDidBeClicked
 {
     if (![GlobalData shared].isBindRD) {
-        [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PleaseConnetToTV") delay:1.f];
     }
     self.volumeButton.userInteractionEnabled = NO;
     NSInteger action = 1;
@@ -391,7 +391,7 @@
 - (void)scrennButtonDidBeClicked
 {
     if (![GlobalData shared].isBindRD) {
-        [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PleaseConnetToTV") delay:1.f];
         return;
     }
     if (self.isPlayEnd) {
@@ -403,7 +403,7 @@
             [self autoPlayButtonStatus];
             [self autoScrennButtonStatus];
         } failure:^{
-            [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithHandel")];
         }];
     }
 }
@@ -415,7 +415,7 @@
 }
 
 - (void)demandVideoWithMediaPath:(NSString *)mediaPath force:(NSInteger)force{
-    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
     
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
@@ -431,11 +431,11 @@
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_AlertWithScreen") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_ScreenContinuePre"), infoStr, RDLocalizedString(@"RDString_ScreenContinueSuf")]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"video"}];
             } bold:NO];
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ContinueScreen") handler:^{
                 [self demandVideoWithMediaPath:mediaPath force:1];
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"video"}];
             } bold:YES];
@@ -459,13 +459,13 @@
 - (void)autoScrennButtonStatus
 {
     if (self.isPlayEnd) {
-        [self.scrennButton setTitle:@"投屏" forState:UIControlStateNormal];
+        [self.scrennButton setTitle:RDLocalizedString(@"RDString_Screen") forState:UIControlStateNormal];
         
         self.minimumLabel.text = @"00:00";
         self.playSilder.value = 0;
         
     }else{
-        [self.scrennButton setTitle:@"退出" forState:UIControlStateNormal];
+        [self.scrennButton setTitle:RDLocalizedString(@"RDString_Back") forState:UIControlStateNormal];
     }
 }
 
@@ -473,7 +473,7 @@
 - (void)playButtonDidBeClicked
 {
     if (![GlobalData shared].isBindRD) {
-        [MBProgressHUD showTextHUDwithTitle:@"请先连接电视" delay:1.f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PleaseConnetToTV") delay:1.f];
         return;
     }
     
@@ -617,7 +617,7 @@
         }];
         
         UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setTitle:@"连接电视" forState:UIControlStateNormal];
+        [button setTitle:RDLocalizedString(@"RDString_ConnetToTV") forState:UIControlStateNormal];
         [button setTitleColor:UIColorFromRGB(0x54453e) forState:UIControlStateNormal];
         button.layer.borderColor = UIColorFromRGB(0xcdc4b9).CGColor;
         button.layer.borderWidth = .5f;
@@ -634,7 +634,7 @@
         }];
         
         UILabel * label = [[UILabel alloc] init];
-        label.text = @"尚未连接电视,请点击进行连接";
+        label.text = RDLocalizedString(@"RDString_ClickToConnetToTV");
         label.textColor = UIColorFromRGB(0x922c3e);
         label.font = [UIFont systemFontOfSize:14];
         label.textAlignment = NSTextAlignmentLeft;

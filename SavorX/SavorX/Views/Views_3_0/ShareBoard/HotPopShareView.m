@@ -87,28 +87,28 @@
     NSMutableArray *typeArr = [NSMutableArray arrayWithCapacity:5];
     
     if (hadInstalledWeixin) {
-        [titlearr addObjectsFromArray:@[@"微信", @"朋友圈"]];
+        [titlearr addObjectsFromArray:@[RDLocalizedString(@"RDString_WeChat"), RDLocalizedString(@"RDString_WeChatTimeLine")]];
         [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
         [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_WechatSession],[NSNumber numberWithInteger:UMSocialPlatformType_WechatTimeLine]]];
     }
     
     if (hadInstalledQQ) {
-        [titlearr addObjectsFromArray:@[@"QQ", @"QQ空间"]];
+        [titlearr addObjectsFromArray:@[@"QQ", RDLocalizedString(@"RDString_QQZone")]];
         [imageArr addObjectsFromArray:@[@"qq",@"fx_Zone"]];
         [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_QQ],[NSNumber numberWithInteger:UMSocialPlatformType_Qzone]]];
     }
     
-    [titlearr addObjectsFromArray:@[@"微博"]];
+    [titlearr addObjectsFromArray:@[RDLocalizedString(@"RDString_WeiBo")]];
     [imageArr addObjectsFromArray:@[@"weibo"]];
     [typeArr addObject:[NSNumber numberWithInteger:UMSocialPlatformType_Sina]];
     
     if (hadInstalledWeixin) {
-        [titlearr addObjectsFromArray:@[@"微信收藏"]];
+        [titlearr addObjectsFromArray:@[RDLocalizedString(@"RDString_WeChatFavorite")]];
         [imageArr addObjectsFromArray:@[@"fx_wxsc"]];
         [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_WechatFavorite]]];
     }
     
-    [titlearr addObjectsFromArray:@[@"复制链接"]];
+    [titlearr addObjectsFromArray:@[RDLocalizedString(@"RDString_CopyLink")]];
     [imageArr addObjectsFromArray:@[@"fuzhilianjie"]];
     [typeArr addObject:[NSNumber numberWithInteger:UMSocialPlatformType_UnKnown]];
 
@@ -277,7 +277,7 @@
             // 复制链接
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = [self.model.contentURL stringByAppendingString:@"?app=inner"];
-            [MBProgressHUD showTextHUDwithTitle:@"复制成功" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithCopy") delay:1.5f];
             
         }
             break;

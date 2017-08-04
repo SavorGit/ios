@@ -95,7 +95,7 @@
             dataLabel.text = @"暂无数据";
             break;
         case kNoDataType_Favorite:
-            dataLabel.text = @"您还没有收藏~";
+            dataLabel.text = RDLocalizedString(@"RDString_CollectNone");
             loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case kNoDataType_Notification:
@@ -138,7 +138,7 @@
             loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case kNoDataType_NotFound:
-            dataLabel.text = @"该内容找不到了~";
+            dataLabel.text = RDLocalizedString(@"RDString_ArtNotFound");
             loaderrImageView.image = [UIImage imageNamed:@"kong_wenzhang.png"];
             break;
         

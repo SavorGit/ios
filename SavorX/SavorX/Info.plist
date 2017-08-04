@@ -212,6 +212,8 @@
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
 	</array>
+	<key>LSHasLocalizedDisplayName</key>
+	<true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -322,7 +324,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>3d_lianjie</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>连接电视</string>
+			<string>3DTouch_Connect</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>3dtouch.connet</string>
 		</dict>
@@ -330,7 +332,7 @@
 			<key>UIApplicationShortcutItemIconFile</key>
 			<string>3d_touping</string>
 			<key>UIApplicationShortcutItemTitle</key>
-			<string>投屏</string>
+			<string>3DTouch_Screen</string>
 			<key>UIApplicationShortcutItemType</key>
 			<string>3dtouch.screen</string>
 		</dict>

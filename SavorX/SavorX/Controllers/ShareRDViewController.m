@@ -114,7 +114,7 @@
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectZero];
     label.textColor = UIColorFromRGB(0x666666);
     label.backgroundColor = [UIColor clearColor];
-    label.text = @"分享到";
+    label.text = RDLocalizedString(@"RDString_ShareTo");
     label.font = [UIFont systemFontOfSize:15];
     label.textAlignment = NSTextAlignmentCenter;
     [self.shareView addSubview:label];
@@ -127,17 +127,17 @@
     NSMutableArray * imageArray = [NSMutableArray new];
 //    @[@"WeChat", @"friends", @"qq", @"weibo", @"fuzhilianjie"];
     NSMutableArray * titleArray = [NSMutableArray new];
-//  @[@"微信", @"朋友圈", @"QQ", @"新浪微博", @"复制链接"];
+//  @[RDLocalizedString(@"RDString_WeChat"), RDLocalizedString(@"RDString_WeChatTimeLine"), @"QQ", RDLocalizedString(@"RDString_Sina"), RDLocalizedString(@"RDString_CopyLink")];
     NSMutableArray * platformArray = [NSMutableArray new];
     
     if ([[UMSocialManager defaultManager] isSupport:UMSocialPlatformType_WechatSession]) {
         [imageArray addObject:@"WeChat"];
-        [titleArray addObject:@"微信"];
+        [titleArray addObject:RDLocalizedString(@"RDString_WeChat")];
         [platformArray addObject:[NSNumber numberWithInteger:UMSocialPlatformType_WechatSession]];
     }
     if ([[UMSocialManager defaultManager] isSupport:UMSocialPlatformType_WechatTimeLine]) {
         [imageArray addObject:@"friends"];
-        [titleArray addObject:@"朋友圈"];
+        [titleArray addObject:RDLocalizedString(@"RDString_WeChatTimeLine")];
         [platformArray addObject:[NSNumber numberWithInteger:UMSocialPlatformType_WechatTimeLine]];
     }
     if ([[UMSocialManager defaultManager] isSupport:UMSocialPlatformType_QQ]) {
@@ -146,10 +146,10 @@
         [platformArray addObject:[NSNumber numberWithInteger:UMSocialPlatformType_QQ]];
     }
     [imageArray addObject:@"weibo"];
-    [titleArray addObject:@"新浪微博"];
+    [titleArray addObject:RDLocalizedString(@"RDString_Sina")];
     [platformArray addObject:[NSNumber numberWithInteger:UMSocialPlatformType_Sina]];
     [imageArray addObject:@"fuzhilianjie"];
-    [titleArray addObject:@"复制链接"];
+    [titleArray addObject:RDLocalizedString(@"RDString_CopyLink")];
     [platformArray addObject:[NSNumber numberWithInteger:UMSocialPlatformType_UnKnown]];
     
     for (NSInteger i = 0; i < imageArray.count; i++) {
@@ -203,9 +203,9 @@
 {
     UMSocialPlatformType type = tap.view.tag - 101;
     
-    NSString * text = @"我觉得小热点很好用, 推荐给您~";
+    NSString * text = RDLocalizedString(@"RDString_ShareAPPTitle");
     if (self.type == SHARERDTYPE_GAME) {
-        text = @"快点儿来参加抽奖活动哦~";
+        text = RDLocalizedString(@"RDString_ShareAPPDetail");
     }
     
     switch (type) {
@@ -229,7 +229,7 @@
         {
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = [NSString stringWithFormat:@"%@?st=usershare&clientname=ios&deviceid=%@", RDDownLoadURL, [GCCKeyChain load:keychainID]];
-            [MBProgressHUD showTextHUDwithTitle:@"复制成功" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithCopy") delay:1.5f];
             
             [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_copy_link" key:nil value:nil];
         }

@@ -31,7 +31,7 @@
 - (instancetype)init
 {
     NSArray * vcArray = @[[RealCreateWealthViewController class],[LiveViewController class],[SpecialTopicViewController class]];
-    NSArray * titleArray = @[@"创富", @"生活", @"专题"];
+    NSArray * titleArray = @[RDLocalizedString(@"RDString_CreateWealth"), RDLocalizedString(@"RDString_Live"), RDLocalizedString(@"RDString_SpecialTopic")];
     
     if (self = [super initWithViewControllerClasses:vcArray andTheirTitles:titleArray]) {
         [self configPageController];
@@ -103,7 +103,7 @@
 {
     UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 90, 25)];
     [button setImage:[UIImage imageNamed:@"logo_biaoti"] forState:UIControlStateNormal];
-    [button setTitle:@"小热点" forState:UIControlStateNormal];
+    [button setTitle:RDLocalizedString(@"RDString_APPName") forState:UIControlStateNormal];
     [button setTitleColor:UIColorFromRGB(0xece6de) forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:17];
     [button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 7)];
@@ -179,7 +179,7 @@
     
     //改变title数组
     NSMutableArray * currentTitles = [NSMutableArray arrayWithArray:self.titles];
-    [currentTitles insertObject:@"投屏" atIndex:0];
+    [currentTitles insertObject:RDLocalizedString(@"RDString_Screen") atIndex:0];
     self.titles = [NSArray arrayWithArray:currentTitles];
     
     //改变控制器数组
@@ -233,7 +233,6 @@
     [self addChildViewController:first];
     [first didMoveToParentViewController:self];
     
-    self.menuViewContentMargin = ([UIScreen mainScreen].bounds.size.width - (self.menuItemWidth + 10) * 4) / 2;
     [self wm_resetMenuViewWithNodelegateWithIndex:index + 1];
     [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     
@@ -334,7 +333,6 @@
     }
     self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width - self.view.frame.size.width, self.scrollView.contentSize.height);
     
-    self.menuViewContentMargin = ([UIScreen mainScreen].bounds.size.width - (self.menuItemWidth + 10) * 3) / 2;
     [self.menuView reload];
     if (index > 0) {
         self.selectIndex = index - 1;
@@ -343,6 +341,7 @@
     [self resetCurrentViewController:[self.displayVC objectForKey:@(self.selectIndex)]];
     [self autoItemMargin];
     [self.menuView updateBadgeViewAtIndex:self.titles.count - 1];
+    
     [self setScrollEnable:YES];
 }
 

@@ -136,7 +136,7 @@
 {
     self.style = style;
     if (str.length > 0) {
-        if ([str isEqualToString:@"在这里添加文字"]) {
+        if ([str isEqualToString:RDLocalizedString(@"RDString_AddTextHere")]) {
             self.textField.text = @"";
             self.textLabel.text = @"点击输入文字";
         }else{

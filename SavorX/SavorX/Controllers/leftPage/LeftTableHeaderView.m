@@ -57,7 +57,7 @@
     label.font = kPingFangLight(14);
     label.textColor = UIColorFromRGB(0xece6de);
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = @"小热点";
+    label.text = RDLocalizedString(@"RDString_APPName");
     label.backgroundColor = [UIColor clearColor];
     [BGView addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make) {

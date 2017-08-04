@@ -37,6 +37,8 @@
     [self.submitButton setBackgroundColor:kThemeColor];
     [self.submitButton setTitleColor:UIColorFromRGB(0xede6de) forState:UIControlStateNormal];
     self.numLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:12];
+    self.phoneTextField.placeholder = RDLocalizedString(@"RDString_AdvicePhone");
+    self.pLabel.text = RDLocalizedString(@"RDString_AdviceP");
 }
 
 - (void)textViewDidChange:(UITextView *)textView

@@ -56,7 +56,7 @@
 
 -(void)setupDatas{
 
-    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"优惠活动",@"提供投屏的餐厅",@"清除缓存",@"当前版本"];
+    _itemArys = @[RDLocalizedString(@"RDString_MyCollection"),RDLocalizedString(@"RDString_Advice"),RDLocalizedString(@"RDString_HelpCenter"),RDLocalizedString(@"RDString_Activity"),RDLocalizedString(@"RDString_CanScreenRestaurant"),RDLocalizedString(@"RDString_ClearCache"),RDLocalizedString(@"RDString_CurrentVersion")];
     _imageArys = @[@"cdh_shoucang", @"cdh_yijianfankui", @"cdh_bangzhu",@"cdh_yhhd",@"cdh_canting", @"cdh_qingchu", @"cdh_banben"];
 }
 
@@ -131,7 +131,7 @@
                 SmashEggsGameViewController * segvVC = [[SmashEggsGameViewController alloc] init];
                 [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:segvVC  animated:NO];
             }else{
-                [MBProgressHUD showTextHUDwithTitle:@"请在酒店环境下使用该功能"];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PleaseUseInHotel")];
             }
 
         }
@@ -205,7 +205,7 @@
             label.font = kPingFangLight(16);
         }
         label.textColor = UIColorFromRGB(0xece6de);
-        label.text = @"向朋友推荐小热点";
+        label.text = RDLocalizedString(@"RDString_ShareAPPToFriend");
         [_footView addSubview:label];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(peopleImageView.mas_right).offset(10);
@@ -233,7 +233,7 @@
     self.sideMenuController.leftViewAnimationSpeed = .2f;
     [self hideLeftViewAnimated:nil];
     ShareRDViewController * share = [[ShareRDViewController alloc] initWithType:SHARERDTYPE_APPLICATION];
-    share.title = @"推荐";
+    share.title = RDLocalizedString(@"RDString_Recommend");
    [(UINavigationController *)self.sideMenuController.rootViewController pushViewController:share  animated:NO];
     self.sideMenuController.leftViewAnimationSpeed = .5f;
     [SAVORXAPI postUMHandleWithContentId:@"menu_recommend" key:nil value:nil];
@@ -247,11 +247,11 @@
 //提示用户是否确认清除缓存
 - (void)showAlertWithClearCache
 {
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"" message:@"本次清除缓存，将清除图片、视频、以及您的文件缓存，请确认您的操作" preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"" message:RDLocalizedString(@"RDString_ClearCacheAlert") preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction * action1 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Cancle") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [SAVORXAPI postUMHandleWithContentId:@"menu_clear_cache" key:@"menu_clear_cache" value:@"fail"];
     }];
-    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction * action2 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Sure") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [self clearApplicationCache];
         [SAVORXAPI postUMHandleWithContentId:@"menu_clear_cache" key:@"menu_clear_cache" value:@"success"];
     }];
@@ -298,7 +298,7 @@
     [self.leftTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
     [MBProgressHUD hideHUDForView:self.view animated:NO];
     
-    [MBProgressHUD showSuccessHUDInView:self.view title:@"清理完成"];
+    [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_ClearCacheOK")];
 }
 
 #pragma mark -- 获取当前系统的缓存大小

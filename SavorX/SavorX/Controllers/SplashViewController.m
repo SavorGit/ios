@@ -109,7 +109,7 @@
                 sureBtn.layer.cornerRadius = 2.0;
                 sureBtn.layer.borderColor = UIColorFromRGB(0x922c3e).CGColor;
                 sureBtn.layer.borderWidth = 1.0f;
-                [sureBtn setTitle:@"立即开启" forState:UIControlStateNormal];
+                [sureBtn setTitle:RDLocalizedString(@"RDString_StartNow") forState:UIControlStateNormal];
                 [sureBtn setTitleColor:UIColorFromRGB(0x922c3e) forState:UIControlStateNormal];
                 [sureBtn.titleLabel setFont:kPingFangLight(16)];
                 [sureBtn addTarget:self action:@selector(sureBtnClicked:) forControlEvents:UIControlEventTouchUpInside];

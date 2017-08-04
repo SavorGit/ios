@@ -47,7 +47,7 @@
     conLabel.textColor = UIColorFromRGB(0xffffff);
     conLabel.backgroundColor = [UIColor clearColor];
     conLabel.textAlignment = NSTextAlignmentCenter;
-    conLabel.text = @"正在压缩视频...";
+    conLabel.text = [RDLocalizedString(@"RDString_CompressingVideo") stringByAppendingString:@"..."];
     [self addSubview:conLabel];
     [conLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 30));

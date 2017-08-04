@@ -45,25 +45,25 @@
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_information" key:nil value:nil];
     }
     if (adviceStr.length == 0) {
-        [SAVORXAPI showAlertWithMessage:@"请填写完整信息"];
+        [SAVORXAPI showAlertWithMessage:RDLocalizedString(@"RDString_PleaseInputAllInfo")];
         return;
     }
     
-    [MBProgressHUD showLoadingWithText:@"正在发送" inView:self.view];
+    [MBProgressHUD showLoadingWithText:RDLocalizedString(@"RDString_Sending") inView:self.view];
     
     HSSubmitFeedbackRequest *request = [[HSSubmitFeedbackRequest alloc] initWithSuggestion:adviceStr contactWay:contactStr];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [MBProgressHUD showSuccessHUDInView:[UIApplication sharedApplication].keyWindow title:@"已发送"];
+        [MBProgressHUD showSuccessHUDInView:[UIApplication sharedApplication].keyWindow title:RDLocalizedString(@"RDString_HasSend")];
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"success"];
         [self.navigationController popViewControllerAnimated:YES];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [SAVORXAPI showAlertWithString:@"发送失败" withController:self];
+        [SAVORXAPI showAlertWithString:RDLocalizedString(@"RDString_FailedWithSend") withController:self];
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [SAVORXAPI showAlertWithMessage:@"无法连接到网络, 请检查网络设置"];
+        [SAVORXAPI showAlertWithMessage:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     }];
     
