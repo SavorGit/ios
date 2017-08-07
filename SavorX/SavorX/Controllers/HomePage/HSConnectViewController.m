@@ -263,7 +263,7 @@
 //        make.centerY.mas_equalTo(self.maskingView);
 //    }];
 //    
-//    self.animationImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+//    self.  = [[UIImageView alloc] initWithFrame:CGRectZero];
 //    self.animationImageView.backgroundColor = [UIColor clearColor];
 //    [smallWindowView addSubview:self.animationImageView];
 //    [self.animationImageView mas_makeConstraints:^(MASConstraintMaker *make) {

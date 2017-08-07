@@ -349,7 +349,20 @@
         ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
         iatVC.imgAtlModel = model;
         iatVC.categoryID = self.categoryID;
-        [self.navigationController pushViewController:iatVC animated:YES];
+    
+        
+        float version = [UIDevice currentDevice].systemVersion.floatValue;
+        if (version < 8.0) {
+            self.modalPresentationStyle = UIModalPresentationCurrentContext;
+        } else {
+            iatVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        }
+        
+//        iatVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        [self presentViewController:iatVC animated:YES completion:nil];
+        
+//        [self.navigationController pushViewController:iatVC animated:YES];
+//        [[UIApplication sharedApplication].keyWindow addSubview:iatVC.view];
         
     } else if (model.type == 3 || model.type == 4){
         [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];

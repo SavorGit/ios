@@ -183,7 +183,7 @@
 {
     if (_imageScrollView == nil) {
         _imageScrollView = [[ImageAtlasScrollView alloc] initWithFrame:CGRectZero];
-        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight *2);
         _imageScrollView.showsHorizontalScrollIndicator = NO;
         // 切换的动画效果
         _imageScrollView.effect = JT3DScrollViewEffectNone;
@@ -260,6 +260,75 @@
      [self setValue:@(_imageScrollView.currentPage) forKey:@"currentPage"];
      
  }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    if (self.isDisappear == NO) {
+        [self wipeUp];
+    }
+
+    CGFloat offsetY = scrollView.contentOffset.y;
+    NSLog(@"---%f",offsetY);
+    if (offsetY >=  - 64) {
+        CGFloat alpha = MIN(1, (offsetY)/kMainBoundsHeight);
+        [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:alpha]];
+//        [[UIApplication sharedApplication].keyWindow setAlpha:alpha];
+//        [self.navigationController.navigationBar cnSetBackgroundColor:[color colorWithAlphaComponent:alpha]];
+        
+//        _descriptionView.alpha = 1 - alpha;
+    } else {
+        CGFloat alpha = MIN(1, (offsetY)/kMainBoundsHeight);
+        [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:alpha]];
+//        [[UIApplication sharedApplication].keyWindow setAlpha:0];
+//        [self.navigationController.navigationBar cnSetBackgroundColor:[color colorWithAlphaComponent:0]];
+    }
+    if (scrollView.contentOffset.y == 0){
+        self.view.backgroundColor = VCBackgroundColor;
+    }
+}
+//完成拖拽
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
+{
+    NSLog(@"ContentOffset  x is  %f,yis %f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+    NSLog(@"scrollViewDidEndDragging");
+    if (scrollView.contentOffset.y > 200) {
+        
+    }else if (scrollView.contentOffset.y == 0){
+        self.view.backgroundColor = VCBackgroundColor;
+    }
+}
+
+- (void)wipeUp{
+    
+//    [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.0f]];
+//    [[UIApplication sharedApplication].keyWindow setAlpha:0.2];
+    
+    self.isDisappear = YES;
+    [self.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
+            [UIView animateWithDuration:0.5 animations:^{
+                obj.alpha = 0;
+                self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
+            } completion:^(BOOL finished) {
+                obj.userInteractionEnabled = NO;
+            }];
+        }
+    }];
+}
+
+//-(void)dismissViewWithAnimationDuration:(float)duration{
+//    
+//    [UIView animateWithDuration:duration animations:^{
+//        
+//        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+//        ImageAtlasScrollView.bottom = keyWindow.top;
+//        
+//    } completion:^(BOOL finished) {
+//        
+//        [ImageAtlasScrollView removeFromSuperview];
+//        
+//    }];
+//}
 
 #pragma mark - KVO
 static int temp = -1;
@@ -425,7 +494,8 @@ static int temp = -1;
 #pragma mark -backButtonClick
 - (void)backButtonClick
 {
-    [self.navigationController popViewControllerAnimated:YES];
+//    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

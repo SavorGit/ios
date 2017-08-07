@@ -133,6 +133,18 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    
+    
+    NSString *currentURL = [webView stringByEvaluatingJavaScriptFromString:@"document.location.href"];
+    NSLog(@"%@",currentURL);
+    if ([currentURL isEqualToString:@"http://devp.admin.littlehotspot.com/activitydetail/toothwash"]) {
+        if ([currentURL containsString:@"pure=1"]) {
+            NSLog(@"ceshi");
+        }
+        self.testView.hidden = YES;
+    }else{
+        self.testView.hidden = NO;
+    }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
