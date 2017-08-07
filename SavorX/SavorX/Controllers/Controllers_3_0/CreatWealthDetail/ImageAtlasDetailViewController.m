@@ -271,14 +271,16 @@
     NSLog(@"---%f",offsetY);
     if (offsetY >=  - 64) {
         CGFloat alpha = MIN(1, (offsetY)/kMainBoundsHeight);
-        [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:alpha]];
+//        [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:alpha]];
+        [self.view setAlpha:alpha];
 //        [[UIApplication sharedApplication].keyWindow setAlpha:alpha];
 //        [self.navigationController.navigationBar cnSetBackgroundColor:[color colorWithAlphaComponent:alpha]];
         
 //        _descriptionView.alpha = 1 - alpha;
     } else {
         CGFloat alpha = MIN(1, (offsetY)/kMainBoundsHeight);
-        [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:alpha]];
+        [self.view setAlpha:alpha];
+//        [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:alpha]];
 //        [[UIApplication sharedApplication].keyWindow setAlpha:0];
 //        [self.navigationController.navigationBar cnSetBackgroundColor:[color colorWithAlphaComponent:0]];
     }
