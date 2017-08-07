@@ -103,6 +103,11 @@
 "RDString_HasPause" = "已暫停";
 "RDString_SliderHasStop" = "幻燈片播放已經結束";
 "RDString_CompressingVideo" = "正在壓縮視頻";
+"RDString_PleaseInputText" = "請輸入文字";
+"RDString_ClickToInputText" = "點擊輸入文字";
+"RDString_Done" = "完成";
+"RDString_MaxInputNumber_16" = "最多輸入16個字符";
+"RDString_MaxInputNumber_20" = "最多輸入20個字符";
 
 //分享
 "RDString_ShareTo" = "分享到";
