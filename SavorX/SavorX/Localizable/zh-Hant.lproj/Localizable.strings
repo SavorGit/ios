@@ -74,6 +74,9 @@
 "RDString_HasSend" = "已發送";
 "RDString_AdvicePhone" = "選填，便於我們與您聯繫";
 "RDString_AdviceP" = "請簡要描述您的建議";
+"RDString_AdviceTitle" = "您的寶貴意見";
+"RDString_ConnectTitle" = "聯繫方式";
+"RDString_maxInput" = "最多輸入200个字符";
 
 //文件
 "RDString_File" = "我的文件";

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -133,10 +133,12 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="adviceTextView" destination="IMt-Uv-OGU" id="WFN-Vx-n3a"/>
+                <outlet property="connectLabel" destination="vTI-Jz-qAo" id="MAM-sq-Uui"/>
                 <outlet property="numLabel" destination="rUu-jg-Mb4" id="7Jc-ft-XGr"/>
                 <outlet property="pLabel" destination="k0W-N0-yjB" id="zCE-LM-woS"/>
                 <outlet property="phoneTextField" destination="xqX-L1-FsU" id="8Lu-nI-Ny6"/>
                 <outlet property="submitButton" destination="qi4-Kd-Ch7" id="bGG-Za-ysy"/>
+                <outlet property="titleLabel" destination="8kH-gD-jNB" id="5dG-VI-s26"/>
             </connections>
             <point key="canvasLocation" x="33.5" y="-55.5"/>
         </view>

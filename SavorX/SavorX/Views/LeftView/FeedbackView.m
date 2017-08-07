@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *pLabel;
 @property (weak, nonatomic) IBOutlet UIButton *submitButton;
 @property (weak, nonatomic) IBOutlet UILabel *numLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *connectLabel;
 
 @end
 
@@ -39,6 +41,8 @@
     self.numLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:12];
     self.phoneTextField.placeholder = RDLocalizedString(@"RDString_AdvicePhone");
     self.pLabel.text = RDLocalizedString(@"RDString_AdviceP");
+    self.titleLabel.text = RDLocalizedString(@"RDString_AdviceTitle");
+    self.connectLabel.text = RDLocalizedString(@"RDString_ConnectTitle");
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -50,7 +54,7 @@
     }
     if (textView.text.length > 200) {
         textView.text = [textView.text substringToIndex:200];
-        [MBProgressHUD showTextHUDwithTitle:@"最多输入200个字符"];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_maxInput")];
     }
     self.numLabel.text = [NSString stringWithFormat:@"%ld/200", textView.text.length];
 }
