@@ -812,8 +812,8 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
                 [SAVORXAPI cancelAllURLTask];
                 
-                RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:@"您的投屏已经退出了"];
-                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
+                RDAlertView * view = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_ScreenDidBack")];
+                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_KnewIt") handler:^{
                     
                 } bold:YES];
                 [view addActions:@[action]];
@@ -833,9 +833,9 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if ([GlobalData shared].networkStatus == RDNetworkStatusNotReachable) {
-                [MBProgressHUD showNetworkStatusTextHUDWithTitle:@"网络不可用，已经断开连接" delay:1.5f];
+                [MBProgressHUD showNetworkStatusTextHUDWithTitle:RDLocalizedString(@"RDString_DisconnectWithNoNet") delay:1.5f];
             }else{
-                [MBProgressHUD showNetworkStatusTextHUDWithTitle:@"与电视断开连接，请重试" delay:1.5f];
+                [MBProgressHUD showNetworkStatusTextHUDWithTitle:RDLocalizedString(@"RDString_DisconnectWithUnknow") delay:1.5f];
             }
         });
     }

@@ -91,7 +91,7 @@
                 }
 
                 
-                [self showTopFreshLabelWithTitle:@"更新成功"];
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
             }
         }
         
@@ -103,7 +103,7 @@
         }
         if (_tableView) {
             [self.tableView.mj_header endRefreshing];
-            [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
         }
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self hiddenLoadingView];
@@ -113,9 +113,9 @@
         if (_tableView) {
             [self.tableView.mj_header endRefreshing];
             if (error.code == -1001) {
-                [self showTopFreshLabelWithTitle:@"数据加载超时"];
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithTimeOut")];
             }else{
-                [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
             }
         }
 
@@ -227,7 +227,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return @" 删除 ";
+    return RDLocalizedString(@"RDString_CellEditDelete");
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -243,7 +243,7 @@
             if ([[dic objectForKey:@"code"] integerValue] == 10000) {
                 [SAVORXAPI postUMHandleWithContentId:@"menu_cancel_collection" key:nil value:nil];
                 model.collected = 0;
-                [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_SuccessWithCancle")];
                 
                 [self.dataSource removeObjectAtIndex:indexPath.row];
                 [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];

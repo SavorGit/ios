@@ -156,7 +156,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     self.definitionButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.definitionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.definitionButton.titleLabel.font = [UIFont systemFontOfSize:14];
-    [self.definitionButton setTitle:@"超清" forState:UIControlStateNormal];
+    [self.definitionButton setTitle:RDLocalizedString(@"RDString_RDDefinitionHQD") forState:UIControlStateNormal];
     [self.definitionButton setImage:[UIImage imageNamed:@"RDUp"] forState:UIControlStateNormal];
     [self.definitionButton setImage:[UIImage imageNamed:@"RDDown"] forState:UIControlStateSelected];
     [self.definitionButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10)];
@@ -181,7 +181,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     
     self.replayButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.replayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.replayButton setTitle:@"重播" forState:UIControlStateNormal];
+    [self.replayButton setTitle:RDLocalizedString(@"RDString_RDRePlay") forState:UIControlStateNormal];
     self.replayButton.titleLabel.font = [UIFont systemFontOfSize:14];
     [self.replayButton setImage:[UIImage imageNamed:@"RDReplay"] forState:UIControlStateNormal];
     [self.replayButton addTarget:self action:@selector(replay) forControlEvents:UIControlEventTouchUpInside];
@@ -192,7 +192,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     [self.endShare setImage:[UIImage imageNamed:@"RDEndShare"] forState:UIControlStateNormal];
     self.endShare.titleLabel.font = [UIFont systemFontOfSize:14];
     [self.endShare addTarget:self action:@selector(shareVideo) forControlEvents:UIControlEventTouchUpInside];
-    [self.endShare setTitle:@"分享" forState:UIControlStateNormal];
+    [self.endShare setTitle:RDLocalizedString(@"RDString_Share") forState:UIControlStateNormal];
     [self.endView addSubview:self.endShare];
     
     self.endBackButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -215,7 +215,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     self.firstButton.titleLabel.font = [UIFont systemFontOfSize:14];
     self.firstButton.tag = 101;
     [self.firstButton addTarget:self action:@selector(selectButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [self.firstButton setTitle:@"高清" forState:UIControlStateNormal];
+    [self.firstButton setTitle:RDLocalizedString(@"RDString_RDDefinitionHD") forState:UIControlStateNormal];
     [self.selectView addSubview:self.firstButton];
     
     self.secondButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -223,7 +223,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     self.secondButton.titleLabel.font = [UIFont systemFontOfSize:14];
     self.secondButton.tag = 102;
     [self.secondButton addTarget:self action:@selector(selectButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [self.secondButton setTitle:@"标清" forState:UIControlStateNormal];
+    [self.secondButton setTitle:RDLocalizedString(@"RDString_RDDefinitionSD") forState:UIControlStateNormal];
     [self.selectView addSubview:self.secondButton];
     
     [self.selectView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -581,9 +581,9 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         [self.delegate playItemShouldChangeDefinitionTo:10];
     }
     self.definition = RDDefinitionSD;
-    [self.definitionButton setTitle:@"标清" forState:UIControlStateNormal];
-    [self.firstButton setTitle:@"超清" forState:UIControlStateNormal];
-    [self.secondButton setTitle:@"高清" forState:UIControlStateNormal];
+    [self.definitionButton setTitle:RDLocalizedString(@"RDString_RDDefinitionSD") forState:UIControlStateNormal];
+    [self.firstButton setTitle:RDLocalizedString(@"RDString_RDDefinitionHQD") forState:UIControlStateNormal];
+    [self.secondButton setTitle:RDLocalizedString(@"RDString_RDDefinitionHD") forState:UIControlStateNormal];
 }
 
 - (void)changeToRDDefinitionHD
@@ -592,9 +592,9 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         [self.delegate playItemShouldChangeDefinitionTo:20];
     }
     self.definition = RDDefinitionHD;
-    [self.definitionButton setTitle:@"高清" forState:UIControlStateNormal];
-    [self.firstButton setTitle:@"超清" forState:UIControlStateNormal];
-    [self.secondButton setTitle:@"标清" forState:UIControlStateNormal];
+    [self.definitionButton setTitle:RDLocalizedString(@"RDString_RDDefinitionHD") forState:UIControlStateNormal];
+    [self.firstButton setTitle:RDLocalizedString(@"RDString_RDDefinitionHQD") forState:UIControlStateNormal];
+    [self.secondButton setTitle:RDLocalizedString(@"RDString_RDDefinitionSD") forState:UIControlStateNormal];
 }
 
 - (void)changeToRDDefinitionHQD
@@ -603,9 +603,9 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         [self.delegate playItemShouldChangeDefinitionTo:30];
     }
     self.definition = RDDefinitionHQD;
-    [self.definitionButton setTitle:@"超清" forState:UIControlStateNormal];
-    [self.firstButton setTitle:@"高清" forState:UIControlStateNormal];
-    [self.secondButton setTitle:@"标清" forState:UIControlStateNormal];
+    [self.definitionButton setTitle:RDLocalizedString(@"RDString_RDDefinitionHQD") forState:UIControlStateNormal];
+    [self.firstButton setTitle:RDLocalizedString(@"RDString_RDDefinitionHD") forState:UIControlStateNormal];
+    [self.secondButton setTitle:RDLocalizedString(@"RDString_RDDefinitionSD") forState:UIControlStateNormal];
 }
 
 - (void)changeVideoDefinition

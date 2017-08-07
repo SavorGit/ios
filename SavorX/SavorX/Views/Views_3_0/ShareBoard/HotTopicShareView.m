@@ -60,7 +60,7 @@
         self.categoryID = categoryID;
         [self creatDatas];
         
-        _protext = @"分享到";
+        _protext = RDLocalizedString(@"RDString_ShareTo");
         self.frame = CGRectMake(0, ory, ScreenWidth, SELF_Height);
         //	背景，带灰度
         self.backgroundColor = UIColorFromRGB(0xf6f2ed);
@@ -86,7 +86,7 @@
     NSMutableArray *typeArr = [NSMutableArray arrayWithCapacity:5];
     
     if (hadInstalledWeixin) {
-        [titlearr addObjectsFromArray:@[@"微信", @"微信朋友圈"]];
+        [titlearr addObjectsFromArray:@[RDLocalizedString(@"RDString_WeChat"), RDLocalizedString(@"RDString_WeChatTimeLineAll")]];
         [imageArr addObjectsFromArray:@[@"WeChat",@"friends"]];
         [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_WechatSession],[NSNumber numberWithInteger:UMSocialPlatformType_WechatTimeLine]]];
     }
@@ -97,7 +97,7 @@
         [typeArr addObjectsFromArray:@[[NSNumber numberWithInteger:UMSocialPlatformType_QQ]]];
     }
     
-    [titlearr addObjectsFromArray:@[@"微博"]];
+    [titlearr addObjectsFromArray:@[RDLocalizedString(@"RDString_WeiBo")]];
     [imageArr addObjectsFromArray:@[@"weibo"]];
     [typeArr addObject:[NSNumber numberWithInteger:UMSocialPlatformType_Sina]];
     

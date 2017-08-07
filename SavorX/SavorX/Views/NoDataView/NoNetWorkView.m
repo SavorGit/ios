@@ -49,12 +49,12 @@
     }
     if (style==NoNetWorkViewStyle_No_NetWork) {
         _flagImageView.image =[UIImage imageNamed:@"kong_wlyc"];
-        _descLabel.text = @"网络异常, 点击重试";
+        _descLabel.text = RDLocalizedString(@"RDString_NetFailedWithNoNet");
         _touchScrrenLabel.text = @"";
     }else if(style==NoNetWorkViewStyle_Load_Fail){
         _flagImageView.image = [UIImage imageNamed:@"kong_wlyc"];
 
-        _descLabel.text = @"网络异常, 点击重试";
+        _descLabel.text = RDLocalizedString(@"RDString_NetFailedWithNoNet");
         _touchScrrenLabel.text = @"";
     }
     

@@ -62,7 +62,7 @@
     
     NSString *distanceStr;
     if (model.id == [GlobalData shared].hotelId) {
-        distanceStr = @"当前餐厅";
+        distanceStr = RDLocalizedString(@"RDString_CurrenRestaurant");
     }else{
         distanceStr = [NSString stringWithFormat:@"%@",model.dis];
     }

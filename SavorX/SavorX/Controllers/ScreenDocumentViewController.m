@@ -100,7 +100,7 @@
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
     self.webView.scrollView.delegate = self;
 
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
     self.isScreen = NO;
     
     self.lockButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -125,7 +125,7 @@
 
 - (void)screenDidQiutWithBox
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
     self.seriesId = [Helper getTimeStamp];
     self.isScreen = NO;
 }
@@ -144,7 +144,7 @@
 - (void)ApplicationDidBindToDevice
 {
     self.isScreen = NO;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
 }
 
 - (void)stopScreenDocment:(BOOL)fromHomeType
@@ -166,7 +166,7 @@
 
 - (void)stop
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
     self.seriesId = [Helper getTimeStamp];
     self.isScreen = NO;
     self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -186,7 +186,7 @@
         
         [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_File];
         
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = YES;
     } failure:^{
@@ -277,7 +277,7 @@
                 self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
                     if (successBlock) {
                         if (self.isScreen == NO) {
-                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
+                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
                             self.isScreen = YES;
                         }
                         successBlock();
@@ -293,12 +293,12 @@
                         failureBlock();
                     }
                     if ([error.domain isEqualToString:@"cancleFileScreen"]) {
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
                         self.isScreen = NO;
                     }
                     if ([error.domain isEqualToString:@"fileScreen"]) {
-                        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:error.localizedDescription];
-                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+                        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:error.localizedDescription];
+                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
                             
                         } bold:YES];
                         [alert addActions:@[action]];

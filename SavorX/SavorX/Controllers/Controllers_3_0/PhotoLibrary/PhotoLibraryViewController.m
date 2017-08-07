@@ -63,8 +63,8 @@
 //加载手机内的相册列表
 - (void)loadPhotoLibrary
 {
-    [MBProgressHUD showLoadingWithText:@"正在加载" inView:self.view];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"选择" style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
+    [MBProgressHUD showLoadingWithText:RDLocalizedString(@"RDString_Loading") inView:self.view];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Choose") style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
     [RDPhotoTool loadPHAssetWithHander:^(NSArray *result, RDPhotoLibraryModel *cameraResult) {
@@ -184,7 +184,7 @@
         button.imageView.transform = CGAffineTransformMakeRotation(0);
     } completion:^(BOOL finished) {
         button.userInteractionEnabled = YES;
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"选择" style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Choose") style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
     }];
 }
 
@@ -238,8 +238,8 @@
         [self.view layoutIfNeeded];
     }];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStyleDone target:self action:@selector(startAllChoose)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_AllChoose") style:UIBarButtonItemStyleDone target:self action:@selector(startAllChoose)];
     self.isChooseStatus = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:RDPhotoLibraryChooseChangeNotification object:nil userInfo:@{@"value":@(YES)}];
 }
@@ -259,7 +259,7 @@
     }];
     
     [self.selectArray removeAllObjects];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"选择" style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Choose") style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
     [self setNavBackArrow];
     self.isChooseStatus = NO;
     self.isAllChoose = NO;
@@ -294,7 +294,7 @@
     }
     
     self.isAllChoose = YES;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消全选" style:UIBarButtonItemStyleDone target:self action:@selector(cancelAllChoose)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_CancleAllChoose") style:UIBarButtonItemStyleDone target:self action:@selector(cancelAllChoose)];
     [[NSNotificationCenter defaultCenter] postNotificationName:RDPhotoLibraryAllChooseNotification object:nil userInfo:@{@"objects":self.selectArray}];
 }
 
@@ -303,7 +303,7 @@
 {
     if (self.isAllChoose) {
         self.isAllChoose = NO;
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStyleDone target:self action:@selector(startAllChoose)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_AllChoose") style:UIBarButtonItemStyleDone target:self action:@selector(startAllChoose)];
         [self.selectArray removeAllObjects];
         [[NSNotificationCenter defaultCenter] postNotificationName:RDPhotoLibraryAllChooseNotification object:nil userInfo:@{@"objects":self.selectArray}];
     }
@@ -327,14 +327,14 @@
             if (isSelect) {
                 if (![weakSelf.selectArray containsObject:asset]) {
                     if (weakSelf.selectArray.count >= 50) {
-                        [MBProgressHUD showTextHUDwithTitle:@"最多只能选择50张" delay:1.f];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_MaxNumForChoose") delay:1.f];
                         [weakCell configSelectStatus:NO];
                     }else{
                         [weakSelf.selectArray addObject:asset];
                         if (weakSelf.selectArray.count == 50 ||
                             weakSelf.selectArray.count == weakSelf.model.fetchResult.count) {
                             weakSelf.isAllChoose = YES;
-                            weakSelf.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消全选" style:UIBarButtonItemStyleDone target:weakSelf action:@selector(cancelAllChoose)];
+                            weakSelf.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_CancleAllChoose") style:UIBarButtonItemStyleDone target:weakSelf action:@selector(cancelAllChoose)];
                         }
                     }
                 }
@@ -342,7 +342,7 @@
                 if ([weakSelf.selectArray containsObject:asset]) {
                     [weakSelf.selectArray removeObject:asset];
                     weakSelf.isAllChoose = NO;
-                    weakSelf.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStyleDone target:weakSelf action:@selector(startAllChoose)];
+                    weakSelf.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_AllChoose") style:UIBarButtonItemStyleDone target:weakSelf action:@selector(startAllChoose)];
                 }
             }
         }];
@@ -377,14 +377,14 @@
         }else{
             PHAsset * checkAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[currentAsset.localIdentifier] options:nil].firstObject;
             if (!checkAsset) {
-                [MBProgressHUD showTextHUDwithTitle:@"照片已删除" delay:1.f];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PhotoHasDelete") delay:1.f];
                 return;
             }
         }
         
         
         if ([GlobalData shared].isBindRD) {
-            RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
+            RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
             NSString * name = currentAsset.localIdentifier;
             [RDPhotoTool getImageFromPHAssetSourceWithAsset:currentAsset success:^(UIImage *result) {
                 
@@ -426,7 +426,7 @@
         
         PHAsset * checkAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[currentAsset.localIdentifier] options:nil].firstObject;
         if (!checkAsset) {
-            [MBProgressHUD showTextHUDwithTitle:@"视频已删除" delay:1.f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_VideoHasDelete") delay:1.f];
             return;
         }
         
@@ -457,7 +457,7 @@
                     
                 }else{
                     //导出失败进行投屏asset操作
-                    [MBProgressHUD showTextHUDwithTitle:@"视频导出失败"];
+                    [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedExportVideo")];
                 }
             });
         }];
@@ -528,7 +528,7 @@
     [self.collectionView reloadData];
     [self closeLibraryChoose];
     self.collectionView.hidden = YES;
-    MBProgressHUD * hud = [MBProgressHUD showLoadingWithText:@"正在加载" inView:self.view];
+    MBProgressHUD * hud = [MBProgressHUD showLoadingWithText:RDLocalizedString(@"RDString_Loading") inView:self.view];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSIndexPath * indexPath = [NSIndexPath indexPathForItem:self.model.fetchResult.count - 1 inSection:0];
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
@@ -541,7 +541,7 @@
 {
     [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_photo_slide" key:nil value:nil];
     if (self.selectArray.count == 0) {
-        [MBProgressHUD showTextHUDwithTitle:@"请至少选择一张图片"];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_MinNumForChoose")];
         return;
     }
     
@@ -553,7 +553,7 @@
     
     third.PHAssetSource = array;
     if ([GlobalData shared].isBindRD) {
-        RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
+        RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
         PHAsset * asset = [third.PHAssetSource objectAtIndex:1];
         NSString * name = asset.localIdentifier;
         
@@ -586,7 +586,7 @@
 }
 
 - (void)demandVideoWithMediaPath:(NSString *)mediaPath asset:(PHAsset *)asset force:(NSInteger)force filePath:(NSString *)filePath{
-    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
     
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
@@ -598,11 +598,11 @@
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_AlertWithScreen") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_ScreenContinuePre"), infoStr, RDLocalizedString(@"RDString_ScreenContinueSuf")]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"video"}];
             } bold:NO];
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ContinueScreen") handler:^{
                 [self demandVideoWithMediaPath:mediaPath asset:asset force:1 filePath:filePath];
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"video"}];
             } bold:YES];

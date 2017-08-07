@@ -61,7 +61,6 @@
     }];
     
     _countLabel = [[UILabel alloc]init];
-    _countLabel.text = @"22图";
     _countLabel.font = kPingFangLight(10);
     _countLabel.textColor = [UIColor whiteColor];
     _countLabel.backgroundColor = [UIColor darkGrayColor];
@@ -127,7 +126,7 @@
     
     self.titleLabel.text = model.title;
     self.sourceLabel.text = model.sourceName;
-    self.countLabel.text = [NSString stringWithFormat:@"%@图",model.colTuJi];
+    self.countLabel.text = [NSString stringWithFormat:@"%@%@",model.colTuJi, RDLocalizedString(@"RDString_Image")];
     if (!isEmptyString(model.updateTime)) {
         self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
     }

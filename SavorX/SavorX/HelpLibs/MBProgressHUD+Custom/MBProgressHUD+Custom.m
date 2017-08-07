@@ -53,7 +53,7 @@
     hud.bezelView.color = [UIColor whiteColor];
     hud.label.font = [UIFont systemFontOfSize:15];
     hud.label.numberOfLines = 0;
-    hud.label.text = @"正在加载";
+    hud.label.text = RDLocalizedString(@"RDString_Loading");
     hud.label.textColor = FontColor;
     
     return hud;

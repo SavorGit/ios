@@ -38,7 +38,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = VCBackgroundColor;
-    self.title = @"我的文件";
+    self.title = RDLocalizedString(@"RDString_File");
     NSArray * array = [OpenFileTool getALLDocumentFileList];
     self.dataSource = [NSMutableArray arrayWithArray:array];
     self.urlString = @"http://h5.littlehotspot.com/Public/html/help3/wenjian_ios.html";
@@ -89,7 +89,7 @@
 - (void)shouldPushHelp
 {
     HelpViewController * help = [[HelpViewController alloc] initWithURL:self.urlString];
-    help.title = @"文件投屏步骤";
+    help.title = RDLocalizedString(@"RDString_FileScreenWays");
     [self.navigationController  pushViewController:help  animated:NO];
 }
 
@@ -287,7 +287,7 @@
         FileVideoViewController * video = [[FileVideoViewController alloc] initWithVideoFileURL:videoUrl totalTime:totalTime];
         video.title = [filePath lastPathComponent];
         if ([GlobalData shared].isBindRD) {
-             RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
+             RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
             hud.tag = 1010;
             
             [self demandVideoWithMediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0 video:video movieUrl:movieURL];
@@ -310,7 +310,7 @@
     }else if (type == FileTypePPT){
         doucment.path = [PPTDocument stringByAppendingPathComponent:[self.dataSource objectAtIndex:indexPath.row]];
     }else{
-        [MBProgressHUD showTextHUDwithTitle:@"不支持的文件"];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FileNotSupport")];
         return;
     }
     doucment.title = [doucment.path lastPathComponent];
@@ -330,11 +330,11 @@
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_AlertWithScreen") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_ScreenContinuePre"), infoStr, RDLocalizedString(@"RDString_ScreenContinueSuf")]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"file"}];
             } bold:NO];
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ContinueScreen") handler:^{
                 [self demandVideoWithMediaPath:mediaPath force:1 video:video movieUrl:movieURL];
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"file"} ];
             } bold:YES];
@@ -364,7 +364,7 @@
 //创建没有文件提示文案
 - (void)createNothingView
 {
-    [self showNoDataViewInView:self.view noDataString:@"没有发现文件，请导入"];
+    [self showNoDataViewInView:self.view noDataString:RDLocalizedString(@"RDString_FileIsNone")];
 }
 
 //创建帮助提示控件

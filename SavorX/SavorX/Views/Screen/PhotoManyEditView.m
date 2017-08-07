@@ -63,19 +63,19 @@
     
     self.titleLabel = [[PhotoTextLabel alloc] initWithFrame:CGRectZero];
     self.titleLabel.font = [UIFont systemFontOfSize:18];
-    self.titleLabel.text = @"在这里添加文字";
+    self.titleLabel.text = RDLocalizedString(@"RDString_AddTextHere");
     self.titleLabel.tag = 101;
     [self addGuestureWithLabel:self.titleLabel];
     
     self.detailLabel = [[PhotoTextLabel alloc] initWithFrame:CGRectZero];
     self.detailLabel.font = [UIFont systemFontOfSize:16];
-    self.detailLabel.text = @"在这里添加文字";
+    self.detailLabel.text = RDLocalizedString(@"RDString_AddTextHere");
     self.detailLabel.tag = 102;
     [self addGuestureWithLabel:self.detailLabel];
     
     self.dateLabel = [[PhotoTextLabel alloc] initWithFrame:CGRectZero];
     self.dateLabel.font = [UIFont systemFontOfSize:15];
-    self.dateLabel.text = @"在这里添加文字";
+    self.dateLabel.text = RDLocalizedString(@"RDString_AddTextHere");
     self.dateLabel.tag = 103;
     [self addGuestureWithLabel:self.dateLabel];
     
@@ -130,14 +130,14 @@
     BOOL haveDetail = NO;
     BOOL haveDate = NO;
     
-    if (![title isEqualToString:@"在这里添加文字"]) {
+    if (![title isEqualToString:RDLocalizedString(@"RDString_AddTextHere")]) {
         haveTitle = YES;
     }
     
-    if (![detail isEqualToString:@"在这里添加文字"]) {
+    if (![detail isEqualToString:RDLocalizedString(@"RDString_AddTextHere")]) {
         haveDetail = YES;
     }
-    if (![date isEqualToString:@"在这里添加文字"]) {
+    if (![date isEqualToString:RDLocalizedString(@"RDString_AddTextHere")]) {
         haveDate = YES;
     }
     

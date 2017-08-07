@@ -80,7 +80,7 @@
             if (self.dataSource.count == 0) {
                 [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
             }else{
-                [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
             }
             return;
         }
@@ -106,7 +106,7 @@
             [self.tableView.mj_footer resetNoMoreData];
         }
         
-        [self showTopFreshLabelWithTitle:@"更新成功"];
+        [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -116,7 +116,7 @@
         }
         if (_tableView) {
             [self.tableView.mj_header endRefreshing];
-            [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
         }
         
         
@@ -130,9 +130,9 @@
             
             [self.tableView.mj_header endRefreshing];
             if (error.code == -1001) {
-                [self showTopFreshLabelWithTitle:@"数据加载超时"];
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithTimeOut")];
             }else{
-                [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
             }
         }
         

@@ -193,7 +193,7 @@
     
     self.quitScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.quitScreenButton.backgroundColor = kThemeColor;
-    [self.quitScreenButton setTitle:@"退出投屏" forState:UIControlStateNormal];
+    [self.quitScreenButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
     [self.quitScreenButton.titleLabel setFont:kPingFangRegular(16)];
     [self.quitScreenButton setTitleColor:UIColorFromRGB(0xede6de) forState:UIControlStateNormal];
     self.quitScreenButton.layer.masksToBounds = YES;
@@ -299,11 +299,11 @@
         if ([[dic objectForKey:@"code"] integerValue] == 10000) {
             if (self.model.collected == 1) {
                 self.model.collected = 0;
-                [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
+                [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_SuccessWithCancle")];
                 [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
             }else{
                 self.model.collected = 1;
-                [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
+                [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_SuccessWithCollect")];
                 [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
             }
             button.selected = !button.selected;
@@ -316,14 +316,14 @@
         }else{
             [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
         }
-        [MBProgressHUD showTextHUDwithTitle:@"收藏失败" delay:1.f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithCollect") delay:1.f];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         if (isCollect == 0) {
             [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
         }else{
             [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
         }
-        [MBProgressHUD showTextHUDwithTitle:@"收藏失败" delay:1.f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithCollect") delay:1.f];
     }];
 }
 
@@ -331,7 +331,7 @@
 - (void)shareAction:(UIButton *)button
 {
     if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
-        [MBProgressHUD showTextHUDwithTitle:@"该内容暂不支持分享" delay:1.5f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDSting_NotSurpport") delay:1.5f];
         return;
     }
     
@@ -514,7 +514,7 @@
 - (void)playBtnClicked
 {
     if (self.isHandle) {
-        [MBProgressHUD showTextHUDwithTitle:@"正在进行操作"];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_IsHandeling")];
         return;
     }
     self.isHandle = YES;
@@ -538,7 +538,7 @@
                 self.isHandle = NO;
                 [self updatePlayStatus];
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithHandel")];
                 self.playBtn.selected = !self.playBtn.selected;
                 [self changeTimerWithPlayStatus];
                 self.isHandle = NO;
@@ -561,7 +561,7 @@
                 }
                 self.isHandle = NO;
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithHandel")];
                 self.playBtn.selected = !self.playBtn.selected;
                 [self changeTimerWithPlayStatus];
                 self.isHandle = NO;
@@ -613,7 +613,7 @@
                     [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
                 }
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                [MBProgressHUD showTextHUDwithTitle:@"操作失败"];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithHandel")];
             }];
         }
     }
@@ -622,7 +622,7 @@
 //重置当前播放条目
 - (void)restartVod
 {
-    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在点播"];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Demanding")];
     self.screenButton.enabled = NO;
     if ([GlobalData shared].isBindRD) {
         
@@ -645,7 +645,7 @@
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             self.screenButton.enabled = YES;
             [hud hidden];
-            [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithPlay")];
             self.isHandle = NO;
         }];
         
@@ -732,7 +732,7 @@
             }
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [MBProgressHUD showTextHUDwithTitle:@"播放失败"];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithPlay")];
             if (button.tag == 101) {
                 button.enabled = YES;
             }

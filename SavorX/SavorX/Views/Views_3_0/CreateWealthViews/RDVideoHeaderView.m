@@ -80,7 +80,7 @@
     self.recommandLabel = [[UILabel alloc] init];
     self.recommandLabel.font = kPingFangRegular(15);
     self.recommandLabel.textColor = UIColorFromRGB(0x922c3e);
-    self.recommandLabel.text = @"为您推荐";
+    self.recommandLabel.text = RDLocalizedString(@"RDString_RecommendForYou");
     [self addSubview:self.recommandLabel];
     [self.recommandLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(15);

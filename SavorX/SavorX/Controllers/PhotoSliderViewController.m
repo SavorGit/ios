@@ -51,7 +51,7 @@
     
     self.currentIndex = 1;
     
-    self.title = @"我的照片";
+    self.title = RDLocalizedString(@"RDString_MyPhoto");
     
     self.view.backgroundColor = VCBackgroundColor;
     
@@ -93,9 +93,9 @@
     [self.timer invalidate];
     self.timer = nil;
     self.isScreen = NO;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
     self.seriesId = [Helper getTimeStamp];
-    self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
 }
 
 - (void)setupBottomView
@@ -122,7 +122,7 @@
     self.statusLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.statusLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:16];
     self.statusLabel.textColor = [UIColor whiteColor];
-    self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  1/%ld", self.PHAssetSource.count - 2];
+    self.statusLabel.text = [NSString stringWithFormat:@"%@  1/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.PHAssetSource.count - 2];
     [downView addSubview:self.statusLabel];
     [self.statusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(15);
@@ -185,15 +185,15 @@
     [self.bottomView addSubview:self.timeLabel];
     
     if ([GlobalData shared].isBindRD) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen")  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
         self.isScreen = YES;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
     }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         [SAVORXAPI showConnetToTVAlert:@"sliderPhoto"];
         self.isScreen = NO;
         self.playButton.selected = NO;
-        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  1/%ld", self.PHAssetSource.count - 2];
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  1/%ld", RDLocalizedString(@"RDString_Slider"), self.PHAssetSource.count - 2];
     }
 }
 
@@ -308,12 +308,12 @@
         //播放
         self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-        self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
     }else{
         //暂停
         [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_pause" key:nil value:nil];
         [self.timer invalidate];
-        self.statusLabel.text = [NSString stringWithFormat:@"已暂停  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_HasPause"), self.currentIndex, self.PHAssetSource.count - 2];
     }
 }
 
@@ -328,10 +328,10 @@
         [self.task cancel];
     }
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         self.seriesId = [Helper getTimeStamp];
         self.navigationItem.rightBarButtonItem.enabled = YES;
-        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
         [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_exit" key:nil value:nil];
         if (fromHomeType == YES) {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
@@ -350,7 +350,7 @@
     self.playButton.selected = NO;
     [self.timer invalidate];
     self.timer = nil;
-    [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
 }
 
 - (void)screenCurrentImage
@@ -375,14 +375,14 @@
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         
         if (nil == result) {
-            [MBProgressHUD showTextHUDwithTitle:@"照片已被删除" delay:1.f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PhotoHasDelete") delay:1.f];
             return;
         }
         
         if ([GlobalData shared].isBindRD) {
             
             [MBProgressHUD hideHUDForView:self.view animated:NO];
-            RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:@"正在投屏"];
+            RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
             
             [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
@@ -393,8 +393,8 @@
                     [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
                     [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                     self.isScreen = YES;
-                    self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                    self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen")  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     
                     [hud hidden];
                     [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
@@ -425,14 +425,14 @@
         }else{
             [self sliderStopWithLocation];
         }
-        [MBProgressHUD showTextHUDwithTitle:@"幻灯片播放已经结束"];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SliderHasStop")];
         self.playButton.selected = NO;
     }else if (self.currentIndex == 0){
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self.PHAssetSource.count - 2 inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         self.currentIndex = self.PHAssetSource.count - 2;
     }
     
-    self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
     
     if (self.isScreen) {
         if ([GlobalData shared].isBindRD) {
@@ -450,7 +450,7 @@
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 
                 if (nil == result) {
-                    [MBProgressHUD showTextHUDwithTitle:@"照片已被删除" delay:1.5f];
+                    [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PhotoHasDelete") delay:1.5f];
                     return;
                 }
                 
@@ -473,9 +473,9 @@
                             [self.task cancel];
                         }
                         [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                        [MBProgressHUD showTextHUDwithTitle:@"幻灯片投屏失败" delay:1.5f];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-                        [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithSlider") delay:1.5f];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                        [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
                     }];
                 }];
             }];
@@ -528,12 +528,12 @@
     }
     
     self.currentIndex = itemIndex;
-    if ([self.statusLabel.text hasPrefix:@"幻灯片"]) {
-        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
-    }else if ([self.statusLabel.text hasPrefix:@"已暂停"]) {
-        self.statusLabel.text = [NSString stringWithFormat:@"已暂停  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    if ([self.statusLabel.text hasPrefix:RDLocalizedString(@"RDString_Slider")]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
+    }else if ([self.statusLabel.text hasPrefix:RDLocalizedString(@"RDString_HasPause")]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_HasPause"), self.currentIndex, self.PHAssetSource.count - 2];
     }else{
-        self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
     }
 }
 
@@ -549,12 +549,12 @@
         itemIndex = self.PHAssetSource.count - 2;
     }
     self.currentIndex = itemIndex;
-    if ([self.statusLabel.text hasPrefix:@"幻灯片"]) {
-        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
-    }else if ([self.statusLabel.text hasPrefix:@"已暂停"]) {
-        self.statusLabel.text = [NSString stringWithFormat:@"已暂停  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    if ([self.statusLabel.text hasPrefix:RDLocalizedString(@"RDString_Slider")]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
+    }else if ([self.statusLabel.text hasPrefix:RDLocalizedString(@"RDString_HasPause")]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_HasPause"), self.currentIndex, self.PHAssetSource.count - 2];
     }else{
-        self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
     }
     
     if (self.PHAssetSource > 0 && self.playButton.isSelected) {
@@ -562,7 +562,7 @@
         [self.timer invalidate];
         self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-        self.statusLabel.text = [NSString stringWithFormat:@"正在播放图片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
         self.playButton.selected = YES;
     }
     if (self.isScreen) {
@@ -581,7 +581,7 @@
             NSString * name = asset.localIdentifier;
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 if (nil == result) {
-                    [MBProgressHUD showTextHUDwithTitle:@"照片已被删除" delay:1.5f];
+                    [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PhotoHasDelete") delay:1.5f];
                     return;
                 }
                 [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
@@ -602,8 +602,8 @@
                             [self.task cancel];
                         }
                         [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-                        self.statusLabel.text = [NSString stringWithFormat:@"幻灯片  %ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
                     }];
                 }];
             }];

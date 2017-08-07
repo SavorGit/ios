@@ -41,7 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"提供投屏的餐厅";
+    self.title = RDLocalizedString(@"RDString_CanScreenRestaurant");
     [SAVORXAPI postUMHandleWithContentId:@"hotel_map_list" key:nil value:nil];
     
     self.dataSource = [NSMutableArray new];
@@ -114,7 +114,7 @@
         [self.tableView reloadData];
         [self hiddenLoadingView];
         
-        [self showTopFreshLabelWithTitle:@"更新成功"];
+        [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -124,7 +124,7 @@
         }
         if (_tableView) {
             [self.tableView.mj_header endRefreshing];
-            [self showTopFreshLabelWithTitle:@"数据出错了，更新失败"];
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
         }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
@@ -137,9 +137,9 @@
         if (_tableView) {
             [self.tableView.mj_header endRefreshing];
             if (error.code == -1001) {
-                [self showTopFreshLabelWithTitle:@"数据加载超时"];
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithTimeOut")];
             }else{
-                [self showTopFreshLabelWithTitle:@"无法连接到网络，请检查网络设置"];
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
             }
         }
         
@@ -184,7 +184,7 @@
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         _page = _page -1;
-        [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
+        [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
         [self.tableView.mj_footer endRefrenshWithNoNetWork];
     }];
 }
@@ -335,8 +335,8 @@
 
 - (void)showScreenAlert
 {
-    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"进入餐厅连接包间wifi, 精彩内容即可投屏到电视上!"];
-    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_ReataurantAlert")];
+    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
         
     } bold:YES];
     [alert addActions:@[action]];

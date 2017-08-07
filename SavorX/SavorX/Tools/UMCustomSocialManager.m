@@ -82,9 +82,9 @@
                 
             {
                     NSString * url = [model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                    NSString * text = [NSString stringWithFormat:@"小热点 | %@\n%@", model.title, url];
+                    NSString * text = [NSString stringWithFormat:@"%@ | %@\n%@", RDLocalizedString(@"RDString_APPName"), model.title, url];
                     if ([self convertToByte:text] > 140) {
-                        text = [NSString stringWithFormat:@"小热点\n%@", url];
+                        text = [NSString stringWithFormat:@"%@\n%@", RDLocalizedString(@"RDString_APPName"), url];
                         if ([self convertToByte:text] > 140) {
                             [MBProgressHUD showTextHUDwithTitle:@"该文章暂不支持新浪分享"];
                             return;
@@ -194,9 +194,9 @@
                 [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"sina"];
                 
                 NSString * url = [model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                NSString * text = [NSString stringWithFormat:@"小热点 | %@\n%@", model.title, url];
+                NSString * text = [NSString stringWithFormat:@"%@ | %@\n%@", RDLocalizedString(@"RDString_APPName"), model.title, url];
                 if ([self convertToByte:text] > 140) {
-                    text = [NSString stringWithFormat:@"小热点\n%@", url];
+                    text = [NSString stringWithFormat:@"%@\n%@", RDLocalizedString(@"RDString_APPName"), url];
                     if ([self convertToByte:text] > 140) {
                         [MBProgressHUD showTextHUDwithTitle:@"该文章暂不支持新浪分享"];
                         return;
@@ -275,7 +275,7 @@
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建网页分享类型
-    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", self.model.title] descr:self.info thumImage:image];
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"%@ - %@", RDLocalizedString(@"RDString_APPName"), self.model.title] descr:self.info thumImage:image];
     [object setWebpageUrl:url];
     messageObject.shareObject = object;
     
@@ -305,7 +305,7 @@
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建网页分享类型
-    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", self.model.title] descr:self.info thumImage:image];
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"%@ - %@", RDLocalizedString(@"RDString_APPName"), self.model.title] descr:self.info thumImage:image];
     [object setWebpageUrl:url];
     messageObject.shareObject = object;
     
@@ -338,7 +338,7 @@
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建网页分享类型
-    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", self.model.title] descr:self.info thumImage:image];
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"%@ - %@", RDLocalizedString(@"RDString_APPName"), self.model.title] descr:self.info thumImage:image];
     [object setWebpageUrl:url];
     messageObject.shareObject = object;
     

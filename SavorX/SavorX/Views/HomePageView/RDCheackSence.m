@@ -49,8 +49,8 @@
         }
     }
     
-    self.alertView = [[RDAlertView alloc] initWithTitle:@"提示" message:@"正在扫描可连接的电视...."];
-    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+    self.alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:[RDLocalizedString(@"RDString_CheackingSence") stringByAppendingString:@"...."]];
+    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
         
     } bold:NO];
     [self.alertView addActions:@[action]];
@@ -64,8 +64,8 @@
         if ([GlobalData shared].scene == RDSceneHaveRDBox) {
             [[RDHomeStatusView defaultView] callQRcodeFromPlatform];
         }else{
-            RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"未发现可连接的电视\n请连接与电视相同的wifi"];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+            RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_NotFoundTV")];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
                 
             } bold:YES];
             [alert addActions:@[action]];

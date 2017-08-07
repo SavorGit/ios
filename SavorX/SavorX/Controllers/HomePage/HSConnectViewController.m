@@ -53,7 +53,7 @@
 
 - (void)setupViews
 {
-    self.title = @"连接电视";
+    self.title = RDLocalizedString(@"RDString_ConnetToTV");
     
     UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectZero];
     bgView.backgroundColor = [UIColor clearColor];
@@ -89,7 +89,7 @@
         make.height.mas_equalTo(20);
         make.width.mas_lessThanOrEqualTo([Helper autoWidthWith:210]);
     }];
-    self.wifiLabel.text = [NSString stringWithFormat:@"当前wifi:%@", [Helper getWifiName]];
+    self.wifiLabel.text = [NSString stringWithFormat:@"%@wifi:%@", RDLocalizedString(@"RDString_ScreenContinuePre"), [Helper getWifiName]];
     
     UIView * bottomView = [[UIView alloc] initWithFrame:CGRectZero];
     bottomView.backgroundColor = UIColorFromRGB(0x922c3e);
@@ -141,7 +141,7 @@
     }else{
         self.textLabel.font = kPingFangLight(16);
     }
-    self.textLabel.text = @"请输入电视中的三位数连接电视";
+    self.textLabel.text = RDLocalizedString(@"RDString_PleaseInputNum");
     self.textLabel.textColor = UIColorFromRGB(0xece6de);
     self.textLabel.backgroundColor = [UIColor clearColor];
     [bottomView addSubview:self.textLabel];
@@ -161,7 +161,7 @@
         self.failConectLabel.font = kPingFangLight(16);
     }
     self.failConectLabel.backgroundColor = [UIColor clearColor];
-    self.failConectLabel.text = @"连接失败，";
+    self.failConectLabel.text = [RDLocalizedString(@"RDString_FailedWithConnect") stringByAppendingString:@"，"];
     self.failConectLabel.textColor = UIColorFromRGB(0xece6de);
     [bottomView addSubview:self.failConectLabel];
     self.failConectLabel.hidden = YES;
@@ -186,7 +186,7 @@
     }else{
         self.reConnectBtn.titleLabel.font = kPingFangLight(16);
     }
-    [self.reConnectBtn setTitle:@"重新连接？" forState:UIControlStateNormal];;
+    [self.reConnectBtn setTitle:[RDLocalizedString(@"RDString_Reconnect") stringByAppendingString:@"？"] forState:UIControlStateNormal];;
     [self.reConnectBtn addTarget:self action:@selector(reClick) forControlEvents:UIControlEventTouchUpInside];
     [bottomView addSubview:self.reConnectBtn];
     self.reConnectBtn.hidden = YES;
@@ -230,7 +230,7 @@
 - (void)shouldPushHelp
 {
     HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helptwo.html"];
-    help.title = @"连接步骤";
+    help.title = RDLocalizedString(@"RDString_HelpForConnect");
     [self.navigationController  pushViewController:help  animated:YES];
     [SAVORXAPI postUMHandleWithContentId:@"link_tv_help" key:nil value:nil];
 }
@@ -243,7 +243,7 @@
 
 - (void)creatMaskingLoadingView{
     
-    self.maskingView = [[RDInteractionLoadingView alloc] initWithView:[UIApplication sharedApplication].keyWindow title:@"连接中..."];
+    self.maskingView = [[RDInteractionLoadingView alloc] initWithView:[UIApplication sharedApplication].keyWindow title:[RDLocalizedString(@"RDString_Connecting") stringByAppendingString:@"..."]];
     
 //    self.maskingView = [[UIView alloc] initWithFrame:CGRectZero];
 //    self.maskingView.backgroundColor = [UIColor blackColor];
@@ -383,7 +383,7 @@
             self.lineView.hidden = YES;
             self.textLabel.hidden = NO;
             self.numSring = @"";
-            self.textLabel.text = @"请输入电视中的三位数连接电视";
+            self.textLabel.text = RDLocalizedString(@"RDString_PleaseInputNum");
         }
     }
 }
@@ -429,7 +429,7 @@
             return;
         }
         
-        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
@@ -477,7 +477,7 @@
             return;
         }
         
-        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
@@ -525,7 +525,7 @@
             return;
         }
         
-        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
@@ -573,7 +573,7 @@
             return;
         }
         
-        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
@@ -606,14 +606,14 @@
     UILabel * label1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 300, 59)];
     label1.backgroundColor = UIColorFromRGB(0xeeeeee);
     label1.textAlignment = NSTextAlignmentCenter;
-    label1.text = @"连接失败";
+    label1.text = RDLocalizedString(@"RDString_FailedWithConnect");
     label1.font = [UIFont systemFontOfSize:18];
     [showView addSubview:label1];
     
     UILabel * label2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 90, 300, 20)];
     label2.textColor = UIColorFromRGB(0x222222);
     label2.textAlignment = NSTextAlignmentCenter;
-    label2.text = @"请将wifi连接至";
+    label2.text = RDLocalizedString(@"RDSting_AlertWithTVWifiPre");
     label2.font = [UIFont systemFontOfSize:17];
     [showView addSubview:label2];
     
@@ -623,7 +623,7 @@
     if (name.length > 0) {
         label3.text = name;
     }else{
-        label3.text = @"电视所在Wi-Fi";
+        label3.text = RDLocalizedString(@"RDSting_AlertWithTVWifiSuf");
     }
     label3.font = [UIFont boldSystemFontOfSize:20];
     [showView addSubview:label3];
@@ -631,13 +631,13 @@
     UILabel * label4 = [[UILabel alloc] initWithFrame:CGRectMake(0, 160, 300, 20)];
     label4.textColor = UIColorFromRGB(0x8888888);
     label4.textAlignment = NSTextAlignmentCenter;
-    label4.text = @"手机与电视连接wifi不一致，请切换后重试";
+    label4.text = RDLocalizedString(@"RDString_PleaseChangeWifi");
     label4.font = [UIFont systemFontOfSize:14];
     [showView addSubview:label4];
     
     UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(0, 189, 300, 49)];
     [button setTitleColor:UIColorFromRGB(0xc9b067) forState:UIControlStateNormal];
-    [button setTitle:@"我知道了" forState:UIControlStateNormal];
+    [button setTitle:RDLocalizedString(@"RDString_IKnewIt") forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont boldSystemFontOfSize:16];
     [button addTarget:view action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
     button.layer.borderWidth = .5f;
@@ -673,7 +673,7 @@
         [GlobalData shared].cacheModel = model;
         [self showAlertWithWifiName:[result objectForKey:@"ssid"]];
     }else{
-        [MBProgressHUD showTextHUDwithTitle:@"绑定失败" delay:1.5f];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
         [self hidenMaskingLoadingView];
         self.failConectLabel.hidden = NO;
         self.reConnectBtn.hidden = NO;
