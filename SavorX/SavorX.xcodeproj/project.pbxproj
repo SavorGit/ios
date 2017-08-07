@@ -276,6 +276,7 @@
 		965241011ED6BE8E0090E1C8 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 965240FC1ED6BE8E0090E1C8 /* libssl.a */; };
 		965241041ED6BE9E0090E1C8 /* RDLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 965241031ED6BE9E0090E1C8 /* RDLocationManager.m */; };
 		965241061ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 965241051ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd */; };
+		965EC0431F385BF5008812FB /* ImageAtlasCollectViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 965EC0421F385BF5008812FB /* ImageAtlasCollectViewCell.m */; };
 		96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */; };
 		9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */; };
 		9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A71E7159210060CE0B /* DocGuided.png */; };
@@ -764,6 +765,8 @@
 		965241021ED6BE9E0090E1C8 /* RDLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDLocationManager.h; sourceTree = "<group>"; };
 		965241031ED6BE9E0090E1C8 /* RDLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDLocationManager.m; sourceTree = "<group>"; };
 		965241051ED6BEF60090E1C8 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
+		965EC0411F385BF5008812FB /* ImageAtlasCollectViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAtlasCollectViewCell.h; sourceTree = "<group>"; };
+		965EC0421F385BF5008812FB /* ImageAtlasCollectViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAtlasCollectViewCell.m; sourceTree = "<group>"; };
 		96608FF01E80D47900D28A61 /* VideoLauchMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLauchMovieViewController.h; sourceTree = "<group>"; };
 		96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLauchMovieViewController.m; sourceTree = "<group>"; };
 		9670C48F1E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoGuidedTwoDimensionalCode.h; sourceTree = "<group>"; };
@@ -2200,6 +2203,8 @@
 				96D8C5B81F0F213000251301 /* DDPhotoScrollView.m */,
 				96D8C5B91F0F213000251301 /* ImageAtlasScrollView.h */,
 				96D8C5BA1F0F213000251301 /* ImageAtlasScrollView.m */,
+				965EC0411F385BF5008812FB /* ImageAtlasCollectViewCell.h */,
+				965EC0421F385BF5008812FB /* ImageAtlasCollectViewCell.m */,
 			);
 			path = ImageAtlasView;
 			sourceTree = "<group>";
@@ -2689,6 +2694,7 @@
 				96D8C5C51F0F66F200251301 /* SpecialTopTableViewCell.m in Sources */,
 				478058351DF989850091C305 /* ConverUtil.m in Sources */,
 				47F9976D1DFFBC910009BDFB /* BaseCell.m in Sources */,
+				965EC0431F385BF5008812FB /* ImageAtlasCollectViewCell.m in Sources */,
 				067BFF5E1F22160A00D9CE74 /* RDIsOnline.m in Sources */,
 				060DB0B41D5B26F9002A2DED /* UIColor+YYAdditions.m in Sources */,
 				0633FB231D82D4480079EF21 /* UIImage+Custom.m in Sources */,
