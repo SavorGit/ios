@@ -41,6 +41,8 @@
 
 @property (nonatomic, assign) BOOL isReady;
 @property (nonatomic, assign) BOOL isPortrait;
+@property (nonatomic, assign) BOOL isComeBack;
+@property (nonatomic, assign) CGFloat lastOffSetY;
 
 @end
 
@@ -57,6 +59,7 @@
     self.view.backgroundColor = VCBackgroundColor;
     
     self.isPortrait = YES;
+    self.isComeBack = YES;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     _isComplete = NO;
@@ -188,6 +191,7 @@
         // 切换的动画效果
         _imageScrollView.effect = JT3DScrollViewEffectNone;
         _imageScrollView.clipsToBounds = YES;
+        _imageScrollView.directionalLockEnabled = YES;
         _imageScrollView.delegate = self;
         
         // 设置小ScrollView（装载imageView的scrollView）
@@ -262,75 +266,122 @@
  }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-    if (self.isDisappear == NO) {
-        [self wipeUp];
-    }
 
     CGFloat offsetY = scrollView.contentOffset.y;
     NSLog(@"---%f",offsetY);
-    if (offsetY >=  - 64) {
-        CGFloat alpha = MIN(1, (offsetY)/kMainBoundsHeight);
-//        [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:alpha]];
-        [self.view setAlpha:alpha];
-//        [[UIApplication sharedApplication].keyWindow setAlpha:alpha];
-//        [self.navigationController.navigationBar cnSetBackgroundColor:[color colorWithAlphaComponent:alpha]];
+    
+    if (offsetY > 0 || offsetY < 0) {
+        if (self.isDisappear == NO) {
+            [self wipeUpOrDown];
+        }
+    }
+    if (offsetY >=  64) {
+        if (offsetY > _lastOffSetY && self.isComeBack == YES) {
+            CGFloat alpha = MIN(1, (offsetY)/kMainBoundsHeight);
+            self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent:1 - alpha];
+        }
+        _lastOffSetY = offsetY;
         
-//        _descriptionView.alpha = 1 - alpha;
-    } else {
-        CGFloat alpha = MIN(1, (offsetY)/kMainBoundsHeight);
-        [self.view setAlpha:alpha];
-//        [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:alpha]];
-//        [[UIApplication sharedApplication].keyWindow setAlpha:0];
-//        [self.navigationController.navigationBar cnSetBackgroundColor:[color colorWithAlphaComponent:0]];
+    }else {
+        if (offsetY < _lastOffSetY && self.isComeBack == YES) {
+            CGFloat alpha = MIN(1, (- offsetY)/kMainBoundsHeight);
+            self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent: 1 - alpha];
+        }
+        _lastOffSetY = offsetY;
     }
-    if (scrollView.contentOffset.y == 0){
-        self.view.backgroundColor = VCBackgroundColor;
+    if (self.isComeBack == YES) {
+        
+        if (scrollView.contentOffset.y == 0 && scrollView.contentOffset.x == 0){
+            _lastOffSetY = 0;
+            self.view.backgroundColor = VCBackgroundColor;
+            [self.view setAlpha:1.0];
+            [self wipeUpOrDown];
+        }
     }
+
 }
+
 //完成拖拽
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
 {
-    NSLog(@"ContentOffset  x is  %f,yis %f",scrollView.contentOffset.x,scrollView.contentOffset.y);
-    NSLog(@"scrollViewDidEndDragging");
-    if (scrollView.contentOffset.y > 200) {
-        
-    }else if (scrollView.contentOffset.y == 0){
-        self.view.backgroundColor = VCBackgroundColor;
+
+    NSLog(@"ContentOffset  x is  %f,y  is %f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+    self.isComeBack = YES;
+    if (scrollView.contentOffset.y > 120) {
+        self.isComeBack = NO;
+        [self dismissFromTopWithDuration:1.0];
+    }else if (scrollView.contentOffset.y < - 120){
+        self.isComeBack = NO;
+        [self dismissFromDownWithDuration:1.0];
     }
 }
 
-- (void)wipeUp{
+// 向上或是向下滑
+- (void)wipeUpOrDown{
     
-//    [self.view setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.0f]];
-//    [[UIApplication sharedApplication].keyWindow setAlpha:0.2];
+    if (self.isDisappear == YES) {
+        self.isDisappear = NO;
+        [self.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
+                [UIView animateWithDuration:0.5 animations:^{
+                    obj.alpha = 1;
+                    self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
+                } completion:^(BOOL finished) {
+                    obj.userInteractionEnabled = YES;
+                }];
+            }
+        }];
+    }else{
+        self.isDisappear = YES;
+        [self.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
+                [UIView animateWithDuration:0.5 animations:^{
+                    obj.alpha = 0;
+                    self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
+                } completion:^(BOOL finished) {
+                    obj.userInteractionEnabled = NO;
+                }];
+            }
+        }];
+    }
+
+
+}
+
+// 页面从顶部消失
+-(void)dismissFromTopWithDuration:(float)duration{
     
-    self.isDisappear = YES;
-    [self.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
-            [UIView animateWithDuration:0.5 animations:^{
-                obj.alpha = 0;
-                self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
-            } completion:^(BOOL finished) {
-                obj.userInteractionEnabled = NO;
-            }];
-        }
+    [UIView animateWithDuration:duration animations:^{
+        
+        self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent: 0.0];
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        _imageScrollView.bottom = keyWindow.top;
+        
+    } completion:^(BOOL finished) {
+        
+        [_imageScrollView removeFromSuperview];
+        [self backButtonClick];
+        
     }];
 }
 
-//-(void)dismissViewWithAnimationDuration:(float)duration{
-//    
-//    [UIView animateWithDuration:duration animations:^{
-//        
-//        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-//        ImageAtlasScrollView.bottom = keyWindow.top;
-//        
-//    } completion:^(BOOL finished) {
-//        
-//        [ImageAtlasScrollView removeFromSuperview];
-//        
-//    }];
-//}
+// 页面从底部消失
+-(void)dismissFromDownWithDuration:(float)duration{
+    
+    [UIView animateWithDuration:duration animations:^{
+        
+        self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent: 0.0];
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        _imageScrollView.top = keyWindow.bottom;
+        
+    } completion:^(BOOL finished) {
+        
+        [_imageScrollView removeFromSuperview];
+        [self backButtonClick];
+        
+    }];
+}
+
 
 #pragma mark - KVO
 static int temp = -1;
