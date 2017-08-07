@@ -126,7 +126,7 @@
 "RDString_Screen" = "投屏";
 "RDString_BackScreen" = "退出投屏";
 "RDString_Demanding" = "正在点播";
-"RDString_BackScreen" = "退出点播";
+"RDString_BackDemand" = "退出点播";
 "RDString_Screening" = "正在投屏";
 "RDString_AlertWithScreen" = "抢投提示";
 "RDString_ScreenContinuePre" = "当前";

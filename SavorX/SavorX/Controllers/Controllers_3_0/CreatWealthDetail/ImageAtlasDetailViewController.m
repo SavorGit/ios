@@ -99,7 +99,11 @@
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        if ([[response objectForKey:@"code"] integerValue] == 19002) {
+            [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        }else{
+            [self showNoNetWorkViewInView:self.view];
+        }
         [self hiddenToolView];
         [self.view bringSubviewToFront:self.topView];
         [self hiddenLoadingView];

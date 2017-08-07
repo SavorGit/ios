@@ -44,8 +44,12 @@
         [self hiddenLoadingView];
         [self createWebView];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        if ([[response objectForKey:@"code"] integerValue] == 19002) {
+            [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        }else{
+            [self showNoNetWorkViewInView:self.view];
+        }
         [self hiddenLoadingView];
-        [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [self hiddenLoadingView];
         [self showNoNetWorkViewInView:self.view];
