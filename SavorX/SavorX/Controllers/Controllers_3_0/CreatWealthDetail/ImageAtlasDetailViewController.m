@@ -18,8 +18,9 @@
 #import "HSIsOrCollectionRequest.h"
 #import "HSGetCollectoinStateRequest.h"
 #import "RDLogStatisticsAPI.h"
+#import "ImageAtlasCollectViewCell.h"
 
-@interface ImageAtlasDetailViewController ()<UIScrollViewDelegate>
+@interface ImageAtlasDetailViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate>
 
 @property (nonatomic, assign) NSInteger currentPage;
 
@@ -43,6 +44,8 @@
 @property (nonatomic, assign) BOOL isPortrait;
 @property (nonatomic, assign) BOOL isComeBack;
 @property (nonatomic, assign) CGFloat lastOffSetY;
+
+@property (nonatomic, strong) UICollectionView *collectionView;
 
 @end
 
@@ -186,7 +189,7 @@
 {
     if (_imageScrollView == nil) {
         _imageScrollView = [[ImageAtlasScrollView alloc] initWithFrame:CGRectZero];
-        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight *2);
+        _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *2);
         _imageScrollView.showsHorizontalScrollIndicator = NO;
         // 切换的动画效果
         _imageScrollView.effect = JT3DScrollViewEffectNone;
@@ -254,6 +257,42 @@
                 }
             };
         }
+        
+        UILabel *recoLabel = [[UILabel alloc]init];
+        recoLabel.font = kPingFangMedium(16);
+        recoLabel.textColor = kThemeColor;
+        recoLabel.textAlignment = NSTextAlignmentCenter;
+        recoLabel.text = @"推荐图集";
+        [_imageScrollView addSubview:recoLabel];
+        [recoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,20));
+            make.top.mas_equalTo(64 + 70);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
+        }];
+        
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];
+        lineView.backgroundColor = kThemeColor;
+        [_imageScrollView addSubview:lineView];
+        [lineView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 120, 1));
+            make.top.mas_equalTo(64 + 95);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + 60);
+        }];
+        
+        
+        UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc]init];
+        _collectionView=[[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.backgroundColor=[UIColor clearColor];
+        _collectionView.delegate=self;
+        _collectionView.dataSource=self;
+        [_imageScrollView addSubview:_collectionView];
+        [_collectionView registerClass:[ImageAtlasCollectViewCell class] forCellWithReuseIdentifier:@"imgCell"];
+        [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64));
+            make.top.mas_equalTo(64 + 120);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
+        }];
+        
     }
     return _imageScrollView;
 }
@@ -275,7 +314,7 @@
             [self wipeUpOrDown];
         }
     }
-    if (offsetY >=  64) {
+    if (offsetY >=  0) {
         if (offsetY > _lastOffSetY && self.isComeBack == YES) {
             CGFloat alpha = MIN(1, (offsetY)/kMainBoundsHeight);
             self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent:1 - alpha];
@@ -400,6 +439,10 @@ static int temp = -1;
     if (_isDisappear == YES) {return;}
     // 先remove, 再加入
     [_photoDescView removeFromSuperview];
+    // 如果页码大于当前最大数，不展示文本
+    if (newIndex == self.imageDatas.count) {
+        return;
+    }
     ImageAtlasDetailModel *tmpModel = self.imageDatas[newIndex];
     
     _photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:newIndex totalCount:self.imageDatas.count];
@@ -676,6 +719,34 @@ static int temp = -1;
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+    return 1;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return 6;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    ImageAtlasCollectViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
+    cell.backgroundColor=[UIColor groupTableViewBackgroundColor];
+    return cell;
+}
+//每一个分组的上左下右间距
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(5, 5, 5, 5);
+}
+//定义每一个cell的大小
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(kMainBoundsWidth/2 - 10, 100);
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+
 }
 
 @end
