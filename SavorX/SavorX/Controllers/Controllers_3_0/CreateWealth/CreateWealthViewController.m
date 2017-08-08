@@ -362,7 +362,7 @@
         iatVC.providesPresentationContextTransitionStyle = YES;
         iatVC.definesPresentationContext = YES;
         iatVC.providesPresentationContextTransitionStyle = YES;
-        iatVC.modalPresentationStyle = UIModalPresentationNone;
+        iatVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         
         [self presentViewController:iatVC animated:YES completion:nil];
         
