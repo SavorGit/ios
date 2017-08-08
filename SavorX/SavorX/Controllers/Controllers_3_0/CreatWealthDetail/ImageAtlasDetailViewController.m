@@ -604,11 +604,12 @@ static int temp = -1;
     return UIStatusBarStyleLightContent;
 }
 
-#pragma mark -旋转屏幕调整布局
-// 旋转屏幕通知处理
+#pragma mark --- 旋转屏幕调整布局
 - (void)orieChanged
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+//    UIDeviceOrientation  orientation = [UIDevice currentDevice].orientation;
+    
     if (orientation == UIInterfaceOrientationPortrait) {
     
         _isPortrait = YES;
@@ -652,7 +653,7 @@ static int temp = -1;
         }];
         self.imageScrollView.width = kMainBoundsWidth;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
-        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight);
         
         [_topView setImage:[UIImage imageNamed:@"quanpingmc"]];
         [_topView setBackgroundColor:[UIColor clearColor]];
