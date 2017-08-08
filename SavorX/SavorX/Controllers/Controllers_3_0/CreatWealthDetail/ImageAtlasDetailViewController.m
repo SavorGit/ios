@@ -311,6 +311,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 
     CGFloat offsetY = scrollView.contentOffset.y;
+    int offsetX = scrollView.contentOffset.x;
     NSLog(@"---%f",offsetY);
     
     if (offsetY > 0 || offsetY < 0) {
@@ -334,7 +335,7 @@
     }
     if (self.isComeBack == YES) {
         
-        if (scrollView.contentOffset.y == 0 && scrollView.contentOffset.x == 0){
+        if (scrollView.contentOffset.y == 0 && offsetX%375 == 0){
             _lastOffSetY = 0;
             self.view.backgroundColor = VCBackgroundColor;
             [self.view setAlpha:1.0];
