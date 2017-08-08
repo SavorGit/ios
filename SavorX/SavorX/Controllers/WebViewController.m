@@ -48,9 +48,7 @@
 
 -(void)dealloc{
     
-    if (self.hasWebObserver) {
-        [self removeObserver];
-    }
+    [self removeObserver];
     
 //    [HSImTeRecommendRequest cancelRequest];
     
@@ -194,17 +192,18 @@
         self.webView.scrollView.delegate = self;
         self.webView.delegate = self;
         self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
-        [self addObserver];
     }
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    [self.dataSource removeAllObjects];
+    [self.tableView reloadData];
     if (!isEmptyString(self.model.contentURL)) {
         NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead&app=inner"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
+        if (!self.webView.superview) {
+            [self addObserver];
+        }
     }
-    
-    [self.dataSource removeAllObjects];
-    [self.tableView reloadData];
 }
 
 - (void)createWebViewWithVideo
@@ -499,14 +498,18 @@
 
 - (void)addObserver
 {
-    self.hasWebObserver = YES;
-    [self.webView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
+    if (!self.hasWebObserver) {
+        self.hasWebObserver = YES;
+        [self.webView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
+    }
 }
 
 - (void)removeObserver
 {
-    self.hasWebObserver = NO;
-    [self.webView.scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
+    if (self.hasWebObserver) {
+        self.hasWebObserver = NO;
+        [self.webView.scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
