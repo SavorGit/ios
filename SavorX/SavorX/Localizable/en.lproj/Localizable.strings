@@ -43,6 +43,7 @@
 "RDString_RDDefinitionHD" = "高清";
 "RDString_RDRePlay" = "重播";
 "RDString_Share" = "分享";
+"RDString_Collect" = "收藏";
 
 //连接
 "RDString_PleaseInputNum" = "请输入电视中的三位数连接电视";
@@ -55,6 +56,8 @@
 "RDString_NotFoundTV" = "未发现可连接的电视\n请连接与电视相同的wifi";
 "RDString_CheackingSence" = "正在扫描可连接的电视";
 "RDString_ConnectScreenAlert" = "请点击\"连接电视\", 即可投屏";
+"RDString_FindTVCanScreen" = "发现电视, 可以投屏";
+"RDString_ConnectSuccessCanScreen" = "连接成功, 可以投屏";
 
 //侧边栏
 "RDString_MyCollection" = "我的收藏";
@@ -166,6 +169,7 @@
 "RDString_SuccessWithCollect" = "收藏成功";
 "RDString_SuccessWithUpdate" = "更新成功";
 "RDString_SuccessWithCopy" = "复制成功";
+"RDString_SuccessWithShare" =  "分享成功";
 
 //失败
 "RDString_FailedWithCollect" = "收藏失败";
@@ -178,6 +182,7 @@
 "RDString_FailedWithPlayer" = "由于网络问题，播放失败";
 "RDString_FailedWithDemand" = "糟糕,点播失败请检查网络wifi";
 "RDString_FailedWithScreen" = "糟糕,投屏失败请检查网络wifi";
+"RDString_FailedWithShare" =  "分享失败";
 
 //网络异常
 "RDString_NetFailedWithData" = "数据出错了，更新失败";

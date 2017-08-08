@@ -33,10 +33,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, assign) GCCPlayerStatus status; //当前播放状态
 @property (nonatomic, strong) GCCControlView * controlView;
 @property (nonatomic, strong) id timeObserve;
-@property (nonatomic, strong) UIButton * replayButton; //重播按钮
 @property (nonatomic, strong) UISlider * volumeViewSlider; //记录系统音量视图
 @property (nonatomic, strong) ZFBrightnessView * brightnessView;
-//@property (nonatomic, strong) ZFVolumeView * volumeView;
 @property (nonatomic, assign) CGFloat sumTime; //当前用户横向操作的时长
 @property (nonatomic, strong) UILabel * sliderLabel; //用户快进快退提示
 @property (nonatomic, assign) BOOL canPlay; //是否可以播放
@@ -563,17 +561,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     }
 }
 
-- (void)playOrientationPortraitWithOnlyVideo
-{
-    self.isFullScreen = NO;
-    [self.controlView playOrientationPortraitWithOnlyVideo];
-    if ([self viewWithTag:888]) {
-        UIView * view = [self viewWithTag:888];
-        [view removeFromSuperview];
-//        [self play];
-    }
-}
-
 //变成横屏
 - (void)playOrientationLandscape
 {
@@ -585,16 +572,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:@"hasPlay"] boolValue];
     if (!temp) {
             [self createHasNotPlayView];
-    }
-}
-
-- (void)playOrientationLandscapeWithOnlyVideo
-{
-    self.isFullScreen = YES;
-    [self.controlView playOrientationLandscapeWithOnlyVideo];
-    BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:@"hasPlay"] boolValue];
-    if (!temp) {
-        [self createHasNotPlayView];
     }
 }
 
@@ -849,9 +826,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             
         case GCCPlayerStatusFaild:
         {
-            [self.controlView didPlayFailed];
-            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithPlayer") delay:1.5f];
-            [self insertSubview:self.imageView belowSubview:self.controlView];
+            [self playDidBeFaild];
         }
             
             break;
@@ -859,6 +834,13 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         default:
             break;
     }
+}
+
+- (void)playDidBeFaild
+{
+    [self.controlView didPlayFailed];
+    [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithPlayer") delay:1.5f];
+    [self insertSubview:self.imageView belowSubview:self.controlView];
 }
 
 // 重写这个方法，告诉系统，这个View的Layer不是普通的Layer，而是用于播放视频的Layer

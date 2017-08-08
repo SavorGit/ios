@@ -31,6 +31,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
 @property (nonatomic, assign) NSInteger totalTime; //视频总时长
 @property (nonatomic, strong) UIButton * replayButton; //重播按钮
 @property (nonatomic, strong) UIButton * endShare; //结束时的分享按钮
+@property (nonatomic, strong) UIButton * endCollect; //结束时的收藏按钮
 @property (nonatomic, strong) UIButton * endBackButton; //结束时的返回按钮
 //@property (nonatomic, strong) UIButton * shotButton; //截图按钮
 @property (nonatomic, strong) UIButton * collectButton; //收藏按钮
@@ -42,7 +43,6 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
 @property (nonatomic, assign) BOOL isShow; //ToolView是否是显示状态
 @property (nonatomic, assign) BOOL isAnimation; //是否正在进行显示或隐藏
 @property (nonatomic, assign) BOOL isFullScreen; //是否全屏
-@property (nonatomic, assign) BOOL isOnlyVideo;
 @property (nonatomic, strong) UIImageView * imageView;
 @property (nonatomic, strong) UIProgressView * progressBG;
 @property (nonatomic, strong) UIProgressView * progressView;
@@ -179,31 +179,42 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     self.endView.backgroundColor = [UIColor blackColor];
     self.endView.hidden = YES;
     
-    self.replayButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.replayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.replayButton setTitle:RDLocalizedString(@"RDString_RDRePlay") forState:UIControlStateNormal];
-    self.replayButton.titleLabel.font = [UIFont systemFontOfSize:14];
-    [self.replayButton setImage:[UIImage imageNamed:@"RDReplay"] forState:UIControlStateNormal];
-    [self.replayButton addTarget:self action:@selector(replay) forControlEvents:UIControlEventTouchUpInside];
-    [self.endView addSubview:self.replayButton];
+    self.endCollect = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.endCollect setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.endCollect setImage:[UIImage imageNamed:@"shipi_shc"] forState:UIControlStateNormal];
+    [self.endCollect setImage:[UIImage imageNamed:@"shipi_yishc"] forState:UIControlStateSelected];
+    self.endCollect.titleLabel.font = kPingFangLight(13);
+    [self.endCollect setTitle:RDLocalizedString(@"RDString_Collect") forState:UIControlStateNormal];
+    [self.endCollect addTarget:self action:@selector(collectVideo) forControlEvents:UIControlEventTouchUpInside];
+    [self.endView addSubview:self.endCollect];
     
     self.endShare = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.endShare setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.endShare setImage:[UIImage imageNamed:@"RDEndShare"] forState:UIControlStateNormal];
-    self.endShare.titleLabel.font = [UIFont systemFontOfSize:14];
+    [self.endShare setImage:[UIImage imageNamed:@"shipi_fx"] forState:UIControlStateNormal];
+    self.endShare.titleLabel.font = kPingFangLight(13);
     [self.endShare addTarget:self action:@selector(shareVideo) forControlEvents:UIControlEventTouchUpInside];
     [self.endShare setTitle:RDLocalizedString(@"RDString_Share") forState:UIControlStateNormal];
     [self.endView addSubview:self.endShare];
+    
+    self.replayButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.replayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.replayButton setTitle:RDLocalizedString(@"RDString_RDRePlay") forState:UIControlStateNormal];
+    self.replayButton.titleLabel.font = kPingFangLight(13);
+    [self.replayButton setImage:[UIImage imageNamed:@"shipi_cb"] forState:UIControlStateNormal];
+    [self.replayButton addTarget:self action:@selector(replay) forControlEvents:UIControlEventTouchUpInside];
+    [self.endView addSubview:self.replayButton];
     
     self.endBackButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.endBackButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     [self.endBackButton addTarget:self action:@selector(backButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.endView addSubview:self.endBackButton];
     
-    [self.replayButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 30, 0)];
-    [self.replayButton setTitleEdgeInsets:UIEdgeInsetsMake(60, -80, 0, 0)];
-    [self.endShare setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 30, 0)];
-    [self.endShare setTitleEdgeInsets:UIEdgeInsetsMake(60, -80, 0, 0)];
+    [self.endCollect setImageEdgeInsets:UIEdgeInsetsMake(0, 2.5, 17, 0)];
+    [self.endCollect setTitleEdgeInsets:UIEdgeInsetsMake(58, -45, 0, 0)];
+    [self.endShare setImageEdgeInsets:UIEdgeInsetsMake(0, 2.5, 17, 0)];
+    [self.endShare setTitleEdgeInsets:UIEdgeInsetsMake(58, -45, 0, 0)];
+    [self.replayButton setImageEdgeInsets:UIEdgeInsetsMake(0, 2.5, 17, 0)];
+    [self.replayButton setTitleEdgeInsets:UIEdgeInsetsMake(58, -45, 0, 0)];
     
     self.selectView = [[UIView alloc] init];
     self.selectView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5f];
@@ -241,15 +252,20 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         make.left.mas_equalTo(0);
         make.size.mas_equalTo(CGSizeMake(50, 40));
     }];
-    [self.replayButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(-60);
+    [self.endCollect mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(-kMainBoundsWidth / 4);
         make.centerY.mas_equalTo(0);
-        make.size.mas_equalTo(CGSizeMake(50, 80));
+        make.size.mas_equalTo(CGSizeMake(50, 70));
     }];
     [self.endShare mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(60);
+        make.centerX.mas_equalTo(0);
         make.centerY.mas_equalTo(0);
-        make.size.mas_equalTo(CGSizeMake(50, 80));
+        make.size.mas_equalTo(CGSizeMake(50, 70));
+    }];
+    [self.replayButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(kMainBoundsWidth / 4);
+        make.centerY.mas_equalTo(0);
+        make.size.mas_equalTo(CGSizeMake(50, 70));
     }];
     [self.endBackButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
@@ -354,7 +370,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
 - (void)backgroundImage:(NSString *)url
 {
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"zanwu"]];
-    [self.endView insertSubview:self.imageView belowSubview:self.replayButton];
+    [self.endView insertSubview:self.imageView belowSubview:self.endCollect];
     self.endView.hidden = YES;
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
@@ -447,31 +463,20 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(35);
     }];
+    [self.endCollect mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(-kMainBoundsWidth / 4);
+        make.size.mas_equalTo(CGSizeMake(50, 70));
+    }];
+    [self.endShare mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(50, 70));
+    }];
+    [self.replayButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(kMainBoundsWidth / 4);
+        make.size.mas_equalTo(CGSizeMake(50, 70));
+    }];
     
     [self.playButton setImage:[UIImage imageNamed:@"sp_zanting"] forState:UIControlStateNormal];
     [self.playButton setImage:[UIImage imageNamed:@"sp_bofang"] forState:UIControlStateSelected];
-}
-
-- (void)playOrientationPortraitWithOnlyVideo
-{
-    self.isOnlyVideo = YES;
-    self.shareButton.hidden = YES;
-    self.collectButton.hidden = YES;
-    self.backButton.hidden = YES;
-    self.topImageView.hidden = YES;
-    self.endBackButton.hidden = YES;
-    [self playOrientationPortrait];
-}
-
-- (void)playOrientationLandscapeWithOnlyVideo
-{
-    self.isOnlyVideo = YES;
-    self.shareButton.hidden = NO;
-    self.collectButton.hidden = NO;
-    self.backButton.hidden = NO;
-    self.topImageView.hidden = NO;
-    self.endBackButton.hidden = NO;
-    [self playOrientationLandscape];
 }
 
 //变成横屏
@@ -514,6 +519,17 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(60);
     }];
+    [self.endCollect mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(-kMainBoundsWidth / 5);
+        make.size.mas_equalTo(CGSizeMake(50, 70));
+    }];
+    [self.endShare mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(50, 70));
+    }];
+    [self.replayButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(kMainBoundsWidth / 5);
+        make.size.mas_equalTo(CGSizeMake(50, 70));
+    }];
     
     [self.playButton setImage:[UIImage imageNamed:@"sp_zanting"] forState:UIControlStateNormal];
     [self.playButton setImage:[UIImage imageNamed:@"sp_bofang"] forState:UIControlStateSelected];
@@ -528,6 +544,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         [self.collectButton setSelected:NO];
         [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
     }
+    self.endCollect.selected = isCollect;
 }
 
 - (void)selectButtonDidClicked:(UIButton *)button
@@ -941,20 +958,11 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     }
     if (orientation == UIInterfaceOrientationLandscapeRight || orientation == UIInterfaceOrientationLandscapeLeft) {
         // 设置横屏
-        if (self.isOnlyVideo) {
-            [self playOrientationLandscapeWithOnlyVideo];
-        }else{
-            [self playOrientationLandscape];
-        }
+        [self playOrientationLandscape];
         
     } else if (orientation == UIInterfaceOrientationPortrait) {
         // 设置竖屏
-        if (self.isOnlyVideo) {
-            [self playOrientationPortraitWithOnlyVideo];
-        }else{
-            [self playOrientationPortrait];
-        }
-        
+        [self playOrientationPortrait];
     }
 }
 
