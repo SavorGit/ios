@@ -41,8 +41,8 @@
     self.numLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:12];
     self.phoneTextField.placeholder = RDLocalizedString(@"RDString_AdvicePhone");
     self.pLabel.text = RDLocalizedString(@"RDString_AdviceP");
-    self.titleLabel.text = RDLocalizedString(@"RDString_AdviceTitle");
-    self.connectLabel.text = RDLocalizedString(@"RDString_ConnectTitle");
+    self.titleLabel.text = [NSString stringWithFormat:@"    %@",RDLocalizedString(@"RDString_AdviceTitle")];
+    self.connectLabel.text = [NSString stringWithFormat:@"    %@",RDLocalizedString(@"RDString_ConnectTitle")];
 }
 
 - (void)textViewDidChange:(UITextView *)textView
