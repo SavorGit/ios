@@ -239,7 +239,7 @@
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_video" key:nil value:nil];
             self.statusLabel.text = [RDLocalizedString(@"RDString_StatusDemandVideo") stringByAppendingString:@">>" ];
             self.statusLabel.userInteractionEnabled = YES;
-            [self.statusButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
+            [self.statusButton setTitle:RDLocalizedString(@"RDString_BackDemand") forState:UIControlStateNormal];
         }
             
             break;

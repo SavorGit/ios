@@ -193,7 +193,7 @@
     
     self.quitScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.quitScreenButton.backgroundColor = kThemeColor;
-    [self.quitScreenButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
+    [self.quitScreenButton setTitle:RDLocalizedString(@"RDString_BackDemand") forState:UIControlStateNormal];
     [self.quitScreenButton.titleLabel setFont:kPingFangRegular(16)];
     [self.quitScreenButton setTitleColor:UIColorFromRGB(0xede6de) forState:UIControlStateNormal];
     self.quitScreenButton.layer.masksToBounds = YES;

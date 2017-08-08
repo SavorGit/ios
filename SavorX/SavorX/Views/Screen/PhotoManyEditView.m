@@ -107,8 +107,8 @@
     }];
     
     self.doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.doneButton.backgroundColor = UIColorFromRGB(0x202020);
-    [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
+    self.doneButton.backgroundColor = kThemeColor;
+    [self.doneButton setTitle:RDLocalizedString(@"RDString_Done") forState:UIControlStateNormal];
     [self.doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.doneButton addTarget:self action:@selector(composeImage) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.doneButton];
