@@ -61,11 +61,11 @@
     }];
     
     _countLabel = [[UILabel alloc]init];
-    _countLabel.font = kPingFangLight(10);
-    _countLabel.textColor = [UIColor whiteColor];
-    _countLabel.backgroundColor = [UIColor darkGrayColor];
-    _countLabel.alpha = 0.6;
-    _countLabel.layer.cornerRadius = 3;
+    _countLabel.font = kPingFangLight(11);
+    _countLabel.textColor = UIColorFromRGB(0xf6f2ed);
+    _countLabel.backgroundColor = UIColorFromRGB(0x000000);
+    _countLabel.alpha = 0.5;
+    _countLabel.layer.cornerRadius = 2;
     _countLabel.layer.masksToBounds = YES;
     _countLabel.textAlignment = NSTextAlignmentCenter;
     [_bgImageView addSubview:_countLabel];

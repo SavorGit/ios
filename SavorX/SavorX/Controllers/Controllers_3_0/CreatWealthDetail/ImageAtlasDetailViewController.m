@@ -182,7 +182,7 @@
 
 - (void)initInfoConfig{
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIDeviceOrientationDidChangeNotification object:nil];
     // app退到后台
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
     // app进入前台
@@ -607,8 +607,8 @@ static int temp = -1;
 #pragma mark --- 旋转屏幕调整布局
 - (void)orieChanged
 {
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-//    UIDeviceOrientation  orientation = [UIDevice currentDevice].orientation;
+//    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    UIDeviceOrientation  orientation = [UIDevice currentDevice].orientation;
     
     if (orientation == UIInterfaceOrientationPortrait) {
     

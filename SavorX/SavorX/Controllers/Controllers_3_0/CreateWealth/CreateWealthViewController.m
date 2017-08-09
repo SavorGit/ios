@@ -351,18 +351,12 @@
         iatVC.categoryID = self.categoryID;
     
         
-//        float version = [UIDevice currentDevice].systemVersion.floatValue;
-//        if (version < 8.0) {
-//            self.modalPresentationStyle = UIModalPresentationCurrentContext;
-//        } else {
-//            iatVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-//        }
-
-        iatVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        iatVC.providesPresentationContextTransitionStyle = YES;
-        iatVC.definesPresentationContext = YES;
-        iatVC.providesPresentationContextTransitionStyle = YES;
-        iatVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        float version = [UIDevice currentDevice].systemVersion.floatValue;
+        if (version < 8.0) {
+            self.modalPresentationStyle = UIModalPresentationCurrentContext;
+        } else {;
+            iatVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        }
         
         [self presentViewController:iatVC animated:YES completion:nil];
         
