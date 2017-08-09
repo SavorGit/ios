@@ -38,9 +38,11 @@
 @property (nonatomic, strong) UIView * testView;   //底部视图
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
-@property (nonatomic, assign) BOOL isOnline;
 @property (nonatomic, assign) BOOL hasDidLoad;
 @property (nonatomic, assign) BOOL hasWebObserver;
+
+@property (nonatomic, assign) BOOL isNeedHiddenNav; //是否需要隐藏导航栏
+@property (nonatomic, assign) BOOL tableViewIsOnWeb; //当前的推荐视图是否在webView上
 
 @end
 
@@ -70,6 +72,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dataSource = [NSMutableArray new];
     
     [self showLoadingView];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -79,32 +82,119 @@
 
 - (void)checkIsOnline
 {
-    self.isOnline = NO;
+    self.tableViewIsOnWeb = NO;
+    self.isNeedHiddenNav = NO;
     [self showLoadingView];
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        self.isOnline = YES;
-        [self readyToGo];
         [self hiddenLoadingView];
+        self.isNeedHiddenNav = YES;
+        [self readyToGo];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self hiddenLoadingView];
         if ([[response objectForKey:@"code"] integerValue] == 19002) {
-            [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+            [self theVideoIsNotOnline];
         }else{
             [self showNoNetWorkViewInView:self.view];
         }
-        [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
         [self hiddenLoadingView];
+        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+    }];
+}
+
+- (void)theVideoIsNotOnline
+{
+    UIView * notOnlineView = [[UIView alloc] init];
+    notOnlineView.tag = 44444;
+    [self.view addSubview:notOnlineView];
+    [notOnlineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)notOnlineView;
+    
+    self.isNeedHiddenNav = YES;
+    self.tableViewIsOnWeb = YES;
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+    [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
+    
+    UILabel * label = [[UILabel alloc] init];
+    label.backgroundColor = [UIColor blackColor];
+    label.textColor = UIColorFromRGB(0xf6f2ed);
+    label.text = @"该内容找不到了~";
+    label.textAlignment = NSTextAlignmentCenter;
+    [notOnlineView addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
+    }];
+    
+    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
+    [notOnlineView addSubview:backButton];
+    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(10);
+        make.left.mas_equalTo(10);
+        make.width.height.mas_equalTo(40);
+    }];
+    
+    UITableView * tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStyleGrouped];
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableView.clipsToBounds = YES;
+    tableView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    tableView.tag = 4444;
+    [notOnlineView addSubview:tableView];
+    [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(label.mas_bottom);
+        make.left.bottom.right.mas_equalTo(0);
+    }];
+    
+    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
+    headView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    UILabel *recommendLabel = [[UILabel alloc] init];
+    recommendLabel.frame = CGRectMake(15, 10, 100, 30);
+    recommendLabel.textColor = UIColorFromRGB(0x922c3e);
+    recommendLabel.font = kPingFangRegular(15);
+    recommendLabel.text = RDLocalizedString(@"RDString_RecommendForYou");
+    recommendLabel.textAlignment = NSTextAlignmentLeft;
+    [headView addSubview:recommendLabel];
+    tableView.tableHeaderView = headView;
+    
+    [HSImTeRecommendRequest cancelRequest];
+    HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.model.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        
+        for (int i = 0; i < resultArr.count; i ++) {
+            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            welthModel.acreateTime = welthModel.updateTime;
+            [self.dataSource addObject:welthModel];
+        }
+        
+        [tableView reloadData];
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
     }];
 }
 
 - (void)readyToGo
 {
     [self setNeedsStatusBarAppearanceUpdate];
-    [self.navigationController setNavigationBarHidden:self.isOnline animated:NO];
-    
-    self.dataSource = [[NSMutableArray alloc] initWithCapacity:100];
+    [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
     
     _isComplete = NO;
     
@@ -213,9 +303,6 @@
     self.webView.backgroundColor = [UIColor clearColor];
     self.webView.opaque = NO;
     
-    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 100)];
-    self.testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
-    self.testView.clipsToBounds = YES;
     [self.webView.scrollView addSubview:self.testView];
 }
 
@@ -365,7 +452,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [MobClick beginLogPageView:NSStringFromClass([self class])];
-    [self.navigationController setNavigationBarHidden:self.isOnline animated:animated];
+    [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -430,7 +517,7 @@
 
 - (BOOL)prefersStatusBarHidden
 {
-    if (self.isOnline) {
+    if (self.isNeedHiddenNav) {
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
         
         if (orientation == UIInterfaceOrientationPortrait) {
@@ -574,6 +661,7 @@
 #pragma mark - 初始化下方推荐数据
 - (void)setUpDatas{
     [self checkCollectStatus];
+    [HSImTeRecommendRequest cancelRequest];
     HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.model.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -588,6 +676,7 @@
             [self.dataSource addObject:welthModel];
         }
         // 当返回有推荐数据时调用
+        
         if (self.dataSource.count > 0) {
             if (self.isOnlyVideo) {
                 [self.baseTableView reloadData];
@@ -732,37 +821,53 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    if (tableView.tag == 4444) {
+        [[self.view viewWithTag:44444] removeFromSuperview];
+    }
+    
     [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     self.model = tmpModel;
-    self.isOnline = NO;
+    self.tableViewIsOnWeb = NO;
+    self.isNeedHiddenNav = NO;
+    
     [self showLoadingView];
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        self.isOnline = YES;
-        [self refreshPage];
         [self hiddenLoadingView];
+        self.isNeedHiddenNav = YES;
+        [self createUI];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        [self.navigationController setNavigationBarHidden:self.isOnline animated:NO];
-        [self setNeedsStatusBarAppearanceUpdate];
+        [self hiddenLoadingView];
         if ([[response objectForKey:@"code"] integerValue] == 19002) {
-            [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+            [self theVideoIsNotOnline];
         }else{
             [self showNoNetWorkViewInView:self.view];
+            [self setNeedsStatusBarAppearanceUpdate];
+            [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
         }
-        [self hiddenLoadingView];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        [self.navigationController setNavigationBarHidden:self.isOnline animated:NO];
+        [self hiddenLoadingView];
+        [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
         [self setNeedsStatusBarAppearanceUpdate];
         [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
-        [self hiddenLoadingView];
     }];
+}
+
+- (UIView *)testView
+{
+    if (!_testView) {
+        _testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 100)];
+        _testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        _testView.clipsToBounds = YES;
+    }
+    return _testView;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    if (self.isOnline) {
+    if (self.isNeedHiddenNav) {
         return UIInterfaceOrientationMaskAllButUpsideDown;
     }
     return UIInterfaceOrientationMaskPortrait;

@@ -107,9 +107,9 @@
                 [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:controller completion:^(id result, NSError *error) {
                     
                     if (error) {
-                        [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
                     }else{
-                        [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
                     }
                     
                 }];
@@ -218,14 +218,14 @@
                 [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:controller completion:^(id result, NSError *error) {
                     
                     if (error) {
-                        [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
                         if (type == 0) {
                             [SAVORXAPI postUMHandleWithContentId:@"details_page_share_sina" key:@"details_page_share_sina" value:@"fail"];
                         }else if (type == 1){
                             [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share_sina" key:@"bunch planting_page_share_sina" value:@"fail"];
                         }
                     }else{
-                        [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
                         if (type == 0) {
                             [SAVORXAPI postUMHandleWithContentId:@"details_page_share_sina" key:@"details_page_share_sina" value:@"success"];
                         }else if (type == 1){
@@ -282,9 +282,9 @@
     [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
         
         if (error) {
-            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
         }else{
-            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
         }
         
     }];
@@ -312,10 +312,10 @@
     [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
         
         if (error) {
-            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
             [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
         }else{
-            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
             [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
         }
         
@@ -346,10 +346,10 @@
         
         if (error) {
             [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
-            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
         }else{
             [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
-            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
         }
         
     }];
@@ -377,10 +377,10 @@
         [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina_click" key:nil value:nil];
         [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
             if (error) {
-                [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
                 [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina" key:@"menu_recommend_sina" value:@"fail"];
             }else{
-                [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
                 [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina" key:@"menu_recommend_sina" value:@"success"];
             }
             
@@ -406,7 +406,7 @@
         [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
             
             if (error) {
-                [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
                 if (type == UMSocialPlatformType_QQ) {
                     [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_qq" key:@"menu_recommend_share_qq" value:@"fail"];
                 }else if (type == UMSocialPlatformType_WechatSession){
@@ -415,7 +415,7 @@
                     [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_weixin_friends" key:@"menu_recommend_share_weixin_friends" value:@"fail"];
                 }
             }else{
-                [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
                 
                 if (type == UMSocialPlatformType_QQ) {
                     [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_qq" key:@"menu_recommend_share_qq" value:@"success"];

@@ -50,9 +50,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 - (void)videoDidInit;
 
 - (void)playOrientationLandscape; //切换横屏
-- (void)playOrientationLandscapeWithOnlyVideo;
 - (void)playOrientationPortrait; //切换竖屏
-- (void)playOrientationPortraitWithOnlyVideo;
 
 - (void)setVideoTotalTime:(NSInteger)time; //设置视频总时长
 - (void)setVideoTitle:(NSString *)title; //设置视频标题
