@@ -923,6 +923,17 @@
     
     RDVideoHeaderView * headerView = [[RDVideoHeaderView alloc] init];
     self.baseTableView.tableHeaderView = headerView;
+    
+    UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
+    footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    UILabel *moreLabel = [[UILabel alloc] init];
+    moreLabel.frame = CGRectMake(0, 10, kMainBoundsWidth, 30);
+    moreLabel.textColor = UIColorFromRGB(0x922c3e);
+    moreLabel.font = kPingFangRegular(15);
+    moreLabel.text = RDLocalizedString(@"RDString_SeeMore");
+    moreLabel.textAlignment = NSTextAlignmentCenter;
+    [footView addSubview:moreLabel];
+    self.baseTableView.tableFooterView = footView;
 }
 
 #pragma mark - 初始化下方推荐数据
@@ -1008,7 +1019,7 @@
     //TableView的高度
     CGFloat tabHeight = 0;
     if (self.dataSource.count != 0) {
-        tabHeight = self.dataSource.count *96 + 48;
+        tabHeight = self.dataSource.count *96 + 48 *2;
     }
     
     [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -1071,7 +1082,7 @@
         if (self.dataSource.count == 0) {
             tabHeiht = 0;
         }else{
-            tabHeiht = self.dataSource.count *96 +48;
+            tabHeiht = self.dataSource.count *96 +48 *2;
         }
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(kMainBoundsWidth);
@@ -1090,6 +1101,17 @@
         recommendLabel.textAlignment = NSTextAlignmentLeft;
         [headView addSubview:recommendLabel];
         _tableView.tableHeaderView = headView;
+        
+        UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
+        footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        UILabel *moreLabel = [[UILabel alloc] init];
+        moreLabel.frame = CGRectMake(0, 10, kMainBoundsWidth, 30);
+        moreLabel.textColor = UIColorFromRGB(0x922c3e);
+        moreLabel.font = kPingFangRegular(15);
+        moreLabel.text = RDLocalizedString(@"RDString_SeeMore");
+        moreLabel.textAlignment = NSTextAlignmentCenter;
+        [footView addSubview:moreLabel];
+        _tableView.tableFooterView = footView;
     }
     
     return _tableView;
@@ -1118,12 +1140,13 @@
     cell.backgroundColor = [UIColor clearColor];
     cell.contentView.backgroundColor = [UIColor clearColor];
     
+    [cell setLineViewHidden:NO];
     //最后一条分割线隐藏
-    if (indexPath.row == self.dataSource.count - 1) {
-        [cell setLineViewHidden:YES];
-    }else{
-        [cell setLineViewHidden:NO];
-    }
+//    if (indexPath.row == self.dataSource.count - 1) {
+//        [cell setLineViewHidden:YES];
+//    }else{
+//        [cell setLineViewHidden:NO];
+//    }
     
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [cell configWithModel:model];
