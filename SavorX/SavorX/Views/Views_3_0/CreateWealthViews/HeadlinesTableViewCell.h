@@ -20,6 +20,10 @@
 
 @property (nonatomic, strong) UIImageView * bgImageView;
 
+@property (nonatomic, strong) UILabel *countLabel;
+
+@property (nonatomic, strong) UILabel *countVideoLabel;
+
 @property (nonatomic, strong) UIImageView *sourceImage;
 
 @property (nonatomic, strong) UILabel *sourceLabel;

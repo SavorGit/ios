@@ -49,6 +49,36 @@
         make.left.mas_equalTo(5);
     }];
     
+    _countLabel = [[UILabel alloc]init];
+    _countLabel.font = kPingFangLight(11);
+    _countLabel.textColor = UIColorFromRGB(0xf6f2ed);
+    _countLabel.backgroundColor = UIColorFromRGB(0x000000);
+    _countLabel.alpha = 0.5;
+    _countLabel.layer.cornerRadius = 2;
+    _countLabel.layer.masksToBounds = YES;
+    _countLabel.textAlignment = NSTextAlignmentCenter;
+    [_bgImageView addSubview:_countLabel];
+    [_countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(25, 14));
+        make.bottom.mas_equalTo(_bgImageView.mas_bottom).offset(-10);
+        make.right.mas_equalTo(_bgImageView.mas_right).offset(-10);
+    }];
+    
+    _countVideoLabel = [[UILabel alloc]init];
+    _countVideoLabel.text = @"4\'23\"";
+    _countVideoLabel.font = kPingFangLight(14);
+    _countVideoLabel.textColor = [UIColor whiteColor];
+    _countVideoLabel.backgroundColor = [UIColorFromRGB(0x222222) colorWithAlphaComponent:.5f];
+    _countVideoLabel.textAlignment = NSTextAlignmentCenter;
+    _countVideoLabel.layer.cornerRadius = 10;
+    _countVideoLabel.layer.masksToBounds = YES;
+    [_bgImageView addSubview:_countVideoLabel];
+    [_countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(50, 20));
+        make.bottom.mas_equalTo(_bgImageView.mas_bottom).offset(-10);
+        make.right.mas_equalTo(_bgImageView.mas_right).offset(-10);
+    }];
+    
     _headLineImage = [[UIImageView alloc] initWithFrame:CGRectZero];
     _headLineImage.contentMode = UIViewContentModeScaleAspectFill;
     _headLineImage.layer.masksToBounds = YES;
@@ -120,6 +150,16 @@
 }
 
 - (void)configModelData:(CreateWealthModel *)model{
+    
+    if (model.type == 2) {
+        self.countLabel.text = [NSString stringWithFormat:@"%@%@",model.colTuJi, RDLocalizedString(@"RDString_Image")];
+    }else if (model.type == 3 || model.type == 4){
+        long long minute = 0, second = 0;
+        second = model.duration;
+        minute = second / 60;
+        second = second % 60;
+        self.countVideoLabel.text = [NSString stringWithFormat:@"%lld'%.2lld\"", minute, second];
+    }
     
     self.titleLabel.text = model.title;
     self.sourceLabel.text = model.sourceName;
