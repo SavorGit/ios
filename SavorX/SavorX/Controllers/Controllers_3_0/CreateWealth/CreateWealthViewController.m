@@ -345,11 +345,11 @@
         [self.navigationController pushViewController:imtVC animated:YES];
         
     }else if (model.type == 2) {
+        
         [SAVORXAPI postUMHandleWithContentId:@"home_click_pic" key:nil value:nil];
         ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
         iatVC.imgAtlModel = model;
         iatVC.categoryID = self.categoryID;
-    
         
         float version = [UIDevice currentDevice].systemVersion.floatValue;
         if (version < 8.0) {
@@ -357,11 +357,9 @@
         } else {;
             iatVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         }
+        iatVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         
         [self presentViewController:iatVC animated:YES completion:nil];
-        
-//        [self.navigationController pushViewController:iatVC animated:YES];
-//        [[UIApplication sharedApplication].keyWindow addSubview:iatVC.view];
         
     } else if (model.type == 3 || model.type == 4){
         [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
