@@ -119,6 +119,9 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 //记录是否有收藏和非收藏操作
 @property (nonatomic, assign) BOOL isCollectAction;
 
+//是否是图集
+@property (nonatomic, assign) BOOL isImageAtlas;
+
 /**
  *  创建单例
  *

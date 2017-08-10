@@ -46,6 +46,8 @@
 @property (nonatomic, assign) CGFloat lastOffSetY;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) UILabel *recoLabel;
+@property (nonatomic, strong) UIView *lineView;
 
 @end
 
@@ -60,6 +62,8 @@
 - (void)viewDidLoad
 {
     self.view.backgroundColor = VCBackgroundColor;
+    
+    [GlobalData shared].isImageAtlas = YES;
     
     self.isPortrait = YES;
     self.isComeBack = YES;
@@ -182,7 +186,7 @@
 
 - (void)initInfoConfig{
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     // app退到后台
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
     // app进入前台
@@ -262,22 +266,22 @@
             };
         }
         
-        UILabel *recoLabel = [[UILabel alloc]init];
-        recoLabel.font = kPingFangMedium(16);
-        recoLabel.textColor = kThemeColor;
-        recoLabel.textAlignment = NSTextAlignmentCenter;
-        recoLabel.text = @"推荐图集";
-        [_imageScrollView addSubview:recoLabel];
-        [recoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        _recoLabel = [[UILabel alloc]init];
+        _recoLabel.font = kPingFangMedium(16);
+        _recoLabel.textColor = kThemeColor;
+        _recoLabel.textAlignment = NSTextAlignmentCenter;
+        _recoLabel.text = @"推荐图集";
+        [_imageScrollView addSubview:_recoLabel];
+        [_recoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,20));
             make.top.mas_equalTo(64 + 70);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
         }];
         
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];
-        lineView.backgroundColor = kThemeColor;
-        [_imageScrollView addSubview:lineView];
-        [lineView mas_updateConstraints:^(MASConstraintMaker *make) {
+        _lineView = [[UIView alloc] initWithFrame:CGRectZero];
+        _lineView.backgroundColor = kThemeColor;
+        [_imageScrollView addSubview:_lineView];
+        [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 120, 1));
             make.top.mas_equalTo(64 + 95);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + 60);
@@ -335,7 +339,7 @@
     }
     if (self.isComeBack == YES) {
         
-        if (scrollView.contentOffset.y == 0 && offsetX%375 == 0){
+        if (offsetY == 0 && offsetX % 375 == 0){
             _lastOffSetY = 0;
             self.view.backgroundColor = VCBackgroundColor;
             [self.view setAlpha:1.0];
@@ -353,10 +357,10 @@
     self.isComeBack = YES;
     if (scrollView.contentOffset.y > 120) {
         self.isComeBack = NO;
-        [self dismissFromTopWithDuration:1.0];
+        [self dismissFromTopWithDuration:0.5];
     }else if (scrollView.contentOffset.y < - 120){
         self.isComeBack = NO;
-        [self dismissFromDownWithDuration:1.0];
+        [self dismissFromDownWithDuration:0.5];
     }
 }
 
@@ -595,8 +599,8 @@ static int temp = -1;
 #pragma mark -backButtonClick
 - (void)backButtonClick
 {
-//    [self.navigationController popViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    [GlobalData shared].isImageAtlas = NO;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -604,11 +608,19 @@ static int temp = -1;
     return UIStatusBarStyleLightContent;
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    if (self.isReady) {
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }else{
+        return UIInterfaceOrientationMaskPortrait;
+    }
+}
+
 #pragma mark --- 旋转屏幕调整布局
 - (void)orieChanged
 {
-//    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    UIDeviceOrientation  orientation = [UIDevice currentDevice].orientation;
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (orientation == UIInterfaceOrientationPortrait) {
     
@@ -622,7 +634,7 @@ static int temp = -1;
         }];
         self.imageScrollView.width = kMainBoundsWidth;
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
-        _imageScrollView.contentSize = CGSizeMake(self.imageDatas.count * kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *2);
         
         [_topView setImage:[UIImage new]];
         _topView.backgroundColor = kThemeColor;
@@ -640,6 +652,24 @@ static int temp = -1;
                 make.left.mas_equalTo(kMainBoundsWidth * i);
             }];
         }
+        
+        [_recoLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,20));
+            make.top.mas_equalTo(64 + 70);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
+        }];
+        
+        [_lineView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 120, 1));
+            make.top.mas_equalTo(64 + 95);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + 60);
+        }];
+        
+        [_collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64));
+            make.top.mas_equalTo(64 + 120);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
+        }];
 
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
 
@@ -671,6 +701,24 @@ static int temp = -1;
                 make.left.mas_equalTo(kMainBoundsWidth * i);
             }];
         }
+        
+        [_recoLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,20));
+            make.top.mas_equalTo(64 + 70);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
+        }];
+        
+        [_lineView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 120, 1));
+            make.top.mas_equalTo(64 + 95);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + 60);
+        }];
+        
+        [_collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64));
+            make.top.mas_equalTo(64 + 120);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
+        }];
     }
 }
 
@@ -701,15 +749,6 @@ static int temp = -1;
 - (BOOL)prefersStatusBarHidden
 {
     return self.isDisappear;
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
-    if (self.isReady) {
-        return UIInterfaceOrientationMaskAllButUpsideDown;
-    }else{
-        return UIInterfaceOrientationMaskPortrait;
-    }
 }
 
 - (void)dealloc
