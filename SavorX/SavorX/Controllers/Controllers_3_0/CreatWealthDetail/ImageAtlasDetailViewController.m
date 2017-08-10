@@ -11,7 +11,6 @@
 #import "DDPhotoScrollView.h"
 #import "DDPhotoDescView.h"
 #import "UIView+Additional.h"
-#import "ImageAtlasScrollView.h"
 #import "HotPopShareView.h"
 #import "HSPicDetailRequest.h"
 #import "ImageAtlasDetailModel.h"
@@ -19,6 +18,7 @@
 #import "HSGetCollectoinStateRequest.h"
 #import "RDLogStatisticsAPI.h"
 #import "ImageAtlasCollectViewCell.h"
+#import "HSImTeRecommendRequest.h"
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate>
 
@@ -26,7 +26,7 @@
 
 @property (nonatomic, strong) UIImageView *topView;
 @property (nonatomic, strong) UIButton *backButton;
-@property (nonatomic, strong) ImageAtlasScrollView *imageScrollView;
+@property (nonatomic, strong) UIScrollView *imageScrollView;
 @property (nonatomic, strong) DDPhotoDescView *photoDescView;
 @property (nonatomic, strong) DDPhotoScrollView *photoScrollView;
 @property (nonatomic, strong) UIButton *collectBtn;
@@ -35,20 +35,21 @@
 @property (nonatomic, assign) BOOL isDisappear;
 @property (nonatomic, assign) NSInteger currentIndex;
 
-@property (nonatomic, strong)NSMutableArray *imageDatas;
-@property (nonatomic, strong)NSArray *imageArr;
-@property (nonatomic, strong)NSMutableArray *scrollObjecArr;
+@property (nonatomic, strong) NSMutableArray *imageDatas;
+@property (nonatomic, strong) NSArray *imageArr;
+@property (nonatomic, strong) NSMutableArray *scrollObjecArr;
 @property (assign, nonatomic) NSUInteger currentImageIndex;
 
 @property (nonatomic, assign) BOOL isReady;
 @property (nonatomic, assign) BOOL isPortrait;
 @property (nonatomic, assign) BOOL isComeBack;
-@property (nonatomic, assign) CGFloat lastOffSetY;
+@property (nonatomic, assign) BOOL isYChange;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UILabel *recoLabel;
-@property (nonatomic, strong) UIView *lineView;
-
+@property (nonatomic, strong) UIView *lineViewOne;
+@property (nonatomic, strong) UIView *lineViewTwo;
+@property (nonatomic, strong) NSMutableArray *dataSource;
 @end
 
 @implementation ImageAtlasDetailViewController
@@ -64,20 +65,21 @@
     self.view.backgroundColor = VCBackgroundColor;
     
     [GlobalData shared].isImageAtlas = YES;
-    
     self.isPortrait = YES;
     self.isComeBack = YES;
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
     _isComplete = NO;
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
     self.scrollObjecArr = [[NSMutableArray alloc] initWithCapacity:100];
     self.imageDatas = [[NSMutableArray alloc] initWithCapacity:100];
+    self.dataSource = [[NSMutableArray alloc] initWithCapacity:100];
     
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     
     [self.view addSubview:self.topView];
-    //2650
+
     [self requestWithContentId:self.imgAtlModel.artid];
+    [self setUpDatas];
 }
 
 - (void)requestWithContentId:(NSString *)contentId{
@@ -121,6 +123,34 @@
         [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
         [self.view bringSubviewToFront:self.topView];
         [self hiddenLoadingView];
+    }];
+}
+
+#pragma mark -  请求图集推荐数据
+- (void)setUpDatas{
+    
+    HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.imgAtlModel.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        
+        for (int i = 0; i < resultArr.count; i ++) {
+            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            [self.dataSource addObject:welthModel];
+        }
+        
+        // 当返回有推荐数据时调用
+        if (self.dataSource.count > 0) {
+            [self.collectionView reloadData];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
     }];
 }
 
@@ -184,23 +214,14 @@
     
 }
 
-- (void)initInfoConfig{
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-    // app退到后台
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
-    // app进入前台
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
-}
-
-- (ImageAtlasScrollView *)imageScrollView
+- (UIScrollView *)imageScrollView
 {
     if (_imageScrollView == nil) {
-        _imageScrollView = [[ImageAtlasScrollView alloc] initWithFrame:CGRectZero];
+        _imageScrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
         _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *2);
+        _imageScrollView.pagingEnabled = YES;
         _imageScrollView.showsHorizontalScrollIndicator = NO;
-        // 切换的动画效果
-        _imageScrollView.effect = JT3DScrollViewEffectNone;
+        _imageScrollView.showsVerticalScrollIndicator = NO;
         _imageScrollView.clipsToBounds = YES;
         _imageScrollView.directionalLockEnabled = YES;
         _imageScrollView.delegate = self;
@@ -231,7 +252,7 @@
                         [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_show" key:nil value:nil];
                     }
                     [weakSelf.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
+                        if (![obj isKindOfClass:[UIScrollView class]]) {
                             [UIView animateWithDuration:0.5 animations:^{
                                 obj.alpha = 1;
                                 weakSelf.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
@@ -251,7 +272,7 @@
                     }
                     // 消失
                     [weakSelf.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
+                        if (![obj isKindOfClass:[UIScrollView class]]) {
                             [UIView animateWithDuration:0.5 animations:^{
                                 obj.alpha = 0;
                                 weakSelf.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
@@ -267,24 +288,34 @@
         }
         
         _recoLabel = [[UILabel alloc]init];
-        _recoLabel.font = kPingFangMedium(16);
-        _recoLabel.textColor = kThemeColor;
+        _recoLabel.backgroundColor = [UIColor clearColor];
+        _recoLabel.font = kPingFangLight(16);
+        _recoLabel.textColor = UIColorFromRGB(0x922c3e);
         _recoLabel.textAlignment = NSTextAlignmentCenter;
         _recoLabel.text = @"推荐图集";
         [_imageScrollView addSubview:_recoLabel];
         [_recoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,20));
-            make.top.mas_equalTo(64 + 70);
-            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
+            make.size.mas_equalTo(CGSizeMake(70,45));
+            make.top.mas_equalTo(64);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + kMainBoundsWidth/2 - 35);
         }];
         
-        _lineView = [[UIView alloc] initWithFrame:CGRectZero];
-        _lineView.backgroundColor = kThemeColor;
-        [_imageScrollView addSubview:_lineView];
-        [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 120, 1));
-            make.top.mas_equalTo(64 + 95);
-            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + 60);
+        _lineViewOne = [[UIView alloc] initWithFrame:CGRectZero];
+        _lineViewOne.backgroundColor = UIColorFromRGB(0x922c3e);
+        [_imageScrollView addSubview:_lineViewOne];
+        [_lineViewOne mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
+            make.top.mas_equalTo(64 + 22);
+            make.right.mas_equalTo(_recoLabel.mas_left).offset(- 10);
+        }];
+        
+        _lineViewTwo = [[UIView alloc] initWithFrame:CGRectZero];
+        _lineViewTwo.backgroundColor = UIColorFromRGB(0x922c3e);
+        [_imageScrollView addSubview:_lineViewTwo];
+        [_lineViewTwo mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
+            make.top.mas_equalTo(64 + 22);
+            make.left.mas_equalTo(_recoLabel.mas_right).offset(10);
         }];
         
         
@@ -297,7 +328,7 @@
         [_collectionView registerClass:[ImageAtlasCollectViewCell class] forCellWithReuseIdentifier:@"imgCell"];
         [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64));
-            make.top.mas_equalTo(64 + 120);
+            make.top.mas_equalTo(64 + 45);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
         }];
         
@@ -305,45 +336,50 @@
     return _imageScrollView;
 }
 
-#pragma mark - UIScrollViewDelegate
+#pragma mark - UIScrollViewDelegate 代理方法
  - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
      
-     [self setValue:@(_imageScrollView.currentPage) forKey:@"currentPage"];
+     _isYChange = NO;
+     
+     CGFloat pageWidth = scrollView.frame.size.width;
+     float fractionalPage = scrollView.contentOffset.x / pageWidth;
+     NSInteger page = lround(fractionalPage);
+     [self setValue:@(page) forKey:@"currentPage"];
      
  }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 
     CGFloat offsetY = scrollView.contentOffset.y;
-    int offsetX = scrollView.contentOffset.x;
     NSLog(@"---%f",offsetY);
     
     if (offsetY > 0 || offsetY < 0) {
+        _isYChange = YES;
         if (self.isDisappear == NO) {
             [self wipeUpOrDown];
         }
     }
+    
     if (offsetY >=  0) {
-        if (offsetY > _lastOffSetY && self.isComeBack == YES) {
-            CGFloat alpha = MIN(1, (offsetY)/kMainBoundsHeight);
+        if ( self.isComeBack == YES) {
+            CGFloat alpha = (offsetY)/kMainBoundsHeight;
             self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent:1 - alpha];
         }
-        _lastOffSetY = offsetY;
-        
     }else {
-        if (offsetY < _lastOffSetY && self.isComeBack == YES) {
-            CGFloat alpha = MIN(1, (- offsetY)/kMainBoundsHeight);
+        if (self.isComeBack == YES) {
+            CGFloat alpha = (-offsetY)/kMainBoundsHeight;
             self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent: 1 - alpha];
         }
-        _lastOffSetY = offsetY;
     }
+    
     if (self.isComeBack == YES) {
         
-        if (offsetY == 0 && offsetX % 375 == 0){
-            _lastOffSetY = 0;
+        if (offsetY == 0 && _isYChange == YES){
             self.view.backgroundColor = VCBackgroundColor;
             [self.view setAlpha:1.0];
-            [self wipeUpOrDown];
+            if (self.isDisappear == YES) {
+                [self wipeUpOrDown];
+            }
         }
     }
 
@@ -352,15 +388,15 @@
 //完成拖拽
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
 {
-
-    NSLog(@"ContentOffset  x is  %f,y  is %f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+    NSLog(@"--- x is  %f,---y  is %f",scrollView.contentOffset.x,scrollView.contentOffset.y);
     self.isComeBack = YES;
     if (scrollView.contentOffset.y > 120) {
+        _imageScrollView.pagingEnabled = NO;
         self.isComeBack = NO;
-        [self dismissFromTopWithDuration:0.5];
+        [self dismissFromTopWithDuration:3.0];
     }else if (scrollView.contentOffset.y < - 120){
         self.isComeBack = NO;
-        [self dismissFromDownWithDuration:0.5];
+        [self dismissFromDownWithDuration:3.0];
     }
 }
 
@@ -370,7 +406,7 @@
     if (self.isDisappear == YES) {
         self.isDisappear = NO;
         [self.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
+            if (![obj isKindOfClass:[UIScrollView class]]) {
                 [UIView animateWithDuration:0.5 animations:^{
                     obj.alpha = 1;
                     self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
@@ -382,7 +418,7 @@
     }else{
         self.isDisappear = YES;
         [self.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![obj isKindOfClass:[ImageAtlasScrollView class]]) {
+            if (![obj isKindOfClass:[UIScrollView class]]) {
                 [UIView animateWithDuration:0.5 animations:^{
                     obj.alpha = 0;
                     self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
@@ -392,7 +428,6 @@
             }
         }];
     }
-
 
 }
 
@@ -543,6 +578,86 @@ static int temp = -1;
     return _topView;
 }
 
+#pragma mark - UICollectionView 代理方法
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+    return 1;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.dataSource.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    ImageAtlasCollectViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
+    cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    
+    CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
+    [cell configModelData:tmpModel];
+    
+    return cell;
+}
+//每一个分组的上左下右间距
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(2.5, 0.0, 2.5, 0.0);
+}
+//定义每一个cell的大小
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(kMainBoundsWidth/2 - 5, 152);
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:@"details_page" value:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [HSPicDetailRequest cancelRequest];
+    [super viewDidDisappear:animated];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
+}
+
+//app进入后台运行
+- (void)appWillDidBackground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+//app进入前台运行
+- (void)appBecomeActivePlayground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return self.isDisappear;
+}
+
+#pragma mark - 返回上一级页面
+- (void)backButtonClick
+{
+    [GlobalData shared].isImageAtlas = NO;
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+    
+}
+
 #pragma mark -分享点击
 - (void)shareAction{
     
@@ -596,34 +711,13 @@ static int temp = -1;
     }];
 }
 
-#pragma mark -backButtonClick
-- (void)backButtonClick
-{
-    [self dismissViewControllerAnimated:NO completion:nil];
-    [GlobalData shared].isImageAtlas = NO;
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
-    if (self.isReady) {
-        return UIInterfaceOrientationMaskAllButUpsideDown;
-    }else{
-        return UIInterfaceOrientationMaskPortrait;
-    }
-}
-
 #pragma mark --- 旋转屏幕调整布局
 - (void)orieChanged
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (orientation == UIInterfaceOrientationPortrait) {
-    
+        
         _isPortrait = YES;
         [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_rotate" key:nil value:nil];
         
@@ -654,25 +748,31 @@ static int temp = -1;
         }
         
         [_recoLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,20));
-            make.top.mas_equalTo(64 + 70);
-            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
+            make.size.mas_equalTo(CGSizeMake(70,45));
+            make.top.mas_equalTo(64);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + kMainBoundsWidth/2 - 35);
         }];
         
-        [_lineView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 120, 1));
-            make.top.mas_equalTo(64 + 95);
-            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + 60);
+        [_lineViewOne mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
+            make.top.mas_equalTo(64 + 22);
+            make.right.mas_equalTo(_recoLabel.mas_left).offset(- 10);
+        }];
+        
+        [_lineViewTwo mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
+            make.top.mas_equalTo(64 + 22);
+            make.left.mas_equalTo(_recoLabel.mas_right).offset(10);
         }];
         
         [_collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64));
-            make.top.mas_equalTo(64 + 120);
+            make.top.mas_equalTo(64 + 45);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
         }];
-
+        
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
-
+        
         _isPortrait = NO;
         [SAVORXAPI postUMHandleWithContentId:@"page_pic_vertical_rotate" key:nil value:nil];
         
@@ -692,7 +792,7 @@ static int temp = -1;
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
-
+        
         for (int i = 0; i < self.scrollObjecArr.count; i++) {
             DDPhotoScrollView *phoScrollView = (DDPhotoScrollView *)self.scrollObjecArr[i];
             [phoScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -703,52 +803,38 @@ static int temp = -1;
         }
         
         [_recoLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,20));
-            make.top.mas_equalTo(64 + 70);
-            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
+            make.size.mas_equalTo(CGSizeMake(70,45));
+            make.top.mas_equalTo(64);
+            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + kMainBoundsWidth/2 - 35);
         }];
         
-        [_lineView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 120, 1));
-            make.top.mas_equalTo(64 + 95);
-            make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + 60);
+        [_lineViewOne mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
+            make.top.mas_equalTo(64 + 22);
+            make.right.mas_equalTo(_recoLabel.mas_left).offset(- 10);
+        }];
+        
+        [_lineViewTwo mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
+            make.top.mas_equalTo(64 + 22);
+            make.left.mas_equalTo(_recoLabel.mas_right).offset(10);
         }];
         
         [_collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64));
-            make.top.mas_equalTo(64 + 120);
+            make.top.mas_equalTo(64 + 45);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
         }];
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:@"details_page" value:[NSString stringWithFormat:@"%ld", self.categoryID]];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [HSPicDetailRequest cancelRequest];
-    [super viewDidDisappear:animated];
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
-}
-
-//app进入后台运行
-- (void)appWillDidBackground{
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
-}
-
-//app进入前台运行
-- (void)appBecomeActivePlayground{
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
-}
-
-- (BOOL)prefersStatusBarHidden
-{
-    return self.isDisappear;
+- (void)initInfoConfig{
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    // app退到后台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+    // app进入前台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)dealloc
@@ -764,34 +850,6 @@ static int temp = -1;
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-}
-
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-    return 1;
-}
-
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return 6;
-}
-
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    ImageAtlasCollectViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"imgCell" forIndexPath:indexPath];
-    cell.backgroundColor=[UIColor groupTableViewBackgroundColor];
-    return cell;
-}
-//每一个分组的上左下右间距
--(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
-{
-    return UIEdgeInsetsMake(5, 5, 5, 5);
-}
-//定义每一个cell的大小
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(kMainBoundsWidth/2 - 10, 100);
-}
-
--(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-
 }
 
 @end

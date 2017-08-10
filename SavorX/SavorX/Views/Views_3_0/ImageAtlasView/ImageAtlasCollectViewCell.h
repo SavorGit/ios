@@ -10,4 +10,6 @@
 
 @interface ImageAtlasCollectViewCell : UICollectionViewCell
 
+- (void)configModelData:(CreateWealthModel *)model;
+
 @end
