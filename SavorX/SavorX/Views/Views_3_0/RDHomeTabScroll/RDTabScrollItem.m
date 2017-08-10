@@ -16,7 +16,6 @@
 @property (nonatomic, strong) UIImageView * imageView;
 @property (nonatomic, strong) UIView * bottomView;
 @property (nonatomic, strong) UILabel * titleLabel;
-@property (nonatomic, strong) UIImageView * detailLogo;
 @property (nonatomic, strong) UILabel * detailFrom;
 @property (nonatomic, strong) UILabel * detailDate;
 @property (nonatomic, strong) UILabel * timeLabel;

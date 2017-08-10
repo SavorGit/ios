@@ -198,9 +198,7 @@
         self.demandModel = nil;
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             
-            DemandViewController *view = [[DemandViewController alloc] init];
-            view.model = model;
-            view.categroyID = self.categoryID;
+            DemandViewController *view = [[DemandViewController alloc] initWithModelSource:self.dataSource categroy:self.categoryID model:model];
             [SAVORXAPI successRing];
             [[RDHomeStatusView defaultView] startScreenWithViewController:view withStatus:RDHomeStatus_Demand];
             [self.navigationController pushViewController:view animated:YES];

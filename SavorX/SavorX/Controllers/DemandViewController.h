@@ -14,8 +14,7 @@
  */
 @interface DemandViewController : BaseViewController
 
-@property (nonatomic, assign) NSInteger categroyID;
-@property (nonatomic, strong) CreateWealthModel * model;
+- initWithModelSource:(NSMutableArray *)source categroy:(NSInteger)categroyID model:(CreateWealthModel *)model;
 
 - (void)shouldRelease;
 

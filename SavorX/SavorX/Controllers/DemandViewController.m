@@ -21,14 +21,15 @@
 #import "HotPopShareView.h"
 #import "RDVideoHeaderView.h"
 
-#import "HSImTeRecommendRequest.h"
+#import "HSTVPlayRecommendRequest.h"
 #import "HotTopicShareView.h"
 #import "RDFavoriteTableViewCell.h"
 #import "RDAlertView.h"
+#import "RDMoreDemandViewController.h"
 
 #define BOTTOMHEIGHT 50.f
 
-@interface DemandViewController ()<UIWebViewDelegate, UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface DemandViewController ()<UIWebViewDelegate, UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource, RDMoreDemandDelegate>
 
 @property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
 @property (nonatomic, strong) UIView *playBackView; //播放空间的背景View
@@ -41,7 +42,6 @@
 @property (nonatomic, strong) NSURLSessionDataTask * task; //记录当前请求任务
 @property (nonatomic, assign) BOOL isHandle; //记录当前是否在进行操作
 @property (nonatomic, strong) UIButton * volumeButton; //静音按钮
-@property (nonatomic, strong) UIButton * screenButton;
 @property (nonatomic, strong) UIButton * quitScreenButton;
 @property (nonatomic, strong) UIImageView * backImageView;
 @property (nonatomic, strong) UIButton * collectButton;
@@ -55,9 +55,26 @@
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, assign) BOOL hasWebObserver;
 
+@property (nonatomic, strong) UIImageView * endView;
+@property (nonatomic, strong) UIButton * endCollect;
+
+@property (nonatomic, assign) NSInteger categroyID;
+@property (nonatomic, strong) CreateWealthModel * model;
+@property (nonatomic, strong) NSArray * modelSource;
+
 @end
 
 @implementation DemandViewController
+
+- (instancetype)initWithModelSource:(NSMutableArray *)source categroy:(NSInteger)categroyID model:(CreateWealthModel *)model;
+{
+    if (self = [super init]) {
+        self.modelSource = [NSArray arrayWithArray:source];
+        self.categroyID = categroyID;
+        self.model = model;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -179,19 +196,6 @@
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
     
-    self.screenButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.screenButton setImage:[UIImage imageNamed:@"tv"] forState:UIControlStateNormal];
-    [self.screenButton addTarget:self action:@selector(tvAciton) forControlEvents:UIControlEventTouchUpInside];
-    self.screenButton.selected = YES;
-    self.screenButton.hidden = YES;
-    [self.view addSubview:self.screenButton];
-    
-    [self.screenButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
-        make.right.mas_equalTo(-110);
-        make.size.mas_equalTo(CGSizeMake(40, 40));
-    }];
-    
     self.maskingView = [[UIView alloc] init];
     self.maskingView.backgroundColor = [UIColor blackColor];
     self.maskingView.alpha = 0.6;
@@ -223,9 +227,9 @@
         make.centerY.equalTo(self.backImageView);
     }];
     
+    [self createBottomView];
     [self refreshPage];
 //    [self createWebView];
-    [self createBottomView];
     [self addBottomEvent];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self createTimer];
@@ -245,7 +249,6 @@
         }
         
     } failure:^{
-        self.screenButton.enabled = YES;
         if (fromHomeType == YES) {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"fail"];
         }
@@ -255,12 +258,7 @@
 
 - (void)quitBack{
     
-    if (!self.model.videoURL || !(self.model.videoURL.length > 0)) {
-        [self.navigationController popViewControllerAnimated:YES];
-        return;
-    }
      [self.navigationController popViewControllerAnimated:YES];
-    
 }
 
 //tv按钮被点击，即重新点播该视频
@@ -292,7 +290,10 @@
                 [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_SuccessWithCollect")];
                 [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
             }
-            button.selected = !button.selected;
+            self.collectButton.selected = !self.collectButton.isSelected;
+            if (self.endCollect) {
+                self.endCollect.selected = !self.endCollect.isSelected;
+            }
         }
         
         [GlobalData shared].isCollectAction = YES;
@@ -372,6 +373,10 @@
     self.playBackView = [[UIView alloc] initWithFrame:CGRectMake(0, kMainBoundsHeight - BOTTOMHEIGHT, kMainBoundsWidth, BOTTOMHEIGHT)];
     self.playBackView.backgroundColor = UIColorFromRGB(0x922c3e);
     [self.view addSubview:self.playBackView];
+    [self.playBackView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.right.mas_equalTo(0);
+        make.height.mas_equalTo(BOTTOMHEIGHT);
+    }];
     
     self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.playBtn setFrame:CGRectMake(0, 0, 40, 40)];
@@ -597,7 +602,6 @@
 - (void)restartVod
 {
     RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Demanding")];
-    self.screenButton.enabled = NO;
     if ([GlobalData shared].isBindRD) {
         
         [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 force:0  success:^(NSURLSessionDataTask *task, NSDictionary *result) {
@@ -608,16 +612,13 @@
                 [self updatePlayStatus];
                 self.quitScreenButton.hidden = NO;
                 self.maskingView.hidden = NO;
-                self.screenButton.hidden = YES;
                 [self createTimer];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
-            self.screenButton.enabled = YES;
             self.isHandle = NO;
             [hud hidden];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            self.screenButton.enabled = YES;
             [hud hidden];
             [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithPlay")];
             self.isHandle = NO;
@@ -628,11 +629,10 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
     [SAVORXAPI postUMHandleWithContentId:self.model.artid withType:demandHandle];
     [self cheakIsFavorite];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-    
+    [MobClick beginLogPageView:NSStringFromClass([self class])];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -792,17 +792,29 @@
 
 - (void)videoDidPlayEnd
 {
+    [UIView animateWithDuration:.2f animations:^{
+        [self.playBackView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(BOTTOMHEIGHT);
+        }];
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        
+    }];
+    
     self.minimumLabel.text = @"00:00";
     self.playSilder.value = 0;
     self.isPlayEnd = YES;
     self.playBtn.selected = NO;
     [self updatePlayStatus];
-    self.quitScreenButton.hidden = YES;
-    self.maskingView.hidden = YES;
-    self.screenButton.hidden = NO;
-    self.screenButton.enabled = YES;
     [self shouldRelease];
-    [self quitBack];
+    [self.view addSubview:self.endView];
+    [self.endView sd_setImageWithURL:[NSURL URLWithString:self.model.imageURL] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    [self.endView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
+    }];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -843,7 +855,7 @@
             make.top.equalTo(self.backImageView.mas_bottom);
             make.left.mas_equalTo(0);
             make.width.mas_equalTo(kMainBoundsWidth);
-            make.bottom.mas_equalTo(0);
+            make.bottom.mas_equalTo(self.playBackView.mas_top);
         }];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
@@ -899,7 +911,7 @@
             make.top.equalTo(self.backImageView.mas_bottom).offset(0);
             make.left.mas_equalTo(0);
             make.right.mas_equalTo(0);
-            make.bottom.mas_equalTo(0);
+            make.bottom.mas_equalTo(self.playBackView.mas_top);
         }];
         self.baseTableView.dataSource = self;
         self.baseTableView.delegate = self;
@@ -916,7 +928,7 @@
 
 - (void)createTableViewWithOnlyVideo
 {
-    self.baseTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStyleGrouped];
+    self.baseTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStylePlain];
     self.baseTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.baseTableView.clipsToBounds = YES;
     self.baseTableView.backgroundColor = UIColorFromRGB(0xf6f2ed);
@@ -926,21 +938,32 @@
     
     UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
     footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
-    UILabel *moreLabel = [[UILabel alloc] init];
-    moreLabel.frame = CGRectMake(0, 10, kMainBoundsWidth, 30);
-    moreLabel.textColor = UIColorFromRGB(0x922c3e);
-    moreLabel.font = kPingFangRegular(15);
-    moreLabel.text = RDLocalizedString(@"RDString_SeeMore");
-    moreLabel.textAlignment = NSTextAlignmentCenter;
-    [footView addSubview:moreLabel];
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:[RDLocalizedString(@"RDString_SeeMore") stringByAppendingString:@" >>"] forState:UIControlStateNormal];
+    button.titleLabel.font = kPingFangLight(14);
+    button.layer.borderColor = UIColorFromRGB(0xe0dad2).CGColor;
+    [button setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    button.layer.borderWidth = .5f;
+    [button addTarget:self action:@selector(moreButtonDidBeclicked) forControlEvents:UIControlEventTouchUpInside];
+    [footView addSubview:button];
+    [button mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo((48 - 25) / 2.f);
+        make.centerX.mas_equalTo(0);
+        make.size.mas_equalTo(CGSizeMake(130, 25));
+    }];
+    button.layer.cornerRadius = 25 / 2.f;
+    button.layer.masksToBounds = YES;
     self.baseTableView.tableFooterView = footView;
 }
 
 #pragma mark - 初始化下方推荐数据
 - (void)setUpDatas{
     
-    [HSImTeRecommendRequest cancelRequest];
-    HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.model.artid];
+    if (self.isOnlyVideo) {
+        self.baseTableView.tableFooterView.hidden = YES;
+    }
+    [HSTVPlayRecommendRequest cancelRequest];
+    HSTVPlayRecommendRequest * request = [[HSTVPlayRecommendRequest alloc] initWithArticleId:self.model.artid sortNum:self.model.sort_num];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self.dataSource removeAllObjects];
@@ -962,24 +985,41 @@
                 [self.tableView reloadData];
             }
         }
-        
         if (self.isOnlyVideo) {
             RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
-            [headerView needRecommand:self.dataSource.count != 0];
+            if (self.dataSource.count == 0) {
+                [headerView needRecommand:NO];
+                self.baseTableView.tableFooterView.hidden = YES;
+            }else{
+                [headerView needRecommand:YES];
+                self.baseTableView.tableFooterView.hidden = NO;
+            }
         }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         if (self.isOnlyVideo) {
             RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
-            [headerView needRecommand:self.dataSource.count != 0];
+            if (self.dataSource.count == 0) {
+                [headerView needRecommand:NO];
+                self.baseTableView.tableFooterView.hidden = YES;
+            }else{
+                [headerView needRecommand:YES];
+                self.baseTableView.tableFooterView.hidden = NO;
+            }
         }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         if (self.isOnlyVideo) {
             RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
-            [headerView needRecommand:self.dataSource.count != 0];
+            if (self.dataSource.count == 0) {
+                [headerView needRecommand:NO];
+                self.baseTableView.tableFooterView.hidden = YES;
+            }else{
+                [headerView needRecommand:YES];
+                self.baseTableView.tableFooterView.hidden = NO;
+            }
         }
         
     }];
@@ -1039,7 +1079,7 @@
     frame.origin.y = cSizeheight;
     self.testView.frame = frame;
     [self.webView.scrollView addSubview:self.testView];
-    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight + 50)];
+    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight)];
     
     [self addObserver];
     
@@ -1104,17 +1144,44 @@
         
         UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
         footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
-        UILabel *moreLabel = [[UILabel alloc] init];
-        moreLabel.frame = CGRectMake(0, 10, kMainBoundsWidth, 30);
-        moreLabel.textColor = UIColorFromRGB(0x922c3e);
-        moreLabel.font = kPingFangRegular(15);
-        moreLabel.text = RDLocalizedString(@"RDString_SeeMore");
-        moreLabel.textAlignment = NSTextAlignmentCenter;
-        [footView addSubview:moreLabel];
+        
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setTitle:[RDLocalizedString(@"RDString_SeeMore") stringByAppendingString:@" >>"] forState:UIControlStateNormal];
+        button.titleLabel.font = kPingFangLight(14);
+        button.layer.borderColor = UIColorFromRGB(0xe0dad2).CGColor;
+        [button setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        button.layer.borderWidth = .5f;
+        [button addTarget:self action:@selector(moreButtonDidBeclicked) forControlEvents:UIControlEventTouchUpInside];
+        [footView addSubview:button];
+        [button mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.center.mas_equalTo(0);
+            make.size.mas_equalTo(CGSizeMake(130, 25));
+        }];
+        button.layer.cornerRadius = 25 / 2.f;
+        button.layer.masksToBounds = YES;
         _tableView.tableFooterView = footView;
     }
     
     return _tableView;
+}
+
+- (void)moreButtonDidBeclicked
+{
+    RDMoreDemandViewController * demand = [[RDMoreDemandViewController alloc] initWithModelSource:self.modelSource];
+    demand.delegate = self;
+    [self.navigationController pushViewController:demand animated:YES];
+}
+
+- (void)playOnTVButtonDidClickedWithModel:(CreateWealthModel *)model
+{
+    if ([GlobalData shared].isBindRD) {
+        
+        [self demandVideoWithModel:model force:0];
+        
+    }else{
+        
+        [[RDHomeStatusView defaultView] scanQRCode];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -1191,9 +1258,9 @@
     [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0  force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
             
-            self.model = model;
             [SAVORXAPI successRing];
-            [self recommendToScreenSuccess];
+            self.isPlayEnd = NO;
+            [self recommendToScreenSuccessWithModel:model];
             
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
@@ -1220,24 +1287,125 @@
 }
 
 // 点击推荐投屏成功
-- (void)recommendToScreenSuccess{
+- (void)recommendToScreenSuccessWithModel:(CreateWealthModel *)model{
     
-    self.title = self.model.title;
-    self.playSilder.maximumValue = self.model.duration;
-    NSInteger pLayDurationInt = self.model.duration; // some duration from the JSON
-    NSInteger playMinutesInt = pLayDurationInt / 60;
-    NSInteger playSecondsInt = pLayDurationInt % 60;
-    NSString *playTimeStr = [NSString stringWithFormat:@"%02ld:%02ld", (long)playMinutesInt, (long)playSecondsInt];
-    self.maximumLabel.text = playTimeStr;
+    if (_endView) {
+        if (self.endView.superview) {
+            [self.endView removeFromSuperview];
+        }
+    }
+    
+    [UIView animateWithDuration:.2f animations:^{
+        [self.playBackView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(0);
+        }];
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        
+    }];
     
     [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Demand];
     [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
     
-    [self.backImageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageURL] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
-    [self refreshPage];
+    self.playBtn.selected = YES;
+    [self updatePlayStatus];
+    if (self.model != model) {
+        self.model = model;
+        self.title = self.model.title;
+        self.playSilder.maximumValue = self.model.duration;
+        NSInteger pLayDurationInt = self.model.duration; // some duration from the JSON
+        NSInteger playMinutesInt = pLayDurationInt / 60;
+        NSInteger playSecondsInt = pLayDurationInt % 60;
+        NSString *playTimeStr = [NSString stringWithFormat:@"%02ld:%02ld", (long)playMinutesInt, (long)playSecondsInt];
+        self.maximumLabel.text = playTimeStr;
+        [self.backImageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageURL] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+        [self refreshPage];
+    }
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self createTimer];
     });
+}
+
+- (UIView *)endView
+{
+    if (!_endView) {
+        _endView = [[UIImageView alloc] init];
+        _endView.userInteractionEnabled = YES;
+        
+        UIView * blackView = [[UIView alloc] init];
+        blackView.backgroundColor = [UIColor blackColor];
+        blackView.alpha = .5f;
+        [_endView addSubview:blackView];
+        [blackView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(0);
+        }];
+        
+        UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+        [_endView addSubview:backButton];
+        [backButton addTarget:self action:@selector(quitBack) forControlEvents:UIControlEventTouchUpInside];
+        [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(10);
+            make.left.mas_equalTo(5);
+            make.width.height.mas_equalTo(40);
+        }];
+        
+        self.endCollect = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.endCollect setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.endCollect setImage:[UIImage imageNamed:@"shipi_shc"] forState:UIControlStateNormal];
+        [self.endCollect setImage:[UIImage imageNamed:@"shipi_yishc"] forState:UIControlStateSelected];
+        self.endCollect.titleLabel.font = kPingFangLight(13);
+        [self.endCollect setTitle:RDLocalizedString(@"RDString_Collect") forState:UIControlStateNormal];
+        [self.endCollect addTarget:self action:@selector(collectAciton:) forControlEvents:UIControlEventTouchUpInside];
+        self.endCollect.selected = self.collectButton.isSelected;
+        [_endView addSubview:self.endCollect];
+        
+        UIButton * endShare = [UIButton buttonWithType:UIButtonTypeCustom];
+        [endShare setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [endShare setImage:[UIImage imageNamed:@"shipi_fx"] forState:UIControlStateNormal];
+        endShare.titleLabel.font = kPingFangLight(13);
+        [endShare addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
+        [endShare setTitle:RDLocalizedString(@"RDString_Share") forState:UIControlStateNormal];
+        [_endView addSubview:endShare];
+        
+        UIButton * replayButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [replayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [replayButton setTitle:RDLocalizedString(@"RDString_RDRePlay") forState:UIControlStateNormal];
+        replayButton.titleLabel.font = kPingFangLight(13);
+        [replayButton setImage:[UIImage imageNamed:@"shipi_cb"] forState:UIControlStateNormal];
+        [replayButton addTarget:self action:@selector(resetVod:) forControlEvents:UIControlEventTouchUpInside];
+        [_endView addSubview:replayButton];
+        
+        [self.endCollect setImageEdgeInsets:UIEdgeInsetsMake(0, 2.5, 17, 0)];
+        [self.endCollect setTitleEdgeInsets:UIEdgeInsetsMake(58, -45, 0, 0)];
+        [endShare setImageEdgeInsets:UIEdgeInsetsMake(0, 2.5, 17, 0)];
+        [endShare setTitleEdgeInsets:UIEdgeInsetsMake(58, -45, 0, 0)];
+        [replayButton setImageEdgeInsets:UIEdgeInsetsMake(0, 2.5, 17, 0)];
+        [replayButton setTitleEdgeInsets:UIEdgeInsetsMake(58, -45, 0, 0)];
+        
+        [self.endCollect mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.mas_equalTo(-kMainBoundsWidth / 4);
+            make.centerY.mas_equalTo(0);
+            make.size.mas_equalTo(CGSizeMake(50, 70));
+        }];
+        [endShare mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.mas_equalTo(0);
+            make.centerY.mas_equalTo(0);
+            make.size.mas_equalTo(CGSizeMake(50, 70));
+        }];
+        [replayButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.mas_equalTo(kMainBoundsWidth / 4);
+            make.centerY.mas_equalTo(0);
+            make.size.mas_equalTo(CGSizeMake(50, 70));
+        }];
+    }
+    return _endView;
+}
+
+- (void)resetVod:(UIButton *)button
+{
+    [self demandVideoWithModel:self.model force:0];
 }
 
 - (void)dealloc
