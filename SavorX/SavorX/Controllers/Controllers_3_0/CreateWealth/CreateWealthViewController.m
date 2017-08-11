@@ -250,7 +250,16 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = [UIColor clearColor];
         cell.contentView.backgroundColor = [UIColor clearColor];
-        
+        if (model.type == 2) {
+            cell.countLabel.hidden = NO;
+            cell.countVideoLabel.hidden = YES;
+        }else if (model.type == 3 || model.type == 4){
+            cell.countLabel.hidden = YES;
+            cell.countVideoLabel.hidden = NO;
+        }else{
+            cell.countLabel.hidden = YES;
+            cell.countVideoLabel.hidden = YES;
+        }
         [cell configModelData:model];
         
         return cell;
