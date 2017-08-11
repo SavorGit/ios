@@ -68,6 +68,8 @@
     self.isPortrait = YES;
     self.isComeBack = YES;
     _isComplete = NO;
+    _isPortrait = YES;
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.scrollObjecArr = [[NSMutableArray alloc] initWithCapacity:100];
@@ -220,7 +222,11 @@
     if (_imageScrollView == nil) {
         
         _imageScrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
-        _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *2);
+        if (_isPortrait == YES) {
+            _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *2);
+        }else{
+            _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight);
+        }
         _imageScrollView.pagingEnabled = YES;
         _imageScrollView.showsHorizontalScrollIndicator = NO;
         _imageScrollView.showsVerticalScrollIndicator = NO;
@@ -521,7 +527,12 @@ static int temp = -1;
         _topView = [[UIImageView alloc] initWithFrame:CGRectZero];
         _topView.userInteractionEnabled = YES;
         _topView.contentMode = UIViewContentModeScaleToFill;
-        _topView.backgroundColor = kThemeColor;
+        if (_isPortrait == YES) {
+            [_topView setImage:[UIImage new]];
+            _topView.backgroundColor = kThemeColor;
+        }else{
+            [_topView setImage:[UIImage imageNamed:@"quanpingmc"]];
+        }
         [self.view addSubview:_topView];
         [_topView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
@@ -611,7 +622,11 @@ static int temp = -1;
 //定义每一个cell的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(kMainBoundsWidth/2 - 5, 152);
+    if (_isPortrait == YES) {
+        return CGSizeMake(kMainBoundsWidth/2 - 5, 152);
+    }else{
+        return CGSizeMake(kMainBoundsWidth/3 - 7.5, 152);
+    }
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -623,8 +638,12 @@ static int temp = -1;
     [self removeObserver];
     [_imageScrollView removeFromSuperview];
     _imageScrollView = nil;
+    [_collectionView removeFromSuperview];
+    _collectionView = nil;
+
     [self requestWithContentId:self.imgAtlModel.artid];
     [self setUpDatas];
+    
     
 }
 
