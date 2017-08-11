@@ -45,6 +45,7 @@
 "RDString_RDRePlay" = "重播";
 "RDString_Share" = "分享";
 "RDString_Collect" = "收藏";
+"RDString_ReLoad" = "重新加载";
 
 //连接
 "RDString_PleaseInputNum" = "请输入电视中的三位数连接电视";
@@ -184,6 +185,7 @@
 "RDString_FailedWithDemand" = "糟糕,点播失败请检查网络wifi";
 "RDString_FailedWithScreen" = "糟糕,投屏失败请检查网络wifi";
 "RDString_FailedWithShare" =  "分享失败";
+"RDString_FailedWithAVPlayer" = "加载超时，点击重试";
 
 //网络异常
 "RDString_NetFailedWithData" = "数据出错了，更新失败";

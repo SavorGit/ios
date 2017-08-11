@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, RDDefinition) {
 - (void)sliderDidSlideToTime:(NSInteger)time;
 - (void)backButtonDidClicked;
 - (void)replayButtonDidClicked;
+- (void)replayButtonDidClickedWhenFailed;
 - (void)shotButtonDidClicked;
 - (void)shareButtonDidClicked;
 - (void)collectButtonDidClicked:(UIButton *)button;

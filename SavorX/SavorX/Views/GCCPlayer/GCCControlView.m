@@ -47,6 +47,9 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
 @property (nonatomic, strong) UIProgressView * progressBG;
 @property (nonatomic, strong) UIProgressView * progressView;
 
+@property (nonatomic, strong) UIImageView * failedView;
+@property (nonatomic, assign) BOOL isPlayFailed;
+
 @end
 
 @implementation GCCControlView
@@ -67,13 +70,78 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         make.edges.mas_equalTo(0);
     }];
     
+    self.failedView = [[UIImageView alloc] init];
+    self.failedView.userInteractionEnabled = YES;
+    [self.toolView addSubview:self.failedView];
+    [self.failedView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    UIView * blackView = [[UIView alloc] init];
+    blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.6f];
+    [self.failedView addSubview:blackView];
+    [blackView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    UILabel * label =  [[UILabel alloc] init];
+    label.textColor = [UIColor whiteColor];
+    label.font = kPingFangLight(15);
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = RDLocalizedString(@"RDString_FailedWithAVPlayer");
+    [self.failedView addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.mas_equalTo(0);
+        make.height.mas_equalTo(20);
+        make.centerY.mas_equalTo(-20);
+    }];
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setBackgroundColor:VCBackgroundColor];
+    button.titleLabel.font = kPingFangLight(14);
+    [button setTitle:RDLocalizedString(@"RDString_ReLoad") forState:UIControlStateNormal];
+    [button setTitleColor:kThemeColor forState:UIControlStateNormal];
+    button.layer.cornerRadius = 3.f;
+    button.layer.masksToBounds = YES;
+    [button addTarget:self action:@selector(replayWhenFailed) forControlEvents:UIControlEventTouchUpInside];
+    [self.failedView addSubview:button];
+    [button mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(0);
+        make.centerY.mas_equalTo(15);
+        make.size.mas_equalTo(CGSizeMake(80, 25));
+    }];
+    
     self.topImageView = [[UIImageView alloc] init];
     self.topImageView.image = [UIImage imageNamed:@"topImageView"];
+    self.topImageView.userInteractionEnabled = YES;
     [self.toolView addSubview:self.topImageView];
     
     self.bottomView = [[UIView alloc] initWithFrame:CGRectZero];
     self.bottomView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.6f];
     [self.toolView addSubview:self.bottomView];
+    
+    self.playButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.playButton setImage:[UIImage imageNamed:@"sp_zanting"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageNamed:@"sp_bofang"] forState:UIControlStateSelected];
+    [self.playButton addTarget:self action:@selector(playButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.playButton];
+    
+    self.loadingView = [[UIActivityIndicatorView alloc] init];
+    self.loadingView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    [self addSubview:self.loadingView];
+    
+    self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
+    [self.collectButton addTarget:self action:@selector(collectVideo) forControlEvents:UIControlEventTouchUpInside];
+    [self.topImageView addSubview:self.collectButton];
+    
+    self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.shareButton setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
+    [self.shareButton addTarget:self action:@selector(shareVideo) forControlEvents:UIControlEventTouchUpInside];
+    [self.topImageView addSubview:self.shareButton];
+    
+    self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    [self.backButton addTarget:self action:@selector(backButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.backButton];
     
     self.slider = [[UISlider alloc] init];
     [self.slider setThumbImage:[UIImage imageNamed:@"bigSlider"] forState:UIControlStateNormal];
@@ -87,13 +155,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     // slider结束滑动事件
     [self.slider addTarget:self action:@selector(progressSliderTouchEnded:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchCancel | UIControlEventTouchUpOutside];
     self.slider.userInteractionEnabled = NO;
-    [self.toolView addSubview:self.slider];
-    
-    self.playButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.playButton setImage:[UIImage imageNamed:@"sp_zanting"] forState:UIControlStateNormal];
-    [self.playButton setImage:[UIImage imageNamed:@"sp_bofang"] forState:UIControlStateSelected];
-    [self.playButton addTarget:self action:@selector(playButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:self.playButton];
+    [self.bottomView addSubview:self.slider];
     
     self.timeLabel = [[UILabel alloc] init];
     self.timeLabel.backgroundColor = [UIColor clearColor];
@@ -101,7 +163,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     self.timeLabel.textAlignment = NSTextAlignmentCenter;
     self.timeLabel.text = @"00:00";
     self.timeLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:13];
-    [self.toolView addSubview:self.timeLabel];
+    [self.bottomView addSubview:self.timeLabel];
     
     self.totalTimeLabel = [[UILabel alloc] init];
     self.totalTimeLabel.backgroundColor = [UIColor clearColor];
@@ -109,7 +171,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     self.totalTimeLabel.textAlignment = NSTextAlignmentCenter;
     self.totalTimeLabel.text = @"00:00";
     self.totalTimeLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:13];
-    [self.toolView addSubview:self.totalTimeLabel];
+    [self.bottomView addSubview:self.totalTimeLabel];
     
     self.bufferView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
     self.bufferView.trackTintColor = [UIColor clearColor];
@@ -136,22 +198,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     [self.screenButton setImage:[UIImage imageNamed:@"RDFullScreen"] forState:UIControlStateNormal];
     [self.screenButton setImage:[UIImage imageNamed:@"RDBackFullScreen"] forState:UIControlStateSelected];
     [self.screenButton addTarget:self action:@selector(screenButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [self.toolView addSubview:self.screenButton];
-    
-    self.loadingView = [[UIActivityIndicatorView alloc] init];
-    self.loadingView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    [self addSubview:self.loadingView];
-    
-    self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
-    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
-    [self.collectButton addTarget:self action:@selector(collectVideo) forControlEvents:UIControlEventTouchUpInside];
-    [self.toolView addSubview:self.collectButton];
-    
-    self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.shareButton setImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
-    [self.shareButton addTarget:self action:@selector(shareVideo) forControlEvents:UIControlEventTouchUpInside];
-    [self.toolView addSubview:self.shareButton];
+    [self.bottomView addSubview:self.screenButton];
     
     self.definitionButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.definitionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -162,14 +209,9 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     [self.definitionButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10)];
     [self.definitionButton setImageEdgeInsets:UIEdgeInsetsMake(0, 40, 0, 0)];
     [self.definitionButton addTarget:self action:@selector(changeVideoDefinition) forControlEvents:UIControlEventTouchUpInside];
-    [self.toolView addSubview:self.definitionButton];
+    [self.bottomView addSubview:self.definitionButton];
     self.definition = RDDefinitionHQD;
     self.definitionButton.hidden = YES;
-    
-    self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-    [self.backButton addTarget:self action:@selector(backButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:self.backButton];
     
     self.endView = [[UIView alloc] init];
     [self addSubview:self.endView];
@@ -358,6 +400,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         make.edges.mas_equalTo(0);
     }];
     
+    self.isPlayFailed = NO;
     self.progressBG.alpha = 0.f;
     self.playButton.alpha = 0.f;
     self.isShow = YES;
@@ -376,12 +419,15 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         make.edges.mas_equalTo(0);
     }];
     
-    UIView * view = [[UIView alloc] initWithFrame:CGRectZero];
-    view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.3f];
-    [self.imageView addSubview:view];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(0);
-    }];
+    if (![self.imageView viewWithTag:748]) {
+        UIView * view = [[UIView alloc] initWithFrame:CGRectZero];
+        view.tag = 748;
+        view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.3f];
+        [self.imageView addSubview:view];
+        [view mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(0);
+        }];
+    }
 }
 
 //截屏
@@ -673,8 +719,19 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     }
 }
 
+- (void)replayWhenFailed
+{
+    self.isPlayFailed = NO;
+    self.endView.hidden = YES;
+    [self showToolView];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(replayButtonDidClickedWhenFailed)]) {
+        [self.delegate replayButtonDidClickedWhenFailed];
+    }
+}
+
 - (void)replay
 {
+    self.isPlayFailed = NO;
     self.endView.hidden = YES;
     [self showToolView];
     if (self.delegate && [self.delegate respondsToSelector:@selector(replayButtonDidClicked)]) {
@@ -728,7 +785,8 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         [self backButtonDidClicked:self.backButton];
     }
     [self stopLoading];
-    self.playButton.alpha = 1.f;
+    self.playButton.alpha = 0.f;
+    self.isPlayFailed = YES;
 }
 
 - (void)setVideoTotalTime:(NSInteger)time
@@ -870,7 +928,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
 //演示控制栏
 - (void)showToolView
 {
-    if (self.isAnimation) {
+    if (self.isAnimation || self.isPlayFailed) {
         return;
     }
     self.isAnimation = YES;
@@ -903,7 +961,7 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
 //隐藏控制栏
 - (void)hiddenToolView
 {
-    if (self.isAnimation || self.isSlider) {
+    if (self.isAnimation || self.isSlider || self.isPlayFailed) {
         return;
     }
     self.isAnimation = YES;
@@ -934,6 +992,20 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _imageView;
+}
+
+- (void)setIsPlayFailed:(BOOL)isPlayFailed
+{
+    _isPlayFailed = isPlayFailed;
+    
+    if (isPlayFailed) {
+        self.failedView.hidden = NO;
+        self.toolView.hidden = NO;
+        self.bottomView.hidden = YES;
+    }else{
+        self.failedView.hidden = YES;
+        self.bottomView.hidden = NO;
+    }
 }
 
 #pragma mark 屏幕转屏相关
