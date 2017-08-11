@@ -9,12 +9,18 @@
 #import "RDMoreDemandViewController.h"
 #import "RDDemandTableViewCell.h"
 #import "WebViewController.h"
+#import "RD_MJRefreshHeader.h"
+#import "HSDemandListRequest.h"
 
 @interface RDMoreDemandViewController ()<UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) NSArray * dataSource;
+@property (nonatomic, strong) NSMutableArray * dataSource;
 
 @property (nonatomic, strong) UITableView * tableView;
+
+@property (nonatomic, strong) UILabel * TopFreshLabel;
+
+@property (nonatomic, strong) UIView * topView;
 
 @end
 
@@ -23,7 +29,7 @@
 - (instancetype)initWithModelSource:(NSArray *)source
 {
     if (self = [super init]) {
-        self.dataSource = [NSArray arrayWithArray:source];
+        self.dataSource = [NSMutableArray arrayWithArray:source];
         [self setupViews];
     }
     return self;
@@ -31,13 +37,14 @@
 
 - (void)setupViews
 {
+    self.automaticallyAdjustsScrollViewInsets = NO;
     
-    UIView * topView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    topView.userInteractionEnabled = YES;
-    topView.contentMode = UIViewContentModeScaleToFill;
-    topView.backgroundColor = kThemeColor;
-    [self.view addSubview:topView];
-    [topView mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.topView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    self.topView.userInteractionEnabled = YES;
+    self.topView.contentMode = UIViewContentModeScaleToFill;
+    self.topView.backgroundColor = kThemeColor;
+    [self.view addSubview:self.topView];
+    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
@@ -47,7 +54,7 @@
     [backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     [backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateSelected];
     [backButton addTarget:self action:@selector(navBackButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [topView addSubview:backButton];
+    [self.topView addSubview:backButton];
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStylePlain];
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -55,13 +62,56 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[RDDemandTableViewCell class] forCellReuseIdentifier:@"DemandCell"];
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 10)];
+    //创建tableView动画加载头视图
+    self.tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(topView.mas_bottom);
+        make.top.mas_equalTo(self.topView.mas_bottom);
         make.left.bottom.right.mas_equalTo(0);
     }];
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 10, 0);
+}
+
+- (void)refreshData
+{
+    HSDemandListRequest * request = [[HSDemandListRequest alloc] initWithHotelID:[GlobalData shared].hotelId];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.tableView.mj_header endRefreshing];
+        NSArray * listArray = [response objectForKey:@"result"];
+        
+        if (listArray && listArray.count != 0) {
+            
+            [self.dataSource removeAllObjects];
+            for (NSDictionary * dict in listArray) {
+                CreateWealthModel * model = [[CreateWealthModel alloc] initWithDictionary:dict];
+                [self.dataSource addObject:model];
+            }
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
+            [self.tableView reloadData];
+            
+        }else{
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
+        }
+        
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self.tableView.mj_header endRefreshing];
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+        }
+        [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [self.tableView.mj_header endRefreshing];
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+        }
+        if (error.code == -1001) {
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithTimeOut")];
+        }else{
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
+        }
+    }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -128,6 +178,55 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+- (NSMutableArray *)dataSource
+{
+    if (!_dataSource) {
+        _dataSource = [[NSMutableArray alloc] init];
+    }
+    return _dataSource;
+}
+
+//页面顶部下弹状态栏显示
+- (void)showTopFreshLabelWithTitle:(NSString *)title
+{
+    //移除当前动画
+    [self.TopFreshLabel.layer removeAllAnimations];
+    
+    //取消延时重置状态栏
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetTopFreshLabel) object:nil];
+    
+    //重新设置状态栏下弹动画
+    self.TopFreshLabel.text = title;
+    self.TopFreshLabel.frame = CGRectMake(0, self.topView.frame.size.height - 35, kMainBoundsWidth, 35);
+    [UIView animateWithDuration:.5f animations:^{
+        self.TopFreshLabel.frame = CGRectMake(0, self.topView.frame.size.height, kMainBoundsWidth, 35);
+    } completion:^(BOOL finished) {
+        [self performSelector:@selector(resetTopFreshLabel) withObject:nil afterDelay:2.f];
+    }];
+}
+
+//重置页面顶部下弹状态栏
+- (void)resetTopFreshLabel
+{
+    [UIView animateWithDuration:.5f animations:^{
+        self.TopFreshLabel.frame = CGRectMake(0, self.topView.frame.size.height - 35, kMainBoundsWidth, 35);
+    }];
+}
+
+- (UILabel *)TopFreshLabel
+{
+    if (!_TopFreshLabel) {
+        _TopFreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.topView.frame.size.height - 35, kMainBoundsWidth, 35)];
+        _TopFreshLabel.textAlignment = NSTextAlignmentCenter;
+        _TopFreshLabel.backgroundColor = [UIColorFromRGB(0xffebc3) colorWithAlphaComponent:.96f];
+        _TopFreshLabel.font = [UIFont systemFontOfSize:15];
+        _TopFreshLabel.textColor = UIColorFromRGB(0x9a6f45);
+        [self.view addSubview:_TopFreshLabel];
+        [self.view bringSubviewToFront:self.topView];
+    }
+    return _TopFreshLabel;
 }
 
 - (void)didReceiveMemoryWarning {

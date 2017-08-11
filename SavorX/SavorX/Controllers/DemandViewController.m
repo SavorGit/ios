@@ -851,11 +851,12 @@
     }
     if (!self.webView.superview) {
         [self.view addSubview:self.webView];
+        [self.view bringSubviewToFront:self.playBackView];
         [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.backImageView.mas_bottom);
             make.left.mas_equalTo(0);
             make.width.mas_equalTo(kMainBoundsWidth);
-            make.bottom.mas_equalTo(self.playBackView.mas_top);
+            make.bottom.mas_equalTo(0);
         }];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
@@ -1059,7 +1060,7 @@
     //TableView的高度
     CGFloat tabHeight = 0;
     if (self.dataSource.count != 0) {
-        tabHeight = self.dataSource.count *96 + 48 *2;
+        tabHeight = self.dataSource.count *96 + 48 + 48 + BOTTOMHEIGHT;
     }
     
     [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -1070,6 +1071,8 @@
     CGFloat theight = tabHeight + 115 + 30;
     if (self.dataSource.count != 0) {
         theight += 8;
+    }else{
+        theight += BOTTOMHEIGHT;
     }
     
     CGFloat cSizeheight = self.webView.scrollView.contentSize.height;
@@ -1122,7 +1125,7 @@
         if (self.dataSource.count == 0) {
             tabHeiht = 0;
         }else{
-            tabHeiht = self.dataSource.count *96 +48 *2;
+            tabHeiht = self.dataSource.count *96 + 48 + 48 + BOTTOMHEIGHT;
         }
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(kMainBoundsWidth);
@@ -1154,7 +1157,8 @@
         [button addTarget:self action:@selector(moreButtonDidBeclicked) forControlEvents:UIControlEventTouchUpInside];
         [footView addSubview:button];
         [button mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.center.mas_equalTo(0);
+            make.top.mas_equalTo((48 - 25) / 2.f);
+            make.centerX.mas_equalTo(0);
             make.size.mas_equalTo(CGSizeMake(130, 25));
         }];
         button.layer.cornerRadius = 25 / 2.f;
