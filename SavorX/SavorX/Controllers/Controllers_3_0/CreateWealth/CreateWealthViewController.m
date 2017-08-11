@@ -369,6 +369,7 @@
         iatVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         
         [self presentViewController:iatVC animated:YES completion:nil];
+
         
     } else if (model.type == 3 || model.type == 4){
         [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
