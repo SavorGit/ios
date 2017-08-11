@@ -82,23 +82,27 @@
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (orientation == UIInterfaceOrientationPortrait) {
-        CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
-        [self mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight + DistanceToBottom));
-            make.bottom.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-        }];
-        self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
+        if (self.superview) {
+            CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
+            [self mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight + DistanceToBottom));
+                make.bottom.mas_equalTo(0);
+                make.left.mas_equalTo(0);
+            }];
+            self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
+        }
+
         
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
-        CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
-        [self mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight + DistanceToBottom));
-            make.bottom.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-        }];
-        self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
-
+        if (self.superview) {
+            CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
+            [self mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight + DistanceToBottom));
+                make.bottom.mas_equalTo(0);
+                make.left.mas_equalTo(0);
+            }];
+            self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
+        }
     }
 }
 

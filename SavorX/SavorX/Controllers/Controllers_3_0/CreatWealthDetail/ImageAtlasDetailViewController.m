@@ -91,6 +91,8 @@
         
         [self hiddenLoadingView];
         
+        [self.imageDatas removeAllObjects];
+        
         if ([response objectForKey:@"result"]) {
             NSArray *resultArr = [response objectForKey:@"result"];
             if (resultArr && resultArr.count > 0) {
@@ -141,7 +143,6 @@
             CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
             [self.dataSource addObject:welthModel];
         }
-        
         // 当返回有推荐数据时调用
         if (self.dataSource.count > 0) {
             [self.collectionView reloadData];
@@ -217,6 +218,7 @@
 - (UIScrollView *)imageScrollView
 {
     if (_imageScrollView == nil) {
+        
         _imageScrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
         _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *2);
         _imageScrollView.pagingEnabled = YES;
@@ -226,6 +228,8 @@
         _imageScrollView.directionalLockEnabled = YES;
         _imageScrollView.delegate = self;
         
+        //点击推荐图集，重新请求数据后清除
+        [self.scrollObjecArr removeAllObjects];
         // 设置小ScrollView（装载imageView的scrollView）
         for (int i = 0; i < self.imageDatas.count; i++) {
             
@@ -233,7 +237,7 @@
             NSString *urlStr = tmpModel.pic_url;
             _photoScrollView = [[DDPhotoScrollView alloc] initWithFrame:CGRectZero urlString:urlStr];
             [_imageScrollView addSubview:_photoScrollView];
-            [_scrollObjecArr addObject:_photoScrollView];
+            [self.scrollObjecArr addObject:_photoScrollView];
             [_photoScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight));
                 make.top.mas_equalTo(0);
@@ -246,7 +250,7 @@
                 // 如果已经消失，就出现
                 if (weakSelf.isDisappear == YES) {
                     // 如果是竖屏状态
-                    if (self.isPortrait == YES) {
+                    if (weakSelf.isPortrait == YES) {
                         [SAVORXAPI postUMHandleWithContentId:@"page_pic_vertical_show" key:nil value:nil];
                     }else{
                         [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_show" key:nil value:nil];
@@ -265,7 +269,7 @@
                     [weakSelf setNeedsStatusBarAppearanceUpdate];
                 } else {
                     // 如果是竖屏状态
-                    if (self.isPortrait == YES) {
+                    if (weakSelf.isPortrait == YES) {
                         [SAVORXAPI postUMHandleWithContentId:@"page_pic_vertical_hide" key:nil value:nil];
                     }else{
                         [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_hide" key:nil value:nil];
@@ -339,11 +343,14 @@
 #pragma mark - UIScrollViewDelegate 代理方法
  - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
      
+     // y轴发生了位移
      _isYChange = NO;
      
+     //算出页码
      CGFloat pageWidth = scrollView.frame.size.width;
      float fractionalPage = scrollView.contentOffset.x / pageWidth;
      NSInteger page = lround(fractionalPage);
+     
      [self setValue:@(page) forKey:@"currentPage"];
      
  }
@@ -375,8 +382,7 @@
     if (self.isComeBack == YES) {
         
         if (offsetY == 0 && _isYChange == YES){
-            self.view.backgroundColor = VCBackgroundColor;
-            [self.view setAlpha:1.0];
+            self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent: 1.0];
             if (self.isDisappear == YES) {
                 [self wipeUpOrDown];
             }
@@ -393,23 +399,23 @@
     if (scrollView.contentOffset.y > 120) {
         _imageScrollView.pagingEnabled = NO;
         self.isComeBack = NO;
-        [self dismissFromTopWithDuration:3.0];
+        [self dismissFromTopWithDuration:0.5];
     }else if (scrollView.contentOffset.y < - 120){
         self.isComeBack = NO;
-        [self dismissFromDownWithDuration:3.0];
+        [self dismissFromDownWithDuration:0.5];
     }
 }
 
 // 向上或是向下滑
 - (void)wipeUpOrDown{
     
+    __weak typeof(self) weakSelf = self;
     if (self.isDisappear == YES) {
         self.isDisappear = NO;
-        [self.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [weakSelf.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if (![obj isKindOfClass:[UIScrollView class]]) {
-                [UIView animateWithDuration:0.5 animations:^{
+                [UIView animateWithDuration:0.2 animations:^{
                     obj.alpha = 1;
-                    self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
                 } completion:^(BOOL finished) {
                     obj.userInteractionEnabled = YES;
                 }];
@@ -417,11 +423,10 @@
         }];
     }else{
         self.isDisappear = YES;
-        [self.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [weakSelf.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if (![obj isKindOfClass:[UIScrollView class]]) {
-                [UIView animateWithDuration:0.5 animations:^{
+                [UIView animateWithDuration:0.2 animations:^{
                     obj.alpha = 0;
-                    self.view.backgroundColor = [UIColor colorWithRed:235/255.0 green:230/255.0 blue:223/255.0 alpha:1.0];
                 } completion:^(BOOL finished) {
                     obj.userInteractionEnabled = NO;
                 }];
@@ -443,7 +448,8 @@
     } completion:^(BOOL finished) {
         
         [_imageScrollView removeFromSuperview];
-        [self backButtonClick];
+        [GlobalData shared].isImageAtlas = NO;
+        [self dismissViewControllerAnimated:NO completion:nil];
         
     }];
 }
@@ -460,7 +466,8 @@
     } completion:^(BOOL finished) {
         
         [_imageScrollView removeFromSuperview];
-        [self backButtonClick];
+        [GlobalData shared].isImageAtlas = NO;
+        [self dismissViewControllerAnimated:NO completion:nil];
         
     }];
 }
@@ -608,7 +615,17 @@ static int temp = -1;
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-
+    
+    CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
+    self.imgAtlModel = tmpModel;
+    
+    _currentIndex = 0;
+    [self removeObserver];
+    [_imageScrollView removeFromSuperview];
+    _imageScrollView = nil;
+    [self requestWithContentId:self.imgAtlModel.artid];
+    [self setUpDatas];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -782,6 +799,7 @@ static int temp = -1;
             make.left.mas_equalTo(0);
         }];
         self.imageScrollView.width = kMainBoundsWidth;
+        
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
         _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight);
         
@@ -840,6 +858,13 @@ static int temp = -1;
 - (void)dealloc
 {
     temp = -1;
+    [self removeObserver];
+
+}
+
+// 移除通知及观察者
+- (void)removeObserver{
+    
     if (self.isReady) {
         [self removeObserver:self forKeyPath:@"currentPage"];
         
@@ -847,7 +872,6 @@ static int temp = -1;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     }
 }
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
