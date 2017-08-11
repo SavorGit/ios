@@ -112,7 +112,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)setPlayItemWithURL:(NSString *)url
 {
     NSString * preCheck = [url substringToIndex:url.length - 8];
-    NSLog(@"视频地址：%@", url);
     if ([self.currentURL hasPrefix:preCheck]) {
         self.time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
     }else{
@@ -724,6 +723,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //    }
 }
 
+- (void)replayButtonDidClickedWhenFailed
+{
+    [self setPlayItemWithURL:self.currentURL];
+}
+
 - (void)shareButtonDidClicked
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(videoShouldBeShare)]) {
@@ -839,8 +843,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)playDidBeFaild
 {
     [self.controlView didPlayFailed];
-    [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithPlayer") delay:1.5f];
-    [self insertSubview:self.imageView belowSubview:self.controlView];
 }
 
 // 重写这个方法，告诉系统，这个View的Layer不是普通的Layer，而是用于播放视频的Layer
