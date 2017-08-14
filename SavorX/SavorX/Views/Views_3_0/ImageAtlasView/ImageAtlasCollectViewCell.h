@@ -10,6 +10,6 @@
 
 @interface ImageAtlasCollectViewCell : UICollectionViewCell
 
-- (void)configModelData:(CreateWealthModel *)model;
+- (void)configModelData:(CreateWealthModel *)model andIsPortrait:(BOOL)isPortrait;
 
 @end

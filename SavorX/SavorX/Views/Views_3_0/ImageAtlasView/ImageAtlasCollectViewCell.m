@@ -37,7 +37,7 @@
     [self addSubview:_bgImageView];
     [_bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(kMainBoundsWidth/2 - 5);
-        make.height.mas_equalTo(100);
+        make.height.mas_equalTo(120);
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
     }];
@@ -84,8 +84,25 @@
     return height;
 }
 
-- (void)configModelData:(CreateWealthModel *)model{
+- (void)configModelData:(CreateWealthModel *)model andIsPortrait:(BOOL)isPortrait{
 
+    if (isPortrait == NO) {
+        
+        [_bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(kMainBoundsWidth/3 - 7.5);
+            make.height.mas_equalTo(90);
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+        }];
+        
+        [_titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(kMainBoundsWidth/3 - 2.5 - 20);
+            make.height.mas_equalTo(21);
+            make.top.mas_equalTo(_bgImageView.mas_bottom).offset(10);
+            make.left.mas_equalTo(10);
+        }];
+    }
+    
     CGFloat titleHeight = [self getHeightByWidth:kMainBoundsWidth/2 - 2.5 - 20 title:model.title font:kPingFangRegular(15)];
     if (titleHeight > 20) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
