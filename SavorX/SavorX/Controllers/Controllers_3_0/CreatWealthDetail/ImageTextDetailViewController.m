@@ -40,6 +40,12 @@
     [super viewDidLoad];
     
     [self checkIsOnLine];
+    // app退到后台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+    // app进入前台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    self.view.backgroundColor = VCBackgroundColor;
+    _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
 }
 
 - (void)checkIsOnLine
@@ -53,7 +59,7 @@
         [self setupViews];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         if ([[response objectForKey:@"code"] integerValue] == 19002) {
-            [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+            [self theArtIsNotOnline];
         }else{
             [self showNoNetWorkViewInView:self.view];
         }
@@ -64,19 +70,122 @@
     }];
 }
 
+- (void)theArtIsNotOnline
+{
+    UIView * notOnlineView = [[UIView alloc] init];
+    notOnlineView.tag = 44444;
+    notOnlineView.backgroundColor = VCBackgroundColor;
+    [self.view addSubview:notOnlineView];
+    [notOnlineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)notOnlineView;
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+    
+    UIView * topView = [[UIView alloc] init];
+    [notOnlineView addSubview:topView];
+    [topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.equalTo(self.view.mas_width).multipliedBy(.45f);
+    }];
+    
+    UILabel * label = [[UILabel alloc] init];
+    label.textColor = UIColorFromRGB(0x434343);
+    label.text = @"该内容找不到了~";
+    label.font = kPingFangRegular(15);
+    label.textAlignment = NSTextAlignmentCenter;
+    [topView addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(25);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(20);
+    }];
+    
+    UIImageView * imageView = [[UIImageView alloc] init];
+    [imageView setImage:[UIImage imageNamed:@"kong_wenzhang.png"]];
+    [topView addSubview:imageView];
+    [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(0);
+        make.bottom.equalTo(label.mas_top).offset(-10);
+        make.size.mas_equalTo(CGSizeMake(83 / 5 * 4, 69 / 5 * 4));
+    }];
+    
+    UIView * lineView = [[UIView alloc] init];
+    lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
+    [topView addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.right.mas_equalTo(0);
+        make.height.mas_equalTo(1);
+    }];
+    
+    [HSImTeRecommendRequest cancelRequest];
+    HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.imgTextModel.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        
+        for (int i = 0; i < resultArr.count; i ++) {
+            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            welthModel.acreateTime = welthModel.updateTime;
+            [self.dataSource addObject:welthModel];
+        }
+        
+        if (self.dataSource.count > 0) {
+            UITableView * tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStyleGrouped];
+            tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+            tableView.clipsToBounds = YES;
+            tableView.backgroundColor = VCBackgroundColor;
+            tableView.delegate = self;
+            tableView.dataSource = self;
+            tableView.tag = 4444;
+            [notOnlineView addSubview:tableView];
+            [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(topView.mas_bottom);
+                make.left.bottom.right.mas_equalTo(0);
+            }];
+            
+            UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
+            headView.backgroundColor = VCBackgroundColor;
+            UILabel *recommendLabel = [[UILabel alloc] init];
+            recommendLabel.frame = CGRectMake(15, 10, 100, 30);
+            recommendLabel.textColor = UIColorFromRGB(0x922c3e);
+            recommendLabel.font = kPingFangRegular(15);
+            recommendLabel.text = RDLocalizedString(@"RDString_RecommendForYou");
+            recommendLabel.textAlignment = NSTextAlignmentLeft;
+            [headView addSubview:recommendLabel];
+            tableView.tableHeaderView = headView;
+            
+            [tableView reloadData];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
+}
+
 - (void)setupViews
 {
     _isComplete = NO;
     
-    // app退到后台
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
-    // app进入前台
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    if (!self.webView) {
+        [self createWebView];
+    }else{
+        if (!isEmptyString(self.imgTextModel.contentURL)) {
+            NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]];
+            [self.webView loadRequest:request];
+        }
+    }
     
-    self.view.backgroundColor = VCBackgroundColor;
-    _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
-    
-    [self createWebView];
     [self setUpDatas];
 }
 
@@ -403,12 +512,7 @@
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     self.imgTextModel = tmpModel;
-    [self.testView removeFromSuperview];
-    [self setUpDatas];
-    if (!isEmptyString(tmpModel.contentURL)) {
-        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]];
-        [self.webView loadRequest:request];
-    }
+    [self checkIsOnLine];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;

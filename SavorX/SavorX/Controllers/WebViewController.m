@@ -42,7 +42,6 @@
 @property (nonatomic, assign) BOOL hasWebObserver;
 
 @property (nonatomic, assign) BOOL isNeedHiddenNav; //是否需要隐藏导航栏
-@property (nonatomic, assign) BOOL tableViewIsOnWeb; //当前的推荐视图是否在webView上
 
 @end
 
@@ -82,7 +81,6 @@
 
 - (void)checkIsOnline
 {
-    self.tableViewIsOnWeb = NO;
     self.isNeedHiddenNav = NO;
     [self showLoadingView];
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
@@ -107,6 +105,7 @@
 {
     UIView * notOnlineView = [[UIView alloc] init];
     notOnlineView.tag = 44444;
+    notOnlineView.backgroundColor = VCBackgroundColor;
     [self.view addSubview:notOnlineView];
     [notOnlineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
@@ -114,58 +113,49 @@
     
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)notOnlineView;
     
-    self.isNeedHiddenNav = YES;
-    self.tableViewIsOnWeb = YES;
+    self.isNeedHiddenNav = NO;
     
     [self setNeedsStatusBarAppearanceUpdate];
     [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
     
-    UILabel * label = [[UILabel alloc] init];
-    label.backgroundColor = [UIColor blackColor];
-    label.textColor = UIColorFromRGB(0xf6f2ed);
-    label.text = @"该内容找不到了~";
-    label.textAlignment = NSTextAlignmentCenter;
-    [notOnlineView addSubview:label];
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+    UIView * topView = [[UIView alloc] init];
+    [notOnlineView addSubview:topView];
+    [topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
-        make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
+        make.height.equalTo(self.view.mas_width).multipliedBy(.45f);
     }];
     
-    UIButton * backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backButtonDidBeClicked) forControlEvents:UIControlEventTouchUpInside];
-    [notOnlineView addSubview:backButton];
-    [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(10);
-        make.left.mas_equalTo(10);
-        make.width.height.mas_equalTo(40);
+    UILabel * label = [[UILabel alloc] init];
+    label.textColor = UIColorFromRGB(0x434343);
+    label.text = @"该内容找不到了~";
+    label.font = kPingFangRegular(15);
+    label.textAlignment = NSTextAlignmentCenter;
+    [topView addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(25);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(20);
     }];
     
-    UITableView * tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStyleGrouped];
-    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    tableView.clipsToBounds = YES;
-    tableView.backgroundColor = UIColorFromRGB(0xf6f2ed);
-    tableView.delegate = self;
-    tableView.dataSource = self;
-    tableView.tag = 4444;
-    [notOnlineView addSubview:tableView];
-    [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(label.mas_bottom);
+    UIImageView * imageView = [[UIImageView alloc] init];
+    [imageView setImage:[UIImage imageNamed:@"kong_wenzhang.png"]];
+    [topView addSubview:imageView];
+    [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(0);
+        make.bottom.equalTo(label.mas_top).offset(-10);
+        make.size.mas_equalTo(CGSizeMake(83 / 5 * 4, 69 / 5 * 4));
+    }];
+    
+    UIView * lineView = [[UIView alloc] init];
+    lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
+    [topView addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.bottom.right.mas_equalTo(0);
+        make.height.mas_equalTo(1);
     }];
-    
-    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
-    headView.backgroundColor = UIColorFromRGB(0xf6f2ed);
-    UILabel *recommendLabel = [[UILabel alloc] init];
-    recommendLabel.frame = CGRectMake(15, 10, 100, 30);
-    recommendLabel.textColor = UIColorFromRGB(0x922c3e);
-    recommendLabel.font = kPingFangRegular(15);
-    recommendLabel.text = RDLocalizedString(@"RDString_RecommendForYou");
-    recommendLabel.textAlignment = NSTextAlignmentLeft;
-    [headView addSubview:recommendLabel];
-    tableView.tableHeaderView = headView;
     
     [HSImTeRecommendRequest cancelRequest];
     HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.model.artid];
@@ -182,7 +172,33 @@
             [self.dataSource addObject:welthModel];
         }
         
-        [tableView reloadData];
+        if (self.dataSource.count > 0) {
+            UITableView * tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStyleGrouped];
+            tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+            tableView.clipsToBounds = YES;
+            tableView.backgroundColor = VCBackgroundColor;
+            tableView.delegate = self;
+            tableView.dataSource = self;
+            tableView.tag = 4444;
+            [notOnlineView addSubview:tableView];
+            [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(topView.mas_bottom);
+                make.left.bottom.right.mas_equalTo(0);
+            }];
+            
+            UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
+            headView.backgroundColor = VCBackgroundColor;
+            UILabel *recommendLabel = [[UILabel alloc] init];
+            recommendLabel.frame = CGRectMake(15, 10, 100, 30);
+            recommendLabel.textColor = UIColorFromRGB(0x922c3e);
+            recommendLabel.font = kPingFangRegular(15);
+            recommendLabel.text = RDLocalizedString(@"RDString_RecommendForYou");
+            recommendLabel.textAlignment = NSTextAlignmentLeft;
+            [headView addSubview:recommendLabel];
+            tableView.tableHeaderView = headView;
+            
+            [tableView reloadData];
+        }
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
@@ -821,15 +837,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (tableView.tag == 4444) {
-        [[self.view viewWithTag:44444] removeFromSuperview];
-    }
-    
     [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     self.model = tmpModel;
-    self.tableViewIsOnWeb = NO;
     self.isNeedHiddenNav = NO;
     
     [self showLoadingView];
@@ -837,7 +848,7 @@
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
         self.isNeedHiddenNav = YES;
-        [self createUI];
+        [self readyToGo];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
         if ([[response objectForKey:@"code"] integerValue] == 19002) {
