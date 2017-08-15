@@ -10,9 +10,12 @@
 #import "CreateWealthModel.h"
 #import "BaseViewController.h"
 
+typedef void (^imageAtlas) (BOOL isPortrait);
 @interface ImageAtlasDetailViewController : BaseViewController
 
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 @property(nonatomic ,strong) CreateWealthModel *imgAtlModel;
+
+@property(nonatomic, copy) imageAtlas imageAtlBlock;
 
 @end

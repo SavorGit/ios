@@ -359,6 +359,13 @@
         ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
         iatVC.imgAtlModel = model;
         iatVC.categoryID = self.categoryID;
+        iatVC.imageAtlBlock = ^(BOOL isPortrait){
+//            // 如果当前是横屏状态，点击返回，需调用下边方法强制旋转屏幕
+//            UIViewController *vc  = [[UIViewController alloc] init];
+//            [self presentViewController:vc animated:NO completion:^{
+//                [vc dismissViewControllerAnimated:NO completion:nil];
+//            }];
+        };
         
         float version = [UIDevice currentDevice].systemVersion.floatValue;
         if (version < 8.0) {
