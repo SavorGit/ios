@@ -101,6 +101,8 @@ NSString * const RDPhotoLibraryAllChooseNotification = @"RDPhotoLibraryAllChoose
         [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CollectionViewCellSize contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
             if (result) {
                 [self.bgImageView setImage:result];
+            }else{
+                [self.bgImageView setImage:[UIImage imageNamed:@"tpysc"]];
             }
         }];
     }

@@ -504,7 +504,7 @@
     }
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         if (nil == result) {
-            [cell.photoImage setImage:[UIImage new]];
+            [cell.photoImage setImage:[UIImage imageNamed:@"tpyscbf"]];
         }else{
             [cell.photoImage setImage:result];
         }
