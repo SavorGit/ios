@@ -286,6 +286,24 @@
     return [formatter stringFromDate:date];
 }
 
++ (NSString *)addURLParamsInAPPWith:(NSString *)url
+{
+    if ([url containsString:@"?"]) {
+        return [url stringByAppendingString:@"&location=newRead&app=inner"];
+    }else{
+        return [url stringByAppendingString:@"?location=newRead&app=inner"];
+    }
+}
+
++ (NSString *)addURLParamsShareWith:(NSString *)url
+{
+    if ([url containsString:@"?"]) {
+        return [url stringByAppendingString:@"&app=inner"];
+    }else{
+        return [url stringByAppendingString:@"?app=inner"];
+    }
+}
+
 /**
  *  强制屏幕转屏
  *

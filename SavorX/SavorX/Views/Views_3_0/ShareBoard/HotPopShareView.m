@@ -276,7 +276,7 @@
         case UMSocialPlatformType_UnKnown: {
             // 复制链接
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-            pasteboard.string = [self.model.contentURL stringByAppendingString:@"?app=inner"];
+            pasteboard.string = [Helper addURLParamsShareWith:self.model.contentURL];
             [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithCopy") delay:1.5f];
             
         }

@@ -87,7 +87,7 @@
     self.webView.frame = CGRectMake(0, 0, width, height);
     
     if (!isEmptyString(self.specilDetailModel.contentURL)) {
-        NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead&app=inner",self.specilDetailModel.contentURL];
+        NSString *urlStr =  [Helper addURLParamsInAPPWith:self.specilDetailModel.contentURL];
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         [self.webView loadRequest:request];
     } 
@@ -124,7 +124,7 @@
 {
     [self hideNoNetWorkView];
     if (self.isReady) {
-        NSString *urlStr =  [NSString stringWithFormat:@"%@?location=newRead&app=inner",self.specilDetailModel.contentURL];
+        NSString *urlStr =  [Helper addURLParamsInAPPWith:self.specilDetailModel.contentURL];
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];

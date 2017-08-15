@@ -183,7 +183,7 @@
         [self createWebView];
     }else{
         if (!isEmptyString(self.imgTextModel.contentURL)) {
-            NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]];
+            NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[Helper addURLParamsInAPPWith:self.imgTextModel.contentURL]]];
             [self.webView loadRequest:request];
         }
     }
@@ -209,7 +209,7 @@
     self.webView.scrollView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);
     if (!isEmptyString(self.imgTextModel.contentURL)) {
-        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]];
+        NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[Helper addURLParamsInAPPWith:self.imgTextModel.contentURL]]];
         [self.webView loadRequest:request];
     }
     self.webView.backgroundColor = VCBackgroundColor;
@@ -283,7 +283,7 @@
 {
     [self hideNoNetWorkView];
     if (self.isReady) {
-        [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?location=newRead&app=inner",self.imgTextModel.contentURL]]]];
+        [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[Helper addURLParamsInAPPWith:self.imgTextModel.contentURL]]]];
     }else{
         [self checkIsOnLine];
     }

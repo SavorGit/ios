@@ -350,7 +350,7 @@
     
     if (self.model.type != 4) {
         if (!isEmptyString(self.model.contentURL)) {
-            [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead&app=inner"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
+            [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[Helper addURLParamsInAPPWith:self.model.contentURL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
             [MBProgressHUD showWebLoadingHUDInView:self.webView];
         }
     }else{
@@ -745,7 +745,7 @@
 - (void)retryToGetData
 {
     [self hideNoNetWorkView];
-    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead&app=inner"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
+    [self.webView loadRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[[Helper addURLParamsInAPPWith:self.model.contentURL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
     [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
 
@@ -868,7 +868,7 @@
     [self.dataSource removeAllObjects];
     [self.tableView reloadData];
     if (!isEmptyString(self.model.contentURL)) {
-        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead&app=inner"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[Helper addURLParamsInAPPWith:self.model.contentURL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
         if (!self.webView.superview) {

@@ -303,7 +303,7 @@
     [self.dataSource removeAllObjects];
     [self.tableView reloadData];
     if (!isEmptyString(self.model.contentURL)) {
-        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead&app=inner"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[Helper addURLParamsInAPPWith:self.model.contentURL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
         if (!self.webView.superview) {

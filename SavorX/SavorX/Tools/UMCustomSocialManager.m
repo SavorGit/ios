@@ -328,7 +328,7 @@
 - (void)sharedToPlatform:(UMSocialPlatformType)platformType andController:(UIViewController *)VC withModel:(CreateWealthModel *)model andUmKeyString:(NSString *)keyString;
 {
     self.model = model;
-    NSString * url = [[self.model.contentURL stringByAppendingString:@"?app=inner"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString * url = [[Helper addURLParamsShareWith:self.model.contentURL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
     if (!image) {
