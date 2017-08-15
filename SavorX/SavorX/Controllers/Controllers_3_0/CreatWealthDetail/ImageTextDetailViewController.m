@@ -249,7 +249,6 @@
 {
     [MBProgressHUD hiddenWebLoadingInView:self.webView];
     
-    
     NSString *currentURL = [webView stringByEvaluatingJavaScriptFromString:@"document.location.href"];
     NSLog(@"%@",currentURL);
     if ([currentURL containsString:@"pure=1"]) {
@@ -257,9 +256,12 @@
         [self footViewShouldBeReset];
         webView.scrollView.bounces = NO;
     }else{
-        self.isAd = NO;
-        [self footViewShouldBeReset];
-        webView.scrollView.bounces = YES;
+        // 如果当前是广告页切换至非广告页
+        if (self.isAd == YES) {
+            self.isAd = NO;
+            [self footViewShouldBeReset];
+            webView.scrollView.bounces = YES;
+        }
     }
 }
 
