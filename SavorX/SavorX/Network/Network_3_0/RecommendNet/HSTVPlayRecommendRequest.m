@@ -13,7 +13,7 @@
 - (instancetype)initWithArticleId:(NSString *)articleId sortNum:(NSString *)sortNum
 {
     if (self = [super init]) {
-        self.methodName = [@"APP3/Recommend/getRecommendInfo?" stringByAppendingString:[Helper getURLPublic]];
+        self.methodName = [@"APP3/Recommend/getTvPlayRecommend?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setValue:articleId forParamKey:@"articleId"];
         [self setValue:sortNum forParamKey:sortNum];
