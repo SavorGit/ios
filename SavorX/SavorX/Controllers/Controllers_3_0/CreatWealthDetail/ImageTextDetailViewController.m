@@ -9,7 +9,7 @@
 #import "ImageTextDetailViewController.h"
 #import "Masonry.h"
 #import "CreateWealthModel.h"
-#import "ImageTextTableViewCell.h"
+#import "RDFavoriteTableViewCell.h"
 #import "HotTopicShareView.h"
 #import "HSIsOrCollectionRequest.h"
 #import "HSImTeRecommendRequest.h"
@@ -513,19 +513,21 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellID = @"imageTextTableCell";
-    ImageTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    RDFavoriteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (cell == nil) {
-        cell = [[ImageTextTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell = [[RDFavoriteTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
     //最后一条分割线隐藏
     if (indexPath.row == self.dataSource.count - 1) {
-        cell.lineView.hidden = YES;
+        [cell setLineViewHidden:YES];
+    }else{
+        [cell setLineViewHidden:NO];
     }
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
-    [cell configModelData:model];
+    [cell configWithModel:model];
     
     
     return cell;

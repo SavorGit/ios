@@ -13,7 +13,7 @@
 
 @property (nonatomic, strong) UIImageView *bgImageView;
 @property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UILabel *countLabel;
+@property (nonatomic, strong) UILabel * imageLabel;
 
 @end
 
@@ -42,21 +42,6 @@
         make.left.mas_equalTo(0);
     }];
     
-    _countLabel = [[UILabel alloc]init];
-    _countLabel.font = kPingFangLight(11);
-    _countLabel.textColor = UIColorFromRGB(0xf6f2ed);
-    _countLabel.backgroundColor = UIColorFromRGB(0x000000);
-    _countLabel.alpha = 0.5;
-    _countLabel.layer.cornerRadius = 2;
-    _countLabel.layer.masksToBounds = YES;
-    _countLabel.textAlignment = NSTextAlignmentCenter;
-    [_bgImageView addSubview:_countLabel];
-    [_countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(25, 14));
-        make.bottom.mas_equalTo(_bgImageView.mas_bottom).offset(-10);
-        make.right.mas_equalTo(_bgImageView.mas_right).offset(-10);
-    }];
-    
     _titleLabel = [[UILabel alloc]init];
     _titleLabel.font = kPingFangRegular(15);
     _titleLabel.textColor = UIColorFromRGB(0x434343);
@@ -71,6 +56,12 @@
         make.top.mas_equalTo(_bgImageView.mas_bottom).offset(10);
         make.left.mas_equalTo(10);
     }];
+    
+    self.imageLabel = [[UILabel alloc] init];
+    self.imageLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.5f];
+    self.imageLabel.textColor = [UIColor whiteColor];
+    self.imageLabel.textAlignment = NSTextAlignmentCenter;
+    [self.bgImageView addSubview:self.imageLabel];
 }
 
 - (CGFloat)getHeightByWidth:(CGFloat)width title:(NSString *)title font:(UIFont *)font
@@ -112,8 +103,51 @@
     }
     self.titleLabel.text = model.title;
     
-    self.countLabel.text = [NSString stringWithFormat:@"%@%@",model.colTuJi, RDLocalizedString(@"RDString_Image")];
     [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"]];
+    
+    if (model.type == 2) {
+        
+        if (!self.imageLabel.superview) {
+            [self.bgImageView addSubview:self.imageLabel];
+        }
+        self.imageLabel.layer.masksToBounds = NO;
+        self.imageLabel.font = kPingFangLight(10);
+        [self.imageLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(-5);
+            make.right.mas_equalTo(-5);
+            make.height.mas_equalTo(14);
+            make.width.mas_greaterThanOrEqualTo(25);
+            make.width.mas_lessThanOrEqualTo(50);
+        }];
+        self.imageLabel.text = [NSString stringWithFormat:@"%@%@", model.colTuJi, RDLocalizedString(@"RDString_Image")];
+        
+    }else if (model.type == 3 || model.type == 4) {
+        
+        if (!self.imageLabel.superview) {
+            [self.bgImageView addSubview:self.imageLabel];
+        }
+        self.imageLabel.layer.masksToBounds = YES;
+        self.imageLabel.font = kPingFangLight(11);
+        [self.imageLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(-5);
+            make.right.mas_equalTo(-5);
+            make.height.mas_equalTo(16);
+            make.width.mas_greaterThanOrEqualTo(35);
+            make.width.mas_lessThanOrEqualTo(100);
+        }];
+        
+        long long minute = 0, second = 0;
+        second = model.duration;
+        minute = second / 60;
+        second = second % 60;
+        self.imageLabel.text = [NSString stringWithFormat:@"%lld'%.2lld\"", minute, second];
+        
+        self.imageLabel.layer.cornerRadius = 8;
+        self.imageLabel.layer.masksToBounds = YES;
+        
+    }else{
+        [self.imageLabel removeFromSuperview];
+    }
     
 }
 
