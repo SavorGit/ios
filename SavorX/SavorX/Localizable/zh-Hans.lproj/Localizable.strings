@@ -29,6 +29,7 @@
 "RDSting_NotSurpport" = "该内容暂不支持分享";
 "RDString_CollectNone" = "您还没有收藏~";
 "RDString_ArtNotFound" = "该内容找不到了~";
+"RDString_imgAtRecommend" = "图集推荐";
 
 //View
 "RDString_Image" = "图";

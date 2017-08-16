@@ -86,6 +86,7 @@
 
 - (void)configModelData:(CreateWealthModel *)model andIsPortrait:(BOOL)isPortrait{
 
+    // 如果是横屏
     if (isPortrait == NO) {
         
         [_bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -104,7 +105,7 @@
     }
     
     CGFloat titleHeight = [self getHeightByWidth:kMainBoundsWidth/2 - 2.5 - 20 title:model.title font:kPingFangRegular(15)];
-    if (titleHeight > 20) {
+    if (titleHeight > 21) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(42);
         }];

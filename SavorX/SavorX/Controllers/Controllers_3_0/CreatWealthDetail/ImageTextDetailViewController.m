@@ -28,6 +28,7 @@
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, strong) UIButton *collectButton;
 @property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
+@property (nonatomic, assign) BOOL isAd; //是否是广告网页
 
 @property (nonatomic, assign) BOOL isReady;
 
@@ -51,6 +52,7 @@
 - (void)checkIsOnLine
 {
     self.isReady = NO;
+    self.isAd = NO;
     [self showLoadingView];
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.imgTextModel.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -248,16 +250,19 @@
 {
     [MBProgressHUD hiddenWebLoadingInView:self.webView];
     
-    
     NSString *currentURL = [webView stringByEvaluatingJavaScriptFromString:@"document.location.href"];
     NSLog(@"%@",currentURL);
-    if ([currentURL isEqualToString:@"http://devp.admin.littlehotspot.com/activitydetail/toothwash"]) {
-        if ([currentURL containsString:@"pure=1"]) {
-            NSLog(@"ceshi");
-        }
-        self.testView.hidden = YES;
+    if ([currentURL containsString:@"pure=1"]) {
+        self.isAd = YES;
+        [self footViewShouldBeReset];
+        webView.scrollView.bounces = NO;
     }else{
-        self.testView.hidden = NO;
+        // 如果当前是广告页切换至非广告页
+        if (self.isAd == YES) {
+            self.isAd = NO;
+            [self footViewShouldBeReset];
+            webView.scrollView.bounces = YES;
+        }
     }
 }
 
@@ -354,9 +359,20 @@
     
     [self removeObserver];
     
+    CGSize contentSize = self.webView.scrollView.contentSize;
+    if (self.isAd == YES) {
+        [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height - self.testView.height)];
+        if (self.testView.superview) {
+            [self.testView removeFromSuperview];
+        }
+        [self addObserver];
+        return;
+    }
+
     if (self.testView.superview) {
         [self.testView removeFromSuperview];
     }
+
     //TableView的高度
     CGFloat tabHeight = 0;
     if (self.dataSource.count != 0) {
@@ -370,7 +386,6 @@
     }
     CGFloat height = self.webView.scrollView.contentSize.height;
     CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
-    CGSize contentSize = self.webView.scrollView.contentSize;
     //底部View与顶部网页的间隔为0
     frame.origin.y = height;
     self.testView.frame = frame;
@@ -551,6 +566,15 @@
 //app进入前台运行
 - (void)appBecomeActivePlayground{
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgTextModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (void)navBackButtonClicked:(UIButton *)sender
+{
+    if (self.webView.canGoBack) {
+        [self.webView goBack];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)dealloc{
