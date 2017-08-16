@@ -372,6 +372,17 @@
          NSInteger page = lround(fractionalPage);
          
          [self setValue:@(page) forKey:@"currentPage"];
+         
+         if (_isComeBack == YES) {
+             if (scrollView.contentOffset.y > 120) {
+                 _imageScrollView.pagingEnabled = NO;
+                 self.isComeBack = NO;
+                 [self dismissFromTopWithDuration:0.5];
+             }else if (scrollView.contentOffset.y < - 120){
+                 self.isComeBack = NO;
+                 [self dismissFromDownWithDuration:0.5];
+             }
+         }
      }
  }
 
