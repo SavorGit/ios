@@ -422,10 +422,10 @@
         if (scrollView.contentOffset.y > 120) {
             _imageScrollView.pagingEnabled = NO;
             self.isComeBack = NO;
-            [self dismissFromTopWithDuration:0.5];
+            [self dismissFromTopWithDuration:0.3];
         }else if (scrollView.contentOffset.y < - 120){
             self.isComeBack = NO;
-            [self dismissFromDownWithDuration:0.5];
+            [self dismissFromDownWithDuration:0.3];
         }
     }
 }
@@ -468,12 +468,12 @@
         self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent: 0.0];
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         _imageScrollView.bottom = keyWindow.top;
+        [GlobalData shared].isImageAtlas = NO;
+        [self dismissViewControllerAnimated:NO completion:nil];
         
     } completion:^(BOOL finished) {
         
         [_imageScrollView removeFromSuperview];
-        [GlobalData shared].isImageAtlas = NO;
-        [self dismissViewControllerAnimated:NO completion:nil];
         
     }];
 }
@@ -486,12 +486,12 @@
         self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent: 0.0];
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         _imageScrollView.top = keyWindow.bottom;
+        [GlobalData shared].isImageAtlas = NO;
+        [self dismissViewControllerAnimated:NO completion:nil];
         
     } completion:^(BOOL finished) {
         
         [_imageScrollView removeFromSuperview];
-        [GlobalData shared].isImageAtlas = NO;
-        [self dismissViewControllerAnimated:NO completion:nil];
         
     }];
 }
