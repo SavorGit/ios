@@ -304,7 +304,7 @@
         _recoLabel.font = kPingFangLight(16);
         _recoLabel.textColor = UIColorFromRGB(0x922c3e);
         _recoLabel.textAlignment = NSTextAlignmentCenter;
-        _recoLabel.text = @"推荐图集";
+        _recoLabel.text = RDLocalizedString(@"RDString_imgAtRecommend");
         [_imageScrollView addSubview:_recoLabel];
         [_recoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(70,45));
