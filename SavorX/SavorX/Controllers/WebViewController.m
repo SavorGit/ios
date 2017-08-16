@@ -21,6 +21,8 @@
 #import "RDVideoHeaderView.h"
 #import "RDFavoriteTableViewCell.h"
 #import "RDIsOnline.h"
+#import "ImageAtlasDetailViewController.h"
+#import "ImageTextDetailViewController.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -839,30 +841,59 @@
     [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
-    self.model = tmpModel;
-    self.isNeedHiddenNav = NO;
-    
-    [self showLoadingView];
-    RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
-    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        [self hiddenLoadingView];
-        self.isNeedHiddenNav = YES;
-        [self readyToGo];
-    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        [self hiddenLoadingView];
-        if ([[response objectForKey:@"code"] integerValue] == 19002) {
-            [self theVideoIsNotOnline];
-        }else{
-            [self showNoNetWorkViewInView:self.view];
-            [self setNeedsStatusBarAppearanceUpdate];
-            [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
+    if (tmpModel.type == 1) {
+        
+        ImageTextDetailViewController * text = [[ImageTextDetailViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
+        
+        NSMutableArray * vcs = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+        [vcs removeObject:self];
+        [vcs addObject:text];
+        [self.navigationController setViewControllers:vcs animated:YES];
+        
+    }else if (tmpModel.type == 2){
+        
+        ImageAtlasDetailViewController * image = [[ImageAtlasDetailViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
+        
+        float version = [UIDevice currentDevice].systemVersion.floatValue;
+        if (version < 8.0) {
+            self.modalPresentationStyle = UIModalPresentationCurrentContext;
+        } else {;
+            image.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         }
-    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        [self hiddenLoadingView];
-        [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
-        [self setNeedsStatusBarAppearanceUpdate];
-        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
-    }];
+        image.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
+        UIViewController * vc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        [self.navigationController popViewControllerAnimated:NO];
+        [vc presentViewController:image animated:NO completion:^{
+            
+        }];
+        
+    }else{
+        self.model = tmpModel;
+        self.isNeedHiddenNav = NO;
+        
+        [self showLoadingView];
+        RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
+        [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            [self hiddenLoadingView];
+            self.isNeedHiddenNav = YES;
+            [self readyToGo];
+        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            [self hiddenLoadingView];
+            if ([[response objectForKey:@"code"] integerValue] == 19002) {
+                [self theVideoIsNotOnline];
+            }else{
+                [self showNoNetWorkViewInView:self.view];
+                [self setNeedsStatusBarAppearanceUpdate];
+                [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
+            }
+        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+            [self hiddenLoadingView];
+            [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
+            [self setNeedsStatusBarAppearanceUpdate];
+            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        }];
+    }
 }
 
 - (UIView *)testView

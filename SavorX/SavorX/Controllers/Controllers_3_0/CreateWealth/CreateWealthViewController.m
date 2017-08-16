@@ -367,6 +367,7 @@
 //            }];
         };
         
+        iatVC.parentNavigationController = self.navigationController;
         float version = [UIDevice currentDevice].systemVersion.floatValue;
         if (version < 8.0) {
             self.modalPresentationStyle = UIModalPresentationCurrentContext;

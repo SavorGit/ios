@@ -19,6 +19,8 @@
 #import "RDLogStatisticsAPI.h"
 #import "ImageAtlasCollectViewCell.h"
 #import "HSImTeRecommendRequest.h"
+#import "WebViewController.h"
+#import "ImageTextDetailViewController.h"
 
 @interface ImageAtlasDetailViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate>
 
@@ -53,6 +55,15 @@
 @end
 
 @implementation ImageAtlasDetailViewController
+
+- (instancetype)initWithCategoryID:(NSInteger)categoryID model:(CreateWealthModel *)model
+{
+    if (self = [super init]) {
+        self.categoryID = categoryID;
+        self.imgAtlModel = model;
+    }
+    return self;
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -639,17 +650,37 @@ static int temp = -1;
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
-    self.imgAtlModel = tmpModel;
-    
-    _currentIndex = 0;
-    [self removeObserver];
-    [_imageScrollView removeFromSuperview];
-    _imageScrollView = nil;
-    [_collectionView removeFromSuperview];
-    _collectionView = nil;
-
-    [self requestWithContentId:self.imgAtlModel.artid];
-    [self setUpDatas];
+    if (tmpModel.type == 3 || tmpModel.type == 4) {
+        
+        WebViewController * web = [[WebViewController alloc] initWithModel:tmpModel categoryID:self.categoryID];
+        
+        [self dismissViewControllerAnimated:NO completion:^{
+            
+        }];
+        [self.parentNavigationController pushViewController:web animated:YES];
+        
+    }else if (tmpModel.type == 1){
+        
+        ImageTextDetailViewController * text = [[ImageTextDetailViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
+        
+        [self dismissViewControllerAnimated:NO completion:^{
+            
+        }];
+        [self.parentNavigationController pushViewController:text animated:YES];
+        
+    }else{
+        self.imgAtlModel = tmpModel;
+        
+        _currentIndex = 0;
+        [self removeObserver];
+        [_imageScrollView removeFromSuperview];
+        _imageScrollView = nil;
+        [_collectionView removeFromSuperview];
+        _collectionView = nil;
+        
+        [self requestWithContentId:self.imgAtlModel.artid];
+        [self setUpDatas];
+    }
     
     
 }

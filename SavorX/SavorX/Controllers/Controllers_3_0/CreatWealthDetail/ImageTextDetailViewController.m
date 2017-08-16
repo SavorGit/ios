@@ -17,6 +17,8 @@
 #import "HSGetCollectoinStateRequest.h"
 #import "RDLogStatisticsAPI.h"
 #import "RDIsOnline.h"
+#import "WebViewController.h"
+#import "ImageAtlasDetailViewController.h"
 
 #define  igTextHeight (130 *802.f/1242.f + 12)
 
@@ -35,6 +37,15 @@
 @end
 
 @implementation ImageTextDetailViewController
+
+- (instancetype)initWithCategoryID:(NSInteger)categoryID model:(CreateWealthModel *)model
+{
+    if (self = [super init]) {
+        self.imgTextModel = model;
+        self.categoryID = categoryID;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     
@@ -532,8 +543,34 @@
     [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
-    self.imgTextModel = tmpModel;
-    [self checkIsOnLine];
+    
+    if (tmpModel.type == 4 || tmpModel.type == 3) {
+        WebViewController * web = [[WebViewController alloc] initWithModel:tmpModel categoryID:self.categoryID];
+        
+        NSMutableArray * vcs = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+        [vcs removeObject:self];
+        [vcs addObject:web];
+        [self.navigationController setViewControllers:vcs animated:YES];
+    }else if (tmpModel.type == 2){
+        ImageAtlasDetailViewController * image = [[ImageAtlasDetailViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
+        
+        float version = [UIDevice currentDevice].systemVersion.floatValue;
+        if (version < 8.0) {
+            self.modalPresentationStyle = UIModalPresentationCurrentContext;
+        } else {;
+            image.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        }
+        image.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
+        UIViewController * vc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        [self.navigationController popViewControllerAnimated:NO];
+        [vc presentViewController:image animated:NO completion:^{
+            
+        }];
+    }else{
+        self.imgTextModel = tmpModel;
+        [self checkIsOnLine];
+    }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;

@@ -13,8 +13,11 @@
 typedef void (^imageAtlas) (BOOL isPortrait);
 @interface ImageAtlasDetailViewController : BaseViewController
 
+- (instancetype)initWithCategoryID:(NSInteger)categoryID model:(CreateWealthModel *)model;
+
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 @property(nonatomic ,strong) CreateWealthModel *imgAtlModel;
+@property (nonatomic, weak) UINavigationController * parentNavigationController;
 
 @property(nonatomic, copy) imageAtlas imageAtlBlock;
 
