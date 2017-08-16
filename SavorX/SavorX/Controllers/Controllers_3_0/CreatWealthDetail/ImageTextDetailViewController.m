@@ -203,6 +203,7 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = self.view.bounds.size.height;
     self.webView = [[UIWebView alloc] init];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
     self.webView.delegate = self;
     self.webView.scrollView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);

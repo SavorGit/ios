@@ -316,6 +316,7 @@
 {
     //初始化webView
     self.webView = [[UIWebView alloc] init];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
     self.webView.backgroundColor = [UIColor clearColor];
     self.webView.opaque = NO;
     

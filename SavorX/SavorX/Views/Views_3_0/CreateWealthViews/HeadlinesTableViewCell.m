@@ -73,7 +73,7 @@
     _countVideoLabel.layer.cornerRadius = 10;
     _countVideoLabel.layer.masksToBounds = YES;
     [_bgImageView addSubview:_countVideoLabel];
-    [_countLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_countVideoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(50, 20));
         make.bottom.mas_equalTo(_bgImageView.mas_bottom).offset(-10);
         make.right.mas_equalTo(_bgImageView.mas_right).offset(-10);

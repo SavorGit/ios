@@ -74,6 +74,7 @@
 {
     
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
     self.webView.backgroundColor = VCBackgroundColor;
     self.webView.opaque = NO;
     self.webView.delegate = self;

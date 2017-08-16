@@ -35,6 +35,8 @@
 
 -(void)feedbackView:(FeedbackView *)fView adviceText:(NSString *)advice phoneText:(NSString *)phone{
     
+    [[UIApplication sharedApplication].keyWindow endEditing:YES];
+    
     NSString * adviceStr = advice;
     NSString * contactStr = phone;
     

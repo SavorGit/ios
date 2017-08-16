@@ -331,6 +331,7 @@
 {
     
     self.webView = [[UIWebView alloc] init];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
     self.webView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     self.webView.opaque = NO;
     [self.view addSubview:self.webView];
