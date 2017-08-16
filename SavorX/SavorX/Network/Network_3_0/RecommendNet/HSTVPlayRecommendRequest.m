@@ -16,7 +16,7 @@
         self.methodName = [@"APP3/Recommend/getTvPlayRecommend?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
         [self setValue:articleId forParamKey:@"articleId"];
-        [self setValue:sortNum forParamKey:sortNum];
+        [self setValue:sortNum forParamKey:@"sort_num"];
     }
     return self;
 }

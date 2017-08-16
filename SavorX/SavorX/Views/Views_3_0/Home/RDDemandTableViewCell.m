@@ -118,6 +118,7 @@
         make.size.mas_equalTo(buttonSize);
     }];
     
+    self.timeLabel = [[UILabel alloc] init];
     self.timeLabel.textColor = [UIColor whiteColor];
     self.timeLabel.font = kPingFangLight(11);
     self.timeLabel.textAlignment = NSTextAlignmentCenter;
