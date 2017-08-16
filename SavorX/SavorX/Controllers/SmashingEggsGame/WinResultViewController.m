@@ -64,6 +64,7 @@
 {
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     self.webView = [[UIWebView alloc] init];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
     self.webView.backgroundColor = [UIColor clearColor];
     self.webView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, kMainBoundsHeight);

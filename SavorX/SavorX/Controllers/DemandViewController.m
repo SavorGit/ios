@@ -331,6 +331,7 @@
 {
     
     self.webView = [[UIWebView alloc] init];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
     self.webView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     self.webView.opaque = NO;
     [self.view addSubview:self.webView];
@@ -871,9 +872,7 @@
         NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[Helper addURLParamsInAPPWith:self.model.contentURL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         [self.webView loadRequest:request];
         [MBProgressHUD showWebLoadingHUDInView:self.webView];
-        if (!self.webView.superview) {
-            [self addObserver];
-        }
+        [self addObserver];
     }
 }
 

@@ -180,31 +180,33 @@
     _isComplete = NO;
     
     if (!self.webView) {
-        [self createWebView];
+        
+        UIBarButtonItem * shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareAction)];
+        self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
+        [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
+        self.collectButton.frame = CGRectMake(0, 0, 40, 35);
+        [self.collectButton addTarget:self action:@selector(collectAction) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem * collectItem = [[UIBarButtonItem alloc] initWithCustomView:self.collectButton];
+        self.navigationItem.rightBarButtonItems = @[shareItem, collectItem];
     }else{
-        if (!isEmptyString(self.imgTextModel.contentURL)) {
-            NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[Helper addURLParamsInAPPWith:self.imgTextModel.contentURL]]];
-            [self.webView loadRequest:request];
-        }
+        [self removeObserver];
+        [self.tableView removeFromSuperview];
+        [self.testView removeFromSuperview];
+        [self.webView removeFromSuperview];
     }
+    
+    [self createWebView];
     
     [self setUpDatas];
 }
 
 - (void)createWebView
 {
-    UIBarButtonItem * shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareAction)];
-    self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect"] forState:UIControlStateNormal];
-    [self.collectButton setImage:[UIImage imageNamed:@"icon_collect_yes"] forState:UIControlStateSelected];
-    self.collectButton.frame = CGRectMake(0, 0, 40, 35);
-    [self.collectButton addTarget:self action:@selector(collectAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem * collectItem = [[UIBarButtonItem alloc] initWithCustomView:self.collectButton];
-    self.navigationItem.rightBarButtonItems = @[shareItem, collectItem];
-    
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = self.view.bounds.size.height;
     self.webView = [[UIWebView alloc] init];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
     self.webView.delegate = self;
     self.webView.scrollView.delegate = self;
     self.webView.frame = CGRectMake(0, 0, width, height);
@@ -220,6 +222,14 @@
     self.testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];
+    
+    [self.testView addSubview:self.tableView];
+    CGFloat tabHeiht = self.dataSource.count *(130 *802.f/1242.f + 12) +48;
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(CGSizeMake(kMainBoundsWidth, tabHeiht));
+        make.top.mas_equalTo(123+30);
+        make.left.mas_equalTo(0);
+    }];
 }
 
 - (void)checkCollectStatus
@@ -378,6 +388,10 @@
         tabHeight = self.dataSource.count *(130 *802.f/1242.f + 12) + 48 + 8;
     }
     
+    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(tabHeight);
+    }];
+    
     //底部View总高度
     CGFloat theight = tabHeight + 115 + 30;
     if (self.dataSource.count != 0) {
@@ -457,15 +471,7 @@
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.backgroundView = nil;
         _tableView.scrollEnabled = NO;
-        [self.testView addSubview:_tableView];
         
-        CGFloat tabHeiht = self.dataSource.count *(130 *802.f/1242.f + 12) +48;
-        [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, tabHeiht));
-            make.top.mas_equalTo(123+30);
-            make.left.mas_equalTo(0);
-        }];
-
         UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
         headView.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
