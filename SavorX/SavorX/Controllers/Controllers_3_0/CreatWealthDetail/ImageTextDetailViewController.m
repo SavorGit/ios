@@ -216,7 +216,7 @@
     [self.webView setOpaque:NO];
     [self.view addSubview:self.webView];
     
-    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 140)];
+    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 0)];
     self.testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.webView.scrollView addSubview:self.testView];
     [self addObserver];

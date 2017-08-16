@@ -29,8 +29,9 @@
     _bgView = [[UIView alloc]init];
     _bgView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     [self.contentView addSubview:_bgView];
+    CGFloat bgHeight =(kMainBoundsWidth - 30) *802.f/1242.f + 113;
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(335.5);
+        make.height.mas_equalTo(bgHeight);//335.5
         make.width.mas_equalTo(kMainBoundsWidth - 20);
         make.top.mas_equalTo(10);
         make.left.mas_equalTo(10);
@@ -43,7 +44,9 @@
     [_bgView addSubview:_bgImageView];
     
     [_bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 222.5));
+//        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 222.5));//222.5
+        make.width.mas_equalTo(kMainBoundsWidth - 30);
+        make.height.equalTo(_bgImageView.mas_width).multipliedBy(802.f/1242.f);//222.5
         make.top.mas_equalTo(5);
         make.left.mas_equalTo(5);
     }];
@@ -112,8 +115,10 @@
         [self.subTitleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 40));
         }];
+        //当副标题为两行时，背景加20
+        CGFloat bgHeight =(kMainBoundsWidth - 30) *802.f/1242.f + 133;
         [_bgView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(355.5);
+            make.height.mas_equalTo(bgHeight);
         }];
     }
     
