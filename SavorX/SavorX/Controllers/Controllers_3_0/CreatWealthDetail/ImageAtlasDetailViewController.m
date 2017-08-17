@@ -405,7 +405,6 @@
  }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-
     if (![scrollView isKindOfClass:[UICollectionView class]] && _isPortrait == YES) {
         
         CGFloat offsetY = scrollView.contentOffset.y;

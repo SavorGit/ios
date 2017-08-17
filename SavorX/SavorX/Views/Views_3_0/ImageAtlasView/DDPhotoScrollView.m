@@ -69,6 +69,7 @@
 	CGPoint actualCenter = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
 									   scrollView.contentSize.height * 0.5 + offsetY);
 	_imageView.center = actualCenter;
+    
 //	NSLog(@"%@", NSStringFromCGAffineTransform(scrollView.subviews[0].transform));
 }
 
