@@ -82,6 +82,7 @@
     self.imageLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.5f];
     self.imageLabel.textColor = [UIColor whiteColor];
     self.imageLabel.textAlignment = NSTextAlignmentCenter;
+    [self.leftImageView addSubview:self.imageLabel];
     
     self.lineView = [[UIView alloc] initWithFrame:CGRectZero];
     self.lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
@@ -132,10 +133,12 @@
     
     if (model.type == 2) {
         
+        if (!self.imageLabel.superview) {
+            [self.leftImageView addSubview:self.imageLabel];
+        }
         self.imageLabel.layer.masksToBounds = NO;
         self.imageLabel.font = kPingFangLight(10);
-        [self.leftImageView addSubview:self.imageLabel];
-        [self.imageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.imageLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.bottom.mas_equalTo(-5);
             make.right.mas_equalTo(-5);
             make.height.mas_equalTo(14);
@@ -146,9 +149,12 @@
         
     }else if (model.type == 3 || model.type == 4) {
         
+        if (!self.imageLabel.superview) {
+            [self.leftImageView addSubview:self.imageLabel];
+        }
+        self.imageLabel.layer.masksToBounds = YES;
         self.imageLabel.font = kPingFangLight(11);
-        [self.leftImageView addSubview:self.imageLabel];
-        [self.imageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.imageLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.bottom.mas_equalTo(-5);
             make.right.mas_equalTo(-5);
             make.height.mas_equalTo(16);
@@ -165,6 +171,8 @@
         self.imageLabel.layer.cornerRadius = 8;
         self.imageLabel.layer.masksToBounds = YES;
         
+    }else{
+        [self.imageLabel removeFromSuperview];
     }
 }
 

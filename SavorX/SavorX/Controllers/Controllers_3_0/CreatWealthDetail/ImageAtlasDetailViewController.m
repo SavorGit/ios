@@ -715,19 +715,21 @@ static int temp = -1;
         
         WebViewController * web = [[WebViewController alloc] initWithModel:tmpModel categoryID:self.categoryID];
         
+        UINavigationController * na = self.parentNavigationController;
         [self dismissViewControllerAnimated:NO completion:^{
             
         }];
-        [self.parentNavigationController pushViewController:web animated:YES];
+        [na pushViewController:web animated:YES];
         
     }else if (tmpModel.type == 1){
         
         ImageTextDetailViewController * text = [[ImageTextDetailViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
         
+        UINavigationController * na = self.parentNavigationController;
         [self dismissViewControllerAnimated:NO completion:^{
             
         }];
-        [self.parentNavigationController pushViewController:text animated:YES];
+        [na pushViewController:text animated:YES];
         
     }else{
         self.imgAtlModel = tmpModel;

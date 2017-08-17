@@ -277,7 +277,17 @@
             ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
             iatVC.imgAtlModel = model;
             iatVC.categoryID = model.categoryId;
-            [self.navigationController pushViewController:iatVC animated:YES];
+            
+            iatVC.parentNavigationController = self.navigationController;
+            float version = [UIDevice currentDevice].systemVersion.floatValue;
+            if (version < 8.0) {
+                self.modalPresentationStyle = UIModalPresentationCurrentContext;
+            } else {;
+                iatVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+            }
+            iatVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            
+            [self presentViewController:iatVC animated:YES completion:nil];
             
         } else if (model.type == 3 || model.type == 4){
             WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:model.categoryId];
