@@ -77,7 +77,7 @@
     [QRCodeBackView addSubview:QRCodeBackImageView];
     [QRCodeBackImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(0);
-        make.width.height.mas_equalTo(300);
+        make.width.height.mas_equalTo([Helper autoWidthWith:300]);
     }];
     
     NSString * QRURL = [NSString stringWithFormat:@"%@?st=qrcode&clientname=ios&deviceid=%@", RDDownLoadURL, [GCCKeyChain load:keychainID]];
