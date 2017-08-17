@@ -380,7 +380,7 @@
                  _imageScrollView.pagingEnabled = NO;
                  self.isComeBack = NO;
                  [self dismissFromTopWithDuration:0.5];
-             }else if (scrollView.contentOffset.y < kMainBoundsHeight - 80){
+             }else if (scrollView.contentOffset.y < kMainBoundsHeight - 100){
                  self.isComeBack = NO;
                  [self dismissFromDownWithDuration:0.5];
              }
@@ -480,7 +480,7 @@
             _imageScrollView.pagingEnabled = NO;
             self.isComeBack = NO;
             [self dismissFromTopWithDuration:0.5];
-        }else if (scrollView.contentOffset.y < kMainBoundsHeight - 80 ){
+        }else if (scrollView.contentOffset.y < kMainBoundsHeight - 100 ){
             self.isComeBack = NO;
             [self dismissFromDownWithDuration:0.5];
         }
