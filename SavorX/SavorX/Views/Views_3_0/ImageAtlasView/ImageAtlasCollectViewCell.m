@@ -77,6 +77,7 @@
 
 - (void)configModelData:(CreateWealthModel *)model andIsPortrait:(BOOL)isPortrait{
 
+    CGFloat titleHeight ;
     // 如果是横屏
     if (isPortrait == NO) {
         
@@ -93,9 +94,26 @@
             make.top.mas_equalTo(_bgImageView.mas_bottom).offset(10);
             make.left.mas_equalTo(10);
         }];
+        
+        titleHeight = [self getHeightByWidth:kMainBoundsWidth/3 - 2.5 - 20 title:model.title font:kPingFangRegular(15)];
+    }else{
+        [_bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(kMainBoundsWidth/2 - 5);
+            make.height.mas_equalTo(90);
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+        }];
+        
+        [_titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(kMainBoundsWidth/2 - 2.5 - 20);
+            make.height.mas_equalTo(21);
+            make.top.mas_equalTo(_bgImageView.mas_bottom).offset(10);
+            make.left.mas_equalTo(10);
+        }];
+        
+        titleHeight = [self getHeightByWidth:kMainBoundsWidth/2 - 2.5 - 20 title:model.title font:kPingFangRegular(15)];
     }
     
-    CGFloat titleHeight = [self getHeightByWidth:kMainBoundsWidth/2 - 2.5 - 20 title:model.title font:kPingFangRegular(15)];
     if (titleHeight > 21) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(42);

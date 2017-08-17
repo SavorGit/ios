@@ -46,6 +46,9 @@
 @property (nonatomic, assign) BOOL isPortrait;
 @property (nonatomic, assign) BOOL isComeBack;
 @property (nonatomic, assign) BOOL isYChange;
+//用来禁止45度滑动
+@property (nonatomic, assign) CGPoint scrollViewStartPosPoint;
+@property (nonatomic, assign) int     scrollDirection;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UILabel *recoLabel;
@@ -80,6 +83,7 @@
     self.isComeBack = YES;
     _isComplete = NO;
     _isPortrait = YES;
+    _scrollDirection = 0;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
@@ -217,27 +221,30 @@
     if (_photoDescView != nil) {
         [_photoDescView removeFromSuperview];
     }
-    if (_isPortrait == YES) {
-        
-        ImageAtlasDetailModel *tmpModel = self.imageDatas[0];
-        _photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:0 totalCount:self.imageDatas.count];
-        [self.view addSubview:_photoDescView];
-        [_photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,_photoDescView.height));
-            make.bottom.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-        }];
-    }
+    
+    ImageAtlasDetailModel *tmpModel = self.imageDatas[0];
+    _photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:0 totalCount:self.imageDatas.count];
+    [self.view addSubview:_photoDescView];
+    [_photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,_photoDescView.height));
+        make.bottom.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+    }];
 }
 
 - (UIScrollView *)imageScrollView
 {
     if (_imageScrollView == nil) {
         
+        // Y轴初始化坐标
+        CGFloat offSetYPoint;
         _imageScrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
         if (_isPortrait == YES) {
-            _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *2);
+            offSetYPoint = kMainBoundsHeight;
+            _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *3);
+            [_imageScrollView setContentOffset:CGPointMake(0, offSetYPoint)];
         }else{
+            offSetYPoint = 0.0;
             _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight);
         }
         _imageScrollView.pagingEnabled = YES;
@@ -259,7 +266,7 @@
             [self.scrollObjecArr addObject:_photoScrollView];
             [_photoScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight));
-                make.top.mas_equalTo(0);
+                make.top.mas_equalTo(offSetYPoint);
                 make.left.mas_equalTo(kMainBoundsWidth * i);
             }];
             
@@ -319,7 +326,7 @@
         [_imageScrollView addSubview:_recoLabel];
         [_recoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(70,45));
-            make.top.mas_equalTo(64);
+            make.top.mas_equalTo(offSetYPoint + 64);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + kMainBoundsWidth/2 - 35);
         }];
         
@@ -328,7 +335,7 @@
         [_imageScrollView addSubview:_lineViewOne];
         [_lineViewOne mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
-            make.top.mas_equalTo(64 + 22);
+            make.top.mas_equalTo(offSetYPoint + 64 + 22);
             make.right.mas_equalTo(_recoLabel.mas_left).offset(- 10);
         }];
         
@@ -337,7 +344,7 @@
         [_imageScrollView addSubview:_lineViewTwo];
         [_lineViewTwo mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
-            make.top.mas_equalTo(64 + 22);
+            make.top.mas_equalTo(offSetYPoint + 64 + 22);
             make.left.mas_equalTo(_recoLabel.mas_right).offset(10);
         }];
         
@@ -347,11 +354,13 @@
         _collectionView.backgroundColor=[UIColor clearColor];
         _collectionView.delegate=self;
         _collectionView.dataSource=self;
+        _collectionView.showsHorizontalScrollIndicator = NO;
+        _collectionView.showsVerticalScrollIndicator = NO;
         [_imageScrollView addSubview:_collectionView];
         [_collectionView registerClass:[ImageAtlasCollectViewCell class] forCellWithReuseIdentifier:@"imgCell"];
         [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64 - 45));
-            make.top.mas_equalTo(64 + 45);
+            make.top.mas_equalTo(offSetYPoint + 64 + 45);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
         }];
         
@@ -362,10 +371,20 @@
 #pragma mark - UIScrollViewDelegate 代理方法
  - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
      
-     if (![scrollView isKindOfClass:[UICollectionView class]]) {
+     if (![scrollView isKindOfClass:[UICollectionView class]] && _isPortrait == YES) {
          // y轴发生了位移
          _isYChange = NO;
          
+         if (_isComeBack == YES) {
+             if (scrollView.contentOffset.y > 120 + kMainBoundsHeight) {
+                 _imageScrollView.pagingEnabled = NO;
+                 self.isComeBack = NO;
+                 [self dismissFromTopWithDuration:0.5];
+             }else if (scrollView.contentOffset.y < kMainBoundsHeight - 80){
+                 self.isComeBack = NO;
+                 [self dismissFromDownWithDuration:0.5];
+             }
+         }
          //算出页码
          CGFloat pageWidth = scrollView.frame.size.width;
          float fractionalPage = scrollView.contentOffset.x / pageWidth;
@@ -373,71 +392,102 @@
          
          [self setValue:@(page) forKey:@"currentPage"];
          
-         if (_isComeBack == YES) {
-             if (scrollView.contentOffset.y > 120) {
-                 _imageScrollView.pagingEnabled = NO;
-                 self.isComeBack = NO;
-                 [self dismissFromTopWithDuration:0.5];
-             }else if (scrollView.contentOffset.y < - 120){
-                 self.isComeBack = NO;
-                 [self dismissFromDownWithDuration:0.5];
-             }
-         }
+     }else if (![scrollView isKindOfClass:[UICollectionView class]]){
+         //算出页码
+         CGFloat pageWidth = scrollView.frame.size.width;
+         float fractionalPage = scrollView.contentOffset.x / pageWidth;
+         NSInteger page = lround(fractionalPage);
+         
+         [self setValue:@(page) forKey:@"currentPage"];
      }
+     
+     self.scrollDirection =0;
  }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
 
-    if (![scrollView isKindOfClass:[UICollectionView class]]) {
+    if (![scrollView isKindOfClass:[UICollectionView class]] && _isPortrait == YES) {
         
         CGFloat offsetY = scrollView.contentOffset.y;
-        NSLog(@"---%f",offsetY);
+//        NSLog(@"---%f",offsetY);
         
-        if (offsetY > 0 || offsetY < 0) {
+        if (offsetY > kMainBoundsHeight || offsetY < kMainBoundsHeight) {
             _isYChange = YES;
             if (self.isDisappear == NO) {
                 [self wipeUpOrDown];
             }
         }
         
-        if (offsetY >=  0) {
+        if (offsetY >  kMainBoundsHeight) {
             if ( self.isComeBack == YES) {
-                CGFloat alpha = (offsetY)/kMainBoundsHeight;
+                CGFloat alpha = (offsetY - kMainBoundsHeight)/kMainBoundsHeight;
                 self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent:1 - alpha];
             }
-        }else {
+        }else if (offsetY <  kMainBoundsHeight) {
             if (self.isComeBack == YES) {
-                CGFloat alpha = (-offsetY)/kMainBoundsHeight;
+                CGFloat alpha = (kMainBoundsHeight - offsetY)/kMainBoundsHeight;
                 self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent: 1 - alpha];
             }
         }
         
         if (self.isComeBack == YES) {
             
-            if (offsetY == 0 && _isYChange == YES){
+            if (offsetY == kMainBoundsHeight && _isYChange == YES){
                 self.view.backgroundColor = [VCBackgroundColor colorWithAlphaComponent: 1.0];
                 if (self.isDisappear == YES) {
                     [self wipeUpOrDown];
                 }
             }
         }
+        
+        if (self.scrollDirection == 0){//we need to determine direction
+            //use the difference between positions to determine the direction.
+            if (abs(self.scrollViewStartPosPoint.x-scrollView.contentOffset.x)<
+                abs(self.scrollViewStartPosPoint.y-scrollView.contentOffset.y)){
+                //Vertical Scrolling
+                self.scrollDirection = 1;
+            } else {
+                //Horitonzal Scrolling
+                self.scrollDirection = 2;
+            }
+        }
+        //Update scroll position of the scrollview according to detected direction.
+        if (self.scrollDirection == 1) {
+            scrollView.contentOffset = CGPointMake(self.scrollViewStartPosPoint.x,scrollView.contentOffset.y);
+        } else if (self.scrollDirection == 2){
+            scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x,self.scrollViewStartPosPoint.y);
+        }
     }
+    
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (_isPortrait == YES) {
+        self.scrollViewStartPosPoint = scrollView.contentOffset;
+        self.scrollDirection = 0;
+    }
+    
 }
 
 //完成拖拽
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
 {
-    if (![scrollView isKindOfClass:[UICollectionView class]]) {
-        NSLog(@"--- x is  %f,---y  is %f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+    if (![scrollView isKindOfClass:[UICollectionView class]] && _isPortrait == YES) {
+//        NSLog(@"--- x is  %f,---y  is %f",scrollView.contentOffset.x,scrollView.contentOffset.y);
         self.isComeBack = YES;
-        if (scrollView.contentOffset.y > 120) {
+        if (scrollView.contentOffset.y > 120 + kMainBoundsHeight ) {
             _imageScrollView.pagingEnabled = NO;
             self.isComeBack = NO;
-            [self dismissFromTopWithDuration:0.3];
-        }else if (scrollView.contentOffset.y < - 120){
+            [self dismissFromTopWithDuration:0.5];
+        }else if (scrollView.contentOffset.y < kMainBoundsHeight - 80 ){
             self.isComeBack = NO;
-            [self dismissFromDownWithDuration:0.3];
+            [self dismissFromDownWithDuration:0.5];
         }
+    }
+    
+    if (decelerate) {
+        self.scrollDirection =0;
     }
 }
 
@@ -828,8 +878,9 @@ static int temp = -1;
             make.left.mas_equalTo(0);
         }];
         self.imageScrollView.width = kMainBoundsWidth;
-        self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
-        _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *2);
+        self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, kMainBoundsHeight);
+        _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight *3);
+        
         
         [_topView setImage:[UIImage new]];
         _topView.backgroundColor = kThemeColor;
@@ -843,32 +894,32 @@ static int temp = -1;
             DDPhotoScrollView *phoScrollView = (DDPhotoScrollView *)self.scrollObjecArr[i];
             [phoScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight));
-                make.top.mas_equalTo(0);
+                make.top.mas_equalTo(kMainBoundsHeight);
                 make.left.mas_equalTo(kMainBoundsWidth * i);
             }];
         }
         
         [_recoLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(70,45));
-            make.top.mas_equalTo(64);
+            make.top.mas_equalTo(kMainBoundsHeight + 64);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count + kMainBoundsWidth/2 - 35);
         }];
         
         [_lineViewOne mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
-            make.top.mas_equalTo(64 + 22);
+            make.top.mas_equalTo(kMainBoundsHeight + 64 + 22);
             make.right.mas_equalTo(_recoLabel.mas_left).offset(- 10);
         }];
         
         [_lineViewTwo mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
-            make.top.mas_equalTo(64 + 22);
+            make.top.mas_equalTo(kMainBoundsHeight + 64 + 22);
             make.left.mas_equalTo(_recoLabel.mas_right).offset(10);
         }];
         
         [_collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64 - 45));
-            make.top.mas_equalTo(64 + 45);
+            make.top.mas_equalTo(kMainBoundsHeight + 64 + 45);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
         }];
         [_collectionView reloadData];
@@ -887,6 +938,8 @@ static int temp = -1;
         
         self.imageScrollView.contentOffset = CGPointMake(_currentIndex *kMainBoundsWidth, 0);
         _imageScrollView.contentSize = CGSizeMake((self.imageDatas.count + 1) * kMainBoundsWidth, kMainBoundsHeight);
+        
+        
         
         [_topView setImage:[UIImage imageNamed:@"quanpingmc"]];
         [_topView setBackgroundColor:[UIColor clearColor]];
