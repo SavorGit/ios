@@ -37,7 +37,7 @@
     [self addSubview:_bgImageView];
     [_bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(kMainBoundsWidth/2 - 5);
-        make.height.mas_equalTo(120);
+        make.bottom.mas_equalTo(-52);
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
     }];
@@ -45,15 +45,14 @@
     _titleLabel = [[UILabel alloc]init];
     _titleLabel.font = kPingFangRegular(15);
     _titleLabel.textColor = UIColorFromRGB(0x434343);
-    _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.text = @"这是标题";
     _titleLabel.numberOfLines = 2;
     [self addSubview:_titleLabel];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(kMainBoundsWidth/2 - 2.5 - 20);
-        make.height.mas_equalTo(21);
-        make.top.mas_equalTo(_bgImageView.mas_bottom).offset(10);
+        make.height.mas_equalTo(42);
+        make.bottom.mas_equalTo(-5);
         make.left.mas_equalTo(10);
     }];
     
@@ -76,14 +75,13 @@
 }
 
 - (void)configModelData:(CreateWealthModel *)model andIsPortrait:(BOOL)isPortrait{
-
-    CGFloat titleHeight ;
     // 如果是横屏
     if (isPortrait == NO) {
         
+        _titleLabel.numberOfLines = 1;
         [_bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(kMainBoundsWidth/3 - 7.5);
-            make.height.mas_equalTo(90);
+            make.bottom.mas_equalTo(-31);
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
@@ -91,34 +89,27 @@
         [_titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(kMainBoundsWidth/3 - 2.5 - 20);
             make.height.mas_equalTo(21);
-            make.top.mas_equalTo(_bgImageView.mas_bottom).offset(10);
+            make.bottom.mas_equalTo(-5);
             make.left.mas_equalTo(10);
         }];
-        
-        titleHeight = [self getHeightByWidth:kMainBoundsWidth/3 - 2.5 - 20 title:model.title font:kPingFangRegular(15)];
     }else{
+        
+        _titleLabel.numberOfLines = 0;
         [_bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(kMainBoundsWidth/2 - 5);
-            make.height.mas_equalTo(90);
+            make.bottom.mas_equalTo(-52);
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
         }];
         
         [_titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(kMainBoundsWidth/2 - 2.5 - 20);
-            make.height.mas_equalTo(21);
-            make.top.mas_equalTo(_bgImageView.mas_bottom).offset(10);
+            make.height.mas_equalTo(42);
+            make.bottom.mas_equalTo(-5);
             make.left.mas_equalTo(10);
         }];
-        
-        titleHeight = [self getHeightByWidth:kMainBoundsWidth/2 - 2.5 - 20 title:model.title font:kPingFangRegular(15)];
     }
     
-    if (titleHeight > 21) {
-        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(42);
-        }];
-    }
     self.titleLabel.text = model.title;
     
     [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"]];

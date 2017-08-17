@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0604509A1F458F3D007174AC /* RD_MJRefreshFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 060450991F458F3D007174AC /* RD_MJRefreshFooter.m */; };
 		0606505C1E014CF100E43024 /* HSWebServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0606505B1E014CF100E43024 /* HSWebServerManager.m */; };
 		060C37361D6C42930058BBBE /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 060C37351D6C42930058BBBE /* GCDAsyncUdpSocket.m */; };
 		060DB0A41D5AD1C8002A2DED /* HTTPServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 060DB0A31D5AD1C8002A2DED /* HTTPServerManager.m */; };
@@ -339,6 +340,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		060450981F458F3D007174AC /* RD_MJRefreshFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RD_MJRefreshFooter.h; sourceTree = "<group>"; };
+		060450991F458F3D007174AC /* RD_MJRefreshFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RD_MJRefreshFooter.m; sourceTree = "<group>"; };
 		0606505A1E014CF100E43024 /* HSWebServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSWebServerManager.h; sourceTree = "<group>"; };
 		0606505B1E014CF100E43024 /* HSWebServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSWebServerManager.m; sourceTree = "<group>"; };
 		060C37341D6C42930058BBBE /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
@@ -1374,6 +1377,8 @@
 				065C87E21F18B6EE007BCCF9 /* RDInteractionLoadingView.m */,
 				065AC2251F1CA1B700545990 /* RD_MJRefreshHeader.h */,
 				065AC2261F1CA1B700545990 /* RD_MJRefreshHeader.m */,
+				060450981F458F3D007174AC /* RD_MJRefreshFooter.h */,
+				060450991F458F3D007174AC /* RD_MJRefreshFooter.m */,
 				0660A6D61F3C41C60069B00F /* RDDemandTableViewCell.h */,
 				0660A6D71F3C41C60069B00F /* RDDemandTableViewCell.m */,
 			);
@@ -2672,6 +2677,7 @@
 				96A7349F1F0C7F2D00906163 /* ImageTextTableViewCell.m in Sources */,
 				0663D4541F0B816300CD2FA2 /* RDVideoCollectionViewCell.m in Sources */,
 				0627E0C01E3231DA00DAED92 /* LGSideMenuControllerGesturesHandler.m in Sources */,
+				0604509A1F458F3D007174AC /* RD_MJRefreshFooter.m in Sources */,
 				065AC2271F1CA1B700545990 /* RD_MJRefreshHeader.m in Sources */,
 				06FB9D771DF989180053BE0A /* BaseModel.m in Sources */,
 				062D4F7A1DEC02BA0093942A /* GCCPlayerView.m in Sources */,

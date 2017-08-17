@@ -54,6 +54,30 @@
         make.centerX.mas_equalTo(self);
         make.top.mas_equalTo(self.percentageLab.mas_bottom).offset(8);
     }];
+    
+    UIButton * cancleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [cancleButton setTitle:RDLocalizedString(@"RDString_Cancle") forState:UIControlStateNormal];
+    [cancleButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    cancleButton.layer.cornerRadius = 5;
+    cancleButton.layer.masksToBounds = YES;
+    cancleButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    cancleButton.layer.borderWidth = 1.f;
+    cancleButton.titleLabel.font = kPingFangLight(15);
+    [self addSubview:cancleButton];
+    [cancleButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(60);
+        make.height.mas_equalTo(28);
+        make.centerX.mas_equalTo(0);
+        make.top.mas_equalTo(conLabel.mas_bottom).offset(30);
+    }];
+    [cancleButton addTarget:self action:@selector(cancleButtonDidClicked) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)cancleButtonDidClicked
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(uploadVideoDidCancle)]) {
+        [self.delegate uploadVideoDidCancle];
+    }
 }
 
 - (void)setTitle:(NSString *)title

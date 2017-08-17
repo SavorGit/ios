@@ -12,7 +12,6 @@
 #import "ImageTextTableViewCell.h"
 #import "HeadlinesTableViewCell.h"
 #import "Masonry.h"
-#import "MJRefresh.h"
 #import "CreateWealthModel.h"
 #import "ImageTextDetailViewController.h"
 #import "ImageAtlasDetailViewController.h"
@@ -21,6 +20,7 @@
 #import "HSCreateWealthRequest.h"
 #import "RDLogStatisticsAPI.h"
 #import "RD_MJRefreshHeader.h"
+#import "RD_MJRefreshFooter.h"
 
 @interface CreateWealthViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -212,7 +212,7 @@
         //创建tableView动画加载头视图
         
         _tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
-        MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
+        RD_MJRefreshFooter* footer = [RD_MJRefreshFooter footerWithRefreshingBlock:^{
            [self getMoreData];
         }];
         _tableView.mj_footer = footer;

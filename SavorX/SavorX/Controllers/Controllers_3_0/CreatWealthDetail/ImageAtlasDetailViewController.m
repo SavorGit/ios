@@ -350,6 +350,9 @@
         
         
         UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc]init];
+        layout.minimumLineSpacing = 5;
+        layout.minimumInteritemSpacing = 5;
+        layout.sectionInset = UIEdgeInsetsMake(0, 0, 5, 0);
         _collectionView=[[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.backgroundColor=[UIColor clearColor];
         _collectionView.delegate=self;
@@ -692,25 +695,31 @@ static int temp = -1;
     
     return cell;
 }
-//每一个分组的上左下右间距
--(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
-{
-    return UIEdgeInsetsMake(2.5, 0.0, 2.5, 0.0);
-}
+
 //定义每一个cell的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    CGFloat width = 0;
+    CGFloat height = 0;
+    
     if (_isPortrait == YES) {
-        return CGSizeMake(kMainBoundsWidth/2 - 5, 172);
+        width = (kMainBoundsWidth-5) / 2;
+        height = (kMainBoundsHeight - 64 - 45 - 5 - 5 - 5) / 3;
     }else{
-        return CGSizeMake(kMainBoundsWidth/3 - 7.5, 142);
+        width = (kMainBoundsWidth-10) / 3;
+        height = (kMainBoundsHeight - 64 - 45 - 5 - 5) / 2;
     }
+    return CGSizeMake(width, height);
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
     if (tmpModel.type == 3 || tmpModel.type == 4) {
+        
+        if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+            [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
+        }
         
         WebViewController * web = [[WebViewController alloc] initWithModel:tmpModel categoryID:self.categoryID];
         
@@ -721,6 +730,10 @@ static int temp = -1;
         [na pushViewController:web animated:YES];
         
     }else if (tmpModel.type == 1){
+        
+        if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+            [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
+        }
         
         ImageTextDetailViewController * text = [[ImageTextDetailViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
         

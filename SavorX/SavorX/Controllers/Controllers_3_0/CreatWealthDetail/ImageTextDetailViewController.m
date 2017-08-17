@@ -217,9 +217,16 @@
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = self.view.bounds.size.height;
     self.webView = [[UIWebView alloc] init];
+    
     self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
     self.webView.delegate = self;
     self.webView.scrollView.delegate = self;
+    
+    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 0)];
+    self.testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    [self.webView.scrollView addSubview:self.testView];
+    [self addObserver];
+    
     self.webView.frame = CGRectMake(0, 0, width, height);
     if (!isEmptyString(self.imgTextModel.contentURL)) {
         NSURLRequest * request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:[Helper addURLParamsInAPPWith:self.imgTextModel.contentURL]]];
@@ -228,11 +235,6 @@
     self.webView.backgroundColor = VCBackgroundColor;
     [self.webView setOpaque:NO];
     [self.view addSubview:self.webView];
-    
-    self.testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 0)];
-    self.testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
-    [self.webView.scrollView addSubview:self.testView];
-    [self addObserver];
     
     [self.testView addSubview:self.tableView];
     CGFloat tabHeiht = self.dataSource.count *(130 *802.f/1242.f + 12) +48;
@@ -571,6 +573,11 @@
         }];
     }else{
         self.imgTextModel = tmpModel;
+        
+        [self.dataSource removeAllObjects];
+        [self footViewShouldBeReset];
+        [self.tableView reloadData];
+        
         [self checkIsOnLine];
     }
 }
