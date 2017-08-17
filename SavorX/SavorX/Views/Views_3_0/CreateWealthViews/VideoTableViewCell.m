@@ -76,7 +76,7 @@
     _countLabel.text = @"4\'23\"";
     _countLabel.font = kPingFangLight(14);
     _countLabel.textColor = [UIColor whiteColor];
-    _countLabel.backgroundColor = [UIColorFromRGB(0x222222) colorWithAlphaComponent:.5f];
+    _countLabel.backgroundColor = [UIColorFromRGB(0x000000) colorWithAlphaComponent:.5f];
     _countLabel.textAlignment = NSTextAlignmentCenter;
     _countLabel.layer.cornerRadius = 10;
     _countLabel.layer.masksToBounds = YES;
