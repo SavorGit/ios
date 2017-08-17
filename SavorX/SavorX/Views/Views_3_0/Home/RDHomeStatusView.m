@@ -165,7 +165,7 @@
 // 断开连接
 - (void)screenBack{
     
-    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_DidBackScreenAlertPre"), RDLocalizedString(@"RDString_DidBackScreenAlertSuf"), [Helper getWifiName]]];
+    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_DidBackScreenAlertPre"), [Helper getWifiName], RDLocalizedString(@"RDString_DidBackScreenAlertSuf")]];
     RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
         
     } bold:NO];
@@ -197,7 +197,7 @@
         case RDHomeStatus_Bind:
         {
             [SAVORXAPI postUMHandleWithContentId:@"home_connect_tv" key:nil value:nil];
-            self.statusLabel.text = [NSString stringWithFormat:@"%@--%@%@", RDLocalizedString(@"RDString_StatusHasConnectPre"), RDLocalizedString(@"RDString_StatusHasConnectSuf"), [Helper getWifiName]];
+            self.statusLabel.text = [NSString stringWithFormat:@"%@--%@%@", RDLocalizedString(@"RDString_StatusHasConnectPre"), [Helper getWifiName], RDLocalizedString(@"RDString_StatusHasConnectSuf")];
             self.statusLabel.userInteractionEnabled = NO;
             [self.statusButton setTitle:RDLocalizedString(@"RDString_Disconnect") forState:UIControlStateNormal];
         }

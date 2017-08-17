@@ -10,13 +10,13 @@
 #import "SpecialTopTableViewCell.h"
 #import "HeadlinesSTopTableViewCell.h"
 #import "Masonry.h"
-#import "MJRefresh.h"
 #import "RDFrequentlyUsed.h"
 #import "SpecialTopDetailViewController.h"
 #import "SpecialTopRequest.h"
 #import "CreateWealthModel.h"
 #import "RDLogStatisticsAPI.h"
 #import "RD_MJRefreshHeader.h"
+#import "RD_MJRefreshFooter.h"
 
 @interface SpecialTopicViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -215,7 +215,7 @@
         //创建tableView动画加载头视图
         
         _tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
-        MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
+        RD_MJRefreshFooter* footer = [RD_MJRefreshFooter footerWithRefreshingBlock:^{
             [self getMoreData];
         }];
         _tableView.mj_footer = footer;

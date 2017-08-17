@@ -8,7 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol RDProgressViewDelegate <NSObject>
+
+- (void)uploadVideoDidCancle;
+
+@end
+
 @interface RDProgressView : UIView
+
+@property (nonatomic, assign) id<RDProgressViewDelegate> delegate;
 
 - (void)setTitle:(NSString *)title;
 

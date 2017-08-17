@@ -19,7 +19,7 @@
 #import "RDInteractionLoadingView.h"
 #import "RDProgressView.h"
 
-@interface PhotoLibraryViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource>
+@interface PhotoLibraryViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource, RDProgressViewDelegate>
 
 @property (nonatomic, strong) UIButton * titleButton;
 
@@ -624,9 +624,17 @@
 - (RDProgressView *)progressView
 {
     if (!_progressView) {
-        self.progressView = [[RDProgressView alloc] init];
+        _progressView = [[RDProgressView alloc] init];
+        _progressView.delegate = self;
     }
     return _progressView;
+}
+
+- (void)uploadVideoDidCancle
+{
+    if (self.session) {
+        [self.session cancelExport];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
