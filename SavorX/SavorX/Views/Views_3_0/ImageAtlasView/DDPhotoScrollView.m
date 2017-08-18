@@ -40,9 +40,9 @@
 		self.delegate = self;
 		self.showsVerticalScrollIndicator = NO;
 		self.showsHorizontalScrollIndicator = NO;
+        self.minimumZoomScale = 1;
 		self.maximumZoomScale = 2.0;
-		self.minimumZoomScale = 1;
-		
+        
 		// 单击手势
 		UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapOnScrollView)];
         [singleTap setNumberOfTapsRequired:1];
@@ -60,17 +60,31 @@
 	return _imageView;
 }
 
+
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-	CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
-	(scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
-	CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
-	(scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
-	CGPoint actualCenter = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
-									   scrollView.contentSize.height * 0.5 + offsetY);
-	_imageView.center = actualCenter;
+//	CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
+//	(scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
+//	CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
+//	(scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
+//	CGPoint actualCenter = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+//									   scrollView.contentSize.height * 0.5 + offsetY);
+//	_imageView.center = actualCenter;
     
 //	NSLog(@"%@", NSStringFromCGAffineTransform(scrollView.subviews[0].transform));
+    
+    
+    CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
+    
+    (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
+    
+    CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
+    
+    (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
+    
+    _imageView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+                            
+                            scrollView.contentSize.height * 0.5 + offsetY);
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -80,6 +94,38 @@
 	[recognizer setValue:scrollView forKey:@"view"];
 }
 
+-(void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
+    
+    NSLog(@"缩放比例-----%f",scale);
+    
+}
+
+/**
+ *  根据图片和屏幕比例关系,调整最大和最小伸缩比例
+ */
+- (void)setMaxAndMinZoomScales
+{
+    // self.photoImageView的初始位置
+    UIImage *image = self.imageView.image;
+    if (image == nil || image.size.height==0) {
+        return;
+    }
+    CGFloat imageWidthHeightRatio = image.size.width / image.size.height;
+    self.imageView.width = kMainBoundsWidth;
+    self.imageView.height = kMainBoundsWidth / imageWidthHeightRatio;
+    self.imageView.centerX = 0;
+    if (self.imageView.height > kMainBoundsHeight) {
+        self.imageView.centerY = 0;
+        self.scrollEnabled = YES;
+    } else {
+        self.imageView.centerY = (kMainBoundsHeight - self.imageView.height ) * 0.5;
+        self.scrollEnabled = NO;
+    }
+    self.maximumZoomScale = MAX(kMainBoundsHeight / self.imageView.height, 3.0);
+    self.minimumZoomScale = 1.0;
+    self.zoomScale = 1.0;
+    self.contentSize = CGSizeMake(self.imageView.width, MAX(self.imageView.height, kMainBoundsHeight));
+}
 
 #pragma mark - 手势
 - (void)singleTapOnScrollView

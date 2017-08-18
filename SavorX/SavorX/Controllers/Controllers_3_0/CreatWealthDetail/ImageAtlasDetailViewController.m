@@ -393,6 +393,11 @@
          float fractionalPage = scrollView.contentOffset.x / pageWidth;
          NSInteger page = lround(fractionalPage);
          
+         if (page == self.imageDatas.count) {
+             if (_isDisappear == YES) {
+                 [self wipeUpOrDown];
+             }
+         }
          [self setValue:@(page) forKey:@"currentPage"];
          
      }else if (![scrollView isKindOfClass:[UICollectionView class]]){
@@ -401,6 +406,11 @@
          float fractionalPage = scrollView.contentOffset.x / pageWidth;
          NSInteger page = lround(fractionalPage);
          
+         if (page == self.imageDatas.count) {
+             if (_isDisappear == YES) {
+                 [self wipeUpOrDown];
+             }
+         }
          [self setValue:@(page) forKey:@"currentPage"];
      }
      
