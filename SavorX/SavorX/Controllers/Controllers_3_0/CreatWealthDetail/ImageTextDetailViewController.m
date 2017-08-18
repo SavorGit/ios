@@ -530,6 +530,7 @@
     }
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [cell configWithModel:model];
+    [cell reConfigWithTimeStr:model.updateTime];
     
     
     return cell;
