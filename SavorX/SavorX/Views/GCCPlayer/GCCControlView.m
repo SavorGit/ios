@@ -546,8 +546,6 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         make.right.mas_equalTo(-150);
     }];
     [self.screenButton mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(0);
-        make.right.mas_equalTo(0);
         make.size.mas_equalTo(CGSizeMake(45, 45));
     }];
     self.backButton.alpha = self.toolView.alpha;

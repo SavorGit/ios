@@ -64,7 +64,7 @@
     _countLabel.font = kPingFangLight(13);
     _countLabel.textColor = [UIColor whiteColor];
     _countLabel.backgroundColor = [UIColorFromRGB(0x000000) colorWithAlphaComponent:.5f];
-    _countLabel.layer.cornerRadius = 2;
+    _countLabel.layer.cornerRadius = 3;
     _countLabel.layer.masksToBounds = YES;
     _countLabel.textAlignment = NSTextAlignmentCenter;
     [_bgImageView addSubview:_countLabel];

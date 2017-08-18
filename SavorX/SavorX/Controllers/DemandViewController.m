@@ -1334,6 +1334,7 @@
 {
     if (!_endView) {
         _endView = [[UIImageView alloc] init];
+        _endView.backgroundColor = [UIColor blackColor];
         _endView.userInteractionEnabled = YES;
         
         UIView * blackView = [[UIView alloc] init];

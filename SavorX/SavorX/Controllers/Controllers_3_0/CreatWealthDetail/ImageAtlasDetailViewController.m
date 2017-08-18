@@ -626,9 +626,10 @@ static int temp = -1;
         }
         [self.view addSubview:_topView];
         [_topView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
+            make.height.mas_equalTo(64);
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
         }];
         
         _backButton = [[UIButton alloc] initWithFrame:CGRectMake(5,20, 40, 44)];
@@ -906,11 +907,11 @@ static int temp = -1;
         
         [_topView setImage:[UIImage new]];
         _topView.backgroundColor = kThemeColor;
-        [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-        }];
+//        [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 64));
+//            make.top.mas_equalTo(0);
+//            make.left.mas_equalTo(0);
+//        }];
         
         for (int i = 0; i < self.scrollObjecArr.count; i++) {
             DDPhotoScrollView *phoScrollView = (DDPhotoScrollView *)self.scrollObjecArr[i];
@@ -965,11 +966,11 @@ static int temp = -1;
         
         [_topView setImage:[UIImage imageNamed:@"quanpingmc"]];
         [_topView setBackgroundColor:[UIColor clearColor]];
-        [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 85));
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-        }];
+//        [_topView mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 85));
+//            make.top.mas_equalTo(0);
+//            make.left.mas_equalTo(0);
+//        }];
         
         for (int i = 0; i < self.scrollObjecArr.count; i++) {
             DDPhotoScrollView *phoScrollView = (DDPhotoScrollView *)self.scrollObjecArr[i];

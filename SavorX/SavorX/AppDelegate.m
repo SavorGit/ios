@@ -54,6 +54,13 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
+    UIImageView * imageView = [[UIImageView alloc] initWithFrame:self.window.bounds];
+    [imageView setImage:[UIImage imageNamed:@"启动图"]];
+    [self.window addSubview:imageView];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [imageView removeFromSuperview];
+    });
+    
     //设置lauch页面
     [self createLaunch];
     

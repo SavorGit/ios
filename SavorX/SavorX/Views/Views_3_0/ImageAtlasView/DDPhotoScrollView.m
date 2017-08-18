@@ -31,9 +31,7 @@
         [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight));
             make.top.mas_equalTo(0);
-            make.bottom.mas_equalTo(0);
             make.left.mas_equalTo(0);
-            make.right.mas_equalTo(0);
         }];
 		
 		// 设置scrollView和缩放
