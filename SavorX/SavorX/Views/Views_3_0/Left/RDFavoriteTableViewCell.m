@@ -176,6 +176,10 @@
     }
 }
 
+- (void)reConfigWithTimeStr:(NSString *)timeStr{
+    self.dateLabel.text = timeStr;
+}
+
 //- (void)reloadWithUcreateTime:(NSString *)ucreateTime
 //{
 //    self.dateLabel.text = [Helper transformDate:[NSDate dateWithTimeIntervalSince1970:[ucreateTime doubleValue]]];
