@@ -892,7 +892,6 @@ static int temp = -1;
     
     if (orientation == UIInterfaceOrientationPortrait) {
         
-        _isPortrait = YES;
         [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_rotate" key:nil value:nil];
         
         [self.imageScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -945,6 +944,7 @@ static int temp = -1;
             make.top.mas_equalTo(kMainBoundsHeight + 64 + 45);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
         }];
+        _isPortrait = YES;
         [_collectionView reloadData];
         
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){

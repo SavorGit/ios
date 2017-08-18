@@ -99,11 +99,13 @@
     
     UIView * topView = [[UIView alloc] init];
     [notOnlineView addSubview:topView];
+    topView.backgroundColor = VCBackgroundColor;
+    CGFloat height = self.view.frame.size.width * 0.45;
     [topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
-        make.height.equalTo(self.view.mas_width).multipliedBy(.45f);
+        make.height.mas_equalTo(height);
     }];
     
     UILabel * label = [[UILabel alloc] init];
@@ -128,13 +130,13 @@
         make.size.mas_equalTo(CGSizeMake(83 / 5 * 4, 69 / 5 * 4));
     }];
     
-    UIView * lineView = [[UIView alloc] init];
-    lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
-    [topView addSubview:lineView];
-    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.bottom.right.mas_equalTo(0);
-        make.height.mas_equalTo(1);
-    }];
+//    UIView * lineView = [[UIView alloc] init];
+//    lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
+//    [topView addSubview:lineView];
+//    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.bottom.right.mas_equalTo(0);
+//        make.height.mas_equalTo(1);
+//    }];
     
     [HSImTeRecommendRequest cancelRequest];
     HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.imgTextModel.artid];
@@ -161,19 +163,31 @@
             tableView.tag = 4444;
             [notOnlineView addSubview:tableView];
             [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.mas_equalTo(topView.mas_bottom);
-                make.left.bottom.right.mas_equalTo(0);
+                make.edges.mas_equalTo(0);
             }];
             
-            UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
-            headView.backgroundColor = VCBackgroundColor;
+            UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height + 48)];
+            headView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+            
+            [topView removeFromSuperview];
+            [headView addSubview:topView];
+            [topView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.left.right.mas_equalTo(0);
+                make.height.mas_equalTo(height);
+            }];
+            
             UILabel *recommendLabel = [[UILabel alloc] init];
-            recommendLabel.frame = CGRectMake(15, 10, 100, 30);
             recommendLabel.textColor = UIColorFromRGB(0x922c3e);
             recommendLabel.font = kPingFangRegular(15);
             recommendLabel.text = RDLocalizedString(@"RDString_RecommendForYou");
             recommendLabel.textAlignment = NSTextAlignmentLeft;
             [headView addSubview:recommendLabel];
+            [recommendLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.mas_equalTo(15);
+                make.bottom.mas_equalTo(-8);
+                make.size.mas_equalTo(CGSizeMake(100, 30));
+            }];
+            
             tableView.tableHeaderView = headView;
             
             [tableView reloadData];

@@ -27,7 +27,7 @@
 - (void)customSelf
 {
     self.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
-    self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.92f];
+    self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.8f];
     
     self.percentageLab = [[UILabel alloc] init];
     self.percentageLab.font = [UIFont systemFontOfSize:24];
