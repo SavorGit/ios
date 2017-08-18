@@ -91,12 +91,14 @@
                         [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
                         [SAVORXAPI cancelAllURLTask];
                         
-                        RDAlertView * view = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:tipMsg];
-                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_KnewIt") handler:^{
-                            
-                        } bold:YES];
-                        [view addActions:@[action]];
-                        [view show];
+//                        RDAlertView * view = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:tipMsg];
+//                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_KnewIt") handler:^{
+//                            
+//                        } bold:YES];
+//                        [view addActions:@[action]];
+//                        [view show];
+                        
+                        [MBProgressHUD showTextHUDwithTitle:tipMsg];
                     });
                 }
             }
