@@ -311,8 +311,8 @@
         
     }
     
-    self.baseCollectionView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
     [self.baseCollectionView reloadData];
+    self.baseCollectionView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
     [self.baseCollectionView setContentOffset:CGPointMake(kMainBoundsWidth * self.currentIndex, 0) animated:NO];
 }
 
