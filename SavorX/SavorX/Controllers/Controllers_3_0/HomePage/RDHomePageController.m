@@ -17,7 +17,7 @@
 #import "GCCDLNA.h"
 #import "WebViewController.h"
 #import "ImageTextDetailViewController.h"
-#import "ImageAtlasDetailViewController.h"
+#import "ImageArrayViewController.h"
 
 @interface RDHomePageController ()
 
@@ -85,8 +85,21 @@
         [self.navigationController pushViewController:web animated:YES];
         [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
     }else if (model.type == 2) {
-        ImageAtlasDetailViewController * vc = [[ImageAtlasDetailViewController alloc] init];
-        vc.imgAtlModel = model;
+        ImageArrayViewController * vc = [[ImageArrayViewController alloc] initWithCategoryID:0 model:model];
+        
+        vc.parentNavigationController = self.navigationController;
+        float version = [UIDevice currentDevice].systemVersion.floatValue;
+        if (version < 8.0) {
+            self.modalPresentationStyle = UIModalPresentationCurrentContext;
+        } else {;
+            vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        }
+        vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
+        [self presentViewController:vc animated:NO completion:^{
+            
+        }];
+        
         [self.navigationController pushViewController:vc animated:YES];
         [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
     }else{

@@ -18,7 +18,7 @@
 #import "RDLogStatisticsAPI.h"
 #import "RDIsOnline.h"
 #import "WebViewController.h"
-#import "ImageAtlasDetailViewController.h"
+#import "ImageArrayViewController.h"
 
 #define  igTextHeight (130 *802.f/1242.f + 12)
 
@@ -571,8 +571,9 @@
         [vcs addObject:web];
         [self.navigationController setViewControllers:vcs animated:YES];
     }else if (tmpModel.type == 2){
-        ImageAtlasDetailViewController * image = [[ImageAtlasDetailViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
+        ImageArrayViewController * image = [[ImageArrayViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
         
+        image.parentNavigationController = self.navigationController;
         float version = [UIDevice currentDevice].systemVersion.floatValue;
         if (version < 8.0) {
             self.modalPresentationStyle = UIModalPresentationCurrentContext;

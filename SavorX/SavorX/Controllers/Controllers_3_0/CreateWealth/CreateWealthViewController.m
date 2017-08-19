@@ -14,7 +14,6 @@
 #import "Masonry.h"
 #import "CreateWealthModel.h"
 #import "ImageTextDetailViewController.h"
-#import "ImageAtlasDetailViewController.h"
 #import "WebViewController.h"
 #import "CreateWealthModel.h"
 #import "HSCreateWealthRequest.h"

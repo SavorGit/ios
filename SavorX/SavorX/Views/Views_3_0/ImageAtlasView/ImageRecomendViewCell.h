@@ -10,6 +10,11 @@
 
 @interface ImageRecomendViewCell : UICollectionViewCell
 
+@property (nonatomic, copy) void (^block)(CreateWealthModel * model);
+
 - (void)configModelData:(NSMutableArray *)modelArr andIsPortrait:(BOOL)isPortrait;
+
+- (void)addGestureForImage:(UIPanGestureRecognizer *)pan;
+- (void)removeGestureForImage:(UIPanGestureRecognizer *)pan;
 
 @end

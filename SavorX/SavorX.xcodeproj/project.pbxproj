@@ -304,10 +304,7 @@
 		96BCE3CA1EC19DE100B1A3F7 /* HSEggsResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE3C91EC19DE100B1A3F7 /* HSEggsResultModel.m */; };
 		96BCE4231EC2C05300B1A3F7 /* RDGoldenEggs.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */; };
 		96BCE4291EC2F3DB00B1A3F7 /* RDPrizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */; };
-		96D8C5B31F0F20DA00251301 /* ImageAtlasDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5B21F0F20DA00251301 /* ImageAtlasDetailViewController.m */; };
 		96D8C5BB1F0F213000251301 /* DDPhotoDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5B61F0F213000251301 /* DDPhotoDescView.m */; };
-		96D8C5BC1F0F213000251301 /* DDPhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5B81F0F213000251301 /* DDPhotoScrollView.m */; };
-		96D8C5BD1F0F213000251301 /* ImageAtlasScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5BA1F0F213000251301 /* ImageAtlasScrollView.m */; };
 		96D8C5C11F0F603500251301 /* SpecialTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C01F0F603500251301 /* SpecialTopicViewController.m */; };
 		96D8C5C51F0F66F200251301 /* SpecialTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C41F0F66F200251301 /* SpecialTopTableViewCell.m */; };
 		96D8C5C81F0F681900251301 /* HeadlinesSTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */; };
@@ -826,14 +823,8 @@
 		96BCE4221EC2C05300B1A3F7 /* RDGoldenEggs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDGoldenEggs.m; sourceTree = "<group>"; };
 		96BCE4271EC2F3DB00B1A3F7 /* RDPrizeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPrizeView.h; sourceTree = "<group>"; };
 		96BCE4281EC2F3DB00B1A3F7 /* RDPrizeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPrizeView.m; sourceTree = "<group>"; };
-		96D8C5B11F0F20DA00251301 /* ImageAtlasDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAtlasDetailViewController.h; sourceTree = "<group>"; };
-		96D8C5B21F0F20DA00251301 /* ImageAtlasDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAtlasDetailViewController.m; sourceTree = "<group>"; };
 		96D8C5B51F0F213000251301 /* DDPhotoDescView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDPhotoDescView.h; sourceTree = "<group>"; };
 		96D8C5B61F0F213000251301 /* DDPhotoDescView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDPhotoDescView.m; sourceTree = "<group>"; };
-		96D8C5B71F0F213000251301 /* DDPhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDPhotoScrollView.h; sourceTree = "<group>"; };
-		96D8C5B81F0F213000251301 /* DDPhotoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDPhotoScrollView.m; sourceTree = "<group>"; };
-		96D8C5B91F0F213000251301 /* ImageAtlasScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAtlasScrollView.h; sourceTree = "<group>"; };
-		96D8C5BA1F0F213000251301 /* ImageAtlasScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAtlasScrollView.m; sourceTree = "<group>"; };
 		96D8C5BF1F0F603500251301 /* SpecialTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTopicViewController.h; sourceTree = "<group>"; };
 		96D8C5C01F0F603500251301 /* SpecialTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopicViewController.m; sourceTree = "<group>"; };
 		96D8C5C31F0F66F200251301 /* SpecialTopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTopTableViewCell.h; sourceTree = "<group>"; };
@@ -2182,8 +2173,6 @@
 			children = (
 				96A734BB1F0C87EA00906163 /* ImageTextDetailViewController.h */,
 				96A734BC1F0C87EA00906163 /* ImageTextDetailViewController.m */,
-				96D8C5B11F0F20DA00251301 /* ImageAtlasDetailViewController.h */,
-				96D8C5B21F0F20DA00251301 /* ImageAtlasDetailViewController.m */,
 				06D260E81F46EF7100EC2B49 /* ImageArrayViewController.h */,
 				06D260E91F46EF7100EC2B49 /* ImageArrayViewController.m */,
 			);
@@ -2239,10 +2228,6 @@
 			children = (
 				96D8C5B51F0F213000251301 /* DDPhotoDescView.h */,
 				96D8C5B61F0F213000251301 /* DDPhotoDescView.m */,
-				96D8C5B71F0F213000251301 /* DDPhotoScrollView.h */,
-				96D8C5B81F0F213000251301 /* DDPhotoScrollView.m */,
-				96D8C5B91F0F213000251301 /* ImageAtlasScrollView.h */,
-				96D8C5BA1F0F213000251301 /* ImageAtlasScrollView.m */,
 				965EC0411F385BF5008812FB /* ImageAtlasCollectViewCell.h */,
 				965EC0421F385BF5008812FB /* ImageAtlasCollectViewCell.m */,
 				96870D271F483130008B9C3A /* ImageRecomendViewCell.h */,
@@ -2743,7 +2728,6 @@
 				96A734B01F0C80B000906163 /* ImageWithLabel.m in Sources */,
 				06B5554C1E8A6A210068BF70 /* DefalutLaunchPlayView.m in Sources */,
 				0663D41C1F0B6AA500CD2FA2 /* RDHomeScreenViewController.m in Sources */,
-				96D8C5BD1F0F213000251301 /* ImageAtlasScrollView.m in Sources */,
 				96D8C5C51F0F66F200251301 /* SpecialTopTableViewCell.m in Sources */,
 				478058351DF989850091C305 /* ConverUtil.m in Sources */,
 				47F9976D1DFFBC910009BDFB /* BaseCell.m in Sources */,
@@ -2823,7 +2807,6 @@
 				96D8C5DC1F1389F900251301 /* WinResultViewController.m in Sources */,
 				0661F6B11F162F2400E914DE /* RealCreateWealthViewController.m in Sources */,
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
-				96D8C5BC1F0F213000251301 /* DDPhotoScrollView.m in Sources */,
 				0647961D1F0E306100DD8AA9 /* PhotoVideoScreenViewController.m in Sources */,
 				06D260F01F46F6F600EC2B49 /* RDCellScrollView.m in Sources */,
 				0663D4511F0B815600CD2FA2 /* RDPhotoCollectionViewCell.m in Sources */,
@@ -2831,7 +2814,6 @@
 				060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */,
 				96D8C5F91F15BE2C00251301 /* HSIsOrCollectionRequest.m in Sources */,
 				96BCE4291EC2F3DB00B1A3F7 /* RDPrizeView.m in Sources */,
-				96D8C5B31F0F20DA00251301 /* ImageAtlasDetailViewController.m in Sources */,
 				96D8C5C11F0F603500251301 /* SpecialTopicViewController.m in Sources */,
 				47FE2CB91E1BB53200D3D0B4 /* SplashViewController.m in Sources */,
 				0663D43C1F0B6CB000CD2FA2 /* WMMenuView.m in Sources */,

@@ -35,7 +35,6 @@
 #import "ScreenDocumentViewController.h"
 #import "WebViewController.h"
 #import "VideoGuidedTwoDimensionalCode.h"
-#import "ImageAtlasDetailViewController.h"
 
 #pragma mark -
 

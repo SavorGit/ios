@@ -13,7 +13,7 @@
 #import "RD_MJRefreshHeader.h"
 #import "MJRefresh.h"
 #import "ImageTextDetailViewController.h"
-#import "ImageAtlasDetailViewController.h"
+#import "ImageArrayViewController.h"
 #import "WebViewController.h"
 #import "SpecialTopDetailViewController.h"
 
@@ -274,9 +274,7 @@
             [self.navigationController pushViewController:imtVC animated:YES];
             
         }else if (model.type == 2) {
-            ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
-            iatVC.imgAtlModel = model;
-            iatVC.categoryID = model.categoryId;
+            ImageArrayViewController *iatVC = [[ImageArrayViewController alloc] initWithCategoryID:model.categoryId model:model];
             
             iatVC.parentNavigationController = self.navigationController;
             float version = [UIDevice currentDevice].systemVersion.floatValue;

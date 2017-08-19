@@ -17,6 +17,8 @@
 #import "HSIsOrCollectionRequest.h"
 #import "DDPhotoDescView.h"
 #import "HSImTeRecommendRequest.h"
+#import "WebViewController.h"
+#import "ImageTextDetailViewController.h"
 
 @interface ImageArrayViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
@@ -34,12 +36,14 @@
 
 @property (nonatomic, strong) NSMutableArray * imageDatas;
 @property (nonatomic, strong) NSMutableArray * dataSource;
-@property (nonatomic, strong) UIPanGestureRecognizer * panGesture;
-@property (nonatomic, strong) ImageArrayCollectionViewCell * currentCell;
+@property (nonatomic, strong) UICollectionViewCell * currentCell;
 
 @property (nonatomic, assign) BOOL isPortrait;
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, assign) BOOL isScrollCollectionView;
+
+@property (nonatomic, strong) UIPanGestureRecognizer * panGesture;
+@property (nonatomic, strong) UITapGestureRecognizer * tapGesture;
 
 @end
 
@@ -70,7 +74,6 @@
     }];
     [self requestWithContentId:self.imgAtlModel.artid];
     [self setUpDatas];
-    [self addObserver];
 }
 
 - (void)requestWithContentId:(NSString *)contentId{
@@ -147,6 +150,22 @@
 - (void)createSubViews
 {
     [self configBaseCollectionView];
+    
+    ImageAtlasDetailModel *tmpModel = self.imageDatas[0];
+    
+    if (self.photoDescView && self.photoDescView.superview) {
+        [self.photoDescView removeFromSuperview];
+    }
+    
+    self.photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:0 totalCount:self.imageDatas.count - 1];
+    [self.view addSubview:self.photoDescView];
+    [self.photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+    }];
+    
+    [self addObserver];
 }
 
 - (void)configBaseCollectionView
@@ -157,15 +176,6 @@
     
     self.currentIndex = 0;
     [self performSelector:@selector(didScrollToItem) withObject:nil afterDelay:.1f];
-    
-    ImageAtlasDetailModel *tmpModel = self.imageDatas[0];
-    self.photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:0 totalCount:self.imageDatas.count - 1];
-    [self.view addSubview:self.photoDescView];
-    [self.photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(0);
-        make.left.mas_equalTo(0);
-        make.right.mas_equalTo(0);
-    }];
 }
 
 - (void)hiddenToolView
@@ -197,6 +207,11 @@
         ImageRecomendViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"ImageRecCell" forIndexPath:indexPath];
         [cell configModelData:self.dataSource andIsPortrait:self.isPortrait];
         
+        __weak typeof(self) weakSelf = self;
+        cell.block = ^(CreateWealthModel *model) {
+            [weakSelf recommandDidBeSelectWithModel:model];
+        };
+        
         return cell;
     }else{
         ImageArrayCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageArrayCell" forIndexPath:indexPath];
@@ -208,6 +223,50 @@
     }
     
     return nil;
+}
+
+- (void)recommandDidBeSelectWithModel:(CreateWealthModel *)model
+{
+    if (model.type == 3 || model.type == 4) {
+        
+        if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+            [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
+        }
+        
+        WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:self.categoryID];
+        
+        UINavigationController * na = self.parentNavigationController;
+        [self dismissViewControllerAnimated:NO completion:^{
+            
+        }];
+        [na pushViewController:web animated:YES];
+        
+    }else if (model.type == 1){
+        
+        if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+            [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
+        }
+        
+        ImageTextDetailViewController * text = [[ImageTextDetailViewController alloc] initWithCategoryID:self.categoryID model:model];
+        
+        UINavigationController * na = self.parentNavigationController;
+        [self dismissViewControllerAnimated:NO completion:^{
+            
+        }];
+        [na pushViewController:text animated:YES];
+        
+    }else{
+        self.imgAtlModel = model;
+        
+        _currentIndex = 0;
+        [self removeObserver];
+        
+        [self.baseCollectionView removeFromSuperview];
+        self.baseCollectionView = nil;
+        
+        [self requestWithContentId:self.imgAtlModel.artid];
+        [self setUpDatas];
+    }
 }
 
 - (void)viewDidPan:(UIPanGestureRecognizer *)pan
@@ -384,8 +443,6 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     if (scrollView == self.baseCollectionView) {
-        self.currentIndex = lround(scrollView.contentOffset.x / kMainBoundsWidth);
-        
         [self didScrollToItem];
     }
 }
@@ -393,34 +450,62 @@
 #pragma mark - 滑动到某一个item的时候相应的处理
 - (void)didScrollToItem
 {
-    if (![self.currentCell isKindOfClass:[ImageRecomendViewCell class]]) {
-        ImageArrayCollectionViewCell * cell = self.currentCell;
-        if (cell) {
-            [cell removeGestureForImage:self.panGesture];
-        }
-        
-        [cell addGestureForImage:self.panGesture];
-        
-        if (self.photoDescView && self.photoDescView.hidden == YES) {
-            self.photoDescView.hidden = NO;
-        }
-        ImageAtlasDetailModel *tmpModel = self.imageDatas[self.currentIndex];
-        [self.photoDescView reConfigTextValueWithText:tmpModel.atext index:self.currentIndex totalCount:self.imageDatas.count - 1];
-        [self.photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-        }];
-    }else{
-        if (self.photoDescView) {
-            self.photoDescView.hidden = YES;
+    if (self.currentCell) {
+        if ([self.currentCell isKindOfClass:[ImageRecomendViewCell class]]) {
+            ImageArrayCollectionViewCell * cell = (ImageArrayCollectionViewCell *)self.currentCell;
+            if (cell) {
+                [cell removeGestureForImage:self.panGesture];
+            }
+        }else{
+            ImageRecomendViewCell * cell = (ImageRecomendViewCell *)self.currentCell;
+            if (cell) {
+                [cell removeGestureForImage:self.panGesture];
+            }
         }
     }
     
+    self.currentIndex = lround(self.baseCollectionView.contentOffset.x / kMainBoundsWidth);
+    
+    if (self.currentCell) {
+        if ([self.currentCell isKindOfClass:[ImageRecomendViewCell class]]) {
+            
+            ImageArrayCollectionViewCell * cell = (ImageArrayCollectionViewCell *)self.currentCell;
+            
+            [cell addGestureForImage:self.panGesture];
+            if (self.photoDescView) {
+                self.photoDescView.hidden = YES;
+            }
+            
+            if ([GlobalData shared].isImageAtlasHiddenTop) {
+                [self topViewStatusShouldChange];
+            }
+            self.tapGesture.enabled = NO;
+            
+        }else{
+            
+            ImageRecomendViewCell * cell = (ImageRecomendViewCell *)self.currentCell;
+            [cell addGestureForImage:self.panGesture];
+            
+            if (self.photoDescView && self.photoDescView.hidden == YES) {
+                self.photoDescView.hidden = NO;
+            }
+            ImageAtlasDetailModel *tmpModel = self.imageDatas[self.currentIndex];
+            [self.photoDescView reConfigTextValueWithText:tmpModel.atext index:self.currentIndex totalCount:self.imageDatas.count - 1];
+            [self.photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.mas_equalTo(0);
+                make.left.mas_equalTo(0);
+                make.right.mas_equalTo(0);
+            }];
+            self.tapGesture.enabled = YES;
+        }
+    }
 }
 
 - (ImageArrayCollectionViewCell *)currentCell
 {
+    if (self.currentIndex > self.imageDatas.count - 1) {
+        return nil;
+    }
     ImageArrayCollectionViewCell * cell = (ImageArrayCollectionViewCell *)[self.baseCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentIndex inSection:0]];
     return cell;
 }
@@ -469,6 +554,15 @@
     return _panGesture;
 }
 
+- (UITapGestureRecognizer *)tapGesture
+{
+    if (!_tapGesture) {
+        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(topViewStatusShouldChange)];
+        _tapGesture.numberOfTapsRequired = 1;
+    }
+    return _tapGesture;
+}
+
 - (UICollectionViewFlowLayout *)baseLayout
 {
     if (!_baseLayout) {
@@ -493,10 +587,8 @@
         _baseCollectionView.dataSource = self;
         _baseCollectionView.delegate = self;
         
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(topViewStatusShouldChange)];
-        tap.numberOfTapsRequired = 1;
-        [_baseCollectionView addGestureRecognizer:tap];
-    }
+        [_baseCollectionView addGestureRecognizer:self.tapGesture];
+        }
     return _baseCollectionView;
 }
 

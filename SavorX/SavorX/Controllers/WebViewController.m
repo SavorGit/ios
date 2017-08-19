@@ -21,7 +21,7 @@
 #import "RDVideoHeaderView.h"
 #import "RDFavoriteTableViewCell.h"
 #import "RDIsOnline.h"
-#import "ImageAtlasDetailViewController.h"
+#import "ImageArrayViewController.h"
 #import "ImageTextDetailViewController.h"
 
 @interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
@@ -865,8 +865,9 @@
         
     }else if (tmpModel.type == 2){
         
-        ImageAtlasDetailViewController * image = [[ImageAtlasDetailViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
+        ImageArrayViewController * image = [[ImageArrayViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
         
+        image.parentNavigationController = self.navigationController;
         float version = [UIDevice currentDevice].systemVersion.floatValue;
         if (version < 8.0) {
             self.modalPresentationStyle = UIModalPresentationCurrentContext;

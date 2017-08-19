@@ -33,41 +33,10 @@
 
 - (void)creatSubViews{
     
-    _recoLabel = [[UILabel alloc]init];
-    _recoLabel.backgroundColor = [UIColor clearColor];
-    _recoLabel.font = kPingFangLight(16);
-    _recoLabel.textColor = UIColorFromRGB(0x922c3e);
-    _recoLabel.textAlignment = NSTextAlignmentCenter;
-    _recoLabel.text = RDLocalizedString(@"RDString_imgAtRecommend");
-    [self addSubview:_recoLabel];
-    [_recoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(70,45));
-        make.top.mas_equalTo(64);
-        make.left.mas_equalTo(kMainBoundsWidth/2 - 35);
-    }];
-    
-    _lineViewOne = [[UIView alloc] initWithFrame:CGRectZero];
-    _lineViewOne.backgroundColor = UIColorFromRGB(0x922c3e);
-    [self addSubview:_lineViewOne];
-    [_lineViewOne mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
-        make.top.mas_equalTo(64 + 22);
-        make.right.mas_equalTo(_recoLabel.mas_left).offset(- 10);
-    }];
-    
-    _lineViewTwo = [[UIView alloc] initWithFrame:CGRectZero];
-    _lineViewTwo.backgroundColor = UIColorFromRGB(0x922c3e);
-    [self addSubview:_lineViewTwo];
-    [_lineViewTwo mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
-        make.top.mas_equalTo(64 + 22);
-        make.left.mas_equalTo(_recoLabel.mas_right).offset(10);
-    }];
-
     UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc]init];
     layout.minimumLineSpacing = 5;
     layout.minimumInteritemSpacing = 5;
-    layout.sectionInset = UIEdgeInsetsMake(0, 0, 5, 0);
+    layout.sectionInset = UIEdgeInsetsMake(45, 0, 5, 0);
     _collectionView=[[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
     _collectionView.backgroundColor=[UIColor clearColor];
     _collectionView.delegate=self;
@@ -79,8 +48,39 @@
     [_collectionView registerClass:[ImageAtlasCollectViewCell class] forCellWithReuseIdentifier:@"imgCell"];
     [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64));
-        make.top.mas_equalTo(64 + 45);
+        make.top.mas_equalTo(64);
         make.left.mas_equalTo(0);
+    }];
+    
+    _recoLabel = [[UILabel alloc]init];
+    _recoLabel.backgroundColor = [UIColor clearColor];
+    _recoLabel.font = kPingFangLight(16);
+    _recoLabel.textColor = UIColorFromRGB(0x922c3e);
+    _recoLabel.textAlignment = NSTextAlignmentCenter;
+    _recoLabel.text = RDLocalizedString(@"RDString_imgAtRecommend");
+    [self.collectionView addSubview:_recoLabel];
+    [_recoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(70,45));
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(kMainBoundsWidth/2 - 35);
+    }];
+    
+    _lineViewOne = [[UIView alloc] initWithFrame:CGRectZero];
+    _lineViewOne.backgroundColor = UIColorFromRGB(0x922c3e);
+    [self.collectionView addSubview:_lineViewOne];
+    [_lineViewOne mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
+        make.top.mas_equalTo(0 + 22);
+        make.right.mas_equalTo(_recoLabel.mas_left).offset(- 10);
+    }];
+    
+    _lineViewTwo = [[UIView alloc] initWithFrame:CGRectZero];
+    _lineViewTwo.backgroundColor = UIColorFromRGB(0x922c3e);
+    [self.collectionView addSubview:_lineViewTwo];
+    [_lineViewTwo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
+        make.top.mas_equalTo(0 + 22);
+        make.left.mas_equalTo(_recoLabel.mas_right).offset(10);
     }];
    
     [self addObserver];
@@ -122,6 +122,13 @@
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.block) {
+        self.block([self.dataSource objectAtIndex:indexPath.row]);
+    }
+}
+
 //定义每一个cell的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -154,29 +161,39 @@
     
     [_recoLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(70,45));
-        make.top.mas_equalTo(64);
+        make.top.mas_equalTo(0);
         make.left.mas_equalTo(kMainBoundsWidth/2 - 35);
     }];
     
     [_lineViewOne mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
-        make.top.mas_equalTo(64 + 22);
+        make.top.mas_equalTo(0 + 22);
         make.right.mas_equalTo(_recoLabel.mas_left).offset(- 10);
     }];
     
     [_lineViewTwo mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth/2 - 100, 1));
-        make.top.mas_equalTo(64 + 22);
+        make.top.mas_equalTo(0 + 22);
         make.left.mas_equalTo(_recoLabel.mas_right).offset(10);
     }];
     
     [_collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64 - 45 -5));
-        make.top.mas_equalTo(64 + 45);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64 -5));
+        make.top.mas_equalTo(64);
         make.left.mas_equalTo(0);
     }];
     self.collectionView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
     [self.collectionView reloadData];
+}
+
+- (void)addGestureForImage:(UIPanGestureRecognizer *)pan
+{
+    [self.collectionView addGestureRecognizer:pan];
+}
+
+- (void)removeGestureForImage:(UIPanGestureRecognizer *)pan
+{
+    [self.collectionView removeGestureRecognizer:pan];
 }
 
 - (void)dealloc{
