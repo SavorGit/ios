@@ -718,7 +718,7 @@ static int temp = -1;
         height = (kMainBoundsHeight - 64 - 45 - 5 - 5 - 5) / 3;
     }else{
         width = (kMainBoundsWidth-10) / 3;
-        height = (kMainBoundsHeight - 64 - 45 - 5 - 5) / 2;
+        height = (kMainBoundsHeight - 64 - 45 - 5 - 5 - 5) / 2;
     }
     return CGSizeMake(width, height);
 }
@@ -1000,7 +1000,8 @@ static int temp = -1;
         }];
         
         [_collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64 - 45));
+            // 横屏最下方多留5像素间距
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,kMainBoundsHeight - 64 - 45 - 5));
             make.top.mas_equalTo(64 + 45);
             make.left.mas_equalTo(kMainBoundsWidth * self.imageDatas.count);
         }];
