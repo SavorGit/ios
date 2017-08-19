@@ -289,6 +289,7 @@
 		9670C4AA1E7159210060CE0B /* DocGuided.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A71E7159210060CE0B /* DocGuided.png */; };
 		9670C4AB1E7159210060CE0B /* DocGuided@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A81E7159210060CE0B /* DocGuided@2x.png */; };
 		9670C4AC1E7159210060CE0B /* DocGuided@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9670C4A91E7159210060CE0B /* DocGuided@3x.png */; };
+		96870D291F483130008B9C3A /* ImageRecomendViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96870D281F483130008B9C3A /* ImageRecomendViewCell.m */; };
 		96A734921F0C7EE900906163 /* CreateWealthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A7348E1F0C7EE900906163 /* CreateWealthViewController.m */; };
 		96A7349D1F0C7F2D00906163 /* HeadlinesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A734961F0C7F2D00906163 /* HeadlinesTableViewCell.m */; };
 		96A7349E1F0C7F2D00906163 /* ImageAtlasTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A734981F0C7F2D00906163 /* ImageAtlasTableViewCell.m */; };
@@ -795,6 +796,8 @@
 		9670C4A71E7159210060CE0B /* DocGuided.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DocGuided.png; sourceTree = "<group>"; };
 		9670C4A81E7159210060CE0B /* DocGuided@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DocGuided@2x.png"; sourceTree = "<group>"; };
 		9670C4A91E7159210060CE0B /* DocGuided@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DocGuided@3x.png"; sourceTree = "<group>"; };
+		96870D271F483130008B9C3A /* ImageRecomendViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageRecomendViewCell.h; sourceTree = "<group>"; };
+		96870D281F483130008B9C3A /* ImageRecomendViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageRecomendViewCell.m; sourceTree = "<group>"; };
 		96A7348D1F0C7EE900906163 /* CreateWealthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateWealthViewController.h; sourceTree = "<group>"; };
 		96A7348E1F0C7EE900906163 /* CreateWealthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateWealthViewController.m; sourceTree = "<group>"; };
 		96A734951F0C7F2D00906163 /* HeadlinesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadlinesTableViewCell.h; sourceTree = "<group>"; };
@@ -2242,6 +2245,8 @@
 				96D8C5BA1F0F213000251301 /* ImageAtlasScrollView.m */,
 				965EC0411F385BF5008812FB /* ImageAtlasCollectViewCell.h */,
 				965EC0421F385BF5008812FB /* ImageAtlasCollectViewCell.m */,
+				96870D271F483130008B9C3A /* ImageRecomendViewCell.h */,
+				96870D281F483130008B9C3A /* ImageRecomendViewCell.m */,
 				06D260EB1F46F47800EC2B49 /* ImageArrayCollectionViewCell.h */,
 				06D260EC1F46F47800EC2B49 /* ImageArrayCollectionViewCell.m */,
 				06D260EE1F46F6F600EC2B49 /* RDCellScrollView.h */,
@@ -2727,6 +2732,7 @@
 				06FA30EA1D3E0C70001F5B37 /* main.m in Sources */,
 				0663D44D1F0B804D00CD2FA2 /* PhotoLibraryViewController.m in Sources */,
 				06FFCCAF1E6EBF6A00ADEA94 /* RDCheackSence.m in Sources */,
+				96870D291F483130008B9C3A /* ImageRecomendViewCell.m in Sources */,
 				4780584E1DF9908D0091C305 /* HSSubmitFeedbackRequest.m in Sources */,
 				06FA33991D3E171D001F5B37 /* ContextFilterLogFormatter.m in Sources */,
 				96D8C5D91F13704900251301 /* HSPicDetailRequest.m in Sources */,

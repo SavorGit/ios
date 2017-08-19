@@ -9,12 +9,14 @@
 //注意注册通知和移除通知需要添加判断
 #import "ImageArrayViewController.h"
 #import "ImageArrayCollectionViewCell.h"
+#import "ImageRecomendViewCell.h"
 #import "ImageAtlasDetailModel.h"
 #import "HSPicDetailRequest.h"
 #import "HSGetCollectoinStateRequest.h"
 #import "HotPopShareView.h"
 #import "HSIsOrCollectionRequest.h"
 #import "DDPhotoDescView.h"
+#import "HSImTeRecommendRequest.h"
 
 @interface ImageArrayViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
@@ -31,6 +33,7 @@
 @property (nonatomic, strong) DDPhotoDescView *photoDescView;
 
 @property (nonatomic, strong) NSMutableArray * imageDatas;
+@property (nonatomic, strong) NSMutableArray * dataSource;
 @property (nonatomic, strong) UIPanGestureRecognizer * panGesture;
 @property (nonatomic, strong) ImageArrayCollectionViewCell * currentCell;
 
@@ -59,12 +62,14 @@
     self.isPortrait = YES;
     [GlobalData shared].isImageAtlas = YES;
     self.imageDatas = [NSMutableArray new];
+    self.dataSource = [NSMutableArray new];
     [self.view addSubview:self.topView];
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.mas_equalTo(0);
         make.height.mas_equalTo(64);
     }];
     [self requestWithContentId:self.imgAtlModel.artid];
+    [self setUpDatas];
     [self addObserver];
 }
 
@@ -85,6 +90,9 @@
                     ImageAtlasDetailModel *imageAtlModel = [[ImageAtlasDetailModel alloc] initWithDictionary:resultArr[i]];
                     [self.imageDatas addObject:imageAtlModel];
                 }
+                //多添加一个空Model
+                ImageAtlasDetailModel *imageAtlModel = [[ImageAtlasDetailModel alloc] init];
+                [self.imageDatas addObject:imageAtlModel];
                 [self createSubViews];
             }else{
                 [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
@@ -113,6 +121,29 @@
     }];
 }
 
+#pragma mark -  请求图集推荐数据
+- (void)setUpDatas{
+    
+    HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.imgAtlModel.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        
+        for (int i = 0; i < resultArr.count; i ++) {
+            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            [self.dataSource addObject:welthModel];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
+}
+
 - (void)createSubViews
 {
     [self configBaseCollectionView];
@@ -128,7 +159,7 @@
     [self performSelector:@selector(didScrollToItem) withObject:nil afterDelay:.1f];
     
     ImageAtlasDetailModel *tmpModel = self.imageDatas[0];
-    self.photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:0 totalCount:self.imageDatas.count];
+    self.photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:0 totalCount:self.imageDatas.count - 1];
     [self.view addSubview:self.photoDescView];
     [self.photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(0);
@@ -160,12 +191,23 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ImageArrayCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageArrayCell" forIndexPath:indexPath];
+
+    if ( indexPath.row == self.imageDatas.count - 1) {
+        
+        ImageRecomendViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"ImageRecCell" forIndexPath:indexPath];
+        [cell configModelData:self.dataSource andIsPortrait:self.isPortrait];
+        
+        return cell;
+    }else{
+        ImageArrayCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageArrayCell" forIndexPath:indexPath];
+        
+        ImageAtlasDetailModel * model = [self.imageDatas objectAtIndex:indexPath.row];
+        [cell setImageWithURL:[NSURL URLWithString:model.pic_url]];
+        
+        return cell;
+    }
     
-    ImageAtlasDetailModel * model = [self.imageDatas objectAtIndex:indexPath.row];
-    [cell setImageWithURL:[NSURL URLWithString:model.pic_url]];
-    
-    return cell;
+    return nil;
 }
 
 - (void)viewDidPan:(UIPanGestureRecognizer *)pan
@@ -351,22 +393,30 @@
 #pragma mark - 滑动到某一个item的时候相应的处理
 - (void)didScrollToItem
 {
-    ImageArrayCollectionViewCell * cell = self.currentCell;
-    if (cell) {
-        [cell removeGestureForImage:self.panGesture];
+    if (![self.currentCell isKindOfClass:[ImageRecomendViewCell class]]) {
+        ImageArrayCollectionViewCell * cell = self.currentCell;
+        if (cell) {
+            [cell removeGestureForImage:self.panGesture];
+        }
+        
+        [cell addGestureForImage:self.panGesture];
+        
+        if (self.photoDescView && self.photoDescView.hidden == YES) {
+            self.photoDescView.hidden = NO;
+        }
+        ImageAtlasDetailModel *tmpModel = self.imageDatas[self.currentIndex];
+        [self.photoDescView reConfigTextValueWithText:tmpModel.atext index:self.currentIndex totalCount:self.imageDatas.count - 1];
+        [self.photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+        }];
+    }else{
+        if (self.photoDescView) {
+            self.photoDescView.hidden = YES;
+        }
     }
     
-    [cell addGestureForImage:self.panGesture];
-    
-    ImageAtlasDetailModel *tmpModel = self.imageDatas[self.currentIndex];
-    [self.photoDescView reConfigTextValueWithText:tmpModel.atext index:self.currentIndex totalCount:self.imageDatas.count];
-    [self.photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,self.photoDescView.height));
-//        make.height.mas_equalTo(self.photoDescView.height);
-        make.bottom.mas_equalTo(0);
-        make.left.mas_equalTo(0);
-        make.right.mas_equalTo(0);
-    }];
 }
 
 - (ImageArrayCollectionViewCell *)currentCell
@@ -439,6 +489,7 @@
         _baseCollectionView.showsHorizontalScrollIndicator = NO;
         _baseCollectionView.showsVerticalScrollIndicator = NO;
         [_baseCollectionView registerClass:[ImageArrayCollectionViewCell class] forCellWithReuseIdentifier:@"ImageArrayCell"];
+        [_baseCollectionView registerClass:[ImageRecomendViewCell class] forCellWithReuseIdentifier:@"ImageRecCell"];
         _baseCollectionView.dataSource = self;
         _baseCollectionView.delegate = self;
         
