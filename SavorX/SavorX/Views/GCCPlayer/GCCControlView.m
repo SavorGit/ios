@@ -977,6 +977,9 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
         if (self.isFullScreen) {
             self.backButton.alpha = self.toolView.alpha;
         }
+        if (self.isPlayFailed) {
+            self.toolView.alpha = 1;
+        }
     } completion:^(BOOL finished) {
         self.isShow = NO;
         self.isAnimation = NO;
@@ -997,8 +1000,8 @@ static const CGFloat ControlViewHiddenWaitTime = 4.f;
     _isPlayFailed = isPlayFailed;
     
     if (isPlayFailed) {
+        self.toolView.alpha = 1;
         self.failedView.hidden = NO;
-        self.toolView.hidden = NO;
         self.bottomView.hidden = YES;
     }else{
         self.failedView.hidden = YES;

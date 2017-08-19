@@ -88,9 +88,8 @@
     RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
-//        self.isNeedHiddenNav = YES;
-//        [self readyToGo];
-        [self theVideoIsNotOnline];
+        self.isNeedHiddenNav = YES;
+        [self readyToGo];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
         if ([[response objectForKey:@"code"] integerValue] == 19002) {

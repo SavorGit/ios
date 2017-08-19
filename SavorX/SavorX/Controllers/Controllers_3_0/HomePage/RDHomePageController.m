@@ -463,8 +463,17 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidNotFoundSenceNotification object:nil];
 }
 
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation
+{
+    return UIStatusBarAnimationSlide;
+}
+
 - (BOOL)prefersStatusBarHidden
 {
+//    if ([GlobalData shared].isImageAtlas) {
+//        return [GlobalData shared].isImageAtlasHiddenTop;
+//    }
+    
     return NO;
 }
 

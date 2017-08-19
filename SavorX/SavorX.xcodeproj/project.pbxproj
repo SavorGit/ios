@@ -164,6 +164,9 @@
 		06BCC8D71F14D2FE0004ECCF /* FileVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BCC8D61F14D2FE0004ECCF /* FileVideoViewController.m */; };
 		06BCC8DB1F14E7190004ECCF /* FavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06BCC8DA1F14E7190004ECCF /* FavoriteViewController.m */; };
 		06BD18D91E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06BD18D71E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a */; };
+		06D260EA1F46EF7100EC2B49 /* ImageArrayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06D260E91F46EF7100EC2B49 /* ImageArrayViewController.m */; };
+		06D260ED1F46F47800EC2B49 /* ImageArrayCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06D260EC1F46F47800EC2B49 /* ImageArrayCollectionViewCell.m */; };
+		06D260F01F46F6F600EC2B49 /* RDCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06D260EF1F46F6F600EC2B49 /* RDCellScrollView.m */; };
 		06E719221E810B6A008496F4 /* HSConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06E719211E810B6A008496F4 /* HSConnectViewController.m */; };
 		06EA38DD1D59E0C60081DDCC /* ShowPhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06EA38DC1D59E0C60081DDCC /* ShowPhotoCollectionViewCell.m */; };
 		06F07B7D1D768EE900AD7B7E /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F07B7C1D768EE900AD7B7E /* HelpViewController.m */; };
@@ -595,6 +598,12 @@
 		06BCC8DA1F14E7190004ECCF /* FavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteViewController.m; sourceTree = "<group>"; };
 		06BD18D71E35AE3C0030F69F /* libUMessage_Sdk_1.4.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUMessage_Sdk_1.4.0.a; sourceTree = "<group>"; };
 		06BD18D81E35AE3C0030F69F /* UMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMessage.h; sourceTree = "<group>"; };
+		06D260E81F46EF7100EC2B49 /* ImageArrayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageArrayViewController.h; sourceTree = "<group>"; };
+		06D260E91F46EF7100EC2B49 /* ImageArrayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageArrayViewController.m; sourceTree = "<group>"; };
+		06D260EB1F46F47800EC2B49 /* ImageArrayCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageArrayCollectionViewCell.h; sourceTree = "<group>"; };
+		06D260EC1F46F47800EC2B49 /* ImageArrayCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageArrayCollectionViewCell.m; sourceTree = "<group>"; };
+		06D260EE1F46F6F600EC2B49 /* RDCellScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCellScrollView.h; sourceTree = "<group>"; };
+		06D260EF1F46F6F600EC2B49 /* RDCellScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDCellScrollView.m; sourceTree = "<group>"; };
 		06E719201E810B6A008496F4 /* HSConnectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSConnectViewController.h; sourceTree = "<group>"; };
 		06E719211E810B6A008496F4 /* HSConnectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSConnectViewController.m; sourceTree = "<group>"; };
 		06EA38DB1D59E0C60081DDCC /* ShowPhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowPhotoCollectionViewCell.h; sourceTree = "<group>"; };
@@ -2172,6 +2181,8 @@
 				96A734BC1F0C87EA00906163 /* ImageTextDetailViewController.m */,
 				96D8C5B11F0F20DA00251301 /* ImageAtlasDetailViewController.h */,
 				96D8C5B21F0F20DA00251301 /* ImageAtlasDetailViewController.m */,
+				06D260E81F46EF7100EC2B49 /* ImageArrayViewController.h */,
+				06D260E91F46EF7100EC2B49 /* ImageArrayViewController.m */,
 			);
 			path = CreatWealthDetail;
 			sourceTree = "<group>";
@@ -2231,6 +2242,10 @@
 				96D8C5BA1F0F213000251301 /* ImageAtlasScrollView.m */,
 				965EC0411F385BF5008812FB /* ImageAtlasCollectViewCell.h */,
 				965EC0421F385BF5008812FB /* ImageAtlasCollectViewCell.m */,
+				06D260EB1F46F47800EC2B49 /* ImageArrayCollectionViewCell.h */,
+				06D260EC1F46F47800EC2B49 /* ImageArrayCollectionViewCell.m */,
+				06D260EE1F46F6F600EC2B49 /* RDCellScrollView.h */,
+				06D260EF1F46F6F600EC2B49 /* RDCellScrollView.m */,
 			);
 			path = ImageAtlasView;
 			sourceTree = "<group>";
@@ -2650,6 +2665,7 @@
 				0647EACF1E70F37E00C39160 /* ZFBrightnessView.m in Sources */,
 				06E719221E810B6A008496F4 /* HSConnectViewController.m in Sources */,
 				061B4EC11E489C92000D5E07 /* PhotoEditTextView.m in Sources */,
+				06D260ED1F46F47800EC2B49 /* ImageArrayCollectionViewCell.m in Sources */,
 				96A734BD1F0C87EA00906163 /* ImageTextDetailViewController.m in Sources */,
 				0664ADC81F1464C400A720A1 /* RDHomeStatusView.m in Sources */,
 				96A734A91F0C7FAC00906163 /* CreateWealthModel.m in Sources */,
@@ -2703,6 +2719,7 @@
 				065C87E31F18B6EE007BCCF9 /* RDInteractionLoadingView.m in Sources */,
 				0639C6F01D794603002A04C1 /* AnimationImageView.m in Sources */,
 				965240E21ED559930090E1C8 /* HSRestaurantListRequest.m in Sources */,
+				06D260EA1F46EF7100EC2B49 /* ImageArrayViewController.m in Sources */,
 				474C76371DFB9BED001129C9 /* NoNetWorkView.m in Sources */,
 				060C37361D6C42930058BBBE /* GCDAsyncUdpSocket.m in Sources */,
 				964177951EB86C2100AA839E /* HSInstallationInforUpload.m in Sources */,
@@ -2802,6 +2819,7 @@
 				06FA33921D3E171D001F5B37 /* GCDAsyncSocket.m in Sources */,
 				96D8C5BC1F0F213000251301 /* DDPhotoScrollView.m in Sources */,
 				0647961D1F0E306100DD8AA9 /* PhotoVideoScreenViewController.m in Sources */,
+				06D260F01F46F6F600EC2B49 /* RDCellScrollView.m in Sources */,
 				0663D4511F0B815600CD2FA2 /* RDPhotoCollectionViewCell.m in Sources */,
 				067BFF5B1F2194BE00D9CE74 /* RDVideoHeaderView.m in Sources */,
 				060DB0BE1D5B28BB002A2DED /* DemandViewController.m in Sources */,

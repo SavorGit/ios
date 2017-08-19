@@ -21,6 +21,7 @@
 #import "RDLogStatisticsAPI.h"
 #import "RD_MJRefreshHeader.h"
 #import "RD_MJRefreshFooter.h"
+#import "ImageArrayViewController.h"
 
 @interface CreateWealthViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -356,16 +357,7 @@
     }else if (model.type == 2) {
         
         [SAVORXAPI postUMHandleWithContentId:@"home_click_pic" key:nil value:nil];
-        ImageAtlasDetailViewController *iatVC = [[ImageAtlasDetailViewController alloc] init];
-        iatVC.imgAtlModel = model;
-        iatVC.categoryID = self.categoryID;
-        iatVC.imageAtlBlock = ^(BOOL isPortrait){
-//            // 如果当前是横屏状态，点击返回，需调用下边方法强制旋转屏幕
-//            UIViewController *vc  = [[UIViewController alloc] init];
-//            [self presentViewController:vc animated:NO completion:^{
-//                [vc dismissViewControllerAnimated:NO completion:nil];
-//            }];
-        };
+        ImageArrayViewController *iatVC = [[ImageArrayViewController alloc] initWithCategoryID:self.categoryID model:model];
         
         iatVC.parentNavigationController = self.navigationController;
         float version = [UIDevice currentDevice].systemVersion.floatValue;

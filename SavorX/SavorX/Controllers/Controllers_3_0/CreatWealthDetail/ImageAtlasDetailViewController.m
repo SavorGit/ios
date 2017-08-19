@@ -27,11 +27,11 @@
 @property (nonatomic, assign) NSInteger currentPage;
 
 @property (nonatomic, strong) UIImageView *topView;
-@property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIScrollView *imageScrollView;
 @property (nonatomic, strong) DDPhotoDescView *photoDescView;
 @property (nonatomic, strong) DDPhotoScrollView *photoScrollView;
 @property (nonatomic, strong) UIButton *collectBtn;
+@property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 
 @property (nonatomic, assign) BOOL isDisappear;

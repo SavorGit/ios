@@ -121,6 +121,7 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 
 //是否是图集
 @property (nonatomic, assign) BOOL isImageAtlas;
+@property (nonatomic, assign) BOOL isImageAtlasHiddenTop;
 
 /**
  *  创建单例

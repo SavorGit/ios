@@ -197,6 +197,10 @@
 
 - (void)orientationChanged
 {
+    if (self.navigationController.topViewController != self) {
+        return;
+    }
+    
     UIInterfaceOrientation  orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (orientation == UIInterfaceOrientationPortrait) {
         self.orientation = orientation;
