@@ -14,6 +14,7 @@
 #import "HSGetCollectoinStateRequest.h"
 #import "HotPopShareView.h"
 #import "HSIsOrCollectionRequest.h"
+#import "DDPhotoDescView.h"
 
 @interface ImageArrayViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
@@ -26,6 +27,8 @@
 @property (nonatomic, strong) UIImageView * topView;
 @property (nonatomic, strong) UIButton *collectBtn;
 @property (nonatomic, strong) UIButton *backButton;
+
+@property (nonatomic, strong) DDPhotoDescView *photoDescView;
 
 @property (nonatomic, strong) NSMutableArray * imageDatas;
 @property (nonatomic, strong) UIPanGestureRecognizer * panGesture;
@@ -123,6 +126,15 @@
     
     self.currentIndex = 0;
     [self performSelector:@selector(didScrollToItem) withObject:nil afterDelay:.1f];
+    
+    ImageAtlasDetailModel *tmpModel = self.imageDatas[0];
+    self.photoDescView = [[DDPhotoDescView alloc] initWithDesc:tmpModel.atext index:0 totalCount:self.imageDatas.count];
+    [self.view addSubview:self.photoDescView];
+    [self.photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+    }];
 }
 
 - (void)hiddenToolView
@@ -278,6 +290,7 @@
 {
     if (![GlobalData shared].isImageAtlasHiddenTop) {
         self.topView.alpha = 0.f;
+        self.photoDescView.alpha = 0.f;
         [GlobalData shared].isImageAtlasHiddenTop = YES;
 //        [self setNeedsStatusBarAppearanceUpdate];
     }
@@ -344,6 +357,16 @@
     }
     
     [cell addGestureForImage:self.panGesture];
+    
+    ImageAtlasDetailModel *tmpModel = self.imageDatas[self.currentIndex];
+    [self.photoDescView reConfigTextValueWithText:tmpModel.atext index:self.currentIndex totalCount:self.imageDatas.count];
+    [self.photoDescView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,self.photoDescView.height));
+//        make.height.mas_equalTo(self.photoDescView.height);
+        make.bottom.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+    }];
 }
 
 - (ImageArrayCollectionViewCell *)currentCell
@@ -430,16 +453,16 @@
 {
     if ([GlobalData shared].isImageAtlasHiddenTop) {
         [GlobalData shared].isImageAtlasHiddenTop = NO;
-//        [self setNeedsStatusBarAppearanceUpdate];
         [UIView animateWithDuration:.3f animations:^{
             self.topView.alpha = 1.f;
+            self.photoDescView.alpha = 1.f;
         }];
         
     }else{
         [GlobalData shared].isImageAtlasHiddenTop = YES;
-//        [self setNeedsStatusBarAppearanceUpdate];
         [UIView animateWithDuration:.3f animations:^{
             self.topView.alpha = 0.f;
+            self.photoDescView.alpha = 0.f;
         }];
     }
 }

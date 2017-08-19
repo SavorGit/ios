@@ -12,4 +12,6 @@
 
 - (instancetype)initWithDesc:(NSString *)desc index:(NSInteger)index totalCount:(NSInteger)totalCount;
 
+- (void) reConfigTextValueWithText:(NSString *)textStr index:(NSInteger)index totalCount:(NSInteger)totalCount;
+
 @end

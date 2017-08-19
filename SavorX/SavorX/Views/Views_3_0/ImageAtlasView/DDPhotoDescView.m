@@ -32,8 +32,8 @@
         self.backgroundColor = [UIColorFromRGB(0xece6de) colorWithAlphaComponent:.9f];
         
         // 页码
-        _page = [[RDTabScrollViewPage alloc] initWithFrame:CGRectMake(5, 18, 40, 23) withTotalNumber:totalCount withType:RDTabScrollViewPageType_DOWNBIG withIndex:index + 1 ];
-        _page.backgroundColor = [UIColor clearColor];
+        self.page = [[RDTabScrollViewPage alloc] initWithFrame:CGRectMake(5, 18, 40, 23) withTotalNumber:totalCount withType:RDTabScrollViewPageType_DOWNBIG withIndex:index + 1 ];
+        self.page.backgroundColor = [UIColor clearColor];
         [self addSubview:_page];
         
 		// 描述文本
@@ -46,19 +46,36 @@
         self.textView.userInteractionEnabled = NO;
         self.textView.editable = YES;
         self.textView.delegate = self;
-        [self addSubview:self.textView]; 
+        [self addSubview:self.textView];
         
+        self.textView.backgroundColor = [UIColor clearColor];
         CGFloat textViewHeight = [self heightForString:self.textView andWidth:TextViewWidth];
         self.frame = CGRectMake(0, 0, kMainBoundsWidth, textViewHeight + DistanceToBottom);
-		self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
-        self.textView.backgroundColor = [UIColor clearColor];
+        
+        [self reConfigTextValueWithText:desc index:index totalCount:totalCount];
+        self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	}
 	return self;
 }
 
-- (float) heightForString:(UITextView *)textView andWidth:(float)width{
+- (void)reConfigTextValueWithText:(NSString *)textStr index:(NSInteger)index totalCount:(NSInteger)totalCount{
+    
+    [self.page resetIndex:index + 1 total:totalCount];
+    self.textView.text = textStr;
+    
+    CGFloat textViewHeight = [self heightForString:self.textView andWidth:TextViewWidth];
+    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(textViewHeight + DistanceToBottom);
+    }];
+    self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
+    
+    
+    
+}
+
+- (float)heightForString:(UITextView *)textView andWidth:(float)width{
     CGSize sizeToFit = [textView sizeThatFits:CGSizeMake(width, MAXFLOAT)];
     return sizeToFit.height;
 }
@@ -85,9 +102,7 @@
         if (self.superview) {
             CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
             [self mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight + DistanceToBottom));
-                make.bottom.mas_equalTo(0);
-                make.left.mas_equalTo(0);
+                make.height.mas_equalTo(textViewHeight + DistanceToBottom);
             }];
             self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
         }
@@ -97,9 +112,7 @@
         if (self.superview) {
             CGFloat textViewHeight = [self heightForString:self.textView andWidth:kMainBoundsWidth - 75];
             [self mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,textViewHeight + DistanceToBottom));
-                make.bottom.mas_equalTo(0);
-                make.left.mas_equalTo(0);
+                make.height.mas_equalTo(textViewHeight + DistanceToBottom);
             }];
             self.textView.frame = CGRectMake(50, 5, TextViewWidth, textViewHeight);
         }
