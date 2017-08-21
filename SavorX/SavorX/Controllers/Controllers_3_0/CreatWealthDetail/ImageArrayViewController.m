@@ -41,6 +41,7 @@
 @property (nonatomic, assign) BOOL isPortrait;
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, assign) BOOL isScrollCollectionView;
+@property (nonatomic, assign) BOOL hasObserver;
 
 @property (nonatomic, strong) UIPanGestureRecognizer * panGesture;
 @property (nonatomic, strong) UITapGestureRecognizer * tapGesture;
@@ -537,12 +538,18 @@
 
 - (void)addObserver
 {
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    if (!self.hasObserver) {
+        self.hasObserver = YES;
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    }
 }
 
 - (void)removeObserver
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    if (self.hasObserver) {
+        self.hasObserver = NO;
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    }
 }
 
 - (UIPanGestureRecognizer *)panGesture
@@ -752,6 +759,11 @@
     }
     
     [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (void)dealloc
+{
+    [self removeObserver];
 }
 
 - (void)didReceiveMemoryWarning {
