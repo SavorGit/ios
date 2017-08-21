@@ -745,12 +745,13 @@
 {
     [GlobalData shared].isImageAtlas = NO;
     [GlobalData shared].isImageAtlasHiddenTop = NO;
-    [self dismissViewControllerAnimated:NO completion:nil];
     
     // 如果当前是横屏状态，点击返回，需调用下边方法强制旋转屏幕
     if (_isPortrait == NO) {
         [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
     }
+    
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
