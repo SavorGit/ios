@@ -52,7 +52,7 @@
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-20);
         make.height.mas_equalTo(42);
-        make.bottom.mas_equalTo(-5);
+        make.top.equalTo(_bgImageView.mas_bottom).offset(5);
         make.left.mas_equalTo(10);
     }];
     
@@ -80,34 +80,29 @@
         
         _titleLabel.numberOfLines = 1;
         [_bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(0);
             make.bottom.mas_equalTo(-31);
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
         }];
         
         [_titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-20);
             make.height.mas_equalTo(21);
-            make.bottom.mas_equalTo(-5);
-            make.left.mas_equalTo(10);
         }];
     }else{
         
         _titleLabel.numberOfLines = 0;
         [_bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(0);
             make.bottom.mas_equalTo(-52);
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
         }];
         
-        [_titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-20);
-            make.height.mas_equalTo(42);
-            make.bottom.mas_equalTo(-5);
-            make.left.mas_equalTo(10);
-        }];
+        CGFloat height = [self getHeightByWidth:(kMainBoundsWidth - 5) / 2 - 30 title:model.title font:kPingFangRegular(15)];
+        if (height > 21) {
+            [_titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.height.mas_equalTo(42);
+            }];
+        }else{
+            [_titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.height.mas_equalTo(21);
+            }];
+        }
     }
     
     self.titleLabel.text = model.title;
