@@ -20,6 +20,7 @@
 #import "WebViewController.h"
 #import "ImageTextDetailViewController.h"
 #import "LGSideMenuController.h"
+#import "RDLogStatisticsAPI.h"
 
 @interface ImageArrayViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
@@ -43,6 +44,7 @@
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, assign) BOOL isScrollCollectionView;
 @property (nonatomic, assign) BOOL hasObserver;
+@property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 
 @property (nonatomic, strong) UIPanGestureRecognizer * panGesture;
 @property (nonatomic, strong) UITapGestureRecognizer * tapGesture;
@@ -181,6 +183,7 @@
     [self.baseCollectionView reloadData];
     
     self.currentIndex = 0;
+    self.isComplete = NO;
     [self performSelector:@selector(didScrollToItem) withObject:nil afterDelay:.1f];
 }
 
@@ -432,6 +435,8 @@
     self.topView.backgroundColor = kThemeColor;
     
     self.panGesture.enabled = YES;
+    
+    [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_rotate" key:nil value:nil];
 }
 
 //横屏
@@ -443,6 +448,8 @@
     [self.topView setBackgroundColor:[UIColor clearColor]];
     
     self.panGesture.enabled = NO;
+    
+    [SAVORXAPI postUMHandleWithContentId:@"page_pic_vertical_rotate" key:nil value:nil];
 }
 
 #pragma mark - scrollView的代理方法
@@ -505,6 +512,14 @@
             self.tapGesture.enabled = YES;
         }
     }
+    
+    // 完整看完图集，写日志
+    if (self.isComplete == NO) {
+        if (self.currentIndex == self.imageDatas.count - 2) {
+            self.isComplete = YES;
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+        }
+    }
 }
 
 - (ImageArrayCollectionViewCell *)currentCell
@@ -546,6 +561,10 @@
     if (!self.hasObserver) {
         self.hasObserver = YES;
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(orieChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+        // app退到后台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+        // app进入前台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
     }
 }
 
@@ -554,6 +573,10 @@
     if (self.hasObserver) {
         self.hasObserver = NO;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:
+         UIApplicationWillResignActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:
+         UIApplicationDidBecomeActiveNotification object:nil];
     }
 }
 
@@ -612,6 +635,11 @@
             self.topView.alpha = 1.f;
             self.photoDescView.alpha = 1.f;
         }];
+        if (self.isPortrait == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"page_pic_vertical_show" key:nil value:nil];
+        }else if (self.isPortrait == NO){
+            [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_show" key:nil value:nil];
+        }
         
     }else{
         [GlobalData shared].isImageAtlasHiddenTop = YES;
@@ -619,6 +647,11 @@
             self.topView.alpha = 0.f;
             self.photoDescView.alpha = 0.f;
         }];
+        if (self.isPortrait == YES) {
+            [SAVORXAPI postUMHandleWithContentId:@"page_pic_vertical_hide" key:nil value:nil];
+        }else if (self.isPortrait == NO){
+            [SAVORXAPI postUMHandleWithContentId:@"page_pic_landscape_hide" key:nil value:nil];
+        }
     }
 }
 
@@ -767,6 +800,31 @@
     }
     
     [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page" key:@"details_page" value:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_begin_reading" key:@"details_begin_reading" value:[Helper getCurrentTimeWithFormat:@"YYYYMMddHHmmss"]];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_back" key:nil value:nil];
+    [SAVORXAPI postUMHandleWithContentId:@"details_end_reading" key:@"details_end_reading" value:[Helper getCurrentTimeWithFormat:@"YYYYMMddHHmmss"]];
+}
+
+//app进入后台运行
+- (void)appWillDidBackground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+//app进入前台运行
+- (void)appBecomeActivePlayground{
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_START type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (void)dealloc
