@@ -43,6 +43,7 @@
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, assign) BOOL isScrollCollectionView;
 @property (nonatomic, assign) BOOL hasObserver;
+@property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
 
 @property (nonatomic, strong) UIPanGestureRecognizer * panGesture;
 @property (nonatomic, strong) UITapGestureRecognizer * tapGesture;
@@ -177,6 +178,7 @@
     [self.baseCollectionView reloadData];
     
     self.currentIndex = 0;
+    self.isComplete = NO;
     [self performSelector:@selector(didScrollToItem) withObject:nil afterDelay:.1f];
 }
 
@@ -503,6 +505,14 @@
                 make.right.mas_equalTo(0);
             }];
             self.tapGesture.enabled = YES;
+        }
+    }
+    
+    // 完整看完图集，写日志
+    if (self.isComplete == NO) {
+        if (self.currentIndex == self.imageDatas.count - 2) {
+            self.isComplete = YES;
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_COMPELETE type:RDLOGTYPE_CONTENT model:self.imgAtlModel categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
         }
     }
 }
