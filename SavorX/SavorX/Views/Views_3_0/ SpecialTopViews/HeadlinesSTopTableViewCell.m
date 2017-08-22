@@ -120,6 +120,16 @@
         [_bgView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(bgHeight);
         }];
+    }else{
+        
+        [self.subTitleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 20));
+        }];
+        
+        CGFloat bgHeight =(kMainBoundsWidth - 30) *802.f/1242.f + 113;
+        [_bgView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(bgHeight);
+        }];
     }
     
     self.titleLabel.text = model.title;
