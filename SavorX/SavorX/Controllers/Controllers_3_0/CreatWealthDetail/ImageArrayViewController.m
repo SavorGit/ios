@@ -19,6 +19,7 @@
 #import "HSImTeRecommendRequest.h"
 #import "WebViewController.h"
 #import "ImageTextDetailViewController.h"
+#import "LGSideMenuController.h"
 #import "RDLogStatisticsAPI.h"
 
 @interface ImageArrayViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
@@ -67,7 +68,11 @@
     [GlobalData shared].isImageAtlasHiddenTop = NO;
     self.currentIndex = 0;
     self.isPortrait = YES;
+    
     [GlobalData shared].isImageAtlas = YES;
+    LGSideMenuController * lgVC = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    lgVC.panGesture.enabled = NO;
+    
     self.imageDatas = [NSMutableArray new];
     self.dataSource = [NSMutableArray new];
     [self.view addSubview:self.topView];
@@ -784,6 +789,9 @@
 - (void)backButtonClick
 {
     [GlobalData shared].isImageAtlas = NO;
+    LGSideMenuController * lgVC = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    lgVC.panGesture.enabled = YES;
+    
     [GlobalData shared].isImageAtlasHiddenTop = NO;
     
     // 如果当前是横屏状态，点击返回，需调用下边方法强制旋转屏幕
