@@ -31,6 +31,8 @@
 #define isNull(x)             (!x || [x isKindOfClass:[NSNull class]])
 #define isEmptyString(x)      (isNull(x) || [x isEqual:@""] || [x isEqual:@"(null)"])
 
+#define RDLocalizedString(key) NSLocalizedString(key, "RDLocalizedString")
+
 //**渠道号**//
 #define kChannelId     @"10000"
 

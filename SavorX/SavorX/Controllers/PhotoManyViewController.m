@@ -13,9 +13,10 @@
 #import "PhotoManyEditView.h"
 #import "GCCUPnPManager.h"
 #import "OpenFileTool.h"
-#import "HomeAnimationView.h"
-#import "PhotoTool.h"
+#import "RDPhotoTool.h"
 #import <Photos/Photos.h>
+#import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 #import "GCCGetInfo.h"
 
@@ -23,15 +24,18 @@
 
 @interface PhotoManyViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, PhotoManyEditViewDelegate>
 
-@property (nonatomic, strong) id PHAssetSource;
+@property (nonatomic, strong) PHFetchResult * PHAssetSource;
 @property (nonatomic, strong) UICollectionView * collectionView;
 @property (nonatomic, strong) UICollectionViewFlowLayout * flowLayout;
 @property (nonatomic, assign) NSInteger index;
 
-@property (nonatomic, strong) PhotoHandleView * rotateView; //旋转控制按钮
-@property (nonatomic, strong) PhotoHandleView * textView; //文字控制按钮
+//@property (nonatomic, strong) PhotoHandleView * rotateView; //旋转控制按钮
+@property (nonatomic, strong) UIButton * rotateView; //旋转控制按钮
+@property (nonatomic, strong) UIButton * textView; //文字控制按钮
 @property (nonatomic, strong) NSURLSessionDataTask * task;
 @property (nonatomic, assign) BOOL isScreen;
+
+@property (nonatomic, assign) BOOL editScreen;
 
 @end
 
@@ -41,7 +45,7 @@
 {
     if (self = [super init]) {
         self.PHAssetSource = source;
-        self.title = @"我的照片";
+        self.title = RDLocalizedString(@"RDString_MyPhoto");
         self.index = index;
     }
     return self;
@@ -78,33 +82,49 @@
     [self.view addSubview:self.collectionView];
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[self dataSourceCount] * 50 + self.index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
     
-    self.rotateView = [[PhotoHandleView alloc] initWithImage:[UIImage imageNamed:@"xuanzhuan"] andTitile:@"旋转"];
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rotateImage)];
-    tap.numberOfTapsRequired = 1;
-    [self.rotateView addGestureRecognizer:tap];
+    self.rotateView = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.rotateView setImage:[UIImage imageNamed:@"xaunzhuan"] forState:UIControlStateNormal];
+    [self.rotateView setTitle:RDLocalizedString(@"RDString_Rotate") forState:UIControlStateNormal];
+    [self.rotateView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.94f]];
+    [self.rotateView addTarget:self action:@selector(rotateImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.rotateView];
+    [self.rotateView setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 5)];
+    [self.rotateView setTitleEdgeInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
     [self.rotateView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(66, 66));
-        make.left.mas_equalTo((kMainBoundsWidth - 132) / 3);
-        make.bottom.mas_equalTo(-10);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth / 2, 50));
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
     }];
     
-    self.textView = [[PhotoHandleView alloc] initWithImage:[UIImage imageNamed:@"wenzi"] andTitile:@"文字"];
-    UITapGestureRecognizer * tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTextOnImage)];
-    tap2.numberOfTapsRequired = 1;
-    [self.textView addGestureRecognizer:tap2];
+    self.textView = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.textView setImage:[UIImage imageNamed:@"wenzi"] forState:UIControlStateNormal];
+    [self.textView setTitle:RDLocalizedString(@"RDString_Text") forState:UIControlStateNormal];
+    [self.textView setBackgroundColor:[kThemeColor colorWithAlphaComponent:.94f]];
+    [self.textView addTarget:self action:@selector(addTextOnImage) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.textView];
+    [self.textView setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 5)];
+    [self.textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(66, 66));
-        make.right.mas_equalTo(-(kMainBoundsWidth - 132) / 3);
-        make.bottom.mas_equalTo(-10);
+        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth / 2, 50));
+        make.right.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
     }];
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+    UIView * lineView = [[UIView alloc] init];
+    lineView.backgroundColor = [UIColor whiteColor];
+    [self.textView addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(10);
+        make.left.mas_equalTo(0);
+        make.bottom.mas_equalTo(-10);
+        make.width.mas_equalTo(.5f);
+    }];
+    
+    if ([GlobalData shared].isBindRD) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
         self.isScreen = YES;
     }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         [SAVORXAPI showConnetToTVAlert:@"photo"];
         self.isScreen = NO;
     }
@@ -114,19 +134,19 @@
 
 - (void)screenBeQiutWithBox
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
     self.isScreen = NO;
 }
 
 - (void)screenCurrentImage
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-        [[HomeAnimationView animationView] scanQRCode];
+    if (![GlobalData shared].isBindRD) {
+        [[RDHomeStatusView defaultView] scanQRCode];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         return;
     }
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
     PhotoManyCollectionViewCell * cell = [self currentCell];
     NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
     PHAsset * asset = [self.PHAssetSource objectAtIndex:index];
@@ -134,14 +154,13 @@
     if (cell.hasEdit) {
         
         if ([GlobalData shared].isBindRD) {
-            [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
+            [RDPhotoTool compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
                 
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
-                    [hud hideAnimated:NO];
-                    [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                    [hud hidden];
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = YES;
                     
@@ -153,22 +172,7 @@
                     
                     
                 } failure:^{
-                    [hud hideAnimated:NO];
-                    self.navigationItem.rightBarButtonItem.enabled = YES;
-                    self.isScreen = NO;
-                }];
-            }];
-        }else if ([GlobalData shared].isBindDLNA) {
-            [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
-                [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
-                    [hud hideAnimated:NO];
-                    [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
-                    self.navigationItem.rightBarButtonItem.enabled = YES;
-                    self.isScreen = YES;
-                } failure:^{
-                    [hud hideAnimated:NO];
+                    [hud hidden];
                     self.navigationItem.rightBarButtonItem.enabled = YES;
                     self.isScreen = NO;
                 }];
@@ -177,14 +181,13 @@
     }else{
         [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
             if ([GlobalData shared].isBindRD) {
-                [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                     
                     [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                         
-                        [hud hideAnimated:NO];
-                        [HomeAnimationView animationView].currentImage = result;
-                        [[HomeAnimationView animationView] startScreenWithViewController:self];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                        [hud hidden];
+                        [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
                         self.isScreen = YES;
                         
@@ -196,22 +199,7 @@
                         
                         
                     } failure:^{
-                        [hud hideAnimated:NO];
-                        self.navigationItem.rightBarButtonItem.enabled = YES;
-                        self.isScreen = NO;
-                    }];
-                }];
-            }else if ([GlobalData shared].isBindDLNA) {
-                [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                    [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:^{
-                        [hud hideAnimated:NO];
-                        [HomeAnimationView animationView].currentImage = result;
-                        [[HomeAnimationView animationView] startScreenWithViewController:self];
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
-                        self.navigationItem.rightBarButtonItem.enabled = YES;
-                        self.isScreen = YES;
-                    } failure:^{
-                        [hud hideAnimated:NO];
+                        [hud hidden];
                         self.navigationItem.rightBarButtonItem.enabled = YES;
                         self.isScreen = NO;
                     }];
@@ -225,7 +213,7 @@
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = NO;
         [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_exit_screen" key:nil value:nil];
@@ -245,17 +233,19 @@
 {
     [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_rotating" key:nil value:nil];
     if ([GlobalData shared].isBindRD && self.isScreen) {
+        
+        self.rotateView.userInteractionEnabled = NO;
         [SAVORXAPI rotateWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0){
                 [self currentCellImageShouldRotate];
             }else{
                 [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"info"]];
             }
+            self.rotateView.userInteractionEnabled = YES;
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+            self.rotateView.userInteractionEnabled = YES;
         }];
-    }else if ([GlobalData shared].isBindDLNA) {
-        [MBProgressHUD showTextHUDwithTitle:@"DLNA暂不支持旋转操作"];
     }else{
         [self currentCellImageShouldRotate];
     }
@@ -278,14 +268,13 @@
 - (void)addTextOnImage
 {
     [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_add_text" key:nil value:nil];
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在加载"];
     
     PhotoManyCollectionViewCell * cell = [self currentCell];
     
+    self.editScreen = self.isScreen;
     [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
         PhotoManyEditView * view = [[PhotoManyEditView alloc] initWithImage:result title:cell.firstText detail:cell.secondText date:cell.thirdText];
         view.delegate = self;
-        [hud hideAnimated:NO];
         [[UIApplication sharedApplication].keyWindow addSubview:view];
     }];
 }
@@ -298,36 +287,36 @@
     cell.secondText = detail;
     cell.thirdText = date;
     
-    if (!([title isEqualToString:@"在这里添加文字"] && [detail isEqualToString:@"在这里添加文字"] && [date isEqualToString:@"在这里添加文字"])) {
-        [[PhotoTool sharedInstance] saveImageInSystemPhoto:image withAlert:NO];
+    NSString * defaultStr = RDLocalizedString(@"RDString_AddTextHere");
+    if (!([title isEqualToString:defaultStr] && [detail isEqualToString:defaultStr] && [date isEqualToString:defaultStr])) {
+        [RDPhotoTool saveImageInSystemPhoto:image withAlert:NO];
     }
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        if (self.isScreen) {
+    if ([GlobalData shared].isBindRD) {
+        if (self.editScreen) {
             NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
             PHAsset * asset = [self.PHAssetSource objectAtIndex:index];
             NSString * name = asset.localIdentifier;
             
-            if ([GlobalData shared].isBindRD) {
-                [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
+            [RDPhotoTool compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
+                
+                [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
                     
-                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
-                        
-                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
-                            
-                        } failure:^{
-                            
-                        }];
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                    self.navigationItem.rightBarButtonItem.enabled = YES;
+                    self.isScreen = YES;
+                    
+                    [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
                         
                     } failure:^{
                         
                     }];
+                    
+                } failure:^{
+                    
                 }];
-            }else if ([GlobalData shared].isBindDLNA) {
-                [OpenFileTool writeImageToSysImageCacheWithImage:image andName:name handle:^(NSString *keyStr) {
-                    [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
-                }];
-            }
+            }];
         }
     }
 }
@@ -375,7 +364,7 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [SAVORXAPI postUMHandleWithContentId:@"picture_to_screen_switch" key:nil value:nil];
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD) {
         if (self.isScreen) {
             PhotoManyCollectionViewCell * cell = [self currentCell];
             NSInteger index = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
@@ -384,10 +373,8 @@
             
             if (cell.hasEdit) {
                 if ([GlobalData shared].isBindRD) {
-                    [[PhotoTool sharedInstance] compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
+                    [RDPhotoTool compressImageWithImage:[cell getCellEditImage] finished:^(NSData *minData, NSData *maxData) {
                         [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
-                            [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
-                            [[HomeAnimationView animationView] startScreenWithViewController:self];
                             [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
                                 
                             } failure:^{
@@ -398,12 +385,6 @@
                             
                         }];
                     }];
-                }else if ([GlobalData shared].isBindDLNA) {
-                    [OpenFileTool writeImageToSysImageCacheWithImage:[cell getCellEditImage] andName:name handle:^(NSString *keyStr) {
-                        [HomeAnimationView animationView].currentImage = [cell getCellEditImage];
-                        [[HomeAnimationView animationView] startScreenWithViewController:self];
-                        [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
-                    }];
                 }
                 
             }else{
@@ -411,11 +392,9 @@
                 [self getImageFromPHAssetSourceWithIndex:[self pageControlIndexWithCurrentCellIndex:[self currentIndex]] success:^(UIImage *result) {
                     
                     if ([GlobalData shared].isBindRD) {
-                        [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                        [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                             
                             [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:1 isThumbnail:YES rotation:0 seriesId:nil force:0 success:^{
-                                [HomeAnimationView animationView].currentImage = result;
-                                [[HomeAnimationView animationView] startScreenWithViewController:self];
                                 [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:1 isThumbnail:NO rotation:0 seriesId:nil force:0 success:^{
                                     
                                 } failure:^{
@@ -425,10 +404,6 @@
                             } failure:^{
                                 
                             }];
-                        }];
-                    }else if ([GlobalData shared].isBindDLNA) {
-                        [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                            [SAVORXAPI screenDLNAImageWithKeyStr:keyStr WithSuccess:nil failure:nil];
                         }];
                     }
                 }];
@@ -463,13 +438,8 @@
 
 - (NSInteger)dataSourceCount
 {
-    if ([self.PHAssetSource isKindOfClass:[PHFetchResult class]]) {
-        PHFetchResult * source = (PHFetchResult *)self.PHAssetSource;
-        return source.count;
-    }else{
-        NSArray * source = (NSArray *)self.PHAssetSource;
-        return source.count;
-    }
+    PHFetchResult * source = (PHFetchResult *)self.PHAssetSource;
+    return source.count;
 }
 
 - (NSInteger)pageControlIndexWithCurrentCellIndex:(NSInteger)index
@@ -498,6 +468,7 @@
         size = CGSizeMake(1080 * scale, 1080);
     }
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        
         PhotoManyCollectionViewCell * cell = [self currentCell];
         switch (cell.Orientation) {
             case 90:
@@ -560,7 +531,7 @@
     }
     
     UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context =UIGraphicsGetCurrentContext();
+    CGContextRef context = UIGraphicsGetCurrentContext();
     //做CTM变换
     CGContextTranslateCTM(context, 0.0, rect.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
@@ -572,6 +543,8 @@
     CGContextDrawImage(context, CGRectMake(0,0,rect.size.width, rect.size.height), image.CGImage);
     
     UIImage *newPic =UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
     return newPic;
 }
 

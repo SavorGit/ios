@@ -7,64 +7,26 @@
 //
 
 #import "WMPageController.h"
-#import "UIViewController+LGSideMenuController.h"
-#import "CategoryViewController.h"
-#import "HotTopicViewController.h"
-#import "HSCategoryListRequest.h"
-#import "HSCategoryModel.h"
-#import "RecommendViewController.h"
-#import "VideoListViewController.h"
-#import "AlbumListViewController.h"
-#import "DocumentListViewController.h"
-#import "SliderViewController.h"
-#import "HomeAnimationView.h"
-#import "RDAlertView.h"
-#import "GCCDLNA.h"
-#import "WebViewController.h"
-#import "HSVideoViewController.h"
-#import "DemandViewController.h"
-#import "ArticleReadViewController.h"
-#import "RDScreenLocationView.h"
-#import "RestaurantListViewController.h"
 
 NSString *const WMControllerDidAddToSuperViewNotification = @"WMControllerDidAddToSuperViewNotification";
 NSString *const WMControllerDidFullyDisplayedNotification = @"WMControllerDidFullyDisplayedNotification";
 
 static NSInteger const kWMUndefinedIndex = -1;
 static NSInteger const kWMControllerCountUndefined = -1;
-@interface WMPageController ()<RDHomeScreenButtonDelegate, RDScreenLocationViewDelegate> {
+@interface WMPageController () {
     CGFloat _viewHeight, _viewWidth, _viewX, _viewY, _targetX, _superviewHeight;
     BOOL    _hasInited, _shouldNotScroll, _isTabBarHidden;
     NSInteger _initializedIndex, _controllerConut, _markedSelectIndex;
 }
 @property (nonatomic, strong, readwrite) UIViewController *currentViewController;
-// 用于记录子控制器view的frame，用于 scrollView 上的展示的位置
-@property (nonatomic, strong) NSMutableArray *childViewFrames;
-// 当前展示在屏幕上的控制器，方便在滚动的时候读取 (避免不必要计算)
-@property (nonatomic, strong) NSMutableDictionary *displayVC;
+
 // 用于记录销毁的viewController的位置 (如果它是某一种scrollView的Controller的话)
 @property (nonatomic, strong) NSMutableDictionary *posRecords;
-// 用于缓存加载过的控制器
-@property (nonatomic, strong) NSCache *memCache;
+
 @property (nonatomic, strong) NSMutableDictionary *backgroundCache;
 // 收到内存警告的次数
 @property (nonatomic, assign) int memoryWarningCount;
 @property (nonatomic, readonly) NSInteger childControllersCount;
-
-@property (nonatomic, strong) NSMutableArray * categorySource;
-
-@property (nonatomic, assign) BOOL canGetPhoto; //是否拥有相册权限
-@property (nonatomic, assign) NSInteger count;
-
-@property (nonatomic, assign) BOOL isInHotel; //是否在酒店环境
-
-// 标题点击按钮
-@property (nonatomic, strong) UIButton *titleViewBtn;
-
-@property (nonatomic, strong) RDHomeScreenButton * homeButton;
-
-@property (nonatomic, strong) RDScreenLocationView * locationView;
-
 @end
 
 @implementation WMPageController
@@ -98,7 +60,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
         NSParameterAssert(classes.count == titles.count);
         _viewControllerClasses = [NSArray arrayWithArray:classes];
         _titles = [NSArray arrayWithArray:titles];
-        
+
         [self wm_setup];
     }
     return self;
@@ -111,54 +73,15 @@ static NSInteger const kWMControllerCountUndefined = -1;
     return self;
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundHotelIdNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidDisconnectDeviceNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
-}
-
-#pragma mark 投屏处理逻辑
-
 - (instancetype)init {
     if (self = [super init]) {
-        
         [self wm_setup];
     }
     return self;
 }
 
-- (void)openLeftDrawer:(id)sender {
-    
-    [self showLeftViewAnimated:sender];
-    
-}
-
-- (void)rightAction{
-    
-    [[HomeAnimationView animationView] scanQRCode];
-    [SAVORXAPI postUMHandleWithContentId:@"home_connect_tv" key:nil value:nil];
-}
-
-//打开用户应用设置
-- (void)openSetting
-{
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"前往开启相册权限" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-    }];
-    [alert addAction:action1];
-    [alert addAction:action2];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-
-
 - (void)setEdgesForExtendedLayout:(UIRectEdge)edgesForExtendedLayout {
-    if (self.edgesForExtendedLayout == edgesForExtendedLayout) { return; }
+    if (self.edgesForExtendedLayout == edgesForExtendedLayout) return;
     [super setEdgesForExtendedLayout:edgesForExtendedLayout];
     
     if (_hasInited) {
@@ -175,7 +98,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 - (void)setScrollEnable:(BOOL)scrollEnable {
     _scrollEnable = scrollEnable;
     
-    if (!self.scrollView) { return; }
+    if (!self.scrollView) return;
     self.scrollView.scrollEnabled = scrollEnable;
 }
 
@@ -243,7 +166,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 - (void)setViewFrame:(CGRect)viewFrame {
-    if (CGRectEqualToRect(viewFrame, _viewFrame)) { return; }
+    if (CGRectEqualToRect(viewFrame, _viewFrame)) return;
     
     _viewFrame = viewFrame;
     if (self.menuView) {
@@ -253,18 +176,14 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 - (void)reloadData {
-    
     [self wm_clearDatas];
     
-    if (!self.childControllersCount) { return; }
+    if (!self.childControllersCount) return;
     
     [self wm_resetScrollView];
     [self.memCache removeAllObjects];
     [self wm_resetMenuView];
     [self viewDidLayoutSubviews];
-    
-    [self.view bringSubviewToFront:[HomeAnimationView animationView]];
-    [self.view bringSubviewToFront:self.homeButton];
 }
 
 - (void)updateTitle:(NSString *)title atIndex:(NSInteger)index {
@@ -347,26 +266,28 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 // 完全进入控制器 (即停止滑动后调用)
 - (void)didEnterController:(UIViewController *)vc atIndex:(NSInteger)index {
-    if (!self.childControllersCount) { return; }
+    if (!self.childControllersCount) return;
     NSDictionary *info = [self infoWithIndex:index];
     if ([self.delegate respondsToSelector:@selector(pageController:didEnterViewController:withInfo:)]) {
         [self.delegate pageController:self didEnterViewController:vc withInfo:info];
     }
+    
     // 当控制器创建时，调用延迟加载的代理方法
     if (_initializedIndex == index && [self.delegate respondsToSelector:@selector(pageController:lazyLoadViewController:withInfo:)]) {
         [self.delegate pageController:self lazyLoadViewController:vc withInfo:info];
         _initializedIndex = kWMUndefinedIndex;
     }
-    
+
     // 根据 preloadPolicy 预加载控制器
-    if (self.preloadPolicy == WMPageControllerPreloadPolicyNever) { return; }
+    if (self.preloadPolicy == WMPageControllerPreloadPolicyNever) return;
+    int length = (int)self.preloadPolicy;
     int start = 0;
     int end = (int)self.childControllersCount - 1;
-    if (index > self.preloadPolicy) {
-        start = (int)index - self.preloadPolicy;
+    if (index > length) {
+        start = (int)index - length;
     }
-    if (self.childControllersCount - 1 > self.preloadPolicy + index) {
-        end = (int)index + self.preloadPolicy;
+    if (self.childControllersCount - 1 > length + index) {
+        end = (int)index + length;
     }
     for (int i = start; i <= end; i++) {
         // 如果已存在，不需要预加载
@@ -379,67 +300,8 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 #pragma mark - Data source
-- (NSString *)pageController:(WMPageController *)pageController titleAtIndex:(NSInteger)index
-{
-    if (self.isInHotel) {
-        if (index == 0) {
-            return @"点播";
-        }else if (index == 1){
-            return @"热点";
-        }else{
-            HSCategoryModel * model = [self.categorySource objectAtIndex:index - 2];
-            return model.name;
-        }
-    }else{
-        if (index == 0){
-            return @"热点";
-        }else{
-            HSCategoryModel * model = [self.categorySource objectAtIndex:index - 1];
-            return model.name;
-        }
-    }
-}
-
-- (UIViewController *)pageController:(WMPageController *)pageController viewControllerAtIndex:(NSInteger)index
-{
-    if (self.isInHotel) {
-        if (index == 0) {
-            RecommendViewController * recommend = [[RecommendViewController alloc] init];
-            recommend.parentNavigationController = self.navigationController;
-            return recommend;
-        }else if (index == 1) {
-            HotTopicViewController * hotTopic = [[HotTopicViewController alloc] init];
-            hotTopic.parentNavigationController = self.navigationController;
-            return hotTopic;
-        }else{
-            HSCategoryModel * model = [self.categorySource objectAtIndex:index - 2];
-            CategoryViewController * category = [[CategoryViewController alloc] initWithCategoryID:model.cid];
-            category.parentNavigationController = self.navigationController;
-            return category;
-        }
-    }else{
-        if (index == 0) {
-            HotTopicViewController * hotTopic = [[HotTopicViewController alloc] init];
-            hotTopic.parentNavigationController = self.navigationController;
-            return hotTopic;
-        }else{
-            HSCategoryModel * model = [self.categorySource objectAtIndex:index - 1];
-            CategoryViewController * category = [[CategoryViewController alloc] initWithCategoryID:model.cid];
-            category.parentNavigationController = self.navigationController;
-            return category;
-        }
-    }
-}
-
 - (NSInteger)childControllersCount {
-    if (_controllerConut == kWMControllerCountUndefined) {
-        if ([self.dataSource respondsToSelector:@selector(numbersOfChildControllersInPageController:)]) {
-            _controllerConut = [self.dataSource numbersOfChildControllersInPageController:self];
-        } else {
-            _controllerConut = self.viewControllerClasses.count;
-        }
-    }
-    return _controllerConut;
+    return self.viewControllerClasses.count;
 }
 
 - (UIViewController * _Nonnull)initializeViewControllerAtIndex:(NSInteger)index {
@@ -462,24 +324,12 @@ static NSInteger const kWMControllerCountUndefined = -1;
 #pragma mark - Private Methods
 
 - (void)wm_resetScrollView {
+    if (self.scrollView) {
+        [self.scrollView removeFromSuperview];
+    }
     [self wm_addScrollView];
     [self wm_addViewControllerAtIndex:self.selectIndex];
     self.currentViewController = self.displayVC[@(self.selectIndex)];
-}
-
-- (void)wm_resetMenuView {
-    if (!self.menuView) {
-        [self wm_addMenuView];
-    } else {
-        [self.menuView reload];
-        if (self.menuView.userInteractionEnabled == NO) {
-            self.menuView.userInteractionEnabled = YES;
-        }
-        if (self.selectIndex != 0) {
-            [self.menuView selectItemAtIndex:self.selectIndex];
-        }
-        [self.view bringSubviewToFront:self.menuView];
-    }
 }
 
 - (void)wm_clearDatas {
@@ -505,7 +355,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 // 当子控制器init完成时发送通知
 - (void)wm_postAddToSuperViewNotificationWithIndex:(int)index {
-    if (!self.postNotification) { return; }
+    if (!self.postNotification) return;
     NSDictionary *info = @{
                            @"index":@(index),
                            @"title":[self titleAtIndex:index]
@@ -516,7 +366,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 // 当子控制器完全展示在user面前时发送通知
 - (void)wm_postFullyDisplayedNotificationWithCurrentIndex:(int)index {
-    if (!self.postNotification) { return; }
+    if (!self.postNotification) return;
     NSDictionary *info = @{
                            @"index":@(index),
                            @"title":[self titleAtIndex:index]
@@ -545,7 +395,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     self.automaticallyCalculatesItemWidths = NO;
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.preloadPolicy = WMPageControllerPreloadPolicyNear;
+    self.preloadPolicy = WMPageControllerPreloadPolicyNever;
     self.cachePolicy = WMPageControllerCachePolicyNoLimit;
     
     self.delegate = self;
@@ -557,60 +407,51 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 // 包括宽高，子控制器视图 frame
 - (void)wm_calculateSize {
-    if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) {
-        CGFloat navigationHeight = CGRectGetMaxY(self.navigationController.navigationBar.frame);
-        UIView *tabBar = [self wm_bottomView];
-        CGFloat height = (tabBar && !tabBar.hidden) ? CGRectGetHeight(tabBar.frame) : 0;
-        CGFloat tarBarHeight = (self.hidesBottomBarWhenPushed == YES) ? 0 : height;
-        // 计算相对 window 的绝对 frame (self.view.window 可能为 nil)
-        UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
-        CGRect absoluteRect = [self.view convertRect:self.view.bounds toView:mainWindow];
-        navigationHeight -= absoluteRect.origin.y;
-        tarBarHeight -= mainWindow.frame.size.height - CGRectGetMaxY(absoluteRect);
-        
-        _viewX = self.viewFrame.origin.x;
-        _viewY = self.viewFrame.origin.y;
-        if (CGRectEqualToRect(self.viewFrame, CGRectZero)) {
-            _viewWidth = self.view.frame.size.width;
-            _viewHeight = self.view.frame.size.height - self.menuHeight - self.menuViewBottomSpace - navigationHeight - tarBarHeight;
-            _viewY += navigationHeight;
-        } else {
-            _viewWidth = self.viewFrame.size.width;
-            _viewHeight = self.viewFrame.size.height - self.menuHeight - self.menuViewBottomSpace;
-        }
+    CGFloat navigationHeight = CGRectGetMaxY(self.navigationController.navigationBar.frame);
+    UIView *tabBar = [self wm_bottomView];
+    CGFloat height = (tabBar && !tabBar.hidden) ? CGRectGetHeight(tabBar.frame) : 0;
+    CGFloat tarBarHeight = (self.hidesBottomBarWhenPushed == YES) ? 0 : height;
+    // 计算相对 window 的绝对 frame (self.view.window 可能为 nil)
+    UIWindow *mainWindow = [[UIApplication sharedApplication].delegate window];
+    CGRect absoluteRect = [self.view convertRect:self.view.bounds toView:mainWindow];
+    navigationHeight -= absoluteRect.origin.y;
+    tarBarHeight -= mainWindow.frame.size.height - CGRectGetMaxY(absoluteRect);
+    
+    _viewX = self.viewFrame.origin.x;
+    _viewY = self.viewFrame.origin.y;
+    if (CGRectEqualToRect(self.viewFrame, CGRectZero)) {
+        _viewWidth = self.view.frame.size.width;
+        _viewHeight = self.view.frame.size.height - self.menuHeight - self.menuViewBottomSpace - navigationHeight - tarBarHeight;
+        _viewY += navigationHeight;
+    } else {
+        _viewWidth = self.viewFrame.size.width;
+        _viewHeight = self.viewFrame.size.height - self.menuHeight - self.menuViewBottomSpace;
     }
     if (self.showOnNavigationBar && self.navigationController.navigationBar) {
         _viewHeight += self.menuHeight;
     }    // 重新计算各个控制器视图的宽高
     _childViewFrames = [NSMutableArray array];
     for (int i = 0; i < self.childControllersCount; i++) {
-        CGRect frame = CGRectMake(i*_viewWidth, 0, _viewWidth, _viewHeight);
+        CGRect frame = CGRectMake(i*_viewWidth, 0, _viewWidth, _viewHeight + _menuHeight);
         [_childViewFrames addObject:[NSValue valueWithCGRect:frame]];
     }
 }
 
 - (void)wm_addScrollView {
+    WMScrollView *scrollView = [[WMScrollView alloc] init];
+    scrollView.scrollsToTop = NO;
+    scrollView.pagingEnabled = YES;
+    scrollView.backgroundColor = [UIColor whiteColor];
+    scrollView.delegate = self;
+    scrollView.showsVerticalScrollIndicator = NO;
+    scrollView.showsHorizontalScrollIndicator = NO;
+    scrollView.bounces = self.bounces;
+    scrollView.scrollEnabled = self.scrollEnable;
+    [self.view addSubview:scrollView];
+    self.scrollView = scrollView;
     
-    if (self.scrollView) {
-        [self.scrollView removeFromSuperview];
-    }
-    
-    self.scrollView = [[WMScrollView alloc] init];
-    self.scrollView.scrollsToTop = NO;
-    self.scrollView.pagingEnabled = YES;
-    self.scrollView.backgroundColor = [UIColor whiteColor];
-    self.scrollView.delegate = self;
-    self.scrollView.showsVerticalScrollIndicator = NO;
-    self.scrollView.showsHorizontalScrollIndicator = NO;
-    self.scrollView.bounces = self.bounces;
-    self.scrollView.otherGestureRecognizerSimultaneously = self.otherGestureRecognizerSimultaneously;
-    self.scrollView.scrollEnabled = self.scrollEnable;
-    [self.view addSubview:self.scrollView];
-    
-    [self.view bringSubviewToFront:[HomeAnimationView animationView]];
-    
-    if (!self.navigationController) { return; }
-    for (UIGestureRecognizer *gestureRecognizer in self.scrollView.gestureRecognizers) {
+    if (!self.navigationController) return;
+    for (UIGestureRecognizer *gestureRecognizer in scrollView.gestureRecognizers) {
         [gestureRecognizer requireGestureRecognizerToFail:self.navigationController.interactivePopGestureRecognizer];
     }
 }
@@ -625,7 +466,12 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     CGRect frame = CGRectMake(_viewX, menuY, _viewWidth, self.menuHeight);
     WMMenuView *menuView = [[WMMenuView alloc] initWithFrame:frame];
-    menuView.backgroundColor = self.menuBGColor;
+    menuView.backgroundColor = [UIColor clearColor];
+    
+    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, -frame.size.width / 375.f * 120 + frame.size.height, frame.size.width, frame.size.width / 375.f * 120)];
+    [imageView setImage:[UIImage imageNamed:@"fenlei_bg"]];
+    [menuView addSubview:imageView];
+    
     menuView.delegate = self;
     menuView.dataSource = self;
     menuView.style = self.menuViewStyle;
@@ -651,19 +497,19 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 - (void)wm_layoutChildViewControllers {
-    int currentPage = (int)self.scrollView.contentOffset.x / _viewWidth;
-    int start = currentPage == 0 ? currentPage : (currentPage - 1);
-    int end = (currentPage == self.childControllersCount - 1) ? currentPage : (currentPage + 1);
-    for (int i = start; i <= end; i++) {
-        CGRect frame = [self.childViewFrames[i] CGRectValue];
+    int currentPage = (int)(self.scrollView.contentOffset.x / _viewWidth);
+    int length = (int)self.preloadPolicy;
+    int left = currentPage - length - 1;
+    int right = currentPage + length + 1;
+    for (int i = 0; i < self.childControllersCount; i++) {
         UIViewController *vc = [self.displayVC objectForKey:@(i)];
-        if ([self wm_isInScreen:frame]) {
-            if (vc == nil) {
+        CGRect frame = [self.childViewFrames[i] CGRectValue];
+        if (!vc) {
+            if ([self wm_isInScreen:frame]) {
                 [self wm_initializedControllerWithIndexIfNeeded:i];
             }
-        } else {
-            if (vc) {
-                // vc不在视野中且存在，移除他
+        } else if (i <= left || i >= right) {
+            if (![self wm_isInScreen:frame]) {
                 [self wm_removeViewController:vc atIndex:i];
             }
         }
@@ -682,16 +528,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [self wm_addViewControllerAtIndex:(int)index];
     }
     [self wm_postAddToSuperViewNotificationWithIndex:(int)index];
-}
-
-- (void)wm_removeSuperfluousViewControllersIfNeeded {
-    [self.displayVC enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, UIViewController * _Nonnull vc, BOOL * _Nonnull stop) {
-        NSInteger index = key.integerValue;
-        CGRect frame = [self.childViewFrames[index] CGRectValue];
-        if (![self wm_isInScreen:frame]) {
-            [self wm_removeViewController:vc atIndex:index];
-        }
-    }];
 }
 
 - (void)wm_addCachedViewController:(UIViewController *)viewController atIndex:(NSInteger)index {
@@ -738,7 +574,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
         [self willCachedController:viewController atIndex:index];
         [self.memCache setObject:viewController forKey:@(index)];
     }
-    
 }
 
 - (void)wm_backToPositionIfNeeded:(UIViewController *)controller atIndex:(NSInteger)index {
@@ -789,11 +624,44 @@ static NSInteger const kWMControllerCountUndefined = -1;
     CGFloat ScreenWidth = self.scrollView.frame.size.width;
     
     CGFloat contentOffsetX = self.scrollView.contentOffset.x;
-    if (CGRectGetMaxX(frame) > contentOffsetX && x-contentOffsetX < ScreenWidth) {
+    if (CGRectGetMaxX(frame) > contentOffsetX && x - contentOffsetX < ScreenWidth) {
         return YES;
     } else {
         return NO;
     }
+}
+
+- (void)wm_resetMenuView {
+    if (!self.menuView) {
+        [self wm_addMenuView];
+    } else {
+        [self.menuView reload];
+        if (self.menuView.userInteractionEnabled == NO) {
+            self.menuView.userInteractionEnabled = YES;
+        }
+        if (self.selectIndex != 0) {
+            [self.menuView selectItemAtIndex:self.selectIndex];
+        }
+        [self.view bringSubviewToFront:self.menuView];
+    }
+}
+
+- (void)wm_resetMenuViewWithNodelegateWithIndex:(NSInteger)index {
+    if (!self.menuView) {
+        [self wm_addMenuView];
+    } else {
+        [self.menuView reload];
+        if (self.menuView.userInteractionEnabled == NO) {
+            self.menuView.userInteractionEnabled = YES;
+        }
+        [self.menuView selectItemAtIndexWithNoDelegate:index];
+        [self.view bringSubviewToFront:self.menuView];
+    }
+}
+
+- (void)resetCurrentViewController:(UIViewController *)vc
+{
+    self.currentViewController = vc;
 }
 
 - (void)wm_growCachePolicyAfterMemoryWarning {
@@ -815,11 +683,10 @@ static NSInteger const kWMControllerCountUndefined = -1;
     // It's not my expectation, so I use `_shouldNotScroll` to lock it.
     // Wait for a better solution.
     _shouldNotScroll = YES;
-    CGRect scrollFrame = CGRectMake(_viewX, _viewY + self.menuHeight + self.menuViewBottomSpace, _viewWidth, _viewHeight);
+    CGRect scrollFrame = CGRectMake(_viewX, _viewY, _viewWidth, _viewHeight + _menuHeight);
     CGFloat oldContentOffsetX = self.scrollView.contentOffset.x;
     CGFloat contentWidth = self.scrollView.contentSize.width;
     scrollFrame.origin.y -= self.showOnNavigationBar && self.navigationController.navigationBar ? self.menuHeight : 0;
-    scrollFrame.origin.y = self.menuHeight;
     self.scrollView.frame = scrollFrame;
     self.scrollView.contentSize = CGSizeMake(self.childControllersCount * _viewWidth, 0);
     CGFloat xContentOffset = contentWidth == 0 ? self.selectIndex * _viewWidth : oldContentOffsetX / contentWidth * self.childControllersCount * _viewWidth;
@@ -843,7 +710,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     __block CGFloat rightWidth = 0;
     if (self.showOnNavigationBar && self.navigationController.navigationBar) {
         [self.navigationController.navigationBar.subviews enumerateObjectsUsingBlock:^(UIView* obj, NSUInteger idx, BOOL *stop) {
-            if (![obj isKindOfClass:[WMMenuView class]] && ![obj isKindOfClass:NSClassFromString(@"_UINavigationBarBackground")] && obj.alpha != 0 && obj.hidden == NO) {
+            if (![obj isKindOfClass:[WMMenuView class]] && obj.alpha != 0 && obj.hidden == NO) {
                 CGFloat maxX = CGRectGetMaxX(obj.frame);
                 if (maxX < _viewWidth / 2) {
                     CGFloat leftWidth = maxX;
@@ -861,9 +728,12 @@ static NSInteger const kWMControllerCountUndefined = -1;
         menuY = (navHeight - menuHeight) / 2;
     }
     CGFloat menuWidth = _viewWidth - menuX - rightWidth;
-    self.menuView.frame = CGRectMake(menuX, 0, menuWidth, menuHeight);
+    CGFloat oriWidth = self.menuView.frame.size.width;
+    self.menuView.frame = CGRectMake(menuX, _viewHeight + _viewY, menuWidth, menuHeight);
     [self.menuView resetFrames];
-    
+    if (oriWidth != menuWidth) {
+        [self.menuView refreshContenOffset];
+    }
 }
 
 - (CGFloat)wm_calculateItemWithAtIndex:(NSInteger)index {
@@ -883,360 +753,13 @@ static NSInteger const kWMControllerCountUndefined = -1;
 #pragma mark - Life Cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.isInHotel = NO;
-    self.categorySource = [NSMutableArray new];
-    
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    [self setupViews];
-    
-    [self setupDatas];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bindDevice) name:RDDidFoundHotelIdNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disconnectDevice) name:RDDidDisconnectDeviceNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectSuccessDevice) name:RDDidBindDeviceNotification object:nil];
-    
-    
-    [self configureSelf];
-    
-    [self creatSmallWindow];
-    
     if (!self.childControllersCount) return;
-    
     [self wm_calculateSize];
-    
     [self wm_addScrollView];
-    
     [self wm_addViewControllerAtIndex:self.selectIndex];
     self.currentViewController = self.displayVC[@(self.selectIndex)];
-    
     [self wm_addMenuView];
-    
-    [self handleLaunchWork];
-}
-
-- (void)handleLaunchWork
-{
-    if ([GlobalData shared].is3DTouchEnable) {
-        
-        if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
-            
-            if ([GlobalData shared].networkStatus == RDNetworkStatusReachableViaWiFi) {
-                [[GCCDLNA defaultManager] startSearchPlatform];
-            }
-            
-            [[HomeAnimationView animationView] scanQRCode];
-            
-        }else if ([[GlobalData shared].shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
-            [self screenButtonDidClicked];
-        }
-    }
-    
-    if ([GlobalData shared].isLaunchedByNotification) {
-        [self didReceiveRemoteNotification:[GlobalData shared].launchModel];
-    }
-}
-
-- (void)creatSmallWindow{
-    
-    HomeAnimationView *view = [HomeAnimationView animationView];
-    [self.view addSubview:view];
-    view.backgroundColor = [UIColor blackColor];
-    view.alpha = 1;
-    view.layer.borderWidth = 0.5;
-    view.layer.borderColor = [UIColorFromRGB(0xeeeeee) colorWithAlphaComponent:0.28].CGColor;
-    
-    CGFloat viewWidth = [Helper autoWidthWith:147.f];
-    CGFloat viewHeight = [Helper autoHeightWith:117.f];
-    CGFloat viewBottomDistance = [Helper autoHeightWith:130.f];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(viewWidth, viewHeight));
-        make.bottom.mas_equalTo(-viewBottomDistance);
-        make.right.mas_equalTo(-6);
-    }];
-    [[HomeAnimationView animationView] hidden];
-   
-    view.singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SingleTapQuitScreen)];
-    //点击的次数
-    view.singleRecognizer.numberOfTapsRequired = 1; // 单击
-    [view.quitScreenLabel addGestureRecognizer:view.singleRecognizer];
-}
-
-- (void)SingleTapQuitScreen{
-    [[HomeAnimationView animationView] quitScreen];
-}
-
-- (void)screenButtonDidClicked
-{
-    [self.locationView showWithStatus:RDScreenLocation_Loading];
-}
-
-#pragma mark -- 首页按钮以及弹窗的代理回调
-- (void)RDHomeScreenButtonDidBeClicked
-{
-    if ([GlobalData shared].scene == RDSceneHaveRDBox) {
-        [self.locationView showWithStatus:RDScreenLocation_Loading];
-        self.isShowScreenView = YES;
-        [self setNeedsStatusBarAppearanceUpdate];
-    }else if ([GlobalData shared].networkStatus == RDNetworkStatusNotReachable){
-        [MBProgressHUD showTextHUDwithTitle:@"当前网络不可用" delay:1.5f];
-    }else{
-        RestaurantListViewController *restVC = [[RestaurantListViewController alloc] initWithScreenAlert];
-        [self.navigationController pushViewController:restVC animated:YES];
-    }
-}
-
-- (void)RDScreenLocationViewDidSelectTabButtonWithIndex:(NSInteger)index
-{
-    self.isShowScreenView = NO;
-    [self setNeedsStatusBarAppearanceUpdate];
-    switch (index) {
-        case 0:
-        {
-            if (self.canGetPhoto) {
-                AlbumListViewController * album = [[AlbumListViewController alloc] init];
-                album.hidesBottomBarWhenPushed = YES;
-                album.title = @"我的照片";
-                [self.navigationController pushViewController:album animated:YES];
-            }else{
-                [self openSetting];
-            }
-        }
-            break;
-            
-        case 1:
-        {
-            if (self.canGetPhoto) {
-                VideoListViewController * video = [[VideoListViewController alloc] init];
-                video.hidesBottomBarWhenPushed = YES;
-                video.title = @"我的视频";
-                [self.navigationController pushViewController:video animated:YES];
-            }else{
-                [self openSetting];
-            }
-        }
-            break;
-            
-        case 2:
-        {
-            if (self.canGetPhoto) {
-                SliderViewController * album = [[SliderViewController alloc] init];
-                album.hidesBottomBarWhenPushed = YES;
-                album.title = @"幻灯片";
-                [self.navigationController pushViewController:album animated:YES];
-            }else{
-                [self openSetting];
-            }
-        }
-            break;
-            
-        case 3:
-        {
-            self.count++;
-            DocumentListViewController * document = [[DocumentListViewController alloc] init];
-            document.hidesBottomBarWhenPushed = YES;
-            document.title = @"我的文件";
-            if (self.count == 1) {
-                document.isHelp = YES;
-            }else{
-                document.isHelp = NO;
-            }
-            [self.navigationController pushViewController:document animated:YES];
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-//查看更多
-- (void)RDScreenLocationViewDidSelectMoreButton
-{
-    self.isShowScreenView = NO;
-    [self setNeedsStatusBarAppearanceUpdate];
-    RestaurantListViewController *restVC = [[RestaurantListViewController alloc] init];
-    [self.navigationController pushViewController:restVC animated:YES];
-    [SAVORXAPI postUMHandleWithContentId:@"home_hotel_more" key:nil value:nil];
-}
-
-- (void)RDScreenLocationViewDidClose
-{
-    self.isShowScreenView = NO;
-    [self setNeedsStatusBarAppearanceUpdate];
-}
-
-- (void)setupViews
-{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.exclusiveTouch = YES;
-    [button setImage:[UIImage imageNamed:@"nav.png"] forState:UIControlStateNormal];
-    button.frame = CGRectMake(0, 0, 40, 40);
-    [button setImageEdgeInsets:UIEdgeInsetsMake(0, -25, 0, 0)];
-    [button addTarget:self action:@selector(openLeftDrawer:) forControlEvents:UIControlEventTouchUpInside];
-    button.backgroundColor = [UIColor clearColor];
-    UIBarButtonItem* backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-    self.navigationItem.leftBarButtonItem = backItem;
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"连接电视" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
-    
-    self.titleViewBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.titleViewBtn.frame = CGRectMake(0, 0, 150, 30);
-    self.titleViewBtn.userInteractionEnabled = NO;
-    [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
-    self.titleViewBtn.titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    [self.titleViewBtn addTarget:self action:@selector(disconnentClick) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.titleView = self.titleViewBtn;
-    
-    self.canGetPhoto = NO;
-    //判断用户是否拥有相机权限
-    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-    if (status == PHAuthorizationStatusNotDetermined) {
-        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-            if (status == PHAuthorizationStatusAuthorized) {
-                self.canGetPhoto = YES;
-            }else{
-                self.canGetPhoto = NO;
-            }
-        }];
-    } else if (status == PHAuthorizationStatusAuthorized) {
-        self.canGetPhoto = YES;
-    }
-    self.count = 0;
-
-}
-
-// 断开连接
-- (void)disconnentClick{
-    
-    RDAlertView *rdAlert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"是否与电视断开，\n断开后将无法投屏？"];
-    RDAlertAction *actionOne = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-        [SAVORXAPI postUMHandleWithContentId:@"home_break_connect" key:@"home_break_connect" value:@"cancel"];
-    } bold:NO];
-    RDAlertAction *actionTwo = [[RDAlertAction alloc] initWithTitle:@"断开连接" handler:^{
-        [SAVORXAPI postUMHandleWithContentId:@"home_break_connect" key:@"home_break_connect" value:@"break"];
-        if ([HomeAnimationView animationView].isScreening) {
-            [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-                [[HomeAnimationView animationView] stopScreen];
-                [[GlobalData shared] disconnect];
-            } failure:^{
-                
-            }];
-        }else{
-            [[HomeAnimationView animationView] stopScreen];
-            [[GlobalData shared] disconnect];
-        }
-    } bold:YES];
-    NSArray *actionArr = [NSArray arrayWithObjects:actionOne,actionTwo, nil];
-    [rdAlert addActions:actionArr];
-    [rdAlert show];
-}
-
-// 连接电视成功，收到通知调用
-- (void)connectSuccessDevice{
-    
-    self.navigationItem.rightBarButtonItem = nil;
-    self.titleViewBtn.userInteractionEnabled = YES;
-    NSString *titleStr;
-    if ([GlobalData shared].isBindRD) {
-        titleStr = [NSString stringWithFormat:@"已连接\"%@\"的电视",[GlobalData shared].RDBoxDevice.sid];
-    }else if ([GlobalData shared].isBindDLNA) {
-        titleStr = [NSString stringWithFormat:@"已连接\"%@\"的电视",[GlobalData shared].DLNADevice.name];
-    }
-    [self.titleViewBtn setTitle:titleStr forState:UIControlStateNormal];
-    
-}
-
-- (void)setupDatas
-{
-    MBProgressHUD * hud;
-    [self.categorySource removeAllObjects];
-    NSFileManager * manage = [NSFileManager defaultManager];
-    if ([manage fileExistsAtPath:CategoryListCache]) {
-        NSArray * listAry = [NSArray arrayWithContentsOfFile:CategoryListCache];
-        for(NSDictionary *dict in listAry){
-            HSCategoryModel *model = [[HSCategoryModel alloc] initWithDictionary:dict];
-            [self.categorySource addObject:model];
-        }
-        [self reloadData];
-    }else{
-        hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
-    }
-    
-    HSCategoryListRequest * request = [[HSCategoryListRequest alloc] init];
-    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
-        self.categorySource = [NSMutableArray arrayWithArray:response];
-        [self reloadData];
-        
-        if (hud) {
-            [hud hideAnimated:NO];
-        }
-        
-    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
-        
-        if (hud) {
-            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
-            [hud hideAnimated:NO];
-        }
-        
-    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
-        
-        if (hud) {
-            [self showNoNetWorkView];
-            [hud hideAnimated:NO];
-        }
-        
-    }];
-}
-
-- (void)retryToGetData
-{
-    [self hideNoDataView];
-    [self setupDatas];
-}
-
-- (void)bindDevice
-{
-    self.isInHotel = YES;
-    [self reloadData];
-    self.selectIndex = 0;
-    if ([self.delegate respondsToSelector:@selector(pageController:didFirstEnterViewController:withInfo:)]) {
-        [self.delegate pageController:self didFirstEnterViewController:self.currentViewController withInfo:@{@"ok":@"yes"}];
-    }
-}
-
-- (void)disconnectDevice
-{
-    if ([GlobalData shared].scene != RDSceneHaveRDBox) {
-        self.isInHotel = NO;
-        [self reloadData];
-        if (self.selectIndex > 1) {
-            self.selectIndex -= 1;
-        }
-    }
-    [self.titleViewBtn setTitle:@"小热点" forState:UIControlStateNormal];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"连接电视" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
-    self.titleViewBtn.userInteractionEnabled = NO;
-}
-
-- (void)configureSelf
-{
-    self.menuBGColor = [UIColor whiteColor];
-    
-    self.menuHeight = [Helper autoHeightWith:40.f];
-    self.menuItemWidth = 58;
-    self.menuViewStyle = WMMenuViewStyleLine;
-    
-    self.titleSizeSelected = 19;
-    self.titleSizeNormal = 17;
-    self.titleColorNormal = UIColorFromRGB(0x777777);
-    self.titleColorSelected = UIColorFromRGB(0x444444);
-    
-    self.progressHeight = 2;
-    self.progressWidth = 35;
-    self.progressColor = UIColorFromRGB(0x555555);
 }
 
 - (void)viewDidLayoutSubviews {
@@ -1246,103 +769,28 @@ static NSInteger const kWMControllerCountUndefined = -1;
     
     CGFloat oldSuperviewHeight = _superviewHeight;
     _superviewHeight = self.view.frame.size.height;
-    
     BOOL oldTabBarIsHidden = _isTabBarHidden;
     _isTabBarHidden = [self wm_bottomView].hidden;
     
     BOOL shouldNotLayout = (_hasInited && _superviewHeight == oldSuperviewHeight && _isTabBarHidden == oldTabBarIsHidden);
     if (shouldNotLayout) return;
-    
     // 计算宽高及子控制器的视图frame
     [self wm_calculateSize];
-    
     [self wm_adjustScrollViewFrame];
-    
     [self wm_adjustMenuViewFrame];
-    
     [self wm_adjustDisplayingViewControllersFrame];
-    
-    [self wm_removeSuperfluousViewControllersIfNeeded];
-    
     _hasInited = YES;
-    
     [self.view layoutIfNeeded];
-    
     [self wm_delaySelectIndexIfNeeded];
-    
-    [self.view bringSubviewToFront:self.homeButton];
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    // 正在投屏返回首页
-    if ([HomeAnimationView animationView].isScreening) {
-        [SAVORXAPI postUMHandleWithContentId:@"home_toscreen_state" key:nil value:nil];
-    }
-    
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    self.sideMenuController.leftViewSwipeGestureEnabled = YES;
-    [self.view bringSubviewToFront:self.homeButton];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.sideMenuController.leftViewSwipeGestureEnabled = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (!self.childControllersCount) { return; }
+    if (!self.childControllersCount) return;
     
     [self wm_postFullyDisplayedNotificationWithCurrentIndex:self.selectIndex];
-    [self didFirstEnterController:self.currentViewController atIndex:self.selectIndex];
-    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-}
-
-// 完全进入控制器 (即停止滑动后调用)
-- (void)didFirstEnterController:(UIViewController *)vc atIndex:(NSInteger)index {
-    if (!self.childControllersCount) { return; }
-    NSDictionary *info = [self infoWithIndex:index];
-    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithDictionary:info];
-    [dict setObject:@(YES) forKey:@"isFirstEnter"];
-    if ([self.delegate respondsToSelector:@selector(pageController:didFirstEnterViewController:withInfo:)]) {
-        [self.delegate pageController:self didFirstEnterViewController:vc withInfo:dict];
-    }
-    // 当控制器创建时，调用延迟加载的代理方法
-    if (_initializedIndex == index && [self.delegate respondsToSelector:@selector(pageController:lazyLoadViewController:withInfo:)]) {
-        [self.delegate pageController:self lazyLoadViewController:vc withInfo:info];
-        _initializedIndex = kWMUndefinedIndex;
-    }
-    
-    // 根据 preloadPolicy 预加载控制器
-    if (self.preloadPolicy == WMPageControllerPreloadPolicyNever) { return; }
-    int start = 0;
-    int end = (int)self.childControllersCount - 1;
-    if (index > self.preloadPolicy) {
-        start = (int)index - self.preloadPolicy;
-    }
-    if (self.childControllersCount - 1 > self.preloadPolicy + index) {
-        end = (int)index + self.preloadPolicy;
-    }
-    for (int i = start; i <= end; i++) {
-        // 如果已存在，不需要预加载
-        if (![self.memCache objectForKey:@(i)] && !self.displayVC[@(i)]) {
-            [self wm_addViewControllerAtIndex:i];
-            [self wm_postAddToSuperViewNotificationWithIndex:i];
-        }
-    }
-    _selectIndex = (int)index;
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    [self didEnterController:self.currentViewController atIndex:self.selectIndex];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -1366,9 +814,9 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 #pragma mark - UIScrollView Delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (![scrollView isKindOfClass:WMScrollView.class]) { return; }
+    if (![scrollView isKindOfClass:WMScrollView.class]) return;
     
-    if (_shouldNotScroll || !_hasInited) { return; }
+    if (_shouldNotScroll || !_hasInited) return;
     
     [self wm_layoutChildViewControllers];
     if (_startDragging) {
@@ -1382,27 +830,26 @@ static NSInteger const kWMControllerCountUndefined = -1;
         CGFloat rate = contentOffsetX / _viewWidth;
         [self.menuView slideMenuAtProgress:rate];
     }
-    
+   
     // Fix scrollView.contentOffset.y -> (-20) unexpectedly.
-    if (scrollView.contentOffset.y == 0) { return; }
+    if (scrollView.contentOffset.y == 0) return;
     CGPoint contentOffset = scrollView.contentOffset;
     contentOffset.y = 0.0;
     scrollView.contentOffset = contentOffset;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (![scrollView isKindOfClass:WMScrollView.class]) { return; }
+    if (![scrollView isKindOfClass:WMScrollView.class]) return;
     
     _startDragging = YES;
     self.menuView.userInteractionEnabled = NO;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (![scrollView isKindOfClass:WMScrollView.class]) { return; }
+    if (![scrollView isKindOfClass:WMScrollView.class]) return;
     
     self.menuView.userInteractionEnabled = YES;
-    _selectIndex = (int)scrollView.contentOffset.x / _viewWidth;
-    [self wm_removeSuperfluousViewControllersIfNeeded];
+    _selectIndex = (int)(scrollView.contentOffset.x / _viewWidth);
     self.currentViewController = self.displayVC[@(self.selectIndex)];
     [self wm_postFullyDisplayedNotificationWithCurrentIndex:self.selectIndex];
     [self didEnterController:self.currentViewController atIndex:self.selectIndex];
@@ -1410,17 +857,16 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    if (![scrollView isKindOfClass:WMScrollView.class]) { return; }
+    if (![scrollView isKindOfClass:WMScrollView.class]) return;
     
     self.currentViewController = self.displayVC[@(self.selectIndex)];
-    [self wm_removeSuperfluousViewControllersIfNeeded];
     [self wm_postFullyDisplayedNotificationWithCurrentIndex:self.selectIndex];
     [self didEnterController:self.currentViewController atIndex:self.selectIndex];
     [self.menuView deselectedItemsIfNeeded];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (![scrollView isKindOfClass:WMScrollView.class]) { return; }
+    if (![scrollView isKindOfClass:WMScrollView.class]) return;
     
     if (!decelerate) {
         self.menuView.userInteractionEnabled = YES;
@@ -1431,41 +877,28 @@ static NSInteger const kWMControllerCountUndefined = -1;
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    if (![scrollView isKindOfClass:WMScrollView.class]) { return; }
+    if (![scrollView isKindOfClass:WMScrollView.class]) return;
     
     _targetX = targetContentOffset->x;
 }
 
-- (NSInteger)numbersOfChildControllersInPageController:(WMPageController *)pageController
-{
-    if (self.categorySource.count == 0) {
-        return 0;
-    }else if (self.isInHotel){
-        return self.categorySource.count + 2;
-    }
-    
-    return self.categorySource.count + 1;
-}
-
 #pragma mark - WMMenuView Delegate
 - (void)menuView:(WMMenuView *)menu didSelesctedIndex:(NSInteger)index currentIndex:(NSInteger)currentIndex {
-    if (!_hasInited) { return; }
+    if (!_hasInited) return;
     _selectIndex = (int)index;
     _startDragging = NO;
     CGPoint targetP = CGPointMake(_viewWidth*index, 0);
     [self.scrollView setContentOffset:targetP animated:self.pageAnimatable];
-    if (!self.pageAnimatable) {
-        // 由于不触发 -scrollViewDidScroll: 手动处理控制器
-        [self wm_removeSuperfluousViewControllersIfNeeded];
-        UIViewController *currentViewController = self.displayVC[@(currentIndex)];
-        if (currentViewController) {
-            [self wm_removeViewController:currentViewController atIndex:currentIndex];
-        }
-        [self wm_layoutChildViewControllers];
-        self.currentViewController = self.displayVC[@(self.selectIndex)];
-        [self wm_postFullyDisplayedNotificationWithCurrentIndex:(int)index];
-        [self didEnterController:self.currentViewController atIndex:index];
+    if (self.pageAnimatable) return;
+    // 由于不触发 -scrollViewDidScroll: 手动处理控制器
+    UIViewController *currentViewController = self.displayVC[@(currentIndex)];
+    if (currentViewController) {
+        [self wm_removeViewController:currentViewController atIndex:currentIndex];
     }
+    [self wm_layoutChildViewControllers];
+    self.currentViewController = self.displayVC[@(self.selectIndex)];
+    [self wm_postFullyDisplayedNotificationWithCurrentIndex:(int)index];
+    [self didEnterController:self.currentViewController atIndex:index];
 }
 
 - (CGFloat)menuView:(WMMenuView *)menu widthForItemAtIndex:(NSInteger)index {
@@ -1486,7 +919,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     return self.itemMargin;
 }
 
-- (CGFloat)menuView:(WMMenuView *)menu titleSizeForState:(WMMenuItemState)state {
+- (CGFloat)menuView:(WMMenuView *)menu titleSizeForState:(WMMenuItemState)state atIndex:(NSInteger)index {
     switch (state) {
         case WMMenuItemStateSelected: {
             return self.titleSizeSelected;
@@ -1499,7 +932,7 @@ static NSInteger const kWMControllerCountUndefined = -1;
     }
 }
 
-- (UIColor *)menuView:(WMMenuView *)menu titleColorForState:(WMMenuItemState)state {
+- (UIColor *)menuView:(WMMenuView *)menu titleColorForState:(WMMenuItemState)state atIndex:(NSInteger)index {
     switch (state) {
         case WMMenuItemStateSelected: {
             return self.titleColorSelected;
@@ -1519,103 +952,6 @@ static NSInteger const kWMControllerCountUndefined = -1;
 
 - (NSString *)menuView:(WMMenuView *)menu titleAtIndex:(NSInteger)index {
     return [self titleAtIndex:index];
-}
-
-- (RDHomeScreenButton *)homeButton
-{
-    if (!_homeButton) {
-        CGFloat diameter = [Helper autoWidthWith:120.f];
-        _homeButton = [[RDHomeScreenButton alloc] initWithFrame:CGRectMake(0, 0, diameter, diameter)];
-        _homeButton.delegate = self;
-        [self.view addSubview:_homeButton];
-    }
-    return _homeButton;
-}
-
-- (RDScreenLocationView *)locationView
-{
-    if (!_locationView) {
-        _locationView = [[RDScreenLocationView alloc] init];
-        _locationView.delegate = self;
-    }
-    return _locationView;
-}
-
-//收到节目的推送，跳转至相关的页面
-- (void)didReceiveRemoteNotification:(HSVodModel *)model
-{
-    NSInteger categoryID = -1;
-    
-    if ([GlobalData shared].isBindRD && model.canPlay == 1) {
-        [SAVORXAPI postUMHandleWithContentId:model.cid withType:demandHandle];
-        
-        //如果是绑定状态
-        [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-        
-        [self demandVideoWithModel:model force:0 categoryID:categoryID];
-        
-    }else{
-        [SAVORXAPI postUMHandleWithContentId:model.cid withType:readHandle];
-        //如果不是绑定状态
-        if (model.type == 3) {
-            WebViewController * web = [[WebViewController alloc] init];
-            web.model = model;
-            web.categoryID = categoryID;
-            
-            [self.navigationController pushViewController:web animated:YES];
-            [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
-        }else if (model.type == 4){
-            HSVideoViewController * web = [[HSVideoViewController alloc] initWithModel:model];
-            
-            [self.navigationController pushViewController:web animated:YES];
-            [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
-        }else{
-            ArticleReadViewController * article = [[ArticleReadViewController alloc] initWithVodModel:model];
-            article.categoryID = categoryID;
-            
-            [self.navigationController pushViewController:article animated:YES];
-            [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
-            
-        }
-    }
-}
-
-- (void)demandVideoWithModel:(HSVodModel *)model force:(NSInteger)force categoryID:(NSInteger)categoryID{
-    
-    [SAVORXAPI demandWithURL:STBURL name:model.name type:1 position:0 force:force  success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        if ([[result objectForKey:@"result"] integerValue] == 0) {
-            
-            DemandViewController *view = [[DemandViewController alloc] init];
-            view.categroyID = categoryID;
-            view.model = model;
-            [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] SDSetImage:model.imageURL];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
-            [self.navigationController pushViewController:view animated:YES];
-            [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
-            
-            NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
-            } bold:NO];
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
-                [self demandVideoWithModel:model force:1 categoryID:categoryID];
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"}];
-            } bold:NO];
-            [alertView addActions:@[action,actionOne]];
-            [alertView show];
-            
-        }
-        else{
-            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-        }
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-    }];
 }
 
 @end

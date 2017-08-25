@@ -20,19 +20,21 @@
 #import "LGSideMenuController.h"
 #import "BaseNavigationController.h"
 #import "LeftViewController.h"
-#import "WMPageController.h"
-#import "HomeAnimationView.h"
 #import "VideoLauchMovieViewController.h"
 #import "HSLauchImageOrVideoRequest.h"
 #import "DefalutLaunchViewController.h"
 #import "RDLogStatisticsAPI.h"
-#import "HotTopicViewController.h"
-#import "RecommendViewController.h"
-#import "CategoryViewController.h"
 #import "HSInstallationInforUpload.h"
 #import "HSFirstUseRequest.h"
 #import "RDLocationManager.h"
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>
+
+#import "RDHomePageController.h"
+#import "RDHomeStatusView.h"
+#import "SpecialTopicViewController.h"
+#import "LiveViewController.h"
+#import "RealCreateWealthViewController.h"
+#import "RDAlertView.h"
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
@@ -207,18 +209,20 @@
 - (LGSideMenuController *)createRootViewController
 {
     LeftViewController *leftVc = [[LeftViewController alloc] init];
-    WMPageController *centerVC = [[WMPageController alloc] init];
+    RDHomePageController *centerVC = [[RDHomePageController alloc] init];
     centerVC.delegate = self;
     //2、初始化导航控制器
     BaseNavigationController *centerNav = [[BaseNavigationController alloc]initWithRootViewController:centerVC];
     
     LGSideMenuController * sliderVC = [[LGSideMenuController alloc] initWithRootViewController:centerNav leftViewController:leftVc rightViewController:nil];
+    
+    //当左边页面将要出现的时候
     sliderVC.willShowLeftView = ^(LGSideMenuController * _Nonnull sideMenuController, UIView * _Nonnull leftView){
         [leftVc willShow];
     };
     CGFloat width = kMainBoundsHeight > kMainBoundsWidth ? kMainBoundsWidth : kMainBoundsHeight;
-    sliderVC.leftViewWidth = width / 3 * 2;
-    sliderVC.leftViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(66, 66);
+    sliderVC.leftViewWidth = width / 3 * 2; //设置左边页面侧滑的距离
+    sliderVC.leftViewSwipeGestureRange = LGSideMenuSwipeGestureRangeMake(66, 66); //设置左侧滑手势的响应区域
     
     [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
     }];
@@ -260,41 +264,23 @@
 
 - (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
 {
-    if ([viewController isKindOfClass:[HotTopicViewController class]]) {
+    if ([viewController isKindOfClass:[RealCreateWealthViewController class]]) {
         
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
-        HotTopicViewController * vc = (HotTopicViewController *)viewController;
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"101" volume:@"index"];
+        RealCreateWealthViewController * vc = (RealCreateWealthViewController *)viewController;
         [vc showSelfAndCreateLog];
         
-    }else if ([viewController isKindOfClass:[RecommendViewController class]]){
+    }else if ([viewController isKindOfClass:[LiveViewController class]]){
         
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
-        RecommendViewController * vc = (RecommendViewController *)viewController;
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"102" volume:@"index"];
+        LiveViewController * vc = (LiveViewController *)viewController;
         [vc showSelfAndCreateLog];
         
-    }else if ([viewController isKindOfClass:[CategoryViewController class]]){
+    }else if ([viewController isKindOfClass:[SpecialTopicViewController class]]){
         
-        CategoryViewController * vc = (CategoryViewController *)viewController;
-        [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", vc.categoryID] volume:@"index"];
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"103" volume:@"index"];
+        SpecialTopicViewController * vc = (SpecialTopicViewController *)viewController;
         [vc showSelfAndCreateLog];
-    }
-}
-
-- (void)pageController:(WMPageController *)pageController didFirstEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
-{
-    if ([viewController isKindOfClass:[HotTopicViewController class]]) {
-        
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"-1" volume:@"index"];
-        
-    }else if ([viewController isKindOfClass:[RecommendViewController class]]){
-        
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"-2" volume:@"index"];
-        
-    }else if ([viewController isKindOfClass:[CategoryViewController class]]){
-        
-        CategoryViewController * vc = (CategoryViewController *)viewController;
-        [RDLogStatisticsAPI RDPageLogCategoryID:[NSString stringWithFormat:@"%ld", vc.categoryID] volume:@"index"];
-        
     }
 }
 
@@ -387,17 +373,20 @@
             
             if (dict && [dict isKindOfClass:[NSDictionary class]]) {
                 //如果收到的推送是一个节目的推送则初始化该节目的一个model
-                HSVodModel * model = [[HSVodModel alloc] initWithDictionary:dict];
+                CreateWealthModel * model = [[CreateWealthModel alloc] initWithDictionary:dict];
+                if (isEmptyString(model.artid)) {
+                    model.artid = [dict objectForKey:@"id"];
+                }
                 
                 if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
                     //如果根视图是LGSide，则可以正常进行跳转
                     LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
                     BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
-                    if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
+                    if (![baseNa.topViewController isKindOfClass:[RDHomePageController class]]) {
                         [baseNa popToRootViewControllerAnimated:NO];
                     }
-                    if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
-                        WMPageController * page = (WMPageController *)baseNa.topViewController;
+                    if ([[baseNa topViewController] isKindOfClass:[RDHomePageController class]]) {
+                        RDHomePageController * page = (RDHomePageController *)baseNa.topViewController;
                         [page didReceiveRemoteNotification:model];
                     }
                 }else{
@@ -577,19 +566,21 @@
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
         
         NSString *urlString = dict[@"url"];
-        if (urlString && urlString.length > 0) {
-            NSString *statusString = dict[@"status"];
-            NSString *durationString = dict[@"duration"];
-            
-            // 如果拿到的lauchID和本地存储的id不一致，则存储图片或是视频
-            if (![[user objectForKey:@"url"]  isEqualToString:urlString]) {
-                [self saveImage:urlString withType:statusString success:^{
-                    [user setObject:urlString forKey:@"url"];
-                    [user setObject:statusString forKey:@"status"];
-                    [user setObject:durationString forKey:@"duration"];
-                    [user synchronize];
-                }];
-            }
+        if (!isEmptyString(urlString)) {
+            if (urlString && urlString.length > 0) {
+                NSString *statusString = dict[@"status"];
+                NSString *durationString = dict[@"duration"];
+                
+                // 如果拿到的lauchID和本地存储的id不一致，则存储图片或是视频
+                if (![[user objectForKey:@"url"]  isEqualToString:urlString]) {
+                    [self saveImage:urlString withType:statusString success:^{
+                        [user setObject:urlString forKey:@"url"];
+                        [user setObject:statusString forKey:@"status"];
+                        [user setObject:durationString forKey:@"duration"];
+                        [user synchronize];
+                    }];
+                }
+        }
         }else{
             [user removeObjectForKey:@"url"];
             [user removeObjectForKey:@"status"];
@@ -634,12 +625,7 @@
     
     if ([self.window.rootViewController isKindOfClass:[LGSideMenuController class]]) {
         if ([GlobalData shared].isBindRD) {
-            if (![HTTPServerManager checkHttpServerWithBoxIP:[GlobalData shared].RDBoxDevice.BoxIP]) {
-                [[GlobalData shared] disconnect];
-                [[GCCDLNA defaultManager] startSearchPlatform];
-            }
-        }else if ([GlobalData shared].isBindDLNA){
-            if (![HTTPServerManager checkHttpServerWithDLNAIP:[GlobalData shared].DLNADevice.headerURL]) {
+            if (![[Helper getWifiName] isEqualToString:[GlobalData shared].RDBoxDevice.sid]) {
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
@@ -664,28 +650,32 @@
         }
         
         //检测当前绑定状态是否断开
-        if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-            [[HomeAnimationView animationView] stopScreen];
+        if (![GlobalData shared].isBindRD) {
+            [[RDHomeStatusView defaultView] stopScreen];
         }
         
         if ([shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
             
-            [[HomeAnimationView animationView] scanQRCode];
+            [[RDHomeStatusView defaultView] scanQRCode];
             
         }else if ([shortcutItem.type isEqualToString:@"3dtouch.screen"]) {
             
-            LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
-            BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
-            if (![baseNa.topViewController isKindOfClass:[WMPageController class]]) {
-                [baseNa popToRootViewControllerAnimated:NO];
+            if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+                LGSideMenuController * side = (LGSideMenuController *)self.window.rootViewController;
+                BaseNavigationController * baseNa = (BaseNavigationController *)side.rootViewController;
+                if (![baseNa.topViewController isKindOfClass:[RDHomePageController class]]) {
+                    [baseNa popToRootViewControllerAnimated:NO];
+                }
+                if ([[baseNa topViewController] isKindOfClass:[RDHomePageController class]]) {
+                    RDHomePageController * page = (RDHomePageController *)baseNa.topViewController;
+                    [page.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+                }
+                
+            }else{
+                
+                [[RDHomeStatusView defaultView] scanQRCode];
+                
             }
-            if ([[baseNa topViewController] isKindOfClass:[WMPageController class]]) {
-                WMPageController * page = (WMPageController *)baseNa.topViewController;
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [page screenButtonDidClicked];
-                });
-            }
-            
         }
     }else{
         if ([Helper isWifiStatus]) {
@@ -728,6 +718,10 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+        [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
+    }
+    
     if ([GlobalData shared].scene == RDSceneHaveRDBox) {
         self.ssid = [Helper getWifiName];
     }else{
@@ -752,6 +746,8 @@
         return;
     }
     
+    [self checkScreenStatus];
+    
     if (!isEmptyString(self.ssid) && [Helper getWifiName]) {
         if ([self.ssid isEqualToString:[Helper getWifiName]]) {
             return;
@@ -767,11 +763,6 @@
             }
             if (![[Helper getWifiName] isEqualToString:[GlobalData shared].RDBoxDevice.sid]) {
                 [self screenShouldBeStop];
-                [[GlobalData shared] disconnect];
-                [[GCCDLNA defaultManager] startSearchPlatform];
-            }
-        }else if ([GlobalData shared].isBindDLNA){
-            if (![HTTPServerManager checkHttpServerWithDLNAIP:[GlobalData shared].DLNADevice.headerURL]) {
                 [[GlobalData shared] disconnect];
                 [[GCCDLNA defaultManager] startSearchPlatform];
             }
@@ -802,22 +793,55 @@
         }
         
         //检测当前绑定状态是否断开
-        if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-            [[HomeAnimationView animationView] stopScreen];
+        if (![GlobalData shared].isBindRD) {
+            [[RDHomeStatusView defaultView] stopScreen];
         }
+    }
+}
+
+- (void)checkScreenStatus
+{
+    if ([GlobalData shared].isBindRD && [RDHomeStatusView defaultView].isScreening) {
+        [SAVORXAPI queryStatusWithURL:STBURL success:^(NSURLSessionDataTask *task, NSDictionary *result) {
+            
+            BOOL isNeedAlert = YES;
+            if ([[result objectForKey:@"status"] integerValue] == 1) {
+                if ([[result objectForKey:@"deviceId"] isEqualToString:[GlobalData shared].deviceID]) {
+                    isNeedAlert = NO;
+                }
+            }
+            
+            if (isNeedAlert) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
+                [SAVORXAPI cancelAllURLTask];
+                
+//                RDAlertView * view = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_ScreenDidBack")];
+//                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_KnewIt") handler:^{
+//                    
+//                } bold:YES];
+//                [view addActions:@[action]];
+//                [view show];
+                
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_ScreenDidBack")];
+            }
+            
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            
+        }];
     }
 }
 
 - (void)screenShouldBeStop
 {
-    if ([HomeAnimationView animationView].isScreening) {
+    if ([RDHomeStatusView defaultView].isScreening) {
         [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if ([GlobalData shared].networkStatus == RDNetworkStatusNotReachable) {
-                [MBProgressHUD showNetworkStatusTextHUDWithTitle:@"网络不可用，已经断开连接" delay:1.5f];
+                [MBProgressHUD showNetworkStatusTextHUDWithTitle:RDLocalizedString(@"RDString_DisconnectWithNoNet") delay:1.5f];
             }else{
-                [MBProgressHUD showNetworkStatusTextHUDWithTitle:@"与电视断开连接，请重试" delay:1.5f];
+                [MBProgressHUD showNetworkStatusTextHUDWithTitle:RDLocalizedString(@"RDString_DisconnectWithUnknow") delay:1.5f];
             }
         });
     }
@@ -826,7 +850,7 @@
 //APP将要退出生命周期调用的函数
 - (void)applicationWillTerminate:(UIApplication *)application {
     //如果是绑定状态，尝试发送退出消息
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD) {
         [SAVORXAPI ScreenDemandShouldBackToTV:nil success:nil failure:nil];
     }
 }

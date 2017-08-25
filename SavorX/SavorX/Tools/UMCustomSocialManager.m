@@ -14,7 +14,7 @@
 
 @interface UMCustomSocialManager ()
 
-@property (nonatomic, strong) HSVodModel * model;
+@property (nonatomic, strong) CreateWealthModel * model;
 @property (nonatomic, strong) UIViewController * controller;
 @property (nonatomic, strong) NSMutableArray * titles;
 @property (nonatomic, strong) NSMutableArray * images;
@@ -46,7 +46,7 @@
     return self;
 }
 
-- (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller
+- (void)showUMSocialSharedWithModel:(CreateWealthModel *)model andController:(UIViewController *)controller
 {
     self.model = model;
     [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
@@ -82,9 +82,9 @@
                 
             {
                     NSString * url = [model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                    NSString * text = [NSString stringWithFormat:@"小热点 | %@\n%@", model.title, url];
+                    NSString * text = [NSString stringWithFormat:@"%@ | %@\n%@", RDLocalizedString(@"RDString_APPName"), model.title, url];
                     if ([self convertToByte:text] > 140) {
-                        text = [NSString stringWithFormat:@"小热点\n%@", url];
+                        text = [NSString stringWithFormat:@"%@\n%@", RDLocalizedString(@"RDString_APPName"), url];
                         if ([self convertToByte:text] > 140) {
                             [MBProgressHUD showTextHUDwithTitle:@"该文章暂不支持新浪分享"];
                             return;
@@ -107,9 +107,9 @@
                 [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:controller completion:^(id result, NSError *error) {
                     
                     if (error) {
-                        [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
                     }else{
-                        [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
                     }
                     
                 }];
@@ -123,7 +123,7 @@
     }];
 }
 
-- (void)showUMSocialSharedWithModel:(HSVodModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type categroyID:(NSInteger)categroyID{
+- (void)showUMSocialSharedWithModel:(CreateWealthModel *)model andController:(UIViewController *)controller andType:(NSUInteger)type categroyID:(NSInteger)categroyID{
     
     self.model = model;
     
@@ -194,9 +194,9 @@
                 [RDLogStatisticsAPI RDShareLogModel:model categoryID:categroyIDStr volume:@"sina"];
                 
                 NSString * url = [model.contentURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                NSString * text = [NSString stringWithFormat:@"小热点 | %@\n%@", model.title, url];
+                NSString * text = [NSString stringWithFormat:@"%@ | %@\n%@", RDLocalizedString(@"RDString_APPName"), model.title, url];
                 if ([self convertToByte:text] > 140) {
-                    text = [NSString stringWithFormat:@"小热点\n%@", url];
+                    text = [NSString stringWithFormat:@"%@\n%@", RDLocalizedString(@"RDString_APPName"), url];
                     if ([self convertToByte:text] > 140) {
                         [MBProgressHUD showTextHUDwithTitle:@"该文章暂不支持新浪分享"];
                         return;
@@ -218,14 +218,14 @@
                 [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:controller completion:^(id result, NSError *error) {
                     
                     if (error) {
-                        [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
                         if (type == 0) {
                             [SAVORXAPI postUMHandleWithContentId:@"details_page_share_sina" key:@"details_page_share_sina" value:@"fail"];
                         }else if (type == 1){
                             [SAVORXAPI postUMHandleWithContentId:@"bunch planting_page_share_sina" key:@"bunch planting_page_share_sina" value:@"fail"];
                         }
                     }else{
-                        [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
                         if (type == 0) {
                             [SAVORXAPI postUMHandleWithContentId:@"details_page_share_sina" key:@"details_page_share_sina" value:@"success"];
                         }else if (type == 1){
@@ -275,16 +275,16 @@
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建网页分享类型
-    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", self.model.title] descr:self.info thumImage:image];
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"%@ - %@", RDLocalizedString(@"RDString_APPName"), self.model.title] descr:self.info thumImage:image];
     [object setWebpageUrl:url];
     messageObject.shareObject = object;
     
     [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
         
         if (error) {
-            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
         }else{
-            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
         }
         
     }];
@@ -305,18 +305,51 @@
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建网页分享类型
-    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"小热点 - %@", self.model.title] descr:self.info thumImage:image];
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"%@ - %@", RDLocalizedString(@"RDString_APPName"), self.model.title] descr:self.info thumImage:image];
     [object setWebpageUrl:url];
     messageObject.shareObject = object;
     
     [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
         
         if (error) {
-            [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
             [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
         }else{
-            [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
             [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
+        }
+        
+    }];
+}
+
+/**
+ *  分享至平台3.0改版调用
+ */
+- (void)sharedToPlatform:(UMSocialPlatformType)platformType andController:(UIViewController *)VC withModel:(CreateWealthModel *)model andUmKeyString:(NSString *)keyString;
+{
+    self.model = model;
+    NSString * url = [[Helper addURLParamsShareWith:self.model.contentURL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+    if (!image) {
+        image = [UIImage imageNamed:@"shareDefalut"];
+    }
+    
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //创建网页分享类型
+    UMShareWebpageObject * object = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"%@ - %@", RDLocalizedString(@"RDString_APPName"), self.model.title] descr:self.info thumImage:image];
+    [object setWebpageUrl:url];
+    messageObject.shareObject = object;
+    
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
+        
+        if (error) {
+            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"fail"];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:keyString key:keyString value:@"success"];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
         }
         
     }];
@@ -344,10 +377,10 @@
         [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina_click" key:nil value:nil];
         [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
             if (error) {
-                [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
                 [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina" key:@"menu_recommend_sina" value:@"fail"];
             }else{
-                [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
                 [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_sina" key:@"menu_recommend_sina" value:@"success"];
             }
             
@@ -373,7 +406,7 @@
         [[UMSocialManager defaultManager] shareToPlatform:type messageObject:messageObject currentViewController:VC completion:^(id result, NSError *error) {
             
             if (error) {
-                [MBProgressHUD showTextHUDwithTitle:@"分享失败" delay:1.5f];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithShare") delay:1.5f];
                 if (type == UMSocialPlatformType_QQ) {
                     [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_qq" key:@"menu_recommend_share_qq" value:@"fail"];
                 }else if (type == UMSocialPlatformType_WechatSession){
@@ -382,7 +415,7 @@
                     [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_weixin_friends" key:@"menu_recommend_share_weixin_friends" value:@"fail"];
                 }
             }else{
-                [MBProgressHUD showTextHUDwithTitle:@"分享成功" delay:1.5f];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SuccessWithShare") delay:1.5f];
                 
                 if (type == UMSocialPlatformType_QQ) {
                     [SAVORXAPI postUMHandleWithContentId:@"menu_recommend_share_qq" key:@"menu_recommend_share_qq" value:@"success"];

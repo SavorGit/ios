@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,36 +19,35 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bad.png" translatesAutoresizingMaskIntoConstraints="NO" id="fNR-Aj-42M">
-                            <rect key="frame" x="152.5" y="199.5" width="70" height="104"/>
+                            <rect key="frame" x="76.5" y="187.5" width="221" height="112"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="70" id="1bZ-t8-Rnn"/>
-                                <constraint firstAttribute="height" constant="104" id="lEC-sF-Odl"/>
+                                <constraint firstAttribute="width" constant="221" id="1bZ-t8-Rnn"/>
+                                <constraint firstAttribute="height" constant="112" id="lEC-sF-Odl"/>
                             </constraints>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="网络开小差咯~" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JQ6-Ru-cXJ" userLabel="网络开小差咯~">
-                            <rect key="frame" x="134" y="323.5" width="107" height="20"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <rect key="frame" x="137.5" y="321.5" width="100.5" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HxV-7y-yYg">
-                            <rect key="frame" x="187.5" y="348.5" width="0.0" height="0.0"/>
+                            <rect key="frame" x="187.5" y="347.5" width="0.0" height="0.0"/>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <color key="textColor" red="0.9675067663192749" green="0.19466732442378998" blue="0.08095763623714447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="centerX" secondItem="HxV-7y-yYg" secondAttribute="centerX" id="0cz-nr-8BM"/>
-                        <constraint firstItem="JQ6-Ru-cXJ" firstAttribute="top" secondItem="fNR-Aj-42M" secondAttribute="bottom" constant="20" id="GRB-Yg-QqS"/>
+                        <constraint firstItem="JQ6-Ru-cXJ" firstAttribute="top" secondItem="fNR-Aj-42M" secondAttribute="bottom" constant="22" id="GRB-Yg-QqS"/>
                         <constraint firstAttribute="centerX" secondItem="fNR-Aj-42M" secondAttribute="centerX" constant="-8" id="JOt-j4-ZuD"/>
                         <constraint firstAttribute="centerX" secondItem="fNR-Aj-42M" secondAttribute="centerX" id="LVB-sW-zmP"/>
                         <constraint firstAttribute="centerY" secondItem="fNR-Aj-42M" secondAttribute="centerY" constant="65" id="Tb3-ui-yaH"/>
-                        <constraint firstItem="HxV-7y-yYg" firstAttribute="top" secondItem="JQ6-Ru-cXJ" secondAttribute="bottom" constant="5" id="oSc-GR-37g"/>
+                        <constraint firstItem="HxV-7y-yYg" firstAttribute="top" secondItem="JQ6-Ru-cXJ" secondAttribute="bottom" constant="8" id="oSc-GR-37g"/>
                         <constraint firstAttribute="centerX" secondItem="JQ6-Ru-cXJ" secondAttribute="centerX" id="pym-py-nC3"/>
                         <constraint firstAttribute="centerY" secondItem="fNR-Aj-42M" secondAttribute="centerY" constant="65" id="v8k-Hv-vjA"/>
-                        <constraint firstAttribute="centerY" secondItem="JQ6-Ru-cXJ" secondAttribute="centerY" id="vVK-x8-8V4"/>
+                        <constraint firstAttribute="centerY" secondItem="JQ6-Ru-cXJ" secondAttribute="centerY" constant="3" id="vVK-x8-8V4"/>
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">

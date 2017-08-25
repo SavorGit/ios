@@ -10,6 +10,7 @@
 #import "UIColor+YYAdditions.h"
 #import "FeedbackView.h"
 #import "HSSubmitFeedbackRequest.h"
+#import "RDAlertView.h"
 
 @interface AdviceViewController ()<FeedbackViewDelegate>
 
@@ -34,6 +35,8 @@
 
 -(void)feedbackView:(FeedbackView *)fView adviceText:(NSString *)advice phoneText:(NSString *)phone{
     
+    [[UIApplication sharedApplication].keyWindow endEditing:YES];
+    
     NSString * adviceStr = advice;
     NSString * contactStr = phone;
     
@@ -44,25 +47,25 @@
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_information" key:nil value:nil];
     }
     if (adviceStr.length == 0) {
-        [SAVORXAPI showAlertWithString:@"请填写完整信息" withController:self];
+        [SAVORXAPI showAlertWithMessage:RDLocalizedString(@"RDString_PleaseInputAllInfo")];
         return;
     }
     
-    [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在发送"];
+    [MBProgressHUD showLoadingWithText:RDLocalizedString(@"RDString_Sending") inView:self.view];
     
     HSSubmitFeedbackRequest *request = [[HSSubmitFeedbackRequest alloc] initWithSuggestion:adviceStr contactWay:contactStr];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [MBProgressHUD showSuccessHUDInView:[UIApplication sharedApplication].keyWindow title:@"已发送"];
+        [MBProgressHUD showSuccessHUDInView:[UIApplication sharedApplication].keyWindow title:RDLocalizedString(@"RDString_HasSend")];
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"success"];
         [self.navigationController popViewControllerAnimated:YES];
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [SAVORXAPI showAlertWithString:@"发送失败" withController:self];
+        [SAVORXAPI showAlertWithString:RDLocalizedString(@"RDString_FailedWithSend") withController:self];
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         [MBProgressHUD hideHUDForView:self.view animated:NO];
-        [SAVORXAPI showAlertWithString:@"发送失败" withController:self];
+        [SAVORXAPI showAlertWithMessage:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
         [SAVORXAPI postUMHandleWithContentId:@"menu_feedback_back_submit" key:@"menu_feedback_back_submit" value:@"fail"];
     }];
     

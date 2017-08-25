@@ -10,7 +10,7 @@
 #import "GCDWebServerDataResponse.h"
 #import "GCDWebServerFileResponse.h"
 #import "RDAlertView.h"
-#import "HomeAnimationView.h"
+#import "RDHomeStatusView.h"
 
 @implementation HSWebServerManager
 
@@ -45,7 +45,7 @@
     
     [webServer addHandlerForMethod:@"GET" path:@"/stopProjection" requestClass:[GCDWebServerRequest class] processBlock:^GCDWebServerResponse *(__kindof GCDWebServerRequest *request) {
         
-        if ([HomeAnimationView animationView].isScreening) {
+        if ([RDHomeStatusView defaultView].isScreening) {
             NSDictionary * params = request.query;
             
             if ([params objectForKey:@"type"]) {
@@ -66,7 +66,7 @@
                     
                     [SAVORXAPI postUMHandleWithContentId:@"competitioned_hint" key:nil value:nil];
                     
-                    tipMsg = [tipMsg stringByAppendingString:@"正在操作投屏, 您的投屏已经退出了"];
+                    tipMsg = [tipMsg stringByAppendingString:RDLocalizedString(@"RDString_ScreenWithOther")];
                     
                     //type = 1 投屏被抢投，手机退出投屏
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -74,8 +74,8 @@
                         [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
                         [SAVORXAPI cancelAllURLTask];
                         
-                        RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
-                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
+                        RDAlertView * view = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:tipMsg];
+                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_KnewIt") handler:^{
                             
                         } bold:YES];
                         [view addActions:@[action]];
@@ -83,7 +83,7 @@
                     });
                 }else if (type == 2){
                     
-                    tipMsg = @"您的投屏已经退出了";
+                    tipMsg = RDLocalizedString(@"RDString_ScreenDidBack");
                     
                     //type = 2 机顶盒主动或者意外退出投屏，通知手机退出投屏
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -91,12 +91,14 @@
                         [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
                         [SAVORXAPI cancelAllURLTask];
                         
-                        RDAlertView * view = [[RDAlertView alloc] initWithTitle:@"提示" message:tipMsg];
-                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"知道了" handler:^{
-                            
-                        } bold:YES];
-                        [view addActions:@[action]];
-                        [view show];
+//                        RDAlertView * view = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:tipMsg];
+//                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_KnewIt") handler:^{
+//                            
+//                        } bold:YES];
+//                        [view addActions:@[action]];
+//                        [view show];
+                        
+                        [MBProgressHUD showTextHUDwithTitle:tipMsg];
                     });
                 }
             }
@@ -156,7 +158,7 @@
         
         NSString * filePath;
         
-        if ([name isEqualToString:@"media-Redianer-TempCache.mp4"]) {
+        if ([name isEqualToString:RDScreenVideoName]) {
             filePath = [HTTPServerDocument stringByAppendingPathComponent:name];
         }else if ([name hasSuffix:@".mp4"]) {
             filePath = [[VideoDocument stringByAppendingPathComponent:name] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];

@@ -9,6 +9,7 @@
 #import "DefalutLaunchViewController.h"
 #import "DefalutLaunchPlayView.h"
 #import "Masonry.h"
+#import "GCCGetInfo.h"
 
 @interface DefalutLaunchViewController ()
 
@@ -32,23 +33,35 @@
 
 - (void)createPlayer
 {
-    NSInteger width = [Helper autoWidthWith:180];
-    
-    if (kMainBoundsWidth >= 410) {
-        width = [Helper autoWidthWith:210];
-    }
+    CGFloat widthF = [Helper autoWidthWith:180] / 10;
+    NSInteger width = (NSInteger)roundf(widthF) * 10;
     
     self.playView = [[DefalutLaunchPlayView alloc] initWithFrame:CGRectMake(0, 0, width, width)];
     NSString * path = [[NSBundle mainBundle] pathForResource:@"DefaultLaunch" ofType:@"mp4"];
     [self.playView setVideoURL:path];
     [self.view addSubview:self.playView];
-    
     [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(width);
         make.height.mas_equalTo(width);
         make.centerX.mas_equalTo(0);
         make.centerY.equalTo(self.view).offset(-(kMainBoundsHeight / 8));
     }];
+    
+    UIView * upView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 2)];
+    upView.backgroundColor = [UIColor whiteColor];
+    [self.playView addSubview:upView];
+    
+    UIView * leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, width)];
+    leftView.backgroundColor = [UIColor whiteColor];
+    [self.playView addSubview:leftView];
+    
+    UIView * bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, width - 2, width, 2)];
+    bottomView.backgroundColor = [UIColor whiteColor];
+    [self.playView addSubview:bottomView];
+    
+    UIView * rightView = [[UIView alloc] initWithFrame:CGRectMake(width - 2, 0, 2, width)];
+    rightView.backgroundColor = [UIColor whiteColor];
+    [self.playView addSubview:rightView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playDidEnd) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
 }

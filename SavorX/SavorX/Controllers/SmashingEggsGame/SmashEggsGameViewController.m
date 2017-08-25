@@ -17,9 +17,14 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreAudio/CoreAudioTypes.h>
 #import <AVFoundation/AVFoundation.h>
-#import "HomeAnimationView.h"
 #import "RDHammer.h"
 #import "ShareRDViewController.h"
+#import "WinResultViewController.h"
+#import "HSSmashEggsRequest.h"
+#import "HSSmashEggsModel.h"
+#import "GlobalData.h"
+#import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 @interface SmashEggsGameViewController ()<UITextViewDelegate,RDGoldenEggsDelegate,AVAudioPlayerDelegate>
 
@@ -39,6 +44,8 @@
 @property (nonatomic, strong) AVAudioPlayer *player;
 @property (nonatomic, strong) NSURL *videoUrl;
 @property (nonatomic, weak) RDHammer * hammer;
+@property (nonatomic, strong) HSSmashEggsModel *smashEggsModel;
+@property (nonatomic, assign) BOOL isConfigure;
 
 @end
 
@@ -46,22 +53,54 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self initOtherParmars];
     [self creatSubViews];
     [self creatBgVoiceWithLoops:-1];
     [_player play];
+    
+    _isConfigure = NO;
+    [self requestEggsInfor];
  
 }
 
 // 初始化基本参数
 - (void)initOtherParmars{
     _videoUrl = [[NSBundle mainBundle] URLForResource:@"selectEggs" withExtension:@"mp3"];
-    self.title = @"砸蛋游戏";
+    self.title = RDLocalizedString(@"RDString_SmashEggsGame");
     _isShake = NO;
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(haClosed) name:RDBoxQuitScreenNotification object:nil];
+}
+
+// 请求砸蛋次数
+- (void)requestEggsInfor{
+    
+    HSSmashEggsRequest * request = [[HSSmashEggsRequest alloc] initWithHotelId:[GlobalData shared].hotelId];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *resultDic = [response objectForKey:@"result"];
+        NSDictionary *awardDic = resultDic[@"award"];
+        
+        if ([awardDic objectForKey:@"lottery_num"] != 0) {
+            
+            _smashEggsModel = [[HSSmashEggsModel alloc] initWithDictionary:[resultDic objectForKey:@"award"]];
+            [RDAwardTool awardSaveAwardNumber:_smashEggsModel.lottery_num];
+            _titleLabel.text = [NSString stringWithFormat:@"%@%ld%@", RDLocalizedString(@"RDString_LotteryNumPre"), [RDAwardTool awardGetLottery_num], RDLocalizedString(@"RDString_LotteryNumSuf")];
+            _isConfigure = YES;
+        }
+        else  if ([resultDic objectForKey:@"award"] == nil){
+            
+            _isConfigure = NO;
+        }
+
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
 }
 
 - (void)creatBgVoiceWithLoops:(NSInteger)loop{
@@ -147,7 +186,7 @@
     _titleLabel.textColor = UIColorFromRGB(0xfbeed9);
     _titleLabel.backgroundColor = [UIColor clearColor];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
-    _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
+    _titleLabel.text = [NSString stringWithFormat:@"%@%ld%@", RDLocalizedString(@"RDString_LotteryNumPre"), [RDAwardTool awardGetLottery_num], RDLocalizedString(@"RDString_LotteryNumSuf")];
     [bgScrollView addSubview:_titleLabel];
     CGFloat textLabelWidth = [Helper autoWidthWith:150.f];
     CGFloat textLabelHeight = [Helper autoHeightWith:20.f];
@@ -157,15 +196,27 @@
         make.centerX.equalTo(self.view);
     }];
     
+    UIButton *winResultBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [winResultBtn setImage:[UIImage imageNamed:@"zd_zjjl"] forState:UIControlStateNormal];
+    [winResultBtn setBackgroundColor:[UIColor clearColor]];
+    [winResultBtn addTarget:self action:@selector(winResultPress) forControlEvents:UIControlEventTouchUpInside];
+    [bgScrollView addSubview:winResultBtn];
+    CGFloat distance = (kMainBoundsWidth - 152 *2)/3;
+    [winResultBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(152, 53));
+        make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
+        make.left.mas_equalTo(distance);
+    }];
+    
     UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [shareBtn setImage:[UIImage imageNamed:@"yaoqing_anniu"] forState:UIControlStateNormal];
+    [shareBtn setImage:[UIImage imageNamed:@"zd_yqhy"] forState:UIControlStateNormal];
     [shareBtn setBackgroundColor:[UIColor clearColor]];
     [shareBtn addTarget:self action:@selector(sharePress:) forControlEvents:UIControlEventTouchUpInside];
     [bgScrollView addSubview:shareBtn];
     [shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(167, 48));
+        make.size.mas_equalTo(CGSizeMake(152, 53));
         make.top.mas_equalTo(_titleLabel.mas_bottom).offset(10);
-        make.centerX.equalTo(self.view);
+        make.right.mas_equalTo(self.view).offset(-distance);
     }];
     
     _textBgView = [[UIImageView alloc] init];
@@ -197,7 +248,7 @@
     gameRuleLab.font = [UIFont systemFontOfSize:17];
     gameRuleLab.textColor = UIColorFromRGB(0x222222);
     gameRuleLab.textAlignment = NSTextAlignmentLeft;
-    gameRuleLab.text = @"游戏规则";
+    gameRuleLab.text = RDLocalizedString(@"RDString_GameRules");
     [gameRuleimgView addSubview:gameRuleLab];
     [gameRuleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(80, 30));
@@ -211,7 +262,7 @@
     _ruleTextView.font = [UIFont systemFontOfSize:15];
     _ruleTextView.editable = NO;
     _ruleTextView.delegate = self;
-    _ruleTextView.text = @"1.此游戏为手机与电视同步互动游戏，参与此活动者须先连接电视；\n\n2.每个用户连接电视后，可选择上面任意一个蛋砸开；\n\n3.每个手机每天可以参与五次砸蛋";
+    _ruleTextView.text = RDLocalizedString(@"RDString_GameRulesDetail");
     if (kMainBoundsWidth == 320) {
         _ruleTextView.font = [UIFont systemFontOfSize:13];
     }
@@ -231,7 +282,7 @@
     bottomLabel.backgroundColor = [UIColor clearColor];
     bottomLabel.font = [UIFont systemFontOfSize:15];
     bottomLabel.textAlignment = NSTextAlignmentCenter;
-    bottomLabel.text = @"本活动最终解释权归\"小热点\"所有";
+    bottomLabel.text = RDLocalizedString(@"RDString_GameCopyright");
     bottomLabel.userInteractionEnabled = YES;
     [downBgView addSubview:bottomLabel];
     [bottomLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -240,6 +291,16 @@
         make.bottom.mas_equalTo(-80);
         make.height.mas_equalTo(20);
     }];
+}
+
+- (void)winResultPress{
+    
+    [self stop];
+    [self.eggsView stopShakeAnimation];
+    
+    WinResultViewController *wrVC = [[WinResultViewController alloc] init];
+    [self.navigationController pushViewController:wrVC animated:YES];
+    
 }
 
 - (void)creatEggMiddleView{
@@ -261,13 +322,48 @@
 {
     [SAVORXAPI postUMHandleWithContentId:@"game_page_choose" key:nil value:nil];
     
-    if ([RDAwardTool awardCanAwardWithAPILottery_num:self.adModel.lottery_num] == NO) {
-        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"今天的抽奖机会用完了\n明天再来吧~"];
-        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+    // 先判断网络环境
+    if ([GlobalData shared].networkStatus != RDNetworkStatusReachableViaWiFi) {
+        [SAVORXAPI showAlertWithMessage:RDLocalizedString(@"RDString_PleaseConnectToWifi")];
+        return;
+        
+    }else if (![GlobalData shared].isBindRD){
+        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_PleaseConnectTVToGame")];
+        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
             
         } bold:NO];
-        [alertView addActions:@[action]];
+        RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ConnetToTV") handler:^{
+            [[RDHomeStatusView defaultView] scanQRCode];
+        } bold:YES];
+        [alertView addActions:@[action,actionOne]];
         [alertView show];
+        return;
+    }
+    
+    // 先判断有没有配置信息
+    if (_isConfigure == NO) {
+        
+        [SAVORXAPI showAlertWithMessage:RDLocalizedString(@"RDString_GameNotStart")];
+//        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"当前包间的活动未开始"];
+//        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
+//            
+//        } bold:YES];
+//        [alertView addActions:@[action]];
+//        [alertView show];
+        return;
+
+    }
+    
+    if ([RDAwardTool awardCanAwardWithAPILottery_num:_smashEggsModel.lottery_num] == NO) {
+        
+        [SAVORXAPI showAlertWithMessage:RDLocalizedString(@"RDString_LotteryHasNone")];
+        
+//        RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"" message:@"今天的抽奖机会用完了\n明天再来吧~"];
+//        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
+//            
+//        } bold:NO];
+//        [alertView addActions:@[action]];
+//        [alertView show];
         return;
     }
 
@@ -276,7 +372,7 @@
         [self requestForEggsNetWork];
     }else{
         [self.shouldDemandDict setObject:@(YES) forKey:@"should"];
-        [[HomeAnimationView animationView] scanQRCode];
+        [[RDHomeStatusView defaultView] scanQRCode];
     }
     
 }
@@ -320,7 +416,7 @@
     [SAVORXAPI postUMHandleWithContentId:@"game_page_recommend" key:nil value:nil];
     
     ShareRDViewController * share = [[ShareRDViewController alloc] initWithType:SHARERDTYPE_GAME];
-    share.title = @"推荐";
+    share.title = RDLocalizedString(@"RDString_Recommend");
     [self.navigationController pushViewController:share animated:YES];
 }
 
@@ -495,28 +591,28 @@
     //如果是绑定状态
     if ([GlobalData shared].isBindRD) {
         
-        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+        RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Loading")];
         
         [SAVORXAPI  gameForEggsWithURL:STBURL hunger:(NSInteger)isGetPrize date:(NSString *)currentDate force:0 success:^(NSURLSessionDataTask *task, NSDictionary *result) {
             if ([[result objectForKey:@"result"] integerValue] == 0) {
                 [self stop];
                 [self.eggsView stopShakeAnimation];
-                [[HomeAnimationView animationView] stopScreenWithEggGame];
+                [[RDHomeStatusView defaultView] stopScreenWithEggGame];
                 [self creatMaskingView];
                 [self performSelector:@selector(eggGameStopWithTimeOut) withObject:nil afterDelay:120];
             }else{
                 [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
             }
-            [hud hideAnimated:NO];
+            [hud hidden];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            [hud hideAnimated:NO];
+            [hud hidden];
             if (error.code != 677) {
-                [MBProgressHUD showTextHUDwithTitle:@"请求失败，请重试"];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_NetFailedWithPleaseTryAgain")];
             }
         }];
         
     }else{
-        [[HomeAnimationView animationView] scanQRCode];
+        [[RDHomeStatusView defaultView] scanQRCode];
     }
 }
 
@@ -548,10 +644,10 @@
                     
                     //进行了一次抽奖
                     [RDAwardTool awardHasAwardWithResultModel:erModel];
-                    if (self.adModel.lottery_num > 0) {
-                        self.adModel.lottery_num = self.adModel.lottery_num - 1;
+                    if (_smashEggsModel.lottery_num > 0) {
+                        _smashEggsModel.lottery_num = _smashEggsModel.lottery_num - 1;
                     }
-                    _titleLabel.text = [NSString stringWithFormat:@"您当前有%ld次机会", [RDAwardTool awardGetLottery_num]];
+                    _titleLabel.text = [NSString stringWithFormat:@"%@%ld%@", RDLocalizedString(@"RDString_LotteryNumPre"), [RDAwardTool awardGetLottery_num], RDLocalizedString(@"RDString_LotteryNumSuf")];
                     [_maskingView removeAllSubviews];
                     [self creatPrizeMiddleView:erModel];
                 }
@@ -563,7 +659,7 @@
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             [SAVORXAPI postUMHandleWithContentId:@"game_page_result" key:@"game_page_result" value:@"prize_failure"];
             if (![GlobalData shared].isBindRD || [GlobalData shared].networkStatus != RDNetworkStatusReachableViaWiFi) {
-                [SAVORXAPI showAlertWithMessage:@"游戏超时啦, 请重新启动"];
+                [SAVORXAPI showAlertWithMessage:RDLocalizedString(@"RDString_NetFailedWithGameTimeOut")];
             }
             
         }];
@@ -582,7 +678,9 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([[self.shouldDemandDict objectForKey:@"should"] boolValue]) {
-        [self requestForEggsNetWork];
+        if (([GlobalData shared].isBindRD)) {
+            [self requestForEggsNetWork];
+        }
         [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     }
 }

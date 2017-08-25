@@ -8,80 +8,89 @@
 
 #import "DocumentListViewController.h"
 #import "ScreenDocumentViewController.h"
-#import "SXVideoPlayViewController.h"
+#import "FileVideoViewController.h"
 #import "OpenFileTool.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
-#import "PhotoTool.h"
 #import "VideoGuidedTwoDimensionalCode.h"
 #import "HelpViewController.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
+#import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 #define DocumentListCell @"DocumentListCell"
 
-@interface DocumentListViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface DocumentListViewController ()<UITableViewDelegate, UITableViewDataSource,UIWebViewDelegate>
 
 @property (nonatomic, strong) UITableView * tableView; //表格视图展示控件
 @property (nonatomic, strong) NSArray * dataSource; //数据源
-
 @property (nonatomic, strong) UIView *guidView; // 引导页视图
+@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) UIToolbar *toolbar;
+@property (nonatomic, strong) NSString *urlString;
 
 @end
 
 @implementation DocumentListViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.view.backgroundColor = VCBackgroundColor;
-    
+    self.title = RDLocalizedString(@"RDString_File");
     NSArray * array = [OpenFileTool getALLDocumentFileList];
     self.dataSource = [NSMutableArray arrayWithArray:array];
+    self.urlString = @"http://h5.littlehotspot.com/Public/html/help3/wenjian_ios.html";
     
     [self createUI];
     
     
     if (self.dataSource.count == 0) {
         
-        [self creatGuidTouchView];
+       [self creatGuidTouchView];
+       [self creatHelpWebView];
 
+    }else{
+       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];
     }
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];
     
     //监听程序进入活跃状态
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillActive) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    
+    if (self.dataSource.count != 0) {
+        if (self.webView) {
+            [self.webView removeFromSuperview];
+        }
+    }
+    
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_list" key:nil value:nil];
 }
 
-- (void)creatHelpGuide{
+- (void)creatHelpWebView
+{
     
-    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_guide" key:nil value:nil];
-     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_help" key:nil value:nil];
-    
-    VideoGuidedTwoDimensionalCode *vgVC = [[VideoGuidedTwoDimensionalCode alloc] init];
-    [vgVC showScreenProjectionTitle:@"documentGuide" fromStyle:FromDocumentGuide block:^(NSInteger selectIndex) {
-        
-        if (self.dataSource.count == 0) {
-            if (self.guidView) {
-                [self.guidView removeFromSuperview];
-                [self.view addSubview:self.guidView];
-
-            }
-           
-        }
-
+    self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
+    self.webView.backgroundColor = VCBackgroundColor;
+    self.webView.opaque = NO;
+    self.webView.delegate = self;
+    [self.view addSubview:self.webView];
+    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
     }];
+    
+    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]];
+    [self.webView loadRequest:request];
 }
 
 - (void)shouldPushHelp
 {
-    HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help/helpone.html"];
-    help.title = @"文件投屏步骤";
+    HelpViewController * help = [[HelpViewController alloc] initWithURL:self.urlString];
+    help.title = RDLocalizedString(@"RDString_FileScreenWays");
     [self.navigationController  pushViewController:help  animated:NO];
 }
 
@@ -89,50 +98,71 @@
     
     self.guidView = [[UIView alloc] init];
     self.guidView.tag = 1888;
-    self.guidView.backgroundColor = [UIColor clearColor];
+    self.guidView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
     self.guidView.userInteractionEnabled = YES;
     self.guidView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight);
-    [self.view addSubview:self.guidView];
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    self.guidView.bottom = keyWindow.top;
+    [keyWindow addSubview:self.guidView];
     
-    UILabel *topTextLabel = [[UILabel alloc] init ];
-    topTextLabel.text = @"文件列表为空，请先导入文件";
-    topTextLabel.textAlignment = NSTextAlignmentCenter;
-    topTextLabel.font = [UIFont systemFontOfSize:15];
-    topTextLabel.textColor = UIColorFromRGB(0x9a6f45);
-    topTextLabel.backgroundColor = UIColorFromRGB(0xffebc3);
-    topTextLabel.alpha = 0.95;
-    [self.guidView addSubview:topTextLabel];
-    [topTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.guidView).offset(0);
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 35));
-        make.centerX.equalTo(self.view);
-    }];
+    [self showViewWithAnimationDuration:.3f];
     
     UIImageView *bgVideoView = [[UIImageView alloc] init];
-    float bgVideoHeight = [Helper autoHeightWith:215];
-    float topbgVideoDistance = [Helper autoHeightWith:145];
-    bgVideoView.frame = CGRectMake(0, topbgVideoDistance, kMainBoundsWidth,bgVideoHeight);
-    bgVideoView.image = [UIImage imageNamed:@"DocGuided_new"];
-    bgVideoView.backgroundColor = [UIColor lightGrayColor];
+    float bgVideoHeight = [Helper autoHeightWith:265];
+    float bgVideoWidth = [Helper autoWidthWith:266];
+    bgVideoView.frame = CGRectZero;
+    bgVideoView.image = [UIImage imageNamed:@"wj_kong"];
+    bgVideoView.backgroundColor = [UIColor whiteColor];
     bgVideoView.userInteractionEnabled = YES;
     [self.guidView addSubview:bgVideoView];
+    [bgVideoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(bgVideoWidth,bgVideoHeight));
+        make.center.mas_equalTo(self.guidView);
+    }];
     
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(creatHelpGuide)];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];
+    lineView.backgroundColor = [UIColor whiteColor];
+    [self.guidView addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(1,kMainBoundsHeight/2));
+        make.bottom.mas_equalTo(bgVideoView.mas_top);
+        make.centerX.equalTo(self.guidView);
+    }];
+    
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(guidPress)];
     tap.numberOfTapsRequired = 1;
-    [bgVideoView addGestureRecognizer:tap];
+    [self.guidView addGestureRecognizer:tap];
     
-    UILabel *textLabel = [[UILabel alloc] init ];
-    textLabel.text = @"如何导入文件请查看视频";
-    textLabel.textAlignment = NSTextAlignmentCenter;
-    textLabel.font = [UIFont systemFontOfSize:16];
-    textLabel.textColor = UIColorFromRGB(0x333333);
-    textLabel.backgroundColor = [UIColor clearColor];
-    [self.guidView addSubview:textLabel];
-    float topTextLabelDistance = [Helper autoHeightWith:230];
-    [textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(bgVideoView).offset(topTextLabelDistance);
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth,30));
-        make.centerX.equalTo(self.view);
+}
+
+- (void)guidPress{
+    
+    [self dismissViewWithAnimationDuration:.3f];
+    [self.toolbar removeFromSuperview];
+
+}
+
+#pragma mark - show view
+-(void)showViewWithAnimationDuration:(float)duration{
+    
+    [UIView animateWithDuration:duration animations:^{
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        self.guidView.bottom = keyWindow.bottom;
+    } completion:^(BOOL finished) {
+    }];
+}
+
+-(void)dismissViewWithAnimationDuration:(float)duration{
+    
+    [UIView animateWithDuration:duration animations:^{
+        
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        self.guidView.bottom = keyWindow.top;
+        
+    } completion:^(BOOL finished) {
+        
+        [self.guidView removeFromSuperview];
+        
     }];
 }
 
@@ -159,6 +189,11 @@
         if (view2) {
             [view2 removeFromSuperview];
         }
+        if (self.dataSource.count != 0) {
+            if (self.webView) {
+                [self.webView removeFromSuperview];
+            }
+        }
         [self.tableView reloadData];
     }
 }
@@ -173,8 +208,11 @@
 - (void)createUI
 {
     [self createDataSource];
-    
+
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kScreen_Width, kScreen_Height - NavHeight) style:UITableViewStylePlain];
+    self.tableView.backgroundColor = VCBackgroundColor;
+    self.tableView.separatorInset = UIEdgeInsetsZero;
+    self.tableView.layoutMargins = UIEdgeInsetsZero;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -189,7 +227,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100.f;
+    return 68.f;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -199,12 +237,35 @@
     if (nil == cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:DocumentListCell];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
-    cell.textLabel.text = [[self.dataSource objectAtIndex:indexPath.row] lastPathComponent];
+    NSString * path = [self.dataSource objectAtIndex:indexPath.row];
+    cell.textLabel.text = [[path lastPathComponent] stringByAppendingString:@"  "];
     cell.textLabel.font = [UIFont systemFontOfSize:FontSizeDefault];
     cell.textLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    
+    if ([path hasSuffix:@"pdf"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"wj_pdf"]];
+    }else if ([path hasSuffix:@"doc"] || [path hasSuffix:@"docx"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"wj_doc"]];
+    }else if ([path hasSuffix:@"xls"] || [path hasSuffix:@"xlsx"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"wj_xls"]];
+    }else if ([path hasSuffix:@"ppt"] || [path hasSuffix:@"pptx"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"wj_ppt"]];
+    }else if ([path hasSuffix:@"mp4"]) {
+        [cell.imageView setImage:[UIImage imageNamed:@"mp4"]];
+    }
+    
+    UIImageView *rightImg = [[UIImageView alloc] init];
+    [rightImg setImage:[UIImage imageNamed:@"xiangce_more"]];
+    [cell addSubview:rightImg];
+    [rightImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(8, 14));
+        make.top.mas_equalTo(27);
+        make.right.mas_equalTo(- 15);
+    }];
     
     return cell;
 }
@@ -224,27 +285,14 @@
         
         NSString * videoUrl = [NSString stringWithFormat:@"video?%@", [filePath lastPathComponent]];
         NSString *asseturlStr = [NSString stringWithFormat:@"%@%@", [HTTPServerManager getCurrentHTTPServerIP], videoUrl];
-        SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
-        video.videoUrl = videoUrl;
-        video.totalTime = totalTime;
+        FileVideoViewController * video = [[FileVideoViewController alloc] initWithVideoFileURL:videoUrl totalTime:totalTime];
         video.title = [filePath lastPathComponent];
         if ([GlobalData shared].isBindRD) {
-             [MBProgressHUD showCustomLoadingHUDInView:self.view];
+             RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
+            hud.tag = 1010;
             
             [self demandVideoWithMediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0 video:video movieUrl:movieURL];
             
-        }else if ([GlobalData shared].isBindDLNA) {
-             [MBProgressHUD showCustomLoadingHUDInView:self.view];
-            [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{
-                UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-                [HomeAnimationView animationView].currentImage = firstImage;
-                [[HomeAnimationView animationView] startScreenWithViewController:video];
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [self.navigationController pushViewController:video animated:YES];
-            } failure:^{
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
-            }];
         }else{
             [self.navigationController pushViewController:video animated:YES];
         }
@@ -263,37 +311,34 @@
     }else if (type == FileTypePPT){
         doucment.path = [PPTDocument stringByAppendingPathComponent:[self.dataSource objectAtIndex:indexPath.row]];
     }else{
-        [MBProgressHUD showTextHUDwithTitle:@"不支持的文件"];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FileNotSupport")];
         return;
     }
     doucment.title = [doucment.path lastPathComponent];
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+    if ([GlobalData shared].isBindRD) {
         [SAVORXAPI successRing];
     }
     [self.navigationController pushViewController:doucment animated:YES];
 }
 
-- (void)demandVideoWithMediaPath:(NSString *)mediaPath force:(NSInteger)force video:(SXVideoPlayViewController *)video movieUrl:(NSURL *)movieURL{
+- (void)demandVideoWithMediaPath:(NSString *)mediaPath force:(NSInteger)force video:(FileVideoViewController *)video movieUrl:(NSURL *)movieURL{
     
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
-            
-            UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-            [HomeAnimationView animationView].currentImage = firstImage;
-            [[HomeAnimationView animationView] startScreenWithViewController:video];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:video withStatus:RDHomeStatus_Video];
             [self.navigationController pushViewController:video animated:YES];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_AlertWithScreen") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_ScreenContinuePre"), infoStr, RDLocalizedString(@"RDString_ScreenContinueSuf")]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"file"}];
             } bold:NO];
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ContinueScreen") handler:^{
                 [self demandVideoWithMediaPath:mediaPath force:1 video:video movieUrl:movieURL];
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"file"} ];
-            } bold:NO];
+            } bold:YES];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
             
@@ -301,16 +346,26 @@
         else{
             [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
         }
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        if ([self.view viewWithTag:1010]) {
+            RDInteractionLoadingView * view = (RDInteractionLoadingView *)[self.view viewWithTag:1010];
+            [view hidden];
+        }
+        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        if ([self.view viewWithTag:1010]) {
+            RDInteractionLoadingView * view = (RDInteractionLoadingView *)[self.view viewWithTag:1010];
+            [view hidden];
+        }
+        
         [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
     }];
 }
 //创建没有文件提示文案
 - (void)createNothingView
 {
-    [self showNoDataViewInView:self.view noDataString:@"没有发现文件，请导入"];
+    [self showNoDataViewInView:self.view noDataString:RDLocalizedString(@"RDString_FileIsNone")];
 }
 
 //创建帮助提示控件
@@ -341,6 +396,19 @@
     }];
 }
 
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    NSLog(@"error%@",error);
+    if ([error code] == NSURLErrorCancelled) {
+        return;
+    }
+}
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];

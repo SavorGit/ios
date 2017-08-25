@@ -15,6 +15,10 @@
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (nonatomic, assign) BOOL hasAdvice; //用户是否输入了意见
 @property (weak, nonatomic) IBOutlet UILabel *pLabel;
+@property (weak, nonatomic) IBOutlet UIButton *submitButton;
+@property (weak, nonatomic) IBOutlet UILabel *numLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *connectLabel;
 
 @end
 
@@ -32,7 +36,13 @@
 {
     [super awakeFromNib];
     self.adviceTextView.delegate = self;
-    
+    [self.submitButton setBackgroundColor:kThemeColor];
+    [self.submitButton setTitleColor:UIColorFromRGB(0xede6de) forState:UIControlStateNormal];
+    self.numLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:12];
+    self.phoneTextField.placeholder = RDLocalizedString(@"RDString_AdvicePhone");
+    self.pLabel.text = RDLocalizedString(@"RDString_AdviceP");
+    self.titleLabel.text = [NSString stringWithFormat:@"    %@",RDLocalizedString(@"RDString_AdviceTitle")];
+    self.connectLabel.text = [NSString stringWithFormat:@"    %@",RDLocalizedString(@"RDString_ConnectTitle")];
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -42,6 +52,11 @@
     }else{
         [self.pLabel setHidden:YES];
     }
+    if (textView.text.length > 200) {
+        textView.text = [textView.text substringToIndex:200];
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_maxInput")];
+    }
+    self.numLabel.text = [NSString stringWithFormat:@"%ld/200", textView.text.length];
 }
 
 

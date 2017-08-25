@@ -13,6 +13,7 @@
 #import "HSRestaurantListRequest.h"
 #import "RDLocationManager.h"
 #import "RDAlertView.h"
+#import "RD_MJRefreshHeader.h"
 
 @interface RestaurantListViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -40,7 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"提供投屏的餐厅";
+    self.title = RDLocalizedString(@"RDString_CanScreenRestaurant");
     [SAVORXAPI postUMHandleWithContentId:@"hotel_map_list" key:nil value:nil];
     
     self.dataSource = [NSMutableArray new];
@@ -57,21 +58,7 @@
 
 // 读取缓存的数据
 - (void)readCacheData{
-    
-    BOOL isCache = [[NSFileManager defaultManager] fileExistsAtPath:self.cachePath];
-    
-    if (isCache) {
-        
-        //如果本地缓存的有数据，则先从本地读取缓存的数据
-        NSArray * listArray = [NSArray arrayWithContentsOfFile:self.cachePath];
-        for(NSDictionary *dict in listArray){
-            
-            RestaurantListModel *model = [[RestaurantListModel alloc] initWithDictionary:dict];
-            [self.dataSource addObject:model];
-        }
-        [self.tableView reloadData];
-        
-    }
+    [self showLoadingView];
     [[RDLocationManager manager] startCheckUserLocationWithHandle:^(CLLocationDegrees latitude, CLLocationDegrees longitude) {
         if ([GlobalData shared].VCLatitude == 0.f) {
             
@@ -81,7 +68,8 @@
             self.latitudeStr = [NSString stringWithFormat:@"%lf", latitude];
             self.longitudeStr = [NSString stringWithFormat:@"%lf", longitude];
             
-            [self setUpDatas];
+            [self showLoadingView];
+            [self setupDatas];
             
         }else if ([[RDLocationManager manager] checkLocationDataIsNeedUpdateWithLastPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake([GlobalData shared].VCLatitude, [GlobalData shared].VCLongitude)) currentPoint:BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latitude, longitude))]){
             
@@ -91,13 +79,13 @@
             self.latitudeStr = [NSString stringWithFormat:@"%lf", latitude];
             self.longitudeStr = [NSString stringWithFormat:@"%lf", longitude];
             
-            [self setUpDatas];
+            [self showLoadingView];
+            [self setupDatas];
             
         }else{
             
-            if (!isCache) {
-                [self setUpDatas];
-            }
+            [self showLoadingView];
+            [self setupDatas];
             
         }
     }];
@@ -105,7 +93,7 @@
 }
 
 //初始化请求第一页，下拉刷新
-- (void)setUpDatas{
+- (void)setupDatas{
 
     HSRestaurantListRequest *request = [[HSRestaurantListRequest alloc] initWithHotelId:[GlobalData shared].hotelId lng:self.longitudeStr lat:self.latitudeStr pageNum:_page];
     
@@ -124,18 +112,45 @@
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
         [self.tableView reloadData];
+        [self hiddenLoadingView];
+        
+        [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        [self.tableView.mj_header endRefreshing];
+        [self hiddenLoadingView];
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+        }
+        if (_tableView) {
+            [self.tableView.mj_header endRefreshing];
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
+        }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
-        [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
-        [self.tableView.mj_header endRefreshing];
+        [self hiddenLoadingView];
+        
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        }
+        if (_tableView) {
+            [self.tableView.mj_header endRefreshing];
+            if (error.code == -1001) {
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithTimeOut")];
+            }else{
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
+            }
+        }
         
     }];
     
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self setupDatas];
 }
 
 - (void)upMoreDatas{
@@ -169,7 +184,7 @@
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
         
         _page = _page -1;
-        [self showTopFreshLabelWithTitle:@"无法连接到网络,请检查网络设置"];
+        [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
         [self.tableView.mj_footer endRefrenshWithNoNetWork];
     }];
 }
@@ -197,7 +212,7 @@
         
         //创建tableView动画加载头视图
         
-        _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
+        _tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
         
         
         MJRefreshFooter* footer = [MJRefreshAutoGifFooter footerWithRefreshingBlock:^{
@@ -299,7 +314,7 @@
     [SAVORXAPI postUMHandleWithContentId:@"hotel_map_list_refresh" key:nil value:nil];
     
     _page = 1;
-    [self setUpDatas];
+    [self setupDatas];
 }
 
 - (void)getMoreData{
@@ -320,8 +335,8 @@
 
 - (void)showScreenAlert
 {
-    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:@"进入餐厅连接包间wifi, 精彩内容即可投屏到电视上!"];
-    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_ReataurantAlert")];
+    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
         
     } bold:YES];
     [alert addActions:@[action]];

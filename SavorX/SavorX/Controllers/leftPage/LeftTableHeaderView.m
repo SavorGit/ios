@@ -41,7 +41,7 @@
     }];
     
     UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    [imageView setImage:[UIImage imageNamed:@"logo"]];
+    [imageView setImage:[UIImage imageNamed:@"cdh_logo"]];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageView.layer.cornerRadius = 10;
     imageView.layer.masksToBounds = YES;
@@ -54,10 +54,10 @@
     }];
     
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectZero];
-    label.font = [UIFont systemFontOfSize:14];
-    label.textColor = [UIColor whiteColor];
+    label.font = kPingFangLight(14);
+    label.textColor = UIColorFromRGB(0xece6de);
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = @"小热点";
+    label.text = RDLocalizedString(@"RDString_APPName");
     label.backgroundColor = [UIColor clearColor];
     [BGView addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make) {

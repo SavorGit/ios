@@ -11,7 +11,7 @@
 #import "GCCControlView.h"
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "PhotoTool.h"
+#import "RDPhotoTool.h"
 #import "ZFBrightnessView.h"
 #import "ZFVolumeView.h"
 #import "RDLogStatisticsAPI.h"
@@ -33,11 +33,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, assign) GCCPlayerStatus status; //当前播放状态
 @property (nonatomic, strong) GCCControlView * controlView;
 @property (nonatomic, strong) id timeObserve;
-@property (nonatomic, strong) UIButton * replayButton; //重播按钮
 @property (nonatomic, strong) UISlider * volumeViewSlider; //记录系统音量视图
 @property (nonatomic, strong) ZFBrightnessView * brightnessView;
-//@property (nonatomic, strong) ZFVolumeView * volumeView;
-@property (nonatomic, assign) NSInteger sumTime; //当前用户横向操作的时长
+@property (nonatomic, assign) CGFloat sumTime; //当前用户横向操作的时长
 @property (nonatomic, strong) UILabel * sliderLabel; //用户快进快退提示
 @property (nonatomic, assign) BOOL canPlay; //是否可以播放
 @property (nonatomic, strong) AVPlayerItemVideoOutput * playerItemVideoOutput;
@@ -48,8 +46,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 @property (nonatomic, assign) BOOL isPan; //是否在进行pan手势
 @property (nonatomic, assign) BOOL isHorizontal; //用户手指是否是水平移动
 @property (nonatomic, assign) BOOL isVolume; //记录当前是否在调节时间
-@property (nonatomic, assign) BOOL canDemand;
 @property (nonatomic, strong) UIImageView * imageView;
+
+@property (nonatomic, assign) CMTime time;
 
 @end
 
@@ -59,7 +58,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 {
     if (self = [super init]) {
         self.status = GCCPlayerStatusInitial;
-        self.canDemand = YES;
         // app退到后台
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground) name:UIApplicationWillResignActiveNotification object:nil];
         // app进入前台
@@ -78,18 +76,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
         }];
         
-//        [[UIApplication sharedApplication].keyWindow addSubview:self.volumeView];
-//        [self.volumeView mas_remakeConstraints:^(MASConstraintMaker *make) {
-//            make.width.height.mas_equalTo(155);
-//            make.center.mas_equalTo([UIApplication sharedApplication].keyWindow);
-//        }];
-        
         // 单击
         self.singleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(viewDidBeSingleClicked)];
         self.singleTap.numberOfTouchesRequired = 1; //手指数
         self.singleTap.numberOfTapsRequired    = 1;
         [self addGestureRecognizer:self.singleTap];
-        [self setPlayItemWithURL:[url stringByAppendingString:@".f30.mp4"]];
         [self configureVolume];
     }
     return self;
@@ -97,14 +88,20 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)backgroundImage:(NSString *)url
 {
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    [self pause];
+    [self.controlView setSliderValue:0.f];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"zanwu"]];
     [self insertSubview:self.imageView belowSubview:self.controlView];
     [self.controlView backgroundImage:url];
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];
     
+    if ([self.imageView viewWithTag:6666]) {
+        [[self.imageView viewWithTag:6666] removeFromSuperview];
+    }
     UIView * view = [[UIView alloc] initWithFrame:CGRectZero];
+    view.tag = 6666;
     view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.3f];
     [self.imageView addSubview:view];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -114,15 +111,20 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)setPlayItemWithURL:(NSString *)url
 {
+    self.isPan = NO;
+    NSString * preCheck = [url substringToIndex:url.length - 8];
+    if ([self.currentURL hasPrefix:preCheck]) {
+        self.time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
+    }else{
+        self.time = kCMTimeZero;
+    }
     self.currentURL = url;
     NSURL * playURL = [NSURL URLWithString:url];
     self.canPlay = NO;
     AVPlayerItem * playerItem = [AVPlayerItem playerItemWithURL:playURL];
-    self.playerItemVideoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:nil];
-    [playerItem addOutput:self.playerItemVideoOutput];
     if (self.player) {
-        CMTime time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
-        [self.player pause];
+        [playerItem removeOutput:self.playerItemVideoOutput];
+//        [self.player pause];
         [self.controlView loading];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
         [self.player.currentItem removeObserver:self forKeyPath:@"status"];
@@ -130,19 +132,19 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self.player.currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
         [self.player.currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
         [self.player replaceCurrentItemWithPlayerItem:playerItem];
-        [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-            [self.player play];
-        }];
     }else{
+        [self.controlView loading];
         self.player = [AVPlayer playerWithPlayerItem:playerItem];
     }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     [playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
     [playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
     // 缓冲区空了，需要等待数据
     [playerItem addObserver:self forKeyPath:@"playbackBufferEmpty" options:NSKeyValueObservingOptionNew context:nil];
     // 缓冲区有足够数据可以播放了
     [playerItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
+    self.playerItemVideoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:nil];
+    [playerItem addOutput:self.playerItemVideoOutput];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayDidEnd) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     // 移除time观察者
     if (self.timeObserve) {
         [self.player removeTimeObserver:self.timeObserve];
@@ -159,6 +161,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)setIsCollect:(BOOL)isCollect
 {
     [self.controlView setVideoIsCollect:isCollect];
+}
+
+- (void)setCollectEnable:(BOOL)enable
+{
+    [self.controlView.shareButton setUserInteractionEnabled:enable];
 }
 
 - (void)createTimer
@@ -186,6 +193,10 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         if ([keyPath isEqualToString:@"status"]) {
             
             if (self.player.currentItem.status == AVPlayerItemStatusReadyToPlay) {
+                [self.player seekToTime:self.time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+                    
+                }];
+                
                 //最开始播放
                 self.canPlay = YES;
                 CGFloat totalTime = self.player.currentItem.duration.value / self.player.currentItem.duration.timescale;
@@ -333,6 +344,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)panDirection:(UIPanGestureRecognizer *)pan
 {
+    static CGPoint center;
+    
     //根据在view上Pan的位置，确定是调音量还是亮度
     CGPoint locationPoint = [pan locationInView:self];
     
@@ -342,11 +355,12 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     switch (pan.state) {
         case UIGestureRecognizerStateBegan:
         {
-            self.isPan = YES;
+            center = pan.view.center;
             // 使用绝对值来判断移动的方向
             CGFloat x = fabs(veloctyPoint.x);
             CGFloat y = fabs(veloctyPoint.y);
             if (x > y) {
+                self.isPan = YES;
                 self.isHorizontal = YES;
                 // 给sumTime初值
                 CMTime time       = self.player.currentTime;
@@ -380,11 +394,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             
         case UIGestureRecognizerStateEnded:
         {
+            self.isPan = NO;
             if (self.isHorizontal) {
                 [self sliderDidSlideToTime:self.sumTime];
                 self.sumTime = 0;
                 [self horizontalIsEnd];
-                self.isPan = NO;
             }else{
                 [self verticalMoved:veloctyPoint.y]; // 垂直移动的方法只要y方向的值
                 self.isVolume = NO;
@@ -408,12 +422,12 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //用户手指横向滑动的时候
 - (void)horizontalMoved:(CGFloat)value
 {
-    // 每次滑动需要叠加时间
-    self.sumTime += value / 200;
     
     // 需要限定sumTime的范围
     CMTime totalTime           = self.player.currentItem.duration;
     CGFloat totalMovieDuration = (CGFloat)totalTime.value/totalTime.timescale;
+    // 每次滑动需要叠加时间
+    self.sumTime += value / 300.f;
     if (self.sumTime > totalMovieDuration) {
         self.sumTime = totalMovieDuration;
     }
@@ -428,9 +442,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if (value < 0) {
         [self.controlView setSliderValue:(CGFloat)self.sumTime/(CGFloat)totalMovieDuration currentTime:self.sumTime totalTime:totalMovieDuration];
         [self showSliderLabelWithCurrentTime:self.sumTime totalTime:totalMovieDuration isForward:NO];
-    }
-    if (value == 0) {
-        return;
     }
 }
 
@@ -546,18 +557,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     if ([self viewWithTag:888]) {
         UIView * view = [self viewWithTag:888];
         [view removeFromSuperview];
-        [self play];
-    }
-}
-
-- (void)playOrientationPortraitWithOnlyVideo
-{
-    self.isFullScreen = NO;
-    [self.controlView playOrientationPortraitWithOnlyVideo];
-    if ([self viewWithTag:888]) {
-        UIView * view = [self viewWithTag:888];
-        [view removeFromSuperview];
-        [self play];
+//        [self play];
     }
 }
 
@@ -572,19 +572,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:@"hasPlay"] boolValue];
     if (!temp) {
             [self createHasNotPlayView];
-    }
-}
-
-- (void)playOrientationLandscapeWithOnlyVideo
-{
-    self.isFullScreen = YES;
-    [self.controlView playOrientationLandscapeWithOnlyVideo];
-    if (self.canDemand) {
-        self.controlView.TVButton.hidden = NO;
-    }
-    BOOL temp = [[[NSUserDefaults standardUserDefaults] objectForKey:@"hasPlay"] boolValue];
-    if (!temp) {
-        [self createHasNotPlayView];
     }
 }
 
@@ -620,7 +607,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [view removeFromSuperview];
     [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"hasPlay"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [self play];
+//    [self play];
 }
 
 #pragma mark -- GCCControlViewDelegate
@@ -642,11 +629,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         [self shotVideoToPhotoWithCurrentTime:self.player.currentTime];
     } else{
         //打开用户应用设置
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"前往开启相册权限" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_PhotoLibrarySetting") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * action1 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Cancle") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
         }];
-        UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction * action2 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Sure") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }];
         [alert addAction:action1];
@@ -671,7 +658,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
                                                  CVPixelBufferGetHeight(pixelBuffer))];
     
     UIImage * image = [UIImage imageWithCGImage:videoImage];
-    [[PhotoTool sharedInstance] saveImageInSystemPhoto:image withAlert:YES];
+    [RDPhotoTool saveImageInSystemPhoto:image withAlert:YES];
     CGImageRelease(videoImage);
 }
 
@@ -737,6 +724,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 //    }
 }
 
+- (void)replayButtonDidClickedWhenFailed
+{
+    [self setPlayItemWithURL:self.currentURL];
+}
+
 - (void)shareButtonDidClicked
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(videoShouldBeShare)]) {
@@ -751,14 +743,6 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     }
 }
 
-- (void)TVButtonDidClicked
-{
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_to_screen" key:nil value:nil];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(videoShouldBeDemand)]) {
-        [self.delegate videoShouldBeDemand];
-    }
-}
-
 - (void)playItemShouldChangeDefinitionTo:(NSInteger)tag
 {
     NSString * url = [self.currentURL substringToIndex:self.currentURL.length - 7];
@@ -766,9 +750,17 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     [self setPlayItemWithURL:url];
 }
 
+- (void)toolViewStatusHidden:(BOOL)isHidden
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(toolViewHiddenStatusDidChangeTo:)]) {
+        [self.delegate toolViewHiddenStatusDidChangeTo:isHidden];
+    }
+}
+
 //app已经进入后台运行
 - (void)appDidEnterBackground
 {
+    self.time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
     self.lastStutas = self.status;
     [self pause];
 }
@@ -838,12 +830,20 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             break;
             
         case GCCPlayerStatusFaild:
-            [self.controlView pause];
+        {
+            [self playDidBeFaild];
+        }
+            
             break;
             
         default:
             break;
     }
+}
+
+- (void)playDidBeFaild
+{
+    [self.controlView didPlayFailed];
 }
 
 // 重写这个方法，告诉系统，这个View的Layer不是普通的Layer，而是用于播放视频的Layer
@@ -894,6 +894,8 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 - (void)shouldRelease
 {
     [self.player pause];
+    self.delegate = nil;
+    self.controlView.delegate = nil;
     // 移除time以及观察者
     if (self.timeObserve) {
         [self.player removeTimeObserver:self.timeObserve];
@@ -914,14 +916,9 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
     NSLog(@"应该释放");
 }
 
-- (void)hiddenTVButton
-{
-    self.controlView.TVButton.hidden = YES;
-    self.canDemand = NO;
-}
-
 - (void)dealloc
 {
+    [self.controlView cancleWaitToHiddenToolView];
     NSLog(@"播放器释放了");
 }
 

@@ -7,15 +7,14 @@
 //
 
 #import "BaseViewController.h"
-#import "HSVodModel.h"
+#import "CreateWealthModel.h"
 
 /**
  *	小热点点播界面，绑定机顶盒的情况下，点击当期视频会进入此界面
  */
 @interface DemandViewController : BaseViewController
 
-@property (nonatomic, assign) NSInteger categroyID;
-@property (nonatomic, strong) HSVodModel * model;
+- initWithModelSource:(NSMutableArray *)source categroy:(NSInteger)categroyID model:(CreateWealthModel *)model;
 
 - (void)shouldRelease;
 

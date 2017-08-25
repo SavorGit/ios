@@ -8,6 +8,7 @@
 
 #import "MBProgressHUD.h"
 #import <Photos/Photos.h>
+#import "RDLoadingView.h"
 
 @interface MBProgressHUD (Custom)
 
@@ -67,7 +68,7 @@
  *
  *  @return 一个MBProgressHUD对象
  */
-+ (MBProgressHUD *)showSuccessHUDInView:(UIView *)view title:(NSString *)title;
++ (void)showSuccessHUDInView:(UIView *)view title:(NSString *)title;
 
 /**
  *  显示一个纯文本的提示框
@@ -96,22 +97,17 @@
 + (void)showNetworkStatusTextHUDWithTitle:(NSString *)title delay:(CGFloat)delay;
 
 /**
- *  显示一个长时间的纯文本的提示框
- *
- *  @param view  需要显示的界面
- *  @param title 显示的标题
- *
- */
-+ (void)showLongTimeTextHUDInView:(UIView *)view title:(NSString *)title;
-
-/**
  *  显示一个H5加载等待效果图
  *
  */
-+ (MBProgressHUD *)showWebLoadingHUDInView:(UIView *)view;
++ (RDLoadingView *)showWebLoadingHUDInView:(UIView *)view;
+
++ (void)hiddenWebLoadingInView:(UIView *)view;
 
 + (MBProgressHUD *)showBackDemandInView:(UIView *)view;
 
 + (void)removeTextHUD;
+
++ (MBProgressHUD *)showLoadingWithText:(NSString *)text inView:(UIView *)view;
 
 @end

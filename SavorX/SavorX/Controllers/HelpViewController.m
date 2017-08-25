@@ -38,7 +38,8 @@
 - (void)customHelpView
 {
     self.webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    self.webView.backgroundColor = [UIColor whiteColor];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
+    self.webView.backgroundColor = [UIColor clearColor];
     self.webView.opaque = NO;
     self.webView.delegate = self;
     [self.view addSubview:self.webView];
@@ -48,6 +49,7 @@
     
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
     [self.webView loadRequest:request];
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {
@@ -62,10 +64,30 @@
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
+    
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    
     NSString *currentUrl = self.webView.request.URL.absoluteString;
-    if (![currentUrl isEqualToString:@"http://h5.littlehotspot.com/Public/html/help/"]) {
+    if (![currentUrl isEqualToString:@"http://h5.littlehotspot.com/Public/html/help3/"]) {
        [SAVORXAPI postUMHandleWithContentId:@"menu_help_web" key:nil value:nil];
     }
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    NSLog(@"error%@",error);
+    if ([error code] == NSURLErrorCancelled) {
+        return;
+    }
+    [self showNoNetWorkViewInView:self.webView];
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.url]]];
+    [MBProgressHUD showWebLoadingHUDInView:self.webView];
 }
 
 @end

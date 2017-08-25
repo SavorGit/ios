@@ -8,27 +8,52 @@
 
 #import "WebViewController.h"
 #import "UMCustomSocialManager.h"
-#import "HSConnectViewController.h"
-#import "HomeAnimationView.h"
-#import "SXVideoPlayViewController.h"
-#import "DemandViewController.h"
-#import "GCCUPnPManager.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "RDLogStatisticsAPI.h"
-#import "RDAlertView.h"
-#import "RDAlertAction.h"
-#import "RestaurantListViewController.h"
+#import "RDHomeStatusView.h"
+#import "HSIsOrCollectionRequest.h"
+#import "HotPopShareView.h"
+#import "HotTopicShareView.h"
+#import "HSGetCollectoinStateRequest.h"
+#import "HSImTeRecommendRequest.h"
+#import "VideoTableViewCell.h"
+#import "RDInteractionLoadingView.h"
+#import "RDVideoHeaderView.h"
+#import "RDFavoriteTableViewCell.h"
+#import "RDIsOnline.h"
+#import "ImageArrayViewController.h"
+#import "ImageTextDetailViewController.h"
 
-@interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate>
+@interface WebViewController ()<UIWebViewDelegate, UIGestureRecognizerDelegate, GCCPlayerViewDelegate, UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
 @property (nonatomic, strong) MPVolumeView * volumeView;
 @property (nonatomic, assign) BOOL isComplete; //内容是否阅读完整
+@property (nonatomic, assign) BOOL toolViewIsHidden;
+
+@property (nonatomic, assign) BOOL isOnlyVideo; //是否是纯视频
+
+//纯视频
+@property (nonatomic, strong) UITableView * baseTableView; //纯视频展示视图
+
+//非纯视频
+@property (nonatomic, strong) UIWebView * webView; //加载Html网页视图
+@property (nonatomic, strong) UIView * testView;   //底部视图
+@property (nonatomic, strong) UITableView * tableView; //表格展示视图
+@property (nonatomic, strong) NSMutableArray * dataSource; //数据源
+@property (nonatomic, assign) BOOL hasDidLoad;
+@property (nonatomic, assign) BOOL hasWebObserver;
+
+@property (nonatomic, assign) BOOL isNeedHiddenNav; //是否需要隐藏导航栏
+
 @end
 
 @implementation WebViewController
 
 -(void)dealloc{
+    
+    [self removeObserver];
+    
+//    [HSImTeRecommendRequest cancelRequest];
     
     //移除页面相关通知监听
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -37,105 +62,329 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
+- (instancetype)initWithModel:(CreateWealthModel *)model categoryID:(NSInteger)categoryID
+{
+    if (self = [super init]) {
+        self.model = model;
+        self.categoryID = categoryID;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dataSource = [NSMutableArray new];
+    
+    [self showLoadingView];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self checkIsOnline];
+    });
+}
+
+- (void)checkIsOnline
+{
+    self.isNeedHiddenNav = NO;
+    [self showLoadingView];
+    RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self hiddenLoadingView];
+        self.isNeedHiddenNav = YES;
+        [self readyToGo];
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self hiddenLoadingView];
+        if ([[response objectForKey:@"code"] integerValue] == 19002) {
+            [self theVideoIsNotOnline];
+        }else{
+            [self showNoNetWorkViewInView:self.view];
+        }
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [self hiddenLoadingView];
+        [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+    }];
+}
+
+- (void)theVideoIsNotOnline
+{
+    UIView * notOnlineView = [[UIView alloc] init];
+    notOnlineView.tag = 44444;
+    notOnlineView.backgroundColor = VCBackgroundColor;
+    [self.view addSubview:notOnlineView];
+    [notOnlineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)notOnlineView;
+    
+    self.isNeedHiddenNav = NO;
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+    [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
+    
+    UIView * topView = [[UIView alloc] init];
+    [notOnlineView addSubview:topView];
+    topView.backgroundColor = VCBackgroundColor;
+    CGFloat height = self.view.frame.size.width * 0.45;
+    [topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(height);
+    }];
+    
+    UILabel * label = [[UILabel alloc] init];
+    label.textColor = UIColorFromRGB(0x434343);
+    label.text = @"该内容找不到了~";
+    label.font = kPingFangRegular(15);
+    label.textAlignment = NSTextAlignmentCenter;
+    [topView addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(25);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(20);
+    }];
+    
+    UIImageView * imageView = [[UIImageView alloc] init];
+    [imageView setImage:[UIImage imageNamed:@"kong_wenzhang.png"]];
+    [topView addSubview:imageView];
+    [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(0);
+        make.bottom.equalTo(label.mas_top).offset(-10);
+        make.size.mas_equalTo(CGSizeMake(83 / 5 * 4, 69 / 5 * 4));
+    }];
+    
+//    UIView * lineView = [[UIView alloc] init];
+//    lineView.backgroundColor = UIColorFromRGB(0xe0dad2);
+//    [topView addSubview:lineView];
+//    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.bottom.right.mas_equalTo(0);
+//        make.height.mas_equalTo(1);
+//    }];
+    
+    [HSImTeRecommendRequest cancelRequest];
+    HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.model.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        
+        for (int i = 0; i < resultArr.count; i ++) {
+            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            welthModel.acreateTime = welthModel.updateTime;
+            [self.dataSource addObject:welthModel];
+        }
+        
+        if (self.dataSource.count > 0) {
+            UITableView * tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStyleGrouped];
+            tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+            tableView.clipsToBounds = YES;
+            tableView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+            tableView.delegate = self;
+            tableView.dataSource = self;
+            tableView.tag = 4444;
+            [notOnlineView addSubview:tableView];
+            [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.mas_equalTo(0);
+            }];
+            
+            UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height + 48)];
+            headView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+            
+            [topView removeFromSuperview];
+            [headView addSubview:topView];
+            [topView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.left.right.mas_equalTo(0);
+                make.height.mas_equalTo(height);
+            }];
+            
+            UILabel *recommendLabel = [[UILabel alloc] init];
+            recommendLabel.textColor = UIColorFromRGB(0x922c3e);
+            recommendLabel.font = kPingFangRegular(15);
+            recommendLabel.text = RDLocalizedString(@"RDString_RecommendForYou");
+            recommendLabel.textAlignment = NSTextAlignmentLeft;
+            [headView addSubview:recommendLabel];
+            [recommendLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.mas_equalTo(15);
+                make.bottom.mas_equalTo(-8);
+                make.size.mas_equalTo(CGSizeMake(100, 30));
+            }];
+            tableView.tableHeaderView = headView;
+            
+            [tableView reloadData];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
+}
+
+- (void)readyToGo
+{
+    [self setNeedsStatusBarAppearanceUpdate];
+    [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
     
     _isComplete = NO;
+    
     [self createUI];
 }
 
 //初始化界面
 - (void)createUI
 {
-    self.view.backgroundColor = [UIColor blackColor];
-    
-    self.title = self.model.title;
-    
-    //初始化播放器
-    self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
-    self.playView.backgroundColor = [UIColor blackColor];
-    self.playView.delegate = self;
-    [self.playView backgroundImage:self.model.imageURL];
-    [self.playView setVideoTitle:self.model.title];
-    [self.view addSubview:self.playView];
-    self.playView.model = self.model;
-    self.playView.categoryID = self.categoryID;
-    [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
-        make.left.mas_equalTo(0);
-        make.right.mas_equalTo(0);
-        make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
-    }];
-    if (!self.model.canPlay) {
-        [self.playView hiddenTVButton];
-    }
-    
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
-        NSMutableArray *theArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
-        __block BOOL iscollect = NO;
-        [theArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
-                iscollect = YES;
-                *stop = YES;
-                return;
-            }
+    if (!self.hasDidLoad) {
+        //初始化播放器
+        self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
+        self.playView.backgroundColor = [UIColor blackColor];
+        self.playView.delegate = self;
+        [self.playView backgroundImage:self.model.imageURL];
+        [self.playView setVideoTitle:self.model.title];
+        [self.view addSubview:self.playView];
+        self.playView.model = self.model;
+        self.playView.categoryID = self.categoryID;
+        [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(0);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
         }];
-        [self.playView setIsCollect:iscollect];
     }
     
-    //初始化webView
-    self.webView = [[UIWebView alloc] init];
-    self.webView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.webView];
-    [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.playView.mas_bottom);
-        make.left.mas_equalTo(0);
-        make.width.mas_equalTo(kMainBoundsWidth);
-        make.bottom.mas_equalTo(0);
-    }];
-    self.webView.scrollView.delegate = self;
-    self.webView.delegate = self;
-    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
-    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[self.model.contentURL stringByAppendingString:@"?location=newRead"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-    self.webView.opaque = NO;
-    [self.webView loadRequest:request];
+    [self refreshPage];
     
-    [MBProgressHUD showWebLoadingHUDInView:self.webView];
+    if (!self.hasDidLoad) {
+        //添加页面相关的通知监听
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+        // app退到后台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
+        // app进入前台
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    }
     
-    //添加页面相关的通知监听
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(phoneBindDevice) name:RDDidBindDeviceNotification object:nil];
-    // app退到后台
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillDidBackground) name:UIApplicationWillResignActiveNotification object:nil];
-    // app进入前台
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActivePlayground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    self.hasDidLoad = YES;
 }
 
-//当手机连接到机顶盒
-- (void)phoneBindDevice
+- (void)refreshPage
 {
-    if ([GlobalData shared].isBindRD && self.model.canPlay == 1) {
-
-        [self demandVideoWithforce:0];
+    [self.playView setVideoTitle:self.model.title];
+    [self.playView setPlayItemWithURL:[self.model.videoURL stringByAppendingString:@".f30.mp4"]];
+    [self.playView backgroundImage:self.model.imageURL];
+    
+    if (self.model.type == 4) {
         
-    }else if ([GlobalData shared].isBindDLNA){
-        //如果是绑定状态
-        MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-        [[GCCUPnPManager defaultManager] setAVTransportURL:[self.model.videoURL stringByAppendingString:@".f20.mp4"] Success:^{
-            
-            DemandViewController *view = [[DemandViewController alloc] init];
-            view.categroyID = self.categoryID;
-            view.model = self.model;
-            [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
-            [self.navigationController pushViewController:view animated:YES];
-            
-            [hud hideAnimated:NO];
-        } failure:^{
-            [hud hideAnimated:NO];
-            [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-        }];
+        self.isOnlyVideo = YES;
+        [self refreshWithOnlyVideo];
+        
+    }else{
+        
+        self.isOnlyVideo = NO;
+        [self refreshWithVideo];
+        
     }
+    
+    [self setUpDatas];
+}
+
+#pragma mark - 非纯视频的页面布局
+- (void)refreshWithVideo
+{
+    if (self.baseTableView.superview) {
+        self.baseTableView.delegate = nil;
+        self.baseTableView.dataSource = nil;
+        [self.baseTableView removeFromSuperview];
+    }
+    
+    if (!self.webView) {
+        [self createWebViewWithVideo];
+    }
+    if (!self.webView.superview) {
+        [self.view addSubview:self.webView];
+        [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.playView.mas_bottom);
+            make.left.mas_equalTo(0);
+            make.width.mas_equalTo(kMainBoundsWidth);
+            make.bottom.mas_equalTo(0);
+        }];
+        self.tableView.delegate = self;
+        self.tableView.dataSource = self;
+        self.webView.scrollView.delegate = self;
+        self.webView.delegate = self;
+        self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.webView;
+    }
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    [self.dataSource removeAllObjects];
+    [self.tableView reloadData];
+    if (!isEmptyString(self.model.contentURL)) {
+        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:[[Helper addURLParamsInAPPWith:self.model.contentURL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        [self.webView loadRequest:request];
+        [MBProgressHUD showWebLoadingHUDInView:self.webView];
+        [self addObserver];
+    }
+}
+
+- (void)createWebViewWithVideo
+{
+    //初始化webView
+    self.webView = [[UIWebView alloc] init];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
+    self.webView.backgroundColor = [UIColor clearColor];
+    self.webView.opaque = NO;
+    
+    [self.webView.scrollView addSubview:self.testView];
+}
+
+#pragma mark - 纯视频的页面布局
+//刷新当前的纯视频视图
+- (void)refreshWithOnlyVideo
+{
+    if (self.webView.superview) {
+        //移除非纯视频播放展示的webView
+        [self.webView removeFromSuperview];
+        [self.testView removeFromSuperview];
+        self.webView.delegate = nil;
+        self.webView.scrollView.delegate = nil;
+        self.tableView.delegate = nil;
+        self.tableView.dataSource = nil;
+        [self removeObserver];
+    }
+    
+    //添加纯视频播放页面的推荐列表
+    if (!self.baseTableView) {
+        [self createTableViewWithOnlyVideo];
+    }
+    if (!self.baseTableView.superview) {
+        [self.view addSubview:self.baseTableView];
+        [self.baseTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.playView.mas_bottom).offset(0);
+            make.left.mas_equalTo(0);
+            make.right.mas_equalTo(0);
+            make.bottom.mas_equalTo(0);
+        }];
+        self.baseTableView.dataSource = self;
+        self.baseTableView.delegate = self;
+    }
+    
+    //添加用户右滑退出该页面的手势操作
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self.baseTableView;
+    RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
+    [headerView reloadWithModel:self.model];
+    
+    [self.dataSource removeAllObjects];
+    [self.baseTableView reloadData];
+}
+
+- (void)createTableViewWithOnlyVideo
+{
+    self.baseTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight) style:UITableViewStyleGrouped];
+    self.baseTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.baseTableView.clipsToBounds = YES;
+    self.baseTableView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    
+    RDVideoHeaderView * headerView = [[RDVideoHeaderView alloc] init];
+    self.baseTableView.tableHeaderView = headerView;
 }
 
 //返回按钮被点击
@@ -150,9 +399,6 @@
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (orientation == UIInterfaceOrientationPortrait) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        [self.playView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(20);
-        }];
         [self.playView playOrientationPortrait];
         
         if (self.webView.isLoading) {
@@ -160,140 +406,83 @@
         }
         [self.navigationController setNeedsStatusBarAppearanceUpdate];
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
+        [MBProgressHUD hiddenWebLoadingInView:self.webView];
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-        [self.playView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-        }];
         [self.playView playOrientationLandscape];
         [MBProgressHUD hideHUDForView:self.webView animated:NO];
         [self.navigationController setNeedsStatusBarAppearanceUpdate];
     }
 }
 
-//收藏按钮被点击
+#pragma mark ---收藏按钮点击
 - (void)videoShouldBeCollect:(UIButton *)button
 {
-    if (!self.model.contentURL || !(self.model.contentURL.length > 0)) {
-        [MBProgressHUD showTextHUDwithTitle:@"该内容暂不支持收藏" delay:1.5f];
-    }
-    NSMutableArray *favoritesArray = [NSMutableArray array];
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"] isKindOfClass:[NSArray class]]) {
-        favoritesArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MyFavorites"]];
-    }
-    if (button.selected) {
-        [favoritesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([[obj objectForKey:@"contentURL"] isEqualToString:self.model.contentURL]) {
-                [favoritesArray removeObject:obj];
-                *stop = YES;
-            }
-        }];
-        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:cancleCollectHandle];
-        [MBProgressHUD showSuccessHUDInView:self.view title:@"取消成功"];
-        [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
-        [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self.playView setIsCollect:NO];
+    NSInteger isCollect;
+    if (button.selected == YES) {
+        isCollect = 0;
     }else{
-        [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:collectHandle];
-        [favoritesArray addObject:[self.model toDictionary]];
-        [MBProgressHUD showSuccessHUDInView:self.view title:@"收藏成功"];
-        [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
-        [[NSUserDefaults standardUserDefaults] setObject:favoritesArray forKey:@"MyFavorites"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self.playView setIsCollect:YES];
+        isCollect = 1;
     }
+    HSIsOrCollectionRequest * request = [[HSIsOrCollectionRequest alloc] initWithArticleId:self.model.artid withState:isCollect];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        if ([[dic objectForKey:@"code"] integerValue] == 10000) {
+            if (isCollect == 0) {
+                self.model.collected = 0;
+                [self.playView setIsCollect:NO];
+                [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_SuccessWithCancle")];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"success"];
+            }else{
+                self.model.collected = 1;
+                [self.playView setIsCollect:YES];
+                [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_SuccessWithCollect")];
+                [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"success"];
+            }
+        }
+        
+        [GlobalData shared].isCollectAction = YES;
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithCollect") delay:1.f];
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        if (isCollect == 0) {
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_cancel_collection" key:@"details_page_cancel_collection" value:@"fail"];
+        }else{
+            [SAVORXAPI postUMHandleWithContentId:@"details_page_collection" key:@"details_page_collection" value:@"fail"];
+        }
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithCollect") delay:1.f];
+    }];
 }
 
-//视频分享按钮被点击
+#pragma mark ---视频分享按钮被点击
 - (void)videoShouldBeShare
 {
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
     [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.model  andVC:self andCategoryID:self.categoryID andSourceId:0];
+    [self.view addSubview:shareView];
 }
 
-//分享按钮被点击
-- (void)shareAction:(UIButton *)button
+- (void)toolViewHiddenStatusDidChangeTo:(BOOL)isHidden
 {
-    [[UMCustomSocialManager defaultManager] showUMSocialSharedWithModel:self.model andController:self andType:0 categroyID:self.categoryID];
-    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
-}
-
-//视频的点播按钮被点击
-- (void)videoShouldBeDemand
-{
-    if ([GlobalData shared].scene != RDSceneHaveRDBox) {
-        RestaurantListViewController *restVC = [[RestaurantListViewController alloc] initWithScreenAlert];
-        [self.navigationController pushViewController:restVC animated:YES];
-    }
+    self.toolViewIsHidden = isHidden;
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    if (self.model.canPlay) {
-        
-        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-        if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
-            [self interfaceOrientation:UIInterfaceOrientationPortrait];
-        }
-        
-        if (([GlobalData shared].isBindRD)){
-            
-            [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:demandHandle];
-            
-            [self demandVideoWithforce:0];
-            
-        }else{
-            [[HomeAnimationView animationView] scanQRCode];
-        }
-
-    }else{
-        [MBProgressHUD showTextHUDwithTitle:@"当前视频不支持该操作"];
+    if (orientation == UIInterfaceOrientationLandscapeLeft ||
+        orientation == UIInterfaceOrientationLandscapeRight) {
+        [self.navigationController setNeedsStatusBarAppearanceUpdate];
     }
-}
-
-- (void)demandVideoWithforce:(NSInteger)force{
-    
-    //如果是绑定状态
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view withTitle:@"正在点播"];
-    [SAVORXAPI demandWithURL:STBURL name:self.model.name type:1 position:0 force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
-        if ([[result objectForKey:@"result"] integerValue] == 0) {
-            
-            DemandViewController *view = [[DemandViewController alloc] init];
-            view.categroyID = self.categoryID;
-            view.model = self.model;
-            [SAVORXAPI successRing];
-            [[HomeAnimationView animationView] SDSetImage:self.model.imageURL];
-            [[HomeAnimationView animationView] startScreenWithViewController:view];
-            [self.navigationController pushViewController:view animated:YES];
-            [SAVORXAPI postUMHandleWithContentId:@"home_click_bunch_video" key:nil value:nil];
-        }else if ([[result objectForKey:@"result"] integerValue] == 4) {
-            
-            NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"vod"}];
-            } bold:NO];
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
-                [self demandVideoWithforce:1];
-                [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"vod"}];
-            } bold:NO];
-            [alertView addActions:@[action,actionOne]];
-            [alertView show];
-            
-        }else{
-            [SAVORXAPI showAlertWithMessage:[result objectForKey:@"info"]];
-        }
-        [hud hideAnimated:NO];
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [hud hideAnimated:NO];
-        [MBProgressHUD showTextHUDwithTitle:DemandFailure];
-    }];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-//    [self.volumeView setHidden:NO];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
-    [SAVORXAPI postUMHandleWithContentId:self.model.cid withType:readHandle];
+    [MobClick beginLogPageView:NSStringFromClass([self class])];
+    [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -308,24 +497,28 @@
     [super viewWillDisappear:animated];
     
     [self.playView pause];
-    if ([UIApplication sharedApplication].statusBarHidden) {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    UIViewController * topVC = [Helper getRootNavigationController].topViewController;
-    if ([topVC isKindOfClass:[HSConnectViewController class]] || [topVC isKindOfClass:[WebViewController class]] || [topVC isKindOfClass:[DemandViewController class]] || [topVC isKindOfClass:[RestaurantListViewController class]]) {
-        
-    }else{
+    [super viewDidDisappear:animated];
+    if (self.navigationController.topViewController == self) {
+        return;
+    }
+    [self shouldRelease];
+    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+}
+
+- (void)shouldRelease
+{
+    [RDIsOnline cancelRequest];
+    if (self.playView) {
         [self.playView shouldRelease];
+    }
+    if (self.webView) {
         self.webView.delegate = nil;
         self.webView.scrollView.delegate = nil;
     }
-    
-    [super viewDidDisappear:animated];
-    [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_END type:RDLOGTYPE_CONTENT model:self.model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -338,7 +531,33 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    [MBProgressHUD hideHUDForView:self.webView animated:NO];
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [self showNoNetWorkViewInView:self.webView];
+}
+
+- (void)retryToGetData
+{
+    [self hideNoNetWorkView];
+    [self checkIsOnline];
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    if (self.isNeedHiddenNav) {
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        
+        if (orientation == UIInterfaceOrientationPortrait) {
+            return YES;
+        }else{
+            return self.toolViewIsHidden;
+        }
+    }else{
+        return NO;
+    }
 }
 
 #pragma mark 屏幕转屏相关
@@ -394,14 +613,319 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)addObserver
+{
+    if (!self.hasWebObserver) {
+        self.hasWebObserver = YES;
+        [self.webView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
+    }
 }
-*/
+
+- (void)removeObserver
+{
+    if (self.hasWebObserver) {
+        self.hasWebObserver = NO;
+        [self.webView.scrollView removeObserver:self forKeyPath:@"contentSize" context:nil];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    [MBProgressHUD hiddenWebLoadingInView:self.webView];
+    if ([keyPath isEqualToString:@"contentSize"]) {
+        [self footViewShouldBeReset];
+    }
+}
+
+- (void)footViewShouldBeReset
+{
+    [self removeObserver];
+    
+    if (self.testView.superview) {
+        [self.testView removeFromSuperview];
+    }
+    //TableView的高度
+    CGFloat tabHeight = 0;
+    if (self.dataSource.count != 0) {
+        tabHeight = self.dataSource.count *96 + 48;
+    }
+    
+    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(tabHeight);
+    }];
+    
+    //底部View总高度
+    CGFloat theight = tabHeight + 115 + 30;
+    if (self.dataSource.count != 0) {
+        theight += 8;
+    }
+    
+    CGFloat cSizeheight = self.webView.scrollView.contentSize.height;
+    CGRect frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, theight);
+    CGSize contentSize = self.webView.scrollView.contentSize;
+    //底部View与顶部网页的间隔为0
+    frame.origin.y = cSizeheight;
+    self.testView.frame = frame;
+    [self.webView.scrollView addSubview:self.testView];
+    [self.webView.scrollView setContentSize:CGSizeMake(contentSize.width, contentSize.height + theight)];
+    
+    [self addObserver];
+    
+    //不是纯视频类型添加分享部分
+    if (self.model.type != 4) {
+        [self shareBoardByDefined];
+    }
+}
+
+- (void)shareBoardByDefined {
+    
+    if ([self.testView viewWithTag:1000]) {
+        [[self.testView viewWithTag:1000] removeFromSuperview];
+    }
+    HotTopicShareView *shareView = [[HotTopicShareView alloc] initWithModel:self.model andVC:self andCategoryID:self.categoryID andY:30];
+    shareView.tag = 1000;
+    [self.testView addSubview:shareView];
+    
+}
+
+#pragma mark - 初始化下方推荐数据
+- (void)setUpDatas{
+    [self checkCollectStatus];
+    [HSImTeRecommendRequest cancelRequest];
+    HSImTeRecommendRequest * request = [[HSImTeRecommendRequest alloc] initWithArticleId:self.model.artid];
+    [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.dataSource removeAllObjects];
+        
+        NSDictionary *dic = (NSDictionary *)response;
+        NSArray *resultArr = [dic objectForKey:@"result"];
+        
+        for (int i = 0; i < resultArr.count; i ++) {
+            CreateWealthModel *welthModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            welthModel.acreateTime = welthModel.updateTime;
+            [self.dataSource addObject:welthModel];
+        }
+        // 当返回有推荐数据时调用
+        
+        if (self.dataSource.count > 0) {
+            if (self.isOnlyVideo) {
+                [self.baseTableView reloadData];
+            }else{
+                [self footViewShouldBeReset];
+                [self.tableView reloadData];
+            }
+        }
+        
+        if (self.isOnlyVideo) {
+            RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
+            [headerView needRecommand:self.dataSource.count != 0];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        if (self.isOnlyVideo) {
+            RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
+            [headerView needRecommand:self.dataSource.count != 0];
+        }
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+        if (self.isOnlyVideo) {
+            RDVideoHeaderView * headerView = (RDVideoHeaderView *)self.baseTableView.tableHeaderView;
+            [headerView needRecommand:self.dataSource.count != 0];
+        }
+        
+    }];
+}
+
+- (void)checkCollectStatus
+{
+    [self.playView setIsCollect:NO];
+    [self.playView setCollectEnable:NO];
+    HSGetCollectoinStateRequest * stateRequest = [[HSGetCollectoinStateRequest alloc] initWithArticleID:self.model.artid];
+    [stateRequest sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+        [self.playView setCollectEnable:YES];
+        NSInteger collect = [[[response objectForKey:@"result"] objectForKey:@"state"] integerValue];
+        // 设置收藏按钮状态
+        if (collect == 1) {
+            [self.playView setIsCollect:YES];
+        }else{
+            [self.playView setIsCollect:NO];
+        }
+        
+    } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        
+    } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        
+    }];
+}
+
+#pragma mark -- 懒加载
+- (UITableView *)tableView
+{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        _tableView.backgroundView = nil;
+        _tableView.scrollEnabled = NO;
+        [self.testView addSubview:_tableView];
+        
+        CGFloat diatanceToTop = 115+30+8;
+        // 纯视频类型去除上边分享部分
+        if (self.model.type == 4) {
+            diatanceToTop = 8;
+        }
+        CGFloat tabHeiht;
+        if (self.dataSource.count == 0) {
+            tabHeiht = 0;
+        }else{
+            tabHeiht = self.dataSource.count *96 +48;
+        }
+        [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(kMainBoundsWidth);
+            make.height.mas_equalTo(tabHeiht);
+            make.top.mas_equalTo(diatanceToTop);
+            make.left.mas_equalTo(0);
+        }];
+        
+        UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 48)];
+        headView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        UILabel *recommendLabel = [[UILabel alloc] init];
+        recommendLabel.frame = CGRectMake(15, 10, 100, 30);
+        recommendLabel.textColor = UIColorFromRGB(0x922c3e);
+        recommendLabel.font = kPingFangRegular(15);
+        recommendLabel.text = RDLocalizedString(@"RDString_RecommendForYou");
+        recommendLabel.textAlignment = NSTextAlignmentLeft; 
+        [headView addSubview:recommendLabel];
+        _tableView.tableHeaderView = headView;
+    }
+    
+    return _tableView;
+}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.dataSource.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellID = @"videoTableCell";
+    RDFavoriteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (cell == nil) {
+        cell = [[RDFavoriteTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+    }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.backgroundColor = [UIColor clearColor];
+    cell.contentView.backgroundColor = [UIColor clearColor];
+    
+    //最后一条分割线隐藏
+    if (indexPath.row == self.dataSource.count - 1) {
+        [cell setLineViewHidden:YES];
+    }else{
+        [cell setLineViewHidden:NO];
+    }
+    
+    CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
+    [cell configWithModel:model];
+    
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 96.f;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [SAVORXAPI postUMHandleWithContentId:@"details_recommended" key:nil value:nil];
+    
+    CreateWealthModel *tmpModel = [self.dataSource objectAtIndex:indexPath.row];
+    if (tmpModel.type == 1) {
+        
+        ImageTextDetailViewController * text = [[ImageTextDetailViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
+        
+        NSMutableArray * vcs = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+        [vcs removeObject:self];
+        [vcs addObject:text];
+        [self.navigationController setViewControllers:vcs animated:YES];
+        
+    }else if (tmpModel.type == 2){
+        
+        ImageArrayViewController * image = [[ImageArrayViewController alloc] initWithCategoryID:self.categoryID model:tmpModel];
+        
+        image.parentNavigationController = self.navigationController;
+        float version = [UIDevice currentDevice].systemVersion.floatValue;
+        if (version < 8.0) {
+            self.modalPresentationStyle = UIModalPresentationCurrentContext;
+        } else {;
+            image.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        }
+        image.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
+        UIViewController * vc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        [self.navigationController popViewControllerAnimated:NO];
+        [vc presentViewController:image animated:NO completion:^{
+            
+        }];
+        
+    }else{
+        self.model = tmpModel;
+        self.isNeedHiddenNav = NO;
+        
+        [self showLoadingView];
+        RDIsOnline * request = [[RDIsOnline alloc] initWithArtID:self.model.artid];
+        [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            [self hiddenLoadingView];
+            self.isNeedHiddenNav = YES;
+            [self readyToGo];
+        } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+            [self hiddenLoadingView];
+            if ([[response objectForKey:@"code"] integerValue] == 19002) {
+                [self theVideoIsNotOnline];
+            }else{
+                [self showNoNetWorkViewInView:self.view];
+                [self setNeedsStatusBarAppearanceUpdate];
+                [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
+            }
+        } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+            [self hiddenLoadingView];
+            [self.navigationController setNavigationBarHidden:self.isNeedHiddenNav animated:NO];
+            [self setNeedsStatusBarAppearanceUpdate];
+            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        }];
+    }
+}
+
+- (UIView *)testView
+{
+    if (!_testView) {
+        _testView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,kMainBoundsWidth, 100)];
+        _testView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        _testView.clipsToBounds = YES;
+    }
+    return _testView;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    if (self.isNeedHiddenNav) {
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }
+    return UIInterfaceOrientationMaskPortrait;
+}
 
 @end

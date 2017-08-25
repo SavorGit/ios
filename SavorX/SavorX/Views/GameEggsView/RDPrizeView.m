@@ -32,7 +32,7 @@
     congratueLab.textColor = UIColorFromRGB(0xfffaeb);
     congratueLab.backgroundColor = [UIColor clearColor];
     congratueLab.textAlignment = NSTextAlignmentCenter;
-    congratueLab.text = @"恭喜您，中奖啦~";
+    congratueLab.text = RDLocalizedString(@"RDString_Congratue");
     [bgImgView addSubview:congratueLab];
     [congratueLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth, 50));
@@ -117,7 +117,7 @@
     prizeTimeLab.textColor = UIColorFromRGB(0x676767);
     prizeTimeLab.backgroundColor = [UIColor clearColor];
     prizeTimeLab.textAlignment = NSTextAlignmentCenter;
-    prizeTimeLab.text = @"有效领奖时间:1小时,";
+    prizeTimeLab.text = RDLocalizedString(@"RDString_CongratueTimeAletPre");
     [bgImgView addSubview:prizeTimeLab];
     CGFloat prizeViewWidth  = [Helper autoWidthWith:294];
     CGFloat priAlertWidth  = [Helper autoWidthWith:260];
@@ -139,7 +139,7 @@
     alertLab.textColor = UIColorFromRGB(0xe14d43);
     alertLab.backgroundColor = [UIColor clearColor];
     alertLab.textAlignment = NSTextAlignmentCenter;
-    alertLab.text = @"关闭后将无法领取";
+    alertLab.text = RDLocalizedString(@"RDString_CongratueTimeAletSuf");
     [bgImgView addSubview:alertLab];
     CGFloat alertWidth  = [Helper autoWidthWith:120];
     CGFloat alertHeight  = [Helper autoHeightWith:20];
@@ -157,7 +157,7 @@
     prizeFormLab.textColor = UIColorFromRGB(0x676767);
     prizeFormLab.backgroundColor = [UIColor clearColor];
     prizeFormLab.textAlignment = NSTextAlignmentCenter;
-    prizeFormLab.text = @"快去找服务员领取奖品吧";
+    prizeFormLab.text = RDLocalizedString(@"RDString_PrizeFrom");
     [bgImgView addSubview:prizeFormLab];
     CGFloat prizeFormToBottom  = [Helper autoHeightWith:4];
     [prizeFormLab mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -167,10 +167,10 @@
     }];
     
     if (model.win == 1) {
-        congratueLab.text = @"恭喜您，中奖啦~";
+        congratueLab.text = RDLocalizedString(@"RDString_Congratue");
     }else if (model.win == 0){
-        congratueLab.text = @"很遗憾，没有中奖";
-        prizeFormLab.text = @"您可邀请好友参加此活动哦~";
+        congratueLab.text = RDLocalizedString(@"RDString_NotCongratue");
+        prizeFormLab.text = RDLocalizedString(@"RDString_GameShare");
         prizeTimeLab.text = @"";
         alertLab.text = @"";
         CGFloat prizeFormToBottom  = [Helper autoHeightWith:10];

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
 #import "BGUploadRequest.h"
-#import "HSVodModel.h"
+#import "CreateWealthModel.h"
 
 typedef NS_ENUM(NSInteger, handleType) {
     collectHandle = 1, //收藏
@@ -188,6 +188,13 @@ typedef NS_ENUM(NSInteger, interactType) {
  */
 + (NSURLSessionDataTask *)rotateWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
 
+/**
+ *  投屏状态请求
+ *
+ * @return NSURLSessionDataTask对象
+ */
++ (NSURLSessionDataTask *)queryStatusWithURL:(NSString *)urlStr success:(void (^)(NSURLSessionDataTask * task, NSDictionary * result))success failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
+
 + (void)screenDLNAImageWithKeyStr:(NSString *)keyStr WithSuccess:(void(^)())successBlock failure:(void(^)())failureBlock;
 
 /**
@@ -222,7 +229,7 @@ typedef NS_ENUM(NSInteger, interactType) {
  *  @param contentId 文章ID
  *  @param type      事件的类型
  */
-+ (void)postUMHandleWithContentId:(NSInteger)contentId withType:(handleType)type;
++ (void)postUMHandleWithContentId:(NSString *)contentId withType:(handleType)type;
 
 /**
  *  友盟上传事件

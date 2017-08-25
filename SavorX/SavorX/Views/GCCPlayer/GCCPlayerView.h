@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CreateWealthModel.h"
 
 @protocol GCCPlayerViewDelegate <NSObject>
 
@@ -15,6 +16,7 @@
 - (void)videoShouldBeShare;
 - (void)videoShouldBeCollect:(UIButton *)button;
 - (void)videoShouldBeDemand;
+- (void)toolViewHiddenStatusDidChangeTo:(BOOL)isHidden;
 
 @end
 
@@ -23,7 +25,7 @@
 - (instancetype)initWithURL:(NSString *)url;
 
 @property (nonatomic, assign) id<GCCPlayerViewDelegate> delegate;
-@property (nonatomic, strong) HSVodModel * model;
+@property (nonatomic, strong) CreateWealthModel * model;
 @property (nonatomic, assign) NSInteger categoryID; //分类ID
 
 
@@ -33,13 +35,12 @@
 - (void)setVideoTitle:(NSString *)title; //设置播放标题
 - (void)setIsCollect:(BOOL)isCollect; //设置是否收藏
 - (void)playOrientationLandscape; //横屏切换
-- (void)playOrientationLandscapeWithOnlyVideo;
 - (void)playOrientationPortrait; //竖屏切换
-- (void)playOrientationPortraitWithOnlyVideo;
-- (void)hiddenTVButton;
 
 - (void)backgroundImage:(NSString *)url;
 
 - (void)shouldRelease;
+
+- (void)setCollectEnable:(BOOL)enable;
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "BaseViewController.h"
-#import "UINavigationBar+PS.h"
+#import "RDLoadingView.h"
 
 @interface BaseViewController ()<NoDataViewDelegate,NoNetWorkViewDelegate>{
     
@@ -15,7 +15,8 @@
     NoDataView*         _noDataView;
     /**无网视图**/
     NoNetWorkView*      _noNetWorkView;
-    
+    /**Loading视图**/
+    RDLoadingView*      _loadingView;
 }
 
 @end
@@ -138,6 +139,11 @@
         _noDataView.delegate = self;
     }
     [_noDataView showNoDataView:superView noDataType:type];
+//    if (type == kNoDataType_NotFound) {
+//        if (self.navigationController) {
+//            self.navigationController.navigationItem.rightBarButtonItems = nil;
+//        }
+//    }
     
 }
 
@@ -182,6 +188,15 @@
     [self showNoNetWorkViewInView:view frame:view.bounds];
 }
 
+- (void)showNoNetWorkViewInView:(UIView *)view centerY:(CGFloat)centerY style:(NoNetWorkViewStyle)style
+{
+    CGRect frame = view.bounds;
+    
+    frame.size.height -= centerY;
+    
+    [self showNoNetWorkViewInView:view frame:frame style:style];
+}
+
 - (void)showNoNetWorkViewInView:(UIView *)view frame:(CGRect)frame{
     NoNetWorkViewStyle style = NoNetWorkViewStyle_No_NetWork;
     AFNetworkReachabilityStatus networkStatus = [AFNetworkReachabilityManager sharedManager].networkReachabilityStatus;
@@ -197,6 +212,7 @@
         _noNetWorkView = [NoNetWorkView loadFromXib];
         _noNetWorkView.delegate = self;
     }
+    
     [_noNetWorkView showInView:view style:style];
     _noNetWorkView.frame = frame;
 }
@@ -210,6 +226,41 @@
 #pragma mark NoNetWorkViewDelegate
 -(void)retryToGetData{
     
+}
+
+#pragma mark - loading的显示方法
+- (void)showLoadingView
+{
+    if (!_loadingView) {
+        _loadingView = [[RDLoadingView alloc] init];
+    }
+    
+    if (_loadingView.superview) {
+        [_loadingView removeFromSuperview];
+    }
+    
+    [self.view addSubview:_loadingView];
+    [_loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(104);
+        make.height.mas_equalTo(40);
+        make.centerX.mas_equalTo(0);
+        make.centerY.mas_equalTo(-30);
+    }];
+    [_loadingView showLoaingAnimation];
+}
+
+- (void)hiddenLoadingView
+{
+    if (_loadingView) {
+        if (_loadingView.superview) {
+            [_loadingView hiddenLoaingAnimation];
+        }
+    }
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -25,6 +25,7 @@
 - (void)setVideoURL:(NSString *)url
 {
     self.backgroundColor = [UIColor whiteColor];
+    self.layer.backgroundColor = [UIColor whiteColor].CGColor;
     AVPlayerItem * item = [AVPlayerItem playerItemWithURL:[NSURL fileURLWithPath:url]];
     self.player = [AVPlayer playerWithPlayerItem:item];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEndBackground) name:UIApplicationWillResignActiveNotification object:nil];

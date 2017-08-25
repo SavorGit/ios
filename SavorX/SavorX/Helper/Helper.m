@@ -12,6 +12,7 @@
 #import "WMPageController.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "GCCKeyChain.h"
+#import "GCCGetInfo.h"
 
 @implementation Helper
 
@@ -273,7 +274,7 @@
 
 + (NSString *)getHTTPHeaderValue
 {
-    NSString * result = [NSString stringWithFormat:@"versionname=%@;versioncode=%d;osversion=%@;model=ios;appname=hotSpot;clientname=ios;channelName=appstore;deviceid=%@;location=%lf,%lf", kSoftwareVersion, kVersionCode, [UIDevice currentDevice].systemVersion, [GCCKeyChain load:keychainID], [GlobalData shared].longitude, [GlobalData shared].latitude];
+    NSString * result = [NSString stringWithFormat:@"versionname=%@;versioncode=%d;osversion=%@;model=%@;appname=hotSpot;clientname=ios;channelName=appstore;deviceid=%@;location=%lf,%lf", kSoftwareVersion, kVersionCode, [UIDevice currentDevice].systemVersion, [GCCGetInfo getDeviceName], [GCCKeyChain load:keychainID], [GlobalData shared].longitude, [GlobalData shared].latitude];
     return result;
 }
 
@@ -283,6 +284,24 @@
     NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:format];
     return [formatter stringFromDate:date];
+}
+
++ (NSString *)addURLParamsInAPPWith:(NSString *)url
+{
+    if ([url containsString:@"?"]) {
+        return [url stringByAppendingString:@"&location=newRead&app=inner"];
+    }else{
+        return [url stringByAppendingString:@"?location=newRead&app=inner"];
+    }
+}
+
++ (NSString *)addURLParamsShareWith:(NSString *)url
+{
+    if ([url containsString:@"?"]) {
+        return [url stringByAppendingString:@"&app=inner"];
+    }else{
+        return [url stringByAppendingString:@"?app=inner"];
+    }
 }
 
 /**
@@ -302,6 +321,26 @@
         // 从2开始是因为0 1 两个参数已经被selector和target占用
         [invocation setArgument:&val atIndex:2];
         [invocation invoke];
+    }
+}
+
++ (NSString *)transformDate:(NSDate *)date
+{
+    NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    return [formatter stringFromDate:date];
+}
+
++ (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size {
+    @autoreleasepool {
+        CGRect rect = CGRectMake(0, 0, size.width, size.height);
+        UIGraphicsBeginImageContext(rect.size);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetFillColorWithColor(context,color.CGColor);
+        CGContextFillRect(context, rect);
+        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return img;
     }
 }
 

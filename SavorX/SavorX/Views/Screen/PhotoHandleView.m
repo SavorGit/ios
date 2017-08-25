@@ -26,9 +26,6 @@
         self.layer.masksToBounds = YES;
         [self.imageView setImage:image];
         self.label.text = title;
-//        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rotateImage)];
-//        tap.numberOfTapsRequired = 1;
-//        [self addGestureRecognizer:tap];
     }
     return self;
 }

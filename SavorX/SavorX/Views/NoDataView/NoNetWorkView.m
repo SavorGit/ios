@@ -12,7 +12,6 @@
 }
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIImageView *flagImageView;
-@property (weak, nonatomic) IBOutlet UILabel *descLabel;
 @property (weak, nonatomic) IBOutlet UILabel *touchScrrenLabel;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageWidthConstraint;
@@ -27,6 +26,8 @@
 {
     [super awakeFromNib];
     self.backgroundColor = VCBackgroundColor;
+    _descLabel.textColor = UIColorFromRGB(0x595757);
+    _descLabel.font = kPingFangLight(15);
 }
 - (IBAction)reloadBtnClicked:(id)sender
 {
@@ -47,13 +48,13 @@
         self.width = superView.width;
     }
     if (style==NoNetWorkViewStyle_No_NetWork) {
-        _flagImageView.image =[UIImage imageNamed:@"bad"];
-        _descLabel.text = @"网络不给力,点击屏幕重试";
+        _flagImageView.image =[UIImage imageNamed:@"kong_wlyc"];
+        _descLabel.text = RDLocalizedString(@"RDString_NetFailedWithNoNet");
         _touchScrrenLabel.text = @"";
     }else if(style==NoNetWorkViewStyle_Load_Fail){
-        _flagImageView.image = [UIImage imageNamed:@"bad"];
+        _flagImageView.image = [UIImage imageNamed:@"kong_wlyc"];
 
-        _descLabel.text = @"未获取到内容,请点击重试";
+        _descLabel.text = RDLocalizedString(@"RDString_NetFailedWithNoNet");
         _touchScrrenLabel.text = @"";
     }
     

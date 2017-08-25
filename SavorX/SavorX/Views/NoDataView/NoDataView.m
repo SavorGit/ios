@@ -32,6 +32,8 @@
     dataButton.hidden = YES;
     bottomImageView.hidden = YES;
     self.backgroundColor = VCBackgroundColor;
+    dataLabel.textColor = UIColorFromRGB(0x595757);
+    dataLabel.font = kPingFangLight(15);
 }
 
 -(void)showNoDataView:(UIView*)superView noDataType:(NODataType)type
@@ -89,51 +91,55 @@
     
     switch (type) {
         case kNoDataType_Default:
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             dataLabel.text = @"暂无数据";
             break;
         case kNoDataType_Favorite:
-            dataLabel.text = @"您还没有收藏~";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            dataLabel.text = RDLocalizedString(@"RDString_CollectNone");
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case kNoDataType_Notification:
             dataLabel.text = @"暂无通知";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case kNoDataType_Praise:
             dataLabel.text = @"还没有赞过的内容";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case KNoDataType_CreditCard:
             dataLabel.text = @"还没有添加信用卡";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case kNoDataType_SalesRecords:
             dataLabel.text = @"暂无销售记录";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case kNoDataType_ConsumptionRecords:
             dataLabel.text = @"暂无消费记录";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case KNoDataType_MessageList:
             dataLabel.text = @"没有消息";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case KNoDataType_Me:
             bottomImageView.hidden = NO;
             dataLabel.text = @"分享精彩，玩出精彩";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case kNoDataType_FindSearch:
             bottomImageView.hidden = NO;
             dataLabel.text = @"没有搜索结果";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
             break;
         case kNoDataType_ReconmentFriend:
             bottomImageView.hidden = NO;
             dataLabel.text = @"没有推荐";
-            loaderrImageView.image = [UIImage imageNamed:@"bad.png"];
+            loaderrImageView.image = [UIImage imageNamed:@"kong_shc.png"];
+            break;
+        case kNoDataType_NotFound:
+            dataLabel.text = RDLocalizedString(@"RDString_ArtNotFound");
+            loaderrImageView.image = [UIImage imageNamed:@"kong_wenzhang.png"];
             break;
         
     }

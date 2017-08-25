@@ -9,13 +9,13 @@
 #import "ScreenDocumentViewController.h"
 #import "GCCScreenImage.h"
 #import "OpenFileTool.h"
-#import "PhotoTool.h"
+#import "RDPhotoTool.h"
 #import "UIImage+Custom.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
 
+#import "RDHomeStatusView.h"
 
 @interface ScreenDocumentViewController ()<UIScrollViewDelegate,UIWebViewDelegate,UIGestureRecognizerDelegate>
 
@@ -45,6 +45,31 @@
     [self createUI];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    if ([GlobalData shared].isBindRD) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self screenButtonDidClickedWithSuccess:^{
+                
+                // 获得点击图片，回传给缩略图
+                if (self.isScreen) {
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_File];
+                    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
+                }
+                
+            } failure:^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                
+                [[RDHomeStatusView defaultView] stopScreen];
+            }];
+        });
+    }else{
+        [SAVORXAPI showConnetToTVAlert:@"doc"];
+    }
+}
+
 - (void)createUI
 {
     self.orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -56,6 +81,8 @@
 //    
     //初始化webView
     self.webView = [[UIWebView alloc] init];
+    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
+    self.webView.backgroundColor = [UIColor clearColor];
     self.webView.delegate = self;
     self.webView.scrollView.delegate = self;
     [self.view addSubview:self.webView];
@@ -68,20 +95,14 @@
         make.right.mas_equalTo(0);  
     }];
     
-//    //webView加载文档
+    //webView加载文档
     NSURL * url = [NSURL fileURLWithPath:self.path];
     self.webView.scalesPageToFit = YES;
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
     self.webView.scrollView.delegate = self;
 
-    if ([GlobalData shared].isBindDLNA || [GlobalData shared].isBindRD) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
-        self.isScreen = YES;
-    }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
-        [SAVORXAPI showConnetToTVAlert:@"doc"];
-        self.isScreen = NO;
-    }
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.isScreen = NO;
     
     self.lockButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.lockButton setBackgroundImage:[UIImage imageNamed:@"suoping"] forState:UIControlStateNormal];
@@ -105,7 +126,7 @@
 
 - (void)screenDidQiutWithBox
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
     self.seriesId = [Helper getTimeStamp];
     self.isScreen = NO;
 }
@@ -123,8 +144,8 @@
 
 - (void)ApplicationDidBindToDevice
 {
-    self.isScreen = YES;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
+    self.isScreen = NO;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
 }
 
 - (void)stopScreenDocment:(BOOL)fromHomeType
@@ -146,7 +167,7 @@
 
 - (void)stop
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
     self.seriesId = [Helper getTimeStamp];
     self.isScreen = NO;
     self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -155,8 +176,8 @@
 - (void)screenDocment
 {
     [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_details_play" key:nil value:nil];
-    if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-        [[HomeAnimationView animationView] scanQRCode];
+    if (![GlobalData shared].isBindRD) {
+        [[RDHomeStatusView defaultView] scanQRCode];
         return;
     }
     
@@ -164,11 +185,9 @@
     
     [self screenButtonDidClickedWithSuccess:^{
         
-        UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
-        [HomeAnimationView animationView].currentImage = currentWebImage;
-        [[HomeAnimationView animationView] startScreenWithViewController:self];
+        [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_File];
         
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏" style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.isScreen = YES;
     } failure:^{
@@ -178,6 +197,10 @@
 
 - (void)orientationChanged
 {
+    if (self.navigationController.topViewController != self) {
+        return;
+    }
+    
     UIInterfaceOrientation  orientation = [UIApplication sharedApplication].statusBarOrientation;
     if (orientation == UIInterfaceOrientationPortrait) {
         self.orientation = orientation;
@@ -252,12 +275,16 @@
     UIImage * image = [screenImage ScalingToSize:size];
     NSString * keyStr = [NSString stringWithFormat:@"savorPhoto%@.png", [Helper getTimeStamp]];
         if ([GlobalData shared].isBindRD) {
-            [[PhotoTool sharedInstance] compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
+            [RDPhotoTool compressImageWithImage:image finished:^(NSData *minData, NSData *maxData) {
                 
                 [self.task cancel];
                 
                 self.task = [SAVORXAPI postFileImageWithURL:STBURL data:minData name:keyStr type:2 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
                     if (successBlock) {
+                        if (self.isScreen == NO) {
+                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen") style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenDocment:)];
+                            self.isScreen = YES;
+                        }
                         successBlock();
                     }
                     self.task = [SAVORXAPI postFileImageWithURL:STBURL data:maxData name:keyStr type:2 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -271,12 +298,12 @@
                         failureBlock();
                     }
                     if ([error.domain isEqualToString:@"cancleFileScreen"]) {
-                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenDocment)];
                         self.isScreen = NO;
                     }
                     if ([error.domain isEqualToString:@"fileScreen"]) {
-                        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:@"提示" message:error.localizedDescription];
-                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"我知道了" handler:^{
+                        RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:error.localizedDescription];
+                        RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
                             
                         } bold:YES];
                         [alert addActions:@[action]];
@@ -285,20 +312,9 @@
                     }else{
                         if (error.code != -999) {
                             [MBProgressHUD showTextHUDwithTitle:ScreenFailure];
+                        }else{
+                            //已取消
                         }
-                    }
-                }];
-            }];
-        }else if ([GlobalData shared].isBindDLNA) {
-            [OpenFileTool writeImageToSysImageCacheWithImage:image andName:keyStr handle:^(NSString *keyStr) {
-                NSString *asseturlStr = [NSString stringWithFormat:@"%@image?%@", [HTTPServerManager getCurrentHTTPServerIP],keyStr];
-                [[GCCUPnPManager defaultManager] setAVTransportURL:asseturlStr Success:^{
-                    if (successBlock) {
-                        successBlock();
-                    }
-                } failure:^{
-                    if (failureBlock) {
-                        failureBlock();
                     }
                 }];
             }];
@@ -354,31 +370,6 @@
     [super viewWillDisappear:animated];
     [self.navigationController setHidesBarsOnTap:NO];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-    if (self.isScreen) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self screenButtonDidClickedWithSuccess:^{
-            
-                // 获得点击图片，回传给缩略图
-                if (self.isScreen) {
-                    UIImage *currentWebImage =  [GCCScreenImage screenView:self.webView];
-                    [HomeAnimationView animationView].currentImage = currentWebImage;
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
-                    [SAVORXAPI postUMHandleWithContentId:@"file_to_screen_play" key:nil value:nil];
-                }
-                
-            } failure:^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                
-                [[HomeAnimationView animationView] stopScreen];
-            }];
-        });
-    }
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -453,6 +444,40 @@
     return YES;
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if (orientation == UIInterfaceOrientationLandscapeLeft ||
+        orientation == UIInterfaceOrientationLandscapeRight) {
+        return YES;
+    }
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    if (self.isLockScreen) {
+        switch (self.orientation) {
+            case UIInterfaceOrientationPortrait:
+                return UIInterfaceOrientationMaskPortrait;
+                break;
+                
+            case UIInterfaceOrientationLandscapeLeft:
+                return UIInterfaceOrientationMaskLandscapeLeft;
+                break;
+                
+            case UIInterfaceOrientationLandscapeRight:
+                return UIInterfaceOrientationMaskLandscapeRight;
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

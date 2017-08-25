@@ -8,7 +8,6 @@
 
 #import "PhotoEditTextView.h"
 #import "PhotoTextLabel.h"
-#import "IQKeyboardManager.h"
 
 @interface PhotoEditTextView ()<UITextFieldDelegate>
 
@@ -32,8 +31,6 @@
 
 - (void)customSelf
 {
-    [[IQKeyboardManager sharedManager] setEnable:NO];
-    
     self.effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
     [self addSubview:self.effectView];
     [self.effectView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -46,7 +43,7 @@
     self.textLabel.lineBreakMode = NSLineBreakByTruncatingHead;
     self.textLabel.textColor = [UIColor whiteColor];
     self.textLabel.backgroundColor = [UIColor clearColor];
-    self.textLabel.text = @"请输入文字";
+    self.textLabel.text = RDLocalizedString(@"RDString_PleaseInputText");
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(textLabelDidBeClicked)];
     [self.textLabel addGestureRecognizer:tap];
     [self addSubview:self.textLabel];
@@ -56,7 +53,7 @@
     [self addSubview:self.toolView];
     
     self.textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 5, kMainBoundsWidth - 70, 30)];
-    self.textField.placeholder = @"点击输入文字";
+    self.textField.placeholder = RDLocalizedString(@"RDString_ClickToInputText");
     self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.textField.backgroundColor = [UIColor whiteColor];
@@ -67,7 +64,7 @@
     
     UIButton * OKButton = [UIButton buttonWithType:UIButtonTypeCustom];
     OKButton.frame = CGRectMake(kMainBoundsWidth - 60, 0, 60, 40);
-    [OKButton setTitle:@"完成" forState:UIControlStateNormal];
+    [OKButton setTitle:RDLocalizedString(@"RDString_Done") forState:UIControlStateNormal];
     [OKButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [OKButton addTarget:self action:@selector(OKButtonDidBeClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.toolView addSubview:OKButton];
@@ -87,7 +84,7 @@
     
     NSString *toBeString = textField.text;
     if (toBeString.length == 0) {
-        self.textLabel.text = @"点击输入文字";
+        self.textLabel.text = RDLocalizedString(@"RDString_ClickToInputText");
         return;
     }else{
         self.textLabel.text = toBeString;
@@ -106,11 +103,13 @@
             if (self.style == PhotoEditTextStyleTitle) {
                 if (toBeString.length > 16) {
                     textField.text = [toBeString substringToIndex:16];
-                    [MBProgressHUD showTextHUDwithTitle:@"最多输入16个字符"];
+                    [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_MaxInputNumber_16")];
+                    self.textLabel.text = textField.text;
                 }
             }else if (toBeString.length > 20) {
                 textField.text = [toBeString substringToIndex:20];
-                [MBProgressHUD showTextHUDwithTitle:@"最多输入20个字符"];
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_MaxInputNumber_20")];
+                self.textLabel.text = textField.text;
             }
         }
         // 有高亮选择的字符串，则暂不对文字进行统计和限制
@@ -122,7 +121,8 @@
     else{
         if (toBeString.length > 16) {
             textField.text = [toBeString substringToIndex:16];
-            [MBProgressHUD showTextHUDwithTitle:@"最多输入16个字符"];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_MaxInputNumber_16")];
+            self.textLabel.text = textField.text;
         }
     }
 }
@@ -136,16 +136,16 @@
 {
     self.style = style;
     if (str.length > 0) {
-        if ([str isEqualToString:@"在这里添加文字"]) {
+        if ([str isEqualToString:RDLocalizedString(@"RDString_AddTextHere")]) {
             self.textField.text = @"";
-            self.textLabel.text = @"点击输入文字";
+            self.textLabel.text = RDLocalizedString(@"RDString_ClickToInputText");
         }else{
             self.textField.text = str;
             self.textLabel.text = str;
         }
     }else{
         self.textField.text = @"";
-        self.textLabel.text = @"点击输入文字";
+        self.textLabel.text = RDLocalizedString(@"RDString_ClickToInputText");
     }
     [view addSubview:self];
     [self.textField becomeFirstResponder];
@@ -156,7 +156,7 @@
     [self.textField resignFirstResponder];
     
     NSString * text = self.textLabel.text;
-    if ([text isEqualToString:@"点击输入文字"]) {
+    if ([text isEqualToString:RDLocalizedString(@"RDString_ClickToInputText")]) {
         text = @"";
     }
     
@@ -220,7 +220,6 @@
 
 - (void)dealloc
 {
-    [[IQKeyboardManager sharedManager] setEnable:YES];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }

@@ -302,6 +302,8 @@ static BGNetworkManager *_manager = nil;
     
     //发送请求
     __weak BGNetworkManager *weakManager = self;
+    //数据加载超时时间15秒
+    self.httpClient.requestSerializer.timeoutInterval = 15;
     switch (request.httpMethod) {
         case BGNetworkRequestHTTPGet:{
             [self.httpClient GET:request.methodName parameters:request.parametersDic progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

@@ -8,17 +8,17 @@
 
 #import "OpenFileTool.h"
 #import "ScreenDocumentViewController.h"
-#import "SXVideoPlayViewController.h"
+#import "FileVideoViewController.h"
 #import "PhotoSliderViewController.h"
 #import "PhotoManyViewController.h"
 #import "DemandViewController.h"
+#import "PhotoLibraryViewController.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
-#import "PhotoTool.h"
 #import "RDAlertView.h"
 #import "RDAlertAction.h"
 #import "LGSideMenuController.h"
-#import "RDScreenLocationView.h"
+#import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 @implementation OpenFileTool
 
@@ -28,13 +28,6 @@
         LGSideMenuController * lgSide = (LGSideMenuController *)[UIApplication sharedApplication].keyWindow.rootViewController;
         if (lgSide.isLeftViewShowing) {
             [lgSide hideLeftView:nil];
-        }
-        
-        for (UIView * view in [UIApplication sharedApplication].keyWindow.subviews) {
-            if ([view isKindOfClass:[RDScreenLocationView class]]) {
-                RDScreenLocationView * locationView = (RDScreenLocationView *)view;
-                [locationView hiddenWithAnimation];
-            }
         }
     }
     
@@ -55,10 +48,10 @@
 
 + (void)screenVideoFileWithPath:(NSString *)filePath
 {
-    MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:[UIApplication sharedApplication].keyWindow];
+    RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:[UIApplication sharedApplication].keyWindow title:RDLocalizedString(@"RDString_Screening")];
     
     UINavigationController * na = [Helper getRootNavigationController];
-    if ([na.topViewController isKindOfClass:[SXVideoPlayViewController class]] ||
+    if ([na.topViewController isKindOfClass:[FileVideoViewController class]] ||
         [na.topViewController isKindOfClass:[ScreenDocumentViewController class]] ||
         [na.topViewController isKindOfClass:[PhotoSliderViewController class]] ||
         [na.topViewController isKindOfClass:[PhotoManyViewController class]] ||
@@ -77,24 +70,8 @@
         
         [OpenFileTool demandVideoWithMediaPath:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] force:0 videoUrl:videoUrl movieURL:movieURL totalTime:totalTime filePath:filePath];
         
-         [hud hideAnimated:NO];
+         [hud hidden];
         
-    }else if ([GlobalData shared].isBindDLNA) {
-        [[GCCUPnPManager defaultManager] setAVTransportURL:[asseturlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] Success:^{
-            [hud hideAnimated:NO];
-            
-            SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
-            video.videoUrl = videoUrl;
-            video.totalTime = totalTime;
-            video.title = [filePath lastPathComponent];
-            UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-            [HomeAnimationView animationView].currentImage = firstImage;
-            [[HomeAnimationView animationView] startScreenWithViewController:video];
-            [[Helper getRootNavigationController] pushViewController:video animated:YES];
-
-        } failure:^{
-            [hud hideAnimated:NO];
-        }];
     }
 }
 
@@ -102,25 +79,21 @@
     
     [SAVORXAPI postVideoWithURL:STBURL mediaPath:mediaPath position:@"0" force:force success:^(NSURLSessionDataTask *task, NSDictionary *result) {
         if ([[result objectForKey:@"result"] integerValue] == 0) {
-            SXVideoPlayViewController * video = [[SXVideoPlayViewController alloc] init];
-            video.videoUrl = videoUrl;
-            video.totalTime = totalTime;
+            FileVideoViewController * video = [[FileVideoViewController alloc] initWithVideoFileURL:videoUrl totalTime:totalTime];
             video.title = [filePath lastPathComponent];
-            UIImage *firstImage = [[PhotoTool sharedInstance] imageWithVideoUrl:movieURL atTime:2];
-            [HomeAnimationView animationView].currentImage = firstImage;
-            [[HomeAnimationView animationView] startScreenWithViewController:video];
+            [[RDHomeStatusView defaultView] startScreenWithViewController:video withStatus:RDHomeStatus_Video];
             [[Helper getRootNavigationController] pushViewController:video animated:YES];
         }else if ([[result objectForKey:@"result"] integerValue] == 4) {
             
             NSString *infoStr = [result objectForKey:@"info"];
-            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:@"抢投提示" message:[NSString stringWithFormat:@"当前%@正在投屏，是否继续投屏?",infoStr]];
-            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:@"取消" handler:^{
+            RDAlertView *alertView = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_AlertWithScreen") message:[NSString stringWithFormat:@"%@%@%@", RDLocalizedString(@"RDString_ScreenContinuePre"), infoStr, RDLocalizedString(@"RDString_ScreenContinueSuf")]];
+            RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_Cancle") handler:^{
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"cancel",@"type" : @"video"}];
             } bold:NO];
-            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:@"继续投屏" handler:^{
+            RDAlertAction * actionOne = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_ContinueScreen") handler:^{
                 [self demandVideoWithMediaPath:mediaPath force:1 videoUrl:videoUrl movieURL:movieURL totalTime:totalTime filePath:filePath];
                 [SAVORXAPI postUMHandleWithContentId:@"to_screen_competition_hint" withParmDic:@{@"to_screen_competition_hint" : @"ensure",@"type" : @"video"}];
-            } bold:NO];
+            } bold:YES];
             [alertView addActions:@[action,actionOne]];
             [alertView show];
             
@@ -136,28 +109,12 @@
 + (void)screenDocmentWithPath:(NSString *)filePath
 {
     UINavigationController * na = [Helper getRootNavigationController];
-    BaseViewController * base = (BaseViewController *)na.topViewController;
-    if ([base isKindOfClass:[ScreenDocumentViewController class]] ||
-        [base isKindOfClass:[PhotoSliderViewController class]] ||
-        [base isKindOfClass:[PhotoManyViewController class]]) {
-        [base.navigationController popViewControllerAnimated:NO];
-    }else if ([base isKindOfClass:[SXVideoPlayViewController class]]) {
-        SXVideoPlayViewController * vc = (SXVideoPlayViewController *)base;
-        if (vc.model) {
-            UIViewController * firstVC = [na.viewControllers firstObject];
-            [vc.navigationController popToViewController:firstVC animated:NO];
-        }else{
-            [vc.navigationController popViewControllerAnimated:NO];
-        }
-    }else if ([base isKindOfClass:[DemandViewController class]]) {
-        UIViewController * vc = [na.viewControllers firstObject];
-        [base.navigationController popToViewController:vc animated:NO];
-    }
+    [na popToRootViewControllerAnimated:NO];
     
     ScreenDocumentViewController * viewController = [[ScreenDocumentViewController alloc] init];
     viewController.title = [filePath lastPathComponent];
     viewController.path = filePath;
-    [base.navigationController pushViewController:viewController animated:YES];
+    [na pushViewController:viewController animated:YES];
 }
 
 + (NSString *)copyDocmentFileWithPath:(NSString *)path andType:(FileType)type

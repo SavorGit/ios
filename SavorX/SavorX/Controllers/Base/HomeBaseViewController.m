@@ -9,6 +9,7 @@
 
 #import "HomeBaseViewController.h"
 #import "AnimationImageView.h"
+#import "RDLoadingView.h"
 
 @interface HomeBaseViewController ()<NoDataViewDelegate,NoNetWorkViewDelegate>{
     
@@ -16,8 +17,10 @@
     NoDataView*         _noDataView;
     /**无网视图**/
     NoNetWorkView*      _noNetWorkView;
-    
+    /**Loading视图**/
+    RDLoadingView*      _loadingView;
 }
+@property (nonatomic, strong) UILabel * TopFreshLabel;
 
 @end
 
@@ -209,6 +212,81 @@
 #pragma mark NoNetWorkViewDelegate
 -(void)retryToGetData{
     
+}
+
+#pragma mark - loading的显示方法
+- (void)showLoadingView
+{
+    if (!_loadingView) {
+        _loadingView = [[RDLoadingView alloc] init];
+    }
+    
+    if (_loadingView.superview) {
+        [_loadingView removeFromSuperview];
+    }
+    
+    [self.view addSubview:_loadingView];
+    [_loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(104);
+        make.height.mas_equalTo(40);
+        make.centerX.mas_equalTo(0);
+        make.centerY.mas_equalTo(-30);
+    }];
+    [_loadingView showLoaingAnimation];
+}
+
+- (void)hiddenLoadingView
+{
+    if (_loadingView) {
+        if (_loadingView.superview) {
+            [_loadingView hiddenLoaingAnimation];
+        }
+    }
+}
+
+//页面顶部下弹状态栏显示
+- (void)showTopFreshLabelWithTitle:(NSString *)title
+{
+    //移除当前动画
+    [self.TopFreshLabel.layer removeAllAnimations];
+    
+    //取消延时重置状态栏
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(resetTopFreshLabel) object:nil];
+    
+    //重新设置状态栏下弹动画
+    self.TopFreshLabel.text = title;
+    self.TopFreshLabel.frame = CGRectMake(0, -35, kMainBoundsWidth, 35);
+    [UIView animateWithDuration:.5f animations:^{
+        self.TopFreshLabel.frame = CGRectMake(0, 0, kMainBoundsWidth, 35);
+    } completion:^(BOOL finished) {
+        [self performSelector:@selector(resetTopFreshLabel) withObject:nil afterDelay:2.f];
+    }];
+}
+
+//重置页面顶部下弹状态栏
+- (void)resetTopFreshLabel
+{
+    [UIView animateWithDuration:.5f animations:^{
+        self.TopFreshLabel.frame = CGRectMake(0, -35, kMainBoundsWidth, 35);
+    }];
+}
+
+- (UILabel *)TopFreshLabel
+{
+    if (!_TopFreshLabel) {
+        _TopFreshLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, -35, kMainBoundsWidth, 35)];
+        _TopFreshLabel.textAlignment = NSTextAlignmentCenter;
+        _TopFreshLabel.backgroundColor = [UIColorFromRGB(0xffebc3) colorWithAlphaComponent:.96f];
+        _TopFreshLabel.font = [UIFont systemFontOfSize:15];
+        _TopFreshLabel.textColor = UIColorFromRGB(0x9a6f45);
+        [self.view addSubview:_TopFreshLabel];
+    }
+    return _TopFreshLabel;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -1,0 +1,197 @@
+/* 
+  Localizable.strings
+  SavorX
+
+  Created by 郭春城 on 2017/8/4.
+  Copyright © 2017年 郭春城. All rights reserved.
+*/
+
+//通用
+"RDString_APPName" = "小热点";
+"RDString_CreateWealth" = "创富";
+"RDString_Live" = "生活";
+"RDString_SpecialTopic" = "专题";
+"RDString_CellEditDelete" = " 删除 ";
+"RDString_RecommendForYou" = "为您推荐";
+"RDString_SeeMore" = "查看更多";
+"RDString_Recommend" = "推荐";
+"RDString_Cancle" = "取消";
+"RDString_Sure" = "确定";
+"RDString_Alert" = "提示";
+"RDString_Loading" = "正在加载";
+"RDString_Back" = "退出";
+"RDString_CanScreenRestaurant" = "提供投屏的餐厅";
+"RDString_CurrenRestaurant" = "当前餐厅";
+"RDString_ReataurantAlert" = "进入餐厅连接包间wifi, 精彩内容即可投屏到电视上!";
+"RDString_IKnewIt" = "我知道了";
+"RDString_KnewIt" = "知道了";
+"RDString_StartNow" = "立即开启";
+"RDSting_NotSurpport" = "该内容暂不支持分享";
+"RDString_CollectNone" = "您还没有收藏~";
+"RDString_ArtNotFound" = "该内容找不到了~";
+"RDString_imgAtRecommend" = "图集推荐";
+
+//View
+"RDString_Image" = "图";
+"RDString_StatusFindhotel" = "您已进入酒楼,快来体验用电视看手机";
+"RDString_StatusHasConnectPre" = "已连接";
+"RDString_StatusHasConnectSuf" = "的电视";
+"RDString_StatusScreenPhoto" = "正在投屏图片,点击进入";
+"RDString_StatusScreenVideo" = "正在投屏本地视频,点击进入";
+"RDString_StatusScreenFile" = "正在投屏文件,点击进入";
+"RDString_StatusDemandVideo" = "正在点播视频,点击进入";
+"RDString_RDDefinitionHQD" = "超清";
+"RDString_RDDefinitionSD" = "标清";
+"RDString_RDDefinitionHD" = "高清";
+"RDString_RDRePlay" = "重播";
+"RDString_Share" = "分享";
+"RDString_Collect" = "收藏";
+"RDString_ReLoad" = "重新加载";
+
+//连接
+"RDString_PleaseInputNum" = "请输入电视中的三位数连接电视";
+"RDString_Reconnect" = "重新连接";
+"RDString_HelpForConnect" = "连接步骤";
+"RDString_Connecting" = "连接中";
+"RDSting_AlertWithTVWifiPre" = "请将wifi连接至";
+"RDSting_AlertWithTVWifiSuf" = "电视所在Wi-Fi";
+"RDString_PleaseChangeWifi" = "手机与电视连接wifi不一致，请切换后重试";
+"RDString_NotFoundTV" = "未发现可连接的电视\n请连接与电视相同的wifi";
+"RDString_CheackingSence" = "正在扫描可连接的电视";
+"RDString_ConnectScreenAlert" = "请点击\"连接电视\", 即可投屏";
+"RDString_FindTVCanScreen" = "发现电视, 可以投屏";
+"RDString_ConnectSuccessCanScreen" = "连接成功, 可以投屏";
+
+//侧边栏
+"RDString_MyCollection" = "我的收藏";
+"RDString_Advice" = "意见反馈";
+"RDString_HelpCenter" = "帮助中心";
+"RDString_Activity" = "优惠活动";
+"RDString_ClearCache" = "清除缓存";
+"RDString_CurrentVersion" = "当前版本";
+"RDString_PleaseUseInHotel" = "请在酒店环境下使用该功能";
+"RDString_ShareAPPToFriend" = "向朋友推荐小热点";
+"RDString_ClearCacheAlert" = "本次清除缓存，将清除图片、视频、以及您的文件缓存，请确认您的操作";
+"RDString_ClearCacheOK" = "清理完成";
+
+//意见反馈
+"RDString_PleaseInputAllInfo" = "请填写完整信息";
+"RDString_Sending" = "正在发送";
+"RDString_HasSend" = "已发送";
+"RDString_AdvicePhone" = "选填，便于我们与您联系";
+"RDString_AdviceP" = "请简要描述您的建议";
+"RDString_AdviceTitle" = "您的宝贵意见";
+"RDString_ConnectTitle" = "联系方式";
+"RDString_maxInput" = "最多输入200个字符";
+
+//文件
+"RDString_File" = "我的文件";
+"RDString_FileScreenWays" = "文件投屏步骤";
+"RDString_FileNotSupport" = "不支持的文件";
+"RDString_FileIsNone" = "没有发现文件，请导入";
+
+//相册
+"RDString_PhotoLibrarySetting" = "该功能需要开启相册权限，是否前往进行设置";
+"RDString_GoToSetting" = "前往设置";
+"RDString_Choose" = "选择";
+"RDString_AllChoose" = "全选";
+"RDString_CancleAllChoose" = "取消全选";
+"RDString_MaxNumForChoose" = "最多只能选择50张";
+"RDString_MinNumForChoose" = "请至少选择一张图片";
+"RDString_PhotoHasDelete" = "照片已被删除";
+"RDString_VideoHasDelete" = "视频已被删除";
+"RDString_MyPhoto" = "我的照片";
+"RDString_Rotate" = "旋转";
+"RDString_Text" = "文字";
+"RDString_AddTextHere" = "在这里添加文字";
+"RDString_PlayPhotoNow" = "正在播放图片";
+"RDString_Slider" = "幻灯片";
+"RDString_HasPause" = "已暂停";
+"RDString_SliderHasStop" = "幻灯片播放已经结束";
+"RDString_CompressingVideo" = "正在压缩视频";
+"RDString_PleaseInputText" = "请输入文字";
+"RDString_ClickToInputText" = "点击输入文字";
+"RDString_Done" = "完成";
+"RDString_MaxInputNumber_16" = "最多输入16个字符";
+"RDString_MaxInputNumber_20" = "最多输入20个字符";
+
+//分享
+"RDString_ShareTo" = "分享到";
+"RDString_WeChat" = "微信";
+"RDString_WeChatTimeLine" = "朋友圈";
+"RDString_WeChatTimeLineAll" = "微信朋友圈";
+"RDString_Sina" = "新浪微博";
+"RDString_WeiBo" = "微博";
+"RDString_QQZone" = "QQ空间";
+"RDString_CopyLink" = "复制链接";
+"RDString_WeChatFavorite" = "微信收藏";
+"RDString_ShareAPPTitle" = "我觉得小热点很好用, 推荐给您~";
+"RDString_ShareAPPDetail" = "快点儿来参加抽奖活动哦~";
+
+//与电视互动
+"RDString_Screen" = "投屏";
+"RDString_BackScreen" = "退出投屏";
+"RDString_Demanding" = "正在点播";
+"RDString_BackDemand" = "退出点播";
+"RDString_Screening" = "正在投屏";
+"RDString_AlertWithScreen" = "抢投提示";
+"RDString_ScreenContinuePre" = "当前";
+"RDString_ScreenContinueSuf" = "正在投屏，是否继续投屏?";
+"RDString_ContinueScreen" = "继续投屏";
+"RDString_ConnetToTV" = "连接电视";
+"RDString_PleaseConnetToTV" = "请先连接电视";
+"RDString_ClickToConnetToTV" = "尚未连接电视,请点击进行连接";
+"RDString_SmashEggsGame" = "砸蛋游戏";
+"RDString_LotteryNumPre" = "您当前有";
+"RDString_LotteryNumSuf" = "次机会";
+"RDString_GameRules" = "游戏规则";
+"RDString_GameRulesDetail" = "1.此游戏为手机与电视同步互动游戏，参与此活动者须先连接电视；\n\n2.每个用户连接电视后，可选择上面任意一个蛋砸开；\n\n3.每个手机每天可以参与五次砸蛋";
+"RDString_GameCopyright" = "本活动最终解释权归\"小热点\"所有";
+"RDString_PleaseConnectToWifi" = "请连接包间wifi后进行操作";
+"RDString_PleaseConnectTVToGame" = "请连接电视，即可参加活动";
+"RDString_GameNotStart" = "当前包间的活动未开始";
+"RDString_LotteryHasNone" = "今天的抽奖机会用完了\n明天再来吧~";
+"RDString_IsHandeling" = "正在进行操作";
+"RDString_DisconnectAlertDetail" = "是否与电视断开，\n断开后将无法投屏？";
+"RDString_Disconnect" = "断开连接";
+"RDString_DidBackScreenAlertPre" = "是否退出包间";
+"RDString_DidBackScreenAlertSuf" = "的投屏";
+"RDString_Congratue" = "恭喜您，中奖啦~";
+"RDString_CongratueTimeAletPre" = "有效领奖时间:1小时,";
+"RDString_CongratueTimeAletSuf" = "关闭后将无法领取";
+"RDString_PrizeFrom" = "快去找服务员领取奖品吧";
+"RDString_NotCongratue" = "很遗憾，没有中奖";
+"RDString_GameShare" = "您可邀请好友参加此活动哦~";
+"RDString_ScreenDidBack" = "您的投屏已经退出了";
+"RDString_ScreenWithOther" = "正在操作投屏, 您的投屏已经退出了";
+"RDString_DisconnectWithNoNet" = "网络不可用，已经断开连接";
+"RDString_DisconnectWithUnknow" = "与电视断开连接，请重试";
+
+//成功
+"RDString_SuccessWithCancle" = "取消成功";
+"RDString_SuccessWithCollect" = "收藏成功";
+"RDString_SuccessWithUpdate" = "更新成功";
+"RDString_SuccessWithCopy" = "复制成功";
+"RDString_SuccessWithShare" =  "分享成功";
+
+//失败
+"RDString_FailedWithCollect" = "收藏失败";
+"RDString_FailedWithHandel" = "操作失败";
+"RDString_FailedExportVideo" = "视频导出失败";
+"RDString_FailedWithConnect" = "连接失败";
+"RDString_FailedWithPlay" = "播放失败";
+"RDString_FailedWithSlider" = "幻灯片投屏失败";
+"RDString_FailedWithSend" = "发送失败";
+"RDString_FailedWithPlayer" = "由于网络问题，播放失败";
+"RDString_FailedWithDemand" = "糟糕,点播失败请检查网络wifi";
+"RDString_FailedWithScreen" = "糟糕,投屏失败请检查网络wifi";
+"RDString_FailedWithShare" =  "分享失败";
+"RDString_FailedWithAVPlayer" = "加载超时，点击重试";
+
+//网络异常
+"RDString_NetFailedWithData" = "数据出错了，更新失败";
+"RDString_NetFailedWithTimeOut" = "数据加载超时";
+"RDString_NetFailedWithBadNet" = "无法连接到网络，请检查网络设置";
+"RDString_NetFailedWithPleaseTryAgain" = "请求失败，请重试";
+"RDString_NetFailedWithGameTimeOut" = "游戏超时啦, 请重新启动";
+"RDString_NetFailedWithNoNet" = "网络异常, 点击重试";

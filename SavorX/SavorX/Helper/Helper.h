@@ -65,4 +65,12 @@
 
 + (void)interfaceOrientation:(UIInterfaceOrientation)orientation;
 
++ (NSString *)transformDate:(NSDate *)date;
+
++ (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size;
+
++ (NSString *)addURLParamsInAPPWith:(NSString *)url;
+
++ (NSString *)addURLParamsShareWith:(NSString *)url;
+
 @end

@@ -26,7 +26,7 @@
 
 + (UIImage *)screenView:(UIView *)view
 {
-    UIGraphicsBeginImageContext(view.frame.size);
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0.0);
     [view.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

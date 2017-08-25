@@ -35,7 +35,6 @@
 #import "ScreenDocumentViewController.h"
 #import "WebViewController.h"
 #import "VideoGuidedTwoDimensionalCode.h"
-#import "HSVideoViewController.h"
 
 #pragma mark -
 
@@ -3059,34 +3058,7 @@ rightViewBackgroundImageInitialScale = _rightViewBackgroundImageInitialScale;
 //返回当前屏幕旋转方向
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    //判断如果是文档展示页就返回镜像，左，右三个方向
-    if ([[Helper getRootNavigationController].topViewController isKindOfClass:[ScreenDocumentViewController class]]){
-        
-        ScreenDocumentViewController * document = (ScreenDocumentViewController *)[Helper getRootNavigationController].topViewController;
-        if (document.isLockScreen) {
-            switch (document.orientation) {
-                case UIInterfaceOrientationPortrait:
-                    return UIInterfaceOrientationMaskPortrait;
-                    break;
-                    
-                case UIInterfaceOrientationLandscapeLeft:
-                    return UIInterfaceOrientationMaskLandscapeLeft;
-                    break;
-                    
-                case UIInterfaceOrientationLandscapeRight:
-                    return UIInterfaceOrientationMaskLandscapeRight;
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
-        
-        return UIInterfaceOrientationMaskAllButUpsideDown;
-    }else if ([[Helper getRootNavigationController].topViewController isKindOfClass:[WebViewController class]] || [[Helper getRootNavigationController].topViewController isKindOfClass:[HSVideoViewController class]]) {
-        return UIInterfaceOrientationMaskAllButUpsideDown;
-    }
-    return UIInterfaceOrientationMaskPortrait;
+    return [Helper getRootNavigationController].topViewController.supportedInterfaceOrientations;
 }
 
 - (void)viewDidAppear:(BOOL)animated

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "HSVodModel.h"
+#import "CreateWealthModel.h"
 
 typedef enum : NSUInteger {
     RDLOGACTION_OPEN,
@@ -31,7 +31,7 @@ typedef enum : NSUInteger {
 @interface RDLogStatisticsAPI : NSObject
 
 //热点条目（对应文章）的log日志
-+ (void)RDItemLogAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(HSVodModel *)model categoryID:(NSString *)categoryID;
++ (void)RDItemLogAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(CreateWealthModel *)model categoryID:(NSString *)categoryID;
 
 //热点启动日志
 + (void)RDItemLogOpenWithHotelID:(NSInteger)hotelID;
@@ -40,7 +40,7 @@ typedef enum : NSUInteger {
 + (void)RDPageLogCategoryID:(NSString *)categoryID volume:(NSString *)volume;
 
 //热点分享的log日志
-+ (void)RDShareLogModel:(HSVodModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume;
++ (void)RDShareLogModel:(CreateWealthModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume;
 
 + (void)checkAndUploadLog;
 

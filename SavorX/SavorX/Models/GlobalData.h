@@ -51,7 +51,7 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 @property (nonatomic, strong) DeviceModel * DLNADevice;
 
 //当前网络状态
-@property (nonatomic, assign) NSInteger networkStatus;
+@property (nonatomic, assign) RDNetworkStatus networkStatus;
 
 //存储小平台呼出二维码地址
 @property (nonatomic, copy) NSString * callQRCodeURL;
@@ -99,7 +99,7 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 @property (nonatomic, assign) BOOL isLaunchedByNotification;
 
 //记录启动应用的通知携带的信息
-@property (nonatomic, strong) HSVodModel * launchModel;
+@property (nonatomic, strong) CreateWealthModel * launchModel;
 
 //记录APNS注册的推送token
 @property (nonatomic, strong) NSString * deviceToken;
@@ -115,6 +115,13 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 @property (nonatomic, assign) double VCLatitude;
 
 @property (nonatomic, assign) double VCLongitude;
+
+//记录是否有收藏和非收藏操作
+@property (nonatomic, assign) BOOL isCollectAction;
+
+//是否是图集
+@property (nonatomic, assign) BOOL isImageAtlas;
+@property (nonatomic, assign) BOOL isImageAtlasHiddenTop;
 
 /**
  *  创建单例

@@ -1,0 +1,14 @@
+/* 
+  InfoPlist.strings
+  SavorX
+
+  Created by 郭春城 on 2017/8/4.
+  Copyright © 2017年 郭春城. All rights reserved.
+*/
+
+"CFBundleDisplayName" = "小热点";
+"NSLocationWhenInUseUsageDescription" = "地图想要在前台使用定位";
+"NSPhotoLibraryUsageDescription" = "需要您的允许才能使用相册功能";
+
+"3DTouch_Screen" = "投屏";
+"3DTouch_Connect" = "连接电视";

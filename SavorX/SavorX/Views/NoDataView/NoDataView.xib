@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,13 +24,6 @@
                             <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bad" translatesAutoresizingMaskIntoConstraints="NO" id="LRk-Wx-hsy">
-                            <rect key="frame" x="125" y="161" width="70" height="104"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="104" id="MZ4-Pj-Y6x"/>
-                                <constraint firstAttribute="width" constant="70" id="dlJ-I0-GX6"/>
-                            </constraints>
-                        </imageView>
                         <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UPv-Jz-Aet">
                             <rect key="frame" x="64" y="304.5" width="192" height="38"/>
                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -47,11 +40,17 @@
                                 <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                         </button>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kong_shc" translatesAutoresizingMaskIntoConstraints="NO" id="LRk-Wx-hsy">
+                            <rect key="frame" x="115" y="163" width="90" height="90"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="90" id="MZ4-Pj-Y6x"/>
+                                <constraint firstAttribute="width" constant="90" id="dlJ-I0-GX6"/>
+                            </constraints>
+                        </imageView>
                     </subviews>
-                    <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="centerX" secondItem="UPv-Jz-Aet" secondAttribute="centerX" id="3aX-YK-7NK"/>
-                        <constraint firstItem="VON-AX-GZO" firstAttribute="top" secondItem="LRk-Wx-hsy" secondAttribute="bottom" constant="10" id="5tE-T0-h25"/>
+                        <constraint firstItem="VON-AX-GZO" firstAttribute="top" secondItem="LRk-Wx-hsy" secondAttribute="bottom" constant="22" id="5tE-T0-h25"/>
                         <constraint firstAttribute="centerY" secondItem="VON-AX-GZO" secondAttribute="centerY" constant="-47.5" id="Dki-31-VTh"/>
                         <constraint firstAttribute="centerX" secondItem="VON-AX-GZO" secondAttribute="centerX" id="KsB-xZ-ubD"/>
                         <constraint firstAttribute="trailing" secondItem="VON-AX-GZO" secondAttribute="trailing" constant="10" id="VTZ-8o-bbA"/>
@@ -88,6 +87,6 @@
         </view>
     </objects>
     <resources>
-        <image name="bad" width="70" height="104"/>
+        <image name="kong_shc" width="90" height="90"/>
     </resources>
 </document>

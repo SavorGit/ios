@@ -106,7 +106,7 @@ static GlobalData* single = nil;
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    NSString * message = [NSString stringWithFormat:@"\"%@\"连接成功, 可以投屏", model.sid];
+    NSString * message = [NSString stringWithFormat:@"\"%@\"%@", model.sid, RDLocalizedString(@"RDString_ConnectSuccessCanScreen")];
     [MBProgressHUD showTextHUDwithTitle:message delay:2.f];
 }
 
@@ -172,7 +172,7 @@ static GlobalData* single = nil;
             self.callQRCodeURL = @"";
         }else{
             [SAVORXAPI postUMHandleWithContentId:@"home_find_tv" key:@"home_find_tv" value:[NSString stringWithFormat:@"%ld",self.hotelId]];
-            [MBProgressHUD showTextHUDwithTitle:@"发现电视, 可以投屏"];
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FindTVCanScreen")];
             if (scene == RDSceneHaveRDBox) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDDidFoundBoxSenceNotification object:nil];
             }else{
@@ -183,7 +183,7 @@ static GlobalData* single = nil;
     }
 }
 
-- (void)setNetworkStatus:(NSInteger)networkStatus
+- (void)setNetworkStatus:(RDNetworkStatus )networkStatus
 {
     if (_networkStatus != networkStatus) {
         _networkStatus = networkStatus;

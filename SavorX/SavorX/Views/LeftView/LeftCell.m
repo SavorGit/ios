@@ -25,15 +25,21 @@
 -(void)fillCellTitle:(NSString *)title content:(NSString*)content{
     
     self.titleLabel.text = title;
+    self.titleLabel.font = kPingFangLight(15);
+    self.textLabel.textColor = UIColorFromRGB(0xece6de);
+    
+    self.contentLabel.font = kPingFangLight(14);
+    self.contentLabel.textColor = UIColorFromRGB(0xece6de);
+    
     if(content.length == 0){
         self.rightLabelWidth.constant = 0;
-        self.rightImageWidth.constant = 15;
+        self.rightImageWidth.constant = 8;
     }else{
         self.contentLabel.text = content;
         self.rightImageWidth.constant = 0;
         self.rightLabelWidth.constant = 60;
     }
-    self.bottomLine.backgroundColor = UIColorFromRGB(0x393939);
+    self.bottomLine.backgroundColor = UIColorFromRGB(0xb45a6a);
 }
 
 - (void)bottomLineHidden:(BOOL)hidden

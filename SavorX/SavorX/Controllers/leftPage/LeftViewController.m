@@ -17,6 +17,7 @@
 #import "LeftTableHeaderView.h"
 #import "ShareRDViewController.h"
 #import "RestaurantListViewController.h"
+#import "SmashEggsGameViewController.h"
 
 @interface LeftViewController ()<UINavigationControllerDelegate>{
     
@@ -37,9 +38,9 @@
     [super viewDidLoad];
     self.navigationController.delegate = self;
     [self setupDatas];
-    self.leftTableView.backgroundColor = UIColorFromRGB(0x202020);
+    self.leftTableView.backgroundColor = kThemeColor;
     CGFloat width = kMainBoundsHeight > kMainBoundsWidth ? kMainBoundsWidth : kMainBoundsHeight;
-    self.headerView = [[LeftTableHeaderView alloc] initWithFrame:CGRectMake(0, 0, width / 3 * 2, width / 3 * 2)];
+    self.headerView = [[LeftTableHeaderView alloc] initWithFrame:CGRectMake(0, 0, width / 3 * 2, width / 3 * 2 - 80)];
     self.leftTableView.tableHeaderView = self.headerView;
     [self.view addSubview:self.footView];
     [self.footView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -48,14 +49,15 @@
         make.bottom.mas_equalTo(0);
         make.right.mas_equalTo(0);
     }];
+    self.leftTableView.showsVerticalScrollIndicator = NO;
     
     // Do any additional setup after loading the view from its nib.
 }
 
 -(void)setupDatas{
 
-    _itemArys = @[@"我的收藏",@"意见反馈",@"帮助中心",@"提供投屏的餐厅",@"清除缓存",@"当前版本"];
-    _imageArys = @[@"shoucang", @"yijianfankui", @"bangzhu",@"canting", @"qingchu", @"banben"];
+    _itemArys = @[RDLocalizedString(@"RDString_MyCollection"),RDLocalizedString(@"RDString_Advice"),RDLocalizedString(@"RDString_HelpCenter"),RDLocalizedString(@"RDString_Activity"),RDLocalizedString(@"RDString_CanScreenRestaurant"),RDLocalizedString(@"RDString_ClearCache"),RDLocalizedString(@"RDString_CurrentVersion")];
+    _imageArys = @[@"cdh_shoucang", @"cdh_yijianfankui", @"cdh_bangzhu",@"cdh_yhhd",@"cdh_canting", @"cdh_qingchu", @"cdh_banben"];
 }
 
 #pragma mark -- UITableViewDataSource
@@ -69,7 +71,7 @@
     [cell bottomLineHidden:NO];
     NSString *content;
     if (indexPath.section == 0) {
-        if (indexPath.row == 3) {
+        if (indexPath.row == 4) {
             [cell bottomLineHidden:YES];
         }
     }else if(indexPath.section == 1){
@@ -81,8 +83,8 @@
             [cell bottomLineHidden:YES];
         }
     }
-    [cell fillCellTitle:[_itemArys objectAtIndex:indexPath.section * 4 + indexPath.row] content:content];
-    [cell.iconImageView setImage:[UIImage imageNamed:[_imageArys objectAtIndex:indexPath.section * 4 + indexPath.row]]];
+    [cell fillCellTitle:[_itemArys objectAtIndex:indexPath.section * 5 + indexPath.row] content:content];
+    [cell.iconImageView setImage:[UIImage imageNamed:[_imageArys objectAtIndex:indexPath.section * 5 + indexPath.row]]];
     
     return cell;
     
@@ -96,7 +98,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 4;
+        return 5;
     }
     return 2;
 }
@@ -119,10 +121,21 @@
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:advice  animated:NO];
         }else if (indexPath.row == 2){
             [self hideLeftViewAnimated:nil];
-            HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help"];
+            HelpViewController * help = [[HelpViewController alloc] initWithURL:@"http://h5.littlehotspot.com/Public/html/help3"];
             help.title = [_itemArys objectAtIndex:indexPath.row];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:help  animated:NO];
         }else if (indexPath.row == 3){
+            [SAVORXAPI postUMHandleWithContentId:@"menu_game" key:nil value:nil];
+            if ([GlobalData shared].hotelId != 0) {
+                [self hideLeftViewAnimated:nil];
+                SmashEggsGameViewController * segvVC = [[SmashEggsGameViewController alloc] init];
+                [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:segvVC  animated:NO];
+            }else{
+                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PleaseUseInHotel")];
+            }
+
+        }
+        else if (indexPath.row == 4){
             [self hideLeftViewAnimated:nil];
             RestaurantListViewController * restVC = [[RestaurantListViewController alloc] init];
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:restVC  animated:NO];
@@ -144,7 +157,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 22.f;
+    return 82.f;
 }
 
 - (UIView *)footView
@@ -158,7 +171,7 @@
         [_footView addGestureRecognizer:tap];
         
         UIView * lineView = [[UIView alloc] initWithFrame:CGRectZero];
-        lineView.backgroundColor = UIColorFromRGB(0x424242);
+        lineView.backgroundColor = UIColorFromRGB(0xb45a6a);
         [_footView addSubview:lineView];
         [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
@@ -177,7 +190,7 @@
         }];
         
         UIImageView * peopleImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-        [peopleImageView setImage:[UIImage imageNamed:@"py"]];
+        [peopleImageView setImage:[UIImage imageNamed:@"cdh_py"]];
         [_footView addSubview:peopleImageView];
         [peopleImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.mas_equalTo(0);
@@ -187,12 +200,12 @@
         
         UILabel * label = [[UILabel alloc] initWithFrame:CGRectZero];
         if (kMainBoundsWidth < 375) {
-            label.font = [UIFont systemFontOfSize:12.5];
+            label.font = kPingFangLight(12.5);
         }else{
-            label.font = [UIFont systemFontOfSize:16];
+            label.font = kPingFangLight(16);
         }
-        label.textColor = UIColorFromRGB(0xffffff);
-        label.text = @"向朋友推荐小热点";
+        label.textColor = UIColorFromRGB(0xece6de);
+        label.text = RDLocalizedString(@"RDString_ShareAPPToFriend");
         [_footView addSubview:label];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(peopleImageView.mas_right).offset(10);
@@ -202,12 +215,12 @@
         }];
         
         UIImageView * rightMode = [[UIImageView alloc] initWithFrame:CGRectZero];
-        [rightMode setImage:[UIImage imageNamed:@"more"]];
+        [rightMode setImage:[UIImage imageNamed:@"cdh_more"]];
         [_footView addSubview:rightMode];
         [rightMode mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-15);
-            make.width.mas_equalTo(15);
-            make.height.mas_equalTo(15);
+            make.right.mas_equalTo(-20);
+            make.width.mas_equalTo(8);
+            make.height.mas_equalTo(14);
             make.centerY.mas_equalTo(0);
         }];
     }
@@ -220,7 +233,7 @@
     self.sideMenuController.leftViewAnimationSpeed = .2f;
     [self hideLeftViewAnimated:nil];
     ShareRDViewController * share = [[ShareRDViewController alloc] initWithType:SHARERDTYPE_APPLICATION];
-    share.title = @"推荐";
+    share.title = RDLocalizedString(@"RDString_Recommend");
    [(UINavigationController *)self.sideMenuController.rootViewController pushViewController:share  animated:NO];
     self.sideMenuController.leftViewAnimationSpeed = .5f;
     [SAVORXAPI postUMHandleWithContentId:@"menu_recommend" key:nil value:nil];
@@ -234,11 +247,11 @@
 //提示用户是否确认清除缓存
 - (void)showAlertWithClearCache
 {
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"" message:@"本次清除缓存，将清除图片、视频、以及您的文件缓存，请确认您的操作" preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"" message:RDLocalizedString(@"RDString_ClearCacheAlert") preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction * action1 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Cancle") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [SAVORXAPI postUMHandleWithContentId:@"menu_clear_cache" key:@"menu_clear_cache" value:@"fail"];
     }];
-    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction * action2 = [UIAlertAction actionWithTitle:RDLocalizedString(@"RDString_Sure") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [self clearApplicationCache];
         [SAVORXAPI postUMHandleWithContentId:@"menu_clear_cache" key:@"menu_clear_cache" value:@"success"];
     }];
@@ -257,14 +270,14 @@
     
     NSFileManager* manager = [NSFileManager defaultManager];
     
-    NSString * mp4Str = [HTTPServerDocument stringByAppendingPathComponent:@"media-Redianer-TempCache.mp4"];
+    NSString * mp4Str = [HTTPServerDocument stringByAppendingPathComponent:RDScreenVideoName];
     //检测导出视频缓存地址
     if ([manager fileExistsAtPath:mp4Str]) {
         [manager removeItemAtPath:mp4Str error:nil];
     }
     
     //检测图片,PDF,DOC,EXCEL,PPT,VIDEO,PHASSET缓存
-    NSArray * paths = @[ImageDocument, PDFDocument, DOCDocument, EXCELDocument, PPTDocument, VideoDocument, SystemImage, CategoryListCache, FileCachePath, HotVodCache, HotelCache];
+    NSArray * paths = @[ImageDocument, PDFDocument, DOCDocument, EXCELDocument, PPTDocument, VideoDocument, SystemImage, FileCachePath];
     for (NSString * path in paths) {
         BOOL isDirectory;
         if ([manager fileExistsAtPath:path isDirectory:&isDirectory]) {
@@ -285,7 +298,7 @@
     [self.leftTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
     [MBProgressHUD hideHUDForView:self.view animated:NO];
     
-    [MBProgressHUD showSuccessHUDInView:self.view title:@"清理完成"];
+    [MBProgressHUD showSuccessHUDInView:self.view title:RDLocalizedString(@"RDString_ClearCacheOK")];
 }
 
 #pragma mark -- 获取当前系统的缓存大小
@@ -302,12 +315,9 @@
     folderSize += [self fileSizeAtPath:PPTDocument];
     folderSize += [self fileSizeAtPath:VideoDocument];
     folderSize += [self fileSizeAtPath:SystemImage];
-    folderSize += [self fileSizeAtPath:CategoryListCache];
     folderSize += [self fileSizeAtPath:FileCachePath];
-    folderSize += [self fileSizeAtPath:HotVodCache];
-    folderSize += [self fileSizeAtPath:HotelCache];
     
-    NSString * mp4Str = [HTTPServerDocument stringByAppendingPathComponent:@"media-Redianer-TempCache.mp4"];
+    NSString * mp4Str = [HTTPServerDocument stringByAppendingPathComponent:RDScreenVideoName];
     if ([manager fileExistsAtPath:mp4Str]) {
         folderSize += [self fileSizeAtPath:mp4Str];
     }
@@ -368,7 +378,6 @@
     } else {
         [navigationController setNavigationBarHidden:NO animated:YES];
     }
-    
 }
 
 - (BOOL)prefersStatusBarHidden {

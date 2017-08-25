@@ -7,10 +7,7 @@
 //
 
 #import "BaseNavigationController.h"
-#import "ScreenDocumentViewController.h"
-#import "WebViewController.h"
 #import "UIViewController+LGSideMenuController.h"
-#import "WMPageController.h"
 
 @interface BaseNavigationController ()
 
@@ -27,25 +24,10 @@
 }
 
 - (BOOL)prefersStatusBarHidden {
-    
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if (orientation == UIInterfaceOrientationLandscapeLeft ||
-        orientation == UIInterfaceOrientationLandscapeRight) {
-        return YES;
-    }
-    
-    return NO;
+    return self.topViewController.prefersStatusBarHidden;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    
-    if ([self.topViewController isKindOfClass:[WMPageController class]]) {
-        WMPageController * vc = (WMPageController *)self.topViewController;
-        if (vc.isShowScreenView) {
-            return UIStatusBarStyleDefault;
-        }
-    }
-    
     return UIStatusBarStyleLightContent;
 }
 

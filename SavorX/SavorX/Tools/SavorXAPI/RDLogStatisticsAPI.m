@@ -15,7 +15,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
 @implementation RDLogStatisticsAPI
 
 //热点条目（对应文章）的log日志
-+ (void)RDItemLogAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(HSVodModel *)model categoryID:(NSString *)categoryID
++ (void)RDItemLogAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(CreateWealthModel *)model categoryID:(NSString *)categoryID
 {
     const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
     dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
@@ -61,7 +61,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
 }
 
 //创建一条新的日志
-+ (void)RDCreateLogWithAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(HSVodModel *)model categoryID:(NSString *)categoryID needNewTime:(BOOL)needNewTime
++ (void)RDCreateLogWithAction:(RDLOGACTION)action type:(RDLOGTYPE)type model:(CreateWealthModel *)model categoryID:(NSString *)categoryID needNewTime:(BOOL)needNewTime
 {
     NSString * volume;
     switch (model.type) {
@@ -117,16 +117,20 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
         time = [Helper getTimeStampMS];
     }
     
-    NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,ios,%lf,%lf,,%@,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:time], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]],[RDLogStatisticsAPI getActionStringWithAction:action],[RDLogStatisticsAPI getTypeStringWithType:type],[RDLogStatisticsAPI checkId:model.cid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],[RDLogStatisticsAPI checkIsNullOrEmpty:model.mediaId], [GlobalData shared].longitude, [GlobalData shared].latitude, [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].areaId],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
-    [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
+    const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
+    dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
+    dispatch_async(RDLogQueue, ^{
+        NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@,%@,%@,%@,%@,ios,%lf,%lf,,%@,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:time], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]],[RDLogStatisticsAPI getActionStringWithAction:action],[RDLogStatisticsAPI getTypeStringWithType:type],[RDLogStatisticsAPI checkIsNullOrEmpty:model.artid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID],[RDLogStatisticsAPI checkIsNullOrEmpty:model.mediaId], [GlobalData shared].longitude, [GlobalData shared].latitude, [RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].areaId],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
+        [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
+    });
 }
 
-+ (void)RDShareLogModel:(HSVodModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume
++ (void)RDShareLogModel:(CreateWealthModel *)model categoryID:(NSString *)categoryID volume:(NSString *)volume
 {
     const char * RDLogQueueName = [RDCreateLogQueueID UTF8String];
     dispatch_queue_t RDLogQueue = dispatch_queue_create(RDLogQueueName, NULL);
     dispatch_async(RDLogQueue, ^{
-        NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,share,content,%@,%@,%@,%@,ios,%lf,%lf,,%@,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkId:model.cid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID], [RDLogStatisticsAPI checkIsNullOrEmpty:model.mediaId],[GlobalData shared].longitude, [GlobalData shared].latitude,[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].areaId],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
+        NSString * logItem = [NSString stringWithFormat:@"%@,%@,%@,%@,share,content,%@,%@,%@,%@,ios,%lf,%lf,,%@,%@", [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkId:[GlobalData shared].hotelId], [RDLogStatisticsAPI checkId:[GlobalData shared].RDBoxDevice.roomID], [RDLogStatisticsAPI checkIsNullOrEmpty:[Helper getTimeStampMS]], [RDLogStatisticsAPI checkIsNullOrEmpty:model.artid],[RDLogStatisticsAPI checkIsNullOrEmpty:categoryID],[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].deviceID], [RDLogStatisticsAPI checkIsNullOrEmpty:model.mediaId],[GlobalData shared].longitude, [GlobalData shared].latitude,[RDLogStatisticsAPI checkIsNullOrEmpty:[GlobalData shared].areaId],[RDLogStatisticsAPI checkIsNullOrEmpty:volume]];
         [RDLogStatisticsAPI RDLogSaveWithLogItem:logItem];
     });
 }

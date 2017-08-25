@@ -9,9 +9,10 @@
 #import "PhotoSliderViewController.h"
 #import "ShowPhotoCollectionViewCell.h"
 #import "OpenFileTool.h"
-#import "PhotoTool.h"
+#import "RDPhotoTool.h"
 #import "GCCUPnPManager.h"
-#import "HomeAnimationView.h"
+#import "RDHomeStatusView.h"
+#import "RDInteractionLoadingView.h"
 
 #define SliderCell @"SliderCell"
 
@@ -25,7 +26,6 @@
 @property (nonatomic, strong) NSTimer * timer; //幻灯片播放的定时器
 @property (nonatomic, assign) BOOL isScreen; //是否是在线状态
 
-@property (nonatomic, strong) UILabel * indexLabel;
 @property (nonatomic, strong) UILabel * timeLabel;
 @property (nonatomic, strong) UIButton * playButton;
 @property (nonatomic, strong) UILabel * statusLabel;
@@ -49,7 +49,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"我的照片";
+    self.currentIndex = 1;
+    
+    self.title = RDLocalizedString(@"RDString_MyPhoto");
     
     self.view.backgroundColor = VCBackgroundColor;
     
@@ -91,9 +93,9 @@
     [self.timer invalidate];
     self.timer = nil;
     self.isScreen = NO;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
     self.seriesId = [Helper getTimeStamp];
-    self.statusLabel.text = @"幻灯片";
+    self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
 }
 
 - (void)setupBottomView
@@ -108,7 +110,7 @@
     }];
     
     UIView * downView = [[UIView alloc] initWithFrame:CGRectZero];
-    downView.backgroundColor = [UIColorFromRGB(0x202020) colorWithAlphaComponent:.94f];
+    downView.backgroundColor = [kThemeColor colorWithAlphaComponent:.94f];
     [self.bottomView addSubview:downView];
     [downView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(50);
@@ -118,25 +120,14 @@
     }];
     
     self.statusLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.statusLabel.font = [UIFont systemFontOfSize:16];
+    self.statusLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:16];
     self.statusLabel.textColor = [UIColor whiteColor];
-    self.statusLabel.text = @"正在播放图片";
+    self.statusLabel.text = [NSString stringWithFormat:@"%@  1/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.PHAssetSource.count - 2];
     [downView addSubview:self.statusLabel];
     [self.statusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(15);
         make.left.mas_equalTo(20);
-        make.size.mas_equalTo(CGSizeMake(100, 20));
-    }];
-    
-    self.indexLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.indexLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:16];
-    self.indexLabel.textColor = [UIColor whiteColor];
-    self.indexLabel.text = [NSString stringWithFormat:@"1/%ld", self.PHAssetSource.count - 2];
-    [downView addSubview:self.indexLabel];
-    [self.indexLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(15);
-        make.left.equalTo(self.statusLabel.mas_right).offset(10);
-        make.size.mas_equalTo(CGSizeMake(50, 20));
+        make.size.mas_equalTo(CGSizeMake(150, 20));
     }];
     
     self.playButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -172,7 +163,7 @@
     NSArray * array = @[self.thirdTimeButton, self.secondTimeButton, self.firstTimeButton];
     for (UIButton * button in array) {
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [button setBackgroundColor:[UIColorFromRGB(0x202020) colorWithAlphaComponent:.7f]];
+        [button setBackgroundColor:[kThemeColor colorWithAlphaComponent:.94f]];
         button.frame = CGRectMake(self.timeLabel.frame.origin.x - 30, 15, 32, 32);
         button.titleLabel.font = [UIFont systemFontOfSize:14];
         button.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -193,16 +184,16 @@
     
     [self.bottomView addSubview:self.timeLabel];
     
-    if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+    if ([GlobalData shared].isBindRD) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen")  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
         self.isScreen = YES;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
     }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         [SAVORXAPI showConnetToTVAlert:@"sliderPhoto"];
         self.isScreen = NO;
         self.playButton.selected = NO;
-        self.statusLabel.text = @"幻灯片";
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  1/%ld", RDLocalizedString(@"RDString_Slider"), self.PHAssetSource.count - 2];
     }
 }
 
@@ -317,12 +308,12 @@
         //播放
         self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-        self.statusLabel.text = @"正在播放图片";
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
     }else{
         //暂停
         [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_pause" key:nil value:nil];
         [self.timer invalidate];
-        self.statusLabel.text = @"已暂停";
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_HasPause"), self.currentIndex, self.PHAssetSource.count - 2];
     }
 }
 
@@ -337,10 +328,10 @@
         [self.task cancel];
     }
     [SAVORXAPI ScreenDemandShouldBackToTVWithSuccess:^{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
         self.seriesId = [Helper getTimeStamp];
         self.navigationItem.rightBarButtonItem.enabled = YES;
-        self.statusLabel.text = @"幻灯片";
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
         [SAVORXAPI postUMHandleWithContentId:@"slide_to_screen_exit" key:nil value:nil];
         if (fromHomeType == YES) {
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_back" key:@"home_quick_back" value:@"success"];
@@ -354,10 +345,18 @@
     }];
 }
 
+- (void)sliderStopWithLocation
+{
+    self.playButton.selected = NO;
+    [self.timer invalidate];
+    self.timer = nil;
+    [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
+}
+
 - (void)screenCurrentImage
 {
-    if (![GlobalData shared].isBindRD && ![GlobalData shared].isBindDLNA) {
-        [[HomeAnimationView animationView] scanQRCode];
+    if (![GlobalData shared].isBindRD) {
+        [[RDHomeStatusView defaultView] scanQRCode];
         return;
     }
     
@@ -375,24 +374,29 @@
     NSString * name = asset.localIdentifier;
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         
+        if (nil == result) {
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PhotoHasDelete") delay:1.f];
+            return;
+        }
+        
         if ([GlobalData shared].isBindRD) {
             
             [MBProgressHUD hideHUDForView:self.view animated:NO];
-            MBProgressHUD * hud = [MBProgressHUD showCustomLoadingHUDInView:self.view];
+            RDInteractionLoadingView * hud = [[RDInteractionLoadingView alloc] initWithView:self.view title:RDLocalizedString(@"RDString_Screening")];
             
-            [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+            [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
                 [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
                     self.playButton.selected = YES;
                     [self.timer setFireDate:[NSDate distantFuture]];
                     [self.timer invalidate];
                     self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
                     [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-                    [[HomeAnimationView animationView] startScreenWithViewController:self];
+                    [[RDHomeStatusView defaultView] startScreenWithViewController:self withStatus:RDHomeStatus_Photo];
                     self.isScreen = YES;
-                    self.statusLabel.text = @"正在播放图片";
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"退出投屏"  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
+                    self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen")  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
                     
-                    [hud hideAnimated:NO];
+                    [hud hidden];
                     [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
                         
                     } failure:^{
@@ -400,12 +404,8 @@
                     }];
                     
                 } failure:^{
-                    [hud hideAnimated:NO];
+                    [hud hidden];
                 }];
-            }];
-        }else if ([GlobalData shared].isBindDLNA) {
-            [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                [self screenDLNAImageWithKeyStr:keyStr];
             }];
         }
     }];
@@ -420,17 +420,22 @@
     if (self.currentIndex == self.PHAssetSource.count - 1) {
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0] atScrollPosition:UICollectionViewScrollPositionRight animated:NO];
         self.currentIndex = 1;
-        [self stopScreenImage:nil];
-        [MBProgressHUD showTextHUDwithTitle:@"幻灯片播放已经结束"];
+        if (self.isScreen) {
+            [self stopScreenImage:nil];
+        }else{
+            [self sliderStopWithLocation];
+        }
+        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_SliderHasStop")];
         self.playButton.selected = NO;
     }else if (self.currentIndex == 0){
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self.PHAssetSource.count - 2 inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         self.currentIndex = self.PHAssetSource.count - 2;
     }
     
-    self.indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
+    
     if (self.isScreen) {
-        if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+        if ([GlobalData shared].isBindRD) {
             PHAsset * asset = [self.PHAssetSource objectAtIndex:self.currentIndex];
             CGFloat width = asset.pixelWidth;
             CGFloat height = asset.pixelHeight;
@@ -443,36 +448,36 @@
                 size = CGSizeMake(1080 * scale, 1080);
             }
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                
+                if (nil == result) {
+                    [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PhotoHasDelete") delay:1.5f];
+                    return;
+                }
+                
                 NSString * name = asset.localIdentifier;
-                if ([GlobalData shared].isBindRD) {
-                    [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
-                        [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
-                            
-                            [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
-                                
-                            } failure:^{
-                                
-                            }];
+                [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
+                        
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
                             
                         } failure:^{
-                            self.playButton.selected = NO;
-                            [self.timer invalidate];
-                            self.timer = nil;
-                            self.isScreen = NO;
-                            if (self.task) {
-                                [self.task cancel];
-                            }
-                            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                            [MBProgressHUD showTextHUDwithTitle:@"幻灯片投屏失败" delay:1.5f];
-                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-                            self.statusLabel.text = @"幻灯片";
+                            
                         }];
+                        
+                    } failure:^{
+                        self.playButton.selected = NO;
+                        [self.timer invalidate];
+                        self.timer = nil;
+                        self.isScreen = NO;
+                        if (self.task) {
+                            [self.task cancel];
+                        }
+                        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithSlider") delay:1.5f];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                        [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
                     }];
-                }else if ([GlobalData shared].isBindDLNA) {
-                    [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                        [self screenDLNAImageWithKeyStr:keyStr];
-                    }];
-                }
+                }];
             }];
         }
     }
@@ -498,7 +503,11 @@
         size = CGSizeMake((kScreen_Height - NavHeight) * scale, kScreen_Height - NavHeight);
     }
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-        [cell.photoImage setImage:result];
+        if (nil == result) {
+            [cell.photoImage setImage:[UIImage imageNamed:@"tpyscbf"]];
+        }else{
+            [cell.photoImage setImage:result];
+        }
     }];
     cell.photoImage.transform = CGAffineTransformMakeRotation(0);
     cell.isLandSpace = NO;
@@ -519,7 +528,13 @@
     }
     
     self.currentIndex = itemIndex;
-    self.indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    if ([self.statusLabel.text hasPrefix:RDLocalizedString(@"RDString_Slider")]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
+    }else if ([self.statusLabel.text hasPrefix:RDLocalizedString(@"RDString_HasPause")]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_HasPause"), self.currentIndex, self.PHAssetSource.count - 2];
+    }else{
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
+    }
 }
 
 //视图结束滑动
@@ -534,18 +549,24 @@
         itemIndex = self.PHAssetSource.count - 2;
     }
     self.currentIndex = itemIndex;
-    self.indexLabel.text = [NSString stringWithFormat:@"%ld/%ld", self.currentIndex, self.PHAssetSource.count - 2];
+    if ([self.statusLabel.text hasPrefix:RDLocalizedString(@"RDString_Slider")]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
+    }else if ([self.statusLabel.text hasPrefix:RDLocalizedString(@"RDString_HasPause")]) {
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_HasPause"), self.currentIndex, self.PHAssetSource.count - 2];
+    }else{
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
+    }
     
     if (self.PHAssetSource > 0 && self.playButton.isSelected) {
         [self.timer setFireDate:[NSDate distantFuture]];
         [self.timer invalidate];
         self.timer = [NSTimer timerWithTimeInterval:self.timeLong target:self selector:@selector(scrollPhotos) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSRunLoopCommonModes];
-        self.statusLabel.text = @"正在播放图片";
+        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
         self.playButton.selected = YES;
     }
     if (self.isScreen) {
-        if ([GlobalData shared].isBindRD || [GlobalData shared].isBindDLNA) {
+        if ([GlobalData shared].isBindRD) {
             PHAsset * asset = [self.PHAssetSource objectAtIndex:itemIndex];
             CGFloat width = asset.pixelWidth;
             CGFloat height = asset.pixelHeight;
@@ -559,34 +580,32 @@
             }
             NSString * name = asset.localIdentifier;
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFill options:self.option resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-                if ([GlobalData shared].isBindRD) {
-                    [[PhotoTool sharedInstance] compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
-                        [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
-                            
-                            [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
-                                
-                            } failure:^{
-                                
-                            }];
+                if (nil == result) {
+                    [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PhotoHasDelete") delay:1.5f];
+                    return;
+                }
+                [RDPhotoTool compressImageWithImage:result finished:^(NSData *minData, NSData *maxData) {
+                    [SAVORXAPI postImageWithURL:STBURL data:minData name:name type:3 isThumbnail:YES rotation:0 seriesId:self.seriesId force:0 success:^{
+                        
+                        [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
                             
                         } failure:^{
-                            self.playButton.selected = NO;
-                            [self.timer invalidate];
-                            self.timer = nil;
-                            self.isScreen = NO;
-                            if (self.task) {
-                                [self.task cancel];
-                            }
-                            [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
-                            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"投屏" style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
-                            self.statusLabel.text = @"幻灯片";
+                            
                         }];
+                        
+                    } failure:^{
+                        self.playButton.selected = NO;
+                        [self.timer invalidate];
+                        self.timer = nil;
+                        self.isScreen = NO;
+                        if (self.task) {
+                            [self.task cancel];
+                        }
+                        [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
+                        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Screen") style:UIBarButtonItemStyleDone target:self action:@selector(screenCurrentImage)];
+                        self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_Slider"), self.currentIndex, self.PHAssetSource.count - 2];
                     }];
-                }else if ([GlobalData shared].isBindDLNA) {
-                    [OpenFileTool writeImageToSysImageCacheWithImage:result andName:name handle:^(NSString *keyStr) {
-                        [self screenDLNAImageWithKeyStr:keyStr];
-                    }];
-                }
+                }];
             }];
         }
     }

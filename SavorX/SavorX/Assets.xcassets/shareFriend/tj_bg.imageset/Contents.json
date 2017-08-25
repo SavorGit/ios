@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "tj_bg.png",
+      "filename" : "tj_bg.jpg",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "tj_bg@2x.png",
+      "filename" : "tj_bg@2x.jpg",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "tj_bg@3x.png",
+      "filename" : "tj_bg@3x.jpg",
       "scale" : "3x"
     }
   ],
