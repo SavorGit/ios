@@ -182,6 +182,11 @@
     if (self.isInsertVC) {
         return;
     }
+    
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+        [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
+    }
+    
     self.itemMargin = 12;
     
     [self setScrollEnable:NO];
@@ -259,6 +264,10 @@
 {
     if (!self.isInsertVC) {
         return;
+    }
+    
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+        [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
     }
     
     self.itemMargin = 20;

@@ -111,6 +111,7 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
 
 - (void)setPlayItemWithURL:(NSString *)url
 {
+    self.isPan = NO;
     NSString * preCheck = [url substringToIndex:url.length - 8];
     if ([self.currentURL hasPrefix:preCheck]) {
         self.time = CMTimeMake(self.player.currentTime.value / self.player.currentTime.timescale, 1);
@@ -355,11 +356,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
         case UIGestureRecognizerStateBegan:
         {
             center = pan.view.center;
-            self.isPan = YES;
             // 使用绝对值来判断移动的方向
             CGFloat x = fabs(veloctyPoint.x);
             CGFloat y = fabs(veloctyPoint.y);
             if (x > y) {
+                self.isPan = YES;
                 self.isHorizontal = YES;
                 // 给sumTime初值
                 CMTime time       = self.player.currentTime;
@@ -393,11 +394,11 @@ typedef NS_ENUM(NSInteger, GCCPlayerStatus) {
             
         case UIGestureRecognizerStateEnded:
         {
+            self.isPan = NO;
             if (self.isHorizontal) {
                 [self sliderDidSlideToTime:self.sumTime];
                 self.sumTime = 0;
                 [self horizontalIsEnd];
-                self.isPan = NO;
             }else{
                 [self verticalMoved:veloctyPoint.y]; // 垂直移动的方法只要y方向的值
                 self.isVolume = NO;

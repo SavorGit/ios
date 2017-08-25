@@ -718,6 +718,10 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+        [Helper interfaceOrientation:UIInterfaceOrientationPortrait];
+    }
+    
     if ([GlobalData shared].scene == RDSceneHaveRDBox) {
         self.ssid = [Helper getWifiName];
     }else{
