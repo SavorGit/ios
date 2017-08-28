@@ -292,18 +292,35 @@
         
         return cell;
     }else if (model.type == 1){
-        static NSString *cellID = @"imageTextTableCell";
-        ImageTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-        if (cell == nil) {
-            cell = [[ImageTextTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        
+        //当图文类型为大图时
+        if (model.type == 5) {
+            static NSString *cellID = @"imageTableCell";
+            ImageAtlasTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil) {
+                cell = [[ImageAtlasTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            }
+            cell.countLabel.hidden = YES;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
+            
+            [cell configModelData:model];
+            
+            return cell;
+        }else{
+            static NSString *cellID = @"imageTextTableCell";
+            ImageTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil) {
+                cell = [[ImageTextTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            }
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
+            
+            [cell configModelData:model];
+            
+            return cell;
         }
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
-        
-        [cell configModelData:model];
-        
-        return cell;
     }else{
         static NSString *cellID = @"defaultCell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
