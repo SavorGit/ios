@@ -10,4 +10,6 @@
 
 @interface SpecialListTableViewCell : UITableViewCell
 
+- (void)configWithTitile:(NSString *)title;
+
 @end

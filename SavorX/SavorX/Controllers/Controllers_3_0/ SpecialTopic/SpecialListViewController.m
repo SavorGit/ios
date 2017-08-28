@@ -50,6 +50,14 @@
     SpecialListTableViewCell * cell = (SpecialListTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"SpecicalCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    static BOOL line = NO;
+    if (line) {
+        [cell configWithTitile:@"小热点专题列表的标题小热点专题列表的标题"];
+    }else{
+        [cell configWithTitile:@"小热点专题列表的标题"];
+    }
+    line = !line;
+    
     return cell;
 }
 
