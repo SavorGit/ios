@@ -106,6 +106,10 @@
 		064F8B931E532838006280FD /* HSGetIpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 064F8B921E532838006280FD /* HSGetIpRequest.m */; };
 		0651A0241F53B8D8007C3CBC /* SpecialListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0651A0231F53B8D8007C3CBC /* SpecialListViewController.m */; };
 		0651A0271F53B901007C3CBC /* SpecialListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0651A0261F53B901007C3CBC /* SpecialListTableViewCell.m */; };
+		0651A02A1F5419E2007C3CBC /* SpecialTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0651A0291F5419E2007C3CBC /* SpecialTextCell.m */; };
+		0651A02D1F5419F1007C3CBC /* SpecialImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0651A02C1F5419F1007C3CBC /* SpecialImageCell.m */; };
+		0651A0301F541A0E007C3CBC /* SpecialArtCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0651A02F1F541A0E007C3CBC /* SpecialArtCell.m */; };
+		0651A0331F541A4C007C3CBC /* SpecialTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0651A0321F541A4C007C3CBC /* SpecialTitleCell.m */; };
 		065AC2271F1CA1B700545990 /* RD_MJRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 065AC2261F1CA1B700545990 /* RD_MJRefreshHeader.m */; };
 		065C87E31F18B6EE007BCCF9 /* RDInteractionLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 065C87E21F18B6EE007BCCF9 /* RDInteractionLoadingView.m */; };
 		065ECD621E8A703F0062E29D /* DefaultLaunch.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD611E8A703F0062E29D /* DefaultLaunch.mp4 */; };
@@ -489,6 +493,14 @@
 		0651A0231F53B8D8007C3CBC /* SpecialListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialListViewController.m; sourceTree = "<group>"; };
 		0651A0251F53B901007C3CBC /* SpecialListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialListTableViewCell.h; sourceTree = "<group>"; };
 		0651A0261F53B901007C3CBC /* SpecialListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialListTableViewCell.m; sourceTree = "<group>"; };
+		0651A0281F5419E2007C3CBC /* SpecialTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTextCell.h; sourceTree = "<group>"; };
+		0651A0291F5419E2007C3CBC /* SpecialTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTextCell.m; sourceTree = "<group>"; };
+		0651A02B1F5419F1007C3CBC /* SpecialImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialImageCell.h; sourceTree = "<group>"; };
+		0651A02C1F5419F1007C3CBC /* SpecialImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialImageCell.m; sourceTree = "<group>"; };
+		0651A02E1F541A0E007C3CBC /* SpecialArtCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialArtCell.h; sourceTree = "<group>"; };
+		0651A02F1F541A0E007C3CBC /* SpecialArtCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialArtCell.m; sourceTree = "<group>"; };
+		0651A0311F541A4C007C3CBC /* SpecialTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTitleCell.h; sourceTree = "<group>"; };
+		0651A0321F541A4C007C3CBC /* SpecialTitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTitleCell.m; sourceTree = "<group>"; };
 		065AC2251F1CA1B700545990 /* RD_MJRefreshHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RD_MJRefreshHeader.h; sourceTree = "<group>"; };
 		065AC2261F1CA1B700545990 /* RD_MJRefreshHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RD_MJRefreshHeader.m; sourceTree = "<group>"; };
 		065C87E11F18B6EE007BCCF9 /* RDInteractionLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDInteractionLoadingView.h; sourceTree = "<group>"; };
@@ -2266,6 +2278,14 @@
 				0651A0261F53B901007C3CBC /* SpecialListTableViewCell.m */,
 				96D8C5C61F0F681900251301 /* HeadlinesSTopTableViewCell.h */,
 				96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */,
+				0651A0281F5419E2007C3CBC /* SpecialTextCell.h */,
+				0651A0291F5419E2007C3CBC /* SpecialTextCell.m */,
+				0651A02B1F5419F1007C3CBC /* SpecialImageCell.h */,
+				0651A02C1F5419F1007C3CBC /* SpecialImageCell.m */,
+				0651A02E1F541A0E007C3CBC /* SpecialArtCell.h */,
+				0651A02F1F541A0E007C3CBC /* SpecialArtCell.m */,
+				0651A0311F541A4C007C3CBC /* SpecialTitleCell.h */,
+				0651A0321F541A4C007C3CBC /* SpecialTitleCell.m */,
 			);
 			path = " SpecialTopViews";
 			sourceTree = "<group>";
@@ -2671,6 +2691,7 @@
 				96A734A91F0C7FAC00906163 /* CreateWealthModel.m in Sources */,
 				9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */,
 				96BCE3BE1EC0128E00B1A3F7 /* SmashEggsGameViewController.m in Sources */,
+				0651A02A1F5419E2007C3CBC /* SpecialTextCell.m in Sources */,
 				0690766B1E51FE8E00CA1AC4 /* PhotoManyCollectionViewCell.m in Sources */,
 				06153E071D530D9A00BB127F /* SAVORXAPI.m in Sources */,
 				06FA33941D3E171D001F5B37 /* DDAbstractDatabaseLogger.m in Sources */,
@@ -2689,6 +2710,7 @@
 				061E0FE91DFFEBD10072605F /* RDBoxModel.m in Sources */,
 				060DB0A41D5AD1C8002A2DED /* HTTPServerManager.m in Sources */,
 				476F44C01E2DB39E00F99090 /* UIImage+Additional.m in Sources */,
+				0651A0331F541A4C007C3CBC /* SpecialTitleCell.m in Sources */,
 				062D4F791DEC02BA0093942A /* GCCControlView.m in Sources */,
 				96D8C5BB1F0F213000251301 /* DDPhotoDescView.m in Sources */,
 				96A7349F1F0C7F2D00906163 /* ImageTextTableViewCell.m in Sources */,
@@ -2760,6 +2782,7 @@
 				061E0FD21DFFD9A40072605F /* GCCDLNA.m in Sources */,
 				06F9B2A81D6EEDBD00C7F0A4 /* GCCKeyChain.m in Sources */,
 				062705921D586EA2003EA6A0 /* WebViewController.m in Sources */,
+				0651A02D1F5419F1007C3CBC /* SpecialImageCell.m in Sources */,
 				067C30EC1F13AF8E000A1150 /* HSSmashEggsRequest.m in Sources */,
 				4772FF841DFA544B00758697 /* BaseViewController.m in Sources */,
 				06FB9D611DF97D0E0053BE0A /* MBProgressHUD+Custom.m in Sources */,
@@ -2776,6 +2799,7 @@
 				0647EAD21E7129E900C39160 /* ZFVolumeView.m in Sources */,
 				06FA333F1D3E16A0001F5B37 /* GlobalData.m in Sources */,
 				061E0FD11DFFD9A40072605F /* DeviceModel.m in Sources */,
+				0651A0301F541A0E007C3CBC /* SpecialArtCell.m in Sources */,
 				4772FF8C1DFA570D00758697 /* UIView+Additional.m in Sources */,
 				0639D19C1F1772AD00AC69AC /* RDLoadingView.m in Sources */,
 				067BFF611F2216A400D9CE74 /* RDIsDemand.m in Sources */,

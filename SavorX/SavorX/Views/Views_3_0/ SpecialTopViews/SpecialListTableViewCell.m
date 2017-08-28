@@ -11,6 +11,7 @@
 
 @interface SpecialListTableViewCell ()
 
+@property (nonatomic, strong) UIView * shadowView;
 @property (nonatomic, strong) UIView * bgContentView;
 @property (nonatomic, strong) UILabel * nameLabel;
 @property (nonatomic, strong) UIImageView * bgImageView;
@@ -31,15 +32,27 @@
 
 - (void)initWithSubView
 {
-    self.backgroundColor = [UIColor clearColor];
-    self.bgContentView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.contentView addSubview:self.bgContentView];
-    [self.bgContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.shadowView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.contentView addSubview:self.shadowView];
+    [self.shadowView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(7.5);
         make.left.mas_equalTo(10);
         make.bottom.mas_equalTo(-7.5);
         make.right.mas_equalTo(-10);
     }];
+    self.shadowView.layer.shadowColor = UIColorFromRGB(0x5e5c58).CGColor;
+    self.shadowView.layer.shadowOpacity = .14f;
+    self.shadowView.layer.shadowRadius = 7.f;
+    self.shadowView.layer.shadowOffset = CGSizeMake(0, 0);
+    
+    self.backgroundColor = [UIColor clearColor];
+    self.bgContentView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.shadowView addSubview:self.bgContentView];
+    [self.bgContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+    self.bgContentView.layer.cornerRadius = 4.f;
+    self.bgContentView.layer.masksToBounds = YES;
     self.bgContentView.backgroundColor = UIColorFromRGB(0xf6f2ed);
     
     UIView * topRedView = [[UIView alloc] initWithFrame:CGRectZero];
