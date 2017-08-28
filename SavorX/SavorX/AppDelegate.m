@@ -23,7 +23,6 @@
 #import "VideoLauchMovieViewController.h"
 #import "HSLauchImageOrVideoRequest.h"
 #import "DefalutLaunchViewController.h"
-#import "RDLogStatisticsAPI.h"
 #import "HSInstallationInforUpload.h"
 #import "HSFirstUseRequest.h"
 #import "RDLocationManager.h"
@@ -31,10 +30,6 @@
 
 #import "RDHomePageController.h"
 #import "RDHomeStatusView.h"
-#import "SpecialTopicViewController.h"
-#import "LiveViewController.h"
-#import "RealCreateWealthViewController.h"
-#import "RDAlertView.h"
 
 @interface AppDelegate ()<UITabBarControllerDelegate, UNUserNotificationCenterDelegate,BMKGeneralDelegate,SplashViewControllerDelegate, WMPageControllerDelegate >
 
@@ -210,7 +205,7 @@
 {
     LeftViewController *leftVc = [[LeftViewController alloc] init];
     RDHomePageController *centerVC = [[RDHomePageController alloc] init];
-    centerVC.delegate = self;
+    
     //2、初始化导航控制器
     BaseNavigationController *centerNav = [[BaseNavigationController alloc]initWithRootViewController:centerVC];
     
@@ -259,28 +254,6 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
             
         }];
-    }
-}
-
-- (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
-{
-    if ([viewController isKindOfClass:[RealCreateWealthViewController class]]) {
-        
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"101" volume:@"index"];
-        RealCreateWealthViewController * vc = (RealCreateWealthViewController *)viewController;
-        [vc showSelfAndCreateLog];
-        
-    }else if ([viewController isKindOfClass:[LiveViewController class]]){
-        
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"102" volume:@"index"];
-        LiveViewController * vc = (LiveViewController *)viewController;
-        [vc showSelfAndCreateLog];
-        
-    }else if ([viewController isKindOfClass:[SpecialTopicViewController class]]){
-        
-        [RDLogStatisticsAPI RDPageLogCategoryID:@"103" volume:@"index"];
-        SpecialTopicViewController * vc = (SpecialTopicViewController *)viewController;
-        [vc showSelfAndCreateLog];
     }
 }
 
@@ -810,13 +783,6 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDBoxQuitScreenNotification object:nil];
                 [SAVORXAPI cancelAllURLTask];
-                
-//                RDAlertView * view = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_Alert") message:RDLocalizedString(@"RDString_ScreenDidBack")];
-//                RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_KnewIt") handler:^{
-//                    
-//                } bold:YES];
-//                [view addActions:@[action]];
-//                [view show];
                 
                 [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_ScreenDidBack")];
             }

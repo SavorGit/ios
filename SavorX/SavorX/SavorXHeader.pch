@@ -33,13 +33,13 @@
 #define AliyunBucketName @"redian-produce"
 #define HOSTURL @"http://mobile.littlehotspot.com/" //正式地址
 #define AliynEndPoint @"http://oss.littlehotspot.com/"
-#define NSLog(...) {}
+//#define NSLog(...) {}
 
 #else
 #define AliyunBucketName @"redian-development"
 #define HOSTURL @"http://devp.mobile.littlehotspot.com/"  //测试地址
 #define AliynEndPoint @"http://devp.oss.littlehotspot.com/"
-#define NSLog(...) NSLog(__VA_ARGS__)
+//#define NSLog(...) NSLog(__VA_ARGS__)
 #endif
 
 #define kVersionCode 2017082201

@@ -104,6 +104,8 @@
 		0647EAD21E7129E900C39160 /* ZFVolumeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0647EAD11E7129E900C39160 /* ZFVolumeView.m */; };
 		064F8B8D1E52FDBC006280FD /* HomeBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 064F8B8C1E52FDBC006280FD /* HomeBaseViewController.m */; };
 		064F8B931E532838006280FD /* HSGetIpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 064F8B921E532838006280FD /* HSGetIpRequest.m */; };
+		0651A0241F53B8D8007C3CBC /* SpecialListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0651A0231F53B8D8007C3CBC /* SpecialListViewController.m */; };
+		0651A0271F53B901007C3CBC /* SpecialListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0651A0261F53B901007C3CBC /* SpecialListTableViewCell.m */; };
 		065AC2271F1CA1B700545990 /* RD_MJRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 065AC2261F1CA1B700545990 /* RD_MJRefreshHeader.m */; };
 		065C87E31F18B6EE007BCCF9 /* RDInteractionLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 065C87E21F18B6EE007BCCF9 /* RDInteractionLoadingView.m */; };
 		065ECD621E8A703F0062E29D /* DefaultLaunch.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD611E8A703F0062E29D /* DefaultLaunch.mp4 */; };
@@ -483,6 +485,10 @@
 		064F8B8C1E52FDBC006280FD /* HomeBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeBaseViewController.m; sourceTree = "<group>"; };
 		064F8B911E532838006280FD /* HSGetIpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSGetIpRequest.h; sourceTree = "<group>"; };
 		064F8B921E532838006280FD /* HSGetIpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSGetIpRequest.m; sourceTree = "<group>"; };
+		0651A0221F53B8D8007C3CBC /* SpecialListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialListViewController.h; sourceTree = "<group>"; };
+		0651A0231F53B8D8007C3CBC /* SpecialListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialListViewController.m; sourceTree = "<group>"; };
+		0651A0251F53B901007C3CBC /* SpecialListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialListTableViewCell.h; sourceTree = "<group>"; };
+		0651A0261F53B901007C3CBC /* SpecialListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialListTableViewCell.m; sourceTree = "<group>"; };
 		065AC2251F1CA1B700545990 /* RD_MJRefreshHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RD_MJRefreshHeader.h; sourceTree = "<group>"; };
 		065AC2261F1CA1B700545990 /* RD_MJRefreshHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RD_MJRefreshHeader.m; sourceTree = "<group>"; };
 		065C87E11F18B6EE007BCCF9 /* RDInteractionLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDInteractionLoadingView.h; sourceTree = "<group>"; };
@@ -2245,6 +2251,8 @@
 			children = (
 				96D8C5BF1F0F603500251301 /* SpecialTopicViewController.h */,
 				96D8C5C01F0F603500251301 /* SpecialTopicViewController.m */,
+				0651A0221F53B8D8007C3CBC /* SpecialListViewController.h */,
+				0651A0231F53B8D8007C3CBC /* SpecialListViewController.m */,
 			);
 			path = " SpecialTopic";
 			sourceTree = "<group>";
@@ -2254,6 +2262,8 @@
 			children = (
 				96D8C5C31F0F66F200251301 /* SpecialTopTableViewCell.h */,
 				96D8C5C41F0F66F200251301 /* SpecialTopTableViewCell.m */,
+				0651A0251F53B901007C3CBC /* SpecialListTableViewCell.h */,
+				0651A0261F53B901007C3CBC /* SpecialListTableViewCell.m */,
 				96D8C5C61F0F681900251301 /* HeadlinesSTopTableViewCell.h */,
 				96D8C5C71F0F681900251301 /* HeadlinesSTopTableViewCell.m */,
 			);
@@ -2674,6 +2684,7 @@
 				066379D81EA8963C00E91313 /* RDLogStatisticsAPI.m in Sources */,
 				06FA33951D3E171D001F5B37 /* DDASLLogger.m in Sources */,
 				0663D43E1F0B6CB000CD2FA2 /* WMScrollView.m in Sources */,
+				0651A0241F53B8D8007C3CBC /* SpecialListViewController.m in Sources */,
 				063FA3371D839F1100D03548 /* BadView.m in Sources */,
 				061E0FE91DFFEBD10072605F /* RDBoxModel.m in Sources */,
 				060DB0A41D5AD1C8002A2DED /* HTTPServerManager.m in Sources */,
@@ -2784,6 +2795,7 @@
 				061E0FD01DFFD9A40072605F /* AVTransportModel.m in Sources */,
 				06FB9D731DF9890C0053BE0A /* Jastor.m in Sources */,
 				06FA33971D3E171D001F5B37 /* DDLog.m in Sources */,
+				0651A0271F53B901007C3CBC /* SpecialListTableViewCell.m in Sources */,
 				0690766E1E520A7700CA1AC4 /* PhotoManyEditView.m in Sources */,
 				476F44CA1E2DBEC500F99090 /* LeftCell.m in Sources */,
 				061B4EBE1E487EF5000D5E07 /* PhotoTextLabel.m in Sources */,

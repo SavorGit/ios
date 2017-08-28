@@ -18,6 +18,9 @@
 #import "WebViewController.h"
 #import "ImageTextDetailViewController.h"
 #import "ImageArrayViewController.h"
+#import "RDLogStatisticsAPI.h"
+
+#import "SpecialListViewController.h"
 
 @interface RDHomePageController ()
 
@@ -445,6 +448,40 @@
         }
     }
     return 40;
+}
+
+- (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
+{
+    if ([viewController isKindOfClass:[SpecialTopicViewController class]]) {
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"103" volume:@"index"];
+        SpecialTopicViewController * vc = (SpecialTopicViewController *)viewController;
+        [vc showSelfAndCreateLog];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareSpecialTopic)];
+        
+    }else{
+        
+        self.navigationItem.rightBarButtonItem = nil;
+        if ([viewController isKindOfClass:[RealCreateWealthViewController class]]) {
+            
+            [RDLogStatisticsAPI RDPageLogCategoryID:@"101" volume:@"index"];
+            RealCreateWealthViewController * vc = (RealCreateWealthViewController *)viewController;
+            [vc showSelfAndCreateLog];
+            
+        }else if ([viewController isKindOfClass:[LiveViewController class]]){
+            
+            [RDLogStatisticsAPI RDPageLogCategoryID:@"102" volume:@"index"];
+            LiveViewController * vc = (LiveViewController *)viewController;
+            [vc showSelfAndCreateLog];
+            
+        }
+    }
+}
+
+- (void)shareSpecialTopic
+{
+    SpecialListViewController * specialList = [[SpecialListViewController alloc] init];
+    [self.navigationController pushViewController:specialList animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
