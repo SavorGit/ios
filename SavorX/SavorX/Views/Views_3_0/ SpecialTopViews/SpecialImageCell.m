@@ -35,8 +35,8 @@
     [self.contentView addSubview:self.bgImageView];
     [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);
-        make.left.mas_equalTo(0);
-        make.right.mas_equalTo(0);
+        make.left.mas_equalTo(15);
+        make.right.mas_equalTo(- 15);
         make.height.equalTo(self.bgImageView.mas_width).multipliedBy(802.f/1242.f);
     }];
 }

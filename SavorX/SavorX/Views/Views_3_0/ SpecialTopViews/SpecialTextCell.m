@@ -31,7 +31,10 @@
     self.artTextLabel.numberOfLines = 0;
     [self.contentView addSubview:self.artTextLabel];
     [self.artTextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(0);
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(15);
+        make.right.mas_equalTo(- 15);
+        make.height.mas_equalTo(22.5);
     }];
 }
 
