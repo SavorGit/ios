@@ -99,7 +99,7 @@
         }];
     }
     
-    CGFloat subTitleHeight = [self getHeightByWidth:kMainBoundsWidth - 30 title:model.shareTitle font:kPingFangMedium(14)];
+    CGFloat subTitleHeight = [self getHeightByWidth:kMainBoundsWidth - 30 title:model.desc font:kPingFangMedium(14)];
     if (subTitleHeight > 20) {
         [self.subTitleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth - 30, 40));
@@ -113,13 +113,13 @@
     }
     
     self.titleLabel.text = model.title;
-    self.subTitleLabel.text = model.shareTitle;
+    self.subTitleLabel.text = model.desc;
     
     if ([self.imageURL isEqualToString:model.imageURL]) {
         return;
     }
-    self.imageURL = model.imageURL;
-    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    self.imageURL = model.img_url;
+    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.img_url] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
         if ([manager diskImageExistsForURL:[NSURL URLWithString:model.imageURL]]) {

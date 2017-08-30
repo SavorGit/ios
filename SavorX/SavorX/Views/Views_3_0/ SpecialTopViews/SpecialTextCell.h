@@ -10,6 +10,8 @@
 
 @interface SpecialTextCell : UITableViewCell
 
+@property (nonatomic, strong) UILabel * artTextLabel;
+
 - (void)configWithText:(NSString *)text;
 
 @end

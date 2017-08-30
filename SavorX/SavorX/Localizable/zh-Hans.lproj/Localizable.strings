@@ -30,6 +30,7 @@
 "RDString_CollectNone" = "您还没有收藏~";
 "RDString_ArtNotFound" = "该内容找不到了~";
 "RDString_imgAtRecommend" = "图集推荐";
+"RDString_IookHisstoryTopic" = "查看历史专题";
 
 //View
 "RDString_Image" = "图";

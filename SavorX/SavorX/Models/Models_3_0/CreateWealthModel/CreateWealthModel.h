@@ -40,6 +40,12 @@
 @property (nonatomic, copy) NSString * order_tag;//用于文章推荐
 @property (nonatomic, copy) NSString * shareTitle;//用于文章推荐
 
+@property (nonatomic, copy) NSString * sgtype;//用于专题组类型
+@property (nonatomic, copy) NSString * img_url;//用于专题组图片
+@property (nonatomic, copy) NSString * stitle;//用于专题组小标题
+@property (nonatomic, copy) NSString * stext;//用于专题组文字内容
+@property (nonatomic, copy) NSString * desc;//用于专题组头部描述
+
 //非接口返回
 @property (nonatomic, assign) NSInteger cid;
 

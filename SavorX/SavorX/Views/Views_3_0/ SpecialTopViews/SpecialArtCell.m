@@ -27,12 +27,12 @@
 - (void)initWithSubView{
     
     _bgView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    _bgView.backgroundColor = UIColorFromRGB(0xece6de);
+    _bgView.backgroundColor = UIColorFromRGB(0xeee8e0);
     [self addSubview:_bgView];
     CGFloat bgViewHeight = 130 *(802.f/1242.f);
     [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(kMainBoundsWidth - 30);
-        make.height.mas_equalTo(bgViewHeight + 10);//84 + 10
+        make.height.mas_equalTo(bgViewHeight + 10);
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(15);
     }];
@@ -44,7 +44,7 @@
     [_bgView addSubview:_bgImageView];
     [_bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(130);
-        make.height.equalTo(_bgImageView.mas_width).multipliedBy(802.f/1242.f);//84
+        make.height.equalTo(_bgImageView.mas_width).multipliedBy(802.f/1242.f);
         make.top.mas_equalTo(5);
         make.left.mas_equalTo(5);
     }];
@@ -63,27 +63,15 @@
         make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
     }];
     
-    _sourceLabel = [[UILabel alloc]init];
-    _sourceLabel.text = @"";
-    _sourceLabel.font = kPingFangLight(11);
-    _sourceLabel.textColor = UIColorFromRGB(0x8a8886);
-    [_bgView addSubview:_sourceLabel];
-    [_sourceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(20);
-        make.bottom.mas_equalTo(_bgImageView.mas_bottom).offset(-5);
-        make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
-        make.width.mas_lessThanOrEqualTo(100);
-    }];
-    
     _timeLabel = [[UILabel alloc]init];
     _timeLabel.text = @"";
     _timeLabel.font = kPingFangLight(10);
-    _timeLabel.textColor = UIColorFromRGB(0xb2afab);
+    _timeLabel.textColor = UIColorFromRGB(0x84827f);
     [_bgView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 20));
         make.bottom.mas_equalTo(_bgImageView.mas_bottom).offset(-5);
-        make.left.equalTo(_sourceLabel.mas_right).offset(10);
+        make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
     }];
 
 }
@@ -112,11 +100,7 @@
         }];
     }
     self.titleLabel.text = model.title;
-    
-    self.sourceLabel.text = model.sourceName;
-    if (!isEmptyString(model.updateTime)) {
-        self.timeLabel.text =  [model.updateTime stringByReplacingOccurrencesOfString:@"." withString:@"-"];
-    }
+    self.timeLabel.text = model.updateTime;
     
     if ([self.imageURL isEqualToString:model.imageURL]) {
         return;
