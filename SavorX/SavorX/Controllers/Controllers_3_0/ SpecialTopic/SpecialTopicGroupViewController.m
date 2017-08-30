@@ -14,6 +14,10 @@
 #import "SpecialHeaderView.h"
 #import "RDFrequentlyUsed.h"
 #import "SpecialTopGroupRequest.h"
+#import "ImageTextDetailViewController.h"
+#import "ImageArrayViewController.h"
+#import "WebViewController.h"
+#import "SpecialListViewController.h"
 
 @interface SpecialTopicGroupViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -31,7 +35,31 @@
     [super viewDidLoad];
     
     [self initInfo];
-    [self dataRequest];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
+        
+        //如果本地缓存的有数据，则先从本地读取缓存的数据
+        NSDictionary * dataDict = [NSDictionary dictionaryWithContentsOfFile:self.cachePath];
+        
+        self.topModel = [[CreateWealthModel alloc] init];
+        self.topModel.name = [dataDict objectForKey:@"name"];
+        self.topModel.title = [dataDict objectForKey:@"title"];
+        self.topModel.img_url = [dataDict objectForKey:@"img_url"];
+        self.topModel.desc = [dataDict objectForKey:@"desc"];
+        
+        NSArray *resultArr = [dataDict objectForKey:@"list"];
+        for(int i = 0; i < resultArr.count; i ++){
+            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            [self.dataSource addObject:tmpModel];
+        }
+        if (dataDict != nil) {
+            [self.tableView reloadData];
+        }
+        [self dataRequest];
+    }else{
+        [self showLoadingView];
+        [self dataRequest];
+    }
 }
 
 - (void)initInfo{
@@ -45,10 +73,21 @@
     SpecialTopGroupRequest * request = [[SpecialTopGroupRequest alloc] initWithId:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
-        NSDictionary *dic = (NSDictionary *)response;
+        [self hiddenLoadingView];
         
+        NSDictionary *dic = (NSDictionary *)response;
         NSDictionary * dataDict = [dic objectForKey:@"result"];
+        if (nil == dataDict || ![dataDict isKindOfClass:[NSDictionary class]] || dataDict.count == 0) {
+            if (self.dataSource.count == 0) {
+                [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+            }else{
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
+            }
+            return;
+        }
 
+        [SAVORXAPI saveFileOnPath:self.cachePath withDictionary:dataDict];
+        
         self.topModel = [[CreateWealthModel alloc] init];
         self.topModel.name = [dataDict objectForKey:@"name"];
         self.topModel.title = [dataDict objectForKey:@"title"];
@@ -57,8 +96,6 @@
         self.topModel.desc = @"受国务院委托，国务院扶贫开发领导小组办公室主任刘永富报告了脱贫攻坚工作情况。在报告了党的十八大以来脱贫攻坚决策部署、建立脱贫攻坚制度体系、全面推进精准扶贫精准脱贫等情况后，他说，脱贫攻坚已取得显著成效，四梁八柱顶层设计基本完成，五级书记抓扶贫、全党动员促攻坚的良好态势已经形成。";
         
         NSArray *resultArr = [dataDict objectForKey:@"list"];
-        
-        [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
         [self.dataSource removeAllObjects];
         for (int i = 0; i < resultArr.count; i ++) {
             CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
@@ -68,10 +105,37 @@
         [self.tableView reloadData];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
+        [self hiddenLoadingView];
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+        }
+        if (_tableView) {
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
+        }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
+        [self hiddenLoadingView];
+        if (self.dataSource.count == 0) {
+            [self showNoNetWorkView:NoNetWorkViewStyle_No_NetWork];
+        }
+        if (_tableView) {
+            
+            if (error.code == -1001) {
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithTimeOut")];
+            }else{
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
+            }
+        }
         
     }];
+}
+
+-(void)retryToGetData{
+    [self hideNoNetWorkView];
+    if (self.dataSource.count == 0)  {
+        [self showLoadingView];
+    }
+    [self dataRequest];
 }
 
 #pragma mark -- 懒加载
@@ -147,7 +211,11 @@
     return _tableView;
 }
 
+#pragma mark -- 点击更多专题组
 - (void)singleTap:(UIGestureRecognizer *)recognizer{
+    
+    SpecialListViewController *spVC = [[SpecialListViewController alloc] init];
+    [self.navigationController pushViewController:spVC animated:YES];
     
 }
 
@@ -274,6 +342,44 @@
         return  textHeight + bottomBlank;
     }
     return 22.5 + bottomBlank;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    CreateWealthModel *model = [self.dataSource objectAtIndex:indexPath.row];
+    
+    if (model.sgtype == 2) {
+        //1 图文 2 图集 3 视频
+        if (model.type == 1) {
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_article" key:nil value:nil];
+            ImageTextDetailViewController *imtVC = [[ImageTextDetailViewController alloc] init];
+            imtVC.imgTextModel = model;
+            imtVC.categoryID = self.categoryID;
+            [self.navigationController pushViewController:imtVC animated:YES];
+            
+        }else if (model.type == 2) {
+            
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_pic" key:nil value:nil];
+            ImageArrayViewController *iatVC = [[ImageArrayViewController alloc] initWithCategoryID:self.categoryID model:model];
+            
+            iatVC.parentNavigationController = self.navigationController;
+            float version = [UIDevice currentDevice].systemVersion.floatValue;
+            if (version < 8.0) {
+                self.modalPresentationStyle = UIModalPresentationCurrentContext;
+            } else {;
+                iatVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+            }
+            iatVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            
+            [self presentViewController:iatVC animated:YES completion:nil];
+            
+            
+        } else if (model.type == 3 || model.type == 4){
+            [SAVORXAPI postUMHandleWithContentId:@"home_click_video" key:nil value:nil];
+            WebViewController * web = [[WebViewController alloc] initWithModel:model categoryID:self.categoryID];
+            [self.navigationController pushViewController:web animated:YES];
+        }
+    }
 }
 
 - (CGFloat)getBottomBlankWith:(CreateWealthModel *)tmpModel nextModel:(CreateWealthModel *)nextModel{

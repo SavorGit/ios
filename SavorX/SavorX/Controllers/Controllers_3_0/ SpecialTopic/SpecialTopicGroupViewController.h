@@ -7,7 +7,8 @@
 //
 
 #import "BaseViewController.h"
+#import "HomeBaseViewController.h"
 
-@interface SpecialTopicGroupViewController : BaseViewController
+@interface SpecialTopicGroupViewController : HomeBaseViewController
 
 @end
