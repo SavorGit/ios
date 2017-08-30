@@ -93,7 +93,6 @@
         self.topModel.title = [dataDict objectForKey:@"title"];
         self.topModel.img_url = [dataDict objectForKey:@"img_url"];
         self.topModel.desc = [dataDict objectForKey:@"desc"];
-        self.topModel.desc = @"受国务院委托，国务院扶贫开发领导小组办公室主任刘永富报告了脱贫攻坚工作情况。在报告了党的十八大以来脱贫攻坚决策部署、建立脱贫攻坚制度体系、全面推进精准扶贫精准脱贫等情况后，他说，脱贫攻坚已取得显著成效，四梁八柱顶层设计基本完成，五级书记抓扶贫、全党动员促攻坚的良好态势已经形成。";
         
         NSArray *resultArr = [dataDict objectForKey:@"list"];
         [self.dataSource removeAllObjects];
@@ -126,7 +125,6 @@
                 [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithBadNet")];
             }
         }
-        
     }];
 }
 
@@ -233,17 +231,39 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
-    if (model.sgtype == 4){
-        static NSString *cellID = @"SpecialTitleCell";
-        SpecialTitleCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    // 1 文字  2 文章  3 图片  4 标题
+    if (model.sgtype == 1){
+        static NSString *cellID = @"SpecialTextCell";
+        SpecialTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[SpecialTitleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            cell = [[SpecialTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
-        [cell configWithText:model.stitle];
+        [cell configWithText:model.stext];
+        //        [cell configWithText:
+        //                             @"这是测试文字数据,这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据。这是测试数据结束。"
+        //                             @"\n"
+        //                             @"近日由中央文献出版社出版，在全国发行。党的十八大以来，以习近平同志为核心的党中央坚定不移走中国特色社会主义政治发展道路。"
+        //                             @"\n"
+        //                             @"近日由中央文献出版社出版，在全国发行。"
+        //         ];
+        return cell;
+        
+    }else if (model.sgtype == 2){
+        
+        static NSString *cellID = @"SpecialArtCell";
+        SpecialArtCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        if (cell == nil) {
+            cell = [[SpecialArtCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
+        
+        [cell configModelData:model];
         
         return cell;
         
@@ -261,38 +281,17 @@
         
         return cell;
         
-    }else if (model.sgtype == 1){
-        static NSString *cellID = @"SpecialTextCell";
-        SpecialTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    }else if (model.sgtype == 4){
+        static NSString *cellID = @"SpecialTitleCell";
+        SpecialTitleCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[SpecialTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            cell = [[SpecialTitleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
-        [cell configWithText:model.stext];
-//        [cell configWithText:
-//                             @"这是测试文字数据,这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据。这是测试数据结束。"
-//                             @"\n"
-//                             @"近日由中央文献出版社出版，在全国发行。党的十八大以来，以习近平同志为核心的党中央坚定不移走中国特色社会主义政治发展道路。"
-//                             @"\n"
-//                             @"近日由中央文献出版社出版，在全国发行。"
-//         ];
-        return cell;
-        
-    }else if (model.sgtype == 2){
-        
-        static NSString *cellID = @"SpecialArtCell";
-        SpecialArtCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-        if (cell == nil) {
-            cell = [[SpecialArtCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        }
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
-        
-        [cell configModelData:model];
+        [cell configWithText:model.stitle];
         
         return cell;
         
@@ -323,6 +322,7 @@
     }else{
         bottomBlank = [self getBottomBlankWith:model nextModel:nil];
     }
+    
     if (model.sgtype == 3) {
         CGFloat imgHeight =  (kMainBoundsWidth - 15) *(802.f/1242.f);
         return  imgHeight + bottomBlank;
