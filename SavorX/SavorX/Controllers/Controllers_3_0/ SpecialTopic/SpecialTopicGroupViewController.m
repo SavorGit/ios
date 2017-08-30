@@ -31,8 +31,7 @@
     [super viewDidLoad];
     
     [self initInfo];
-//    [self dataRequest];
-    [self initDatas];
+    [self dataRequest];
 }
 
 - (void)initInfo{
@@ -55,15 +54,16 @@
         self.topModel.title = [dataDict objectForKey:@"title"];
         self.topModel.img_url = [dataDict objectForKey:@"img_url"];
         self.topModel.desc = [dataDict objectForKey:@"desc"];
+        self.topModel.desc = @"受国务院委托，国务院扶贫开发领导小组办公室主任刘永富报告了脱贫攻坚工作情况。在报告了党的十八大以来脱贫攻坚决策部署、建立脱贫攻坚制度体系、全面推进精准扶贫精准脱贫等情况后，他说，脱贫攻坚已取得显著成效，四梁八柱顶层设计基本完成，五级书记抓扶贫、全党动员促攻坚的良好态势已经形成。";
         
         NSArray *resultArr = [dataDict objectForKey:@"list"];
         
-//        [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
-//        [self.dataSource removeAllObjects];
-//        for (int i = 0; i < resultArr.count; i ++) {
-//            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
-//            [self.dataSource addObject:tmpModel];
-//        }
+        [SAVORXAPI saveFileOnPath:self.cachePath withArray:resultArr];
+        [self.dataSource removeAllObjects];
+        for (int i = 0; i < resultArr.count; i ++) {
+            CreateWealthModel *tmpModel = [[CreateWealthModel alloc] initWithDictionary:resultArr[i]];
+            [self.dataSource addObject:tmpModel];
+        }
         
         [self.tableView reloadData];
         
@@ -74,53 +74,11 @@
     }];
 }
 
-- (void)initDatas{
-    
-    self.topModel = [[CreateWealthModel alloc] init];
-    self.topModel.title = @"我是文章标题,我是文章标题,我是文章标题。";
-    self.topModel.img_url = @"http://oss.littlehotspot.com/media/resource/RNZhJmpWJ5.jpg";
-    self.topModel.desc = @"我是文章副标题，我是文章简介，我是文章简介。我是文章简介，我是文章简介。";
-    
-    for(int i = 0; i < 10; i ++){
-        
-        CreateWealthModel *tmpModel = [[CreateWealthModel alloc] init];
-        tmpModel.type = 1;
-        if (i == 0) {
-            tmpModel.type = 1;
-        }else if (i == 1){
-            tmpModel.type = 2;
-        }else if (i == 2){
-            tmpModel.type = 3;
-        }else if (i == 3){
-            tmpModel.type = 4;
-        }else if (i == 4){
-            tmpModel.type = 4;
-        }else if (i == 5){
-            tmpModel.type = 1;
-        }else if (i == 6){
-            tmpModel.type = 2;
-        }else if (i == 7){
-            tmpModel.type = 4;
-        }else if (i == 8){
-            tmpModel.type = 3;
-        }else if (i == 9){
-            tmpModel.type = 2;
-        }
-        tmpModel.title = @"我是文章标题,我是文章标题,我是文章标题。";
-        tmpModel.imageURL = @"http://oss.littlehotspot.com/media/resource/RNZhJmpWJ5.jpg";
-        tmpModel.updateTime = @"2017-08-26";
-        
-        
-        [self.dataSource addObject:tmpModel];
-        
-    }
-    [self.tableView reloadData];
-}
-
 #pragma mark -- 懒加载
 - (UITableView *)tableView
 {
     if (!_tableView) {
+        
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
@@ -129,7 +87,6 @@
         _tableView.backgroundView = nil;
         _tableView.showsVerticalScrollIndicator = NO;
         [self.view addSubview:_tableView];
-        
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(0);
             make.left.mas_equalTo(0);
@@ -137,18 +94,16 @@
             make.right.mas_equalTo(0);
         }];
         
-        
         SpecialHeaderView *topView = [[SpecialHeaderView alloc] initWithFrame:CGRectZero];
         topView.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
+        // 计算图片高度
         CGFloat imgHeight =kMainBoundsWidth *802.f/1242.f;//113
         CGFloat totalHeight = imgHeight + 25 + 40;// 25为下方留白 40为控件间隔
-        CGFloat subTitleHeight = [RDFrequentlyUsed getHeightByWidth:kMainBoundsWidth - 30 title:self.topModel.desc font:[UIFont systemFontOfSize:14]];
-        if (subTitleHeight > 20) {
-            totalHeight = totalHeight + 40;
-        }else{
-            totalHeight = totalHeight + 20;
-        }
+        // 计算描述文字内容的高度
+        CGFloat descHeight = [RDFrequentlyUsed getAttrHeightByWidth:kMainBoundsWidth - 30 title:self.topModel.desc font:kPingFangLight(15)];
+        totalHeight = totalHeight + descHeight;
+        // 计算标题的高度
         CGFloat titleHeight = [RDFrequentlyUsed getHeightByWidth:kMainBoundsWidth - 30 title:self.topModel.title font:kPingFangMedium(22)];
         if (titleHeight > 31) {
             totalHeight = totalHeight + 62;
@@ -158,7 +113,6 @@
         
         UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, totalHeight)];
         [headView addSubview:topView];
-        
         [topView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.left.right.mas_equalTo(0);
             make.height.mas_equalTo(totalHeight);
@@ -168,8 +122,9 @@
         _tableView.tableHeaderView = headView;
         
         UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 80)];
+        footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
         UILabel *recommendLabel = [[UILabel alloc] init];
-        recommendLabel.frame = CGRectMake((kMainBoundsWidth - 120)/2, 25, 120, 30);
+        recommendLabel.frame = CGRectMake(kMainBoundsWidth/2 - 60, 25, 120, 30);
         recommendLabel.textColor = UIColorFromRGB(0x922c3e);
         recommendLabel.font = kPingFangRegular(15);
         recommendLabel.text = RDLocalizedString(@"RDString_IookHisstoryTopic");
@@ -181,11 +136,11 @@
         recommendLabel.userInteractionEnabled = YES;
         [footView addSubview:recommendLabel];
         
+        _tableView.tableFooterView = footView;
+        
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
         tapGesture.numberOfTapsRequired = 1;
         [recommendLabel addGestureRecognizer:tapGesture];
-        
-        _tableView.tableFooterView = footView;
         
     }
     
@@ -210,7 +165,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
-    if (model.type == 1){
+    if (model.sgtype == 4){
         static NSString *cellID = @"SpecialTitleCell";
         SpecialTitleCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
@@ -220,11 +175,11 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
-        [cell configWithText:@"我是标题字段"];
+        [cell configWithText:model.stitle];
         
         return cell;
         
-    }else if (model.type == 2){
+    }else if (model.sgtype == 3){
         static NSString *cellID = @"SpecialImgCell";
         SpecialImageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
@@ -234,31 +189,31 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
-        [cell configWithImageURL:@"http://oss.littlehotspot.com/media/resource/RNZhJmpWJ5.jpg"];
+        [cell configWithImageURL:model.img_url];
         
         return cell;
         
-    }else if (model.type == 3){
+    }else if (model.sgtype == 1){
         static NSString *cellID = @"SpecialTextCell";
         SpecialTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
             cell = [[SpecialTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         }
         
-        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
-        [cell configWithText:
-                             @"这是测试文字数据,这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据。这是测试数据结束。"
-                             @"\n"
-                             @"近日由中央文献出版社出版，在全国发行。党的十八大以来，以习近平同志为核心的党中央坚定不移走中国特色社会主义政治发展道路。"
-                             @"\n"
-                             @"近日由中央文献出版社出版，在全国发行。"
-         ];
+        [cell configWithText:model.stext];
+//        [cell configWithText:
+//                             @"这是测试文字数据,这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据。这是测试数据结束。"
+//                             @"\n"
+//                             @"近日由中央文献出版社出版，在全国发行。党的十八大以来，以习近平同志为核心的党中央坚定不移走中国特色社会主义政治发展道路。"
+//                             @"\n"
+//                             @"近日由中央文献出版社出版，在全国发行。"
+//         ];
         return cell;
         
-    }else if (model.type == 4){
+    }else if (model.sgtype == 2){
         
         static NSString *cellID = @"SpecialArtCell";
         SpecialArtCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
@@ -300,67 +255,68 @@
     }else{
         bottomBlank = [self getBottomBlankWith:model nextModel:nil];
     }
-    if (model.type == 2) {
+    if (model.sgtype == 3) {
         CGFloat imgHeight =  (kMainBoundsWidth - 15) *(802.f/1242.f);
         return  imgHeight + bottomBlank;
-    }else if (model.type == 4){
+    }else if (model.sgtype == 2){
         CGFloat artHeight= 130 *802.f/1242.f + 10;
         return  artHeight + bottomBlank;
-    }else if (model.type == 3){
+    }else if (model.sgtype == 1){
         // 计算富文本的高度
-        CGFloat textHeight = [RDFrequentlyUsed getAttrHeightByWidth:kMainBoundsWidth - 30 title:@"这是测试文字数据,这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据。"
-                  @"\n"
-                  @"近日由中央文献出版社出版，在全国发行。党的十八大以来，以习近平同志为核心的党中央坚定不移走中国特色社会主义政治发展道路。"
-                  @"\n"
-                  @"近日由中央文献出版社出版，在全国发行。"
-                              
-        font:kPingFangLight(15)];
+//        CGFloat textHeight = [RDFrequentlyUsed getAttrHeightByWidth:kMainBoundsWidth - 30 title:@"这是测试文字数据,这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据。"
+//                  @"\n"
+//                  @"近日由中央文献出版社出版，在全国发行。党的十八大以来，以习近平同志为核心的党中央坚定不移走中国特色社会主义政治发展道路。"
+//                  @"\n"
+//                  @"近日由中央文献出版社出版，在全国发行。"
+//                              
+//        font:kPingFangLight(15)];
+        CGFloat textHeight = [RDFrequentlyUsed getAttrHeightByWidth:kMainBoundsWidth - 30 title:model.stext font:kPingFangLight(15)];
         return  textHeight + bottomBlank;
     }
     return 22.5 + bottomBlank;
 }
 
 - (CGFloat)getBottomBlankWith:(CreateWealthModel *)tmpModel nextModel:(CreateWealthModel *)nextModel{
-   // 1 标题  2 图片  3 文字  4 文章
+   // 1 文字  2 文章  3 图片  4 标题
     if (nextModel != nil) {
-        if (tmpModel.type == 1) {
-            if (nextModel.type == 1) {
+        if (tmpModel.sgtype == 1) {
+            if (nextModel.sgtype == 1) {
                 return 25;
-            }else if (nextModel.type == 2){
+            }else if (nextModel.sgtype == 2){
                 return 20;
-            }else if (nextModel.type == 3){
+            }else if (nextModel.sgtype == 3){
                 return 20;
-            }else if (nextModel.type == 4){
+            }else if (nextModel.sgtype == 4){
                 return 20;
             }
-        }else if (tmpModel.type == 2){
-            if (nextModel.type == 1) {
+        }else if (tmpModel.sgtype == 2){
+            if (nextModel.sgtype == 1) {
                 return 25;
-            }else if (nextModel.type == 2){
+            }else if (nextModel.sgtype == 2){
                 return 5;
-            }else if (nextModel.type == 3){
+            }else if (nextModel.sgtype == 3){
                 return 15;
-            }else if (nextModel.type == 4){
+            }else if (nextModel.sgtype == 4){
                 return 20;
             }
-        }else if (tmpModel.type == 3){
-            if (nextModel.type == 1) {
+        }else if (tmpModel.sgtype == 3){
+            if (nextModel.sgtype == 1) {
                 return 25;
-            }else if (nextModel.type == 2){
+            }else if (nextModel.sgtype == 2){
                 return 15;
-            }else if (nextModel.type == 3){
+            }else if (nextModel.sgtype == 3){
                 return 25;
-            }else if (nextModel.type == 4){
+            }else if (nextModel.sgtype == 4){
                 return 25;
             }
-        }else if (tmpModel.type == 4){
-            if (nextModel.type == 1) {
+        }else if (tmpModel.sgtype == 4){
+            if (nextModel.sgtype == 1) {
                 return 25;
-            }else if (nextModel.type == 2){
+            }else if (nextModel.sgtype == 2){
                 return 20;
-            }else if (nextModel.type == 3){
+            }else if (nextModel.sgtype == 3){
                 return 25;
-            }else if (nextModel.type == 4){
+            }else if (nextModel.sgtype == 4){
                 return 5;
             }
         }
