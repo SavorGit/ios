@@ -13,6 +13,7 @@
 @property(nonatomic, assign) NSString * artid;
 @property(nonatomic, strong) NSString *sort_num;
 @property(nonatomic, assign) NSInteger type;
+@property(nonatomic, assign) NSInteger imgStyle;
 @property(nonatomic, strong) NSString *title;
 @property(nonatomic, strong) NSString *imageURL;
 @property(nonatomic, strong) NSString *contentURL;

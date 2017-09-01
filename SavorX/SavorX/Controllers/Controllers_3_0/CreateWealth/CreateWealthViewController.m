@@ -293,8 +293,8 @@
         return cell;
     }else if (model.type == 1){
         
-        //当图文类型为大图时
-        if (model.type == 5) {
+        //当图文类型为大图时 imgStyle 2 为大图
+        if (model.imgStyle == 2) {
             static NSString *cellID = @"imageTableCell";
             ImageAtlasTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
             if (cell == nil) {
@@ -307,7 +307,8 @@
             [cell configModelData:model];
             
             return cell;
-        }else{
+            
+        }if (model.imgStyle == 1){
             static NSString *cellID = @"imageTextTableCell";
             ImageTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
             if (cell == nil) {
