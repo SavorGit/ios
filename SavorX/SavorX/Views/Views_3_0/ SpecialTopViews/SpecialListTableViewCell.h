@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CreateWealthModel.h"
 
 @interface SpecialListTableViewCell : UITableViewCell
 
-- (void)configWithTitile:(NSString *)title;
+- (void)configWithModel:(CreateWealthModel *)model;
 
 @end

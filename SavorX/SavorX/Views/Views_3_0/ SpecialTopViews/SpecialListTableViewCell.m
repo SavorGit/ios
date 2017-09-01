@@ -11,6 +11,7 @@
 
 @interface SpecialListTableViewCell ()
 
+@property (nonatomic, copy)   NSString * imageURL;
 @property (nonatomic, strong) UIView * shadowView;
 @property (nonatomic, strong) UIView * bgContentView;
 @property (nonatomic, strong) UILabel * nameLabel;
@@ -121,15 +122,15 @@
     }];
 }
 
-- (void)configWithTitile:(NSString *)title
+- (void)configWithModel:(CreateWealthModel *)model
 {
-    self.nameLabel.text = @"小热点专题名称";
-    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:@"http://oss.littlehotspot.com/media/resource/yk7Q67bprb.jpg"]];
-    self.titleLabel.text = title;
-    self.detailLabel.text = @"红酥手，黄縢酒，满城春色宫墙柳。东风恶，欢情薄。一怀愁绪，几年离索。错！错！错！春如旧，人空瘦，泪痕红浥鲛绡透。桃花落。闲池阁。山盟虽在，锦书难托。莫！莫！莫！";
+    self.nameLabel.text = model.name;
+//    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:@"http://oss.littlehotspot.com/media/resource/yk7Q67bprb.jpg"]];
+    self.titleLabel.text = model.title;
+    self.detailLabel.text = model.desc;
     
     CGFloat width = kMainBoundsWidth - 40 - 24;
-    CGFloat height = [self getHeightByWidth:width title:title font:kPingFangMedium(18)];
+    CGFloat height = [self getHeightByWidth:width title:model.title font:kPingFangMedium(18)];
     if (height > 40) {
         height = (kMainBoundsWidth - 40) * (802.f/1242.f) * 0.232 + 25;
     }else{
@@ -137,6 +138,28 @@
     }
     [self.titleView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(height);
+    }];
+    
+    if ([self.imageURL isEqualToString:model.img_url]) {
+        return;
+    }
+    self.imageURL = model.img_url;
+    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.img_url] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        
+        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        if ([manager diskImageExistsForURL:[NSURL URLWithString:model.imageURL]]) {
+            NSLog(@"不加载动画");
+        }else {
+            
+            self.bgImageView.alpha = 0.0;
+            [UIView transitionWithView:self.bgImageView
+                              duration:1.0f
+                               options:UIViewAnimationOptionTransitionNone
+                            animations:^{
+                                [self.bgImageView setImage:image];
+                                self.bgImageView.alpha = 1.0;
+                            } completion:NULL];
+        }
     }];
 }
 
