@@ -149,6 +149,8 @@
 "RDString_GameRulesDetail" = "1.此游戏为手机与电视同步互动游戏，参与此活动者须先连接电视；\n\n2.每个用户连接电视后，可选择上面任意一个蛋砸开；\n\n3.每个手机每天可以参与五次砸蛋";
 "RDString_GameCopyright" = "本活动最终解释权归\"小热点\"所有";
 "RDString_PleaseConnectToWifi" = "请连接包间wifi后进行操作";
+"RDString_PleaseConnectToWifiWithRoom" = "请连接包间wifi";
+"RDString_ConnectToCheckIsGameEnable" = "连接后可查看当前酒楼是否有优惠活动";
 "RDString_PleaseConnectTVToGame" = "请连接电视，即可参加活动";
 "RDString_GameNotStart" = "当前包间的活动未开始";
 "RDString_LotteryHasNone" = "今天的抽奖机会用完了\n明天再来吧~";

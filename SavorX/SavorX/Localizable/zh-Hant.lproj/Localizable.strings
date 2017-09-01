@@ -149,6 +149,8 @@
 "RDString_GameRulesDetail" = "1.此遊戲為手機與電視同步互動遊戲，參與此活動者須先連接電視；\n\n2.每個用戶連接電視后，可選擇上面任意一個蛋砸開；\n\n3.每個手機每天可以參與5次砸蛋";
 "RDString_GameCopyright" = "本活動最終解釋權歸\"小熱點\"所有";
 "RDString_PleaseConnectToWifi" = "請連接包間wifi後進行操作";
+"RDString_PleaseConnectToWifiWithRoom" = "請連接包間wifi";
+"RDString_ConnectToCheckIsGameEnable" = "連接后可查看當前酒樓是否有優惠活動";
 "RDString_PleaseConnectTVToGame" = "請連接電視，即可參加活動";
 "RDString_GameNotStart" = "當前包間的活動未開始";
 "RDString_LotteryHasNone" = "今天的抽獎機會用完了\n明天再來吧~";

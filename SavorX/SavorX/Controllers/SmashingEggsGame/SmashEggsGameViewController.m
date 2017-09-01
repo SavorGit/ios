@@ -61,7 +61,6 @@
     
     _isConfigure = NO;
     [self requestEggsInfor];
- 
 }
 
 // 初始化基本参数
@@ -72,6 +71,17 @@
     self.shouldDemandDict = [[NSMutableDictionary alloc] init];
     [self.shouldDemandDict setObject:@(NO) forKey:@"should"];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(haClosed) name:RDBoxQuitScreenNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didNotFoundSence) name:RDDidNotFoundSenceNotification object:nil];
+}
+
+- (void)didNotFoundSence
+{
+    RDAlertView * alert = [[RDAlertView alloc] initWithTitle:RDLocalizedString(@"RDString_PleaseConnectToWifiWithRoom") message:RDLocalizedString(@"RDString_ConnectToCheckIsGameEnable")];
+    RDAlertAction * action = [[RDAlertAction alloc] initWithTitle:RDLocalizedString(@"RDString_IKnewIt") handler:^{
+        [self.navigationController popViewControllerAnimated:YES];
+    } bold:YES];
+    [alert addActions:@[action]];
+    [alert show];
 }
 
 // 请求砸蛋次数
@@ -738,6 +748,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDBoxQuitScreenNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidNotFoundSenceNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
