@@ -230,8 +230,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     CreateWealthModel *model = [self.dataSource objectAtIndex:indexPath.row];
-    
-    SingleSpecialTopicViewController *singleVC = [[SingleSpecialTopicViewController alloc] init];
+    SingleSpecialTopicViewController *singleVC = [[SingleSpecialTopicViewController alloc] initWithtopGroupID:model.id];
     [self.navigationController pushViewController:singleVC animated:YES];
     
 }

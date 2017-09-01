@@ -25,10 +25,19 @@
 @property (nonatomic, assign) NSInteger categoryID;
 @property (nonatomic, copy) NSString * cachePath;
 @property (nonatomic, strong)  CreateWealthModel * topModel; //数据源
+@property (nonatomic, copy) NSString *topGroupId;
 
 @end
 
 @implementation SpecialTopicGroupViewController
+
+- (instancetype)initWithtopGroupID:(NSInteger )topGroupId
+{
+    if (self = [super init]) {
+        self.topGroupId = [NSString stringWithFormat:@"%ld",topGroupId];;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -69,7 +78,7 @@
 
 - (void)dataRequest{
     
-    SpecialTopGroupRequest * request = [[SpecialTopGroupRequest alloc] initWithId:nil];
+    SpecialTopGroupRequest * request = [[SpecialTopGroupRequest alloc] initWithId:self.topGroupId];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self hiddenLoadingView];
