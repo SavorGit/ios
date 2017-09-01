@@ -11,6 +11,7 @@
 #import "RD_MJRefreshHeader.h"
 #import "RD_MJRefreshFooter.h"
 #import "SpecialTopListRequest.h"
+#import "SingleSpecialTopicViewController.h"
 
 @interface SpecialListViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -226,6 +227,14 @@
     return 145 + (kMainBoundsWidth - 20) * 802.f/1242.f;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    CreateWealthModel *model = [self.dataSource objectAtIndex:indexPath.row];
+    
+    SingleSpecialTopicViewController *singleVC = [[SingleSpecialTopicViewController alloc] init];
+    [self.navigationController pushViewController:singleVC animated:YES];
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

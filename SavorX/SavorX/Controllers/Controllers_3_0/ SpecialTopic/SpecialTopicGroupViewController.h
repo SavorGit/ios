@@ -11,4 +11,6 @@
 
 @interface SpecialTopicGroupViewController : HomeBaseViewController
 
+@property (nonatomic, strong) UITableView * tableView; //表格展示视图
+
 @end

@@ -21,7 +21,6 @@
 
 @interface SpecialTopicGroupViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
 @property (nonatomic, assign) NSInteger categoryID;
 @property (nonatomic, copy) NSString * cachePath;
