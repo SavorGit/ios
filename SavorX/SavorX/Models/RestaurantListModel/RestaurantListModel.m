@@ -10,4 +10,9 @@
 
 @implementation RestaurantListModel
 
+-(NSDictionary *)attrMapDict{
+    
+    return @{@"cid":@"id"};
+}
+
 @end

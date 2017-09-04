@@ -247,6 +247,7 @@
 //页面顶部下弹状态栏显示
 - (void)showTopFreshLabelWithTitle:(NSString *)title
 {
+    
     //移除当前动画
     [self.TopFreshLabel.layer removeAllAnimations];
     
@@ -256,6 +257,7 @@
     //重新设置状态栏下弹动画
     self.TopFreshLabel.text = title;
     self.TopFreshLabel.frame = CGRectMake(0, -35, kMainBoundsWidth, 35);
+    [self.view bringSubviewToFront:self.TopFreshLabel];
     [UIView animateWithDuration:.5f animations:^{
         self.TopFreshLabel.frame = CGRectMake(0, 0, kMainBoundsWidth, 35);
     } completion:^(BOOL finished) {

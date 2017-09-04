@@ -10,4 +10,9 @@
 
 @implementation CreateWealthModel
 
+-(NSDictionary *)attrMapDict{
+    
+    return @{@"cid":@"id"};
+}
+
 @end

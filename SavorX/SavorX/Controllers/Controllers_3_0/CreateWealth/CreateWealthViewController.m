@@ -308,7 +308,7 @@
             
             return cell;
             
-        }if (model.imgStyle == 1){
+        }else{
             static NSString *cellID = @"imageTextTableCell";
             ImageTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
             if (cell == nil) {

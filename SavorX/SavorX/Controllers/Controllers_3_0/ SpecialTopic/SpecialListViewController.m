@@ -9,7 +9,6 @@
 #import "SpecialListViewController.h"
 #import "SpecialListTableViewCell.h"
 #import "RD_MJRefreshHeader.h"
-#import "RD_MJRefreshFooter.h"
 #import "SpecialTopListRequest.h"
 #import "SingleSpecialTopicViewController.h"
 
@@ -27,6 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     [self initInfo];
     [self setupViews];
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.cachePath]) {
@@ -128,7 +128,7 @@
 {
     
     CreateWealthModel *welthModel = [self.dataSource lastObject];
-    SpecialTopListRequest * request = [[SpecialTopListRequest alloc] initWithId:[NSString stringWithFormat:@"%ld",welthModel.id]];
+    SpecialTopListRequest * request = [[SpecialTopListRequest alloc] initWithId:[NSString stringWithFormat:@"%ld",welthModel.cid]];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary *dic = (NSDictionary *)response;
@@ -192,10 +192,7 @@
     
     //创建tableView动画加载头视图
     self.tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(refreshData)];
-    RD_MJRefreshFooter* footer = [RD_MJRefreshFooter footerWithRefreshingBlock:^{
-        [self getMoreData];
-    }];
-    self.tableView.mj_footer = footer;
+    self.tableView.mj_footer = [MJRefreshAutoGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(getMoreData)];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -230,7 +227,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     CreateWealthModel *model = [self.dataSource objectAtIndex:indexPath.row];
-    SingleSpecialTopicViewController *singleVC = [[SingleSpecialTopicViewController alloc] initWithtopGroupID:model.id];
+    SingleSpecialTopicViewController *singleVC = [[SingleSpecialTopicViewController alloc] initWithtopGroupID:model.cid];
     [self.navigationController pushViewController:singleVC animated:YES];
     
 }

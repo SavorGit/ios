@@ -15,4 +15,6 @@
 
 - (instancetype)initWithtopGroupID:(NSInteger)topGroupId;
 
+- (void)showSelfAndCreateLog;
+
 @end

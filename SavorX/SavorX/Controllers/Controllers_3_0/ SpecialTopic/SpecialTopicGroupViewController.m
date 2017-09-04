@@ -18,6 +18,8 @@
 #import "ImageArrayViewController.h"
 #import "WebViewController.h"
 #import "SpecialListViewController.h"
+#import "RDLogStatisticsAPI.h"
+#import "RD_MJRefreshHeader.h"
 
 @interface SpecialTopicGroupViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -73,7 +75,11 @@
 - (void)initInfo{
     self.categoryID = 103;
     _dataSource = [[NSMutableArray alloc] initWithCapacity:100];
-    self.cachePath = [NSString stringWithFormat:@"%@%@.plist", CategoryCache, @"SpecialTopicGroup"];
+    if (isEmptyString(self.topGroupId)) {
+        self.cachePath = [NSString stringWithFormat:@"%@%@.plist", CategoryCache, @"SpecialTopicGroup"];
+    }else{
+        self.cachePath = [NSString stringWithFormat:@"%@%@%@.plist", CategoryCache, @"SpecialTopicGroup", self.topGroupId];
+    }
 }
 
 - (void)dataRequest{
@@ -109,7 +115,9 @@
             [self.dataSource addObject:tmpModel];
         }
         
+        [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
         [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
@@ -118,6 +126,7 @@
         }
         if (_tableView) {
             [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
+            [self.tableView.mj_header endRefreshing];
         }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
@@ -127,6 +136,7 @@
         }
         if (_tableView) {
             
+            [self.tableView.mj_header endRefreshing];
             if (error.code == -1001) {
                 [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithTimeOut")];
             }else{
@@ -191,7 +201,7 @@
         
         _tableView.tableHeaderView = headView;
         
-        UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 80)];
+        UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 130)];
         footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
         UILabel *recommendLabel = [[UILabel alloc] init];
         recommendLabel.frame = CGRectMake(kMainBoundsWidth/2 - 60, 25, 120, 30);
@@ -211,6 +221,9 @@
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
         tapGesture.numberOfTapsRequired = 1;
         [recommendLabel addGestureRecognizer:tapGesture];
+        
+        //创建tableView动画加载头视图
+        self.tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(dataRequest)];
         
     }
     
@@ -438,6 +451,19 @@
         return 0.0;
     }
     return 0.0;
+}
+
+- (void)showSelfAndCreateLog
+{
+    if (_tableView) {
+        NSArray * cells = self.tableView.visibleCells;
+        for (UITableViewCell * cell in cells) {
+            NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+            CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.section];
+            [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_SHOW type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
+        }
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {

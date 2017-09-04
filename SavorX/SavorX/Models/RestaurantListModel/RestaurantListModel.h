@@ -20,7 +20,7 @@
 @property (nonatomic, copy) NSString *addr;
 
 //id
-@property (nonatomic, assign) NSInteger id;
+@property (nonatomic, assign) NSInteger cid;
 
 //纬度
 @property (nonatomic, copy) NSString *lat;
