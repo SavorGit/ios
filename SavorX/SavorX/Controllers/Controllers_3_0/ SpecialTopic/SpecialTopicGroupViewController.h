@@ -12,6 +12,7 @@
 @interface SpecialTopicGroupViewController : HomeBaseViewController
 
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
+@property (nonatomic, strong) CreateWealthModel * topModel; //数据源
 
 - (instancetype)initWithtopGroupID:(NSInteger)topGroupId;
 
