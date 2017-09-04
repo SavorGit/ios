@@ -65,6 +65,7 @@
         }
         if (dataDict != nil) {
             [self.tableView reloadData];
+            [self setUpTableHeaderView];
         }
         [self dataRequest];
     }else{
@@ -121,6 +122,7 @@
         
         [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
         [self.tableView reloadData];
+        [self setUpTableHeaderView];
         [self.tableView.mj_header endRefreshing];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
@@ -178,33 +180,6 @@
             make.right.mas_equalTo(0);
         }];
         
-        SpecialHeaderView *topView = [[SpecialHeaderView alloc] initWithFrame:CGRectZero];
-        topView.backgroundColor = UIColorFromRGB(0xf6f2ed);
-        
-        // 计算图片高度
-        CGFloat imgHeight =kMainBoundsWidth *802.f/1242.f;//113
-        CGFloat totalHeight = imgHeight + 25 + 40;// 25为下方留白 40为控件间隔
-        // 计算描述文字内容的高度
-        CGFloat descHeight = [RDFrequentlyUsed getAttrHeightByWidth:kMainBoundsWidth - 30 title:self.topModel.desc font:kPingFangLight(15)];
-        totalHeight = totalHeight + descHeight;
-        // 计算标题的高度
-        CGFloat titleHeight = [RDFrequentlyUsed getHeightByWidth:kMainBoundsWidth - 30 title:self.topModel.title font:kPingFangMedium(22)];
-        if (titleHeight > 31) {
-            totalHeight = totalHeight + 62;
-        }else{
-            totalHeight = totalHeight + 31;
-        }
-        
-        UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, totalHeight)];
-        [headView addSubview:topView];
-        [topView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.left.right.mas_equalTo(0);
-            make.height.mas_equalTo(totalHeight);
-        }];
-        [topView configModelData:self.topModel];
-        
-        _tableView.tableHeaderView = headView;
-        
         UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 130)];
         footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
         UILabel *recommendLabel = [[UILabel alloc] init];
@@ -232,6 +207,37 @@
     }
     
     return _tableView;
+}
+
+-(void)setUpTableHeaderView{
+    
+    SpecialHeaderView *topView = [[SpecialHeaderView alloc] initWithFrame:CGRectZero];
+    topView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+    
+    // 计算图片高度
+    CGFloat imgHeight =kMainBoundsWidth *802.f/1242.f;//113
+    CGFloat totalHeight = imgHeight + 25 + 40;// 25为下方留白 40为控件间隔
+    // 计算描述文字内容的高度
+    CGFloat descHeight = [RDFrequentlyUsed getAttrHeightByWidth:kMainBoundsWidth - 30 title:self.topModel.desc font:kPingFangLight(15)];
+    totalHeight = totalHeight + descHeight;
+    // 计算标题的高度
+    CGFloat titleHeight = [RDFrequentlyUsed getHeightByWidth:kMainBoundsWidth - 30 title:self.topModel.title font:kPingFangMedium(22)];
+    if (titleHeight > 31) {
+        totalHeight = totalHeight + 62;
+    }else{
+        totalHeight = totalHeight + 31;
+    }
+    
+    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, totalHeight)];
+    [headView addSubview:topView];
+    [topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.mas_equalTo(0);
+        make.height.mas_equalTo(totalHeight);
+    }];
+    [topView configModelData:self.topModel];
+    
+    _tableView.tableHeaderView = headView;
+    
 }
 
 #pragma mark -- 点击更多专题组

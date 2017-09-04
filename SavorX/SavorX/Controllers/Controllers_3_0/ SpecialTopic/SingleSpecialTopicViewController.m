@@ -14,9 +14,9 @@
 
 @implementation SingleSpecialTopicViewController
 
-- (instancetype)init
+- (instancetype)initWithtopGroupID:(NSInteger )topGroupId
 {
-    if (self = [super init]) {
+    if (self = [super initWithtopGroupID:topGroupId]) {
         
         [self hiddenFootView];
     }
