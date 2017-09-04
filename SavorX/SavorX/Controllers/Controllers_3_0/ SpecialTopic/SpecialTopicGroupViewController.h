@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) UITableView * tableView; //表格展示视图
 @property (nonatomic, strong) CreateWealthModel * topModel; //数据源
+@property (nonatomic, assign) NSInteger categoryID;
 
 - (instancetype)initWithtopGroupID:(NSInteger)topGroupId;
 

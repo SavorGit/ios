@@ -24,7 +24,6 @@
 @interface SpecialTopicGroupViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) NSMutableArray * dataSource; //数据源
-@property (nonatomic, assign) NSInteger categoryID;
 @property (nonatomic, copy) NSString * cachePath;
 @property (nonatomic, copy) NSString *topGroupId;
 
@@ -55,6 +54,9 @@
         self.topModel.title = [dataDict objectForKey:@"title"];
         self.topModel.img_url = [dataDict objectForKey:@"img_url"];
         self.topModel.desc = [dataDict objectForKey:@"desc"];
+        self.topModel.imageURL = self.topModel.img_url;
+        self.topModel.contentURL = @"http://devp.admin.littlehotspot.com/content/2727.html";
+        self.topModel.shareType = 1;
         
         NSArray *resultArr = [dataDict objectForKey:@"list"];
         for(int i = 0; i < resultArr.count; i ++){
@@ -106,6 +108,9 @@
         self.topModel.title = [dataDict objectForKey:@"title"];
         self.topModel.img_url = [dataDict objectForKey:@"img_url"];
         self.topModel.desc = [dataDict objectForKey:@"desc"];
+        self.topModel.imageURL = self.topModel.img_url;
+        self.topModel.contentURL = @"http://devp.admin.littlehotspot.com/content/2727.html";
+        self.topModel.shareType = 1;
         
         NSArray *resultArr = [dataDict objectForKey:@"list"];
         [self.dataSource removeAllObjects];

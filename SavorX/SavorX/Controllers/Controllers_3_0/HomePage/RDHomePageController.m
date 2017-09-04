@@ -19,8 +19,7 @@
 #import "ImageTextDetailViewController.h"
 #import "ImageArrayViewController.h"
 #import "RDLogStatisticsAPI.h"
-
-#import "SpecialListViewController.h"
+#import "HotPopShareView.h"
 
 @interface RDHomePageController ()
 
@@ -478,10 +477,15 @@
     }
 }
 
+#pragma mark ---分享按钮点击
 - (void)shareSpecialTopic
 {
     UIViewController * currentVC = self.currentViewController;
     if ([self.currentViewController isKindOfClass:[SpecialTopicGroupViewController class]]) {
+        SpecialTopicGroupViewController * tmpVC = (SpecialTopicGroupViewController *)self.currentViewController;
+        
+        HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:tmpVC.topModel andVC:self andCategoryID:tmpVC.categoryID andSourceId:1];
+        [[UIApplication sharedApplication].keyWindow addSubview:shareView];
         
     }
 }

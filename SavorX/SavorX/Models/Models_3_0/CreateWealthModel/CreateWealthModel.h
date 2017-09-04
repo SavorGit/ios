@@ -47,8 +47,9 @@
 @property (nonatomic, copy) NSString * stext;//用于专题组文字内容
 @property (nonatomic, copy) NSString * desc;//用于专题组头部描述
 
+
 //非接口返回
 @property (nonatomic, assign) NSInteger cid;
-
+@property (nonatomic, assign) NSInteger shareType;//非接口返回，用于分享类型(1代表专题组首页分享)
 
 @end
