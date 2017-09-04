@@ -31,9 +31,18 @@
 
 @implementation SpecialTopicGroupViewController
 
+- (instancetype)init
+{
+    if ([super init]) {
+        self.isNeedFootView = YES;
+    }
+    return self;
+}
+
 - (instancetype)initWithtopGroupID:(NSInteger )topGroupId
 {
     if (self = [super init]) {
+        self.isNeedFootView = NO;
         self.topGroupId = [NSString stringWithFormat:@"%ld",topGroupId];;
     }
     return self;
@@ -120,7 +129,9 @@
             [self.dataSource addObject:tmpModel];
         }
         
-        [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
+        if (_tableView) {
+            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
+        }
         [self.tableView reloadData];
         [self setUpTableHeaderView];
         [self.tableView.mj_header endRefreshing];
@@ -180,26 +191,34 @@
             make.right.mas_equalTo(0);
         }];
         
-        UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 130)];
-        footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
-        UILabel *recommendLabel = [[UILabel alloc] init];
-        recommendLabel.frame = CGRectMake(kMainBoundsWidth/2 - 60, 25, 120, 30);
-        recommendLabel.textColor = UIColorFromRGB(0x922c3e);
-        recommendLabel.font = kPingFangRegular(15);
-        recommendLabel.text = RDLocalizedString(@"RDString_IookHisstoryTopic");
-        recommendLabel.layer.cornerRadius = 2.5;
-        recommendLabel.layer.masksToBounds = YES;
-        recommendLabel.layer.borderWidth = 0.5;
-        recommendLabel.layer.borderColor = UIColorFromRGB(0x922c3e).CGColor;
-        recommendLabel.textAlignment = NSTextAlignmentCenter;
-        recommendLabel.userInteractionEnabled = YES;
-        [footView addSubview:recommendLabel];
+        if (self.isNeedFootView) {
+            
+            UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 130)];
+            footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+            UILabel *recommendLabel = [[UILabel alloc] init];
+            recommendLabel.frame = CGRectMake(kMainBoundsWidth/2 - 60, 25, 120, 30);
+            recommendLabel.textColor = UIColorFromRGB(0x922c3e);
+            recommendLabel.font = kPingFangRegular(15);
+            recommendLabel.text = RDLocalizedString(@"RDString_IookHisstoryTopic");
+            recommendLabel.layer.cornerRadius = 2.5;
+            recommendLabel.layer.masksToBounds = YES;
+            recommendLabel.layer.borderWidth = 0.5;
+            recommendLabel.layer.borderColor = UIColorFromRGB(0x922c3e).CGColor;
+            recommendLabel.textAlignment = NSTextAlignmentCenter;
+            recommendLabel.userInteractionEnabled = YES;
+            [footView addSubview:recommendLabel];
+            
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+            tapGesture.numberOfTapsRequired = 1;
+            [recommendLabel addGestureRecognizer:tapGesture];
+            
+            _tableView.tableFooterView = footView;
+        }else{
+            UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 15)];
+            footView.backgroundColor = UIColorFromRGB(0xf6f2ed);
+            _tableView.tableFooterView = footView;
+        }
         
-        _tableView.tableFooterView = footView;
-        
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
-        tapGesture.numberOfTapsRequired = 1;
-        [recommendLabel addGestureRecognizer:tapGesture];
         
         //创建tableView动画加载头视图
         self.tableView.mj_header = [RD_MJRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(dataRequest)];

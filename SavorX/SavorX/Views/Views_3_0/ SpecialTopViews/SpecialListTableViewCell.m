@@ -109,7 +109,6 @@
     }];
     
     self.detailLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    self.detailLabel.textAlignment = NSTextAlignmentCenter;
     self.detailLabel.textColor = UIColorFromRGB(0x575757);
     self.detailLabel.font = kPingFangLight(15);
     self.detailLabel.numberOfLines = 3;

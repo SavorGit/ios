@@ -10,12 +10,14 @@
 
 @implementation SpecialTopGroupRequest
 
-- (instancetype)initWithId:(NSString *)id;
+- (instancetype)initWithId:(NSString *)cid;
 {
     if (self = [super init]) {
         self.methodName = [@"APP3/Special/specialGroupDetail?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setValue:id forParamKey:@"id"];
+        if (!isEmptyString(cid)) {
+            [self setValue:cid forParamKey:@"id"];
+        }
     }
     return self;
 }

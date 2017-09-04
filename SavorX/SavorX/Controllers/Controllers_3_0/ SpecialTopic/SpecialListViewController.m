@@ -10,7 +10,7 @@
 #import "SpecialListTableViewCell.h"
 #import "RD_MJRefreshHeader.h"
 #import "SpecialTopListRequest.h"
-#import "SingleSpecialTopicViewController.h"
+#import "SpecialTopicGroupViewController.h"
 
 @interface SpecialListViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -227,7 +227,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     CreateWealthModel *model = [self.dataSource objectAtIndex:indexPath.row];
-    SingleSpecialTopicViewController *singleVC = [[SingleSpecialTopicViewController alloc] initWithtopGroupID:model.cid];
+    SpecialTopicGroupViewController *singleVC = [[SpecialTopicGroupViewController alloc] initWithtopGroupID:model.cid];
     [self.navigationController pushViewController:singleVC animated:YES];
     
 }
