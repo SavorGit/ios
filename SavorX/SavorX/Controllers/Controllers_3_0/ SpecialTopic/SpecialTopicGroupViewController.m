@@ -73,8 +73,8 @@
             [self.dataSource addObject:tmpModel];
         }
         if (dataDict != nil) {
-            [self.tableView reloadData];
             [self setUpTableHeaderView];
+            [self.tableView reloadData];
         }
         [self dataRequest];
     }else{
@@ -132,8 +132,9 @@
         if (_tableView) {
             [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
         }
-        [self.tableView reloadData];
         [self setUpTableHeaderView];
+        [self.tableView reloadData];
+        
         [self.tableView.mj_header endRefreshing];
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
