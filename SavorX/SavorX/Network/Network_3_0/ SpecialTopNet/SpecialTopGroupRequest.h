@@ -10,6 +10,6 @@
 
 @interface SpecialTopGroupRequest : BGNetworkRequest
 
-- (instancetype)initWithId:(NSString *)id;
+- (instancetype)initWithId:(NSString *)cid;
 
 @end

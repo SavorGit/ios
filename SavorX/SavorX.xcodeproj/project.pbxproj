@@ -293,7 +293,6 @@
 		965C25E61F55399300BEB141 /* SpecialHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 965C25E51F55399300BEB141 /* SpecialHeaderView.m */; };
 		965C25E91F55674B00BEB141 /* SpecialTopGroupRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 965C25E81F55674B00BEB141 /* SpecialTopGroupRequest.m */; };
 		965C25EC1F58F2B700BEB141 /* SpecialTopListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 965C25EB1F58F2B700BEB141 /* SpecialTopListRequest.m */; };
-		965C25EF1F59047400BEB141 /* SingleSpecialTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 965C25EE1F59047400BEB141 /* SingleSpecialTopicViewController.m */; };
 		965EC0431F385BF5008812FB /* ImageAtlasCollectViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 965EC0421F385BF5008812FB /* ImageAtlasCollectViewCell.m */; };
 		96608FF21E80D47900D28A61 /* VideoLauchMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96608FF11E80D47900D28A61 /* VideoLauchMovieViewController.m */; };
 		9670C4911E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670C4901E6D73DA0060CE0B /* VideoGuidedTwoDimensionalCode.m */; };
@@ -815,8 +814,6 @@
 		965C25E81F55674B00BEB141 /* SpecialTopGroupRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopGroupRequest.m; sourceTree = "<group>"; };
 		965C25EA1F58F2B700BEB141 /* SpecialTopListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecialTopListRequest.h; sourceTree = "<group>"; };
 		965C25EB1F58F2B700BEB141 /* SpecialTopListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecialTopListRequest.m; sourceTree = "<group>"; };
-		965C25ED1F59047400BEB141 /* SingleSpecialTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleSpecialTopicViewController.h; sourceTree = "<group>"; };
-		965C25EE1F59047400BEB141 /* SingleSpecialTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleSpecialTopicViewController.m; sourceTree = "<group>"; };
 		965EC0411F385BF5008812FB /* ImageAtlasCollectViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAtlasCollectViewCell.h; sourceTree = "<group>"; };
 		965EC0421F385BF5008812FB /* ImageAtlasCollectViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAtlasCollectViewCell.m; sourceTree = "<group>"; };
 		96608FF01E80D47900D28A61 /* VideoLauchMovieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLauchMovieViewController.h; sourceTree = "<group>"; };
@@ -2282,8 +2279,6 @@
 				0651A0231F53B8D8007C3CBC /* SpecialListViewController.m */,
 				965C25E11F54FF1F00BEB141 /* SpecialTopicGroupViewController.h */,
 				965C25E21F54FF1F00BEB141 /* SpecialTopicGroupViewController.m */,
-				965C25ED1F59047400BEB141 /* SingleSpecialTopicViewController.h */,
-				965C25EE1F59047400BEB141 /* SingleSpecialTopicViewController.m */,
 			);
 			path = " SpecialTopic";
 			sourceTree = "<group>";
@@ -2833,7 +2828,6 @@
 				067BFF611F2216A400D9CE74 /* RDIsDemand.m in Sources */,
 				96D8C5CC1F0F75AC00251301 /* SpecialTopDetailViewController.m in Sources */,
 				0627E0B31E32111500DAED92 /* LeftTableHeaderView.m in Sources */,
-				965C25EF1F59047400BEB141 /* SingleSpecialTopicViewController.m in Sources */,
 				96D8C5FD1F1613DC00251301 /* HSImTeRecommendRequest.m in Sources */,
 				06FA33961D3E171D001F5B37 /* DDFileLogger.m in Sources */,
 				0647BC351E506285002284BB /* HSFirstUseRequest.m in Sources */,
