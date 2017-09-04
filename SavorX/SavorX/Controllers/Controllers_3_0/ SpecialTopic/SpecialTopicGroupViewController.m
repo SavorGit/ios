@@ -20,6 +20,7 @@
 #import "SpecialListViewController.h"
 #import "RDLogStatisticsAPI.h"
 #import "RD_MJRefreshHeader.h"
+#import "HotPopShareView.h"
 
 @interface SpecialTopicGroupViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -43,7 +44,9 @@
 {
     if (self = [super init]) {
         self.isNeedFootView = NO;
-        self.topGroupId = [NSString stringWithFormat:@"%ld",topGroupId];;
+        self.topGroupId = [NSString stringWithFormat:@"%ld",topGroupId];
+        UIBarButtonItem * shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareAction)];
+        self.navigationItem.rightBarButtonItem = shareItem;
     }
     return self;
 }
@@ -64,7 +67,7 @@
         self.topModel.img_url = [dataDict objectForKey:@"img_url"];
         self.topModel.desc = [dataDict objectForKey:@"desc"];
         self.topModel.imageURL = self.topModel.img_url;
-        self.topModel.contentURL = @"http://devp.admin.littlehotspot.com/content/2727.html";
+        self.topModel.contentURL = [dataDict objectForKey:@"contentUrl"];
         self.topModel.shareType = 1;
         
         NSArray *resultArr = [dataDict objectForKey:@"list"];
@@ -119,7 +122,7 @@
         self.topModel.img_url = [dataDict objectForKey:@"img_url"];
         self.topModel.desc = [dataDict objectForKey:@"desc"];
         self.topModel.imageURL = self.topModel.img_url;
-        self.topModel.contentURL = @"http://devp.admin.littlehotspot.com/content/2727.html";
+        self.topModel.contentURL = [dataDict objectForKey:@"contentUrl"];
         self.topModel.shareType = 1;
         
         NSArray *resultArr = [dataDict objectForKey:@"list"];
@@ -482,6 +485,13 @@
         }
     }
     
+}
+
+#pragma mark ---分享按钮点击
+- (void)shareAction{
+    [SAVORXAPI postUMHandleWithContentId:@"details_page_share" key:nil value:nil];
+    HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:self.topModel andVC:self andCategoryID:self.categoryID andSourceId:0];
+    [[UIApplication sharedApplication].keyWindow addSubview:shareView];
 }
 
 - (void)didReceiveMemoryWarning {
