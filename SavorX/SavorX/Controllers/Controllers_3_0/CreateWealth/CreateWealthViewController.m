@@ -347,8 +347,14 @@
         CGFloat imgHeight= (kMainBoundsWidth - 30) *802.f/1242.f;
         return imgHeight + 95;
     }else if (model.type == 1){
-        CGFloat igTextHeight= 130 *802.f/1242.f;
-        return igTextHeight + 12;
+        //当图文类型为大图时 imgStyle 2 为大图
+        if (model.imgStyle == 2) {
+            CGFloat imgHeight= (kMainBoundsWidth - 30) *802.f/1242.f;
+            return imgHeight + 95;
+        }else{
+            CGFloat igTextHeight= 130 *802.f/1242.f;
+            return igTextHeight + 12;
+        }
     }
     return 0;
 }

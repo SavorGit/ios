@@ -293,13 +293,6 @@
         cell.backgroundColor = UIColorFromRGB(0xf6f2ed);
         
         [cell configWithText:model.stext];
-        //        [cell configWithText:
-        //                             @"这是测试文字数据,这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据。这是测试数据结束。"
-        //                             @"\n"
-        //                             @"近日由中央文献出版社出版，在全国发行。党的十八大以来，以习近平同志为核心的党中央坚定不移走中国特色社会主义政治发展道路。"
-        //                             @"\n"
-        //                             @"近日由中央文献出版社出版，在全国发行。"
-        //         ];
         return cell;
         
     }else if (model.sgtype == 2){
