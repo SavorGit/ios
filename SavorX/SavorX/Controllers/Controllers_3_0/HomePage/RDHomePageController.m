@@ -480,8 +480,10 @@
 
 - (void)shareSpecialTopic
 {
-    SpecialListViewController * specialList = [[SpecialListViewController alloc] init];
-    [self.navigationController pushViewController:specialList animated:YES];
+    UIViewController * currentVC = self.currentViewController;
+    if ([self.currentViewController isKindOfClass:[SpecialTopicGroupViewController class]]) {
+        
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
