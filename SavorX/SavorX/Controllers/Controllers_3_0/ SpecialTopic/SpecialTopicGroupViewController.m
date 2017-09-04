@@ -361,16 +361,11 @@
         CGFloat artHeight= 130 *802.f/1242.f + 10;
         return  artHeight + bottomBlank;
     }else if (model.sgtype == 1){
-        // 计算富文本的高度
-//        CGFloat textHeight = [RDFrequentlyUsed getAttrHeightByWidth:kMainBoundsWidth - 30 title:@"这是测试文字数据,这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据，这是测试文字数据。"
-//                  @"\n"
-//                  @"近日由中央文献出版社出版，在全国发行。党的十八大以来，以习近平同志为核心的党中央坚定不移走中国特色社会主义政治发展道路。"
-//                  @"\n"
-//                  @"近日由中央文献出版社出版，在全国发行。"
-//                              
-//        font:kPingFangLight(15)];
         CGFloat textHeight = [RDFrequentlyUsed getAttrHeightByWidth:kMainBoundsWidth - 30 title:model.stext font:kPingFangLight(15)];
         return  textHeight + bottomBlank;
+    }else if (model.sgtype == 4){
+        CGFloat titleHeight = [RDFrequentlyUsed getAttrHeightByWidthNoSpacing:kMainBoundsWidth - 30 title:model.stitle font:kPingFangLight(16)];
+        return  titleHeight + bottomBlank;
     }
     return 22.5 + bottomBlank;
 }
