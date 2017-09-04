@@ -106,23 +106,7 @@
         return;
     }
     self.imageURL = model.img_url;
-    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.img_url] placeholderImage:[UIImage imageNamed:@"zanwu"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        
-        SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        if ([manager diskImageExistsForURL:[NSURL URLWithString:model.imageURL]]) {
-            NSLog(@"不加载动画");
-        }else {
-            
-            self.bgImageView.alpha = 0.0;
-            [UIView transitionWithView:self.bgImageView
-                              duration:1.0f
-                               options:UIViewAnimationOptionTransitionNone
-                            animations:^{
-                                [self.bgImageView setImage:image];
-                                self.bgImageView.alpha = 1.0;
-                            } completion:NULL];
-        }
-    }];
+    [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:model.img_url] placeholderImage:[UIImage imageNamed:@"zanwu"]];
     
 }
 
