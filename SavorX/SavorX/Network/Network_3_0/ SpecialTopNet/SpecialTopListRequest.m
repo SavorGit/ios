@@ -10,12 +10,12 @@
 
 @implementation SpecialTopListRequest
 
-- (instancetype)initWithId:(NSString *)id;
+- (instancetype)initWithTime:(NSString *)updateTime;
 {
     if (self = [super init]) {
         self.methodName = [@"APP3/Special/specialGroupList?" stringByAppendingString:[Helper getURLPublic]];
         self.httpMethod = BGNetworkRequestHTTPPost;
-        [self setValue:id forParamKey:@"id"];
+        [self setValue:updateTime forParamKey:@"updateTime"];
     }
     return self;
 }

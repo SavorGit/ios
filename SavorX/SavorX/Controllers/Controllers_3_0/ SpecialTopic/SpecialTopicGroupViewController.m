@@ -124,7 +124,7 @@
         self.topModel.imageURL = self.topModel.img_url;
         self.topModel.contentURL = [dataDict objectForKey:@"contentUrl"];
         self.topModel.shareType = 1;
-        
+         
         NSArray *resultArr = [dataDict objectForKey:@"list"];
         [self.dataSource removeAllObjects];
         for (int i = 0; i < resultArr.count; i ++) {
