@@ -135,8 +135,9 @@
         if (_tableView) {
             [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_SuccessWithUpdate")];
         }
-        [self setUpTableHeaderView];
+//        [self setUpTableHeaderView];
         [self.tableView reloadData];
+        [self setUpTableHeaderView];
         
         [self.tableView.mj_header endRefreshing];
         
