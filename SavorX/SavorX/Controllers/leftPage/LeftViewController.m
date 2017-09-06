@@ -126,14 +126,9 @@
             [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:help  animated:NO];
         }else if (indexPath.row == 3){
             [SAVORXAPI postUMHandleWithContentId:@"menu_game" key:nil value:nil];
-            if ([GlobalData shared].hotelId != 0) {
-                [self hideLeftViewAnimated:nil];
-                SmashEggsGameViewController * segvVC = [[SmashEggsGameViewController alloc] init];
-                [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:segvVC  animated:NO];
-            }else{
-                [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_PleaseUseInHotel")];
-            }
-
+            [self hideLeftViewAnimated:nil];
+            SmashEggsGameViewController * segvVC = [[SmashEggsGameViewController alloc] init];
+            [(UINavigationController *)self.sideMenuController.rootViewController  pushViewController:segvVC  animated:NO];
         }
         else if (indexPath.row == 4){
             [self hideLeftViewAnimated:nil];

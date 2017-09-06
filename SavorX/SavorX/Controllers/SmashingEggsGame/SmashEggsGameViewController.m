@@ -60,6 +60,11 @@
     [_player play];
     
     _isConfigure = NO;
+    
+    if ([GlobalData shared].hotelId == 0 || [GlobalData shared].networkStatus != RDNetworkStatusReachableViaWiFi) {
+        [self didNotFoundSence];
+    }
+    
     [self requestEggsInfor];
 }
 
