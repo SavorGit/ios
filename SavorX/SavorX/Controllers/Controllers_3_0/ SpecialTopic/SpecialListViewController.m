@@ -55,7 +55,7 @@
 //下拉刷新页面数据
 - (void)refreshData
 {
-    SpecialTopListRequest * request = [[SpecialTopListRequest alloc] initWithId:nil];
+    SpecialTopListRequest * request = [[SpecialTopListRequest alloc] initWithTime:nil];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         [self hiddenLoadingView];
@@ -128,7 +128,7 @@
 {
     
     CreateWealthModel *welthModel = [self.dataSource lastObject];
-    SpecialTopListRequest * request = [[SpecialTopListRequest alloc] initWithId:[NSString stringWithFormat:@"%ld",welthModel.cid]];
+    SpecialTopListRequest * request = [[SpecialTopListRequest alloc] initWithTime:welthModel.updateTime];
     [request sendRequestWithSuccess:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         
         NSDictionary *dic = (NSDictionary *)response;

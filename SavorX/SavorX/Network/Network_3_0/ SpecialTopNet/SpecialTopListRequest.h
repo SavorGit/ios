@@ -10,6 +10,6 @@
 
 @interface SpecialTopListRequest : BGNetworkRequest
 
-- (instancetype)initWithId:(NSString *)id;
+- (instancetype)initWithTime:(NSString *)updateTime;
 
 @end
