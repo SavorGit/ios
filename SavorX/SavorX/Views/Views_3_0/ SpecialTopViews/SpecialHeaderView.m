@@ -59,7 +59,7 @@
         make.left.mas_equalTo(15);
     }];
     
-    _subTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 0)];
+    _subTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth - 30, 0)];
     _subTitleLabel.text = @"";
     _subTitleLabel.font = kPingFangLight(15);
     _subTitleLabel.textColor = UIColorFromRGB(0x575757);

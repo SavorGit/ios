@@ -57,7 +57,7 @@
     self.titleLabel.numberOfLines = 2;
     [_bgView addSubview:_titleLabel];
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(kMainBoundsWidth - 130 - 38);
+        make.width.mas_equalTo(kMainBoundsWidth - 130 - 48);
         make.height.mas_equalTo(25);
         make.top.mas_equalTo(2);
         make.left.mas_equalTo(_bgImageView.mas_right).offset(10);
@@ -78,7 +78,7 @@
 
 - (void)configModelData:(CreateWealthModel *)model{
     
-    CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 38) title:model.title font:kPingFangMedium(16)];
+    CGFloat titleHeight = [self getHeightByWidth:(kMainBoundsWidth - 130 - 48) title:model.title font:kPingFangMedium(16)];
     if (titleHeight > 30) {
         [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(50);

@@ -335,11 +335,6 @@
         image = [UIImage imageNamed:@"shareDefalut"];
     }
     
-    if (model.shareType == 1) {
-        self.info = model.desc;
-    }else{
-        self.info = @"热点聚焦 , 投你所好";
-    }
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建网页分享类型

@@ -430,7 +430,7 @@
     if (nextModel != nil) {
         if (tmpModel.sgtype == 1) {
             if (nextModel.sgtype == 1) {
-                return 25;
+                return 20;
             }else if (nextModel.sgtype == 2){
                 return 25;
             }else if (nextModel.sgtype == 3){
@@ -440,7 +440,7 @@
             }
         }else if (tmpModel.sgtype == 2){
             if (nextModel.sgtype == 1) {
-                return 25;
+                return 20;
             }else if (nextModel.sgtype == 2){
                 return 5;
             }else if (nextModel.sgtype == 3){
@@ -450,7 +450,7 @@
             }
         }else if (tmpModel.sgtype == 3){
             if (nextModel.sgtype == 1) {
-                return 15;
+                return 10;
             }else if (nextModel.sgtype == 2){
                 return 20;
             }else if (nextModel.sgtype == 3){
@@ -460,7 +460,7 @@
             }
         }else if (tmpModel.sgtype == 4){
             if (nextModel.sgtype == 1) {
-                return 20;
+                return 15;
             }else if (nextModel.sgtype == 2){
                 return 20;
             }else if (nextModel.sgtype == 3){
