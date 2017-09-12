@@ -143,12 +143,17 @@
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
-        if (self.dataSource.count == 0) {
-            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
-        }
-        if (_tableView) {
-            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
-            [self.tableView.mj_header endRefreshing];
+        
+        if ([[response objectForKey:@"code"] integerValue] == 19101) {
+            [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        }else{
+            if (self.dataSource.count == 0) {
+                [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+            }
+            if (_tableView) {
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
+                [self.tableView.mj_header endRefreshing];
+            }
         }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
