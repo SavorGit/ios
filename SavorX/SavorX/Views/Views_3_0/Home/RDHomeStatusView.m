@@ -77,6 +77,10 @@
     self.statusButton.layer.masksToBounds = YES;
     self.statusButton.titleLabel.font = kPingFangLight(14);
     [self.statusButton addTarget:self action:@selector(statusButtonDidClicked) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (self.statusButton.superview) {
+        [self.statusButton removeFromSuperview];
+    }
     [self addSubview:self.statusButton];
     
     [self.statusButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -94,6 +98,10 @@
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(statusLabelDidClicked)];
     tap.numberOfTapsRequired = 1;
     [self.statusLabel addGestureRecognizer:tap];
+    
+    if (self.statusLabel.superview) {
+        [self.statusLabel removeFromSuperview];
+    }
     [self addSubview:self.statusLabel];
     
     [self.statusLabel mas_makeConstraints:^(MASConstraintMaker *make) {

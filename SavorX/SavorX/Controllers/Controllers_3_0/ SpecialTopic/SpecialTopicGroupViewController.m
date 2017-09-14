@@ -142,12 +142,17 @@
         
     } businessFailure:^(BGNetworkRequest * _Nonnull request, id  _Nullable response) {
         [self hiddenLoadingView];
-        if (self.dataSource.count == 0) {
-            [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
-        }
-        if (_tableView) {
-            [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
-            [self.tableView.mj_header endRefreshing];
+        
+        if ([[response objectForKey:@"code"] integerValue] == 19101) {
+            [self showNoDataViewInView:self.view noDataType:kNoDataType_NotFound];
+        }else{
+            if (self.dataSource.count == 0) {
+                [self showNoNetWorkView:NoNetWorkViewStyle_Load_Fail];
+            }
+            if (_tableView) {
+                [self showTopFreshLabelWithTitle:RDLocalizedString(@"RDString_NetFailedWithData")];
+                [self.tableView.mj_header endRefreshing];
+            }
         }
         
     } networkFailure:^(BGNetworkRequest * _Nonnull request, NSError * _Nullable error) {
@@ -429,7 +434,7 @@
     if (nextModel != nil) {
         if (tmpModel.sgtype == 1) {
             if (nextModel.sgtype == 1) {
-                return 25;
+                return 20;
             }else if (nextModel.sgtype == 2){
                 return 25;
             }else if (nextModel.sgtype == 3){
@@ -439,7 +444,7 @@
             }
         }else if (tmpModel.sgtype == 2){
             if (nextModel.sgtype == 1) {
-                return 25;
+                return 20;
             }else if (nextModel.sgtype == 2){
                 return 5;
             }else if (nextModel.sgtype == 3){
@@ -449,7 +454,7 @@
             }
         }else if (tmpModel.sgtype == 3){
             if (nextModel.sgtype == 1) {
-                return 15;
+                return 10;
             }else if (nextModel.sgtype == 2){
                 return 20;
             }else if (nextModel.sgtype == 3){
@@ -459,7 +464,7 @@
             }
         }else if (tmpModel.sgtype == 4){
             if (nextModel.sgtype == 1) {
-                return 20;
+                return 15;
             }else if (nextModel.sgtype == 2){
                 return 20;
             }else if (nextModel.sgtype == 3){

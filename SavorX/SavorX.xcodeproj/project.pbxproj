@@ -112,7 +112,6 @@
 		0651A0331F541A4C007C3CBC /* SpecialTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0651A0321F541A4C007C3CBC /* SpecialTitleCell.m */; };
 		065AC2271F1CA1B700545990 /* RD_MJRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 065AC2261F1CA1B700545990 /* RD_MJRefreshHeader.m */; };
 		065C87E31F18B6EE007BCCF9 /* RDInteractionLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 065C87E21F18B6EE007BCCF9 /* RDInteractionLoadingView.m */; };
-		065ECD621E8A703F0062E29D /* DefaultLaunch.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD611E8A703F0062E29D /* DefaultLaunch.mp4 */; };
 		065ECD701E8A73BA0062E29D /* index4_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD6C1E8A73BA0062E29D /* index4_2.jpg */; };
 		065ECD711E8A73BA0062E29D /* index5_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD6D1E8A73BA0062E29D /* index5_2.jpg */; };
 		065ECD721E8A73BA0062E29D /* indexp6_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 065ECD6E1E8A73BA0062E29D /* indexp6_2.jpg */; };
@@ -163,6 +162,7 @@
 		06944CE71F348E0300C04F77 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 06944CE91F348E0300C04F77 /* InfoPlist.strings */; };
 		069CDFDB1D991FAB00A0C1A6 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 069CDFDA1D991FAB00A0C1A6 /* UserNotifications.framework */; };
 		069D46C41DB5E91D00F85D72 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 069D46C31DB5E91D00F85D72 /* libxml2.tbd */; };
+		069DB6FC1F67CBA300FA8F52 /* DefaultLaunch.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 069DB6FB1F67CBA300FA8F52 /* DefaultLaunch.mp4 */; };
 		06AB944F1D880C8000A29D36 /* rotationImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06AB944E1D880C8000A29D36 /* rotationImageView.m */; };
 		06B555131E8A587D0068BF70 /* documentVideoGuided.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 06B555121E8A587D0068BF70 /* documentVideoGuided.mp4 */; };
 		06B5554C1E8A6A210068BF70 /* DefalutLaunchPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 06B555491E8A6A210068BF70 /* DefalutLaunchPlayView.m */; };
@@ -509,7 +509,6 @@
 		065AC2261F1CA1B700545990 /* RD_MJRefreshHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RD_MJRefreshHeader.m; sourceTree = "<group>"; };
 		065C87E11F18B6EE007BCCF9 /* RDInteractionLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDInteractionLoadingView.h; sourceTree = "<group>"; };
 		065C87E21F18B6EE007BCCF9 /* RDInteractionLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDInteractionLoadingView.m; sourceTree = "<group>"; };
-		065ECD611E8A703F0062E29D /* DefaultLaunch.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultLaunch.mp4; sourceTree = "<group>"; };
 		065ECD6C1E8A73BA0062E29D /* index4_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index4_2.jpg; sourceTree = "<group>"; };
 		065ECD6D1E8A73BA0062E29D /* index5_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = index5_2.jpg; sourceTree = "<group>"; };
 		065ECD6E1E8A73BA0062E29D /* indexp6_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = indexp6_2.jpg; sourceTree = "<group>"; };
@@ -605,6 +604,7 @@
 		069CDFD91D98C0DF00A0C1A6 /* SavorX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SavorX.entitlements; sourceTree = "<group>"; };
 		069CDFDA1D991FAB00A0C1A6 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		069D46C31DB5E91D00F85D72 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		069DB6FB1F67CBA300FA8F52 /* DefaultLaunch.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultLaunch.mp4; sourceTree = "<group>"; };
 		06AB944D1D880C8000A29D36 /* rotationImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rotationImageView.h; path = ../rotationImageView.h; sourceTree = "<group>"; };
 		06AB944E1D880C8000A29D36 /* rotationImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = rotationImageView.m; path = ../rotationImageView.m; sourceTree = "<group>"; };
 		06B555121E8A587D0068BF70 /* documentVideoGuided.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = documentVideoGuided.mp4; sourceTree = "<group>"; };
@@ -2121,8 +2121,8 @@
 			isa = PBXGroup;
 			children = (
 				96BCE3CE1EC1A60C00B1A3F7 /* gameVoice */,
-				065ECD611E8A703F0062E29D /* DefaultLaunch.mp4 */,
 				06B555121E8A587D0068BF70 /* documentVideoGuided.mp4 */,
+				069DB6FB1F67CBA300FA8F52 /* DefaultLaunch.mp4 */,
 			);
 			path = videoGuide;
 			sourceTree = "<group>";
@@ -2510,7 +2510,6 @@
 				06944CE71F348E0300C04F77 /* InfoPlist.strings in Resources */,
 				962EFA7A1E84F7980074450A /* laba_g@3x.png in Resources */,
 				062CF02C1EC3498D00EA6AE0 /* glass.mp3 in Resources */,
-				065ECD621E8A703F0062E29D /* DefaultLaunch.mp4 in Resources */,
 				065ECD821E8A8EC10062E29D /* indexp6_1.jpg in Resources */,
 				062D4FA01DEC02BA0093942A /* RDShare@3x.png in Resources */,
 				474C76381DFB9BED001129C9 /* NoNetWorkView.xib in Resources */,
@@ -2571,6 +2570,7 @@
 				06944CDF1F34205800C04F77 /* Localizable.strings in Resources */,
 				962EFA991E88A4F20074450A /* shanchu1.png in Resources */,
 				062D4F7C1DEC02BA0093942A /* bottomImageView.png in Resources */,
+				069DB6FC1F67CBA300FA8F52 /* DefaultLaunch.mp4 in Resources */,
 				962EFA771E84F7980074450A /* laba@3x.png in Resources */,
 				065ECD801E8A8EB80062E29D /* index5_1.jpg in Resources */,
 				962EFA831E84F7980074450A /* voljia@3x.png in Resources */,
@@ -3061,10 +3061,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c004d3fc-7c39-4003-b59e-186289911aa1";
-				PROVISIONING_PROFILE_SPECIFIER = TestHotTopicesDevelopment;
+				PROVISIONING_PROFILE = "e6cdc8c8-d847-4469-9753-5c466ad8755f";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -3102,10 +3102,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1cf2c895-455e-496b-8785-d00a28d78f62";
-				PROVISIONING_PROFILE_SPECIFIER = "TestHotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "2803d4ae-0de5-42d6-937f-9ec4a13e0c96";
+				PROVISIONING_PROFILE_SPECIFIER = "HotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

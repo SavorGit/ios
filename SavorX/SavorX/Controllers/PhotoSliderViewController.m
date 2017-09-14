@@ -355,8 +355,10 @@
 
 - (void)screenCurrentImage
 {
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     if (![GlobalData shared].isBindRD) {
         [[RDHomeStatusView defaultView] scanQRCode];
+        self.navigationItem.rightBarButtonItem.enabled = YES;
         return;
     }
     
@@ -395,7 +397,7 @@
                     self.isScreen = YES;
                     self.statusLabel.text = [NSString stringWithFormat:@"%@  %ld/%ld", RDLocalizedString(@"RDString_PlayPhotoNow"), self.currentIndex, self.PHAssetSource.count - 2];
                     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_BackScreen")  style:UIBarButtonItemStyleDone target:self action:@selector(stopScreenImage:)];
-                    
+                    self.navigationItem.rightBarButtonItem.enabled = YES;
                     [hud hidden];
                     [SAVORXAPI postImageWithURL:STBURL data:maxData name:name type:3 isThumbnail:NO rotation:0 seriesId:self.seriesId force:0 success:^{
                         
@@ -404,9 +406,13 @@
                     }];
                     
                 } failure:^{
+                    self.navigationItem.rightBarButtonItem.enabled = YES;
                     [hud hidden];
                 }];
             }];
+        }else{
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            [[RDHomeStatusView defaultView] scanQRCode];
         }
     }];
 }

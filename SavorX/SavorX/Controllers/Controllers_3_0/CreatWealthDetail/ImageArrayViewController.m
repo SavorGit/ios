@@ -248,6 +248,7 @@
         [self dismissViewControllerAnimated:NO completion:^{
             
         }];
+        [GlobalData shared].isImageAtlas = NO;
         [na pushViewController:web animated:YES];
         
     }else if (model.type == 1){
@@ -262,6 +263,7 @@
         [self dismissViewControllerAnimated:NO completion:^{
             
         }];
+        [GlobalData shared].isImageAtlas = NO;
         [na pushViewController:text animated:YES];
         
     }else{
