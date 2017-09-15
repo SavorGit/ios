@@ -549,7 +549,6 @@
     }else{
         return UIInterfaceOrientationMaskAllButUpsideDown;
     }
-    return UIInterfaceOrientationMaskPortrait;;
 }
 
 - (void)dealloc

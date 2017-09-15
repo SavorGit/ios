@@ -288,7 +288,11 @@
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskPortrait;
+    if ([GlobalData shared].isImageAtlas == NO) {
+        return UIInterfaceOrientationMaskPortrait;
+    }else{
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

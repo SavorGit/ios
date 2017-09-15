@@ -264,7 +264,7 @@
     }];
     [topView configModelData:self.topModel];
     
-    _tableView.tableHeaderView = headView;
+    self.tableView.tableHeaderView = headView;
     
 }
 
@@ -418,7 +418,7 @@
             }
             iatVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             
-            [self presentViewController:iatVC animated:YES completion:nil];
+            [self.navigationController presentViewController:iatVC animated:YES completion:nil];
             
             
         } else if (model.type == 3 || model.type == 4){
