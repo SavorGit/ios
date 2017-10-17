@@ -47,21 +47,21 @@
         make.centerY.equalTo(self.view).offset(-(kMainBoundsHeight / 8));
     }];
     
-    UIView * upView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 2)];
-    upView.backgroundColor = [UIColor whiteColor];
-    [self.playView addSubview:upView];
-    
-    UIView * leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, width)];
-    leftView.backgroundColor = [UIColor whiteColor];
-    [self.playView addSubview:leftView];
-    
-    UIView * bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, width - 2, width, 2)];
-    bottomView.backgroundColor = [UIColor whiteColor];
-    [self.playView addSubview:bottomView];
-    
-    UIView * rightView = [[UIView alloc] initWithFrame:CGRectMake(width - 2, 0, 2, width)];
-    rightView.backgroundColor = [UIColor whiteColor];
-    [self.playView addSubview:rightView];
+//    UIView * upView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 2)];
+//    upView.backgroundColor = [UIColor whiteColor];
+//    [self.playView addSubview:upView];
+//    
+//    UIView * leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, width)];
+//    leftView.backgroundColor = [UIColor whiteColor];
+//    [self.playView addSubview:leftView];
+//    
+//    UIView * bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, width - 2, width, 2)];
+//    bottomView.backgroundColor = [UIColor whiteColor];
+//    [self.playView addSubview:bottomView];
+//    
+//    UIView * rightView = [[UIView alloc] initWithFrame:CGRectMake(width - 2, 0, 2, width)];
+//    rightView.backgroundColor = [UIColor whiteColor];
+//    [self.playView addSubview:rightView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playDidEnd) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
 }

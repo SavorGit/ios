@@ -17,6 +17,7 @@
 #import "RDLogStatisticsAPI.h"
 #import "RD_MJRefreshHeader.h"
 #import "RD_MJRefreshFooter.h"
+#import "SpecialTopicGroupViewController.h"
 
 @interface SpecialTopicViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -312,8 +313,11 @@
     CreateWealthModel * model = [self.dataSource objectAtIndex:indexPath.row];
     [RDLogStatisticsAPI RDItemLogAction:RDLOGACTION_CLICK type:RDLOGTYPE_CONTENT model:model categoryID:[NSString stringWithFormat:@"%ld", self.categoryID]];
     
-    SpecialTopDetailViewController *stVC = [[SpecialTopDetailViewController alloc] init];
-    stVC.specilDetailModel = model;
+//    SpecialTopDetailViewController *stVC = [[SpecialTopDetailViewController alloc] init];
+//    stVC.specilDetailModel = model;
+//    [self.navigationController pushViewController:stVC animated:YES];
+    
+    SpecialTopicGroupViewController *stVC = [[SpecialTopicGroupViewController alloc] init];
     [self.navigationController pushViewController:stVC animated:YES];
 }
 

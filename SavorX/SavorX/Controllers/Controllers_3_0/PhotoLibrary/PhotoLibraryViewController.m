@@ -63,19 +63,22 @@
 //加载手机内的相册列表
 - (void)loadPhotoLibrary
 {
-    [MBProgressHUD showLoadingWithText:RDLocalizedString(@"RDString_Loading") inView:self.view];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Choose") style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    
+    MBProgressHUD * hud = [MBProgressHUD showLoadingWithText:RDLocalizedString(@"RDString_Loading") inView:self.view];
     [RDPhotoTool loadPHAssetWithHander:^(NSArray *result, RDPhotoLibraryModel *cameraResult) {
-        self.photoLibrarySource = result;
-        self.model = cameraResult;
-        [self createUI];
+        [hud hideAnimated:NO];
+        if (cameraResult) {
+            self.photoLibrarySource = result;
+            self.model = cameraResult;
+            [self createUI];
+        }
     }];
 }
 
 - (void)createUI
 {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RDLocalizedString(@"RDString_Choose") style:UIBarButtonItemStyleDone target:self action:@selector(rightButtonItemDidClicked)];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    
     [self autoTitleButtonWith:self.model.title];
     self.selectArray = [NSMutableArray new];
     

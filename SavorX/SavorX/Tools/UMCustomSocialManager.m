@@ -330,9 +330,13 @@
     self.model = model;
     NSString * url = [[Helper addURLParamsShareWith:self.model.contentURL] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
-    if (!image) {
-        image = [UIImage imageNamed:@"shareDefalut"];
+//    UIImage * image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:self.model.imageURL];
+    UIImage * image = [UIImage imageNamed:@"shareDefalut"];
+    
+    if (model.shareType == 1) {
+        self.info = model.desc;
+    }else{
+        self.info = @"热点聚焦 , 投你所好";
     }
     
     //创建分享消息对象

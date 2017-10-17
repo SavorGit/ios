@@ -10,7 +10,7 @@
 #import "RDHomeScreenViewController.h"
 #import "UIViewController+LGSideMenuController.h"
 #import "RealCreateWealthViewController.h"
-#import "SpecialTopicViewController.h"
+#import "SpecialTopicGroupViewController.h"
 #import "HSGetSpecialRequest.h"
 #import "RDHomeStatusView.h"
 #import "LiveViewController.h"
@@ -18,6 +18,8 @@
 #import "WebViewController.h"
 #import "ImageTextDetailViewController.h"
 #import "ImageArrayViewController.h"
+#import "RDLogStatisticsAPI.h"
+#import "HotPopShareView.h"
 
 @interface RDHomePageController ()
 
@@ -30,7 +32,7 @@
 
 - (instancetype)init
 {
-    NSArray * vcArray = @[[RealCreateWealthViewController class],[LiveViewController class],[SpecialTopicViewController class]];
+    NSArray * vcArray = @[[RealCreateWealthViewController class],[LiveViewController class],[SpecialTopicGroupViewController class]];
     NSArray * titleArray = @[RDLocalizedString(@"RDString_CreateWealth"), RDLocalizedString(@"RDString_Live"), RDLocalizedString(@"RDString_SpecialTopic")];
     
     if (self = [super initWithViewControllerClasses:vcArray andTheirTitles:titleArray]) {
@@ -447,6 +449,47 @@
     return 40;
 }
 
+- (void)pageController:(WMPageController *)pageController didEnterViewController:(__kindof UIViewController *)viewController withInfo:(NSDictionary *)info
+{
+    if ([viewController isKindOfClass:[SpecialTopicGroupViewController class]]) {
+        
+        [RDLogStatisticsAPI RDPageLogCategoryID:@"103" volume:@"index"];
+        SpecialTopicGroupViewController * vc = (SpecialTopicGroupViewController *)viewController;
+        [vc showSelfAndCreateLog];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareSpecialTopic)];
+        
+    }else{
+        
+        self.navigationItem.rightBarButtonItem = nil;
+        if ([viewController isKindOfClass:[RealCreateWealthViewController class]]) {
+            
+            [RDLogStatisticsAPI RDPageLogCategoryID:@"101" volume:@"index"];
+            RealCreateWealthViewController * vc = (RealCreateWealthViewController *)viewController;
+            [vc showSelfAndCreateLog];
+            
+        }else if ([viewController isKindOfClass:[LiveViewController class]]){
+            
+            [RDLogStatisticsAPI RDPageLogCategoryID:@"102" volume:@"index"];
+            LiveViewController * vc = (LiveViewController *)viewController;
+            [vc showSelfAndCreateLog];
+            
+        }
+    }
+}
+
+#pragma mark ---分享按钮点击
+- (void)shareSpecialTopic
+{
+    UIViewController * currentVC = self.currentViewController;
+    if ([self.currentViewController isKindOfClass:[SpecialTopicGroupViewController class]]) {
+        SpecialTopicGroupViewController * tmpVC = (SpecialTopicGroupViewController *)self.currentViewController;
+        
+        HotPopShareView *shareView = [[HotPopShareView alloc] initWithModel:tmpVC.topModel andVC:self andCategoryID:tmpVC.categoryID andSourceId:1];
+        [[UIApplication sharedApplication].keyWindow addSubview:shareView];
+        
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -506,7 +549,6 @@
     }else{
         return UIInterfaceOrientationMaskAllButUpsideDown;
     }
-    return UIInterfaceOrientationMaskPortrait;;
 }
 
 - (void)dealloc

@@ -92,7 +92,8 @@
 
 - (void)createUI
 {
-    CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 20 + 59 + 40 + 40;
+    CGFloat width = kMainBoundsHeight > kMainBoundsWidth ? kMainBoundsWidth : kMainBoundsHeight;
+    CGFloat height = (width - 40) * 0.646 + 20 + 59 + 40 + 40;
     self.tabScroll = [[RDTabScrollView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height) modelArray:self.dataSource];
     self.tabScroll.delegate = self;
     [self.view addSubview:self.tabScroll];
@@ -108,11 +109,13 @@
 
 - (void)setupViews
 {
+    CGFloat mainWidth = kMainBoundsHeight > kMainBoundsWidth ? kMainBoundsWidth : kMainBoundsHeight;
+    
     self.view.backgroundColor = UIColorFromRGB(0xece6de);
     
-    CGFloat height = (kMainBoundsWidth - 40) * 0.646 + 20 + 59 + 40 + 40;
+    CGFloat height = (mainWidth - 40) * 0.646 + 20 + 59 + 40 + 40;
     
-    self.topView = [[UIView alloc] initWithFrame:CGRectMake(0, kNaviBarHeight + kStatusBarHeight, kMainBoundsWidth, height)];
+    self.topView = [[UIView alloc] initWithFrame:CGRectMake(0, kNaviBarHeight + kStatusBarHeight, mainWidth, height)];
     [self.view addSubview:self.topView];
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(0);

@@ -96,7 +96,11 @@
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            success([NSArray arrayWithArray:collections], [collections objectAtIndex:0]);
+            if (collections.count > 0) {
+                success([NSArray arrayWithArray:collections], [collections objectAtIndex:0]);
+            }else{
+                success([NSArray arrayWithArray:collections], nil);
+            }
         });
     });
 }

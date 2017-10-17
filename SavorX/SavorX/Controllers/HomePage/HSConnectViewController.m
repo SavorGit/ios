@@ -617,7 +617,7 @@
     label2.font = [UIFont systemFontOfSize:17];
     [showView addSubview:label2];
     
-    UILabel * label3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 112, 300, 20)];
+    UILabel * label3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 112, 300, 22)];
     label3.textColor = UIColorFromRGB(0x222222);
     label3.textAlignment = NSTextAlignmentCenter;
     if (name.length > 0) {

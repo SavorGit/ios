@@ -13,6 +13,7 @@
 @property(nonatomic, assign) NSString * artid;
 @property(nonatomic, strong) NSString *sort_num;
 @property(nonatomic, assign) NSInteger type;
+@property(nonatomic, assign) NSInteger imgStyle;
 @property(nonatomic, strong) NSString *title;
 @property(nonatomic, strong) NSString *imageURL;
 @property(nonatomic, strong) NSString *contentURL;
@@ -40,8 +41,15 @@
 @property (nonatomic, copy) NSString * order_tag;//用于文章推荐
 @property (nonatomic, copy) NSString * shareTitle;//用于文章推荐
 
+@property (nonatomic, assign) NSInteger sgtype;//用于专题组类型
+@property (nonatomic, copy) NSString * img_url;//用于专题组图片
+@property (nonatomic, copy) NSString * stitle;//用于专题组小标题
+@property (nonatomic, copy) NSString * stext;//用于专题组文字内容
+@property (nonatomic, copy) NSString * desc;//用于专题组头部描述
+
+
 //非接口返回
 @property (nonatomic, assign) NSInteger cid;
-
+@property (nonatomic, assign) NSInteger shareType;//非接口返回，用于分享类型(1代表专题组首页分享)
 
 @end

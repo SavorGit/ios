@@ -70,7 +70,7 @@
     self.titleLabel.text = model.name;
     
     NSString *distanceStr;
-    if (model.id == [GlobalData shared].hotelId) {
+    if (model.cid == [GlobalData shared].hotelId) {
         distanceStr = @"当前餐厅";
     }else{
         distanceStr = [NSString stringWithFormat:@"%@",model.dis];
