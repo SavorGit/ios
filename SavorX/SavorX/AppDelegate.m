@@ -624,7 +624,11 @@
         
         //检测当前绑定状态是否断开
         if (![GlobalData shared].isBindRD) {
-            [[RDHomeStatusView defaultView] stopScreen];
+            if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+                [[RDHomeStatusView defaultView] stopScreenWithStatus:RDHomeStatus_Normal];
+            }else{
+                [[RDHomeStatusView defaultView] stopScreenWithStatus:RDHomeStatus_NoScene];
+            }
         }
         
         if ([shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
@@ -762,7 +766,11 @@
         
         //检测当前绑定状态是否断开
         if (![GlobalData shared].isBindRD) {
-            [[RDHomeStatusView defaultView] stopScreen];
+            if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+                [[RDHomeStatusView defaultView] stopScreenWithStatus:RDHomeStatus_Normal];
+            }else{
+                [[RDHomeStatusView defaultView] stopScreenWithStatus:RDHomeStatus_NoScene];
+            }
         }
     }
 }

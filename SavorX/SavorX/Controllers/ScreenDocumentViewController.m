@@ -62,7 +62,7 @@
             } failure:^{
                 [[NSNotificationCenter defaultCenter] postNotificationName:RDQiutScreenNotification object:nil];
                 
-                [[RDHomeStatusView defaultView] stopScreen];
+                [[RDHomeStatusView defaultView] stopScreenWithStatus:RDHomeStatus_Bind];
             }];
         });
     }else{

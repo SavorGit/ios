@@ -317,7 +317,7 @@ static NSString * RDCreateLogQueueID = @"com.hottopics.RDCreateLogQueueID";
     });
 }
 
-+ (void)uploadZipFileToAliyunWithPath:(NSString *)path success:(void(^)())successBlock failure:(void(^)())failureBlock;
++ (void)uploadZipFileToAliyunWithPath:(NSString *)path success:(void(^)())successBlock failure:(void(^)())failureBlock
 {
     NSString *endpoint = AliynEndPoint;
     

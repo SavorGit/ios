@@ -166,10 +166,10 @@ static GlobalData* single = nil;
     if (_scene != scene) {
         _scene = scene;
         if (scene == RDSceneNothing) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:RDDidNotFoundSenceNotification object:nil];
             [self disconnect];
             self.hotelId = 0;
             self.callQRCodeURL = @"";
+            [[NSNotificationCenter defaultCenter] postNotificationName:RDDidNotFoundSenceNotification object:nil];
         }else{
             [SAVORXAPI postUMHandleWithContentId:@"home_find_tv" key:@"home_find_tv" value:[NSString stringWithFormat:@"%ld",self.hotelId]];
             [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FindTVCanScreen")];
