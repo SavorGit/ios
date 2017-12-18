@@ -3061,10 +3061,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "474792bd-f268-4236-a0e5-8423a0c01502";
-				PROVISIONING_PROFILE_SPECIFIER = TestHotTopicesDevelopment;
+				PROVISIONING_PROFILE = "e6cdc8c8-d847-4469-9753-5c466ad8755f";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -3102,10 +3102,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "30a46fa6-c7c2-4639-91f2-e9f6edfbab89";
-				PROVISIONING_PROFILE_SPECIFIER = "TestHotTopicsAd-Hoc";
+				PROVISIONING_PROFILE = "a9b07ad7-2902-4449-90fd-3b5c922f42ed";
+				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDistribution;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
