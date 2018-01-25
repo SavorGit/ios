@@ -71,16 +71,18 @@
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight - kNaviBarHeight - kStatusBarHeight) collectionViewLayout:self.flowLayout];
+    self.collectionView.dataSource = self;
+    self.collectionView.delegate = self;
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.collectionView.pagingEnabled = YES;
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     [self.collectionView registerClass:[PhotoManyCollectionViewCell class] forCellWithReuseIdentifier:PhotoManyCell];
-    self.collectionView.dataSource = self;
-    self.collectionView.delegate = self;
     self.collectionView.scrollsToTop = NO;
     [self.view addSubview:self.collectionView];
-    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[self dataSourceCount] * 50 + self.index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[self dataSourceCount] * 50 + self.index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    });
     
     self.rotateView = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.rotateView setImage:[UIImage imageNamed:@"xaunzhuan"] forState:UIControlStateNormal];
@@ -91,10 +93,16 @@
     [self.rotateView setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 5)];
     [self.rotateView setTitleEdgeInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
     [self.rotateView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth / 2, 50));
+        make.width.mas_equalTo(kMainBoundsWidth / 2);
+        make.height.mas_equalTo(50);
         make.left.mas_equalTo(0);
         make.bottom.mas_equalTo(0);
     }];
+    if ([GlobalData shared].isIphoneX) {
+        [self.rotateView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(50 + 34);
+        }];
+    }
     
     self.textView = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.textView setImage:[UIImage imageNamed:@"wenzi"] forState:UIControlStateNormal];
@@ -105,10 +113,16 @@
     [self.textView setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 5)];
     [self.textView setTitleEdgeInsets:UIEdgeInsetsMake(0, 5, 0, 0)];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(kMainBoundsWidth / 2, 50));
+        make.width.mas_equalTo(kMainBoundsWidth / 2);
+        make.height.mas_equalTo(50);
         make.right.mas_equalTo(0);
         make.bottom.mas_equalTo(0);
     }];
+    if ([GlobalData shared].isIphoneX) {
+        [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(50 + 34);
+        }];
+    }
     
     UIView * lineView = [[UIView alloc] init];
     lineView.backgroundColor = [UIColor whiteColor];

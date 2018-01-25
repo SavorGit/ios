@@ -380,13 +380,18 @@
     
     self.menuItemWidth = 50;
     self.menuBGColor = kThemeColor;
-    self.menuHeight = 50;
+    if ([GlobalData shared].isIphoneX) {
+        self.menuHeight = 50 + 34;
+        self.progressViewBottomSpace = 13 + 34;
+    }else{
+        self.menuHeight = 50;
+        self.progressViewBottomSpace = 13;
+    }
     self.itemMargin = 15;
 //    [self autoItemMargin];
     
     self.progressColor = [UIColor colorWithRed:143.f/255.f green:46.f/255.f blue:64.f/255.f alpha:1];
     self.progressWidth = 30;
-    self.progressViewBottomSpace = 13;
     
     self.pageAnimatable = YES;
     self.menuViewLayoutMode = WMMenuViewLayoutModeCenter;
@@ -456,7 +461,7 @@
         [RDLogStatisticsAPI RDPageLogCategoryID:@"103" volume:@"index"];
         SpecialTopicGroupViewController * vc = (SpecialTopicGroupViewController *)viewController;
         [vc showSelfAndCreateLog];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareSpecialTopic)];
+//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_share"] style:UIBarButtonItemStyleDone target:self action:@selector(shareSpecialTopic)];
         
     }else{
         

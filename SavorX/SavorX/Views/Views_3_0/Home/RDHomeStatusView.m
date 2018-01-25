@@ -38,7 +38,7 @@
     
     dispatch_once(&onceToken, ^{
         
-        view = [[RDHomeStatusView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 48) status:RDHomeStatus_Normal];
+        view = [[RDHomeStatusView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 48) status:RDHomeStatus_NoScene];
         
     });
     

@@ -236,6 +236,7 @@
 - (void)createUI
 {
     if (!self.hasDidLoad) {
+        
         //初始化播放器
         self.playView = [[GCCPlayerView alloc] initWithURL:self.model.videoURL];
         self.playView.backgroundColor = [UIColor blackColor];
@@ -245,12 +246,25 @@
         [self.view addSubview:self.playView];
         self.playView.model = self.model;
         self.playView.categoryID = self.categoryID;
-        [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(0);
-            make.left.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-            make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
-        }];
+        if ([GlobalData shared].isIphoneX) {
+            CGFloat width = kMainBoundsWidth;
+            CGFloat height = kMainBoundsHeight - kStatusBarHeight - 34;
+            [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(kStatusBarHeight);
+                make.left.mas_equalTo(0);
+                make.right.mas_equalTo(0);
+                make.height.mas_equalTo(self.playView.mas_width).multipliedBy(width / height);
+            }];
+        }else{
+            [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(0);
+                make.left.mas_equalTo(0);
+                make.right.mas_equalTo(0);
+                make.height.equalTo(self.view.mas_width).multipliedBy([UIScreen mainScreen].bounds.size.width / [UIScreen mainScreen].bounds.size.height);
+            }];
+        }
+        
+        self.view.backgroundColor = [UIColor blackColor];
     }
     
     [self refreshPage];
@@ -405,12 +419,28 @@
             [MBProgressHUD showWebLoadingHUDInView:self.webView];
         }
         [self.navigationController setNeedsStatusBarAppearanceUpdate];
+        
+        if ([GlobalData shared].isIphoneX) {
+            [self.playView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.mas_equalTo(0);
+                make.right.mas_equalTo(0);
+                make.top.mas_equalTo(kStatusBarHeight);
+            }];
+        }
+        
     }else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight){
         [MBProgressHUD hiddenWebLoadingInView:self.webView];
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
         [self.playView playOrientationLandscape];
         [MBProgressHUD hideHUDForView:self.webView animated:NO];
         [self.navigationController setNeedsStatusBarAppearanceUpdate];
+        if ([GlobalData shared].isIphoneX) {
+            [self.playView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.mas_equalTo(44);
+                make.right.mas_equalTo(-34);
+                make.top.mas_equalTo(0);
+            }];
+        }
     }
 }
 
@@ -551,7 +581,13 @@
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
         
         if (orientation == UIInterfaceOrientationPortrait) {
-            return YES;
+            
+            if ([GlobalData shared].isIphoneX) {
+                return NO;
+            }else{
+                return YES;
+            }
+            
         }else{
             return self.toolViewIsHidden;
         }

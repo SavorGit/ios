@@ -51,7 +51,11 @@
 - (void)customPhotoManyEditView
 {
     self.effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-    self.effectView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight - 50);
+    if ([GlobalData shared].isIphoneX) {
+        self.effectView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight - 50 - 34);
+    }else{
+        self.effectView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight - 50);
+    }
     [self addSubview:self.effectView];
     self.effectView.userInteractionEnabled = YES;
     
@@ -118,6 +122,11 @@
         make.right.mas_equalTo(0);
         make.height.mas_equalTo(50);
     }];
+    if ([GlobalData shared].isIphoneX) {
+        [self.doneButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(50 + 34);
+        }];
+    }
 }
 
 - (void)composeImage

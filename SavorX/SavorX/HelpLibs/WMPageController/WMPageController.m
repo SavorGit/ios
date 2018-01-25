@@ -468,7 +468,11 @@ static NSInteger const kWMControllerCountUndefined = -1;
     WMMenuView *menuView = [[WMMenuView alloc] initWithFrame:frame];
     menuView.backgroundColor = [UIColor clearColor];
     
-    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, -frame.size.width / 375.f * 120 + frame.size.height, frame.size.width, frame.size.width / 375.f * 120)];
+    CGRect imageFrame = CGRectMake(0, -frame.size.width / 375.f * 120 + frame.size.height, frame.size.width, frame.size.width / 375.f * 120);
+    if ([GlobalData shared].isIphoneX) {
+        imageFrame.size.height += 34;
+    }
+    UIImageView * imageView = [[UIImageView alloc] initWithFrame:imageFrame];
     [imageView setImage:[UIImage imageNamed:@"fenlei_bg"]];
     [menuView addSubview:imageView];
     
@@ -729,7 +733,11 @@ static NSInteger const kWMControllerCountUndefined = -1;
     }
     CGFloat menuWidth = _viewWidth - menuX - rightWidth;
     CGFloat oriWidth = self.menuView.frame.size.width;
-    self.menuView.frame = CGRectMake(menuX, _viewHeight + _viewY, menuWidth, menuHeight);
+    if ([GlobalData shared].isIphoneX) {
+        self.menuView.frame = CGRectMake(menuX, _viewHeight + _viewY - 34, menuWidth, menuHeight + 34);
+    }else{
+        self.menuView.frame = CGRectMake(menuX, _viewHeight + _viewY, menuWidth, menuHeight);
+    }
     [self.menuView resetFrames];
     if (oriWidth != menuWidth) {
         [self.menuView refreshContenOffset];

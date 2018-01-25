@@ -104,6 +104,8 @@ extern NSString * const RDBoxQuitScreenNotification; //机顶盒通知退出投�
 //记录APNS注册的推送token
 @property (nonatomic, strong) NSString * deviceToken;
 
+@property (nonatomic, assign) BOOL isIphoneX;
+
 @property (nonatomic, assign) double latitude;
 
 @property (nonatomic, assign) double longitude;

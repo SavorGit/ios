@@ -49,6 +49,12 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
+    if ([UIScreen mainScreen].bounds.size.height == 812.f || [UIScreen mainScreen].bounds.size.width == 812.f) {
+        [GlobalData shared].isIphoneX = YES;
+    }else{
+        [GlobalData shared].isIphoneX = NO;
+    }
+    
     //设置lauch页面
     [self createLaunch];
     

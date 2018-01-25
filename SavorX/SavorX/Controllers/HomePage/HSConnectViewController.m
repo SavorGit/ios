@@ -73,7 +73,7 @@
     [backButton addTarget:self action:@selector(navBackButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:backButton];
     [backButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(20);
+        make.top.mas_equalTo(kStatusBarHeight);
         make.left.mas_equalTo(0);
         make.height.width.mas_equalTo(50);
     }];
@@ -221,6 +221,11 @@
     
     RDKeyBoard *keyBoard;
     keyBoard = [[RDKeyBoard alloc] initWithHeight:[Helper autoHeightWith:240] inView:self.view];
+    if ([GlobalData shared].isIphoneX) {
+        [keyBoard mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(-34);
+        }];
+    }
     keyBoard.delegate = self;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_bangzhu"] style:UIBarButtonItemStyleDone target:self action:@selector(shouldPushHelp)];
