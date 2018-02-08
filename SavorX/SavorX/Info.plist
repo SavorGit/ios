@@ -315,7 +315,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>地图想要在前台使用定位</string>
+	<string>需要您的允许才能获得您当前的位置信息</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>需要您的允许才能使用相册功能</string>
 	<key>UIApplicationShortcutItems</key>
