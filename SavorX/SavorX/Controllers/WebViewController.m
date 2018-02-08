@@ -344,7 +344,7 @@
     //初始化webView
     self.webView = [[UIWebView alloc] init];
     self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
-    self.webView.backgroundColor = [UIColor clearColor];
+    self.webView.backgroundColor = VCBackgroundColor;
     self.webView.opaque = NO;
     
     [self.webView.scrollView addSubview:self.testView];
