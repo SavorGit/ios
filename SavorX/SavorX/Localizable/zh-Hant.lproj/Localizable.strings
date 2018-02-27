@@ -34,7 +34,8 @@
 
 //View
 "RDString_Image" = "圖";
-"RDString_StatusFindhotel" = "您已進入酒樓,快來體驗用電視看手機";
+"RDString_StatusFindhotel" = "您已進入餐廳,連接電視體驗大屏看手機";
+"RDString_NotScene" = "請連接酒樓包間wifi後,即可體驗大屏看手機";
 "RDString_StatusHasConnectPre" = "已連接";
 "RDString_StatusHasConnectSuf" = "的電視";
 "RDString_StatusScreenPhoto" = "正在投屏圖片,點擊進入";

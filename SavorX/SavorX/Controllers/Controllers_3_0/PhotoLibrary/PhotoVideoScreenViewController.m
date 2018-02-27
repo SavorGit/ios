@@ -60,6 +60,16 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    if ([GlobalData shared].isIphoneX) {
+        UIView * statusView = [[UIView alloc] initWithFrame:CGRectZero];
+        statusView.backgroundColor = [UIColor blackColor];
+        [self.view addSubview:statusView];
+        [statusView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.right.mas_equalTo(0);
+            make.height.mas_equalTo(kStatusBarHeight);
+        }];
+    }
+    
     self.backImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     [self.backImageView setImage:[UIImage imageNamed:@"sptpdb_bg"]];
     [self.view addSubview:self.backImageView];
@@ -70,6 +80,12 @@
         make.right.mas_equalTo(0);
         make.height.equalTo(self.view.mas_width).multipliedBy(254.f/414.f);
     }];
+    
+    if ([GlobalData shared].isIphoneX) {
+        [self.backImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(kStatusBarHeight);
+        }];
+    }
     
     UIView * playSliderView = [[UIView alloc] initWithFrame:CGRectZero];
     playSliderView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.7f];
@@ -135,6 +151,12 @@
         make.left.mas_equalTo(10);
         make.size.mas_equalTo(CGSizeMake(40, 40));
     }];
+    
+    if ([GlobalData shared].isIphoneX) {
+        [backButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(kStatusBarHeight);
+        }];
+    }
     
     [self createToolView];
 }

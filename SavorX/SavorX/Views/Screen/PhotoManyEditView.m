@@ -51,14 +51,18 @@
 - (void)customPhotoManyEditView
 {
     self.effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-    self.effectView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight - 50);
+    if ([GlobalData shared].isIphoneX) {
+        self.effectView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight - 50 - 34);
+    }else{
+        self.effectView.frame = CGRectMake(0, 0, kMainBoundsWidth, kMainBoundsHeight - 50);
+    }
     [self addSubview:self.effectView];
     self.effectView.userInteractionEnabled = YES;
     
     self.imageView = [[UIImageView alloc] initWithFrame:self.effectView.bounds];
     [self.imageView setImage:self.image];
     self.imageView.userInteractionEnabled = YES;
-    [self.effectView addSubview:self.imageView];
+    [self.effectView.contentView addSubview:self.imageView];
     [self autoImageViewFrame];
     
     self.titleLabel = [[PhotoTextLabel alloc] initWithFrame:CGRectZero];
@@ -79,7 +83,7 @@
     self.dateLabel.tag = 103;
     [self addGuestureWithLabel:self.dateLabel];
     
-    [self.effectView addSubview:self.titleLabel];
+    [self.effectView.contentView addSubview:self.titleLabel];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(40);
         make.centerX.equalTo(self.imageView);
@@ -88,7 +92,7 @@
         make.width.lessThanOrEqualTo(@(kMainBoundsWidth - 40));
     }];
     
-    [self.effectView addSubview:self.detailLabel];
+    [self.effectView.contentView addSubview:self.detailLabel];
     [self.detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(40);
         make.centerX.equalTo(self.imageView);
@@ -118,6 +122,11 @@
         make.right.mas_equalTo(0);
         make.height.mas_equalTo(50);
     }];
+    if ([GlobalData shared].isIphoneX) {
+        [self.doneButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(50 + 34);
+        }];
+    }
 }
 
 - (void)composeImage

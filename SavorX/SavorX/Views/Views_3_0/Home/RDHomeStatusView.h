@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 typedef enum : NSUInteger {
+    RDHomeStatus_NoScene,
     RDHomeStatus_Normal,
     RDHomeStatus_Bind,
     RDHomeStatus_Photo,
@@ -25,7 +26,7 @@ typedef enum : NSUInteger {
 
 - (void)startScreenWithViewController:(UIViewController *)viewController withStatus:(RDHomeStatusType)status;
 
-- (void)stopScreen;
+- (void)stopScreenWithStatus:(RDHomeStatusType)type;
 
 - (void)scanQRCode;
 

@@ -38,7 +38,7 @@
     
     dispatch_once(&onceToken, ^{
         
-        view = [[RDHomeStatusView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 48) status:RDHomeStatus_Normal];
+        view = [[RDHomeStatusView alloc] initWithFrame:CGRectMake(0, 0, kMainBoundsWidth, 48) status:RDHomeStatus_NoScene];
         
     });
     
@@ -118,9 +118,11 @@
 
 - (void)addNotification
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopScreen) name:RDQiutScreenNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(qiutScreen) name:RDQiutScreenNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeBind) name:RDDidDisconnectDeviceNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bindBox) name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFoundBox) name:RDDidFoundHotelIdNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notFoundBox) name:RDDidNotFoundSenceNotification object:nil];
 }
 
 - (void)removeNotification
@@ -128,6 +130,25 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDQiutScreenNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidDisconnectDeviceNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidBindDeviceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidFoundHotelIdNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RDDidNotFoundSenceNotification object:nil];
+}
+
+- (void)didFoundBox
+{
+    self.status = RDHomeStatus_Normal;
+    [self reloadStatus];
+}
+
+- (void)notFoundBox
+{
+    self.status = RDHomeStatus_NoScene;
+    [self reloadStatus];
+}
+
+- (void)qiutScreen
+{
+    [self stopScreenWithStatus:RDHomeStatus_Bind];
 }
 
 - (void)bindBox
@@ -192,11 +213,22 @@
 - (void)reloadStatus
 {
     switch (self.status) {
+        case RDHomeStatus_NoScene:
+        {
+            [SAVORXAPI postUMHandleWithContentId:@"home_disconnect" key:nil value:nil];
+            self.statusLabel.text = RDLocalizedString(@"RDString_NotScene");
+            self.statusLabel.userInteractionEnabled = NO;
+            self.statusButton.hidden = YES;
+        }
+            
+            break;
+        
         case RDHomeStatus_Normal:
         {
             [SAVORXAPI postUMHandleWithContentId:@"home_disconnect" key:nil value:nil];
             self.statusLabel.text = RDLocalizedString(@"RDString_StatusFindhotel");
             self.statusLabel.userInteractionEnabled = NO;
+            self.statusButton.hidden = NO;
             [self.statusButton setTitle:RDLocalizedString(@"RDString_ConnetToTV") forState:UIControlStateNormal];
         }
             
@@ -207,6 +239,7 @@
             [SAVORXAPI postUMHandleWithContentId:@"home_connect_tv" key:nil value:nil];
             self.statusLabel.text = [NSString stringWithFormat:@"%@--%@%@", RDLocalizedString(@"RDString_StatusHasConnectPre"), [Helper getWifiName], RDLocalizedString(@"RDString_StatusHasConnectSuf")];
             self.statusLabel.userInteractionEnabled = NO;
+            self.statusButton.hidden = NO;
             [self.statusButton setTitle:RDLocalizedString(@"RDString_Disconnect") forState:UIControlStateNormal];
         }
             
@@ -217,6 +250,7 @@
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
             self.statusLabel.text = [RDLocalizedString(@"RDString_StatusScreenPhoto") stringByAppendingString:@">>"];
             self.statusLabel.userInteractionEnabled = YES;
+            self.statusButton.hidden = NO;
             [self.statusButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
         }
             
@@ -227,6 +261,7 @@
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
             self.statusLabel.text = [RDLocalizedString(@"RDString_StatusScreenVideo") stringByAppendingString:@">>"];
             self.statusLabel.userInteractionEnabled = YES;
+            self.statusButton.hidden = NO;
             [self.statusButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
         }
             
@@ -237,6 +272,7 @@
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_entry" key:nil value:nil];
             self.statusLabel.text = [RDLocalizedString(@"RDString_StatusScreenFile") stringByAppendingString:@">>"];
             self.statusLabel.userInteractionEnabled = YES;
+            self.statusButton.hidden = NO;
             [self.statusButton setTitle:RDLocalizedString(@"RDString_BackScreen") forState:UIControlStateNormal];
         }
             
@@ -247,6 +283,7 @@
             [SAVORXAPI postUMHandleWithContentId:@"home_quick_video" key:nil value:nil];
             self.statusLabel.text = [RDLocalizedString(@"RDString_StatusDemandVideo") stringByAppendingString:@">>" ];
             self.statusLabel.userInteractionEnabled = YES;
+            self.statusButton.hidden = NO;
             [self.statusButton setTitle:RDLocalizedString(@"RDString_BackDemand") forState:UIControlStateNormal];
         }
             
@@ -286,12 +323,12 @@
 
 - (void)closeBind
 {
-    [self stopScreen];
-    self.status = RDHomeStatus_Normal;
-    [self reloadStatus];
+    [self stopScreenWithStatus:RDHomeStatus_Normal];
+//    self.status = RDHomeStatus_Normal;
+//    [self reloadStatus];
 }
 
-- (void)stopScreen
+- (void)stopScreenWithStatus:(RDHomeStatusType)type
 {
     if ([self.currentVC isKindOfClass:[PhotoSliderViewController class]]) {
         PhotoSliderViewController * vc = (PhotoSliderViewController *)self.currentVC;
@@ -304,17 +341,18 @@
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     self.currentVC = nil;
     _isScreening = NO;
-    if (self.superview) {
-        self.status = RDHomeStatus_Bind;
-    }else{
-        self.status = RDHomeStatus_Normal;
-    }
+//    if (self.superview) {
+//        self.status = RDHomeStatus_Bind;
+//    }else{
+//        self.status = RDHomeStatus_Normal;
+//    }
+    self.status = type;
     [self reloadStatus];
 }
 
 - (void)stopScreenWithEggGame
 {
-    [self stopScreen];
+    [self stopScreenWithStatus:RDHomeStatus_Bind];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 }
 

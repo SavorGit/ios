@@ -23,7 +23,7 @@
         
         //列出手机自带相册
         PHFetchResult *syncedAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum
-                                                                               subtype:PHAssetCollectionSubtypeAlbumSyncedEvent options:userAlbumsOptions];
+                                                                               subtype:PHAssetCollectionSubtypeAlbumSyncedAlbum options:userAlbumsOptions];
         
         //列出所有用户创建
         PHFetchResult *userCollections = [PHCollectionList fetchTopLevelUserCollectionsWithOptions:nil];

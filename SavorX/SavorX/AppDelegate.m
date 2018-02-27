@@ -49,6 +49,12 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
+    if ([UIScreen mainScreen].bounds.size.height == 812.f || [UIScreen mainScreen].bounds.size.width == 812.f) {
+        [GlobalData shared].isIphoneX = YES;
+    }else{
+        [GlobalData shared].isIphoneX = NO;
+    }
+    
     //设置lauch页面
     [self createLaunch];
     
@@ -624,7 +630,11 @@
         
         //检测当前绑定状态是否断开
         if (![GlobalData shared].isBindRD) {
-            [[RDHomeStatusView defaultView] stopScreen];
+            if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+                [[RDHomeStatusView defaultView] stopScreenWithStatus:RDHomeStatus_Normal];
+            }else{
+                [[RDHomeStatusView defaultView] stopScreenWithStatus:RDHomeStatus_NoScene];
+            }
         }
         
         if ([shortcutItem.type isEqualToString:@"3dtouch.connet"]) {
@@ -762,7 +772,11 @@
         
         //检测当前绑定状态是否断开
         if (![GlobalData shared].isBindRD) {
-            [[RDHomeStatusView defaultView] stopScreen];
+            if ([GlobalData shared].scene == RDSceneHaveRDBox) {
+                [[RDHomeStatusView defaultView] stopScreenWithStatus:RDHomeStatus_Normal];
+            }else{
+                [[RDHomeStatusView defaultView] stopScreenWithStatus:RDHomeStatus_NoScene];
+            }
         }
     }
 }

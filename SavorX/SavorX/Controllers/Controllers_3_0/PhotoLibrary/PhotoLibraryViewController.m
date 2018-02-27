@@ -130,6 +130,13 @@
         make.bottom.mas_equalTo(50);
         make.right.mas_equalTo(0);
     }];
+    if ([GlobalData shared].isIphoneX) {
+        [self.screenButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(50 + 34);
+            make.bottom.mas_equalTo(50 + 34);
+        }];
+        [self.screenButton setImageEdgeInsets:UIEdgeInsetsMake(-5, 0, 0, 0)];
+    }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSIndexPath * indexPath = [NSIndexPath indexPathForItem:self.model.fetchResult.count - 1 inSection:0];
@@ -254,9 +261,15 @@
     [button setImage:[UIImage imageNamed:@"xczk"] forState:UIControlStateNormal];
     button.userInteractionEnabled = YES;
     
-    [self.screenButton mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(50);
-    }];
+    if ([GlobalData shared].isIphoneX) {
+        [self.screenButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(50 + 34);
+        }];
+    }else{
+        [self.screenButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(50);
+        }];
+    }
     [UIView animateWithDuration:.25f animations:^{
         [self.view layoutIfNeeded];
     }];
