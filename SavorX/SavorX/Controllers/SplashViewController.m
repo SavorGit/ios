@@ -55,6 +55,8 @@
             imageName = [NSString stringWithFormat:@"index5_%d.jpg",i];
         }else if(kMainBoundsWidth==414 && kMainBoundsHeight==736){
             imageName = [NSString stringWithFormat:@"indexp6_%d.jpg",i];
+        }else if ([GlobalData shared].isIphoneX == YES){
+            imageName = [NSString stringWithFormat:@"indexp6_%d.jpg",i];
         }
         UIImage *image = IMAGE_AT_APPDIR(imageName);
         if (image) {
