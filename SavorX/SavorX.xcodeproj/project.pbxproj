@@ -143,6 +143,9 @@
 		0663D4581F0B875600CD2FA2 /* RDPhotoLibraryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D4571F0B875600CD2FA2 /* RDPhotoLibraryModel.m */; };
 		0663D45B1F0B8A1500CD2FA2 /* RDPhotoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */; };
 		0664ADC81F1464C400A720A1 /* RDHomeStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0664ADC71F1464C400A720A1 /* RDHomeStatusView.m */; };
+		067544372046BADD00BB6189 /* indexX_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 067544342046BADC00BB6189 /* indexX_1.jpg */; };
+		067544382046BADD00BB6189 /* indexX_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 067544352046BADC00BB6189 /* indexX_2.jpg */; };
+		067544392046BADD00BB6189 /* indexX_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 067544362046BADD00BB6189 /* indexX_3.jpg */; };
 		067BFF5B1F2194BE00D9CE74 /* RDVideoHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 067BFF5A1F2194BE00D9CE74 /* RDVideoHeaderView.m */; };
 		067BFF5E1F22160A00D9CE74 /* RDIsOnline.m in Sources */ = {isa = PBXBuildFile; fileRef = 067BFF5D1F22160A00D9CE74 /* RDIsOnline.m */; };
 		067BFF611F2216A400D9CE74 /* RDIsDemand.m in Sources */ = {isa = PBXBuildFile; fileRef = 067BFF601F2216A400D9CE74 /* RDIsDemand.m */; };
@@ -564,6 +567,9 @@
 		0663D45A1F0B8A1500CD2FA2 /* RDPhotoTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPhotoTool.m; sourceTree = "<group>"; };
 		0664ADC61F1464C400A720A1 /* RDHomeStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDHomeStatusView.h; sourceTree = "<group>"; };
 		0664ADC71F1464C400A720A1 /* RDHomeStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDHomeStatusView.m; sourceTree = "<group>"; };
+		067544342046BADC00BB6189 /* indexX_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = indexX_1.jpg; sourceTree = "<group>"; };
+		067544352046BADC00BB6189 /* indexX_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = indexX_2.jpg; sourceTree = "<group>"; };
+		067544362046BADD00BB6189 /* indexX_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = indexX_3.jpg; sourceTree = "<group>"; };
 		067BFF591F2194BE00D9CE74 /* RDVideoHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDVideoHeaderView.h; sourceTree = "<group>"; };
 		067BFF5A1F2194BE00D9CE74 /* RDVideoHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDVideoHeaderView.m; sourceTree = "<group>"; };
 		067BFF5C1F22160A00D9CE74 /* RDIsOnline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDIsOnline.h; sourceTree = "<group>"; };
@@ -2003,6 +2009,9 @@
 				065ECD811E8A8EC10062E29D /* indexp6_1.jpg */,
 				065ECD6E1E8A73BA0062E29D /* indexp6_2.jpg */,
 				47FE2CC01E1BCB7400D3D0B4 /* indexp6_3.jpg */,
+				067544342046BADC00BB6189 /* indexX_1.jpg */,
+				067544352046BADC00BB6189 /* indexX_2.jpg */,
+				067544362046BADD00BB6189 /* indexX_3.jpg */,
 			);
 			path = lanch;
 			sourceTree = "<group>";
@@ -2507,6 +2516,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				062D4F841DEC02BA0093942A /* RDCollectNO@2x.png in Resources */,
+				067544372046BADD00BB6189 /* indexX_1.jpg in Resources */,
 				06944CE71F348E0300C04F77 /* InfoPlist.strings in Resources */,
 				962EFA7A1E84F7980074450A /* laba_g@3x.png in Resources */,
 				062CF02C1EC3498D00EA6AE0 /* glass.mp3 in Resources */,
@@ -2580,6 +2590,7 @@
 				962EFA731E84F7980074450A /* bofang_g@2x.png in Resources */,
 				062D4F851DEC02BA0093942A /* RDCollectNO@3x.png in Resources */,
 				962EFA7D1E84F7980074450A /* labajingyin@3x.png in Resources */,
+				067544392046BADD00BB6189 /* indexX_3.jpg in Resources */,
 				065ECD721E8A73BA0062E29D /* indexp6_2.jpg in Resources */,
 				474C76361DFB9BED001129C9 /* NoDataView.xib in Resources */,
 				06B555131E8A587D0068BF70 /* documentVideoGuided.mp4 in Resources */,
@@ -2599,6 +2610,7 @@
 				062D4F9A1DEC02BA0093942A /* RDReplay@3x.png in Resources */,
 				962EFA711E84F7980074450A /* bofang@3x.png in Resources */,
 				062D4F981DEC02BA0093942A /* RDReplay.png in Resources */,
+				067544382046BADD00BB6189 /* indexX_2.jpg in Resources */,
 				062D4F951DEC02BA0093942A /* RDPlay.png in Resources */,
 				962EFA8D1E84F7980074450A /* zanting.png in Resources */,
 				062D4FA11DEC02BA0093942A /* RDUp.png in Resources */,

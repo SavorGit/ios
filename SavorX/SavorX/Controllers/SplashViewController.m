@@ -41,7 +41,7 @@
 {
     NSInteger count = 4;
     NSMutableArray *imageArray = [[NSMutableArray alloc] init];
-    for (int i = 1; i <=count; i ++)
+    for (int i = 1; i < count; i ++)
     {
         NSString *imageName;
         if (kMainBoundsWidth==320 && kMainBoundsHeight==480)
@@ -56,11 +56,14 @@
         }else if(kMainBoundsWidth==414 && kMainBoundsHeight==736){
             imageName = [NSString stringWithFormat:@"indexp6_%d.jpg",i];
         }else if ([GlobalData shared].isIphoneX == YES){
-            imageName = [NSString stringWithFormat:@"indexp6_%d.jpg",i];
+            imageName = [NSString stringWithFormat:@"indexX_%d.jpg",i];
         }
         UIImage *image = IMAGE_AT_APPDIR(imageName);
         if (image) {
             [imageArray addObject:image];
+        }else{
+            UIImage * tempImage = [Helper imageWithColor:[UIColor whiteColor] size:[UIScreen mainScreen].bounds.size];
+            [imageArray addObject:tempImage];
         }
     }
     return imageArray;
