@@ -10,25 +10,25 @@
 
 @interface CreateWealthModel : BaseModel
 
-@property(nonatomic, assign) NSString * artid;
-@property(nonatomic, strong) NSString *sort_num;
+@property(nonatomic, copy) NSString * artid;
+@property(nonatomic, copy) NSString *sort_num;
 @property(nonatomic, assign) NSInteger type;
 @property(nonatomic, assign) NSInteger imgStyle;
-@property(nonatomic, strong) NSString *title;
-@property(nonatomic, strong) NSString *imageURL;
-@property(nonatomic, strong) NSString *contentURL;
-@property(nonatomic, strong) NSString *sourceName;
-@property(nonatomic, strong) NSString *logo; 
-@property(nonatomic, strong) NSString *indexImageUrl;
+@property(nonatomic, copy) NSString *title;
+@property(nonatomic, copy) NSString *imageURL;
+@property(nonatomic, copy) NSString *contentURL;
+@property(nonatomic, copy) NSString *sourceName;
+@property(nonatomic, copy) NSString *logo;
+@property(nonatomic, copy) NSString *indexImageUrl;
 
 @property(nonatomic, assign) NSInteger canplay;
 @property(nonatomic, assign) NSInteger duration;
-@property(nonatomic, assign) NSString *mediaId;
-@property(nonatomic, strong) NSString *name;
-@property(nonatomic, strong) NSString *updateTime;
-@property(nonatomic, strong) NSString *videoURL;
+@property(nonatomic, copy) NSString *mediaId;
+@property(nonatomic, copy) NSString *name;
+@property(nonatomic, copy) NSString *updateTime;
+@property(nonatomic, copy) NSString *videoURL;
 @property (nonatomic, assign) NSInteger canPlay;
-@property (nonatomic, assign) NSString *colTuJi;
+@property (nonatomic, copy) NSString *colTuJi;
 @property (nonatomic, copy) NSString * createTime; //创建时间
 @property (nonatomic, assign) NSInteger collected;  //0代表未收藏，1代表收藏
 
