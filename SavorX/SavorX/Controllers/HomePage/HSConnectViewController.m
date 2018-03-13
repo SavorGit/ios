@@ -395,8 +395,9 @@
 
 - (void)getBoxInfo
 {
-    __block BOOL hasSuccess = NO; //记录是否绑定成功过
     __block NSInteger hasFailure = 0; //记录失败的次数
+    
+    __block BOOL ssidIsNull = NO;
     
     NSString *platformUrl = [NSString stringWithFormat:@"%@/command/box-info/%@", [GlobalData shared].callQRCodeURL, self.numSring];
     
@@ -404,27 +405,39 @@
         
         NSInteger code = [[result objectForKey:@"code"] integerValue];
         if (code == 10000) {
-            if (hasSuccess) {
+            if ([GlobalData shared].isBindRD) {
                 return;
             }
-            hasSuccess = YES;
             
-            [self getBoxInfoWithResult:result];
+            NSDictionary * realResult = [result objectForKey:@"result"];
+            if (isEmptyString([realResult objectForKey:@"ssid"])) {
+                ssidIsNull = YES;
+                hasFailure += 1;
+                if (hasFailure < 4) {
+                    
+                }else{
+                    [self showAlertWithWifiName:@""];
+                    [self bindSuccessStatus];
+                }
+                return;
+            }
+            
+            [self getBoxInfoWithResult:realResult];
         }else{
             
             hasFailure += 1;
             if (hasFailure < 4) {
+                return;
+            }else if (ssidIsNull) {
+                [self showAlertWithWifiName:@""];
+                [self bindSuccessStatus];
                 return;
             }
             
             [MBProgressHUD showTextHUDwithTitle:[result objectForKey:@"msg"] delay:1.5f];
             self.textLabel.text = [result objectForKey:@"msg"];
         }
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = YES;
-        self.reConnectBtn.hidden = YES;
-        self.lineView.hidden = YES;
-        self.textLabel.hidden = NO;
+        [self bindSuccessStatus];
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -432,14 +445,13 @@
         hasFailure += 1;
         if (hasFailure < 4) {
             return;
+        }else if (ssidIsNull) {
+            [self showAlertWithWifiName:@""];
+        }else{
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
         }
         
-        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = NO;
-        self.reConnectBtn.hidden = NO;
-        self.lineView.hidden = NO;
-        self.textLabel.hidden = YES;
+        [self bindFaildStatus];
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
         
     }];
@@ -451,16 +463,32 @@
         NSInteger code = [[result objectForKey:@"code"] integerValue];
         if (code == 10000) {
             
-            if (hasSuccess) {
+            if ([GlobalData shared].isBindRD) {
                 return;
             }
-            hasSuccess = YES;
             
-            [self getBoxInfoWithResult:result];
+            NSDictionary * realResult = [result objectForKey:@"result"];
+            if (isEmptyString([realResult objectForKey:@"ssid"])) {
+                ssidIsNull = YES;
+                hasFailure += 1;
+                if (hasFailure < 4) {
+                    
+                }else{
+                    [self showAlertWithWifiName:@""];
+                    [self bindSuccessStatus];
+                }
+                return;
+            }
+            
+            [self getBoxInfoWithResult:realResult];
         }else{
             
             hasFailure += 1;
             if (hasFailure < 4) {
+                return;
+            }else if (ssidIsNull) {
+                [self showAlertWithWifiName:@""];
+                [self bindSuccessStatus];
                 return;
             }
             
@@ -468,11 +496,7 @@
             self.textLabel.text = [result objectForKey:@"msg"];
         }
         
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = YES;
-        self.reConnectBtn.hidden = YES;
-        self.lineView.hidden = YES;
-        self.textLabel.hidden = NO;
+        [self bindSuccessStatus];
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -480,14 +504,13 @@
         hasFailure += 1;
         if (hasFailure < 4) {
             return;
+        }else if (ssidIsNull) {
+            [self showAlertWithWifiName:@""];
+        }else{
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
         }
         
-        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = NO;
-        self.reConnectBtn.hidden = NO;
-        self.lineView.hidden = NO;
-        self.textLabel.hidden = YES;
+        [self bindFaildStatus];
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
         
     }];
@@ -499,16 +522,32 @@
         NSInteger code = [[result objectForKey:@"code"] integerValue];
         if (code == 10000) {
             
-            if (hasSuccess) {
+            if ([GlobalData shared].isBindRD) {
                 return;
             }
-            hasSuccess = YES;
             
-            [self getBoxInfoWithResult:result];
+            NSDictionary * realResult = [result objectForKey:@"result"];
+            if (isEmptyString([realResult objectForKey:@"ssid"])) {
+                ssidIsNull = YES;
+                hasFailure += 1;
+                if (hasFailure < 4) {
+                    
+                }else{
+                    [self showAlertWithWifiName:@""];
+                    [self bindSuccessStatus];
+                }
+                return;
+            }
+            
+            [self getBoxInfoWithResult:realResult];
         }else{
             
             hasFailure += 1;
             if (hasFailure < 4) {
+                return;
+            }else if (ssidIsNull) {
+                [self showAlertWithWifiName:@""];
+                [self bindSuccessStatus];
                 return;
             }
             
@@ -516,11 +555,7 @@
             self.textLabel.text = [result objectForKey:@"msg"];
         }
         
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = YES;
-        self.reConnectBtn.hidden = YES;
-        self.lineView.hidden = YES;
-        self.textLabel.hidden = NO;
+        [self bindSuccessStatus];
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -528,14 +563,13 @@
         hasFailure += 1;
         if (hasFailure < 4) {
             return;
+        }else if (ssidIsNull) {
+            [self showAlertWithWifiName:@""];
+        }else{
+            [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
         }
         
-        [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = NO;
-        self.reConnectBtn.hidden = NO;
-        self.lineView.hidden = NO;
-        self.textLabel.hidden = YES;
+        [self bindFaildStatus];
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
         
     }];
@@ -547,12 +581,13 @@
         NSInteger code = [[result objectForKey:@"code"] integerValue];
         if (code == 10000) {
             
-            if (hasSuccess) {
+            if ([GlobalData shared].isBindRD) {
                 return;
             }
-            hasSuccess = YES;
             
-            [self getBoxInfoWithResult:result];
+            NSDictionary * realResult = [result objectForKey:@"result"];
+            
+            [self getBoxInfoWithResult:realResult];
         }else{
             
             hasFailure += 1;
@@ -564,11 +599,7 @@
             self.textLabel.text = [result objectForKey:@"msg"];
         }
         
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = YES;
-        self.reConnectBtn.hidden = YES;
-        self.lineView.hidden = YES;
-        self.textLabel.hidden = NO;
+        [self bindSuccessStatus];
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"success"];
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -579,14 +610,28 @@
         }
         
         [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = NO;
-        self.reConnectBtn.hidden = NO;
-        self.lineView.hidden = NO;
-        self.textLabel.hidden = YES;
+        [self bindFaildStatus];
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
         
     }];
+}
+
+- (void)bindSuccessStatus
+{
+    [self hidenMaskingLoadingView];
+    self.failConectLabel.hidden = YES;
+    self.reConnectBtn.hidden = YES;
+    self.lineView.hidden = YES;
+    self.textLabel.hidden = NO;
+}
+
+- (void)bindFaildStatus
+{
+    [self hidenMaskingLoadingView];
+    self.failConectLabel.hidden = NO;
+    self.reConnectBtn.hidden = NO;
+    self.lineView.hidden = NO;
+    self.textLabel.hidden = YES;
 }
 
 - (void)navBackButtonClicked:(UIButton *)sender {
@@ -652,7 +697,6 @@
 
 - (void)getBoxInfoWithResult:(NSDictionary *)result
 {
-    result = [result objectForKey:@"result"];
     RDBoxModel * model = [[RDBoxModel alloc] init];
     
     if ([HTTPServerManager checkHttpServerWithBoxIP:[result objectForKey:@"box_ip"]]) {
@@ -679,11 +723,7 @@
         [self showAlertWithWifiName:[result objectForKey:@"ssid"]];
     }else{
         [MBProgressHUD showTextHUDwithTitle:RDLocalizedString(@"RDString_FailedWithConnect") delay:1.5f];
-        [self hidenMaskingLoadingView];
-        self.failConectLabel.hidden = NO;
-        self.reConnectBtn.hidden = NO;
-        self.lineView.hidden = NO;
-        self.textLabel.hidden = YES;
+        [self bindFaildStatus];
         [SAVORXAPI postUMHandleWithContentId:@"link_tv_input_num" key:@"link_tv_input_num" value:@"fail"];
     }
 }

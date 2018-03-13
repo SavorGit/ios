@@ -3050,6 +3050,7 @@
 				CODE_SIGN_ENTITLEMENTS = SavorX/SavorX.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 922V2U92Z9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3073,10 +3074,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8db51cc6-64db-43d0-92e2-ec367eb35c3b";
-				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDevelopment;
+				PROVISIONING_PROFILE = "6dbf9462-03cd-4a2e-98ec-f4db83cb780d";
+				PROVISIONING_PROFILE_SPECIFIER = TestHottopicDev;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -3091,6 +3092,7 @@
 				CODE_SIGN_ENTITLEMENTS = SavorX/SavorX.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 922V2U92Z9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3114,10 +3116,10 @@
 					"$(PROJECT_DIR)/SavorX/HelpLibs/BaiduMap_IOSSDK_v3.3.1_Lib/thirdlibs",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.appstore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hottopics.inhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a9b07ad7-2902-4449-90fd-3b5c922f42ed";
-				PROVISIONING_PROFILE_SPECIFIER = HotTopicsDistribution;
+				PROVISIONING_PROFILE = "415e6eee-5e8f-4ce0-b6bd-efa9dd1ef944";
+				PROVISIONING_PROFILE_SPECIFIER = "TestHotTopicsAd-Hoc";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
